@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IScheduleDay _scheduleDay2;
 		private IPersonAssignment _personAssignment1;
 		private IMainShift _mainShift1;
-		private IMainShift _mainShift2;
+		private IEditorShift _mainShift2;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IScheduleMatrixPro _scheduleMatrixPro2;
 		private IScheduleDayPro _scheduleDayPro;
@@ -42,10 +43,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private DateTimePeriod _dateTimePeriod;
+		private IEditorShiftMapper _editorShiftMapper;
 	
 		[SetUp]
 		public void Setup()
 		{
+			_editorShiftMapper = _mocks.StrictMock<IEditorShiftMapper>();
 			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2012, 1, 1);
@@ -67,12 +70,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_mainShift1 = _mocks.StrictMock<IMainShift>();
 			_scheduleRange2 = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			_mainShift2 = _mocks.StrictMock<IMainShift>();
+			_mainShift2 = _mocks.StrictMock<IEditorShift>();
 			_coherentChecker = _mocks.StrictMock<ITeamSteadyStateCoherentChecker>();
 			_teamSteadyStateScheduleMatrixProFinder = _mocks.StrictMock<ITeamSteadyStateScheduleMatrixProFinder>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_dateTimePeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 2);
-			_target = new TeamSteadyStateMainShiftScheduler(_coherentChecker, _teamSteadyStateScheduleMatrixProFinder, _resourceOptimizationHelper);
+			_target = new TeamSteadyStateMainShiftScheduler(_coherentChecker, _teamSteadyStateScheduleMatrixProFinder, _resourceOptimizationHelper, _editorShiftMapper);
 		}
 
 		[Test]
@@ -129,7 +132,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
-				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.Twice();
 				Expect.Call(()=>_scheduleDay2.AddMainShift(_mainShift2));
 				Expect.Call(()=>_rollbackService.Modify(_scheduleDay2));
 				Expect.Call(_scheduleDay2.SignificantPartForDisplay()).Return(SchedulePartView.None);

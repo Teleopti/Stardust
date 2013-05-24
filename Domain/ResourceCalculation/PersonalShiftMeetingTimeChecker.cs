@@ -6,14 +6,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IPersonalShiftMeetingTimeChecker
 	{
-		bool CheckTimeMeeting(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings);
-		bool CheckTimePersonAssignment(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments);
+		bool CheckTimeMeeting(IEditorShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings);
+		bool CheckTimePersonAssignment(IEditorShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments);
 	}
 
 	public class PersonalShiftMeetingTimeChecker : IPersonalShiftMeetingTimeChecker
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool CheckTimeMeeting(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
+		public bool CheckTimeMeeting(IEditorShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool CheckTimePersonAssignment(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments)
+		public bool CheckTimePersonAssignment(IEditorShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();

@@ -8,6 +8,6 @@
 		/// <summary>
 		/// Returns the shift category
 		/// </summary>
-		IShiftCategory ShiftCategory { get; }
+		IShiftCategory ShiftCategory { get; set; }
 	}
 }

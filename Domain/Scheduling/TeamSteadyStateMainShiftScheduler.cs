@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -18,14 +19,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class TeamSteadyStateMainShiftScheduler : ITeamSteadyStateMainShiftScheduler
 	{
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-	    private readonly ITeamSteadyStateCoherentChecker _coherentChecker;
+		private readonly IEditorShiftMapper _editorShiftMapper;
+		private readonly ITeamSteadyStateCoherentChecker _coherentChecker;
 		private readonly ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
 
-        public TeamSteadyStateMainShiftScheduler(ITeamSteadyStateCoherentChecker coherentChecker, ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder, IResourceOptimizationHelper resourceOptimizationHelper)
+        public TeamSteadyStateMainShiftScheduler(ITeamSteadyStateCoherentChecker coherentChecker, 
+			ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder, 
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IEditorShiftMapper editorShiftMapper)
 		{
             _coherentChecker = coherentChecker;
             _teamSteadyStateScheduleMatrixProFinder = teamSteadyStateScheduleMatrixProFinder;
             _resourceOptimizationHelper = resourceOptimizationHelper;
+	        _editorShiftMapper = editorShiftMapper;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -91,12 +97,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (personAssignmentSource == null)
                     return false;
 
-                var mainShift = personAssignmentSource.ToMainShift();
+	            var mainShift = _editorShiftMapper.CreateEditorShift(personAssignmentSource);
                 var scheduleRange = scheduleDictionary[groupMember];
                 var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-                var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;
 
-                if (DontAddMainShiftIfDayNotEmpty(scheduleDay)) continue;
+                if (dontAddMainShiftIfDayNotEmpty(scheduleDay)) continue;
 
                 var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDay);
                 if (theMatrix == null) continue;
@@ -104,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(dateOnly));
 
                 if (locked) continue;
-                scheduleDay.AddMainShift(cloneMainShift);
+				scheduleDay.AddMainShift(mainShift);
                 rollbackService.Modify(scheduleDay);
                 daysToRecalculate.Add(scheduleDay);
             }
@@ -120,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return true;
         }
 
-        private static bool DontAddMainShiftIfDayNotEmpty(IScheduleDay scheduleDay)
+        private static bool dontAddMainShiftIfDayNotEmpty(IScheduleDay scheduleDay)
         {
             var significantPart = scheduleDay.SignificantPartForDisplay();
             return significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff;

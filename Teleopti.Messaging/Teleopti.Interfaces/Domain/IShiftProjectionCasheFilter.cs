@@ -143,7 +143,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="mainShiftActivitiesOptimizeSpecification"> </param>
         /// <returns></returns>
         IList<IShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(
-            IList<IShiftProjectionCache> shiftList,ISpecification< IMainShift > mainShiftActivitiesOptimizeSpecification );
+			IList<IShiftProjectionCache> shiftList, ISpecification<IEditorShift> mainShiftActivitiesOptimizeSpecification);
 
     	///<summary>
     	/// Filter on Business Rules on all Persons in List

@@ -285,8 +285,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-            var mainshift1 = _mocks.StrictMock<IMainShift>();
-            var mainshift2 = _mocks.StrictMock<IMainShift>();
+            var mainshift1 = _mocks.StrictMock<IEditorShift>();
+			var mainshift2 = _mocks.StrictMock<IEditorShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -294,8 +294,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -330,8 +330,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-            var mainshift1 = _mocks.StrictMock<IMainShift>();
-            var mainshift2 = _mocks.StrictMock<IMainShift>();
+			var mainshift1 = _mocks.StrictMock<IEditorShift>();
+			var mainshift2 = _mocks.StrictMock<IEditorShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -509,8 +509,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-            var mainshift1 = _mocks.StrictMock<IMainShift>();
-            var mainshift2 = _mocks.StrictMock<IMainShift>();
+			var mainshift1 = _mocks.StrictMock<IEditorShift>();
+			var mainshift2 = _mocks.StrictMock<IEditorShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -519,8 +519,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToMainShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
                 Expect.Call(mainshift1.ProjectionService()).Return(ps1);
                 Expect.Call(mainshift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);

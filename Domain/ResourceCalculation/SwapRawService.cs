@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						continue;
 				}
 				
-				var tempDayOneHasSwapData = CopyData(selectionOne[i], tempDayOne);
-				var tempDayTwoHasSwapData = CopyData(selectionTwo[i], tempDayTwo);
+				var tempDayOneHasSwapData = copyData(selectionOne[i], tempDayOne);
+				var tempDayTwoHasSwapData = copyData(selectionTwo[i], tempDayTwo);
 			
 				if (tempDayTwoHasSwapData)
 				{
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static bool CopyData(IScheduleDay scheduleDay, ISchedulePart tempDay)
+		private static bool copyData(IScheduleDay scheduleDay, ISchedulePart tempDay)
 		{
 			var hasSwapData = false;
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var personAssignment = scheduleDay.AssignmentHighZOrder();
 				if (personAssignment.ShiftCategory != null)
 				{
-					tempDay.AddMainShift(((IMainShift)personAssignment.ToMainShift().NoneEntityClone()));
+					tempDay.AddMainShift(scheduleDay.GetEditorShift());
 					hasSwapData = true;
 				}
 			}

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterIfThereIsAnyCommonMainShift()
 		{
-			var mainShift = MainShiftFactory.CreateMainShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
+			var mainShift = EditorShiftFactory.CreateEditorShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 															 _activity, _category);
 			var workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 															  _activity, _category);
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldReturnNullNoCommonMainShiftAvailable()
 		{
-			var mainShift = MainShiftFactory.CreateMainShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
-														 _activity, _category);
+			var mainShift = EditorShiftFactory.CreateEditorShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
+															 _activity, _category);
 			var effectiveRestriction = new EffectiveRestriction(
 				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),

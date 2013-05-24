@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// /// </remarks>
     public class ShiftProjectionCache : IShiftProjectionCache
     {
-        private IMainShift _mainShift;
+        private IEditorShift _mainShift;
         private readonly IWorkShift _workShift;
         private  DateTime _schedulingDate;
         private TimeSpan? _workShiftProjectionContractTime;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 _localTimeZoneInfo = localTimeZoneInfo;
                 _schedulingDate = schedulingDate;
                 _dayOfWeek = _schedulingDate.DayOfWeek;
-                _mainShift = _workShift.ToMainShift(schedulingDate.Date, localTimeZoneInfo);
+                _mainShift = _workShift.ToEditorShift(schedulingDate.Date, localTimeZoneInfo);
                 _mainshiftProjection = null;
             }
             
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Created by: Ola
         ///  Created date: 2008-09-16    
         /// /// </remarks>
-        public IMainShift TheMainShift
+        public IEditorShift TheMainShift
         {
             get { return _mainShift; }
         }
@@ -133,20 +133,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (personAssignments.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, mainShiftProjection, personAssignments))
 				return false;
 
-			//foreach (IPersonMeeting personMeeting in meetings)
-			//{
-			//    if (!PeriodIsWorkTimeInProjection(mainShiftProjection, personMeeting.Period))
-			//        return false;
-			//}
-			//foreach (IPersonAssignment personAssignment in personAssignments)
-			//{
-			//    foreach (IPersonalShift personalShift in personAssignment.PersonalShiftCollection)
-			//    {
-			//        if (personalShift.LayerCollection.Period().HasValue)
-			//            if(!PeriodIsWorkTimeInProjection(mainShiftProjection, personalShift.LayerCollection.Period().Value))
-			//                return false;
-			//    }
-			//}
             return true;
         }
 
@@ -169,18 +155,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Add(TimeSpan.FromDays(day));
 			}
     	}
-
-		//private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
-		//{
-		//    foreach (VisualLayer visualLayer in mainShiftProjection)
-		//    {
-		//        if (visualLayer.Period.Intersect(period))
-		//        {
-		//            if (visualLayer.HighestPriorityActivity != null && !visualLayer.HighestPriorityActivity.InWorkTime)
-		//                return false;
-		//        }
-		//    }
-		//    return true;
-		//}
     }
 }

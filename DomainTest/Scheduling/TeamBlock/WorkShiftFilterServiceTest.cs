@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldFilterWorkShifts()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IMainShift>();
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditorShift>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();
 			using (_mocks.Record())
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnNullIfShiftListIsNull()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IMainShift>();
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditorShift>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();
 			using (_mocks.Record())
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnNullFilteredWorkShiftsListIsEmpty()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IMainShift>();
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditorShift>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();
 			using (_mocks.Record())
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnNullIfEffectiveRestrictionShiftFilterSaysFalse()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IMainShift>();
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditorShift>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			using (_mocks.Record())
 			{
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					ShiftCategory =
 						shiftCategory
 				};
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IMainShift>();
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditorShift>();
 			_schedulingOptions.ShiftCategory = shiftCategory;
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();

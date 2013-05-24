@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IMainShiftOptimizeActivitySpecificationSetter _target;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private IOptimizationPreferences _optimizationPreferences;
-		private IMainShift _mainShift;
+		private IEditorShift _mainShift;
 
 		[SetUp]
 		public void Setup()
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target = new MainShiftOptimizeActivitySpecificationSetter();
 			_schedulingOptionsCreator = new SchedulingOptionsCreator();
 			_optimizationPreferences = new OptimizationPreferences();
-			_mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+			_mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences);
 
 			var minShiftOptimizeActivitySpecification = schedulingOptions.MainShiftOptimizeActivitySpecification;
-			Assert.AreEqual(typeof(All<IMainShift>), minShiftOptimizeActivitySpecification.GetType());
+			Assert.AreEqual(typeof(All<IEditorShift>), minShiftOptimizeActivitySpecification.GetType());
 
 			_target.SetSpecification(schedulingOptions, _optimizationPreferences, _mainShift, DateOnly.MinValue);
 

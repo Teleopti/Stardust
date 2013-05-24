@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
         private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
         private IPersonAssignment _personAssignment;
-        private IMainShift _mainShift;
+        private IEditorShift _mainShift;
         private IPerson _person;
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IScheduleDay _scheduleDay2;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
             _dateOnlyAsDateTimePeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
             _personAssignment = _mock.StrictMock<IPersonAssignment>();
-            _mainShift = _mock.StrictMock<IMainShift>();
+            _mainShift = _mock.StrictMock<IEditorShift>();
             _person = _mock.StrictMock<IPerson>();
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 
@@ -313,7 +313,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDay2.Person).Return(_person);
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment);
-            Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift).Repeat.Twice();
+			Expect.Call(_scheduleDay1.GetEditorShift()).Return(_mainShift);
+			Expect.Call(_scheduleDay2.GetEditorShift()).Return(_mainShift);
 			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
 			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
         }
@@ -325,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 ShouldReturnFalseIfNotSuccessExpectValues();
-                Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_scheduleDay1.GetEditorShift()).Return(_mainShift);
                 Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
                 Expect.Call(_scheduleDay1.Person).Return(_person).Repeat.Twice();
                 Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             //Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
-            Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+			Expect.Call(_scheduleDay1.GetEditorShift()).Return(_mainShift);
             Expect.Call(
                 () =>
                 _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
@@ -436,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
                 //Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_scheduleDay1.GetEditorShift()).Return(_mainShift);
                 Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
                 Expect.Call(_scheduleDay1.Person).Return(_person).Repeat.Twice();
                 Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(date, _person, _groupSchedulingService,

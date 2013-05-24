@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var startTimeLimitation = new StartTimeLimitation();
 			var endTimeLimitation = new EndTimeLimitation();
 			var workTimeLimitation = new WorkTimeLimitation();
-			IMainShift commonMainShift = null;
+			IEditorShift commonMainShift = null;
 			IShiftCategory shiftCategory = null;
 			if (schedulingOptions.UseTeamBlockSameStartTime)
 			{

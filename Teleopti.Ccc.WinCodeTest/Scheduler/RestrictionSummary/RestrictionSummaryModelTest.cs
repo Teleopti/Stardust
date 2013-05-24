@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void CanLoadPeriod()
         {
-            IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+			var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.AddMainShift(mainShift);
             Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();

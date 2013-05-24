@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             IPerson person = new Person();
 
-            MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             ActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             target.Interval = TimeSpan.FromMinutes(7);
             IPerson person = new Person();
 
-            MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), period);
+            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
             {
@@ -275,9 +275,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             DateTimePeriod nextPeriod = new DateTimePeriod(period.EndDateTime, period.EndDateTime.AddHours(1));
             IPerson person = new Person();
 
-            MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer nowLayer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), period);
-            ActivityLayer nextLayer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("testAnother"), nextPeriod);
+            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            ActivityLayer nowLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
+            ActivityLayer nextLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("testAnother"), nextPeriod);
             mainShift.LayerCollection.Add(nowLayer);
             mainShift.LayerCollection.Add(nextLayer);
             using (mocks.Record())

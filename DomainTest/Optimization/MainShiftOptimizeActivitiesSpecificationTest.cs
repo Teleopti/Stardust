@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class MainShiftOptimizeActivitiesSpecificationTest
     {
-        private Specification<IMainShift> _interface;
+        private Specification<IEditorShift> _interface;
         private MainShiftOptimizeActivitiesSpecification _target;
         private OptimizerActivitiesPreferences _preferences;
-        private IMainShift _originalMainShift;
+        private IEditorShift _originalMainShift;
         private IActivity _baseAct;
         private IActivity _lunchAct;
         private IActivity _shbrAct;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _lunchAct.InContractTime = false;
             _shbrAct = ActivityFactory.CreateActivity("ShBr");
             _shbrAct.InContractTime = true;
-            _originalMainShift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            _originalMainShift = EditorShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             DateOnly dateOnly = new DateOnly(2007, 1, 1);
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             _target = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyIsSatisfiedBy()
         {
-            IMainShift shift = _originalMainShift;
+            var shift = _originalMainShift;
             Assert.IsTrue(_interface.IsSatisfiedBy(shift));
         }
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyCorrectShiftCategory()
         {
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            var shift = EditorShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             Assert.IsTrue(_target.CorrectShiftCategory(shift));
 
             _preferences.KeepShiftCategory = true;

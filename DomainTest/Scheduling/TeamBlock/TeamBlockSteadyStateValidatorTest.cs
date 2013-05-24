@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -30,12 +31,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IScheduleDay _tomorrowScheduleDay;
         private DateOnly _tomorrow;
         private DateOnly _dayAfterTomorrow;
+	    private IScheduleDayEquator _scheduleDayEquator;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-            _target = new BlockSteadyStateValidator();
+	        _scheduleDayEquator = _mock.StrictMock<IScheduleDayEquator>();
+			_target = new BlockSteadyStateValidator(_scheduleDayEquator);
             _baseLineData = new BaseLineData();
             _matrixList = new List<IScheduleMatrixPro>();
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();

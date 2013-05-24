@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 Remove(pAss);
         }
 
-        public void MergePersonalShiftsToOneAssignment(IMainShift mainShift)
+        public void MergePersonalShiftsToOneAssignment(DateTimePeriod mainShiftPeriod)
         {
             IPersonAssignment currentAss = AssignmentHighZOrder();
             IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 IList<IPersonalShift> shiftsToMove = new List<IPersonalShift>();
                 foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
                 {
-                    if (mainShift.LayerCollection.Period().Value.ContainsPart(shift.LayerCollection.Period().Value) || mainShift.LayerCollection.Period().Value.Adjacent(shift.LayerCollection.Period().Value))
+					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.Adjacent(shift.LayerCollection.Period().Value))
                         shiftsToMove.Add(shift);
                 }
                 foreach (IPersonalShift shift in shiftsToMove)
@@ -656,7 +656,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             else
             {
-                MergePersonalShiftsToOneAssignment(workingCopyOfMainShift);
+				MergePersonalShiftsToOneAssignment(sourceShiftPeriod);
                 IPersonAssignment destAss = AssignmentHighZOrder();
                 destAss.SetMainShift(workingCopyOfMainShift);
             }
@@ -886,7 +886,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			IMainShift mainShift = new MainShift(shiftCategory);
 			mainShift.LayerCollection.Add(layer);
-			MergePersonalShiftsToOneAssignment(mainShift);
+			MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
@@ -935,20 +935,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Add(newPersonAssignment);
 		}
 
-        public void AddMainShift(IMainShift mainShift)
+        public void AddMainShift(IEditorShift mainShift)
         {
             IPersonAssignment currentAss = AssignmentHighZOrder();
-            MergePersonalShiftsToOneAssignment(mainShift);
+            MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
             if (currentAss == null)
             {
-                IPersonAssignment personAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-                personAssignment.SetMainShift(mainShift);
-                Add(personAssignment);
+                currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+				Add(currentAss);
             }
-            else
-            {
-                currentAss.SetMainShift(mainShift);
-            }
+
+			new EditorShiftMapper().SetMainShiftLayers(currentAss, mainShift);
         }
 
         #endregion Methods

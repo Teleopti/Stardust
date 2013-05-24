@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -475,6 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
 			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());
+			var editorShift = new EditorShiftMapper().CreateEditorShift(personAssignment);
 			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
 
@@ -482,10 +484,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
-				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(editorShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
 																						   optimizationPreferences,
-				                                                                           personAssignment.ToMainShift(),
+																						   editorShift,
 				                                                                           new DateOnly())).IgnoreArguments();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);
@@ -511,6 +513,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			                                                                                           new DateTimePeriod(),
 			                                                                                           new ShiftCategory("hej"),
 			                                                                                           new Scenario("hej"));
+			var editorShift = new EditorShiftMapper().CreateEditorShift(personAssignment);
 			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
 
@@ -518,10 +521,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
-				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(editorShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
 																						   optimizationPreferences,
-																						   personAssignment.ToMainShift(),
+																						   editorShift,
 																						   new DateOnly())).IgnoreArguments();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);

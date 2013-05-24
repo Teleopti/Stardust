@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IResourceCalculateDelayer _resourceCalculateDelayer;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
-        private IMainShift _mainShift;
+		private IEditorShift _mainShift;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private ITeamBlockInfo _teamBlockInfo;
         private ITeamInfo _teaminfo;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_groupPerson = new GroupPerson(new List<IPerson>{ _person },DateOnly.MinValue,"hej", null);
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_mainShift = new MainShift(new ShiftCategory("hej"));
+			_mainShift = new EditorShift(new ShiftCategory("hej"));
 
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			_groupMatrixList = new List<IList<IScheduleMatrixPro>>();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(
 		            () => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
 	            Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
-	            Expect.Call(() => _scheduleDay.AddMainShift((IMainShift)_mainShift.NoneEntityClone())).IgnoreArguments();
+	            Expect.Call(() => _scheduleDay.AddMainShift(_mainShift));
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());

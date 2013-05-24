@@ -112,30 +112,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection()); }
         }
 
-        public IMainShift ToMainShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+        public IEditorShift ToEditorShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
             var utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate, localTimeZoneInfo);
             var nextUtcDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.AddDays(1), localTimeZoneInfo);
             if (nextUtcDate.AddMinutes(-1).Subtract(utcDateBaseDate) != TimeSpan.FromHours(24).Add(TimeSpan.FromMinutes(-1)))
                 return toMainShiftOnDaylightSavingChange(localMainShiftBaseDate, localTimeZoneInfo);
 
-            var ret = new MainShift(ShiftCategory);
+            var ret = new EditorShift(ShiftCategory);
             foreach (var layer in LayerCollection)
             {
                 var start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
                 var end = start.Add(layer.Period.ElapsedTime());
                 var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+                var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 
             return ret;
         }
 
-        private IMainShift toMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+		private IEditorShift toMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
-            var ret = new MainShift(ShiftCategory);
+            var ret = new EditorShift(ShiftCategory);
             var hoursToChange = 0;
             foreach (var layer in LayerCollection)
             {
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
                 var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+				var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
                 Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IMainShift>())).
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditorShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions, null)).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
                 Expect.Call(_personPeriod.RuleSetBag).Return(bag);
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IMainShift>())).
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditorShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions, null)).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
                 Expect.Call(_personPeriod.RuleSetBag).Return(bag);
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false)).Return(caches);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(new List<IShiftProjectionCache>(), new Domain.Specification.All<IMainShift>())).
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(new List<IShiftProjectionCache>(), new Domain.Specification.All<IEditorShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions, null)).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();

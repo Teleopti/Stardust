@@ -7,13 +7,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class EditorShift : IEditorShift
 	{
-
-		private IShiftCategory _shiftCategory;
 		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
 		public EditorShift(IShiftCategory shiftCategory)
 		{
-			_shiftCategory = shiftCategory;
+			ShiftCategory = shiftCategory;
 
 		}
 
@@ -40,10 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool HasProjection { get; private set; }
 
-		public IShiftCategory ShiftCategory
-		{
-			get { return _shiftCategory; }
-		}
+		public IShiftCategory ShiftCategory { get; set; }
 
 		public IVisualLayerFactory CreateVisualLayerFactory()
 		{

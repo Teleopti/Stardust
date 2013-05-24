@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IMainShiftOptimizeActivitiesSpecificationShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISpecification<IMainShift> mainShiftActivitiesOptimizeSpecification);
+		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISpecification<IEditorShift> mainShiftActivitiesOptimizeSpecification);
 	}
 
 	public class MainShiftOptimizeActivitiesSpecificationShiftFilter : IMainShiftOptimizeActivitiesSpecificationShiftFilter
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISpecification<IMainShift> mainShiftActivitiesOptimizeSpecification)
+		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISpecification<IEditorShift> mainShiftActivitiesOptimizeSpecification)
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;

@@ -410,24 +410,19 @@ namespace Teleopti.Ccc.Domain.Optimization
                 // reviewed and fixed version
                 IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
-                IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
             	schedulingOptions.MainShiftOptimizeActivitySpecification = null;
-                if (originalPersonAssignment != null)
-                {
-                    IMainShift originalMainShift = originalPersonAssignment.ToMainShift();
-                    if (originalMainShift != null)
-                    {
-											originalShiftCategory = originalPersonAssignment.ShiftCategory;
-						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
-                    }
 
-                }
+	            var originalMainShift = originalScheduleDay.GetEditorShift();
+	            if (originalMainShift != null)
+	            {
+					originalShiftCategory = originalMainShift.ShiftCategory;
+		            _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences,
+		                                                                           originalMainShift, dateOnly);
+	            }
 
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
+	            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-
-				
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)

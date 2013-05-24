@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var dateOnly = new DateOnly(2011,4,28);
             var maxSeatSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
             var shiftCache = _mocks.StrictMock<IShiftProjectionCache>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+            var mainShift = _mocks.StrictMock<IEditorShift>();
             var projection = _mocks.StrictMock<IVisualLayerCollection>();
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var dateOnly = new DateOnly(2011, 4, 28);
             var maxSeatSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
             var shiftCache = _mocks.StrictMock<IShiftProjectionCache>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+            var mainShift = _mocks.StrictMock<IEditorShift>();
             var projection = _mocks.StrictMock<IVisualLayerCollection>();
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var dateOnly = new DateOnly(2011, 4, 28);
             var maxSeatSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
             var shiftCache = _mocks.StrictMock<IShiftProjectionCache>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+            var mainShift = _mocks.StrictMock<IEditorShift>();
             var projection = _mocks.StrictMock<IVisualLayerCollection>();
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>

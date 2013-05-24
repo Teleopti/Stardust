@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, new All<IMainShift>())).IgnoreArguments().Return
+				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftProjectionList, new All<IEditorShift>())).IgnoreArguments().Return
                         (_shiftProjectionList).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly,
                                                                                                         agentTimeZone,
