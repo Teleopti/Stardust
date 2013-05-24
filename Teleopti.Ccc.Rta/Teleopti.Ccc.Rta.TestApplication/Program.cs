@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
                                                               stateForTest.BatchIdentifier,
                                                               stateForTest.IsSnapshot);
 
-							if (sendSettings.RemainingCount % sendSettings.IntervalForScheduleUpdate == 0)
+							if (sendSettings.IntervalForScheduleUpdate != 0 && sendSettings.RemainingCount % sendSettings.IntervalForScheduleUpdate == 0)
 								clientHandler.UpdateScheduleChange(stateForTest.PersonId, stateForTest.BusinessUnitId.ToString(), DateTime.UtcNow);
                         }
                         catch (Exception exception)
