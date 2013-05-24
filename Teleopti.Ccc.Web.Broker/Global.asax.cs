@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 using Microsoft.AspNet.SignalR;
+using log4net;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	public class Global : HttpApplication
 	{
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
@@ -27,9 +30,21 @@ namespace Teleopti.Ccc.Web.Broker
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
 			RouteTable.Routes.MapHubs(new HubConfiguration{EnableCrossDomain = true});
+
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 		}
 
-		protected void Session_Start(object sender, EventArgs e)
+	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+	    {
+	        if (!unobservedTaskExceptionEventArgs.Observed)
+	        {
+	            Logger.Error("An error occured, please review the error and take actions necessary.",
+	                         unobservedTaskExceptionEventArgs.Exception);
+	            unobservedTaskExceptionEventArgs.SetObserved();
+	        }
+	    }
+
+	    protected void Session_Start(object sender, EventArgs e)
 		{
 
 		}
