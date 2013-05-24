@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//fix later when mainshift is removed -> add mainshiftlayer directly
-				uow.Reassociate(PersonAssignment);
 				var ms = PersonAssignment.ToMainShift();
 				var sameAct = ms.LayerCollection[0].Payload;
 				ms.LayerCollection.Add(new MainShiftActivityLayer(sameAct, new DateTimePeriod(Today, Today.AddDays(1))));
 				PersonAssignment.SetMainShift(ms);
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
