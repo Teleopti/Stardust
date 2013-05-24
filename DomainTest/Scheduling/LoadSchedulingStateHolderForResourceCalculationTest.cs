@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
+				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
 					().Return(scheduleDictionary);
 				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
+				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments
 					().Return(scheduleDictionary);
 				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);

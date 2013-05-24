@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private static DateTimePeriod? getShiftPeriod(IScheduleDay scheduleDay)
         {
             var samplePersonAssignment = scheduleDay.AssignmentHighZOrder();
-            if (samplePersonAssignment != null && samplePersonAssignment.MainShift!=null)
+            if (samplePersonAssignment != null && samplePersonAssignment.ToMainShift()!=null)
             {
-                return  samplePersonAssignment.MainShift.ProjectionService().CreateProjection().Period();
+                return  samplePersonAssignment.ToMainShift().ProjectionService().CreateProjection().Period();
             }
             return null;
         }
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     {
                         var sourceZOrder = sampleScheduleDay.AssignmentHighZOrder();
                         var destZOrder = scheduleDay.AssignmentHighZOrder();
-                        if ((sourceZOrder != null && destZOrder != null) && (sourceZOrder.MainShift != null && destZOrder.MainShift != null ))
-                            if ((!equator.MainShiftEqualsWithoutPeriod(sourceZOrder.MainShift, destZOrder.MainShift)))
+                        if ((sourceZOrder != null && destZOrder != null) && (sourceZOrder.ToMainShift() != null && destZOrder.ToMainShift() != null ))
+                            if ((!equator.MainShiftEqualsWithoutPeriod(sourceZOrder.ToMainShift(), destZOrder.ToMainShift())))
                                 return false;
                     }
                        

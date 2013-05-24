@@ -87,11 +87,13 @@ DROP TABLE [Stage].[stg_schedule_updated_ShiftStartDateUTC]
 GO
 CREATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC (
 	person_id int not null,
-	shift_startdate_id int not null
+	shift_startdate_id int not null,
+	interval_id int not null
 CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
 (
 	[person_id],
-	[shift_startdate_id]
+	[shift_startdate_id],
+	[interval_id]
 )
 )
 GO

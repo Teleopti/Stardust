@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				schedulingOptions.MainShiftOptimizeActivitySpecification = null;
 				if (originalPersonAssignment != null)
 				{
-					IMainShift originalMainShift = originalPersonAssignment.MainShift;
+					IMainShift originalMainShift = originalPersonAssignment.ToMainShift();
 					if (originalMainShift != null)
 					{
 						originalShiftCategory = originalMainShift.ShiftCategory;

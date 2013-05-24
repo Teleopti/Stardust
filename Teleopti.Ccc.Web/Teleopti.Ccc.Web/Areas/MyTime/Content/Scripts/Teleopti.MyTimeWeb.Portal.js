@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		$('nav .ui-button').button("option", "disabled", true);
 
 		$('.selected-date-period').css({ opacity: 0.5 });
-		$('#Team-Picker').select2("disable");
+		$('#Team-Picker').select2("enable", false);
 	}
 
 	//enable navigation controls on ajax-complete
@@ -63,7 +63,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		$('.ui-buttonset').buttonset("option", "disabled", false);
 		$('.ui-button').button("option", "disabled", false);
 		$('.selected-date-period').css({ opacity: 1 });
-		$('#Team-Picker').select2("enable");
+		$('#Team-Picker').select2("enable", true);
 	}
 
 	function _datePickerPartsToFixedDate(year, month, day) {

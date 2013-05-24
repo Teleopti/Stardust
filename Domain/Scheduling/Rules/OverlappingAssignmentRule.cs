@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
                 {
-                    if (ass.MainShift != null)
+                    if (ass.ToMainShift() != null)
                     {
                         if (ass.Period.StartDateTime <= approxUtc && ass.Period.EndDateTime >= approxUtc)
                         {

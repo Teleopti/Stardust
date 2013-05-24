@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonViewStudentAvailability.Name = "toolStripButtonViewStudentAvailability";
             this.SetShortcut(this.toolStripButtonViewStudentAvailability, System.Windows.Forms.Keys.None);
             this.toolStripButtonViewStudentAvailability.Size = new System.Drawing.Size(120, 78);
-            this.toolStripButtonViewStudentAvailability.Text = "xxStudentAvailability";
+            this.toolStripButtonViewStudentAvailability.Text = "xxAvailability";
             this.toolStripButtonViewStudentAvailability.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewStudentAvailability, false);
             this.toolStripButtonViewStudentAvailability.Click += new System.EventHandler(this.toolStripButtonViewStudentAvailability_Click);
@@ -781,11 +781,11 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripTabItemStudentAvailability.Panel.Name = "ribbonPanel4";
             this.toolStripTabItemStudentAvailability.Panel.ScrollPosition = 0;
             this.toolStripTabItemStudentAvailability.Panel.TabIndex = 6;
-            this.toolStripTabItemStudentAvailability.Panel.Text = "xxStudentAvailability";
+            this.toolStripTabItemStudentAvailability.Panel.Text = "xxAvailability";
             this.toolStripTabItemStudentAvailability.Position = 3;
             this.SetShortcut(this.toolStripTabItemStudentAvailability, System.Windows.Forms.Keys.None);
             this.toolStripTabItemStudentAvailability.Size = new System.Drawing.Size(109, 19);
-            this.toolStripTabItemStudentAvailability.Text = "xxStudentAvailability";
+            this.toolStripTabItemStudentAvailability.Text = "xxAvailability";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItemStudentAvailability, false);
             this.toolStripTabItemStudentAvailability.Visible = false;
             // 

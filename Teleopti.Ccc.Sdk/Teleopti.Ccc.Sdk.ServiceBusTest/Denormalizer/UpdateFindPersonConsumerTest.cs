@@ -9,35 +9,43 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
-	[TestFixture]
-	public class UpdateFindPersonConsumerTest
-	{
+    [TestFixture]
+    public class UpdateFindPersonConsumerTest
+    {
         private MockRepository _mocks;
-        private UpdateFindPersonConsumer  _target;
-         private IPersonFinderReadOnlyRepository _finderReadOnlyRep;
-       
+        private UpdateFindPersonConsumer _target;
+        private IPersonFinderReadOnlyRepository _finderReadOnlyRep;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private IUnitOfWork _unitOfWork;
+
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-             _finderReadOnlyRep = _mocks.StrictMock<IPersonFinderReadOnlyRepository>();
+            _finderReadOnlyRep = _mocks.StrictMock<IPersonFinderReadOnlyRepository>();
+            _currentUnitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+            _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 
-             _target = new UpdateFindPersonConsumer(_finderReadOnlyRep);
+            _target = new UpdateFindPersonConsumer(_finderReadOnlyRep, _currentUnitOfWorkFactory);
         }
 
         [Test]
         public void UpdateFindPersonTestCall()
         {
             var person = PersonFactory.CreatePerson();
-            Guid tempGuid = Guid.NewGuid();
+            var tempGuid = Guid.NewGuid();
             person.SetId(tempGuid);
 
-            Guid[] ids = new Guid[] { tempGuid };
+            var ids = new[] {tempGuid};
             var mess = new PersonChangedMessage();
             mess.SetPersonIdCollection(ids);
             using (_mocks.Record())
             {
                 Expect.Call(() => _finderReadOnlyRep.UpdateFindPerson(ids));
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             }
             using (_mocks.Playback())
             {
@@ -45,6 +53,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             }
             Assert.That(mess.Identity, Is.Not.Null);
         }
-	}
-
+    }
 }

@@ -183,10 +183,6 @@ in what infrastructuretest this has happened - it is unknown for me.";
 				session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, Guid.NewGuid());
 				uow.PersistAll();
 
-
-				//session.CreateCriteria(typeof(IAggregateRoot))
-				//    .List<IAggregateRoot>()
-				//    .ForEach(rep.Remove);
 				var allDbRoots = session.CreateCriteria(typeof(IAggregateRoot))
 					 .List<IAggregateRoot>();
 				foreach (var aggregateRoot in allDbRoots)

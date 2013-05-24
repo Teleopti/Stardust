@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)
                     DefaultPeriod = new DateTimePeriod(assPeriod.EndDateTime, assPeriod.EndDateTime.AddHours(1));
-                if (personAssignment.MainShift != null)
+                if (personAssignment.ToMainShift() != null)
                 {
-                    visualLayer = personAssignment.MainShift.ProjectionService().CreateProjection().LastOrDefault();
+                    visualLayer = personAssignment.ToMainShift().ProjectionService().CreateProjection().LastOrDefault();
                     defaultActivity = (IActivity)visualLayer.Payload;
                 }
             }

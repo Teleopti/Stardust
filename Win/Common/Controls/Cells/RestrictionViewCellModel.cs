@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         private void drawSchedule(Graphics g, Rectangle clientRectangle, IScheduleDay schedulePart, StringFormat format)
         {
-            IShiftCategory category = schedulePart.AssignmentHighZOrder().MainShift.ShiftCategory;
+            IShiftCategory category = schedulePart.AssignmentHighZOrder().ShiftCategory;
 
             drawShiftCategory(clientRectangle, category, g, format);
 

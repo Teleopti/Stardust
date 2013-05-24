@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IEffectiveRestriction CreateKeepShiftCategoryRestriction(IScheduleDay scheduleDay)
         {
 
-            IShiftCategory shiftCategory = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
+            IShiftCategory shiftCategory = scheduleDay.AssignmentHighZOrder().ShiftCategory;
             return new EffectiveRestriction(
                 new StartTimeLimitation(),
                 new EndTimeLimitation(),
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IEffectiveRestriction CreateKeepStartAndEndTimeRestriction(IScheduleDay scheduleDay)
         {
 			IPerson person = scheduleDay.Person;
-			TimePeriod timePeriod = scheduleDay.AssignmentHighZOrder().MainShift.ProjectionService().
+			TimePeriod timePeriod = scheduleDay.AssignmentHighZOrder().ToMainShift().ProjectionService().
                 CreateProjection().Period().Value.TimePeriod(person.PermissionInformation.DefaultTimeZone());
             TimeSpan shiftStartTime = timePeriod.StartTime;
             TimeSpan shiftEndTime = timePeriod.EndTime;

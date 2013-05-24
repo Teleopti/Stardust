@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     foreach (var personAssignment in yesterDay.PersonAssignmentCollection())
                     {
                         
-                        if (personAssignment.MainShift != null && personAssignment.MainShift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
+                        if (personAssignment.ToMainShift() != null && personAssignment.ToMainShift().LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
                         {
                             DateTime maxTemp =
-                                personAssignment.MainShift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
+                                personAssignment.ToMainShift().LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
                             min = selectedDate.Date;
                             if(maxTemp > max)
                                 max = maxTemp;
@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IScheduleDay today = range.ScheduledDay(selectedDate);
                 foreach (var personAssignment in today.PersonAssignmentCollection())
                 {
-                    if (personAssignment.MainShift != null)
+                    if (personAssignment.ToMainShift() != null)
                     {
-                        if (max < personAssignment.MainShift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone))
-                            max = personAssignment.MainShift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
-                        if (min > personAssignment.MainShift.LayerCollection.Period().Value.StartDateTimeLocal(timeZone))
-                            min = personAssignment.MainShift.LayerCollection.Period().Value.StartDateTimeLocal(timeZone);
+                        if (max < personAssignment.ToMainShift().LayerCollection.Period().Value.EndDateTimeLocal(timeZone))
+                            max = personAssignment.ToMainShift().LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
+                        if (min > personAssignment.ToMainShift().LayerCollection.Period().Value.StartDateTimeLocal(timeZone))
+                            min = personAssignment.ToMainShift().LayerCollection.Period().Value.StartDateTimeLocal(timeZone);
                     }
                 }
             }

@@ -677,7 +677,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         }
         public void SetCalendarCultureInfo(CultureInfo cultureInfo)
         {
-            dateTimePickerAdvPublishedTo.Culture = cultureInfo;
+			dateTimePickerAdvPublishedTo.SetCultureInfoSafe(cultureInfo);
+
+			var minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), 
+											   new DateOnly(DateHelper.MaxSmallDateTime));
+			dateTimePickerAdvPublishedTo.SetAvailableTimeSpan(minPeriod);
+			
             dateSelectionFromToIsOpen.SetCulture(cultureInfo);
             dateSelectionFromToPreferencePeriod.SetCulture(cultureInfo);
             dateSelectionFromToIsOpenStudentAvailability.SetCulture(cultureInfo);

@@ -4389,10 +4389,6 @@
     <value>الحالة</value>
     <comment>الحالة</comment>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>الوقت التوفر</value>
-    <comment>AP:أعمدة شبكة قائمة انتظار (تقريري)</comment>
-  </data>
   <data name="Subject" xml:space="preserve">
     <value>الموضوع</value>
   </data>
@@ -5761,9 +5757,6 @@
   <data name="TimeTypeWeeksSingular" xml:space="preserve">
     <value>اسبوع</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>توفر الطالب</value>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>ادخل القيمة للمجموعات المختلفة</value>
   </data>
@@ -5787,9 +5780,6 @@
   </data>
   <data name="Budgeting" xml:space="preserve">
     <value>عمل الميزانية</value>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>توفر الطالب</value>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>مجموعة تخطيط جديدة</value>
@@ -6724,9 +6714,6 @@
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>هل أنت متأكد من حذف الاسم {0} ؟</value>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>توفر طالب جديد</value>
-  </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
     <value>نتيجة جدولة الفريق</value>
   </data>
@@ -6897,9 +6884,6 @@
   </data>
   <data name="SummeryName" xml:space="preserve">
     <value>اسم الملخص </value>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>اضافة توفر طالب</value>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>دامج</value>

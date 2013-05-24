@@ -73,13 +73,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             var diffColl = new DifferenceCollection<IPersistableScheduleData>();
 						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             var cat = new ShiftCategory("ballefjong");
+	        var act = new Activity("sdfasdfa");
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);
             PersistAndRemoveFromUnitOfWork(schedData);
             PersistAndRemoveFromUnitOfWork(cat);
+					PersistAndRemoveFromUnitOfWork(act);
 
             var schedDataModified = schedData.EntityClone();
-            schedDataModified.SetMainShift(new MainShift(cat));
+	        var newMainShift = new MainShift(cat);
+					newMainShift.LayerCollection.Add(new MainShiftActivityLayer(act, schedData.Period));
+            schedDataModified.SetMainShift(newMainShift);
             
             diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(schedData, schedDataModified));
 
@@ -87,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), diffColl);
 
-            Assert.AreEqual(cat.Id.Value, Session.Get<PersonAssignment>(schedData.Id).MainShift.ShiftCategory.Id.Value);
+            Assert.AreEqual(cat.Id.Value, Session.Get<PersonAssignment>(schedData.Id).ShiftCategory.Id.Value);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(date, _person, _groupSchedulingService,
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1));
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.MainShift).Return(_mainShift);
+				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, new DateOnly(2012, 1, 1)));
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(new DateOnly(2012, 1, 1), _person, _groupSchedulingService,

@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			{
 				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.AssignmentHighZOrder();
 				if (personAssignmentFrom == null) continue;
-				var mainShiftFrom = personAssignmentFrom.MainShift;
+				var mainShiftFrom = personAssignmentFrom.ToMainShift();
 				
 				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.AssignmentHighZOrder();
 				if (personAssignmentTo == null) continue;
-				var mainShiftTo = personAssignmentTo.MainShift;
+				var mainShiftTo = personAssignmentTo.ToMainShift();
 
 				if (mainShiftFrom != null)
 				{

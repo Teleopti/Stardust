@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -21,6 +23,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         protected MainShiftActivityLayer()
         {
         }
+
+				protected override int findOrderIndex()
+				{
+					//fix later
+					return ((IList<IMainShiftActivityLayer>)((IPersonAssignment)Parent).MainShiftActivityLayers).IndexOf(this);
+				}
 
 		public override bool Equals(IEntity other)
 		{

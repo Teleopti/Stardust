@@ -65,6 +65,8 @@
 					   VerticalAlignment="Stretch" 
 					   AutoGenerateColumns="False"
                        SelectionMode="Extended" 
+					   EnableRowVirtualization="true"
+					   EnableColumnVirtualization="true"
                        CellStyle="{StaticResource CellStyle}"
                        RowStyle="{StaticResource RequestRowStyle}"
                        VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"

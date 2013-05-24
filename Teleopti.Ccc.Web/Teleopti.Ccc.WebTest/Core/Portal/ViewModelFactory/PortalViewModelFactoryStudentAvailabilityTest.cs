@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var result = target.CreatePortalViewModel();
 
-			var studentAvailability = (from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).SingleOrDefault();
+			var studentAvailability = (from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
 			studentAvailability.Should().Be.Null();
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var result = target.CreatePortalViewModel();
 
-			var preference = (from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).Single();
+			var preference = (from i in result.NavigationItems where i.Controller == "Availability" select i).Single();
 			var datePicker = (from i in preference.ToolBarItems where i is ToolBarDatePicker select i).SingleOrDefault();
 			datePicker.Should().Not.Be.Null();
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var result = target.CreatePortalViewModel();
 
-			var preference = (from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).Single();
+			var preference = (from i in result.NavigationItems where i.Controller == "Availability" select i).Single();
 			var buttons = from i in preference.ToolBarItems where i is ToolBarButtonItem select i;
 			buttons.Should().Have.Count.EqualTo(2);
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var result = target.CreatePortalViewModel();
 
 			var studentAvailabilityToolbarItems =
-				result.NavigationItems.Where(ni => ni.Controller.Equals("StudentAvailability")).Select(x => x.ToolBarItems).First();
+				result.NavigationItems.Where(ni => ni.Controller.Equals("Availability")).Select(x => x.ToolBarItems).First();
 
 			studentAvailabilityToolbarItems.Should().Have.Count.EqualTo(5);
 		}

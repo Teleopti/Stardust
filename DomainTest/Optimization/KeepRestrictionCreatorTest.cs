@@ -30,12 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void VerifyCreateKeepShiftCategoryRestriction()
 		{
 			IPersonAssignment personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-			IMainShift mainShift = _mockRepository.StrictMock<IMainShift>();
 			using (_mockRepository.Record())
 			{
 				Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(personAssignment);
-				Expect.Call(personAssignment.MainShift).Return(mainShift);
-				Expect.Call(mainShift.ShiftCategory).Return(new ShiftCategory("TestCategory"));
+				Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("TestCategory"));
 			}
 			using (_mockRepository.Playback())
 			{
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(personAssignment);
-                Expect.Call(personAssignment.MainShift).Return(mainShift);
+                Expect.Call(personAssignment.ToMainShift()).Return(mainShift);
                 Expect.Call(mainShift.ProjectionService()).Return(projectionService);
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
                 Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod());

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Absence</value>
@@ -5935,10 +5935,6 @@ Jsou aktivovány tyto volby:
     <value>týden</value>
     <comment>weeks in recurrent meeting page</comment>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Dostupnost studenta</value>
-    <comment>Student Availability</comment>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Vložte hodnoty pro různé kombinace</value>
     <comment>EnterValuesForTheDifferentCombinations</comment>
@@ -5970,10 +5966,6 @@ Jsou aktivovány tyto volby:
   <data name="Budgeting" xml:space="preserve">
     <value>Sestavování rozpočtu</value>
     <comment>Panel</comment>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Dostupnost studenta</value>
-    <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>Nová plánovací skupina</value>
@@ -6262,10 +6254,6 @@ Jsou aktivovány tyto volby:
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Chcete opravdu smazat '{0}' kontakt?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Nová dostupnost studenta</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolutní začátek</value>
@@ -6612,10 +6600,6 @@ Jsou aktivovány tyto volby:
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Přidat preference</value>
     <comment>Add Preference Restriction</comment>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Přidat dostupnost studenta</value>
-    <comment>Add Student Availability</comment>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>Násobitel</value>
@@ -7741,9 +7725,6 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Uzamčení omezení</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Uzamčení Dostupnosti Studentů</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Uzamčení cyklů</value>
@@ -8874,9 +8855,6 @@ Chybová zpráva: {0}</value>
   <data name="StaffEmployed" xml:space="preserve">
     <value>Zaměstnanci uplatnění</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Hodiny studentů</value>
-  </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Přidat efektiviu ztrát</value>
   </data>
@@ -9180,20 +9158,11 @@ Chybová zpráva: {0}</value>
   <data name="NextDayColon" xml:space="preserve">
     <value>Další den:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Pro dostupnost studenta nejsou k dispozici žádné směny</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Období dostupnosti studenta</value>
-  </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Měl(a) bste pracovat minimálně {0}h. Nyní jste dostupný(á) mezi {1}h a {2}h.</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Metrika fronty agenta</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Otevřít dostupnost studenta</value>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
     <value>Maximální délka přiřazení je {0} hodin(y). Stávající délka přidělení je {1} hodin(y),</value>
@@ -9981,9 +9950,6 @@ Tyto volitelné funkce jsou používány:
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Směny pro průžnou pracovní dobu</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Dostupnost studenta</value>
-  </data>
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
     <value>Činnost nemůže být prázdná</value>
   </data>
@@ -10064,9 +10030,6 @@ Tyto volitelné funkce jsou používány:
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>Požadavek na absenci {0} byl zamítnut.</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Splnění požadavků na dostupnost studenta</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>Nový požadavek na výměnu směny {0}, schvalte nebo zamítněnte ve svém seznamu požadavků.</value>

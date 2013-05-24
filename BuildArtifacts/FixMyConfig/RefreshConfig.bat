@@ -34,6 +34,9 @@ for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do copy "%%h" "%%g"
 ::update app.config+web.config according to your custom config
 for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do call:Replace "%%g" "%CustomConfig%"
 
+::update web.config with machineKey config
+for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do SetMachineKeys "%%g"
+
 ::cleanup
 XCOPY "%ROOTDIR%\%nhibFile%" "%nhibDir%" /Y
 DEL "%ROOTDIR%\%nhibFile%"

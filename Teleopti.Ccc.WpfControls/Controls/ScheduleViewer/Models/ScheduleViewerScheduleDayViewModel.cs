@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             if (_part.PersonAssignmentCollection().Count > 0)
             {
                 HasMainShift = true;
-                Description = _part.PersonAssignmentCollection().First().MainShift.ShiftCategory.Description;
-                DisplayColor = _part.PersonAssignmentCollection().First().MainShift.ShiftCategory.DisplayColor;
+                Description = _part.PersonAssignmentCollection().First().ShiftCategory.Description;
+                DisplayColor = _part.PersonAssignmentCollection().First().ShiftCategory.DisplayColor;
 
             }
 

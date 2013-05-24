@@ -90,7 +90,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
 	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
             PersonAssignment ass = new PersonAssignment(agent, scenario, date);
-            ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+	        var mainshift = MainShiftFactory.CreateMainShift(activity, period, category);
+            ass.SetMainShift(mainshift);
             return ass;
         }
 

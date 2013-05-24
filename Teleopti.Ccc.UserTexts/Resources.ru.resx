@@ -5939,10 +5939,6 @@ Periods</comment>
     <value>неделя</value>
     <comment>weeks in recurrent meeting page</comment>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Доступность студентов</value>
-    <comment>Student Availability</comment>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Ввод значений для разных комбинаций</value>
     <comment>EnterValuesForTheDifferentCombinations</comment>
@@ -5974,10 +5970,6 @@ Periods</comment>
   <data name="Budgeting" xml:space="preserve">
     <value>Планирование бюджета</value>
     <comment>Panel</comment>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Доступность студентов</value>
-    <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>Новая группа планирования</value>
@@ -6267,10 +6259,6 @@ Periods</comment>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Приведет к удалению контракта '{0}'. Продолжить?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Новая доступность студентов</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Абсолютное начало</value>
@@ -6617,10 +6605,6 @@ Periods</comment>
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Добавить ограничение предпочтения</value>
     <comment>Add Preference Restriction</comment>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Добавить доступность студентов</value>
-    <comment>Add Student Availability</comment>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>Множитель</value>
@@ -8914,12 +8898,6 @@ Teleopti R&amp;D</value>
   <data name="NextDayColon" xml:space="preserve">
     <value>Следующий день:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Нет доступных смен для доступности студентов.</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Период доступности студентов</value>
-  </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Вы должны работать мин. {0} ч. Сейчас вы доступны для работы между {1} и {2} ч.</value>
   </data>
@@ -8958,9 +8936,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Блокировать ограничения</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Блокировать доступность студентов</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Блокировать ротации</value>
@@ -9250,9 +9225,6 @@ Teleopti R&amp;D</value>
   <data name="OptimizationSteps" xml:space="preserve">
     <value>Шаги оптимизации</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Доступность студентов</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Группы</value>
   </data>
@@ -9406,9 +9378,6 @@ Teleopti R&amp;D</value>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>Запрос на отсутствие {0} был отклонен.</value>
   </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Выполнение доступности студентов</value>
-  </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>Новый запрос изменения смен {0}, подтвердите или отклоните в вашем списке запросов.</value>
   </data>
@@ -9484,9 +9453,6 @@ Teleopti R&amp;D</value>
   <data name="StaffEmployed" xml:space="preserve">
     <value>Текущий штат</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Часы студентов</value>
-  </data>
   <data name="AddShrinkageRow" xml:space="preserve">
     <value>Добавить сокращение</value>
   </data>
@@ -9558,9 +9524,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="IncludeQueues" xml:space="preserve">
     <value>Включая очереди</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Открыть доступность студентов</value>
   </data>
   <data name="AllDaysOff" xml:space="preserve">
     <value>Все выходные</value>

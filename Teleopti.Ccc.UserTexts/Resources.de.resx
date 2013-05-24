@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>abgebrochene Anrufe</value>
@@ -425,10 +425,6 @@
   <data name="AddShiftCategory" xml:space="preserve">
     <value>Schichtkategorie hinzufügen</value>
     <comment>Add shift category text in the shit category settings page</comment>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Studentenverfügbarkeit hinzufügen</value>
-    <comment>Add Student Availability</comment>
   </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>Quick Access Toolbar hinzufügen</value>
@@ -1419,10 +1415,6 @@
   <data name="CreateSkillSummery" xml:space="preserve">
     <value>Skillzusammenfassung erstellen</value>
     <comment>Context menu in Scheduler</comment>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Studentenverfügbarkeit</value>
-    <comment>Student Availability</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
     <value>Anfragen ändern</value>
@@ -3342,7 +3334,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Information</comment>
   </data>
   <data name="MidnightBreakOffsetColon" xml:space="preserve">
-    <value>Mitternachtspause</value>
+    <value>Mitternachtsumbruch</value>
     <comment>Describes a Midnight break e.g 00:00 - 00:00</comment>
   </data>
   <data name="Min" xml:space="preserve">
@@ -3814,10 +3806,6 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <value>Neue Statusgruppe</value>
     <comment>New state group</comment>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Neue Studentenverfügbarkeit</value>
-    <comment>AP context menu item</comment>
-  </data>
   <data name="NewTextRequest" xml:space="preserve">
     <value>Neue Textanfrage</value>
     <comment>Agent Portal Context menu item text for Text Request</comment>
@@ -3979,7 +3967,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Users</comment>
   </data>
   <data name="NotValidOpenHoursForMidnightBreak" xml:space="preserve">
-    <value>Keine gültigen Öffnungszeiten für aktuelle Mitternachtspause \nAktuelle Mitternachtspause des Skill</value>
+    <value>Keine gültigen Öffnungszeiten für den aktuellen Mitternachtsumbruch.</value>
     <comment>Open hour not within midnight break</comment>
   </data>
   <data name="NoValueInNameField" xml:space="preserve">
@@ -4271,7 +4259,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Override</comment>
   </data>
   <data name="Overstaffing" xml:space="preserve">
-    <value>Überbelegung</value>
+    <value>Überdeckung</value>
     <comment>Overstaffing</comment>
   </data>
   <data name="Overtime" xml:space="preserve">
@@ -5412,7 +5400,7 @@ Periods</comment>
     <comment>Seniority</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>Kritische Unterbelegung</value>
+    <value>Kritische Unterdeckung</value>
     <comment>Critical understaffing</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
@@ -5882,10 +5870,6 @@ Periods</comment>
     <value>Status</value>
     <comment>Status</comment>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Studentenverfügbarkeit</value>
-    <comment>Student Availability</comment>
-  </data>
   <data name="Subject" xml:space="preserve">
     <value>Betreff</value>
   </data>
@@ -6349,7 +6333,7 @@ Periods</comment>
     <comment>Unable to connect the the remote service</comment>
   </data>
   <data name="Understaffing" xml:space="preserve">
-    <value>Unterbelegung</value>
+    <value>Unterdeckung</value>
     <comment>Understaffing</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -8735,9 +8719,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="NetStaff" xml:space="preserve">
     <value>Netto -Personal</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Studentenstunden</value>
-  </data>
   <data name="DifferencePercent" xml:space="preserve">
     <value>Unterschied (%)</value>
   </data>
@@ -8918,9 +8899,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="NoMeetingIsSelected" xml:space="preserve">
     <value>Kein Meeting ausgewählt</value>
   </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Studentenverfügbarkeit öffnen</value>
-  </data>
   <data name="PickBestMeetingSlot" xml:space="preserve">
     <value>Meetingvorschläge auswählen</value>
   </data>
@@ -8935,9 +8913,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="SlotsFound" xml:space="preserve">
     <value>Möglichkeit(en) gefunden</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Zeitraum Studentenverfügbarkeit</value>
   </data>
   <data name="UseMaxSeats" xml:space="preserve">
     <value>Nutze maximale Plätze</value>
@@ -9125,9 +9100,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
     <value>Möchten Sie das Meeting {0} löschen?</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Keine Schichten für die Studenten-Verfügbarkeit vorhanden</value>
-  </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
     <value>Die maximale Dauer einer Zuweisung ist/sind {0} Stunde(n). Die aktuelle Dauer der Zuweisung ist/sind {1} Stunde(n).</value>
   </data>
@@ -9175,9 +9147,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Sperre Plan-Beschränkungen</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Studenten-Verfügbarkeit sperren</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Rotationen sperren</value>
@@ -9749,9 +9718,6 @@ Diese Optionen sind aktiviert:
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Soll-Toleranz lt. Vertrag nutzen</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Studentenverfügbarkeiten</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Teams</value>
   </data>
@@ -9847,9 +9813,6 @@ Diese Optionen sind aktiviert:
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>Die Abwesenheitsanfrage {0} wurde abgelehnt.</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Erfüllung Studentenverfügbarkeit</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>Neue Schichttausch-Anfrage {0} liegt zur Beantwortung in der Anfragenliste bereit.</value>
