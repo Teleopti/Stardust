@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
         public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
         {
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind='value: Subject']", "The cake is a.. Cake!");
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section textarea[data-bind='value: Message']", "A message. A very very very short message. Or maybe not.");	
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-detail-section select[data-bind='value: AbsenceId']", name);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='datepicker: DateFrom']", date.ToShortDateString(UserFactory.User().Culture));	
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='datepicker: DateTo']", date.ToShortDateString(UserFactory.User().Culture));	
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", "The cake is a.. Cake!");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section textarea[data-bind='value: Message']", "A message. A very very very short message. Or maybe not.");	
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section select[data-bind='value: AbsenceId']", name);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='datepicker: DateFrom']", date.ToShortDateString(UserFactory.User().Culture));	
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='datepicker: DateTo']", date.ToShortDateString(UserFactory.User().Culture));	
         }
 
 		[Then(@"I should see the text request in the list")]
@@ -49,10 +49,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I click the send button")]
-		[When(@"I click the update button")]
 		public void WhenIClickTheSendButton()
 		{
-			Browser.Interactions.Click("#Request-detail-section button[data-bind*='click: AddRequest']");
+			Browser.Interactions.Click("#Request-add-section button[data-bind*='click: AddRequest']");
+		}
+
+		[When(@"I click the update button")]
+		public void WhenIClickTheUpdateButton()
+		{
+			Browser.Interactions.Click(".bdd-request-edit-detail button[data-bind*='click: AddRequest']");
 		}
 	}
 }

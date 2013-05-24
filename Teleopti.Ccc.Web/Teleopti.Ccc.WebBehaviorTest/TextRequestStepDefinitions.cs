@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -21,34 +22,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input text request values")]
 		public void WhenIInputTextRequstValues()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
 		}
 
         [When(@"I input text request values for date '(.*)'")]
         public void WhenIInputTextRequestValuesForDate(DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-            var time = date.AddHours(12);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
+			
+			var time = date.AddHours(12);
+			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+            
         }
 
 		[When(@"I input new text request values")]
 		public void WhenIInputNewTextRequestValues()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
+			TypeSubject("The cake is a.. cinnemon roll!");
 		}
 
 		[Then(@"I should see the request's values")]
@@ -79,63 +74,77 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
-		public void ThenIShouldSeeTheTextRequestFormWithTodaySDateAsDefault()
+		public void ThenIShouldSeeTheRequestFormWithTodaySDateAsDefault()
 		{
 			var today = DateTime.Today;
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(today));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(today));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateFrom]", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateTo]", today.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = string.Empty;
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", string.Empty);
 		}
 
 		[When(@"I input too long message request values")]
 		[When(@"I input too long text request values")]
         public void WhenIInputTooLongTextRequestValues()
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = new string('t', 2002);
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage(new string('t', 2002));
+			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
         }
 
 		[When(@"I input too long subject request values")]
 		public void WhenIInputTooLongSubjectRequestValues()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "01234567890123456789012345678901234567890123456789012345678901234567890123456789#";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			TypeSubject("01234567890123456789012345678901234567890123456789012345678901234567890123456789#");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
+			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
+		}
+
+		private void TypeSubject(string text)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", text);
+		}
+
+		private void TypeMessage(string text)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section textarea[data-bind='value: Message']", text);
+		}
+
+		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
+		{
+			EnableTimePickersByUncheckingFullDayCheckbox();
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateFrom\"]').datepicker('set', '{0}');",
+							  fromDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeFrom']", fromTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateTo\"]').datepicker('set', '{0}');",
+							  toDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeTo']", toTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Today.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
+			SetValuesForDateAndTime(DateTime.Today.AddDays(1), DateTime.Today, DateTime.Today, DateTime.Today.AddHours(-2));
+		}
+		
+		private void EnableTimePickersByUncheckingFullDayCheckbox()
+		{
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
         [When(@"I input later start time than end time for date '(.*)'")]
         public void WhenIInputLaterStartTimeThanEndTimeForDate(DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = date.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = date.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
+			SetValuesForDateAndTime(date.AddDays(1), date.AddHours(1), date, date.AddHours(-2));
         }
 
 		[When(@"I click the text request's delete button")]
@@ -156,24 +165,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.OuterHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.Period)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.Period)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MissingSubject));
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MissingSubject);
 		}
 
         [Then(@"I should see texts describing too long text error")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MessageTooLong));
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MessageTooLong);
         }
 
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.TheNameIsTooLong));
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.TheNameIsTooLong);
 		}
 
 		[Then(@"I should not see the absence request in the list")]
@@ -195,25 +200,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see a delete button")]
 		public void ThenIShouldNotSeeADeleteButton()
 		{
-			PersonRequest request = null;
-			if (UserFactory.User().HasSetup<ExistingApprovedTextRequest>())
-				request = UserFactory.User().UserData<ExistingApprovedTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingDeniedTextRequest>())
-				request = UserFactory.User().UserData<ExistingDeniedTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingApprovedAbsenceRequest>())
-				request = UserFactory.User().UserData<ExistingApprovedAbsenceRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingDeniedAbsenceRequest>())
-				request = UserFactory.User().UserData<ExistingDeniedAbsenceRequest>().PersonRequest;
-			if (request == null)
-				ScenarioContext.Current.Pending();
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(request.Id.Value).Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(request.Id.Value).IsDisplayed(), Is.False);
+			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-request-body .close");
 		}
 
 		[Then(@"I should not see a save button")]
 		public void ThenIShouldNotSeeASaveButton()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
+			//EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".bdd-request-edit-detail:nth-of-type(1) button[data-bind*=click: AddRequest]");
 		}
 	}
 }
