@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,14 +19,20 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private DateOnly _startDate;
         private MockRepository _mocks;
         private IAddressBookView _addressBookView;
+	    private Guid _guid1;
+	    private Guid _guid2;
 
         [SetUp]
         public void Setup()
         {
+	        _guid1 = Guid.NewGuid();
+	        _guid2 = Guid.NewGuid();
             _mocks = new MockRepository();
             _addressBookView = _mocks.StrictMock<IAddressBookView>();
             _person1 = new ContactPersonViewModel(PersonFactory.CreatePerson("required","1"));
             _person2 = new ContactPersonViewModel(PersonFactory.CreatePerson("optional","2"));
+			_person1.SetId(_guid1);
+			_person2.SetId(_guid2);
             _startDate = new DateOnly(2009, 10, 15);
             _addressBookViewModel = new AddressBookViewModel(new List<ContactPersonViewModel> {_person1, _person2},
                                                              new List<ContactPersonViewModel> {_person1},
@@ -74,8 +81,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.ReplayAll();
             _target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person1 });
             Assert.AreEqual("required 1", _target.AddressBookViewModel.RequiredParticipants);
-            _target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person2 });
-            Assert.AreEqual("required 1; optional 2", _target.AddressBookViewModel.RequiredParticipants);
+			_target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person2 });
+			Assert.AreEqual("required 1; optional 2", _target.AddressBookViewModel.RequiredParticipants);
              _mocks.VerifyAll();
         }
 
@@ -111,84 +118,98 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
         }
 
-        [Test]
-        public void VerifyCanParseAndRemoveOptionalParticipants()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(() => _addressBookView.SetOptionalParticipants(""));
-                Expect.Call(() => _addressBookView.SetCurrentDate(new DateOnly(2009, 10, 15)));
-                Expect.Call(() => _addressBookView.SetRequiredParticipants("required 1"));
-                Expect.Call(() => _addressBookView.SetOptionalParticipants("optional 2"));
-				Expect.Call(() => _addressBookView.PrepareGridView(new List<ContactPersonViewModel> { _person1, _person2 }));
-            }
+		[Test]
+		public void ShouldHandleRequiredAgentsWithSameName()
+		{
+			var guid1 = Guid.NewGuid();
+			var guid2 = Guid.NewGuid();
+
+			_person1 = new ContactPersonViewModel(PersonFactory.CreatePerson("firstName", "lastName"));
+			_person1.SetId(guid1);
+			_person2 = new ContactPersonViewModel(PersonFactory.CreatePerson("firstName", "lastName"));
+			_person2.SetId(guid2);
+			_addressBookViewModel.RequiredParticipantList.Clear();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _addressBookView.SetRequiredParticipants("firstName lastName"));
+				Expect.Call(() => _addressBookView.SetRequiredParticipants("firstName lastName; firstName lastName"));	
+			}
 
 			using (_mocks.Playback())
 			{
-				_target.Initialize();
-				_target.ParseOptionalParticipants("optional ");
-				Assert.AreEqual("", _target.AddressBookViewModel.OptionalParticipants);
-			}
-        }
+				_target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person1 });
+				_target.AddRequiredParticipants(new List<ContactPersonViewModel> { _person2 });
 
-        [Test]
-        public void VerifyCanParseAndRemoveRequiredParticipants()
-        {
+				Assert.AreEqual(2, _target.AddressBookViewModel.RequiredParticipantList.Count);
+				Assert.AreEqual(guid1, _target.AddressBookViewModel.RequiredParticipantList[0].Id);
+				Assert.AreEqual(guid2, _target.AddressBookViewModel.RequiredParticipantList[1].Id);
+			}
+		}
+
+		[Test]
+		public void ShouldHandleOptionalAgentsWithSameName()
+		{
+			var guid1 = Guid.NewGuid();
+			var guid2 = Guid.NewGuid();
+
+			_person1 = new ContactPersonViewModel(PersonFactory.CreatePerson("firstName", "lastName"));
+			_person1.SetId(guid1);
+			_person2 = new ContactPersonViewModel(PersonFactory.CreatePerson("firstName", "lastName"));
+			_person2.SetId(guid2);
+			_addressBookViewModel.OptionalParticipantList.Clear();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _addressBookView.SetOptionalParticipants("firstName lastName"));
+				Expect.Call(() => _addressBookView.SetOptionalParticipants("firstName lastName; firstName lastName"));
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.AddOptionalParticipants(new List<ContactPersonViewModel> { _person1 });
+				_target.AddOptionalParticipants(new List<ContactPersonViewModel> { _person2 });
+
+				Assert.AreEqual(2, _target.AddressBookViewModel.OptionalParticipantList.Count);
+				Assert.AreEqual(guid1, _target.AddressBookViewModel.OptionalParticipantList[0].Id);
+				Assert.AreEqual(guid2, _target.AddressBookViewModel.OptionalParticipantList[1].Id);
+			}
+		}
+
+		[Test]
+		public void ShouldRemoveRequiredFromIndex()
+		{
+			var allSelectedIndex = new List<int> {0};
+
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _addressBookView.SetRequiredParticipants(""));
-				Expect.Call(() => _addressBookView.SetCurrentDate(new DateOnly(2009, 10, 15)));
-				Expect.Call(() => _addressBookView.SetRequiredParticipants("required 1"));
-				Expect.Call(() => _addressBookView.SetOptionalParticipants("optional 2"));
-				Expect.Call(() => _addressBookView.PrepareGridView(new List<ContactPersonViewModel> { _person1, _person2 }));
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.Initialize();
-				_target.ParseRequiredParticipants("optional ");
-				Assert.AreEqual("", _target.AddressBookViewModel.RequiredParticipants);
+				Assert.AreEqual(1, _target.AddressBookViewModel.RequiredParticipantList.Count);
+				_target.RemoveIndexesRequired(allSelectedIndex);
+				Assert.AreEqual(0, _target.AddressBookViewModel.RequiredParticipantList.Count);
 			}
-        }
+		}
 
-        [Test]
-        public void VerifyCanParseAndRemoveOptionalParticipantsCorrectly()
-        {
+		[Test]
+		public void ShouldRemoveOptionalFromIndex()
+		{
+			var allSelectedIndex = new List<int> {0};
+
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _addressBookView.SetOptionalParticipants(""));
-				Expect.Call(() => _addressBookView.SetCurrentDate(new DateOnly(2009, 10, 15)));
-				Expect.Call(() => _addressBookView.SetRequiredParticipants("required 1"));
-				Expect.Call(() => _addressBookView.SetOptionalParticipants("optional 2"));
-				Expect.Call(() => _addressBookView.PrepareGridView(new List<ContactPersonViewModel> { _person1, _person2 }));
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.Initialize();
-				_target.ParseOptionalParticipants("optoptional ");
-				Assert.AreEqual("", _target.AddressBookViewModel.OptionalParticipants);
+				Assert.AreEqual(1, _target.AddressBookViewModel.OptionalParticipantList.Count);
+				_target.RemoveIndexesOptional(allSelectedIndex);
+				Assert.AreEqual(0, _target.AddressBookViewModel.OptionalParticipantList.Count);
 			}
-        }
-
-        [Test]
-        public void VerifyCanParseAndRemoveRequiredParticipantsCorrectly()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _addressBookView.SetRequiredParticipants(""));
-				Expect.Call(() => _addressBookView.SetCurrentDate(new DateOnly(2009, 10, 15)));
-				Expect.Call(() => _addressBookView.SetRequiredParticipants("required 1"));
-				Expect.Call(() => _addressBookView.SetOptionalParticipants("optional 2"));
-				Expect.Call(() => _addressBookView.PrepareGridView(new List<ContactPersonViewModel> { _person1, _person2 }));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.Initialize();
-				_target.ParseRequiredParticipants("reqoptional ");
-				Assert.AreEqual("", _target.AddressBookViewModel.RequiredParticipants);
-			}
-        }
+		}
     }
 }

@@ -122,6 +122,16 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapAvailability()
+		{
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.Availability.Should().Be.EqualTo((bool)domainData.Availability);
+		}
+
+		[Test]
 		public void ShouldMapStateToday()
 		{
 			var domainData = new WeekScheduleDayDomainData {Date = DateOnly.Today};
