@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                 if (personAssignments.Count < 1)
                 {
-                    var personAssignmentEndDateTime = scheduleDay.Period.EndDateTime.AddSeconds(-1);
+                    var personAssignmentEndDateTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);
                     var personAssignmentStartDateTime = scheduleDay.Period.StartDateTime;
 
                     if (personAssignmentStartDateTime <= startDate)
