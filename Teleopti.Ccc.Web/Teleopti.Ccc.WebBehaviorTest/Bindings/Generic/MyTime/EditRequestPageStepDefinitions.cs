@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -30,21 +31,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
-			Browser.Interactions.AssertExists("#Request-detail-section");
+			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-detail-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
-				Browser.Interactions.Click("#Request-detail-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-detail-section input[type=checkbox]:enabled').prop('checked')").ToString() == "false")
-				Browser.Interactions.Click("#Request-detail-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "false")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
 
@@ -74,11 +75,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSee800_1700AsTheDefaultTimes(string startTime, string endTime)
 		{
 			int[] st = startTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tstart = new TimeSpan(st[0], st[1], 0);
+			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
 			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tend = new TimeSpan(end[0], end[1], 0);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tstart, UserFactory.User().Culture)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tend, UserFactory.User().Culture)));
+			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
+
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeFrom]",
+			                                    TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeTo]",
+												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the request form with '(.*)' as default date")]
@@ -88,20 +92,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(date));
 		}
 
-
-
-
-		[Then(@"I should see the edit text request form")]
-		[Then(@"I should see the edit absence request form")]
-		public void ThenIShouldSeeTheRequestsDetailsForm()
+		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.JQueryVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertElementsAreVisible(string.Format(".bdd-request-edit-detail:nth-of-type({0})", position));
 		}
-
-
-
-
 
 		[Then(@"I should see the add text request form")]
 		public void ThenIShouldSeeTheTextRequestForm()

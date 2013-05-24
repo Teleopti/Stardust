@@ -74,18 +74,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
-		public void ThenIShouldSeeTheTextRequestFormWithTodaySDateAsDefault()
+		public void ThenIShouldSeeTheRequestFormWithTodaySDateAsDefault()
 		{
 			var today = DateTime.Today;
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(today));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(today));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateFrom]", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateTo]", today.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind='value: Subject']", string.Empty);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", string.Empty);
 		}
 
 		[When(@"I input too long message request values")]
@@ -107,25 +107,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void TypeSubject(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind='value: Subject']", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", text);
 		}
 
 		private void TypeMessage(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section textarea[data-bind='value: Message']", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section textarea[data-bind='value: Message']", text);
 		}
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
 		{
 			EnableTimePickersByUncheckingFullDayCheckbox();
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-detail-section input[data-bind*=\"datepicker: DateFrom\"]').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateFrom\"]').datepicker('set', '{0}');",
 							  fromDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='timepicker: TimeFrom']", fromTime.ToShortTimeString(UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeFrom']", fromTime.ToShortTimeString(UserFactory.User().Culture));
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-detail-section input[data-bind*=\"datepicker: DateTo\"]').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateTo\"]').datepicker('set', '{0}');",
 							  toDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='timepicker: TimeTo']", toTime.ToShortTimeString(UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeTo']", toTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 
@@ -137,8 +137,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		
 		private void EnableTimePickersByUncheckingFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-detail-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
-				Browser.Interactions.Click("#Request-detail-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
         [When(@"I input later start time than end time for date '(.*)'")]
@@ -165,20 +165,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			Browser.Interactions.AssertContains("#Request-detail-section .alert-danger", string.Format(Resources.InvalidTimeValue, Resources.Period));
-			Browser.Interactions.AssertContains("#Request-detail-section .alert-danger", Resources.MissingSubject);
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MissingSubject);
 		}
 
         [Then(@"I should see texts describing too long text error")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-			Browser.Interactions.AssertContains("#Request-detail-section .alert-danger", Resources.MessageTooLong);
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MessageTooLong);
         }
 
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			Browser.Interactions.AssertContains("#Request-detail-section .alert-danger", Resources.TheNameIsTooLong);
+			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.TheNameIsTooLong);
 		}
 
 		[Then(@"I should not see the absence request in the list")]
@@ -206,7 +206,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see a save button")]
 		public void ThenIShouldNotSeeASaveButton()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
+			//EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".bdd-request-edit-detail:nth-of-type(1) button[data-bind*=click: AddRequest]");
 		}
 	}
 }

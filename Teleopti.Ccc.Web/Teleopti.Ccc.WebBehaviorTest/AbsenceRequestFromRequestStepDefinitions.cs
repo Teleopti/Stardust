@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -25,76 +23,110 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest());
 		}
 
-
-
-		[When(@"I click the absence request's delete button")]
-		public void WhenIClickTheAbsenceRequestSDeleteButton()
+		[When(@"I click the absence request's delete button for request at position '(.*)' in the list")]
+		public void WhenIClickTheAbsenceRequestSDeleteButtonForRequestAtPositionInTheList(int position)
 		{
-			var requestId = UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.Id.Value;
-			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).EventualClick();
+			Browser.Interactions.Click(string.Format(".bdd-request-body:nth-of-type({0}) button .close", position));
 		}
 
-		[When(@"I input new absence request values")]
-		public void WhenIInputNewAbsenceRequestValues()
+		[When(@"I change the absence request values with")]
+		public void WhenIChangeTheAbsenceRequestValuesWith(Table table)
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
-			Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select("Illness");
+			var absence = table.Rows[1][1];
+			var subject = table.Rows[2][1];
+			var position = table.Rows[0][1];
+
+			Browser.Interactions.SelectOptionByTextUsingJQuery(
+				string.Format(".bdd-request-edit-detail:nth-of-type({0}) select[data-bind='value: AbsenceId']", position), absence);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(
+				string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind='value: Subject']", position), subject);
 		}
 
-
-
-		[Then(@"I should see the new absence request values in the list")]
-		public void ThenIShouldSeeTheNewAbsenceRequestValuesInTheList()
+		[Then(@"I should see the updated request values in the list with")]
+		public void ThenIShouldSeeTheUpdatedRequestValuesInTheListWith(Table table)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
+			var absence = table.Rows[1][1];
+			var subject = table.Rows[2][1];
+			var position = table.Rows[0][1];
+
+			Browser.Interactions.AssertNotExists(string.Format(".bdd-request-body:nth-of-type({0})", position), string.Format(".bdd-request-body:nth-of-type({0})", position + 1));
+			Browser.Interactions.AssertContains(string.Format(".bdd-request-body:nth-of-type({0}) .request-data-subject", position), subject);
+			Browser.Interactions.AssertContains(string.Format(".bdd-request-body:nth-of-type({0}) .request-data-type", position), absence);
 		}
 
-		[Then(@"I should not be able to input values for absence request")]
-		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequest()
+		[Then(@"I should not be able to input values for absence request for request at position '(.*)' in the list")]
+		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequestForRequestAtPositionInTheList(int position)
 		{
-			const string disabledAttr = "disabled";
-			const string readonlyAttr = "readonly";
-			var detailForm = Pages.Pages.CurrentEditRequestPage;
-			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
-			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailFromTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailSubjectInput");
-			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
-			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
-			EventualAssert.That(() => detailForm.AbsenceTypesTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "AbsenceTypesTextField");
-			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind*=\"value: Subject\"][disabled]", position));
+			Browser.Interactions.AssertExists(".bdd-request-edit-detail textarea[data-bind*=\"value: Message\"][disabled]");
+
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) select[disabled]", position));
+
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind*=\"datepicker: DateFrom\"][disabled]", position));
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind*=\"timepicker: TimeFrom\"][disabled]", position));
+
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind*=\"datepicker: DateTo\"][disabled]", position));
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[data-bind*=\"timepicker: TimeTo\"][disabled]", position));
+
+			Browser.Interactions.AssertExists(string.Format(".bdd-request-edit-detail:nth-of-type({0}) input[type=\"checkbox\"][disabled]", position));
 		}
 
-		[Then(@"I should see the absence request containing '(.*)' in the list")]
-		public void ThenIShouldSeeTheAbsenceRequestInTheList(string absence)
+		[Then(@"I should see the absence request containing '(.*)' at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheAbsenceRequestContainingAtPositionInTheList(string absence, int position)
 		{
 			Browser.Interactions.AssertExists(".bdd-request-body");
-			Browser.Interactions.AssertContains(".bdd-request-body:nth-of-type(1)", absence);
+			Browser.Interactions.AssertContains(string.Format(".bdd-request-body:nth-of-type({0}) .request-data-type", position), absence);
 		}
 
-		[Then(@"I should see the absence request's values")]
-		public void ThenIShouldSeeTheAbsenceRequestSValues()
+		[Then(@"I should see the absence request's values at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheAbsenceRequestSValuesAtPositionInTheList(int position)
 		{
 			var request = UserFactory.User().UserData<ExistingAbsenceRequest>();
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value,
-																		Is.EqualTo(request.PersonRequest.GetMessage(new NoFormatting())));
+			//EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value),
+			//															Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.Date));
+			//EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value),
+			//															Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
+			//EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value,
+			//															Is.EqualTo(request.PersonRequest.GetMessage(new NoFormatting())));
 
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceTypesTextField.Value,
-																		Is.EqualTo(request.AbsenceRequest.Absence.Description.Name));
+			//EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceTypesTextField.Value,
+			//															Is.EqualTo(request.AbsenceRequest.Absence.Description.Name));
 
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value,
-																		Is.EqualTo(request.PersonRequest.GetSubject(new NoFormatting())));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
+			//EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value,
+			//															Is.EqualTo(request.PersonRequest.GetSubject(new NoFormatting())));
+			//EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value),
+			//															Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.Date));
+			//EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value),
+			//															Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.TimeOfDay));
+			//EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-subject", position),
+				request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-subject", position),
+				request.PersonRequest.GetMessage(new NoFormatting()));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-type", position),
+				request.AbsenceRequest.Absence.Description.Name);
+			
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".bdd-request-body:nth-of-type({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+
 		}
 
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]

@@ -46,7 +46,7 @@
         <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
-    <div class="clearfix" data-bind="visible: IsEditable">
+    <div class="clearfix" data-bind="if: IsEditable">
         <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
@@ -60,10 +60,10 @@
         <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
-        <label for="Absence-type">
+        <label>
             @Resources.AbsenceType
         </label>
-        <select id="Absence-type" data-bind="value: AbsenceId, enable: IsEditable">
+        <select data-bind="value: AbsenceId, enable: IsEditable">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
@@ -94,7 +94,7 @@
         <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
-    <div class="clearfix" data-bind="visible: IsEditable">
+    <div class="clearfix" data-bind="if: IsEditable">
         <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
@@ -111,7 +111,7 @@
         <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message" />
     </div>
     <div data-bind="visible: AbsenceRequestHeaderVisible">
-        <label for="Absence-type">
+        <label>
             @Resources.AbsenceType
         </label>
         <select data-bind="value: AbsenceId">
@@ -178,7 +178,7 @@
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-    <div id="Request-detail-section" class="well well-small" data-bind="visible: IsNewInProgress">
+    <div id="Request-add-section" class="well well-small" data-bind="visible: IsNewInProgress">
 		<div data-bind="template : Template">
 		</div>
 	</div>
@@ -216,7 +216,7 @@
                             <div class="request-text" data-bind="text: Text">
                             </div>
                         </div>
-                        <div data-bind="visible: IsSelected, with: DetailItem">
+                        <div class="bdd-request-edit-detail" data-bind="visible: IsSelected, with: DetailItem">
                             <hr />
                             <div data-bind="template : Template">
                             </div>

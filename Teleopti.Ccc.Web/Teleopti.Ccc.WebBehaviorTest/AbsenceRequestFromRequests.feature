@@ -10,7 +10,7 @@ Scenario: Add absence request
 	When I click to add a new absence request
 	And I input absence request values with Vacation
 	And I click the send button
-	Then I should see the absence request containing 'Vacation' in the list
+	Then I should see the absence request containing 'Vacation' at position '1' in the list
 
 Scenario: Add absence request when multiple absences exist
 	Given I am an agent
@@ -20,7 +20,7 @@ Scenario: Add absence request when multiple absences exist
 	When I click to add a new absence request
 	And I input absence request values with Holiday
 	And I click the send button
-	Then I should see the absence request containing 'Holiday' in the list
+	Then I should see the absence request containing 'Holiday' at position '1' in the list
 
 Scenario: Can not add absence request from request view if no permission
 	Given I am an agent without access to absence requests
@@ -91,43 +91,51 @@ Scenario: View absence request details
 	Given I am an agent
 	And I have an existing absence request
 	And I am viewing requests
-	When I click on the request
-	Then I should see the edit absence request form 
-	And I should see the absence request's values
+	When I click on the request at position '1' in the list
+	Then I should see the detail form for request at position '1' in the list
+	And I should see the absence request's values at position '1' in the list
 
 Scenario: Edit absence request
 	Given I am an agent
 	And I have a requestable absence called Illness
 	And I have an existing absence request
 	And I am viewing requests
-	When I click on the request
-	And I input new absence request values
+	When I click on the request at position '1' in the list
+	And I change the absence request values with
+	| Field         | Value          |
+	| ListPosistion | 1              |
+	| Absence       | Illness        |
+	| Subject       | my new subject |
 	And I click the update button
-	Then I should see the new absence request values in the list
+	Then I should see the updated request values in the list with
+	| Field         | Value          |
+	| ListPosistion | 1              |
+	| Absence       | Illness        |
+	| Subject       | my new subject |
 
 Scenario: Delete absence request
 	Given I am an agent
 	And I have an existing absence request
 	And I am viewing requests
-	When I click the absence request's delete button
+	When I click the absence request's delete button for request at position '1' in the list
 	Then I should not see the absence request in the list
 
 Scenario: Can not edit approved absence requests
 	Given I am an agent
 	And I have an approved absence request
 	And I am viewing requests
-	When I click on the request
-	Then I should see the edit absence request form
-	And I should not be able to input values for absence request
+	When I click on the request at position '1' in the list
+	Then I should see the detail form for request at position '1' in the list
+	And I should not be able to input values for absence request for request at position '1' in the list
 	And I should not see a save button
 
 Scenario: Can not edit denied absence requests
 	Given I am an agent
 	And I have a denied absence request
 	And I am viewing requests
-	When I click on the request
-	Then I should see the edit absence request form
-	And I should not be able to input values for absence request
+	When I click on the request at position '1' in the list
+	Then I should see the detail form for request at position '1' in the list
+	And I should not be able to input values for absence request for request at position '1' in the list
 	And I should not see a save button
 
 Scenario: Can not delete approved absence request
@@ -146,14 +154,14 @@ Scenario: Can see why absence request was denied
 	Given I am an agent
 	And I have a denied absence request beacuse of missing workflow control set
 	And I am viewing requests
-	When I click on the request
-	Then I should see the edit absence request form
+	When I click on the request at position '1' in the list
+	Then I should see the detail form for request at position '1' in the list
 	And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'
 
 Scenario: Clear deny reason when adding new absence request
 	Given I am an agent
 	And I have a denied absence request beacuse of missing workflow control set
 	And I am viewing requests
-	When I click on the request 
+	When I click on the request at position '1' in the list
 	When I click to add a new absence request
 	Then I should not see the deny reason
