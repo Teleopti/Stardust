@@ -75,7 +75,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 		var domainObjectIdString = Subscription.IdToString(domainObjectId);
 		var domainQualifiedTypeString = types[0].AssemblyQualifiedName;
 		var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
-		var domainObjectString = (domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null;
+		var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
 		foreach (var type in types)
 		{
 			yield return new Notification
@@ -405,7 +405,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			var domainObject = d.BinaryData;
 			if (!string.IsNullOrEmpty(domainObject))
 			{
-				message.DomainObject = Encoding.UTF8.GetBytes(domainObject);
+				message.DomainObject = Convert.FromBase64String(domainObject);
 			}
 
 			InvokeEventHandlers(message, d.Routes());
