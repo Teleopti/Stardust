@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void _clipboardControlStudentAvailability_PasteClicked(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView != null)
             {
                 studentAvailabilityView.PasteClip();
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void _clipboardControlStudentAvailability_CutClicked(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView != null)
             {
                 studentAvailabilityView.CutClip();
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void _clipboardControlStudentAvailability_CopyClicked(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView != null)
             {
                 studentAvailabilityView.CopyToClipboard();
@@ -1002,7 +1002,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void SetUpStudentAvailabilityToolStrip()
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView == null) return;
 
             toolStripTabItemStudentAvailability.Visible = true;
@@ -1011,7 +1011,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void toolStripButtonSAPreviousPeriod_Click(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView == null) return;
             Cursor = Cursors.WaitCursor;
             studentAvailabilityView.Presenter.GetPreviousPeriod();
@@ -1021,7 +1021,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void toolStripButtonSANextPeriod_Click(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView == null) return;
             Cursor = Cursors.WaitCursor;
             studentAvailabilityView.Presenter.GetNextPeriod();
@@ -1032,7 +1032,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void toolStripButtonSAValidate_Click(object sender, EventArgs e)
         {
-            var studentAvailabilityView = panelSchedule.Controls[0] as StudentAvailabilityView;
+            var studentAvailabilityView = panelSchedule.Controls[0] as AvailabilityView;
             if (studentAvailabilityView == null) return;
             Cursor = Cursors.WaitCursor;
             studentAvailabilityView.Presenter.ReloadPeriod();

@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
 {
-    partial class StudentAvailabilityView
+    partial class AvailabilityView
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentAvailabilityView));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AvailabilityView));
             this.gridControl1 = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.contextMenuStripStudentAvailability = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemCut = new System.Windows.Forms.ToolStripMenuItem();
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "StudentAvailabilityView";
+            this.Name = "AvailabilityView";
             this.Load += new System.EventHandler(this.StudentAvailabilityView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             this.contextMenuStripStudentAvailability.ResumeLayout(false);
