@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						return false;
 					return _thisShouldGoAway.Equals(that._thisShouldGoAway);					
 				}
-				return Equals((IEntity)other);
+				return Equals((ILayer)other);
 			}
 			/// 
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				protected override int findOrderIndex()
 				{
 					//fix later
-					return ((IList<IMainShiftActivityLayer>)((IPersonAssignment)Parent).MainShiftActivityLayers).IndexOf(this);
+					return (((IMainShift)Parent).LayerCollection).IndexOf(this);
 				}
 
 		public override bool Equals(IEntity other)

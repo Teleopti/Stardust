@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void SetMainShift(IMainShift mainShift)
 		{
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
+			mainShift.SetParent(this);
 			//fix nicer later
 			ClearMainShiftLayers();
 			mainShift.LayerCollection.ForEach(layer =>
