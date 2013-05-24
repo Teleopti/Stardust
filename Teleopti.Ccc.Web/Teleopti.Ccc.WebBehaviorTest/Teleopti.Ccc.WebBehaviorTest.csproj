@@ -87,13 +87,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="AnywherePerformanceTool\AddFullDayAbsencePerformanceView.feature.cs">
-      <DependentUpon>AddFullDayAbsencePerformanceView.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="AnywherePerformanceTool\RemoveAbsencePerformanceView.feature.cs">
-      <DependentUpon>RemoveAbsencePerformanceView.feature</DependentUpon>
+    <Compile Include="PerformanceTool\PerformanceView.feature.cs">
+      <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -592,13 +587,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="AnywherePerformanceTool\AddFullDayAbsencePerformanceView.feature">
+    <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AddFullDayAbsencePerformanceView.feature.cs</LastGenOutput>
-    </None>
-    <None Include="AnywherePerformanceTool\RemoveAbsencePerformanceView.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RemoveAbsencePerformanceView.feature.cs</LastGenOutput>
+      <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
