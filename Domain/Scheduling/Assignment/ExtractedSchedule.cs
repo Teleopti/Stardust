@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             foreach (var assignment in PersonAssignmentCollection())
             {
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.ToMainShift() == null)
+							if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.ShiftCategory == null)
                     Remove(assignment);
             }
         }
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     assignment.RemoveOvertimeShift(overTime);
                 }
 
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.ToMainShift() == null)
+								if (assignment.PersonalShiftCollection.Count == 0 && assignment.ShiftCategory == null)
                     personAssToRemoveList.Add(assignment);
             }
 
@@ -891,7 +891,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
 				{
-					if (personAssignment.ToMainShift() == null)
+					if (personAssignment.ShiftCategory == null)
 					{
 						personAssignment.SetMainShift(mainShift);
 					}
