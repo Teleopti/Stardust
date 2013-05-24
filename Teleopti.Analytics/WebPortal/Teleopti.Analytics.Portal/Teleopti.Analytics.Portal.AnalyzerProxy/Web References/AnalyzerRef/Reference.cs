@@ -4329,6 +4329,15 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy.AnalyzerRef {
         Print,
         
         /// <remarks/>
+         ManageSubscr,
+        
+        /// <remarks/>
+        Subscribe,
+        
+        /// <remarks/>
+        Theme,
+        
+        /// <remarks/>
         EntireToolbar,
     }
     
