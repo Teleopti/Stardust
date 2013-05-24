@@ -62,6 +62,37 @@ Scenario: Add
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-09 00:00 |
 
+Scenario: Add absence for shift ending tomorrow
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-05-22 22:00 |
+	| End time       | 2013-05-23 07:00 |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-05-23 22:00 |
+	| End time       | 2013-05-24 07:00 |	
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-05-23'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-05-23 |
+	And I click 'apply'
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 22:00 |
+	| End time   | 07:00 |
+	| Color      | Red   |
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-05-23 07:00 |
+	| End time   | 2013-05-24 07:00 |
+
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
