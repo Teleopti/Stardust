@@ -12,9 +12,9 @@ define([
 
 			var self = this;
 
-			var time = moment(data.Start, resources.FixedDateTimeFormat);
+			var startTime = moment(data.Start);
 		    
-			var localStartMinutes = time.diff(data.Date, 'minutes');
+			var localStartMinutes = startTime.diff(data.Date, 'minutes');
 
 			this.StartMinutes = ko.observable(localStartMinutes);
 			this.LengthMinutes = ko.observable(data.Minutes);
