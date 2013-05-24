@@ -2,31 +2,38 @@
 <html>
 	<head>
 		<title>All Tests</title>
-		<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-		<META HTTP-EQUIV="Expires" CONTENT="-1">
-
+		
 		<link rel="stylesheet" href="../../../../Content/Scripts/qunit.css" type="text/css" media="screen" />
 		<script type="text/javascript" src="../../../../Content/Scripts/jquery-1.8.3.js"></script>
 		<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.9.1.custom.js"></script>
 		<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
 		<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.2.0.js"></script>
-
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
-
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Ajax.js"></script>
-
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.DayViewModel.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js"></script>
-
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.Tests.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.Tests.js"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js?v=2"></script>
 		
-	
+	    <script type="text/javascript">
+    	    function loadScriptNoCache(src) {
+	            $.ajax({
+	                url: src,
+	                dataType: "script",
+	                async: false,
+	                cache: false
+	            });
+	        }
+    	
+    	    $(function () {
+    	        loadScriptNoCache('Teleopti.MyTimeWeb.Ajax.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.DayViewModel.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.Tests.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.Tests.js');
+		        loadScriptNoCache('Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js');
+		    });
+		</script>
+		
 	</head>
 	<body>
 		<h1 id="qunit-header">All tests</h1>
