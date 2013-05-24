@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
     	private IPersonAssignment _personAssignment;
-    	private IMainShift _mainShift;
 
         [SetUp]
         public void Setup()
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _nightRestWhiteSpotSolverService = _mocks.StrictMock<INightRestWhiteSpotSolverService>();
             _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
         	_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-        	_mainShift = _mocks.StrictMock<IMainShift>();
         }
 
 
@@ -122,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.Twice();
 				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone()).Return(part).Repeat.Twice();
                 part.DeleteMainShift(part);
                 part.CreateAndAddDayOff(_dayOffTemplate);
@@ -228,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.Twice();
             	Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-            	Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+            	Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone())
                     .Return(part).Repeat.AtLeastOnce();
                 part.DeleteMainShift(part);
@@ -312,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.AtLeastOnce();
 				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone()).Return(part).Repeat.AtLeastOnce();
                 part.DeleteMainShift(part);
                 part.CreateAndAddDayOff(_dayOffTemplate);
@@ -445,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
 				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.Twice();
 
@@ -568,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
 				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.AtLeastOnce();
 
@@ -699,7 +696,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
 				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
-				Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.Twice();
 
