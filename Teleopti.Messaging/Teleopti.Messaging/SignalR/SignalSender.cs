@@ -63,7 +63,7 @@ namespace Teleopti.Messaging.SignalR
 									DomainQualifiedType = type.AssemblyQualifiedName,
 									ModuleId = Subscription.IdToString(Guid.Empty),
 									DomainUpdateType = (int)DomainUpdateType.Insert,
-									BinaryData = domainObject,
+					          		BinaryData = Convert.ToBase64String(domainObject),
 									BusinessUnitId = Subscription.IdToString(businessUnitId)
 								});
 					break;
