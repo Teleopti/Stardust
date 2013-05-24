@@ -223,18 +223,49 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var allowance = TimeSpan.FromHours(4);
-			var allowanceDay1 = new Tuple<DateOnly,TimeSpan>(week.StartDate,allowance);
-			var allowanceDay2 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(1),allowance);
-			var allowanceDay3 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(2),allowance);
-			var allowanceDay4 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(3),allowance);
-			var allowanceDay5 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(4),allowance);
-			var allowanceDay6 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(5),allowance);
-			var allowanceDay7 = new Tuple<DateOnly, TimeSpan>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)));
-
+			var allowanceDay1 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate,allowance, true);
+			var allowanceDay2 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(1), allowance, true);
+			var allowanceDay3 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(2), allowance, true);
+			var allowanceDay4 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(3), allowance, true);
+			var allowanceDay5 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(4), allowance, true);
+			var allowanceDay6 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(5), allowance, true);
+			var allowanceDay7 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)), true);
+ 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { allowanceDay1, allowanceDay2, allowanceDay3, allowanceDay4, allowanceDay5, allowanceDay6, allowanceDay7 });
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Item2.TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldMapAvailabilities()
+		{
+			var date = DateOnly.Today;
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			var projection = new StubFactory().ProjectionStub();
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			var allowance = TimeSpan.FromHours(4);
+			const bool availability = false;
+			var availabilityDay1 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate, allowance, availability);
+			var availabilityDay2 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(1), allowance, availability);
+			var availabilityDay3 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(2), allowance, availability);
+			var availabilityDay4 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(3), allowance, availability);
+			var availabilityDay5 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(4), allowance, availability);
+			var availabilityDay6 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(5), allowance, availability);
+			var availabilityDay7 = new Tuple<DateOnly, TimeSpan, bool>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)), availability);
+
+			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { availabilityDay1, availabilityDay2, availabilityDay3, availabilityDay4, availabilityDay5, availabilityDay6, availabilityDay7 });
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+			result.Days.Single(d => d.Date == lastDayOfWeek).Availability.Should().Be.EqualTo(availabilityDay7.Item3);
 		}
 
 		[Test]

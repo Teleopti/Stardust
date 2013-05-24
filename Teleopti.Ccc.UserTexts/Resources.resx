@@ -5850,7 +5850,7 @@ These options are activated:
     <comment>weeks in recurrent meeting page</comment>
   </data>
   <data name="StudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
+    <value>Hourly Availability</value>
     <comment>Student Availability</comment>
   </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
@@ -5887,7 +5887,7 @@ Start Date</value>
     <comment>Panel</comment>
   </data>
   <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
+    <value>Hourly Availability</value>
     <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
@@ -6174,10 +6174,6 @@ Meeting</value>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Are you sure you want to delete '{0}' contract?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>New Student Availability</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolute Start</value>
@@ -9680,11 +9676,11 @@ Period</comment>
     <comment>Next day:</comment>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>No shifts available for this student availability.</value>
+    <value>No shifts available for this availability.</value>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Student availability period</value>
+    <value>Availability period</value>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
@@ -9696,7 +9692,7 @@ Period</comment>
     <comment>Agent Queue Metrics</comment>
   </data>
   <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Open student availability</value>
+    <value>Open hourly availability</value>
     <comment>Open student availability</comment>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
@@ -9780,7 +9776,7 @@ Period</comment>
     <comment>Lock Restrictions</comment>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Lock Student Availability</value>
+    <value>Lock Hourly Availability</value>
     <comment>Lock Student Availability</comment>
   </data>
   <data name="LockRotations" xml:space="preserve">
@@ -10471,7 +10467,7 @@ These options are activated:
     <comment>Shifts for flexible work time</comment>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Student availabilities</value>
+    <value>Hourly availabilities</value>
     <comment>Student availabilities</comment>
   </data>
   <data name="Teams" xml:space="preserve">
@@ -10600,7 +10596,7 @@ These options are activated:
     <comment>Denied absence request for one day.</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Student Availability Fulfillment</value>
+    <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
@@ -11438,7 +11434,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>To be used in menus/ribbon when adding preference</comment>
   </data>
   <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
-    <value>Add Student Availability...</value>
+    <value>Add Hourly Availability...</value>
     <comment>To be used in menus/ribbon when adding student availability</comment>
   </data>
   <data name="Fair" xml:space="preserve">

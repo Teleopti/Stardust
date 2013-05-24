@@ -10,11 +10,8 @@ namespace Teleopti.Ccc.Domain.Auditing
 		public virtual DateTime ModifiedAt { get; protected set; }
 		public virtual IPerson ModifiedBy { get; protected set; }
 
-		public virtual void SetRevisionData(IPerson currentUser, DateTime utcNow)
+		public virtual void SetRevisionData(IPerson currentUser)
 		{
-			//todo - don't need to pass date here when upgrading Envers next time
-			//https://nhibernate.jira.com/browse/NHE-122
-			ModifiedAt = utcNow;
 			ModifiedBy = currentUser;
 		}
 

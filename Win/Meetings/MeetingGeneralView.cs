@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void meetingPersonTextBoxParticipant_TextChanged(object sender, EventArgs e)
         {
-            _presenter.ParseParticipants(textBoxExtParticipant.Text);
+            //_presenter.ParseParticipants(textBoxExtParticipant.Text);
         }
 
         public void SetOrganizer(string organizer)
@@ -254,9 +254,21 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void textBoxExtParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers != Keys.Control)
-                _lastSelectionWas = TextBoxNameExtender.KeyDown(textBoxExtParticipant, e, _lastSelectionWas, true);
-            
+			if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+			{
+				var textBox = textBoxExtParticipant;
+				var first = textBox.Text.Substring(0, textBox.SelectionStart);
+				var allSelectedIndexes = TextBoxNameExtender.SelectedIndexes(textBox);
+				_presenter.Remove(allSelectedIndexes);
+				textBox.Select(first.Length, 0);
+				TextBoxNameExtender.GetSelected(textBox);
+			}
+
+			else if (e.Modifiers != Keys.Control)
+			{
+				_lastSelectionWas = TextBoxNameExtender.KeyDown(textBoxExtParticipant, e, _lastSelectionWas, true);
+			}
+
             e.SuppressKeyPress = true;
         }
 

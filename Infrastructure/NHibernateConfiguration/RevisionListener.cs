@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public void NewRevision(object revisionEntity)
 		{
 			var revision = (Revision) revisionEntity;
-			revision.SetRevisionData(_personProvider.CurrentUser(), DateTime.UtcNow);
+			revision.SetRevisionData(_personProvider.CurrentUser());
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
@@ -37,19 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
 			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
-			//if (!message.IsInitialLoad)
-			//{
-			//	_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
-			//}
-
 			var readModels = _scheduleDayReadModelsCreator.GetReadModels(message);
-			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.BusinessUnitId, readModels, skipClear: message.IsInitialLoad);
-			//foreach (var readModel in readModels)
-			//{
-			//	_scheduleDayReadModelRepository.SaveReadModels(readModel);
-			//}
+			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.BusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
 		}
-
 	}
-
 }

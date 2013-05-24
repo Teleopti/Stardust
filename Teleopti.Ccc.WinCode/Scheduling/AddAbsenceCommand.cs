@@ -46,6 +46,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
 			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 
+            if (!IsMultipleAgentsRequest(selectedSchedules))
+            {
+                periodSetup = getDefaultDateTimePeriod(selectedSchedules);
+            }
+            //var temp = getDefaultDateTimePeriod(selectedSchedules);
+
 			IAddLayerViewModel<IAbsence> addAbsenceDialog = ScheduleViewBase.CreateAddAbsenceViewModel(n.ToList(), periodSetup, SchedulerStateHolder.TimeZoneInfo);
 			bool dialogResult = addAbsenceDialog.Result;
 			if (!dialogResult) return;
@@ -122,6 +128,99 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 			
 		}
+
+        private static ISetupDateTimePeriod getDefaultDateTimePeriod(IList<IScheduleDay> selectedSchedules)
+        {
+            var defaultDateTime = getDefaultDateTimePeriodForOnePerson(selectedSchedules);
+            return defaultDateTime;
+        }
+
+        private static ISetupDateTimePeriod getDefaultDateTimePeriodForOnePerson(IList<IScheduleDay> selectedSchedules)
+        {
+            var startDate = new DateTime();
+            var endDate = new DateTime();
+
+            if (selectedSchedules.Count > 0)
+            {
+                if (selectedSchedules.First().PersonAssignmentCollection().Count > 0)
+                    startDate = selectedSchedules.First().PersonAssignmentCollection().First().Period.StartDateTime;
+                else
+                    startDate = selectedSchedules.First().Period.StartDateTime;
+
+                endDate = startDate;
+            }
+
+            foreach (var scheduleDay in selectedSchedules)
+            {
+                var personAssignments = scheduleDay.PersonAssignmentCollection();
+
+                foreach (var personAssignment in personAssignments)
+                {
+                    var personAssignmentEndDateTime = personAssignment.Period.EndDateTime;
+                    var personAssignmentStartDateTime = personAssignment.Period.StartDateTime;
+
+                    if (personAssignmentStartDateTime <= startDate)
+                    {
+                        startDate = personAssignmentStartDateTime;
+                    }
+
+                    if (personAssignmentEndDateTime >= endDate)
+                    {
+                        endDate = personAssignmentEndDateTime;
+                    }
+                }
+
+                if (personAssignments.Count < 1)
+                {
+                    var personAssignmentEndDateTime = scheduleDay.Period.EndDateTime.AddSeconds(-1);
+                    var personAssignmentStartDateTime = scheduleDay.Period.StartDateTime;
+
+                    if (personAssignmentStartDateTime <= startDate)
+                    {
+                        startDate = personAssignmentStartDateTime;
+                    }
+
+                    if (personAssignmentEndDateTime >= endDate)
+                    {
+                        endDate = personAssignmentEndDateTime;
+                    }
+                }
+            }
+
+            return new SetupDateTimePeriodToDefaultPeriod(new DateTimePeriod(startDate, endDate));
+        }
+
+        private static bool IsMultipleAgentsRequest(IList<IScheduleDay> selectedSchedules)
+        {
+            var person = selectedSchedules.First().Person.Id;
+            var result = false;
+
+            foreach (var selectedSchedule in selectedSchedules)
+            {
+                var personAssignments = selectedSchedule.PersonAssignmentCollection();
+
+                foreach (var personAssignment in personAssignments)
+                {
+                    if (personAssignment.Person.Id != person)
+                    {
+                        person = personAssignment.Person.Id;
+                        result = true;
+                    }
+                }
+
+                if (personAssignments.Count < 1)
+                {
+                    if (person != selectedSchedule.Person.Id)
+                    {
+                        person = selectedSchedule.Person.Id;
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
+
 
 		private IList<IScheduleDay> removeLockedSchedules(IEnumerable<IScheduleDay> selectedSchedules)
 		{

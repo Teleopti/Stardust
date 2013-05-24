@@ -12,7 +12,7 @@ using Teleopti.Ccc.AgentPortalCode.Helper;
 
 namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
 {
-    public partial class StudentAvailabilityView : BaseUserControl, IStudentAvailabilityView
+	public partial class AvailabilityView : BaseUserControl, IStudentAvailabilityView, IHelpContext
     {
         private const int RowHeight = 90;
         private const int ColHeaderHeight = 30;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
         private readonly StudentAvailabilityModel _model;
         private static readonly NotValidatedSpecification NotValidatedSpecification = new NotValidatedSpecification();
 
-        public StudentAvailabilityView(IToggleButtonState parent)
+        public AvailabilityView(IToggleButtonState parent)
         {
             InitializeComponent();
             IScheduleHelper scheduleHelper = new ScheduleHelper();

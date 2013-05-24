@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private Control _hostedView;
         private ScheduleControl _scheduleControl;
         private PreferenceView _preferenceView;
-        private StudentAvailabilityView _studentAvailabilityView;
+        private AvailabilityView _studentAvailabilityView;
 	    private readonly LegendLoader _legendLoader = new LegendLoader(()=>SdkServiceHelper.SchedulingService);
 
 	    private ViewConstructor()
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                     _hostedView.Width = container.Width;
                     _hostedView.Height = container.Height;
 
-                    if (_hostedView is StudentAvailabilityView || _hostedView is PreferenceView)
+                    if (_hostedView is AvailabilityView || _hostedView is PreferenceView)
                         parent.ShowRightPanel(false);
                     else parent.ShowRightPanel(true);
 
@@ -137,10 +137,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
             return null;
         }
 
-        private StudentAvailabilityView GetStudentAvailabilityView(IToggleButtonState parent)
+        private AvailabilityView GetStudentAvailabilityView(IToggleButtonState parent)
         {
             if (_studentAvailabilityView == null)
-                _studentAvailabilityView = new StudentAvailabilityView(parent);
+                _studentAvailabilityView = new AvailabilityView(parent);
 
             return _studentAvailabilityView;
         }

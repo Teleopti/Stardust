@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -6155,10 +6155,6 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>vecka på:</value>
     <comment>recurrence meeting text</comment>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Ny tillgänglighet för timanställd</value>
-    <comment>AP context menu item</comment>
-  </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>Tapp och svarstider</value>
   </data>
@@ -9429,7 +9425,7 @@ period</comment>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Tillgänglighetsperiod för timanställd</value>
+    <value>Tillgänglighetsperiod</value>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
@@ -10291,7 +10287,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Rotation Fulfillment</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Studenttillgänglighetsuppfyllnad</value>
+    <value>Tillgänglighetsuppfyllnad för timanställd</value>
     <comment>Student Availability Fulfillment</comment>
   </data>
   <data name="ImportWorkload" xml:space="preserve">
@@ -10864,7 +10860,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Snabbprognosen kommer att startas som ett bakgrundsjobb när denna guide avslutas. Titta i jobbhistoriken för att se status. </value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny eller godkänd. </value>
+    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny, nekad eller godkänd. </value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nytt namn på mall</value>

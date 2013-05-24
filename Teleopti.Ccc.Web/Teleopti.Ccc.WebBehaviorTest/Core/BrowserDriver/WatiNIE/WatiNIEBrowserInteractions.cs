@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			browserAssert(() => _browser.Eval(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
-		public void AssertInputValue(string selector, string value)
-		{
-			browserAssert(() => _browser.TextField(Find.BySelector(selector)).Value, Is.EqualTo(value), "Failed to assert that input " + selector + " had the value " + value);
-		}
-
 		public void AssertExists(string selector)
 		{
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
