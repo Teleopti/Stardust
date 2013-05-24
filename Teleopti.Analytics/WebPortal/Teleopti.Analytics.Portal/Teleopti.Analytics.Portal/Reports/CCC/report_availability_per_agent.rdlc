@@ -33,7 +33,6 @@
                             <TextRun>
                               <Value>=Parameters!ResSelections.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -75,7 +74,6 @@
                             <TextRun>
                               <Value>=Parameters!ResScenarioColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -109,7 +107,6 @@
                             <TextRun>
                               <Value>=Parameters!scenario_id.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -150,7 +147,7 @@
                             <TextRun>
                               <Value>=Parameters!ResGroupPageColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
+                                <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -179,7 +176,6 @@
                             <TextRun>
                               <Value>=Parameters!group_page_code.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -219,7 +215,7 @@
                             <TextRun>
                               <Value>=Parameters!ResGroupPageGroupColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
+                                <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -251,7 +247,6 @@
                             <TextRun>
                               <Value>=Parameters!group_page_group_set.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -294,7 +289,7 @@
                             <TextRun>
                               <Value>=Parameters!ResSiteNameColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
+                                <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -328,7 +323,6 @@
                             <TextRun>
                               <Value>=Parameters!site_id.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -373,7 +367,6 @@
                             <TextRun>
                               <Value>=Parameters!ResTeamNameColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -411,7 +404,6 @@
                             <TextRun>
                               <Value>=Parameters!team_set.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -456,7 +448,6 @@
                             <TextRun>
                               <Value>=Parameters!ResDateColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -490,7 +481,6 @@
                             <TextRun>
                               <Value>=iif(Parameters!date_from.Value&lt;&gt;Parameters!date_to.Value,Parameters!date_from.Value +" - " + Parameters!date_to.Value,Parameters!date_to.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -619,7 +609,6 @@
                             <TextRun>
                               <Value>=Parameters!ResAgentName.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -659,7 +648,6 @@
                             <TextRun>
                               <Value>=Parameters!ResAvailableDays.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -698,7 +686,6 @@
                             <TextRun>
                               <Value>=Parameters!ResAvailableTime.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -738,7 +725,6 @@
                             <TextRun>
                               <Value>=Parameters!ResScheduledDays.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -778,7 +764,6 @@
                             <TextRun>
                               <Value>=Parameters!ResScheduledTime.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -818,7 +803,6 @@
                             <TextRun>
                               <Value>=Parameters!ResUtilization.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -860,7 +844,6 @@
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -902,7 +885,6 @@
                             <TextRun>
                               <Value>=sum(Fields!AvailableDays.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -940,7 +922,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -978,7 +959,6 @@
                             <TextRun>
                               <Value>=Sum(Fields!ScheduledDays.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1016,7 +996,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(Sum(Fields!ScheduledMinutes.Value))</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1054,7 +1033,6 @@
                             <TextRun>
                               <Value>=Sum(Fields!ScheduledMinutes.Value)/Sum(Fields!AvailableMinutes.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Format>0.0%</Format>
                                 <Color>DimGray</Color>
@@ -1101,7 +1079,6 @@
                             <TextRun>
                               <Value>=Fields!PersonName.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1134,7 +1111,6 @@
                             <TextRun>
                               <Value>=Fields!AvailableDays.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1166,7 +1142,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!AvailableMinutes.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1198,7 +1173,6 @@
                             <TextRun>
                               <Value>=Fields!ScheduledDays.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1230,7 +1204,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!ScheduledMinutes.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1303,7 +1276,6 @@
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1345,7 +1317,6 @@
                             <TextRun>
                               <Value>=sum(Fields!AvailableDays.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1383,7 +1354,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1421,7 +1391,6 @@
                             <TextRun>
                               <Value>=Sum(Fields!ScheduledDays.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1459,7 +1428,6 @@
                             <TextRun>
                               <Value>=Code.TimeString(Sum(Fields!ScheduledMinutes.Value))</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1497,7 +1465,6 @@
                             <TextRun>
                               <Value>=Sum(Fields!ScheduledMinutes.Value) / Sum(Fields!AvailableMinutes.Value)</Value>
                               <Style>
-                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Format>0.0%</Format>
                                 <Color>DimGray</Color>
@@ -1587,7 +1554,7 @@
     <Height>6.93115cm</Height>
     <Style />
   </Body>
-  <Width>22.93042cm</Width>
+  <Width>19.35854cm</Width>
   <Page>
     <PageHeader>
       <Height>2cm</Height>
@@ -1603,7 +1570,6 @@
                 <TextRun>
                   <Value>=Parameters!ResReportAvailabilityPerAgent.Value</Value>
                   <Style>
-                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>22pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1642,7 +1608,6 @@
                 <TextRun>
                   <Value>=Format(Globals.ExecutionTime, "g")</Value>
                   <Style>
-                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1674,7 +1639,6 @@
                 <TextRun>
                   <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
                   <Style>
-                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1729,7 +1693,6 @@
                 <TextRun>
                   <Value>Powered by TELEOPTI CCC©</Value>
                   <Style>
-                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
                     <Color>DimGray</Color>
@@ -1884,11 +1847,6 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>agent_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="time_zone_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>time_zone_id</Prompt>
     </ReportParameter>
     <ReportParameter Name="person_code">
       <DataType>String</DataType>
