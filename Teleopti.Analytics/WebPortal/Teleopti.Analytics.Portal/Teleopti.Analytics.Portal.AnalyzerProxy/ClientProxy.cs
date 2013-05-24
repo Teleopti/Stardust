@@ -175,6 +175,8 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
             // Configure the toolbar. Create a collection of toolbarbuttons that need to be hidden in the UI
             var buttons = new ToolbarButton[]
                               {
+								  ToolbarButton.ManageSubscr,
+								  ToolbarButton.Subscribe,
                                   ToolbarButton.Close,
                                   ToolbarButton.BookmarkPanel,
                                   ToolbarButton.Config,
