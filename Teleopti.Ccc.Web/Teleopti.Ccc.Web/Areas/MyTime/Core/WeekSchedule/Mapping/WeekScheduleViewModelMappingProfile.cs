@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
 				.ForMember(d => d.Allowance, c => c.MapFrom(s => s.Allowance))
 				.ForMember(d => d.AbsenceAgents, c => c.MapFrom(s => s.AbsenceTime))
+				.ForMember(d => d.Availability, c => c.MapFrom(s => s.Availability))
 
 				.ForMember(d => d.State, o => o.ResolveUsing(s =>
 															{
