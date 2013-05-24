@@ -650,7 +650,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     Remove(dayOff);
                 }
 
-                IPersonAssignment ass = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
+                IPersonAssignment ass = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
                 ass.SetMainShift(workingCopyOfMainShift);
                 Add(ass);
             }
