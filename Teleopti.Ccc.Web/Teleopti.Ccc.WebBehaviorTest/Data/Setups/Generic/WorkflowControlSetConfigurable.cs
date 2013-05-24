@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string AbsenceRequestOpenPeriodEnd { get; set; }
 		public string AbsenceRequestPreferencePeriodStart { get; set; }
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
+		public string StaffingCheck { get; set; }
+		public string AutoGrant { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -74,6 +76,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
 				};
 				workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+				switch (StaffingCheck)
+				{
+					case null:
+						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+						break;
+					case "intraday":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new StaffingThresholdValidator();
+						break;
+					case "budgetgroup":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+						break;
+					case "budgetgroup head count":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+						break;
+				}
+
+				switch (AutoGrant)
+				{
+					case null:
+						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new PendingAbsenceRequest();
+						break;
+					case "yes":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new GrantAbsenceRequest();
+						break;
+					case "deny":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new DenyAbsenceRequest();
+						break;
+				}
 			}
 
 			if (!string.IsNullOrEmpty(AvailableActivity))

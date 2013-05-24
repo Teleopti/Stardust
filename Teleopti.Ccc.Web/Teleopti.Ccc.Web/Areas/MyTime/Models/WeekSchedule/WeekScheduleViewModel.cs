@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public int Allowance { get; set; }
 		public int AbsenceAgents { get; set; }
 		public int DayOfWeekNumber { get; set; }
+		public bool Availability { get; set; }
 
 		public bool HasNote
 		{
