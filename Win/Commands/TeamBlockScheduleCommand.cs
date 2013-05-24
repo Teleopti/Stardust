@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-			var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
 
 
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Win.Commands
 											 teamBlockScheduler, 
 											 new BlockSteadyStateValidator(), 
 											 _safeRollbackAndResourceCalculation,
-                                             _workShiftMinMaxCalculator, advanceSchedulingResults);
+                                             _workShiftMinMaxCalculator, advanceSchedulingResults,new TeamBlockMaxSeatChecker(_schedulerStateHolder.SchedulingResultState,schedulingOptions  ));
 
 			return advanceSchedulingService;
 		}

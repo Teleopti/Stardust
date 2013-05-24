@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private bool _cancelMe;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly List<IWorkShiftFinderResult> _advanceSchedulingResults;
+        private ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
 
         public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, IBlockSteadyStateValidator blockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults)
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, IBlockSteadyStateValidator blockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _advanceSchedulingResults = advanceSchedulingResults;
+            _teamBlockMaxSeat = teamBlockMaxSeat;
             _schedulingOptions = schedulingOptions;
 	    }
 
@@ -103,6 +105,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                     break;
                                 }
                             }
+
+                            //check the max seat of the block
+                            if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer))
+                            {
+                                rollbackExecuted = true;
+                                //var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
+                                //workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult("Max Seats voilated", 0, 0));
+                                //_advanceSchedulingResults.Add(workShiftFinderResult);
+
+                                _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
+                                                                                _schedulingOptions);
+                                break;
+                            }
+
                             if (rollbackExecuted)
                             {
                                 //should skip the whole block

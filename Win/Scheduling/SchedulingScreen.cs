@@ -3666,10 +3666,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //when the advance scheduling is required
 					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
 
-                    //old group scheduling code 
-                    //var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-                    //_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
-				
+                    
                 }
                 else
                 {

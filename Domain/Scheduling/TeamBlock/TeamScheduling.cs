@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
-        public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public TeamScheduling(IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             _resourceCalculateDelayer = resourceCalculateDelayer;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -26,7 +26,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod)
 		{
-			var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
+		    
+            
+            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
 			if (!tempMatrixList.Any()) 
 				return;
 
