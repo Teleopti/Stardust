@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
@@ -63,7 +64,7 @@ namespace Teleopti.Messaging.SignalR
 									DomainQualifiedType = type.AssemblyQualifiedName,
 									ModuleId = Subscription.IdToString(Guid.Empty),
 									DomainUpdateType = (int)DomainUpdateType.Insert,
-					          		BinaryData = Convert.ToBase64String(domainObject),
+					          		BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
 									BusinessUnitId = Subscription.IdToString(businessUnitId)
 								});
 					break;
