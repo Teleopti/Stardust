@@ -105,8 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ret.SetParent(this);
 			_mainShiftActivityLayers.ForEach(layer =>
 				{
-					var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, layer.Period);
-					mainShiftLayer.SetId(layer.Id);
+					var mainShiftLayer = new MainShiftActivityLayer(layer);
 					ret.LayerCollection.Add(mainShiftLayer);
 				});
 			return ret;
