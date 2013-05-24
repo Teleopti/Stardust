@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
-            builder.RegisterType<KeepRestrictionCreator>().As<IKeepRestrictionCreator>().InstancePerLifetimeScope();
             builder.RegisterInstance(new ScheduleTagSetter(NullScheduleTag.Instance)).As<IScheduleTagSetter>().SingleInstance();
             builder.RegisterType<FixedStaffSchedulingService>().As<IFixedStaffSchedulingService>().InstancePerLifetimeScope();
 

@@ -201,7 +201,6 @@
     <Compile Include="Domain\ICustomShrinkage.cs" />
     <Compile Include="Domain\ICustomShrinkageWrapper.cs" />
     <Compile Include="Domain\IDayOffDecisionMaker.cs" />
-    <Compile Include="Domain\IKeepRestrictionCreator.cs" />
     <Compile Include="Domain\IMasterActivity.cs" />
     <Compile Include="Domain\IGroupPageOptions.cs" />
     <Compile Include="Domain\IMoveTimeDecisionMaker.cs" />

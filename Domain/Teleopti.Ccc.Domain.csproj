@@ -407,7 +407,6 @@
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />
     <Compile Include="Optimization\MatrixOvertimeLocker.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreator.cs" />
     <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />

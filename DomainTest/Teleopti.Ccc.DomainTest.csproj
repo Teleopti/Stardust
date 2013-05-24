@@ -323,7 +323,6 @@
     <Compile Include="Optimization\IntradayOptimizerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreatorTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
