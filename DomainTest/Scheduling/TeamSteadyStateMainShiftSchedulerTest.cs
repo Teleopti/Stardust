@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[SetUp]
 		public void Setup()
 		{
-			_editorShiftMapper = _mocks.StrictMock<IEditorShiftMapper>();
 			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
+			_editorShiftMapper = _mocks.StrictMock<IEditorShiftMapper>();
 			_dateOnly = new DateOnly(2012, 1, 1);
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());

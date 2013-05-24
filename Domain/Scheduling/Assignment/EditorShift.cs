@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class EditorShift : IEditorShift
 	{
-		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
+		private readonly IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
 		public EditorShift(IShiftCategory shiftCategory)
 		{
@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IProjectionService ProjectionService()
 		{
-			throw new System.NotImplementedException();
+			var proj = new VisualLayerProjectionService(null);
+			proj.Add(this);
+			return proj;
 		}
 
 		public bool HasProjection { get; private set; }
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IVisualLayerFactory CreateVisualLayerFactory()
 		{
-			throw new System.NotImplementedException();
+			return new VisualLayerFactory();
 		}
 
 		public object Clone()
