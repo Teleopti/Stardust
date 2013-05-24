@@ -34,6 +34,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void AtLeastOneMainShiftLayerMustBeSet()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => 
+				target.SetMainShiftLayers(new IMainShiftActivityLayerNew[0], new ShiftCategory("foo")));
+		}
+
+		[Test]
 		public void VerifyBelongsToScenario()
 		{
 			Assert.IsTrue(target.BelongsToScenario(target.Scenario));
