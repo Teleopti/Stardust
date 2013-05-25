@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dates = new List<DateOnly>();
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             Expect.Call(_dictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
+	        Expect.Call(_dictionary.PermissionsEnabled).Return(true).Repeat.AtLeastOnce();
             _mocks.Replay(_dictionary);
             _range1 = _mocks.StrictMock<IScheduleRange>();
             _range2 = _mocks.StrictMock<IScheduleRange>();

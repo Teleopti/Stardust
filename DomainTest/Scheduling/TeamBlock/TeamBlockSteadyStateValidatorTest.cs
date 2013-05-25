@@ -358,29 +358,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private void expectCallForDayForSameShift(IScheduleDay scheduleDay, DateOnly dateOnly)
         {
-            IList<IPersonDayOff> list = new List<IPersonDayOff>();
-            ReadOnlyCollection<IPersonDayOff> personDayOffCollection = new ReadOnlyCollection<IPersonDayOff>(list);
-            var pA = _mock.StrictMock<IPersonAssignment>();
-            IList<IPersonAssignment> personAssignment = new List<IPersonAssignment>();
-            ReadOnlyCollection<IPersonAssignment> personAssignmentList = new ReadOnlyCollection<IPersonAssignment>(personAssignment);
             var mainShift = _mock.StrictMock<IEditorShift>();
-            IShiftCategory shiftCategory = _mock.StrictMock<IShiftCategory>();
-
 			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_todayScheduleDayPro);
 			Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 			Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
 			Expect.Call(scheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleDayEquator.MainShiftEqualsWithoutPeriod(mainShift, mainShift)).Return(true).Repeat.AtLeastOnce();
-	        //Expect.Call(scheduleDay.PersonDayOffCollection()).Return(personDayOffCollection).Repeat.AtLeastOnce();
-	        //Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-	        //Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(personAssignmentList);
-	        //Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pA).Repeat.AtLeastOnce();
-
-
-	        //Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
-	        //Expect.Call(shiftCategory.Id).Return(new Guid()).Repeat.AtLeastOnce();
-	        //Expect.Call(mainShift.LayerCollection).Return(new LayerCollection<IActivity>()).Repeat.AtLeastOnce();
         }
 
         private void expectCallForDayForSameStartTime(IScheduleDay scheduleDay, DateOnly dateOnly, DateTime startTime, bool isScheduled)
