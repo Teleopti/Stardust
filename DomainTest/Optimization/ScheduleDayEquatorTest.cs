@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            var newMainShift = new EditorShift(original.PersonAssignmentCollection()[0].ShiftCategory);
+	        var newMainShift = original.GetEditorShift();
             original.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            var newMainShift = new EditorShift(current.PersonAssignmentCollection()[0].ShiftCategory);
+	        var newMainShift = current.GetEditorShift();
             current.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));

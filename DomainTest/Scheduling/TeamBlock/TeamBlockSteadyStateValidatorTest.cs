@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -364,22 +363,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var pA = _mock.StrictMock<IPersonAssignment>();
             IList<IPersonAssignment> personAssignment = new List<IPersonAssignment>();
             ReadOnlyCollection<IPersonAssignment> personAssignmentList = new ReadOnlyCollection<IPersonAssignment>(personAssignment);
-            IMainShift mainShift = _mock.StrictMock<IMainShift>();
+            var mainShift = _mock.StrictMock<IEditorShift>();
             IShiftCategory shiftCategory = _mock.StrictMock<IShiftCategory>();
 
-            Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_todayScheduleDayPro);
-            Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(scheduleDay);
-            Expect.Call(scheduleDay.IsScheduled()).Return(true);
+			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_todayScheduleDayPro);
+			Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+			Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
-            Expect.Call(scheduleDay.PersonDayOffCollection()).Return(personDayOffCollection).Repeat.AtLeastOnce();
-            Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-            Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(personAssignmentList);
-            Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pA).Repeat.AtLeastOnce();
-            
-            Expect.Call(pA.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
-            Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
-            Expect.Call(shiftCategory.Id).Return(new Guid()).Repeat.AtLeastOnce();
-            Expect.Call(mainShift.LayerCollection).Return(new LayerCollection<IActivity>()).Repeat.AtLeastOnce();
+			Expect.Call(scheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDayEquator.MainShiftEqualsWithoutPeriod(mainShift, mainShift)).Return(true).Repeat.AtLeastOnce();
+	        //Expect.Call(scheduleDay.PersonDayOffCollection()).Return(personDayOffCollection).Repeat.AtLeastOnce();
+	        //Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+	        //Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(personAssignmentList);
+	        //Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pA).Repeat.AtLeastOnce();
+
+
+	        //Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
+	        //Expect.Call(shiftCategory.Id).Return(new Guid()).Repeat.AtLeastOnce();
+	        //Expect.Call(mainShift.LayerCollection).Return(new LayerCollection<IActivity>()).Repeat.AtLeastOnce();
         }
 
         private void expectCallForDayForSameStartTime(IScheduleDay scheduleDay, DateOnly dateOnly, DateTime startTime, bool isScheduled)

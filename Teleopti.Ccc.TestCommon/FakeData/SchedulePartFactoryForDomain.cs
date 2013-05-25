@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod first = new DateTimePeriod(CurrentPeriod.StartDateTime, CurrentPeriod.StartDateTime.AddHours(2));
             DateTimePeriod second = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(2), CurrentPeriod.StartDateTime.AddHours(4));
             var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer firstLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("first"), first);
-			ActivityLayer secondLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("second"), second);
+            var firstLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("first"), first);
+			var secondLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("second"), second);
             mainShift.LayerCollection.Add(firstLayer);
             mainShift.LayerCollection.Add(secondLayer);
             part.AddMainShift(mainShift);
