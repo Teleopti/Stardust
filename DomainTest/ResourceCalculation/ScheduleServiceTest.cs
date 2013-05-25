@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -159,7 +158,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																													  new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
-            Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() => _part.AddMainShift(mainShift));
             Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
@@ -198,7 +196,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person, new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
-            Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() =>_part.AddMainShift(mainShift));
 			Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);

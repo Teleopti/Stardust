@@ -360,17 +360,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void setExpectationsForSettingOriginalShiftCategory()
         {
-
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+            var mainShift = _mocks.StrictMock<IEditorShift>();
             var shiftCategory = _mocks.StrictMock<IShiftCategory>();
-             var originalSchedulePart = _mocks.StrictMock<IScheduleDay>();
+            var originalSchedulePart = _mocks.StrictMock<IScheduleDay>();
 
-             Expect.Call(_effectiveRestriction.ShiftCategory).Return(shiftCategory).Repeat.Any();
-
-            Expect.Call(originalSchedulePart.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
-            Expect.Call(personAssignment.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
-						Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
+            Expect.Call(_effectiveRestriction.ShiftCategory).Return(shiftCategory).Repeat.Any();
+			Expect.Call(originalSchedulePart.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
+			Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
 
             IDictionary<DateOnly, IScheduleDay> originalScheuduleDays = new Dictionary<DateOnly, IScheduleDay>();
             originalScheuduleDays.Add(new DateOnly(2010, 1, 1), originalSchedulePart);
