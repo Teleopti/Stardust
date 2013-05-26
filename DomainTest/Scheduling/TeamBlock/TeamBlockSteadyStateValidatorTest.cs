@@ -362,7 +362,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var mainShift = _mock.StrictMock<IEditorShift>();
             IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
-            var personAssignment = _mock.StrictMock<IPersonAssignment>();
             IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 
 			Expect.Call(scheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
