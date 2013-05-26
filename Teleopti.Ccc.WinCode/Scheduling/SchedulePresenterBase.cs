@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -927,7 +928,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void AddOvertime(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IList<IMultiplicatorDefinitionSet> definitionSets)
         {
-            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules);
+            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules, new EditorShiftMapper());
             if (defaultPeriod.HasValue)
             {
                 command.DefaultPeriod = defaultPeriod;

@@ -10,9 +10,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class AddOvertimeCommand : AddLayerCommand
     {
         private IList<IMultiplicatorDefinitionSet> _definitionSets;
+	    private readonly IEditorShiftMapper _editorShiftMapper;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts)
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditorShiftMapper editorShiftMapper)
             : base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
 		    DefaultIsSet = false;
@@ -21,7 +22,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 DefaultPeriod = GetDefaultPeriodFromPart(ScheduleParts[0]);
             }
             _definitionSets = definitionSets;
-        }
+			_editorShiftMapper = editorShiftMapper;
+		}
 
         public bool DefaultIsSet
         {
@@ -58,9 +60,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)
                     DefaultPeriod = new DateTimePeriod(assPeriod.EndDateTime, assPeriod.EndDateTime.AddHours(1));
-                if (personAssignment.ToMainShift() != null)
+				var shift = _editorShiftMapper.CreateEditorShift(personAssignment);
+                if (shift != null)
                 {
-                    visualLayer = personAssignment.ToMainShift().ProjectionService().CreateProjection().LastOrDefault();
+                    visualLayer = shift.ProjectionService().CreateProjection().LastOrDefault();
                     defaultActivity = (IActivity)visualLayer.Payload;
                 }
             }
