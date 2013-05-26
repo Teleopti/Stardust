@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void OnAdd(ILayer<IActivity> layer)
 		{
 			if (!(layer is IEditorActivityLayer))
-				throw new ArgumentException("Only ActivityLayers can be added to a EditorShift");
+				throw new ArgumentException("Only EditorActivityLayers can be added to a EditorShift");
 			
 			((IEditorActivityLayer)layer).SetParent(this);
 		}
@@ -49,17 +49,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public object Clone()
 		{
-			throw new System.NotImplementedException();
+			var ret = new EditorShift(ShiftCategory);
+			foreach (var layer in LayerCollection)
+			{
+				ret.LayerCollection.Add(new EditorActivityLayer(layer.Payload, layer.Period));
+			}
+
+			return ret;
 		}
 
 		public IShift NoneEntityClone()
 		{
-			throw new System.NotImplementedException();
+			//Should not be necessary
+			return (IEditorShift) Clone();
+
 		}
 
 		public IShift EntityClone()
 		{
-			throw new System.NotImplementedException();
+			//Should not be necessary
+			return (IEditorShift)Clone();
 		}
 	}
 }

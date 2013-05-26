@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IPerson person = new Person();
 
             var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), period);
+            ActivityLayer layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
             {

@@ -47,5 +47,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, _target.LayerCollection[1].OrderIndex);
 		}
 
+		[Test]
+		public void CloneShouldWork()
+		{
+			
+		}
+
 	}
 }
