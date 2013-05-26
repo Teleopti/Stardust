@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -59,9 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _teamInfo = new TeamInfo(_baseLineData.GroupPerson, new List<IList<IScheduleMatrixPro>> { _matrixList });
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
-            var schedulingOptions =new SchedulingOptions();
-            schedulingOptions.UseTeamBlockSameShift = true;
-            using (_mock.Record())
+            var schedulingOptions = new SchedulingOptions {UseTeamBlockSameShift = true};
+	        using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod)
@@ -203,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_today)).Return(_todayScheduleDayPro);
                 Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(_todayScheduleDay);
 
-                Expect.Call(_todayScheduleDay.AssignmentHighZOrder()).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_todayScheduleDay.GetEditorShift()).Return(null).Repeat.AtLeastOnce();
                 
 
             }
@@ -232,16 +229,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 //day1
                 expectCallForDayForSameStartTime(_todayScheduleDay, _today, now, true);
 
-                //day2
-                //expectCallForDayForSameStartTime(_todayScheduleDay, _tomorrow, now, true);
-
-                var mainShift = _mock.StrictMock<IMainShift>();
+                var mainShift = _mock.StrictMock<IEditorShift>();
                 IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
-                var personAssignment = _mock.StrictMock<IPersonAssignment>();
                 IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
-
-                Expect.Call(_tomorrowScheduleDay  .AssignmentHighZOrder()).Return(null);
-                Expect.Call(personAssignment.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
+                Expect.Call(_tomorrowScheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
                 Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod(now, now.AddHours(1))).Repeat.AtLeastOnce();
@@ -369,13 +360,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private void expectCallForDayForSameStartTime(IScheduleDay scheduleDay, DateOnly dateOnly, DateTime startTime, bool isScheduled)
         {
-            var mainShift = _mock.StrictMock<IMainShift>();
+            var mainShift = _mock.StrictMock<IEditorShift>();
             IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
             var personAssignment = _mock.StrictMock<IPersonAssignment>();
             IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 
-            Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
-            Expect.Call(personAssignment.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
+			Expect.Call(scheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
             Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
             Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod(startTime, startTime.AddHours(1))).Repeat.AtLeastOnce();

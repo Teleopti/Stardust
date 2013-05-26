@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private static bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
-            var dateTimePeriod = getShiftPeriod(sampleScheduleDay);
+            var dateTimePeriod = getShiftPeriod(sampleScheduleDay.GetEditorShift());
             if (dateTimePeriod.HasValue)
             {
                 var sampleStartTime = dateTimePeriod.Value.StartDateTimeLocal(sampleScheduleDay.TimeZone);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private static DateTime getStartTimeLocal(IScheduleDay scheduleDay)
         {
-            var dateTimePeriod = getShiftPeriod(scheduleDay);
+            var dateTimePeriod = getShiftPeriod(scheduleDay.GetEditorShift());
             if (dateTimePeriod.HasValue)
             {
                 return dateTimePeriod.Value.StartDateTimeLocal(scheduleDay.TimeZone);
@@ -88,12 +88,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return DateTime.MinValue ;
         }
 
-        private static DateTimePeriod? getShiftPeriod(IScheduleDay scheduleDay)
+        private static DateTimePeriod? getShiftPeriod(IEditorShift editorShift)
         {
-            var samplePersonAssignment = scheduleDay.AssignmentHighZOrder();
-            if (samplePersonAssignment != null && samplePersonAssignment.ToMainShift()!=null)
+			if (editorShift != null)
             {
-                return  samplePersonAssignment.ToMainShift().ProjectionService().CreateProjection().Period();
+				return editorShift.ProjectionService().CreateProjection().Period();
             }
             return null;
         }
@@ -104,7 +103,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
                 {
                     var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-                    //scheduleDay.AssignmentHighZOrder().MainShift.ProjectionService().CreateProjection().Period().Value.StartDateTimeLocal(schedulePart.TimeZone)
                     if (scheduleDay.IsScheduled())
                     {
 	                    var sourceShift = sampleScheduleDay.GetEditorShift();
