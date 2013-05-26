@@ -931,8 +931,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date, _date.AddDays(1), _timeZoneInfo);
 
             _personAssignment = new PersonAssignment(_person, _scenario, _date);
-            IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
-            _personAssignment.SetMainShift(new MainShift(shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
 
@@ -986,8 +984,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _personAssignment = new PersonAssignment(_person, _scenario, _date);
             _personAssignment2 = new PersonAssignment(_person, _scenario, _date.AddDays(1));
-            IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
-            _personAssignment.SetMainShift(new MainShift(shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
             _personAssignmentsList.Add(_personAssignment2);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
@@ -1120,15 +1116,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldAddAbsenceWithDefaultPeriod()
 		{
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-		   
 			var schedulePart = _mocks.StrictMock<IScheduleDay>();
 			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			var date = new DateOnly(2009, 02, 02);
 
             _personAssignment = new PersonAssignment(_person, _scenario, date);
-            IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
-            _personAssignment.SetMainShift(new MainShift(shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
 
@@ -1178,7 +1170,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyAddAbsenceAccordingToDialogPeriodEvenIfOnlyOneDaySelected()
         {
-            var ass = _mocks.StrictMock<IPersonAssignment>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
 			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
             var selectedItem = _mocks.StrictMock<IAbsence>();
@@ -1186,8 +1177,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var period = new DateTimePeriod(2009, 2, 1, 2009, 2, 2);
 
             _personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(new DateTime(2009,2,1)));
-            IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
-            _personAssignment.SetMainShift(new MainShift(shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
 
@@ -1224,9 +1213,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IAddLayerViewModel<IAbsence> dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
 
             _personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(new DateTime(2001,1,1)));
-            IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
-            _personAssignment.SetMainShift(new MainShift(shiftCategory));
-            _personAssignmentsList.Add(_personAssignment);
+
+            
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
 
             Expect.Call(schedulePart.Person).Return(_person).Repeat.AtLeastOnce();

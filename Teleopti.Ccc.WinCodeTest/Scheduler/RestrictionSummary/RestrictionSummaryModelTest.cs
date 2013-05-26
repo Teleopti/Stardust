@@ -225,9 +225,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Mainshift"), Test]
         public void VerifyGetTotalMainshiftRestriction()
         {
-            IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-						IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            assignment.SetMainShift(mainShift);
+            var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+            new EditorShiftMapper().SetMainShiftLayers(assignment, mainShift);
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);
             
@@ -254,13 +254,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
                 new DateTimePeriod(new DateTime(2007, 1, 1, 21, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc));
 
-            var layer1 = new MainShiftActivityLayer(telephone, period1);
+            var layer1 = new EditorActivityLayer(telephone, period1);
 
-            MainShift mainShiftShift = MainShiftFactory.CreateMainShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
+            var mainShiftShift = EditorShiftFactory.CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
             mainShiftShift.LayerCollection.Add(layer1);
 
 						IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            assignment.SetMainShift(mainShiftShift);
+            new EditorShiftMapper().SetMainShiftLayers(assignment, mainShiftShift);
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);
