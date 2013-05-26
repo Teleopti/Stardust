@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
@@ -418,18 +419,54 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
 																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, Guid.Empty, null, period.StartDateTime,
+																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow));
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
 			
 			mocks.ReplayAll();
 
-			_target.Initialize();
+            _schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2),DateOnly.Today.AddDays(2)), TimeZoneInfo.Utc);
+			_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]);
+            _target.Initialize();
 			
 			mocks.VerifyAll();
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
 		}
+
+        [Test]
+        public void VerifyOnLoadWithMoreThanOneHundredPeople()
+        {
+            mocks.BackToRecord(_schedulingResultLoader);
+
+            var uow = mocks.DynamicMock<IUnitOfWork>();
+            var period = _schedulerStateHolder.RequestedPeriod.Period();
+
+            createRealTimeAdherenceInitializeExpectation();
+            createRtaStateHolderExpectation();
+
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
+
+            Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
+            Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
+                                                                    period.EndDateTime)).IgnoreArguments().Repeat.Times(3);
+
+            Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow));
+            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
+
+            mocks.ReplayAll();
+
+            _schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)), TimeZoneInfo.Utc);
+            Enumerable.Range(0, 101)
+                      .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+            _target.Initialize();
+
+            mocks.VerifyAll();
+
+            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
+        }
 
 		[Test]
 		public void VerifyOnLoadWithoutRtaEnabled()

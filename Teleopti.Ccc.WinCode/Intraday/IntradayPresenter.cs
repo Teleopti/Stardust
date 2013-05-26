@@ -127,16 +127,26 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     period.EndDateTime);
             if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 
-            foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
+            if (SchedulerStateHolder.FilteredPersonDictionary.Count>100)
+                {
+                    _messageBroker.RegisterEventSubscription(OnEventExternalAgentStateMessageHandler,
+                                                                typeof(IExternalAgentState),
+                                                                DateTime.UtcNow,
+                                                                DateTime.UtcNow.AddDays(1));
+                }
+            else
             {
-                _messageBroker.RegisterEventSubscription(OnEventExternalAgentStateMessageHandler,
-                                                        person.Id.GetValueOrDefault(),
-                                                        typeof(IExternalAgentState),
-                                                        DateTime.UtcNow,
-                                                        DateTime.UtcNow.AddDays(1));
-            }
+                foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
+                {
+                    _messageBroker.RegisterEventSubscription(OnEventExternalAgentStateMessageHandler,
+                                                            person.Id.GetValueOrDefault(),
+                                                            typeof(IExternalAgentState),
+                                                            DateTime.UtcNow,
+                                                            DateTime.UtcNow.AddDays(1));
+                }
 
-            addSubscriptionForBatchEvents();
+                addSubscriptionForBatchEvents();
+            }
         }
 
     	private void addSubscriptionForBatchEvents()
