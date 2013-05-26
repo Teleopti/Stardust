@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IPersonalShift _personalShift;
 		private IPersonAssignment _personAssignmentFrom;
 		private IPersonAssignment _personAssignmentTo;
-		private IMainShift _mainShift;
+		private IEditorShift _mainShift;
 		private ILayerCollection<IActivity> _layerCollectionFrom;
 		private ILayerCollection<IActivity> _layerCollectionTo;
 		private DateTimePeriod? _periodFrom;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_scheduleDayTo = _mocks.StrictMock<IScheduleDay>();
 			_personAssignmentFrom = _mocks.StrictMock<IPersonAssignment>();
 			_personAssignmentTo = _mocks.StrictMock<IPersonAssignment>();
-			_mainShift = _mocks.StrictMock<IMainShift>();
+			_mainShift = _mocks.StrictMock<IEditorShift>();
 			_layerCollectionFrom = _mocks.StrictMock<ILayerCollection<IActivity>>();
 			_layerCollectionTo = _mocks.StrictMock<ILayerCollection<IActivity>>();
 			_personalShift = _mocks.StrictMock<IPersonalShift>();
@@ -70,12 +70,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
-				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(_mainShift);
+				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
 				Expect.Call(_layerCollectionFrom.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
-				Expect.Call(_personAssignmentTo.ToMainShift()).Return(null);
+				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentTo.PersonalShiftCollection).Return(_personalShifts);
 				Expect.Call(_personalShift.HasProjection).Return(true);
 				Expect.Call(_personalShift.LayerCollection).Return(_layerCollectionTo);
@@ -98,12 +98,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
-				Expect.Call(_personAssignmentTo.ToMainShift()).Return(_mainShift);
+				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 				Expect.Call(_layerCollectionTo.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
-				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(null);
+				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentFrom.PersonalShiftCollection).Return(_personalShifts);
 				Expect.Call(_personalShift.HasProjection).Return(true);
 				Expect.Call(_personalShift.LayerCollection).Return(_layerCollectionFrom);

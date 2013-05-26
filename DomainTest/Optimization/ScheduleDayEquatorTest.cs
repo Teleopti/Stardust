@@ -154,14 +154,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(2, personAssingment.MainShiftActivityLayers.Count());
 
             // change order
-            ILayer<IActivity> activity1 = personAssingment.ToMainShift().LayerCollection[0];
-            ILayer<IActivity> activity2 = personAssingment.ToMainShift().LayerCollection[1];
-            personAssingment.ClearMainShiftLayers();
-            Assert.AreEqual(0, personAssingment.MainShiftActivityLayers.Count());
-	        var mainShift = new MainShift(category);
+            ILayer<IActivity> activity1 = current.GetEditorShift().LayerCollection[0];
+			ILayer<IActivity> activity2 = current.GetEditorShift().LayerCollection[1];
+
+	        var mainShift = new EditorShift(category);
 			mainShift.LayerCollection.Add(activity2);
 			mainShift.LayerCollection.Add(activity1);
-			personAssingment.SetMainShift(mainShift);
+			new EditorShiftMapper().SetMainShiftLayers(personAssingment, mainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));
@@ -178,9 +177,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IActivity activity = ActivityFactory.CreateActivity("Hej");
             DateTimePeriod layerPeriod =
-                scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
+                scheduleDay2.GetEditorShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
             IShiftCategory category = scheduleDay1.PersonAssignmentCollection()[0].ShiftCategory;
-            scheduleDay2.PersonAssignmentCollection()[0].SetMainShift(MainShiftFactory.CreateMainShift(activity, layerPeriod, category));
+			new EditorShiftMapper().SetMainShiftLayers(scheduleDay2.PersonAssignmentCollection()[0], EditorShiftFactory.CreateEditorShift(activity, layerPeriod, category));
 
             Assert.IsTrue(_target.DayOffEquals(scheduleDay1, scheduleDay2));
             Assert.IsFalse(_target.MainShiftEquals(scheduleDay1, scheduleDay2));

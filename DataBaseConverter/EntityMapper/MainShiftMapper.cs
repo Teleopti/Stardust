@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// <summary>
     /// Maps a MainShift.
     /// </summary>
-    public class MainShiftMapper : Mapper<MainShift, global::Domain.WorkShift>
+    public class MainShiftMapper : Mapper<IEditorShift, global::Domain.WorkShift>
     {
         private readonly DateTime _date;
 
@@ -38,11 +38,11 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public override MainShift Map(global::Domain.WorkShift oldEntity)
+        public override IEditorShift Map(global::Domain.WorkShift oldEntity)
         {
             IShiftCategory category = MappedObjectPair.ShiftCategory.GetPaired(oldEntity.Category);
-            MainShift retShift = new MainShift(category);
-            ActivityLayerMapper actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.MainShift, _date, TimeZone);
+            IEditorShift retShift = new EditorShift(category);
+            var actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.MainShift, _date, TimeZone);
             global::Domain.Activity baseActivity;
             if(oldEntity.Bag == null)
                 baseActivity = BaseActivity(oldEntity);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 {
                     if (actLayer.LayerActivity != baseActivity)
                     {
-                        MainShiftActivityLayer newLayer = (MainShiftActivityLayer)actLayerMapper.Map(actLayer);
+						var newLayer = (EditorActivityLayer)actLayerMapper.Map(actLayer);
                         if (newLayer != null)
                             retShift.LayerCollection.Add(newLayer);
                     }
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             return retShift;
         }
 
-        private static MainShiftActivityLayer BaseLayer(global::Domain.WorkShift oldEntity, global::Domain.Activity baseActivity, ActivityLayerMapper actLayerMapper)
+        private static EditorActivityLayer BaseLayer(global::Domain.WorkShift oldEntity, global::Domain.Activity baseActivity, ActivityLayerMapper actLayerMapper)
         {
             global::Domain.ActivityLayer oldBaseLayer = new global::Domain.ActivityLayer(oldEntity.ProjectedPeriod(), baseActivity);
-            return (MainShiftActivityLayer) actLayerMapper.Map(oldBaseLayer);
+			return (EditorActivityLayer)actLayerMapper.Map(oldBaseLayer);
         }
 
         private bool absenceActivity(global::Domain.Activity oldActivity)

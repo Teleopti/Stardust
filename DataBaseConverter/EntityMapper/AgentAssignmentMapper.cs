@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 																				new DateOnly(oldEntity.AgentDate));
                 MainShiftMapper msMapper = new MainShiftMapper(MappedObjectPair, TimeZone, oldEntity.AgentDate);
 
-                agAss.SetMainShift(msMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
+				new EditorShiftMapper().SetMainShiftLayers(agAss, msMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
                 if (_shiftContainsOvertime.IsSatisfiedBy(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift))
                 {
                     agAss.AddOvertimeShift(overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 																				new DateOnly(oldEntity.AgentDate));
                 MainShiftMapper msMapper = new MainShiftMapper(MappedObjectPair, TimeZone, oldEntity.AgentDate);
 
-                agAss.SetMainShift(msMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));
+				new EditorShiftMapper().SetMainShiftLayers(agAss, msMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));
                 if (_shiftContainsOvertime.IsSatisfiedBy(oldEntity.AgentDayAssignment.AbsenceWorkshift))
                 {
                     agAss.AddOvertimeShift(overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));

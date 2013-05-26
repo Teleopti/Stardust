@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IPerson _personTo;
 		private IScheduleDay _scheduleDayFrom;
 		private IScheduleDay _scheduleDayTo;
-		private IPersonAssignment _personAssignmentFrom;
-		private IPersonAssignment _personAssignmentTo;
-		private IMainShift _mainShift;
+		private IEditorShift _mainShift;
 		private ILayerCollection<IActivity> _layerCollectionFrom;
 		private ILayerCollection<IActivity> _layerCollectionTo;
 		private DateTimePeriod? _periodFrom;
@@ -41,9 +39,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_scheduleDayTo = _mock.StrictMock<IScheduleDay>();
 			_swapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()){SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo};
 			_details = new List<IShiftTradeSwapDetail>{_swapDetail};
-			_personAssignmentFrom = _mock.StrictMock<IPersonAssignment>();
-			_personAssignmentTo = _mock.StrictMock<IPersonAssignment>();
-			_mainShift = _mock.StrictMock<IMainShift>();
+			_mainShift = _mock.StrictMock<IEditorShift>();
 			_layerCollectionFrom = _mock.StrictMock<ILayerCollection<IActivity>>();
 			_layerCollectionTo = _mock.StrictMock<ILayerCollection<IActivity>>();
 			var startFrom = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
@@ -74,15 +70,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using(_mock.Record())
 			{
-				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(_mainShift).Repeat.Twice();
+				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
 				Expect.Call(_layerCollectionFrom.Period()).Return(_periodFrom);
 
-				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(_personMeetings);
-				Expect.Call(_personAssignmentTo.ToMainShift()).Return(null);
+				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(null);
 				Expect.Call(_personMeeting.Period).Return(_periodTo);
 			}
 
@@ -101,15 +95,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-				Expect.Call(_personAssignmentTo.ToMainShift()).Return(_mainShift).Repeat.Twice();
+				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 				Expect.Call(_layerCollectionTo.Period()).Return(_periodFrom);
 
-				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(_personMeetings);
-				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(null);
+				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
 				Expect.Call(_personMeeting.Period).Return(_periodTo);
 			}
 
