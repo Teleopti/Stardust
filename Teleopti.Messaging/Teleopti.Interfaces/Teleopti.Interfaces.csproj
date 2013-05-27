@@ -166,6 +166,7 @@
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
     <Compile Include="Domain\IJobResultDetail.cs" />
+    <Compile Include="Domain\IProjectableLayerCollectionOwner.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />

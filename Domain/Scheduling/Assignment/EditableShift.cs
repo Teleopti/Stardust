@@ -58,14 +58,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ret;
 		}
 
-		public IShift NoneEntityClone()
+		public IEditableShift NoneEntityClone()
 		{
 			//Should not be necessary
 			return (IEditableShift) Clone();
 
 		}
 
-		public IShift EntityClone()
+		public IEditableShift EntityClone()
 		{
 			//Should not be necessary
 			return (IEditableShift)Clone();

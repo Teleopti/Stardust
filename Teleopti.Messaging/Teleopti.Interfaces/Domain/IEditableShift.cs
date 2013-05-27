@@ -3,7 +3,9 @@
 	/// <summary>
 	/// Dto to hold layers representing an old Mainshift
 	/// </summary>
-	public interface IEditableShift : IShift
+	public interface IEditableShift : IProjectionSource,
+																ICloneableEntity<IEditableShift>,
+																IProjectableLayerCollectionOwner<IActivity>
 	{
 		/// <summary>
 		/// Returns the shift category
