@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ITeamBlockGenerator _teamBlockGenerator;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private IStandardDeviationSumCalculator _standardDeviationSumCalculator;
+		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 
 		[SetUp]
 		public void Setup()
@@ -41,12 +42,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_standardDeviationSumCalculator = _mocks.StrictMock<IStandardDeviationSumCalculator>();
+			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
 			                                                   _teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
 			                                                   _teamBlockClearer,
-															   _standardDeviationSumCalculator);
+															   _standardDeviationSumCalculator, _teamBlockMaxSeatChecker);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 				                                                     persons))
 				      .Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 				      .Return(true);
 				Expect.Call(_standardDeviationSumCalculator.Calculate(selectedPeriod, matrixes, optimizationPreferences,
@@ -177,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					  .Return(false);
 				Expect.Call(_standardDeviationSumCalculator.Calculate(selectedPeriod, matrixes, optimizationPreferences,
 																	  schedulingOptions)).Return(5.0);
-				
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 			}
 			using (_mocks.Playback())

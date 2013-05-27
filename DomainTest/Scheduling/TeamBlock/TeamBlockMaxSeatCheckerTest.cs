@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOption = new SchedulingOptions();
             _schedulingOption.DoNotBreakMaxSeats = true;
+            _schedulingOption.UseMaxSeats = true;
             _target=new TeamBlockMaxSeatChecker(_schedulingResultStateHolder,_schedulingOption );
             _dateOnly = DateOnly.Today;
             _skill1 = _mock.StrictMock<ISkill>();

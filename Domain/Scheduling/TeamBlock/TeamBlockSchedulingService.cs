@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private bool _cancelMe;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly List<IWorkShiftFinderResult> _advanceSchedulingResults;
-        private ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
+        private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
 
         public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, IBlockSteadyStateValidator blockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat)

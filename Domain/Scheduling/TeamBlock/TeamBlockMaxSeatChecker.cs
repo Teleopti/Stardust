@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             var skillDays = _schedulingResultStateHolder.SkillDays;
 
-            if (_schdulingOption.DoNotBreakMaxSeats )
+            if (_schdulingOption.UseMaxSeats && _schdulingOption.DoNotBreakMaxSeats )
             {
                 foreach (var skillPair in skillDays)
                 {
