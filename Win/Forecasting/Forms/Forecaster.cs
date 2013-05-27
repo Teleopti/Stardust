@@ -901,7 +901,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             toolStripProgressBarMain.Visible = true;
             toolStripStatusLabelInfo.Text = UserTexts.Resources.LoadingThreeDots;
             officeDropDownButtonSaveToScenario.Enabled = false;
-            
+
+            EntityEventAggregator.EntitiesNeedsRefresh -= MainScreen_EntitiesNeedsRefresh;
+            _chartControl.ChartRegionMouseEnter -= _chartControl_ChartRegionMouseEnter;
+            _chartControl.ChartRegionClick -= _chartControl_ChartRegionClick;
+
             LoadSkill(_skill);
             if (backgroundWorker1.IsBusy)
             {
