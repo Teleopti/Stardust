@@ -55,8 +55,9 @@ Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
-	When I view Add Shift Trade Request for date '2030-02-15'
-	Then the selected date should be '2030-01-31'
+	When I view Add Shift Trade Request for date '2030-02-01'
+	And I click on the next date
+	Then the selected date should be '2030-02-01'
 
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'

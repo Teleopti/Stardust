@@ -93,6 +93,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
+		[When(@"I click on the next date")]
+		public void WhenIClickOnTheNextDate()
+		{
+			Browser.Interactions.Click(".icon-arrow-right");
+		}
+
+
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
 		{
