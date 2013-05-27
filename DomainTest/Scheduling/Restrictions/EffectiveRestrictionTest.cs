@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _activity.InContractTime = true;
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-			_commonMainShift = EditorShiftFactory.CreateEditorShift(_activity, period, _shiftCategory);
+			_commonMainShift = EditableShiftFactory.CreateEditorShift(_activity, period, _shiftCategory);
             //15h
             _workShift1 = WorkShiftFactory.CreateWorkShift(
                 TimeSpan.FromHours(6),
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var activity = ActivityFactory.CreateActivity("Test1");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 7, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-			var commonMainShift = EditorShiftFactory.CreateEditorShift(activity, period, _shiftCategory);
+			var commonMainShift = EditableShiftFactory.CreateEditorShift(activity, period, _shiftCategory);
 			var other = new EffectiveRestriction(
 			_startTimeLimitation,
 			_endTimeLimitation,

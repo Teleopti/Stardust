@@ -83,17 +83,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             {
                 _p1D1 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2009, 2, 1));
 
-                _p1D1.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d1, category));
+                _p1D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
                 _p1D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, absencePeriod1));
 
                 _p2D1 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2009, 2, 1));
-				_p2D1.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d1, category));
+				_p2D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
 
                 _p1D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2009, 2, 2));
-				_p1D2.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d2, category));
+				_p1D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
 
                 _p2D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2009, 2, 2));
-				_p2D2.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d2, category));
+				_p2D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
                 _p2D2.Add(PersonAbsenceFactory.CreatePersonAbsence(_person2, _scenario, absencePeriod2));
 
 
@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
                 _p1D3.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, theFirstDate, dOff));
 
                 _p2D3 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2009, 2, 3));
-				_p2D3.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d3, category));
+				_p2D3.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d3, category));
                 _p2D3.Add(PersonAbsenceFactory.CreatePersonAbsence(_person2, _scenario, absencePeriod3));
 
                 _scheduleDayToNextDay = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2009, 2, 1));
-				_scheduleDayToNextDay.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _periodToNextDay, category));
+				_scheduleDayToNextDay.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _periodToNextDay, category));
                 _scheduleDayToNextDay.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, _periodToNextDay));
             }
             _mocks.BackToRecordAll();

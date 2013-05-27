@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _lunchAct.InContractTime = false;
             _shbrAct = ActivityFactory.CreateActivity("ShBr");
             _shbrAct.InContractTime = true;
-            _originalMainShift = EditorShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            _originalMainShift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             DateOnly dateOnly = new DateOnly(2007, 1, 1);
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             _target = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyCorrectShiftCategory()
         {
-            var shift = EditorShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            var shift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             Assert.IsTrue(_target.CorrectShiftCategory(shift));
 
             _preferences.KeepShiftCategory = true;

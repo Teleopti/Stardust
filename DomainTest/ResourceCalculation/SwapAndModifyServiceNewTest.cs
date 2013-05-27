@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IActivity activity = ActivityFactory.CreateActivity("hej");
 
 			_p1D1 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2008, 2, 1));
-			_p1D1.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d1, category));
+			_p1D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
 			_p2D1 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2008, 2, 1));
-			_p2D1.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d1, category));
+			_p2D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
 
 			_p1D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2008, 2, 2));
-			_p1D2.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d2, category));
+			_p1D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
 			_p2D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2008, 2, 2));
-			_p2D2.AddMainShift(EditorShiftFactory.CreateEditorShift(activity, _d2, category));
+			_p2D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
 			_mock.BackToRecord(_dictionary);
 		}
 

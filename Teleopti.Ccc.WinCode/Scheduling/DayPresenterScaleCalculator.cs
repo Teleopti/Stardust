@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     }
     public class DayPresenterScaleCalculator : IDayPresenterScaleCalculator
     {
-	    private readonly IEditorShiftMapper _editorShiftMapper;
+	    private readonly IEditableShiftMapper _editableShiftMapper;
 
-	    public DayPresenterScaleCalculator(IEditorShiftMapper editorShiftMapper)
+	    public DayPresenterScaleCalculator(IEditableShiftMapper editableShiftMapper)
 		{
-			_editorShiftMapper = editorShiftMapper;
+			_editableShiftMapper = editableShiftMapper;
 		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 	timeZone = yesterDay.TimeZone;
                     foreach (var personAssignment in yesterDay.PersonAssignmentCollection())
                     {
-	                    var shift = _editorShiftMapper.CreateEditorShift(personAssignment);
+	                    var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
                         if (shift != null && shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
                         {
                             DateTime maxTemp =
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IScheduleDay today = range.ScheduledDay(selectedDate);
                 foreach (var personAssignment in today.PersonAssignmentCollection())
                 {
-					var shift = _editorShiftMapper.CreateEditorShift(personAssignment);
+					var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
 					if (shift != null)
                     {
 						if (max < shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone))

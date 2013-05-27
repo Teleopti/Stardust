@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			activity.SetId(Guid.NewGuid());
 			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
 			category.SetId(Guid.NewGuid());
-			var mainShift = EditorShiftFactory.CreateEditorShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
+			var mainShift = EditableShiftFactory.CreateEditorShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
 														 activity, category);
 
 			_schedulingOptions.UseTeamBlockSameShift = true;

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		    if (personAssignment == null)
 			    return null;
 
-		    return new EditorShiftMapper().CreateEditorShift(personAssignment);
+		    return new EditableShiftMapper().CreateEditorShift(personAssignment);
 	    }
 
 	    public bool IsScheduled()
@@ -637,14 +637,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 }
 
                 IPersonAssignment ass = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-                new EditorShiftMapper().SetMainShiftLayers(ass, workingCopyOfMainShift);
+                new EditableShiftMapper().SetMainShiftLayers(ass, workingCopyOfMainShift);
                 Add(ass);
             }
             else
             {
 				MergePersonalShiftsToOneAssignment(sourceShiftPeriod);
                 IPersonAssignment destAss = AssignmentHighZOrder();
-				new EditorShiftMapper().SetMainShiftLayers(destAss, workingCopyOfMainShift);
+				new EditableShiftMapper().SetMainShiftLayers(destAss, workingCopyOfMainShift);
             }
 
             SplitAbsences(period);
@@ -930,7 +930,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				Add(currentAss);
             }
 
-			new EditorShiftMapper().SetMainShiftLayers(currentAss, mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(currentAss, mainShift);
         }
 
         #endregion Methods

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter =
 		    _mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 		    _projectionService = _mockRepository.StrictMock<IProjectionService>();
-		    _mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+		    _mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 		    _originalDays = new Dictionary<DateOnly, IScheduleDay>{{_mostOverStaffDate, _mostOverStaffSchedulePart},{_mostUnderStaffDate, _mostUnderStaffSchedulePart}};
 
         	_target = new MoveTimeOptimizer(

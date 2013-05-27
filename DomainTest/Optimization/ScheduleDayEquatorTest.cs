@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [SetUp]
         public void Setup()
         {
-            _target = new ScheduleDayEquator(new EditorShiftMapper());
+            _target = new ScheduleDayEquator(new EditableShiftMapper());
         }
 
 	
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        var mainShift = new EditableShift(category);
 			mainShift.LayerCollection.Add(activity2);
 			mainShift.LayerCollection.Add(activity1);
-			new EditorShiftMapper().SetMainShiftLayers(personAssingment, mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(personAssingment, mainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateTimePeriod layerPeriod =
                 scheduleDay2.GetEditorShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
             IShiftCategory category = scheduleDay1.PersonAssignmentCollection()[0].ShiftCategory;
-			new EditorShiftMapper().SetMainShiftLayers(scheduleDay2.PersonAssignmentCollection()[0], EditorShiftFactory.CreateEditorShift(activity, layerPeriod, category));
+			new EditableShiftMapper().SetMainShiftLayers(scheduleDay2.PersonAssignmentCollection()[0], EditableShiftFactory.CreateEditorShift(activity, layerPeriod, category));
 
             Assert.IsTrue(_target.DayOffEquals(scheduleDay1, scheduleDay2));
             Assert.IsFalse(_target.MainShiftEquals(scheduleDay1, scheduleDay2));
@@ -285,8 +285,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var period = new DateTimePeriod(2013, 02, 19, 2013, 02, 19);
 			var shiftCategory = new ShiftCategory("C");
-			var currentShift = EditorShiftFactory.CreateEditorShift(new Activity("A"), period, shiftCategory);
-			var otherShift = EditorShiftFactory.CreateEditorShift(new Activity("B"), period, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(new Activity("A"), period, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(new Activity("B"), period, shiftCategory);
 
 			bool result = _target.MainShiftEquals(otherShift, currentShift);
 			Assert.IsFalse(result);
@@ -300,8 +300,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var shiftCategory = new ShiftCategory("C");
 			var activity = new Activity("A");
 			activity.SetId(Guid.NewGuid());
-			var currentShift = EditorShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
-			var otherShift = EditorShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
 			
 			Assert.IsFalse(_target.MainShiftEquals(otherShift, currentShift));
 			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
@@ -317,8 +317,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var shiftCategory = new ShiftCategory("C");
 			var activity = new Activity("A");
 			activity.SetId(Guid.NewGuid());
-			var currentShift = EditorShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
-			var otherShift = EditorShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null);

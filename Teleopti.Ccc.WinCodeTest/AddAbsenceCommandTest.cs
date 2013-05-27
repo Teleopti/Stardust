@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest
             _personAssignment2 = new PersonAssignment(person1, _scenario, new DateOnly(2012, 07, 17));
 			//IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
 			//_personAssignment.SetMainShift(new MainShift(shiftCategory));
-			//new EditorShiftMapper().SetMainShiftLayers(_personAssignment, EditorShiftFactory.CreateEditorShift(new Activity("hej"), _personAssignment.Period, shiftCategory));
+			//new EditableShiftMapper().SetMainShiftLayers(_personAssignment, EditableShiftFactory.CreateEditorShift(new Activity("hej"), _personAssignment.Period, shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
             _personAssignmentsList.Add(_personAssignment2);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);

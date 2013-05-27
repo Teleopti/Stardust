@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target = new MainShiftOptimizeActivitySpecificationSetter();
 			_schedulingOptionsCreator = new SchedulingOptionsCreator();
 			_optimizationPreferences = new OptimizationPreferences();
-			_mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			_mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 		}
 
 		[Test]

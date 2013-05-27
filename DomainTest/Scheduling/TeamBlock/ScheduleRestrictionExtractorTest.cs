@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IActivity activity = new Activity("bo");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-			var mainShift = EditorShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
@@ -173,10 +173,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IActivity activity = new Activity("bo");
 			var period1 = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-			var mainShift1 = EditorShiftFactory.CreateEditorShift(activity, period1, new ShiftCategory("cat"));
+			var mainShift1 = EditableShiftFactory.CreateEditorShift(activity, period1, new ShiftCategory("cat"));
 			var period2 = new DateTimePeriod(new DateTime(2012, 12, 8, 7, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 8, 8, 30, 0, DateTimeKind.Utc));
-			var mainShift2 = EditorShiftFactory.CreateEditorShift(activity, period2, new ShiftCategory("cat"));
+			var mainShift2 = EditableShiftFactory.CreateEditorShift(activity, period2, new ShiftCategory("cat"));
 			
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();

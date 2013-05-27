@@ -85,13 +85,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         #endregion
 
         private IEventAggregator _eventAggregator;
-	    private readonly IEditorShiftMapper _editorShiftMapper;
+	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    #region ctor
-		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditorShiftMapper editorShiftMapper)
+		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
         {
             _eventAggregator = eventAggregator;
-			_editorShiftMapper = editorShiftMapper;
+			_editableShiftMapper = editableShiftMapper;
 			SurroundingTime = TimeSpan.FromHours(4);
             Layers = layerCollection;
 			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         }
 
 
-		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditorShiftMapper editorShiftMapper)
-            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editorShiftMapper)
+		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
+            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
         {
 
         }
@@ -356,9 +356,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                     var assignement = SchedulePart.AssignmentHighZOrder();
 					if (assignement != null)
 					{
-						var editorShift = _editorShiftMapper.CreateEditorShift(assignement);
+						var editorShift = _editableShiftMapper.CreateEditorShift(assignement);
                         editorShift.ShiftCategory = _category;
-						_editorShiftMapper.SetMainShiftLayers(assignement, editorShift);
+						_editableShiftMapper.SetMainShiftLayers(assignement, editorShift);
                         new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
                     }
                 }

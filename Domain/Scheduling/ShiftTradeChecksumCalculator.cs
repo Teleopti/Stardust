@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             {
                 foreach (IPersonAssignment personAssignment in _scheduleDay.PersonAssignmentCollection())
                 {
-	                var shift = new EditorShiftMapper().CreateEditorShift(personAssignment);
+	                var shift = new EditableShiftMapper().CreateEditorShift(personAssignment);
 					if (shift != null)
                     {
                         IVisualLayerCollection visualLayerCollection =

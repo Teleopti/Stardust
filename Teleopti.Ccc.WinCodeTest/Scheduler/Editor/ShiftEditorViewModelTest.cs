@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private IShiftEditorObserver _observer2;
         private DateTimePeriod _selectedPeriod;
         Microsoft.Practices.Composite.Events.IEventAggregator _eventAggregator;
-		private IEditorShiftMapper _editorShiftMapper;
+		private IEditableShiftMapper _editableShiftMapper;
 
         [SetUp]
         public void Setup()
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _mocker = new MockRepository();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();
             _eventAggregator = new Microsoft.Practices.Composite.Events.EventAggregator();
-	        _editorShiftMapper = _mocker.StrictMock<IEditorShiftMapper>();
-            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, _editorShiftMapper);
+	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
+            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, _editableShiftMapper);
             _partForTest = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
         }
 

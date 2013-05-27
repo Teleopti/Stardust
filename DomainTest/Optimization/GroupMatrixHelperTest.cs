@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
 			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());
-			var editorShift = new EditorShiftMapper().CreateEditorShift(personAssignment);
+			var editorShift = new EditableShiftMapper().CreateEditorShift(personAssignment);
 			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
 
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			                                                                                           new DateTimePeriod(),
 			                                                                                           new ShiftCategory("hej"),
 			                                                                                           new Scenario("hej"));
-			var editorShift = new EditorShiftMapper().CreateEditorShift(personAssignment);
+			var editorShift = new EditableShiftMapper().CreateEditorShift(personAssignment);
 			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 			IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
 

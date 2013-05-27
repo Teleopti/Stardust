@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
 
-			var mainShift = EditorShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("activity"), period44, ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("activity"), period44, ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
 			_target.AddMainShift(mainShift);
 
 			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
@@ -557,11 +557,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
 
-			var mainShift = EditorShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test"), period,
+			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test"));
 			_target.AddMainShift(mainShift);
 
-			mainShift = EditorShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test1"), period,
+			mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test1"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			_target.AddMainShift(mainShift);
 			Assert.AreEqual(mainShift.ShiftCategory.Description.Name, _target.AssignmentHighZOrder().ShiftCategory.Description.Name);
@@ -577,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
 
-			var mainShift = EditorShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test"), period,
+			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test"));
 			_target.AddMainShift(mainShift);
 
@@ -596,7 +596,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual("test1", _target.PersonAssignmentCollection()[1].ShiftCategory.Description.Name);
 			Assert.AreEqual("test", _target.AssignmentHighZOrder().ShiftCategory.Description.Name);
 
-			var mainShift3 = EditorShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("ff"), period,
+			var mainShift3 = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("ff"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("pp"));
 
 			_target.AddMainShift(mainShift3);
@@ -1418,7 +1418,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             DateTimePeriod period = new DateTimePeriod(start, end);
             ShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
-			var mainShift = EditorShiftFactory.CreateEditorShift(activity, period, shiftCategory);
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, shiftCategory);
             sourceDay.AddMainShift(mainShift);
 
             IScheduleDay targetDaySameTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInSameTimezone, day);
@@ -1456,7 +1456,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             DateTimePeriod period = new DateTimePeriod(start, end);
             ShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
-			var mainShift = EditorShiftFactory.CreateEditorShift(activity, period, shiftCategory);
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, shiftCategory);
             sourceDay.AddMainShift(mainShift);
 
             IScheduleDay targetDaySameTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInSameTimezone, day);
@@ -1787,7 +1787,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																											scenario);
 			DateTimePeriod mainPeriodCoverBoth = new DateTimePeriod(new DateTime(2000,3,1, 7,0,0, DateTimeKind.Utc), new DateTime(2000,3,1, 18,0,0, DateTimeKind.Utc));
 			IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("Day");
-			var mainShift = EditorShiftFactory.CreateEditorShift(activityMain, mainPeriodCoverBoth, category);
+			var mainShift = EditableShiftFactory.CreateEditorShift(activityMain, mainPeriodCoverBoth, category);
 			part.Add(personAssignment);
 			part.Add(personAssignment2);
 

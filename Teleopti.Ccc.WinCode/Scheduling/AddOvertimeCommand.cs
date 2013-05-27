@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class AddOvertimeCommand : AddLayerCommand
     {
         private IList<IMultiplicatorDefinitionSet> _definitionSets;
-	    private readonly IEditorShiftMapper _editorShiftMapper;
+	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditorShiftMapper editorShiftMapper)
+		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditableShiftMapper editableShiftMapper)
             : base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
 		    DefaultIsSet = false;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 DefaultPeriod = GetDefaultPeriodFromPart(ScheduleParts[0]);
             }
             _definitionSets = definitionSets;
-			_editorShiftMapper = editorShiftMapper;
+			_editableShiftMapper = editableShiftMapper;
 		}
 
         public bool DefaultIsSet
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)
                     DefaultPeriod = new DateTimePeriod(assPeriod.EndDateTime, assPeriod.EndDateTime.AddHours(1));
-				var shift = _editorShiftMapper.CreateEditorShift(personAssignment);
+				var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
                 if (shift != null)
                 {
                     visualLayer = shift.ProjectionService().CreateProjection().LastOrDefault();

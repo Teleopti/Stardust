@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void CanLoadPeriod()
         {
-			var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.AddMainShift(mainShift);
             Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
@@ -225,9 +225,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Mainshift"), Test]
         public void VerifyGetTotalMainshiftRestriction()
         {
-            var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+            var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 			IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            new EditorShiftMapper().SetMainShiftLayers(assignment, mainShift);
+            new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);
             
@@ -256,11 +256,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 
             var layer1 = new EditorActivityLayer(telephone, period1);
 
-            var mainShiftShift = EditorShiftFactory.CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
+            var mainShiftShift = EditableShiftFactory.CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
             mainShiftShift.LayerCollection.Add(layer1);
 
 						IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            new EditorShiftMapper().SetMainShiftLayers(assignment, mainShiftShift);
+            new EditableShiftMapper().SetMainShiftLayers(assignment, mainShiftShift);
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);

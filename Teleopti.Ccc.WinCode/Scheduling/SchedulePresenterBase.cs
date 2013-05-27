@@ -928,7 +928,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void AddOvertime(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IList<IMultiplicatorDefinitionSet> definitionSets)
         {
-            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules, new EditorShiftMapper());
+            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules, new EditableShiftMapper());
             if (defaultPeriod.HasValue)
             {
                 command.DefaultPeriod = defaultPeriod;

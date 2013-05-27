@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class EditorShiftFactory
+	public class EditableShiftFactory
 	{
 		public static IEditableShift CreateEditorShift(IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{

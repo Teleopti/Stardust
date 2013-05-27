@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
 			var absence = AbsenceFactory.CreateAbsence("Sick");
 			var layer = new AbsenceLayer(absence, _dateTimePeriod);
-			var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 			part.AddMainShift(mainShift);
 			part.CreateAndAddAbsence(layer);
 			var projection = part.ProjectionService().CreateProjection();
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			var dateOnly = new DateOnly(_dateTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
-			var mainShift = EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
 			part.AddMainShift(mainShift);
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));

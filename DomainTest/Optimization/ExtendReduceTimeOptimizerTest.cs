@@ -303,9 +303,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _schedulingOptions)).IgnoreArguments()
                 .Return(_effectiveRestriction);
 			Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(_dic).Repeat.Any();
-			Expect.Call(_scheduleDay1.GetEditorShift()).Return(EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
+			Expect.Call(_scheduleDay1.GetEditorShift()).Return(EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
 				Repeat.Any();
-			Expect.Call(_scheduleDay2.GetEditorShift()).Return(EditorShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
+			Expect.Call(_scheduleDay2.GetEditorShift()).Return(EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
 				Repeat.Any();
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue))

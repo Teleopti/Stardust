@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ScheduleDayEquator : IScheduleDayEquator
     {
-	    private readonly IEditorShiftMapper _editorShiftMapper;
+	    private readonly IEditableShiftMapper _editableShiftMapper;
 
-	    public ScheduleDayEquator(IEditorShiftMapper editorShiftMapper)
+	    public ScheduleDayEquator(IEditableShiftMapper editableShiftMapper)
 		{
-			_editorShiftMapper = editorShiftMapper;
+			_editableShiftMapper = editableShiftMapper;
 		}
 
 	    public bool MainShiftEquals(IScheduleDay original, IScheduleDay current)
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if(current.PersonAssignmentCollection().Count  > 0)
                 {
-					IEditableShift originalMainShift =_editorShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
-					IEditableShift currentMainShift =_editorShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift originalMainShift =_editableShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift currentMainShift =_editableShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
 
                     if (originalMainShift == null || currentMainShift == null)
                         return false;

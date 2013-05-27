@@ -1,18 +1,16 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public interface IEditorShiftMapper
+	public interface IEditableShiftMapper
 	{
 		IEditableShift CreateEditorShift(IPersonAssignment personassignment);
 		void SetMainShiftLayers(IPersonAssignment personassignment, IEditableShift editableShift);
 	}
 
-	public class EditorShiftMapper : IEditorShiftMapper
+	public class EditableShiftMapper : IEditableShiftMapper
 	{
 		 public IEditableShift CreateEditorShift(IPersonAssignment personassignment)
 		 {

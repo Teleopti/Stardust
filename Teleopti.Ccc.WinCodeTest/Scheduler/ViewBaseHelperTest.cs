@@ -1196,7 +1196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);
             mainShift.LayerCollection.Add(new EditorActivityLayer(ActivityFactory.CreateActivity("activity"), period));
-            new EditorShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
+            new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
             return personAssignment;
         }

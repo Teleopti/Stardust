@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
         {
-			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, new EditorShiftMapper());
+			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, new EditableShiftMapper());
             _model.AddObserver(this); //Because we are using events for now. We could add schedscreen (if implementing IShiftEditorObserver)here instead of events..
             DataContext = _model;
             setupforEventAggregator(eventAggregator);

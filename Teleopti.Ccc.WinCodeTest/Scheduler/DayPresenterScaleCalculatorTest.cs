@@ -25,15 +25,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay1;
     	private TimeZoneInfo _timeZone;
-	    private IEditorShiftMapper _editorShiftMapper;
+	    private IEditableShiftMapper _editableShiftMapper;
 
     	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-    		_editorShiftMapper = _mocks.StrictMock<IEditorShiftMapper>();
-            _target = new DayPresenterScaleCalculator(_editorShiftMapper);
+    		_editableShiftMapper = _mocks.StrictMock<IEditableShiftMapper>();
+            _target = new DayPresenterScaleCalculator(_editableShiftMapper);
             _person = PersonFactory.CreatePerson();
             _persons = new Dictionary<Guid, IPerson>();
             _persons.Add(Guid.NewGuid(), _person);
@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             	Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {ass1}));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass1)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass2 }));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass2)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
             }
 
             DateTimePeriod result;
@@ -96,11 +96,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
-	            Expect.Call(_editorShiftMapper.CreateEditorShift(ass1)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
+	            Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass2 }));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass2)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
             }
 
             DateTimePeriod result;
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass1)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass1)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
@@ -201,11 +201,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass1)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{ass2}));
-				Expect.Call(_editorShiftMapper.CreateEditorShift(ass2)).Return(EditorShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
+				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
             }
 
             DateTimePeriod result;

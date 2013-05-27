@@ -41,7 +41,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             var mainShift = new EditableShift(shiftCategory);
             mainShift.LayerCollection.Add(new EditorActivityLayer(activity, schedulePart.Period));
 			IPersonAssignment assignment = new PersonAssignment(person, schedulePart.Scenario, new DateOnly(2000, 1, 1));
-            new EditorShiftMapper().SetMainShiftLayers(assignment, mainShift);
+            new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("WrongDayOff"));
             dayOffTemplate.SetId(Guid.NewGuid());
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
