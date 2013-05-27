@@ -7,26 +7,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class StudentAvailabilityPage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
 	{
-		[FindBy(Id = "StudentAvailability-edit-button")]
+		[FindBy(Id = "Availability-edit-button")]
 		public Button EditButton;
-		[FindBy(Id = "StudentAvailability-delete-button")]
+		[FindBy(Id = "Availability-delete-button")]
 		public Button DeleteButton { get; set; }
-
-		//[FindBy(Id = "StudentAvailability-edit-starttime-input")]
-		//public TextField StartTimeTextField;
-		//[FindBy(Id = "StudentAvailability-edit-endtime-input")]
-		//public TextField EndTimeTextField;
-		//[FindBy(Id = "StudentAvailability-edit-nextday-cb")]
-		//public CheckBox NextDay;
-
-		//[FindBy(Id = "StudentAvailability-edit-ok-button")]
-		//public Button OkButton { get; set; }
-
-		//[FindBy(Id = "StudentAvailability-edit-cancel-button")]
-		//public Button CancelButton { get; set; }
-
-		//[FindBy(Id = "StudentAvailability-edit-section")]
-		//public Div InputPanel { get; set; }
 
 		[FindBy(Id = "qtip-edit-student-availability")]
 		public Div EditStudentAvailabilityPanel;
@@ -45,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Student-availability-apply-error")]
 		public Div ValidationError;
 
-		[FindBy(Id = "StudentAvailabilityDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
+		[FindBy(Id = "AvailabilityDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 		[FindBy(Id = "StudentAvailabilityScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
@@ -53,12 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click("#AvailabilityDateRangeSelector button:last-of-type");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click("#AvailabilityDateRangeSelector button:first-of-type");
 		}
 
 	}

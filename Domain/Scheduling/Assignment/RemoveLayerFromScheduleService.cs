@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layers in mainshift...
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
+#pragma warning disable 612,618
 	                var mainShift = assignment.ToMainShift();
+#pragma warning restore 612,618
 					if (mainShift == null)
                         continue;
 					if (mainShift.LayerCollection.Contains(layer))

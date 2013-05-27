@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
                 {
-                    if (ass.ToMainShift() != null)
+                    if (ass.ShiftCategory != null)
                     {
                         if (ass.Period.Contains(approxUtc))
                             return new DateTimePeriod(approxUtc, approxUtc);

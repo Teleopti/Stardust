@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                                                                                           new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity();
 	        var sc = ass.ShiftCategory;
-            IPayload pLoad = ass.ToMainShift().LayerCollection[0].Payload;
+					IPayload pLoad = ass.MainShiftActivityLayers.First().Payload;
             try
             {
                 SkipRollback();

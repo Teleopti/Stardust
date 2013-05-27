@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         }
 
-		private static bool areMainShiftsEqual(IMainShift original, IMainShift current)
+		private static bool areMainShiftsEqual(IEditableShift original, IEditableShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;
@@ -459,6 +458,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		}
 
 		public bool NotAllowedForDayOffs { get; set; }
-	    public IMainShift CommonMainShift { get; set; }
+	    public IEditableShift CommonMainShift { get; set; }
     }
 }

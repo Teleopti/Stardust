@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -6,15 +7,22 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IScheduleDayEquator
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
-		bool MainShiftEquals(IMainShift original, IMainShift current);
-        bool MainShiftEqualsWithoutPeriod(IMainShift original, IMainShift current);
+		bool MainShiftEquals(IEditableShift original, IEditableShift current);
+		bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
-	    bool MainShiftBasicEquals(IMainShift original, IMainShift current);
+		bool MainShiftBasicEquals(IEditableShift original, IEditableShift current);
     }
 
     public class ScheduleDayEquator : IScheduleDayEquator
     {
-        public bool MainShiftEquals(IScheduleDay original, IScheduleDay current)
+	    private readonly IEditableShiftMapper _editableShiftMapper;
+
+	    public ScheduleDayEquator(IEditableShiftMapper editableShiftMapper)
+		{
+			_editableShiftMapper = editableShiftMapper;
+		}
+
+	    public bool MainShiftEquals(IScheduleDay original, IScheduleDay current)
         {
             if (!checkMainShiftEqual(original, current))
                 return false;
@@ -47,8 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if(current.PersonAssignmentCollection().Count  > 0)
                 {
-                    IMainShift originalMainShift = original.PersonAssignmentCollection()[assignmentIndex].ToMainShift();
-                    IMainShift currentMainShift = current.PersonAssignmentCollection()[assignmentIndex].ToMainShift();
+					IEditableShift originalMainShift =_editableShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift currentMainShift =_editableShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
 
                     if (originalMainShift == null || currentMainShift == null)
                         return false;
@@ -62,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool MainShiftEquals(IMainShift original, IMainShift current)
+		public bool MainShiftEquals(IEditableShift original, IEditableShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;
@@ -78,8 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool MainShiftBasicEquals(IMainShift original, IMainShift current)
+		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;
@@ -100,8 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool MainShiftEqualsWithoutPeriod(IMainShift original, IMainShift current)
+		public bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current)
         {
             if (original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;

@@ -60,11 +60,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//fix later when mainshift is removed -> add mainshiftlayer directly
-				uow.Reassociate(PersonAssignment);
+#pragma warning disable 612,618
 				var ms = PersonAssignment.ToMainShift();
+#pragma warning restore 612,618
 				var sameAct = ms.LayerCollection[0].Payload;
 				ms.LayerCollection.Add(new MainShiftActivityLayer(sameAct, new DateTimePeriod(Today, Today.AddDays(1))));
 				PersonAssignment.SetMainShift(ms);
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
@@ -225,8 +227,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				var pShift = new PersonalShift();
-				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.ToMainShift().LayerCollection[0].Payload,
-																							 PersonAssignment.ToMainShift().LayerCollection[0].Period));
+				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShiftActivityLayers.First().Payload,
+																							 PersonAssignment.MainShiftActivityLayers.First().Period));
 				PersonAssignment.ClearMainShiftLayers();
 				PersonAssignment.AddPersonalShift(pShift);
 				uow.PersistAll();

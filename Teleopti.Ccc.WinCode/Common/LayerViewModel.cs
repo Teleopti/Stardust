@@ -255,6 +255,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 Layer.Period = Period;
                 if (_part != null)
                 {
+									hackToUpdateUnderlyingPersonAssignment();
                     //Trigger update ShiftEditor
                     new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
                 }
@@ -346,10 +347,21 @@ namespace Teleopti.Ccc.WinCode.Common
 
         protected void TriggerShiftEditorUpdate()
         {
-            new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+	        hackToUpdateUnderlyingPersonAssignment();
+	        new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
         }
 
-        public abstract bool CanMoveUp { get; }
+	    private void hackToUpdateUnderlyingPersonAssignment()
+	    {
+		    var mainShiftLayer = Layer as ILayer<IActivity>;
+		    if (mainShiftLayer != null)
+		    {
+			    var ms = (IMainShift) mainShiftLayer.Parent;
+			    ((IPersonAssignment) ms.Parent).SetMainShift(ms);
+		    }
+	    }
+
+	    public abstract bool CanMoveUp { get; }
         public abstract bool CanMoveDown { get; }
 
         #endregion

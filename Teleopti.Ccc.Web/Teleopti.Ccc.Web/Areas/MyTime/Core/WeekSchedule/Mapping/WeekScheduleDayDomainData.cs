@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
@@ -15,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
         public TimePeriod MinMaxTime { get; set; }
 		public double Allowance { get; set; }
 		public double AbsenceTime { get; set; }
+		public bool Availability { get; set; }
 	}
 }

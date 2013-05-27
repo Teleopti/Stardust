@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTime start = DateTime.SpecifyKind(_date.Date.AddHours(8), DateTimeKind.Utc);
 			DateTime end = DateTime.SpecifyKind(_date.Date.AddHours(16), DateTimeKind.Utc);
 			DateTimePeriod shiftPeriod = new DateTimePeriod(start, end);
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("act"), shiftPeriod,
+			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("act"), shiftPeriod,
 																	ShiftCategoryFactory.CreateShiftCategory("bla"));
 			IScheduleDay scheduleDay = _dic[person].ScheduledDay(_date);
 			scheduleDay.AddMainShift(mainShift);

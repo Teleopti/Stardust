@@ -256,7 +256,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-10-28
         /// </remarks>
-        void AddMainShift(IMainShift mainShift);
+        void AddMainShift(IEditableShift mainShift);
 
         /// <summary>
         /// Delete main shift
@@ -281,7 +281,7 @@ namespace Teleopti.Interfaces.Domain
         /// If two ore more personal shift are covered by a mainshift
         /// they should be merged ino one assignment.
         /// </summary>
-        void MergePersonalShiftsToOneAssignment(IMainShift mainShift);
+		void MergePersonalShiftsToOneAssignment(DateTimePeriod mainShiftPeriod);
 
 
         /// <summary>

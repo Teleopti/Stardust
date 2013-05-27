@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             {
                 case ActivityLayerBelongsTo.MainShift:
                     if (!_layerContainsOvertime.IsSatisfiedBy(oldEntity))
-                        returnLayer = new MainShiftActivityLayer(newAct, newPeriod);
+                        returnLayer = new EditorActivityLayer(newAct, newPeriod);
                     break;
                 case ActivityLayerBelongsTo.PersonalShift:
                     if (!_layerContainsOvertime.IsSatisfiedBy(oldEntity))

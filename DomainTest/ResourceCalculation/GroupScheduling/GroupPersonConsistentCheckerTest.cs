@@ -105,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonCategory = true };
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -115,8 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Twice();
-			Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift).Repeat.Twice();
 			Expect.Call(mainShift.ShiftCategory).Return(_category1).Repeat.Twice();
 			_mocks.ReplayAll();
 			var result = _target.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _persons, date, schedulingOptions);
@@ -129,8 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldReturnTrueIfSameActivity()
 		{
 			var date = new DateOnly(2010, 10, 4);
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var activity = ActivityFactory.CreateActivity("lunch");
             var schedulingOptions = new SchedulingOptions { UseCommonActivity = true, CommonActivity = activity};
@@ -145,8 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Twice();
-			Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift).Repeat.Twice();
             Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.Twice();
             Expect.Call(projectionService.CreateProjection()).Return(new VisualLayerCollection(_person1,
                                                                                                new List<IVisualLayer> { layerLunch }, new ProjectionPayloadMerger())).Repeat.Twice();
@@ -162,10 +158,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonCategory = true };
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var assOther = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var mainShiftOther = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -178,11 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(_scheduledDayOtherCategory.SignificantPart()).Return(SchedulePartView.MainShift);
 
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
-			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
-
-			Expect.Call(ass.ToMainShift()).Return(mainShift);
-			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift);
+			Expect.Call(_scheduledDayOtherCategory.GetEditorShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ShiftCategory).Return(_category1);
 			Expect.Call(mainShiftOther.ShiftCategory).Return(_category2);
@@ -214,10 +205,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var date = new DateOnly(2010, 10, 4);
 			var dateTime = new DateTime(2012, 6, 18, 12, 0, 0, 0, DateTimeKind.Utc);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var assOther = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var mainShiftOther = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var visualLayerCol = _mocks.StrictMock<IVisualLayerCollection>();
 			Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
@@ -232,11 +221,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(_scheduledDayOtherCategory.SignificantPart()).Return(SchedulePartView.MainShift);
 
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
-			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
-
-			Expect.Call(ass.ToMainShift()).Return(mainShift);
-			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift);
+			Expect.Call(_scheduledDayOtherCategory.GetEditorShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ProjectionService()).Return(projectionService);
 			Expect.Call(mainShiftOther.ProjectionService()).Return(projectionService);
@@ -256,10 +242,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var date = new DateOnly(2010, 10, 4);
 			var dateTime = new DateTime(2012, 6, 18, 12, 0, 0, 0, DateTimeKind.Utc);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
-			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var assOther = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var mainShiftOther = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var visualLayerCol = _mocks.StrictMock<IVisualLayerCollection>();
 			Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
@@ -274,11 +258,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(_scheduledDayOtherCategory.SignificantPart()).Return(SchedulePartView.MainShift);
 
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
-			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
-
-			Expect.Call(ass.ToMainShift()).Return(mainShift);
-			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift);
+			Expect.Call(_scheduledDayOtherCategory.GetEditorShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ProjectionService()).Return(projectionService);
 			Expect.Call(mainShiftOther.ProjectionService()).Return(projectionService);
@@ -301,8 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                                             new DateTime(2010, 10, 5, 1, 30, 0, DateTimeKind.Utc));
             var schedulingOptions = new SchedulingOptions
                                         {UseGroupSchedulingCommonStart = true, UseGroupSchedulingCommonEnd = true};
-            var ass = _mocks.StrictMock<IPersonAssignment>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+            var mainShift = _mocks.StrictMock<IEditableShift>();
             var groupPerson = _mocks.StrictMock<IGroupPerson>();
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
@@ -313,8 +293,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}));
             Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay);
             Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
-            Expect.Call(ass.ToMainShift()).Return(mainShift);
+			Expect.Call(_scheduledDay.GetEditorShift()).Return(mainShift);
             Expect.Call(mainShift.ProjectionService()).Return(projectionService);
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             Expect.Call(visualLayerCollection.Period()).Return(period);

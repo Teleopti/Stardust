@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
 			{
-				_loggingSvc.ErrorFormat(
+				_loggingSvc.WarnFormat(
 					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
 				return;
 			}

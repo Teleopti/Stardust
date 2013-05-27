@@ -55,7 +55,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			if (_withLunch)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
+#pragma warning disable 612,618
 				assignment.ToMainShift().LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
+#pragma warning restore 612,618
 			}
 
 			assignmentRepository.Add(assignment);

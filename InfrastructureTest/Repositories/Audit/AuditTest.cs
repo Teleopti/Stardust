@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
@@ -43,8 +44,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				Repository.Add(Agent);
 				Repository.Add(Scenario);
 				Repository.Add(PersonAssignment.ShiftCategory);
-				Repository.Add(PersonAssignment.ToMainShift().LayerCollection[0].Payload);
-				Repository.Add(PersonAssignment.ToMainShift().LayerCollection[0].Payload.GroupingActivity);
+				Repository.Add(PersonAssignment.MainShiftActivityLayers.First().Payload);
+				Repository.Add(PersonAssignment.MainShiftActivityLayers.First().Payload.GroupingActivity);
 				Repository.Add(PersonAbsence.Layer.Payload);
 
 				Repository.Add(PersonAssignment);

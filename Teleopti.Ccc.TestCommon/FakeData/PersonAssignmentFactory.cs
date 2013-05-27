@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IPersonAssignment CreatePersonAssignmentAggregate(IPerson agent,
                                                                      IMainShift mainShift,
                                                                      ICollection<IPersonalShift> personalShiftCollection,
-                                                                     IScenario scenario,
-																																		DateOnly dateOnly)
+                                                                     IScenario scenario, DateOnly dateOnly)
         {
             IPersonAssignment ret = new PersonAssignment(agent, scenario, dateOnly);
             ret.SetMainShift(mainShift);

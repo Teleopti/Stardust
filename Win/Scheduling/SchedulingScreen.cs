@@ -1224,7 +1224,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (schedulePart.PersonDayOffCollection().Count == 0)
 					{
-						IMainShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
+						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
 						{
 							schedulePart.AddMainShift(selectedShift);
@@ -2025,14 +2025,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var part = (IScheduleDay)_schedulerState.Schedules[lst[0].Person].ReFetch(lst[0]).Clone();
 
 					part.Clear<IScheduleData>();
-					IMainShift mainShift = workShift.ToMainShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
-
+					IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
 					foreach (var cat in _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
 					{
 						mainShift.ShiftCategory = cat;
 					}
 
 					part.AddMainShift(mainShift);
+
 					_clipHandlerSchedule.Clear();
 					_clipHandlerSchedule.AddClip(0, 0, part);
 					_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));

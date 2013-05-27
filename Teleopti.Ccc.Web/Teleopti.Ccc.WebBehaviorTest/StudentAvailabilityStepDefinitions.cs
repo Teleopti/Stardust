@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIViewStudentAvailability()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoStudentAvailability();
+			Navigation.GotoAvailability();
 			_page = Browser.Current.Page<StudentAvailabilityPage>();
 		}
 
 		[When(@"I navigate to the student availability page")]
 		public void WhenINavigateToTheStudentAvailabilityPage()
 		{
-			Navigation.GotoStudentAvailability();
+			Navigation.GotoAvailability();
 		}
 
 		[Then(@"I should see the student availability period information")]

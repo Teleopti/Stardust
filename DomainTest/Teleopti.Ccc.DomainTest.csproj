@@ -323,7 +323,6 @@
     <Compile Include="Optimization\IntradayOptimizerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreatorTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
@@ -351,8 +350,9 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShiftMapperTest.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShiftTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
@@ -951,7 +951,6 @@
     <Compile Include="Forecasting\SkillTypePhoneTest.cs" />
     <Compile Include="Forecasting\QueueSourceTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Common\LayerSorterTest.cs" />
     <Compile Include="Helper\DateHelperTest.cs" />
     <Compile Include="Helper\PerformanceOutputTest.cs" />
     <Compile Include="Helper\SkillDayStaffHelperTest.cs" />

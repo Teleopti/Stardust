@@ -34,6 +34,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void AtLeastOneMainShiftLayerMustBeSet()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => 
+				target.SetMainShiftLayers(new IMainShiftActivityLayerNew[0], new ShiftCategory("foo")));
+		}
+
+		[Test]
 		public void VerifyBelongsToScenario()
 		{
 			Assert.IsTrue(target.BelongsToScenario(target.Scenario));
@@ -58,7 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
-			Assert.IsNull(target.ToMainShift());
+			target.MainShiftActivityLayers.Should().Be.Empty();
+			target.ShiftCategory.Should().Be.Null();
 			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
 			Assert.IsNull(target.CreatedOn);
@@ -201,11 +209,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanSetBaseShift()
 		{
-			Assert.IsNull(target.ToMainShift());
 			var category = new ShiftCategory("Morning");
 			MainShift baseShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, category);
 			target.SetMainShift(baseShift);
-			Assert.IsNotNull(target.ToMainShift());
+			Assert.AreEqual(target.MainShiftActivityLayers.Count(), baseShift.LayerCollection.Count);
 			Assert.AreSame(target.ShiftCategory, baseShift.ShiftCategory);
 		}
 
@@ -429,7 +436,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
-			Assert.IsNull(targetClone.ToMainShift());
+			target.MainShiftActivityLayers.Should().Be.Empty();
 			Assert.AreEqual(0, targetClone.PersonalShiftCollection.Count);
 		}
 
@@ -531,10 +538,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetId(Guid.NewGuid());
 			target.ZOrder = zOrder;
 
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, new ShiftCategory("sdf"));
-			mainShift.SetId(Guid.NewGuid());
-			target.SetMainShift(mainShift);
-
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
 			IPersonalShift persShift =
 				PersonalShiftFactory.CreatePersonalShift(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
@@ -547,7 +550,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
-			Assert.AreEqual(target.ToMainShift().Id, pAss.ToMainShift().Id);
 			Assert.AreEqual(target.PersonalShiftCollection[0].Id, pAss.PersonalShiftCollection[0].Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
@@ -556,7 +558,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.ToMainShift().Id);
 			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
@@ -564,7 +565,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.ToMainShift().Id);
 			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
 			Assert.AreEqual(zOrder, target.ZOrder);

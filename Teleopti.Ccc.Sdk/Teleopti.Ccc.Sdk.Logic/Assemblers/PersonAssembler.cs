@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (!string.IsNullOrEmpty(dto.Note))
                 person.Note = dto.Note;
             if(dto.IsDeleted)
-                ((Person)person).SetDeleted();
+                ((IDeleteTag)person).SetDeleted();
         }
 
 
