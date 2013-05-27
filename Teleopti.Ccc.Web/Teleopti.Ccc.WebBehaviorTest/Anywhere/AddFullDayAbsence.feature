@@ -62,6 +62,7 @@ Scenario: Add
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-09 00:00 |
 
+	@ignore
 Scenario: Add absence for shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -93,6 +94,28 @@ Scenario: Add absence for shift ending tomorrow
 	| Start time | 2013-05-23 07:00 |
 	| End time   | 2013-05-24 07:00 |
 
+@ignore
+Scenario: Add absence on a day with a night shift starting yesterday
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-05-22 22:00 |
+	| End time       | 2013-05-23 07:00 |
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-05-23'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-05-23 |
+	And I click 'apply'
+	Then I should not see any shift
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-05-23 07:00 |
+	| End time   | 2013-05-23 23:59 |
+
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
@@ -108,3 +131,4 @@ Scenario: Invalid dates
 	| Field    | Value      |
 	| End date | 2012-12-01 |
 	Then I should see the alert 'Invalid end date'
+
