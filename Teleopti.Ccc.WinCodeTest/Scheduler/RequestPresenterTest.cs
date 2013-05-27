@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void ShouldReturnRequestsFromtheCurrentMonth()
         {
             var filerExpression = new List<string>();
-            var month = DateTime.Now.Month;
+            var month = _dateTimePeriod.StartDateTimeLocal(_TimeZoneInfo).Month;
             filerExpression.Add(month.ToString());
 
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
