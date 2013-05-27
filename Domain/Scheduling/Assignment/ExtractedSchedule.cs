@@ -880,7 +880,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 					else
 					{
+#pragma warning disable 612,618
 						var oldShift = personAssignment.ToMainShift();
+#pragma warning restore 612,618
 						oldShift.LayerCollection.Add(layer);
 						personAssignment.SetMainShift(oldShift);
 					}

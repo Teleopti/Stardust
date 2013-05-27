@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public class CreateLayerViewModelService : ICreateLayerViewModelService
     {
 
-        private static ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer, IEventAggregator eventAggregator, TimeSpan interval)
+        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, IEventAggregator eventAggregator, TimeSpan interval)
         {
             ILayerViewModel visualLayerViewModel;
             if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, eventAggregator);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)
                     {
-                        var viewModel = CreateViewModelFromVisualLayer(visualLayer, eventAggregator, interval);
+                        var viewModel = createViewModelFromVisualLayer(visualLayer, eventAggregator, interval);
                         viewModel.SchedulePart = scheduleDay;
                         retList.Add(viewModel);
                     }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 foreach (IVisualLayer visualLayer in projectionSource.ProjectionService().CreateProjection())
                 {
-                    projectionViewModels.Add(CreateViewModelFromVisualLayer(visualLayer, eventAggregator, interval));
+                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, eventAggregator, interval));
                 }
             }
             return projectionViewModels;
@@ -63,7 +63,9 @@ namespace Teleopti.Ccc.WinCode.Common
             IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
             if (assignment != null)
             {
+#pragma warning disable 612,618
 	            var ms = assignment.ToMainShift();
+#pragma warning restore 612,618
                 if (ms != null)
                 {
                     foreach (ILayer<IActivity> layer in ms.LayerCollection)

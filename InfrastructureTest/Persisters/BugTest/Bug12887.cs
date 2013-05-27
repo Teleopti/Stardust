@@ -56,7 +56,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
+#pragma warning disable 612,618
 			var ms = personAssignment.ToMainShift();
+#pragma warning restore 612,618
 			var activity = ms.LayerCollection[0].Payload;
 			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
 			ms.LayerCollection.Add(layer);

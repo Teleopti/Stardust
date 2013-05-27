@@ -116,7 +116,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
 	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
 					ass.SetMainShift(shift);
+#pragma warning disable 612,618
 	        var ms = ass.ToMainShift();
+#pragma warning restore 612,618
 					ILayer<IActivity> firstLayer =
 		(from l in shift.LayerCollection
 		 orderby l.OrderIndex

@@ -417,10 +417,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var id1 = Guid.NewGuid();
 			var id2 = Guid.NewGuid();
+#pragma warning disable 612,618
 			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
 			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
 			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
 			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
+#pragma warning restore 612,618
 		}
     }
 }
