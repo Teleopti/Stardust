@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
 					_container.Resolve<ITeamBlockClearer>(),
-					teamBlockRestrictionOverLimitValidator
+                    teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
 					_container.Resolve<ITeamBlockClearer>(),
-					_container.Resolve<IStandardDeviationSumCalculator>()
+                    _container.Resolve<IStandardDeviationSumCalculator>(), _container.Resolve<ITeamBlockMaxSeatChecker >()
                     );
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
