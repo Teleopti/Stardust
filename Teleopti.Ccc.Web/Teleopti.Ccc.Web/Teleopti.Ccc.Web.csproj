@@ -894,6 +894,7 @@
     <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
+    <Content Include="Content\select2\select2-spinner.gif" />
     <Content Include="Content\select2\select2.css" />
     <Content Include="Content\select2\select2.png" />
     <Content Include="Content\select2\select2x2.png" />
@@ -912,7 +913,6 @@
     <Content Include="Content\moment\moment.min.js" />
     <Content Include="Content\signalr\jquery.signalR-1.0.1.js" />
     <Content Include="Content\signalr\jquery.signalR-1.0.1.min.js" />
-    <Content Include="Content\select2\spinner.gif" />
     <Content Include="Content\select2\select2.js" />
     <Content Include="Content\select2\select2.min.js" />
     <Content Include="Web.config">
