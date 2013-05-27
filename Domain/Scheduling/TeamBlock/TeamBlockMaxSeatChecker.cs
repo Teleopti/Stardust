@@ -5,25 +5,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ITeamBlockMaxSeatChecker
     {
-        bool CheckMaxSeat(DateOnly dateOnly);
+		bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schdulingOption);
     }
 
     public class TeamBlockMaxSeatChecker : ITeamBlockMaxSeatChecker
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly ISchedulingOptions _schdulingOption;
 
-        public TeamBlockMaxSeatChecker(ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulingOptions schdulingOption)
+        public TeamBlockMaxSeatChecker(ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
-            _schdulingOption = schdulingOption;
         }
 
-        public bool  CheckMaxSeat(DateOnly dateOnly )
+		public bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schdulingOption)
         {
             var skillDays = _schedulingResultStateHolder.SkillDays;
 
-            if (_schdulingOption.UseMaxSeats && _schdulingOption.DoNotBreakMaxSeats )
+			if (schdulingOption.UseMaxSeats && schdulingOption.DoNotBreakMaxSeats)
             {
                 foreach (var skillPair in skillDays)
                 {

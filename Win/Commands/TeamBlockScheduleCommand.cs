@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-			IWorkShiftFinderResultHolder workShiftFinderResultHolder)
+			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -189,7 +192,7 @@ namespace Teleopti.Ccc.Win.Commands
 											 teamBlockScheduler, 
 											 new BlockSteadyStateValidator(), 
 											 _safeRollbackAndResourceCalculation,
-                                             _workShiftMinMaxCalculator, advanceSchedulingResults,new TeamBlockMaxSeatChecker(_schedulerStateHolder.SchedulingResultState,schedulingOptions  ));
+											 _workShiftMinMaxCalculator, advanceSchedulingResults, _teamBlockMaxSeatChecker);
 
 			return advanceSchedulingService;
 		}

@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(true);
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true);
-	            Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 expectCallForRollback();
             }
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true );
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-	            Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 expectCallForRollback();
             }
             SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 expectCallsForShouldBreakIfCancelMeIsSetWithNullDayScheduled(teamInfo);
                 expectCallForRollback();
-	            Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
             }
             SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
             args.Cancel = true;
@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(true);
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true);
-	            Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);

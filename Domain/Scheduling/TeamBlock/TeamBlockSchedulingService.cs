@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 }
                             }
 
-                            if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer))
+                            if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer, _schedulingOptions))
                             {
                                 //var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
                                 //workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult("Max Seats voilated", 0, 0));

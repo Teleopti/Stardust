@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOption = new SchedulingOptions();
             _schedulingOption.DoNotBreakMaxSeats = true;
             _schedulingOption.UseMaxSeats = true;
-            _target=new TeamBlockMaxSeatChecker(_schedulingResultStateHolder,_schedulingOption );
+            _target=new TeamBlockMaxSeatChecker(_schedulingResultStateHolder);
             _dateOnly = DateOnly.Today;
             _skill1 = _mock.StrictMock<ISkill>();
             _skill2 = _mock.StrictMock<ISkill>();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(4.0);
                 Expect.Call(_skillStaff2.MaxSeats).Return(6);
             }
-            Assert.IsTrue( _target.CheckMaxSeat(_dateOnly));
+            Assert.IsTrue( _target.CheckMaxSeat(_dateOnly, _schedulingOption));
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(6.0);
                 Expect.Call(_skillStaff2.MaxSeats).Return(6);
             }
-            Assert.IsTrue( _target.CheckMaxSeat(_dateOnly));
+			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption));
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(7.0);
                 Expect.Call(_skillStaff2.MaxSeats).Return(6);
             }
-            Assert.IsFalse(_target.CheckMaxSeat(_dateOnly));
+			Assert.IsFalse(_target.CheckMaxSeat(_dateOnly, _schedulingOption));
         }
 
 

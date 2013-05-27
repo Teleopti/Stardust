@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 				                                                     persons))
 				      .Return(true);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 				      .Return(true);
 				Expect.Call(_standardDeviationSumCalculator.Calculate(selectedPeriod, matrixes, optimizationPreferences,
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					  .Return(false);
 				Expect.Call(_standardDeviationSumCalculator.Calculate(selectedPeriod, matrixes, optimizationPreferences,
 																	  schedulingOptions)).Return(5.0);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 			}
 			using (_mocks.Playback())

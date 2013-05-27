@@ -217,8 +217,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService, allPersonMatrixList);
 			if (!success)
 				return false;
-			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x)) ||
-			                             removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x));
+			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
+										 removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
 			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

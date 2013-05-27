@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					continue;
 				}
-				
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
