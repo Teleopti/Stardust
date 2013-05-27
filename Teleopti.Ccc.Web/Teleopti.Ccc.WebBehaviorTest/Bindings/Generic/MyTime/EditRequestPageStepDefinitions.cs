@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the New Shift Trade Request menu item")]
 		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addShiftTradeRequest-menuItem");
+			Browser.Interactions.AssertNotExists(".navbar-inner",".bdd-add-shifttrade-request-link");
 		}
 
 		[When(@"I click new text request menu item in the toolbar")]
@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
-			//Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
-			//Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
-			//Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.AssertExists("#Request-detail-section");

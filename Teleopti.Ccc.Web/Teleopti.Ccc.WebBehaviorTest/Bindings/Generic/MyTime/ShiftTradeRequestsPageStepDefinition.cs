@@ -6,7 +6,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
@@ -23,13 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			gotoAddRequestToday();
 		}
-
-		[When(@"I click '(.*)'")]
-		public void WhenIClick(string p0)
-		{
-			Browser.Interactions.Click(".cancel-button");
-		}
-
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
@@ -118,6 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the datepicker")]
 		public void ThenIShouldNotSeeTheDatepicker()
 		{
+			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-missing-wcs-message", ".add-shifttrade-datepicker ");
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
 		}
 
@@ -167,15 +160,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
+			Browser.Interactions.AssertContains(".request-data-subject", subject);
 		}
 
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
+			Browser.Interactions.AssertContains(".request-text", message);
 		}
-
 
 		[When(@"I enter subject '(.*)'")]
 		public void WhenIEnterSubject(string subject)
@@ -190,6 +182,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue(message);
 		}
+
+		[When(@"I click send shifttrade button")]
+		public void WhenIClickSendShifttradeButton()
+		{
+			Browser.Interactions.Click(".send-button");
+		}
+
 		
 		[Then(@"Add Shift Trade Request view should not be visible")]
 		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
@@ -201,7 +200,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.Text, Is.EqualTo(Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.IsDisplayed(), Is.True);
 		}
 
 		[Then(@"I should not see timelines")]

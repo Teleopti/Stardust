@@ -45,5 +45,6 @@
 			interactions.Javascript("$(\"{0}\").val(\"{1}\");", selectSelector, text);
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
 		}
+
 	}
 }

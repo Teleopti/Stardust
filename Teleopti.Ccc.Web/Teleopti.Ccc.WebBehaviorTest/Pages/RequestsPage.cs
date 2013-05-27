@@ -25,7 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button RequestDeleteButtonById(Guid Id)
 		{
 			var request = RequestById(Id);
-			return request.Button(QuicklyFind.ByClass("request-delete-button"));
+			return request.Button(QuicklyFind.ByClass("close"));
+		}
+
+		public Button RequestsDeleteButton()
+		{
+			return Document.Button(QuicklyFind.ByClass("close"));
 		}
 
 		public Span AddRequestDropDown
@@ -157,12 +162,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-shift-trade-date-to")]
 		public Element ShiftTradeDateTo { get; set; }
-
-		[FindBy(Id = "Request-shift-trade-detail-subject")]
-		public Div ShiftTradeRequestDetailSubject { get; set; }
-
-		[FindBy(Id = "Request-shift-trade-detail-message")]
-		public Div  ShiftTradeRequestDetailMessage { get; set; }
 
 		[FindBy(Id = "Request-shift-trade-detail-info")]
 		public Div  ShiftTradeRequestDetailInfo { get; set; }
