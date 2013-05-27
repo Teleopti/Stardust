@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
         {
-            Guid? result;
+            Guid? affectedId;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
@@ -53,78 +53,110 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var existPersonPeriod =
 					person.PersonPeriodCollection.FirstOrDefault(pp => pp.StartDate == startDate);
 
-                IPersonPeriod newPersonPeriod = null;
-
                 if (existPersonPeriod != null)
-                {//update a existing person period
-                    if (command.PersonContract != null)
-                    {
-                        existPersonPeriod.PersonContract = createPersonContract(command.PersonContract);
-                    }
-                    if (command.Team != null)
-                        existPersonPeriod.Team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
-                    if (command.ExternalLogOn != null)
-                        resetExternalLogOns(command.ExternalLogOn, existPersonPeriod);
-                    if (command.PersonSkillPeriodCollection != null)
-                        resetPersonSkills(command.PersonSkillPeriodCollection, existPersonPeriod);
-                    if (!string.IsNullOrEmpty(command.Note))
-                        existPersonPeriod.Note = command.Note;
-
-                    uow.PersistAll();
-                    result = existPersonPeriod.Id.GetValueOrDefault();
+                {
+                    affectedId = updateExistingPersonPeriod(command, existPersonPeriod, uow);
                 }
                 else
-                {//add a new person period, copy values from previous person period if it exists
-                    var lastPersonPeriod = person.PersonPeriodCollection.OrderBy(pp => pp.Period.StartDate).LastOrDefault();
-                    if (lastPersonPeriod != null)
-                    {
-                        newPersonPeriod = new PersonPeriod(startDate,
-                                                           command.PersonContract == null
-                                                               ? lastPersonPeriod.PersonContract
-                                                               : createPersonContract(command.PersonContract),
-                                                           command.Team == null
-                                                               ? lastPersonPeriod.Team
-                                                               : _teamRepository.Load(
-                                                                   command.Team.Id.GetValueOrDefault()));
-                        var externalLogOnDtos = new List<ExternalLogOnDto>();
-                        lastPersonPeriod.ExternalLogOnCollection.ForEach(
-                            e => externalLogOnDtos.Add(new ExternalLogOnDto
-                                                      {
-                                                          AcdLogOnOriginalId = e.AcdLogOnOriginalId,
-                                                          AcdLogOnName = e.AcdLogOnName
-                                                      }));
-
-                        var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
-                        resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod);
-                        resetPersonSkills(command.PersonSkillPeriodCollection ??
-                            new List<PersonSkillPeriodDto> { personSkillPeriodDtos }, newPersonPeriod);
-
-                        newPersonPeriod.Note = string.IsNullOrEmpty(command.Note) ? lastPersonPeriod.Note : command.Note;
-                    }
-                    else
-                    {
-                        if(command.PersonContract == null || command.Team == null)
-                             throw new FaultException(
-                               "There is no person period existed before, you have to specify both person contract and team.");
-                        newPersonPeriod = createPersonPeriod(command);
-                        if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod);
-                        if (command.PersonSkillPeriodCollection != null) resetPersonSkills(command.PersonSkillPeriodCollection, newPersonPeriod);
-                        if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
-                    }
-                    if (newPersonPeriod == null) throw new FaultException("Create person period error.");
-
-                    person.AddPersonPeriod(newPersonPeriod);
-                    uow.PersistAll();
-                    result = newPersonPeriod.Id.GetValueOrDefault();
+                {
+                    affectedId = createNewPersonPeriod(command, person, uow);
                 }
             }
-            return new CommandResultDto { AffectedId = result, AffectedItems = 1 };
+			return new CommandResultDto { AffectedId = affectedId, AffectedItems = 1 };
+        }
+
+        private Guid? createNewPersonPeriod(ChangePersonEmploymentCommandDto command, IPerson person, IUnitOfWork uow)
+        {
+            var lastPersonPeriod = person.PersonPeriodCollection.OrderBy(pp => pp.Period.StartDate).LastOrDefault();
+            IPersonPeriod newPersonPeriod;
+            if (lastPersonPeriod != null)
+            {
+                var team = command.Team == null
+                               ? lastPersonPeriod.Team
+                               : _teamRepository.Load(command.Team.Id.GetValueOrDefault());
+                checkBusinessUnitConsistency(team.Site);
+                newPersonPeriod = new PersonPeriod(new DateOnly(command.Period.StartDate.DateTime), 
+                                                   command.PersonContract == null
+                                                       ? lastPersonPeriod.PersonContract
+                                                       : createPersonContract(command.PersonContract),team);
+                var externalLogOnDtos = new List<ExternalLogOnDto>();
+                lastPersonPeriod.ExternalLogOnCollection.ForEach(
+                    e => externalLogOnDtos.Add(new ExternalLogOnDto
+                        {
+                            AcdLogOnOriginalId = e.AcdLogOnOriginalId,
+                            AcdLogOnName = e.AcdLogOnName
+                        }));
+
+                var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
+                resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod);
+                resetPersonSkills(command.PersonSkillPeriodCollection ??
+                                  new List<PersonSkillPeriodDto> {personSkillPeriodDtos}, newPersonPeriod);
+
+                newPersonPeriod.Note = string.IsNullOrEmpty(command.Note) ? lastPersonPeriod.Note : command.Note;
+            }
+            else
+            {
+                if (command.PersonContract == null || command.Team == null)
+                    throw new FaultException(
+                        "There is no person period existed before, you have to specify both person contract and team.");
+                newPersonPeriod = createPersonPeriod(command);
+                if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod);
+                if (command.PersonSkillPeriodCollection != null)
+                    resetPersonSkills(command.PersonSkillPeriodCollection, newPersonPeriod);
+                if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
+            }
+            if (newPersonPeriod == null) throw new FaultException("Create person period error.");
+
+            person.AddPersonPeriod(newPersonPeriod);
+            uow.PersistAll();
+            return newPersonPeriod.Id;
+        }
+
+        private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPersonPeriod existPersonPeriod,
+                                                 IUnitOfWork uow)
+        {
+            if (command.Team != null)
+            {
+                existPersonPeriod.Team = _teamRepository.Get(command.Team.Id.GetValueOrDefault());
+                checkBusinessUnitConsistency(existPersonPeriod.Team.Site);
+            }
+            if (command.PersonContract != null)
+            {
+                existPersonPeriod.PersonContract = createPersonContract(command.PersonContract);
+            }
+            if (command.ExternalLogOn != null)
+            {
+                resetExternalLogOns(command.ExternalLogOn, existPersonPeriod);
+            }
+            if (command.PersonSkillPeriodCollection != null)
+            {
+                resetPersonSkills(command.PersonSkillPeriodCollection, existPersonPeriod);
+            }
+            if (!string.IsNullOrEmpty(command.Note))
+                existPersonPeriod.Note = command.Note;
+
+            uow.PersistAll();
+            return existPersonPeriod.Id;
+        }
+
+        private void checkBusinessUnitConsistency(IBelongsToBusinessUnit belongsToBusinessUnit)
+        {
+            var currentBusinessUnit = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+            if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
+            {
+                throw new FaultException(
+                    string.Format(
+                        "Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {0}, Current business unit id: {1}, Attempted business unit id: {2})",
+                        belongsToBusinessUnit.GetType(), currentBusinessUnit,
+                        belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault()));
+            }
         }
 
         private IPersonPeriod createPersonPeriod(ChangePersonEmploymentCommandDto command)
         {
-            var personContract = createPersonContract(command.PersonContract);
             var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
+            checkBusinessUnitConsistency(team.Site);
+            var personContract = createPersonContract(command.PersonContract);
             return new PersonPeriod(new DateOnly(command.Period.StartDate.DateTime), personContract, team);
         }
 
@@ -133,6 +165,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var partTimePercentage = _partTimePercentageRepository.Load(personContractDto.PartTimePercentageId.GetValueOrDefault());
             var contractSchedule = _contractScheduleRepository.Load(personContractDto.ContractScheduleId.GetValueOrDefault());
             var contract = _contractRepository.Load(personContractDto.ContractId.GetValueOrDefault());
+
+            checkBusinessUnitConsistency((IBelongsToBusinessUnit) partTimePercentage);
+            checkBusinessUnitConsistency((IBelongsToBusinessUnit) contractSchedule);
+            checkBusinessUnitConsistency((IBelongsToBusinessUnit) contract);
+
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
 
@@ -141,8 +178,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             personPeriod.ResetPersonSkill();
             foreach (var personSkills in from personSkillPeriodDto in personSkillPeriodDtos
                                          select personSkillPeriodDto.SkillCollection)
-                personSkills.ForEach(
-                    s => personPeriod.AddPersonSkill(new PersonSkill(_skillRepository.Load(s), new Percent(1))));
+            {
+                personSkills.ForEach(s =>
+                    {
+                        var skill = _skillRepository.Load(s);
+                        checkBusinessUnitConsistency(skill);
+                        personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+                    });
+            }
         }
 
         private void resetExternalLogOns(IEnumerable<ExternalLogOnDto> externalLogOnDtos, IPersonPeriod personPeriod)
