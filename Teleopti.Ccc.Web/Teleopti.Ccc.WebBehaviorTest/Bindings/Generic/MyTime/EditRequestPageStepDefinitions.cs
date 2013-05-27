@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -16,21 +17,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the New Absence Request menu item")]
 		public void ThenIShouldNotSeeTheNewAbsenceRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addAbsenceRequest-menuItem");
+			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-absence-request-link");
 		}
 
 		[Then(@"I should not see the New Shift Trade Request menu item")]
 		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-inner",".bdd-add-shifttrade-request-link");
-		}
-
-		[When(@"I click new text request menu item in the toolbar")]
-		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
-		{
-			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.AddTextRequestMenuItem.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-shifttrade-request-link");
 		}
 
 		[When(@"I click to add a new absence request")]
@@ -38,28 +31,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
-			Browser.Interactions.AssertExists("#Request-detail-section");
-		}
-
-		[When(@"I click absence request tab")]
-		public void WhenIClickAbsenceRequestTab()
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.EventualClick();
+			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = false;
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = true;
+			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "false")
+				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
 		}
 
 
@@ -89,11 +75,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSee800_1700AsTheDefaultTimes(string startTime, string endTime)
 		{
 			int[] st = startTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tstart = new TimeSpan(st[0], st[1], 0);
+			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
 			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tend = new TimeSpan(end[0], end[1], 0);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tstart, UserFactory.User().Culture)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tend, UserFactory.User().Culture)));
+			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
+
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeFrom]",
+			                                    TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeTo]",
+												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the request form with '(.*)' as default date")]
@@ -103,20 +92,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(date));
 		}
 
-
-
-
-		[Then(@"I should see the edit text request form")]
-		[Then(@"I should see the edit absence request form")]
-		public void ThenIShouldSeeTheRequestsDetailsForm()
+		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.JQueryVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertElementsAreVisible(string.Format(".bdd-request-edit-detail:nth-of-type({0})", position));
 		}
-
-
-
-
 
 		[Then(@"I should see the add text request form")]
 		public void ThenIShouldSeeTheTextRequestForm()

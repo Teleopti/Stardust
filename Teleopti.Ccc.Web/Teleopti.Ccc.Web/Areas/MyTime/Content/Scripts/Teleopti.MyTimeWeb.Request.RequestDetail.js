@@ -35,9 +35,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _initControls(requestDetailViewModel) {
 		requestViewModel = requestDetailViewModel;
-		if ($('#Request-detail-section').length == 0)
+		if ($('#Request-add-section').length == 0)
 			return;
-		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
+		ko.applyBindings(requestViewModel, $('#Request-add-section')[0]);
 	}
 
 	function _addRequest(model, successCallback) {
@@ -199,7 +199,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.Message = ko.observable();
     self.EntityId = ko.observable();
     self.DenyReason = ko.observable();
-    self.IsEditable = ko.observable();
+    self.IsEditable = ko.observable(true);
     self.IsNewInProgress = ko.observable(false);
 
     self.IsTimeInputEnabled = ko.computed(function () {
@@ -230,8 +230,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.TextRequestHeaderVisible(true);
 		self.AbsenceRequestHeaderVisible(false);
 		self.IsFullDay(false);
-	    _setDefaultDates();
-	};
+		_setDefaultDates();
+    };
 
     self.AddAbsenceRequest = function () {
         self.IsNewInProgress(true);

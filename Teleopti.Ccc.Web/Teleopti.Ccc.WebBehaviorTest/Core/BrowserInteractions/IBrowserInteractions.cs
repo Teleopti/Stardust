@@ -46,5 +46,10 @@
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
 		}
 
+		public static void AssertElementsAreVisible(this IBrowserInteractions interactions, string selectSelector)
+		{
+			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selectSelector);
+			interactions.AssertJavascriptResultContains(js, "visible");
+		}
 	}
 }

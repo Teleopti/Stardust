@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -19,12 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 		private RequestsPage _page { get { return Pages.Pages.RequestsPage; } }
 
-		[When(@"I click on the request")]
-		public void WhenIClickOnTheRequest()
+		[When(@"I click on the request at position '(.*)' in the list")]
+		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
 		{
-			_page.FirstRequest.Click();
+			Browser.Interactions.Click(string.Format(".bdd-request-body:nth-of-type({0})", position));
 		}
-
+		
 		[When(@"I click the delete button on the shift trade request")]
 		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
 		{
