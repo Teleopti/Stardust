@@ -278,18 +278,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var validPeriods = new List<DateTimePeriod>();
 #pragma warning disable 612,618
-				if (ToMainShift() != null)
-#pragma warning restore 612,618
+				var mainShiftTemp = ToMainShift();
+				if (mainShiftTemp != null)
 				{
-#pragma warning disable 612,618
-					proj.Add(ToMainShift());
-#pragma warning restore 612,618
-#pragma warning disable 612,618
-					var mainShiftPeriod = ToMainShift().LayerCollection.Period();
-#pragma warning restore 612,618
+					proj.Add(mainShiftTemp);
+					var mainShiftPeriod = mainShiftTemp.LayerCollection.Period();
 					if (mainShiftPeriod.HasValue)
 						validPeriods.Add(mainShiftPeriod.Value);
 				}
+#pragma warning restore 612,618
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();
