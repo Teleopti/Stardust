@@ -298,33 +298,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(expectedLayer.Period.EndDateTime, layer.Period.EndDateTime);
         }
 
-
-        /// <summary>
-        /// Verify that transform works
-        /// </summary>
-        [Test]
-        public void CanTransformOneLayerToAnother()
-        {
-            DateTimePeriod per = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), 
-                                    new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-
-            DateTimePeriod newPer = new DateTimePeriod(new DateTime(2000, 1, 5, 10, 0, 0, DateTimeKind.Utc),
-                                    new DateTime(2000, 1, 5, 12, 0, 0, DateTimeKind.Utc));
-
-            FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
-
-            Activity activity = new Activity("Kalle");
-
-            FakeLayerClass newActL = new FakeLayerClass(activity, newPer);
-
-
-            actL.Transform(newActL);
-
-            Assert.AreEqual("Kalle", actL.Payload.Description.Name);
-            Assert.AreEqual(newPer, actL.Period);
-
-        }
-
         private class FakeLayerClass : Layer<IActivity>
         {
             public FakeLayerClass(IActivity act, DateTimePeriod period) : base(act, period)

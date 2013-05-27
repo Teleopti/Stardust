@@ -27,12 +27,6 @@ namespace Teleopti.Interfaces.Domain
         new DateTimePeriod Period { get; set; }
 
         /// <summary>
-        /// Transforms one layer(this instance) of type T to another layer of Type T
-        /// </summary>
-        /// <param name="layer"></param>
-        void Transform(ILayer<T> layer);
-
-        /// <summary>
         /// Checks if to layers are adjacent.
         /// In other words - one layer starts when the other one ends.
         /// </summary>
