@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				throw new ArgumentNullException("dates");
 			if (scheduleDictionary == null)
 				throw new ArgumentNullException("scheduleDictionary");
-			InParameter.ListCannotBeEmpty("dates", (IList)dates);
+			InParameter.ListCannotBeEmpty("dates", dates);
 			if (person1 == person2)
 				throw new ArgumentException("The Persons must be different");
 			if(lockedDates == null)

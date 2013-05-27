@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var resultHolder = _mocks.StrictMock<IWorkShiftCalculationResultHolder>();
             var projCashe = _mocks.StrictMock<IShiftProjectionCache>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var start = new DateTime(2011, 1, 18, 0, 0, 0, DateTimeKind.Utc);
             var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej");
 			var useCategory = new PossibleStartEndCategory { ShiftCategory = shiftCategory };
@@ -159,7 +158,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																													  new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
-            Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() => _part.AddMainShift(mainShift));
             Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
@@ -180,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var resultHolder = _mocks.StrictMock<IWorkShiftCalculationResultHolder>();
             var projCashe = _mocks.StrictMock<IShiftProjectionCache>();
-            var mainShift = _mocks.StrictMock<IMainShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var start = new DateTime(2011, 1, 18, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, start.AddDays(1));
             Expect.Call(_part.IsScheduled()).Return(false);
@@ -198,7 +196,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person, new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
-            Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() =>_part.AddMainShift(mainShift));
 			Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);

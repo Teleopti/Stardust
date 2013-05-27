@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// TO BE CONTINUED....
 		
 		//remove me later
+		[Obsolete("Mainshift will not be supported in near future")]
 		public virtual IMainShift ToMainShift()
 		{
 			if (!_mainShiftActivityLayers.Any())
@@ -147,6 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory)
 		{
+			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
 			//clear or new list?
 			ClearMainShiftLayers();
 			activityLayers.ForEach(layer =>
@@ -275,13 +277,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasProjection)
 			{
 				var validPeriods = new List<DateTimePeriod>();
-				if (ToMainShift() != null)
+#pragma warning disable 612,618
+				var mainShiftTemp = ToMainShift();
+				if (mainShiftTemp != null)
 				{
-					proj.Add(ToMainShift());
-					var mainShiftPeriod = ToMainShift().LayerCollection.Period();
+					proj.Add(mainShiftTemp);
+					var mainShiftPeriod = mainShiftTemp.LayerCollection.Period();
 					if (mainShiftPeriod.HasValue)
 						validPeriods.Add(mainShiftPeriod.Value);
 				}
+#pragma warning restore 612,618
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();

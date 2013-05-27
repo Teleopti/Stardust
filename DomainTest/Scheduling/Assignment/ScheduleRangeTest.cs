@@ -720,8 +720,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
 																						   new DateTimePeriod(2000, 1, 5,
 																											  2000, 1, 6));
+#pragma warning disable 612,618
 			ass1.ToMainShift().ShiftCategory = low;
 			ass2.ToMainShift().ShiftCategory = high;
+#pragma warning restore 612,618
 
 			((ScheduleRange)dic1[_person]).Add(ass1);
 
@@ -747,11 +749,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																											  2000, 1, 6));
 			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
 																		  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+#pragma warning disable 612,618
 			var tmpShift = ass1.ToMainShift();
+#pragma warning restore 612,618
 			tmpShift.ShiftCategory = low;
 			ass1.SetMainShift(tmpShift);
 
+#pragma warning disable 612,618
 			tmpShift = ass2.ToMainShift();
+#pragma warning restore 612,618
 			tmpShift.ShiftCategory = high;
 			ass2.SetMainShift(tmpShift);
 

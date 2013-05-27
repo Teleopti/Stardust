@@ -121,9 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mockRepository.Record())
 			{
-                Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne)).IgnoreArguments().Repeat.AtLeastOnce();
+                commonMocks();
 			}
 
 			using (_mockRepository.Playback())
@@ -163,14 +161,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
+		private void commonMocks()
+		{
+			Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne))
+			      .IgnoreArguments()
+			      .Return(true)
+			      .Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
+			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne))
+			      .IgnoreArguments()
+			      .Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.PermissionsEnabled).Return(true).Repeat.AtLeastOnce();
+		}
+
 		[Test]
 		public void ShouldSwapUnderLayingMainShiftWhenFullDayAbsence()
 		{
 			using (_mockRepository.Record())
 			{
-                Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne)).IgnoreArguments().Repeat.AtLeastOnce();
+                commonMocks();
 			}
 
 			using (_mockRepository.Playback())
@@ -200,9 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mockRepository.Record())
 			{
-                Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne)).IgnoreArguments().Repeat.AtLeastOnce();
+				commonMocks();
 			}
 
 			using (_mockRepository.Playback())
@@ -229,9 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mockRepository.Record())
 			{
-                Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne)).IgnoreArguments().Repeat.AtLeastOnce();
+				commonMocks();
 			}
 
 			using (_mockRepository.Playback())
@@ -261,9 +266,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mockRepository.Record())
 			{
-                Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne)).IgnoreArguments().Repeat.AtLeastOnce();
+				commonMocks();
 			}
 
 			using (_mockRepository.Playback())

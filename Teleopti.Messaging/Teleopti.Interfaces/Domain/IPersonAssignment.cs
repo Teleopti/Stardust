@@ -27,6 +27,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// Gets the main shift.
 	    /// </summary>
 	    /// <returns>The main shift.</returns>
+	    [Obsolete("Mainshift will not be supported in near future")]
 	    IMainShift ToMainShift();
 
 	    /// <summary>

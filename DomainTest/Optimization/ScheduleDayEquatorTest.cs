@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [SetUp]
         public void Setup()
         {
-            _target = new ScheduleDayEquator();
+            _target = new ScheduleDayEquator(new EditableShiftMapper());
         }
 
 	
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            IMainShift newMainShift = new MainShift(original.PersonAssignmentCollection()[0].ShiftCategory);
+	        var newMainShift = original.GetEditorShift();
             original.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            IMainShift newMainShift = new MainShift(current.PersonAssignmentCollection()[0].ShiftCategory);
+	        var newMainShift = current.GetEditorShift();
             current.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -154,14 +154,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(2, personAssingment.MainShiftActivityLayers.Count());
 
             // change order
-            ILayer<IActivity> activity1 = personAssingment.ToMainShift().LayerCollection[0];
-            ILayer<IActivity> activity2 = personAssingment.ToMainShift().LayerCollection[1];
-            personAssingment.ClearMainShiftLayers();
-            Assert.AreEqual(0, personAssingment.MainShiftActivityLayers.Count());
-	        var mainShift = new MainShift(category);
+            ILayer<IActivity> activity1 = current.GetEditorShift().LayerCollection[0];
+			ILayer<IActivity> activity2 = current.GetEditorShift().LayerCollection[1];
+
+	        var mainShift = new EditableShift(category);
 			mainShift.LayerCollection.Add(activity2);
 			mainShift.LayerCollection.Add(activity1);
-			personAssingment.SetMainShift(mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(personAssingment, mainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));
@@ -178,9 +177,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IActivity activity = ActivityFactory.CreateActivity("Hej");
             DateTimePeriod layerPeriod =
-                scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
+                scheduleDay2.GetEditorShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
             IShiftCategory category = scheduleDay1.PersonAssignmentCollection()[0].ShiftCategory;
-            scheduleDay2.PersonAssignmentCollection()[0].SetMainShift(MainShiftFactory.CreateMainShift(activity, layerPeriod, category));
+			new EditableShiftMapper().SetMainShiftLayers(scheduleDay2.PersonAssignmentCollection()[0], EditableShiftFactory.CreateEditorShift(activity, layerPeriod, category));
 
             Assert.IsTrue(_target.DayOffEquals(scheduleDay1, scheduleDay2));
             Assert.IsFalse(_target.MainShiftEquals(scheduleDay1, scheduleDay2));
@@ -286,8 +285,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var period = new DateTimePeriod(2013, 02, 19, 2013, 02, 19);
 			var shiftCategory = new ShiftCategory("C");
-			IMainShift currentShift = MainShiftFactory.CreateMainShift(new Activity("A"), period, shiftCategory);
-			IMainShift otherShift = MainShiftFactory.CreateMainShift(new Activity("B"), period, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(new Activity("A"), period, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(new Activity("B"), period, shiftCategory);
 
 			bool result = _target.MainShiftEquals(otherShift, currentShift);
 			Assert.IsFalse(result);
@@ -301,8 +300,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var shiftCategory = new ShiftCategory("C");
 			var activity = new Activity("A");
 			activity.SetId(Guid.NewGuid());
-			IMainShift currentShift = MainShiftFactory.CreateMainShift(activity, period1, shiftCategory);
-			IMainShift otherShift = MainShiftFactory.CreateMainShift(activity, period2, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
 			
 			Assert.IsFalse(_target.MainShiftEquals(otherShift, currentShift));
 			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
@@ -318,8 +317,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var shiftCategory = new ShiftCategory("C");
 			var activity = new Activity("A");
 			activity.SetId(Guid.NewGuid());
-			IMainShift currentShift = MainShiftFactory.CreateMainShift(activity, period1, shiftCategory);
-			IMainShift otherShift = MainShiftFactory.CreateMainShift(activity, period2, shiftCategory);
+			var currentShift = EditableShiftFactory.CreateEditorShift(activity, period1, shiftCategory);
+			var otherShift = EditableShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null);
@@ -418,10 +417,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var id1 = Guid.NewGuid();
 			var id2 = Guid.NewGuid();
+#pragma warning disable 612,618
 			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
 			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
 			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
 			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
+#pragma warning restore 612,618
 		}
     }
 }

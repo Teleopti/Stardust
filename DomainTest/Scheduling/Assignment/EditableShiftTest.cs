@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -8,18 +7,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	public class EditorShiftTest
+	public class EditableShiftTest
 	{
-		private MockRepository _mocks;
-		private IEditorShift _target;
+		private IEditableShift _target;
 		private IShiftCategory _shiftCategory;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_shiftCategory = new ShiftCategory("cat");
-			_target = new EditorShift(_shiftCategory);
+			_target = new EditableShift(_shiftCategory);
 		}
 
 		[Test]
@@ -45,6 +42,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.LayerCollection.Add(activityLayer2);
 			Assert.AreEqual(0, _target.LayerCollection[0].OrderIndex);
 			Assert.AreEqual(1, _target.LayerCollection[1].OrderIndex);
+		}
+
+		[Test]
+		public void CloneShouldWork()
+		{
+			
 		}
 
 	}

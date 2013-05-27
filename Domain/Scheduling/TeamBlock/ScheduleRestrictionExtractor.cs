@@ -76,9 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{
-						var assignment = schedulePart.AssignmentHighZOrder();
-						if (assignment == null) continue;
-						var mainShift = assignment.ToMainShift();
+						var mainShift = schedulePart.GetEditorShift();
 						if (mainShift == null) continue;
 						if (restriction.CommonMainShift == null)
 						{

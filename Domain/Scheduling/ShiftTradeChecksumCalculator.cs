@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -21,17 +22,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             if (_scheduleDay.SignificantPart() == SchedulePartView.DayOff)
             {
-                checksum = GetDayOffChecksum();
+                checksum = getDayOffChecksum();
             }
             else
             {
                 foreach (IPersonAssignment personAssignment in _scheduleDay.PersonAssignmentCollection())
                 {
-                    if (hasMainShift(personAssignment))
+	                var shift = new EditableShiftMapper().CreateEditorShift(personAssignment);
+					if (shift != null)
                     {
                         IVisualLayerCollection visualLayerCollection =
-                            personAssignment.ToMainShift().ProjectionService().CreateProjection();
-                        checksum = checksum ^ GetMainShiftChecksum(visualLayerCollection);
+                            shift.ProjectionService().CreateProjection();
+                        checksum = checksum ^ getMainShiftChecksum(visualLayerCollection);
                     }
                 }
             }
@@ -39,12 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return checksum;
         }
 
-        private static bool hasMainShift(IPersonAssignment personAssignment)
-        {
-            return personAssignment.ToMainShift() != null;
-        }
-
-        private static long GetMainShiftChecksum(IEnumerable<IVisualLayer> layerCollection)
+        private static long getMainShiftChecksum(IEnumerable<IVisualLayer> layerCollection)
         {
             uint checksum = 0;
             foreach (IVisualLayer layer in layerCollection)
@@ -57,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return checksum;
         }
 
-        private long GetDayOffChecksum()
+        private long getDayOffChecksum()
         {
             return _scheduleDay.PersonDayOffCollection()[0].Checksum();
         }
