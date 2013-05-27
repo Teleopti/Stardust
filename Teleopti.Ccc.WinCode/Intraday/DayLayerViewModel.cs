@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _repositoryFactory = repositoryFactory;
             _dispatcherWrapper = dispatcherWrapper;
             _rtaStateHolder = rtaStateHolder;
+	        ModelSource = new CollectionViewSource {Source = Models};
         }
+
+		public CollectionViewSource ModelSource { get; set; }
 
         public ICollection<DayLayerModel> Models
         {
@@ -117,6 +120,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				dayLayerModel.ColorValue = agentState.Color;
 	            dayLayerModel.AlarmDescription = agentState.AlarmName;
             }
+			ModelSource.View.Refresh();
         }
 
         public void RefreshProjection(IPerson person)
