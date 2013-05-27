@@ -247,6 +247,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call((() => unitOfWork.PersistAll()));
@@ -295,6 +296,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
