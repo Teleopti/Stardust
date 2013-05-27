@@ -405,12 +405,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_schedulePartEarly.IsScheduled()).Return(true).Repeat.Any();
 			Expect.Call(_schedulePartLate.IsScheduled()).Return(true).Repeat.Any();
             Expect.Call(_schedulePartEarly.AssignmentHighZOrder()).Return(earlyAssignment).Repeat.Any();
-            Expect.Call(earlyAssignment.ToMainShift()).Return(earlyShift).Repeat.Any();
-						Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
+			Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
             Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
-            Expect.Call(lateAssignment.ToMainShift()).Return(lateShift).Repeat.Any();
-						Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
+			Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
             Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
             Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2009, 12, 31))).Return(null).
