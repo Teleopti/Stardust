@@ -12,7 +12,7 @@ define([
 
 			var self = this;
 
-			var startTime = moment(data.Start);
+			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
 		    
 			var localStartMinutes = startTime.diff(data.Date, 'minutes');
 
