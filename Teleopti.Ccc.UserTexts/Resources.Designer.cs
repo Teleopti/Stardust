@@ -17487,6 +17487,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent..
+        /// </summary>
+        public static string RecipientAnsweredToEarlierMessage {
+            get {
+                return ResourceManager.GetString("RecipientAnsweredToEarlierMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recruitment.
         /// </summary>
         public static string Recruitment {
