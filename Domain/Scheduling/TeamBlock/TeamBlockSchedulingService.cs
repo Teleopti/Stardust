@@ -106,17 +106,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 }
                             }
 
-                            //check the max seat of the block
                             if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer))
                             {
-                                rollbackExecuted = true;
                                 //var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
                                 //workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult("Max Seats voilated", 0, 0));
                                 //_advanceSchedulingResults.Add(workShiftFinderResult);
 
                                 _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
                                                                                 _schedulingOptions);
-                                break;
+                                rollbackExecuted = true;
+                                //dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
                             }
 
                             if (rollbackExecuted)
@@ -125,10 +124,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
                                 //break; Removed this to schedule all the remaining teams if this block failed.
                             }
-                                
                         }
-
                     }
+                    
                      
 					if (_cancelMe)
 						break;
