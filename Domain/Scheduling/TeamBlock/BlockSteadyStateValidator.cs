@@ -88,11 +88,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return DateTime.MinValue ;
         }
 
-        private static DateTimePeriod? getShiftPeriod(IEditorShift editorShift)
+        private static DateTimePeriod? getShiftPeriod(IEditableShift editableShift)
         {
-			if (editorShift != null)
+			if (editableShift != null)
             {
-				return editorShift.ProjectionService().CreateProjection().Period();
+				return editableShift.ProjectionService().CreateProjection().Period();
             }
             return null;
         }

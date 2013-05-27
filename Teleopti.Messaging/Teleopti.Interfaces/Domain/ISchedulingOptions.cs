@@ -296,7 +296,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// 
         /// </summary>
-		ISpecification<IEditorShift> MainShiftOptimizeActivitySpecification
+		ISpecification<IEditableShift> MainShiftOptimizeActivitySpecification
 		{
 			get;
 			set;

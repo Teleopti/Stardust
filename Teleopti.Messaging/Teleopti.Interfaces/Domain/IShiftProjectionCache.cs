@@ -25,7 +25,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-09-16    
         /// /// </remarks>
-        IEditorShift TheMainShift { get; }
+        IEditableShift TheMainShift { get; }
 
         /// <summary>
         /// Gets the work shift.

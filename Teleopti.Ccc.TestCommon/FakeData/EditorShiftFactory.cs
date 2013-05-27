@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class EditorShiftFactory
 	{
-		public static IEditorShift CreateEditorShift(IActivity activity, DateTimePeriod period, IShiftCategory category)
+		public static IEditableShift CreateEditorShift(IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{
-			var shift = new EditorShift(category);
+			var shift = new EditableShift(category);
 			var layer = new EditorActivityLayer(activity, period);
 			shift.LayerCollection.Add(layer);
 			return shift;
@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// Creates a shift with default category
 		/// </summary>
 		/// <returns></returns>
-		public static IEditorShift CreateEditorShiftWithDefaultCategory()
+		public static IEditableShift CreateEditorShiftWithDefaultCategory()
 		{
 			ShiftCategory category = new ShiftCategory("Morning");
-			var shift = new EditorShift(category);
+			var shift = new EditableShift(category);
 			return shift;
 		}
 
@@ -31,15 +31,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// </summary>
 		/// <param name="cat">The cat.</param>
 		/// <returns></returns>
-		public static IEditorShift CreateEditorShift(IShiftCategory cat)
+		public static IEditableShift CreateEditorShift(IShiftCategory cat)
 		{
-			var shift = new EditorShift(cat);
+			var shift = new EditableShift(cat);
 			return shift;
 		}
 
-		public static IEditorShift CreateEditorShift(TimeSpan start, TimeSpan end, IActivity activity, IShiftCategory category)
+		public static IEditableShift CreateEditorShift(TimeSpan start, TimeSpan end, IActivity activity, IShiftCategory category)
 		{
-			var shift = new EditorShift(category);
+			var shift = new EditableShift(category);
 			var layer1 = new EditorActivityLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start),
 									  WorkShift.BaseDate.Add(end)));
 			shift.LayerCollection.Add(layer1);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// Creates mainshift with three activity layers.
 		/// </summary>
 		/// <returns></returns>
-		public static IEditorShift CreateEditorShiftWithThreeActivityLayers()
+		public static IEditableShift CreateEditorShiftWithThreeActivityLayers()
 		{
 			Activity telephone = ActivityFactory.CreateActivity("Tel");
 			DateTimePeriod period1 =
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return resultShift;
 		}
 
-		public static IEditorShift CreateEditorShiftWithLayers(IActivity baseAct, IActivity lunchAct, IActivity shortAct)
+		public static IEditableShift CreateEditorShiftWithLayers(IActivity baseAct, IActivity lunchAct, IActivity shortAct)
 		{
 
 			DateTimePeriod period1 =

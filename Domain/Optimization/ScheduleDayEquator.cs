@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IScheduleDayEquator
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
-		bool MainShiftEquals(IEditorShift original, IEditorShift current);
-		bool MainShiftEqualsWithoutPeriod(IEditorShift original, IEditorShift current);
+		bool MainShiftEquals(IEditableShift original, IEditableShift current);
+		bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
-		bool MainShiftBasicEquals(IEditorShift original, IEditorShift current);
+		bool MainShiftBasicEquals(IEditableShift original, IEditableShift current);
     }
 
     public class ScheduleDayEquator : IScheduleDayEquator
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if(current.PersonAssignmentCollection().Count  > 0)
                 {
-					IEditorShift originalMainShift =_editorShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
-					IEditorShift currentMainShift =_editorShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift originalMainShift =_editorShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift currentMainShift =_editorShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
 
                     if (originalMainShift == null || currentMainShift == null)
                         return false;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool MainShiftEquals(IEditorShift original, IEditorShift current)
+		public bool MainShiftEquals(IEditableShift original, IEditableShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-		public bool MainShiftBasicEquals(IEditorShift original, IEditorShift current)
+		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		public bool MainShiftEqualsWithoutPeriod(IEditorShift original, IEditorShift current)
+		public bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current)
         {
             if (original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;

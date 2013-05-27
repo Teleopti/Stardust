@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var shiftCategory = new ShiftCategory("hej");
 			var activity = new Activity("hopp");
-			var editorShift = new EditorShift(shiftCategory);
+			var editorShift = new EditableShift(shiftCategory);
 			var editorActivityLayer = new EditorActivityLayer(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			editorShift.LayerCollection.Add(editorActivityLayer);
 			_target.SetMainShiftLayers(_personAssignment, editorShift);

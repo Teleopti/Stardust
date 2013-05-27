@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// /// </remarks>
     public class ShiftProjectionCache : IShiftProjectionCache
     {
-        private IEditorShift _mainShift;
+        private IEditableShift _mainShift;
         private readonly IWorkShift _workShift;
         private  DateTime _schedulingDate;
         private TimeSpan? _workShiftProjectionContractTime;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Created by: Ola
         ///  Created date: 2008-09-16    
         /// /// </remarks>
-        public IEditorShift TheMainShift
+        public IEditableShift TheMainShift
         {
             get { return _mainShift; }
         }

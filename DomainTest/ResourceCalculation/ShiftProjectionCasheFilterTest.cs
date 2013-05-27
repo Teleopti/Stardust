@@ -285,8 +285,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-            var mainshift1 = _mocks.StrictMock<IEditorShift>();
-			var mainshift2 = _mocks.StrictMock<IEditorShift>();
+            var mainshift1 = _mocks.StrictMock<IEditableShift>();
+			var mainshift2 = _mocks.StrictMock<IEditableShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -330,8 +330,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-			var mainshift1 = _mocks.StrictMock<IEditorShift>();
-			var mainshift2 = _mocks.StrictMock<IEditorShift>();
+			var mainshift1 = _mocks.StrictMock<IEditableShift>();
+			var mainshift2 = _mocks.StrictMock<IEditableShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -509,8 +509,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-			var mainshift1 = _mocks.StrictMock<IEditorShift>();
-			var mainshift2 = _mocks.StrictMock<IEditorShift>();
+			var mainshift1 = _mocks.StrictMock<IEditableShift>();
+			var mainshift2 = _mocks.StrictMock<IEditableShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
             var ps2 = _mocks.StrictMock<IProjectionService>();
             var lc1 = _mocks.StrictMock<IVisualLayerCollection>();

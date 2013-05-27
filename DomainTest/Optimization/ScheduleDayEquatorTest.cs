@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             ILayer<IActivity> activity1 = current.GetEditorShift().LayerCollection[0];
 			ILayer<IActivity> activity2 = current.GetEditorShift().LayerCollection[1];
 
-	        var mainShift = new EditorShift(category);
+	        var mainShift = new EditableShift(category);
 			mainShift.LayerCollection.Add(activity2);
 			mainShift.LayerCollection.Add(activity1);
 			new EditorShiftMapper().SetMainShiftLayers(personAssingment, mainShift);

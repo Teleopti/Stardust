@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// <summary>
     /// Maps a MainShift.
     /// </summary>
-    public class MainShiftMapper : Mapper<IEditorShift, global::Domain.WorkShift>
+    public class MainShiftMapper : Mapper<IEditableShift, global::Domain.WorkShift>
     {
         private readonly DateTime _date;
 
@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public override IEditorShift Map(global::Domain.WorkShift oldEntity)
+        public override IEditableShift Map(global::Domain.WorkShift oldEntity)
         {
             IShiftCategory category = MappedObjectPair.ShiftCategory.GetPaired(oldEntity.Category);
-            IEditorShift retShift = new EditorShift(category);
+            IEditableShift retShift = new EditableShift(category);
             var actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.MainShift, _date, TimeZone);
             global::Domain.Activity baseActivity;
             if(oldEntity.Bag == null)

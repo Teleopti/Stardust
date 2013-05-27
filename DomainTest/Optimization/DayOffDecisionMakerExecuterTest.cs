@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void setExpectationsForSettingOriginalShiftCategory()
         {
-            var mainShift = _mocks.StrictMock<IEditorShift>();
+            var mainShift = _mocks.StrictMock<IEditableShift>();
             var shiftCategory = _mocks.StrictMock<IShiftCategory>();
             var originalSchedulePart = _mocks.StrictMock<IScheduleDay>();
 

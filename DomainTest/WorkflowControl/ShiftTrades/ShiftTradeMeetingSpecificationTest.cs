@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IPerson _personTo;
 		private IScheduleDay _scheduleDayFrom;
 		private IScheduleDay _scheduleDayTo;
-		private IEditorShift _mainShift;
+		private IEditableShift _mainShift;
 		private ILayerCollection<IActivity> _layerCollectionFrom;
 		private ILayerCollection<IActivity> _layerCollectionTo;
 		private DateTimePeriod? _periodFrom;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_scheduleDayTo = _mock.StrictMock<IScheduleDay>();
 			_swapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()){SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo};
 			_details = new List<IShiftTradeSwapDetail>{_swapDetail};
-			_mainShift = _mock.StrictMock<IEditorShift>();
+			_mainShift = _mock.StrictMock<IEditableShift>();
 			_layerCollectionFrom = _mock.StrictMock<ILayerCollection<IActivity>>();
 			_layerCollectionTo = _mock.StrictMock<ILayerCollection<IActivity>>();
 			var startFrom = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);

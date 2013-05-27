@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleDay _scheduleDay;
 		private ISchedulingOptions _schedulingOptions;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
-		private IEditorShift _mainShift;
+		private IEditableShift _mainShift;
 		private IPersonAssignment _personAssignment;
 		private IPerson _person;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnlyAsDateTimePeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
-			_mainShift = _mock.StrictMock<IEditorShift>();
+			_mainShift = _mock.StrictMock<IEditableShift>();
 			_personAssignment = _mock.StrictMock<IPersonAssignment>();
 			_person = new Person();
 			

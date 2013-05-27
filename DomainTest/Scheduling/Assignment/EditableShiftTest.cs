@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -8,18 +7,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	public class EditorShiftTest
+	public class EditableShiftTest
 	{
-		private MockRepository _mocks;
-		private IEditorShift _target;
+		private IEditableShift _target;
 		private IShiftCategory _shiftCategory;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_shiftCategory = new ShiftCategory("cat");
-			_target = new EditorShift(_shiftCategory);
+			_target = new EditableShift(_shiftCategory);
 		}
 
 		[Test]

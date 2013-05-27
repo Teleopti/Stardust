@@ -38,17 +38,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterAccordingToMainShiftOptimizeActivitiesSpecification()
 		{
-			var result = _target.Filter(getCashes(), new Domain.Specification.All<IEditorShift>());
+			var result = _target.Filter(getCashes(), new Domain.Specification.All<IEditableShift>());
 			Assert.That(result.Count, Is.EqualTo(3));
 		}
 		
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(new List<IShiftProjectionCache>(), new Domain.Specification.All<IEditorShift>());
+			var result = _target.Filter(new List<IShiftProjectionCache>(), new Domain.Specification.All<IEditableShift>());
 			Assert.That(result.Count, Is.EqualTo(0));
 
-			result = _target.Filter(null, new Domain.Specification.All<IEditorShift>());
+			result = _target.Filter(null, new Domain.Specification.All<IEditableShift>());
 			Assert.IsNull(result);
 		}
 

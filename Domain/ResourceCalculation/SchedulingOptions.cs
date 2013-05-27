@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
         //private BlockFinderType _blockFinderType;
-		private ISpecification<IEditorShift> _mainShiftOptimizeActivitySpecification;
+		private ISpecification<IEditableShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
         public bool OnlyShiftsWhenUnderstaffed { get; set; }
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        public ISpecification<IEditorShift> MainShiftOptimizeActivitySpecification
+        public ISpecification<IEditableShift> MainShiftOptimizeActivitySpecification
     	{
     		get
     		{
 				if(_mainShiftOptimizeActivitySpecification == null)
-					return  new All<IEditorShift>();
+					return  new All<IEditableShift>();
 
     			return _mainShiftOptimizeActivitySpecification;
     		}

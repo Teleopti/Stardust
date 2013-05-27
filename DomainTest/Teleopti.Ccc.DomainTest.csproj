@@ -351,7 +351,7 @@
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapperTest.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShiftTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />

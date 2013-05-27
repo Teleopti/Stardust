@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return ServiceForSignificantPartForDisplay.SignificantPart();
         }
 
-	    public IEditorShift GetEditorShift()
+	    public IEditableShift GetEditorShift()
 	    {
 		    var personAssignment = AssignmentHighZOrder();
 		    if (personAssignment == null)
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (sourceMainShift == null)
 				return;
 
-            var workingCopyOfMainShift = (IEditorShift)sourceMainShift.NoneEntityClone();
+            var workingCopyOfMainShift = (IEditableShift)sourceMainShift.NoneEntityClone();
             var sourceShiftPeriod = source.Period;
             if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
                 sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
@@ -658,7 +658,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// we also check the property even if the ignoretimechanges is false. 
         /// </summary>
         /// <param name="mainShift"></param>
-        private void updateDateOnlyAsPeriod(IEditorShift mainShift)
+        private void updateDateOnlyAsPeriod(IEditableShift mainShift)
         {
             DateTimePeriod? mainShiftPeriod = mainShift.LayerCollection.Period();
             if(mainShiftPeriod.HasValue)
@@ -920,7 +920,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Add(newPersonAssignment);
 		}
 
-        public void AddMainShift(IEditorShift mainShift)
+        public void AddMainShift(IEditableShift mainShift)
         {
             IPersonAssignment currentAss = AssignmentHighZOrder();
             MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);

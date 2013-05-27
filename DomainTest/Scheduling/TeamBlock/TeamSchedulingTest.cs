@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IResourceCalculateDelayer _resourceCalculateDelayer;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
-		private IEditorShift _mainShift;
+		private IEditableShift _mainShift;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private ITeamBlockInfo _teamBlockInfo;
         private ITeamInfo _teaminfo;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_groupPerson = new GroupPerson(new List<IPerson>{ _person },DateOnly.MinValue,"hej", null);
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_mainShift = new EditorShift(new ShiftCategory("hej"));
+			_mainShift = new EditableShift(new ShiftCategory("hej"));
 
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			_groupMatrixList = new List<IList<IScheduleMatrixPro>>();

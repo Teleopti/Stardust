@@ -5,11 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class EditorShift : IEditorShift
+	public class EditableShift : IEditableShift
 	{
 		private readonly IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
-		public EditorShift(IShiftCategory shiftCategory)
+		public EditableShift(IShiftCategory shiftCategory)
 		{
 			ShiftCategory = shiftCategory;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void OnAdd(ILayer<IActivity> layer)
 		{
 			if (!(layer is IEditorActivityLayer))
-				throw new ArgumentException("Only EditorActivityLayers can be added to a EditorShift");
+				throw new ArgumentException("Only EditorActivityLayers can be added to a editableShift");
 			
 			((IEditorActivityLayer)layer).SetParent(this);
 		}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public object Clone()
 		{
-			var ret = new EditorShift(ShiftCategory);
+			var ret = new EditableShift(ShiftCategory);
 			foreach (var layer in LayerCollection)
 			{
 				ret.LayerCollection.Add(new EditorActivityLayer(layer.Payload, layer.Period));
@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IShift NoneEntityClone()
 		{
 			//Should not be necessary
-			return (IEditorShift) Clone();
+			return (IEditableShift) Clone();
 
 		}
 
 		public IShift EntityClone()
 		{
 			//Should not be necessary
-			return (IEditorShift)Clone();
+			return (IEditableShift)Clone();
 		}
 	}
 }

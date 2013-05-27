@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEditorShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
+        public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
             IWorkShiftFinderService finderService)
         {

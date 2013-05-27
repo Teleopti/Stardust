@@ -1191,7 +1191,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     	private IPersonAssignment CreatePersonAssignment()
         {
 					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);

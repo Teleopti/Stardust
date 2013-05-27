@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_schedulingOptions);
 			Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 
-			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditorShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
+			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 			Expect.Call(
 				() =>
 				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 
-                Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditorShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
+                Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 
-				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditorShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 
-				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditorShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,

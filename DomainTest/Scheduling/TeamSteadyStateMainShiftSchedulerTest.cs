@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
 		private IPersonAssignment _personAssignment1;
-		private IEditorShift _mainShift1;
+		private IEditableShift _mainShift1;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IScheduleMatrixPro _scheduleMatrixPro2;
 		private IScheduleDayPro _scheduleDayPro;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment1 = _mocks.StrictMock<IPersonAssignment>();
-			_mainShift1 = _mocks.StrictMock<IEditorShift>();
+			_mainShift1 = _mocks.StrictMock<IEditableShift>();
 			_scheduleRange2 = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			_coherentChecker = _mocks.StrictMock<ITeamSteadyStateCoherentChecker>();

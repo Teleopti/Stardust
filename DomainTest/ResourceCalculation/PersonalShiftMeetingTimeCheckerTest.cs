@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class PersonalShiftMeetingTimeCheckerTest
 	{
 		private PersonalShiftMeetingTimeChecker _target;
-		private IEditorShift _mainShift;
+		private IEditableShift _mainShift;
 		private IShiftCategory _shiftCategory;
 		private IPersonMeeting _personMeeting;
 		private IPersonAssignment _personAssignment;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mainShiftLayer = new EditorActivityLayer(_activity, _mainDateTimePeriod);
 			_mainShiftLayerNotInWorkTime = new EditorActivityLayer(_activityNotInWorktime, _mainDateTimePeriodNotInWorkTime);
 			_mainShiftLayerNoOverwrite = new EditorActivityLayer(_activityNoOverwrite, _mainDateTimePeriodNoOverwrite);
-			_mainShift = new EditorShift(_shiftCategory);
+			_mainShift = new EditableShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayer);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNotInWorkTime);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldAllowNoOverwriteActivityBetweenPersonalShifts()
 		{
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			_mainShift = new EditorShift(_shiftCategory);
+			_mainShift = new EditableShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
 			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
 			_personalActivity.InContractTime = false;

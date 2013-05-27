@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class MainShiftOptimizeActivitiesSpecificationTest
     {
-        private Specification<IEditorShift> _interface;
+        private Specification<IEditableShift> _interface;
         private MainShiftOptimizeActivitiesSpecification _target;
         private OptimizerActivitiesPreferences _preferences;
-        private IEditorShift _originalMainShift;
+        private IEditableShift _originalMainShift;
         private IActivity _baseAct;
         private IActivity _lunchAct;
         private IActivity _shbrAct;

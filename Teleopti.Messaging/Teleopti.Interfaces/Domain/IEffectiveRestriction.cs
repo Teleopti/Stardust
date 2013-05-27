@@ -122,6 +122,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// The common main shift to be assigned to all the rest free slots
 		/// </summary>
-		IEditorShift CommonMainShift { get; set; }
+		IEditableShift CommonMainShift { get; set; }
     }
 }

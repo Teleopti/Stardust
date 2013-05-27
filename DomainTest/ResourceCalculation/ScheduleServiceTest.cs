@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var resultHolder = _mocks.StrictMock<IWorkShiftCalculationResultHolder>();
             var projCashe = _mocks.StrictMock<IShiftProjectionCache>();
-			var mainShift = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var start = new DateTime(2011, 1, 18, 0, 0, 0, DateTimeKind.Utc);
             var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej");
 			var useCategory = new PossibleStartEndCategory { ShiftCategory = shiftCategory };
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var resultHolder = _mocks.StrictMock<IWorkShiftCalculationResultHolder>();
             var projCashe = _mocks.StrictMock<IShiftProjectionCache>();
-			var mainShift = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var start = new DateTime(2011, 1, 18, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, start.AddDays(1));
             Expect.Call(_part.IsScheduled()).Return(false);

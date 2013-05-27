@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
 	    private static void extractCommonActivity(ISchedulingOptions schedulingOptions, PossibleStartEndCategory poss,
-	                                              IEditorShift shift)
+	                                              IEditableShift shift)
 	    {
 	        if (schedulingOptions.UseCommonActivity)
 	            foreach (var activity in shift.ProjectionService().CreateProjection())

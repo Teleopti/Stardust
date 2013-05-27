@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         }
 
-		private static bool areMainShiftsEqual(IEditorShift original, IEditorShift current)
+		private static bool areMainShiftsEqual(IEditableShift original, IEditableShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;
@@ -458,6 +458,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		}
 
 		public bool NotAllowedForDayOffs { get; set; }
-	    public IEditorShift CommonMainShift { get; set; }
+	    public IEditableShift CommonMainShift { get; set; }
     }
 }

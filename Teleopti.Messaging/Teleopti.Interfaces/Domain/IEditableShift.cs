@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Dto to hold layers representing an old Mainshift
 	/// </summary>
-	public interface IEditorShift : IShift
+	public interface IEditableShift : IShift
 	{
 		/// <summary>
 		/// Returns the shift category

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonCategory = true };
-			var mainShift = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldReturnTrueIfSameActivity()
 		{
 			var date = new DateOnly(2010, 10, 4);
-			var mainShift = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var activity = ActivityFactory.CreateActivity("lunch");
             var schedulingOptions = new SchedulingOptions { UseCommonActivity = true, CommonActivity = activity};
@@ -158,8 +158,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonCategory = true };
-			var mainShift = _mocks.StrictMock<IEditorShift>();
-			var mainShiftOther = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var date = new DateOnly(2010, 10, 4);
 			var dateTime = new DateTime(2012, 6, 18, 12, 0, 0, 0, DateTimeKind.Utc);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
-			var mainShift = _mocks.StrictMock<IEditorShift>();
-			var mainShiftOther = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var visualLayerCol = _mocks.StrictMock<IVisualLayerCollection>();
 			Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
@@ -242,8 +242,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var date = new DateOnly(2010, 10, 4);
 			var dateTime = new DateTime(2012, 6, 18, 12, 0, 0, 0, DateTimeKind.Utc);
 			var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
-			var mainShift = _mocks.StrictMock<IEditorShift>();
-			var mainShiftOther = _mocks.StrictMock<IEditorShift>();
+			var mainShift = _mocks.StrictMock<IEditableShift>();
+			var mainShiftOther = _mocks.StrictMock<IEditableShift>();
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var visualLayerCol = _mocks.StrictMock<IVisualLayerCollection>();
 			Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                                             new DateTime(2010, 10, 5, 1, 30, 0, DateTimeKind.Utc));
             var schedulingOptions = new SchedulingOptions
                                         {UseGroupSchedulingCommonStart = true, UseGroupSchedulingCommonEnd = true};
-            var mainShift = _mocks.StrictMock<IEditorShift>();
+            var mainShift = _mocks.StrictMock<IEditableShift>();
             var groupPerson = _mocks.StrictMock<IGroupPerson>();
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();

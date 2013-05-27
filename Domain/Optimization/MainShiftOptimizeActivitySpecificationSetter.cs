@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IMainShiftOptimizeActivitySpecificationSetter
 	{
-		void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditorShift mainShift, DateOnly viewDate);
+		void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate);
 	}
 
 	public class MainShiftOptimizeActivitySpecificationSetter : IMainShiftOptimizeActivitySpecificationSetter
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditorShift mainShift, DateOnly viewDate)
+		public void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
 		{
 			if (optimizationPreferences == null)
 				return;

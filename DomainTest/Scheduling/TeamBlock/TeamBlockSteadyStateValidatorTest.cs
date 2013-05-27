@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 //day1
                 expectCallForDayForSameStartTime(_todayScheduleDay, _today, now, true);
 
-                var mainShift = _mock.StrictMock<IEditorShift>();
+                var mainShift = _mock.StrictMock<IEditableShift>();
                 IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
                 IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
                 Expect.Call(_tomorrowScheduleDay.GetEditorShift()).Return(mainShift).Repeat.AtLeastOnce();
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private void expectCallForDayForSameShift(IScheduleDay scheduleDay, DateOnly dateOnly)
         {
-            var mainShift = _mock.StrictMock<IEditorShift>();
+            var mainShift = _mock.StrictMock<IEditableShift>();
 			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(_todayScheduleDayPro);
 			Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 			Expect.Call(scheduleDay.IsScheduled()).Return(true);
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private void expectCallForDayForSameStartTime(IScheduleDay scheduleDay, DateOnly dateOnly, DateTime startTime, bool isScheduled)
         {
-            var mainShift = _mock.StrictMock<IEditorShift>();
+            var mainShift = _mock.StrictMock<IEditableShift>();
             IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
             IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 

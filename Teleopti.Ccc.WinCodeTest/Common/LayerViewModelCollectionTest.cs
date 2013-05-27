@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             IPerson person = new Person();
 
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             ActivityLayer layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             target.Interval = TimeSpan.FromMinutes(7);
             IPerson person = new Person();
 
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             var layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             DateTimePeriod nextPeriod = new DateTimePeriod(period.EndDateTime, period.EndDateTime.AddHours(1));
             IPerson person = new Person();
 
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             ActivityLayer nowLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
             ActivityLayer nextLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("testAnother"), nextPeriod);
             mainShift.LayerCollection.Add(nowLayer);

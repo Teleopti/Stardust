@@ -5,15 +5,15 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class MainShiftOptimizeActivitiesSpecification : Specification<IEditorShift>
+	public class MainShiftOptimizeActivitiesSpecification : Specification<IEditableShift>
 	{
         private readonly IOptimizerActivitiesPreferences _optimizerActivitiesPreferences;
-		private readonly IEditorShift _originalMainShift;
+		private readonly IEditableShift _originalMainShift;
 		private readonly DateOnly _viewerDate;
         private readonly TimeZoneInfo _viewerTimeZone;
         private readonly IVisualLayerCollection _visualLayerColl;
 
-		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditorShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
+		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditableShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
         {
             _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
 			_originalMainShift = originalMainShift;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
         }
 
-		public override bool IsSatisfiedBy(IEditorShift obj)
+		public override bool IsSatisfiedBy(IEditableShift obj)
         {
             IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         }
 
-		public bool CorrectShiftCategory(IEditorShift shift)
+		public bool CorrectShiftCategory(IEditableShift shift)
         {
             if(!_optimizerActivitiesPreferences.KeepShiftCategory)
                 return true;

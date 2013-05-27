@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IScheduleDay part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
             DateTimePeriod first = new DateTimePeriod(CurrentPeriod.StartDateTime, CurrentPeriod.StartDateTime.AddHours(2));
             DateTimePeriod second = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(2), CurrentPeriod.StartDateTime.AddHours(4));
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             var firstLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("first"), first);
 			var secondLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("second"), second);
             mainShift.LayerCollection.Add(firstLayer);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod first = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(5), CurrentPeriod.StartDateTime.AddHours(6));
             DateTimePeriod second = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(4), CurrentPeriod.StartDateTime.AddHours(8));
 
-            var mainShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
             ActivityLayer layer1 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityOne", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(1)));
 			ActivityLayer layer2 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityTwo", System.Drawing.Color.Yellow), first.MovePeriod(TimeSpan.FromHours(2)));
 			ActivityLayer layer3 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityThree", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(4)));

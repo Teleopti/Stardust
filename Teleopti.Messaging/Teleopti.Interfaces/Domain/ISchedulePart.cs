@@ -256,7 +256,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-10-28
         /// </remarks>
-        void AddMainShift(IEditorShift mainShift);
+        void AddMainShift(IEditableShift mainShift);
 
         /// <summary>
         /// Delete main shift

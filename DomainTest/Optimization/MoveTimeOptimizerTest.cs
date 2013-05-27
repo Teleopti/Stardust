@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IProjectionService _projectionService;
     	private IVisualLayerCollection _visualLayerCollection;
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-		private IEditorShift _mainShift;
+		private IEditableShift _mainShift;
 		private IDictionary<DateOnly, IScheduleDay> _originalDays;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]

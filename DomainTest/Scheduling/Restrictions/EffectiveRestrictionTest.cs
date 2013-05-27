@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private EndTimeLimitation _endTimeLimitation;
         private WorkTimeLimitation _workTimeLimitation;
         private IShiftCategory _shiftCategory;
-		private IEditorShift _commonMainShift;
+		private IEditableShift _commonMainShift;
 
         private IWorkShift _workShift1;
         private IWorkShift _workShift2;
