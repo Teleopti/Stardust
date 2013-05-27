@@ -35,14 +35,6 @@ namespace Teleopti.Ccc.Domain.Collection
 				item.SetParent(owner);
         }
 
-	    public void MoveAllLayers(TimeSpan time)
-        {
-            foreach (var layer in Items)
-            {
-                layer.MoveLayer(time);
-            }
-        }
-
         public DateTimePeriod? Period()
         {
             var count = Count;

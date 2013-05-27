@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					var destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
 					var diff = CalculatePeriodOffset(source.Period);
-					((LayerCollection<IActivity>)destPersonalShift.LayerCollection).MoveAllLayers(diff);
+					moveAllLayers(destPersonalShift.LayerCollection, diff);
 
 					destAss.AddPersonalShift(destPersonalShift);
 				}
@@ -599,6 +599,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				if (destAss.PersonalShiftCollection.Count > 0)
 					Add(destAss);
+			}
+		}
+
+		private static void moveAllLayers(IEnumerable<ILayer<IActivity>> layers, TimeSpan time)
+		{
+			foreach (var layer in layers)
+			{
+				layer.MoveLayer(time);
 			}
 		}
 
@@ -616,13 +624,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (sourceMainShift == null)
 				return;
 
-            var workingCopyOfMainShift = (IEditableShift)sourceMainShift.NoneEntityClone();
+            var workingCopyOfMainShift = sourceMainShift.NoneEntityClone();
             var sourceShiftPeriod = source.Period;
             if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
                 sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
             IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
             TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
-            workingCopyOfMainShift.LayerCollection.MoveAllLayers(periodOffset);
+						moveAllLayers(workingCopyOfMainShift.LayerCollection, periodOffset);
             DateTimePeriod period = source.Period.MovePeriod(periodOffset);
 
             if (PersonAssignmentCollection().Count == 0)
@@ -729,7 +737,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     {
                         var destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
                         TimeSpan diff = CalculatePeriodOffset(source.Period);
-                        destPersonalShift.LayerCollection.MoveAllLayers(diff);
+											moveAllLayers(destPersonalShift.LayerCollection, diff);
 
                         destAss.AddPersonalShift(destPersonalShift);
                     }
@@ -742,7 +750,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     {
                         var destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
                         var diff = CalculatePeriodOffset(source.Period);
-                        destPersonalShift.LayerCollection.MoveAllLayers(diff);
+												moveAllLayers(destPersonalShift.LayerCollection, diff);
 
                         if (destPersonalShift.LayerCollection.Period().HasValue)
                         {
