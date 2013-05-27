@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -238,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has PersonalShift
 					IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 					IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithPersonalShift.InsertPersonalShift(new PersonalShift(), personAssignmentWithPersonalShift.PersonalShiftCollection.Count);
+            personAssignmentWithPersonalShift.AddPersonalShift(new PersonalShift());
 
             using (_mocker.Record())
             {
