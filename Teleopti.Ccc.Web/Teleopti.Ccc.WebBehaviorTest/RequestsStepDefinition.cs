@@ -183,16 +183,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
-
 			EventualAssert.That(() => _page.RequestsDeleteButton().IsDisplayed(), Is.False);
-
 			_page.DenyShiftTradeButton.EventualClick();
 		}
 
 		[Then(@"I should not see a delete button on the request")]
 		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
 		{
-			Browser.Interactions.AssertExists(".close");	
+			Browser.Interactions.AssertNotExists(".bdd-request-body", ".close");	
 		}
 
 		[Then(@"I should see '(.*)' as the sender of the request")]

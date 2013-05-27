@@ -208,5 +208,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
 		}
 
+		[When(@"I click '(.*)'")]
+		public void WhenIClick(string p0)
+		{
+			Browser.Interactions.Click(".cancel-button");
+		}
+
+		[When(@"I click on the request")]
+		public void WhenIClickOnTheRequest()
+		{
+			Browser.Interactions.Click(".bdd-request-body");
+		}
+
+
 	}
 }
