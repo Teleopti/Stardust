@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			var result = _browser.Eval(javascript);
 			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
 		}
 
