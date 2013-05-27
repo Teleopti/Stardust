@@ -11199,4 +11199,8 @@ These options are activated:
     <value>Resolution (minutes)</value>
     <comment>select resolution in Meettíng Overview</comment>
   </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent.</value>
+    <comment>Message for optimistic lock exception in messaging.</comment>
+  </data>
 </root>
