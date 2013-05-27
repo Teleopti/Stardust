@@ -60,22 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyCorrectStartTime()
-        {
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);   
-            shift.LayerCollection[0].ChangeLayerPeriodStart(TimeSpan.FromMinutes(1));
-            IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.CorrectStart(layers));
-
-            _preferences.KeepStartTime = true;
-            Assert.IsFalse(_target.CorrectStart(layers));
-
-            shift.LayerCollection[0].ChangeLayerPeriodStart(TimeSpan.FromMinutes(-1));
-            layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.CorrectStart(layers));
-        }
-
-        [Test]
         public void VerifyCorrectEndTime()
         {
             IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);

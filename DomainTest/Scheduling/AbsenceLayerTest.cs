@@ -56,12 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
-        public void ShouldNotAllowToChangeStartTimeOfLayersBySeconds()
-        {
-            target.ChangeLayerPeriodStart(TimeSpan.FromSeconds(-4));
-        }
-
-        [Test, ExpectedException(typeof(ArgumentException))]
         public void ShouldNotAllowToChangeEndTimeOfLayersBySeconds()
         {
             target.ChangeLayerPeriodEnd(TimeSpan.FromSeconds(4));

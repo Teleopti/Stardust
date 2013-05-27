@@ -88,10 +88,6 @@ namespace Teleopti.Ccc.Domain.Common
             _period = _period.ChangeEndTime(timeSpan);
         }
 
-        public virtual void ChangeLayerPeriodStart(TimeSpan timeSpan)
-        {
-            _period = _period.ChangeStartTime(timeSpan);
-        }
 
         public virtual void MoveLayer(TimeSpan timeSpan)
         {

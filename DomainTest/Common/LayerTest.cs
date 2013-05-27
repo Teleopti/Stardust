@@ -230,29 +230,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         /// <summary>
-        /// Verifies that a new correct DateTimePeriod (start time) is created on specific layer
-        /// </summary>
-        [Test]
-        public void CanChangePeriodStartTimeAccordingToTimeSpan()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 15, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.ChangeLayerPeriodStart(new TimeSpan(0, -1, 0, 0));
-
-            Assert.AreEqual(layer.Period.StartDateTime, expectedLayer.Period.StartDateTime);
-            Assert.AreEqual(layer.Period.EndDateTime, expectedLayer.Period.EndDateTime);
-        }
-
-        /// <summary>
         /// Verifies that the layer is moved forward in time
         /// </summary>
         [Test]

@@ -43,12 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			base.ChangeLayerPeriodEnd(timeSpan);
 		}
 
-		public override void ChangeLayerPeriodStart(TimeSpan timeSpan)
-		{
-			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
-			base.ChangeLayerPeriodStart(timeSpan);
-		}
-
 		public override void MoveLayer(TimeSpan timeSpan)
 		{
 			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
