@@ -21,15 +21,7 @@ GO
 --				2012-10-08 #20924 Fix Contract Deviation
 --
 -- =============================================
-/*
-set statistics io on
-set statistics time on
-dbcc freeproccache
-dbcc dropcleanbuffers
-exec mart.etl_fact_schedule_deviation_load '2013-02-01 23:00:00','2013-03-01 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
-*/
 
---exec mart.etl_fact_schedule_deviation_load '2013-02-01 23:00:00','2013-02-25 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,

@@ -710,7 +710,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public int PersistScheduleChanged(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.stg_schedule_changed_delete", _dataMartConnectionString);
-			return HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
+			int rowCount = HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[stage].[etl_stg_schedule_updated_special_load]", null, _dataMartConnectionString);
+			return rowCount;
+			
 		}
 
 		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
