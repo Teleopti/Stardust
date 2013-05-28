@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TypeMessage("A message. A very very very short message. Or maybe not.");
 			
 			var time = date.AddHours(12);
-			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+			SetValuesForDateAndTimeInSchedule(date, time, date, time.AddHours(1));
             
         }
 
@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void TypeSubject(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-subject-input", text);
 		}
 
 		private void TypeMessage(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section textarea[data-bind='value: Message']", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-message-input", text);
 		}
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
@@ -126,6 +126,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateTo\"]').datepicker('set', '{0}');",
 							  toDate.ToShortDateString(UserFactory.User().Culture)));
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeTo']", toTime.ToShortTimeString(UserFactory.User().Culture));
+		}
+
+		private void SetValuesForDateAndTimeInSchedule(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
+		{
+			EnableTimePickersByUncheckingFullDayCheckbox();
+
+			Browser.Interactions.Javascript(string.Format("$('#Schedule-addRequest-fromDate-input').datepicker('set', '{0}');",
+							  fromDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-fromTime-input-input", fromTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.Javascript(string.Format("$('#Schedule-addRequest-toDate-input').datepicker('set', '{0}');",
+							  toDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-toTime-input-input", toTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 

@@ -28,46 +28,47 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var completelyLoaded;
 
 	function _initTooltip() {
-		var addTextRequest = $('.show-request');
-		addTextRequestTooltip = $('<div />').qtip({
+			var addTextRequest = $('.show-request');
+			addTextRequestTooltip = $('<div />').qtip({
 
-			content: {
-				text: $('#Schedule-addRequest-section'),
-				title: {
-					text: $('#Schedule-addRequest-title'),
-					button: $('#Schedule-addRequest-cancel-button').text()
+				content: {
+					text: $('#Schedule-addRequest-section'),
+					title: {
+						text: $('#Schedule-addRequest-title'),
+						button: $('#Schedule-addRequest-cancel-button').text()
+					}
+				},
+				position: {
+					target: 'event',
+					my: 'middle left',
+					at: 'middle right',
+					viewport: $(window),
+					adjust: {
+						x: 5
+					}
+				},
+				events: {
+					show: function (event, api) {
+						var date = $(event.originalEvent.target).closest('ul').attr('data-mytime-date');
+						Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
+					}
+				},
+				show: {
+					target: addTextRequest,
+					event: 'click'
+				},
+				hide: {
+					target: $("#page"),
+					event: 'mousedown'
+				},
+				style: {
+					def: false,
+					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+					tip: true
 				}
-			},
-			position: {
-				target: 'event',
-				my: 'middle left',
-				at: 'middle right',
-				viewport: $(window),
-				adjust: {
-					x: 5
-				}
-			},
-			events: {
-				show: function (event, api) {
-					var date = $(event.originalEvent.target).closest('ul').attr('data-mytime-date');
-					Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
-				}
-			},
-			show: {
-				target: addTextRequest,
-				event: 'click'
-			},
-			hide: {
-				target: $("#page"),
-				event: 'mousedown'
-			},
-			style: {
-				def: false,
-				classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-				tip: true
-			}
-		});
-	    //$('.datepicker').datepicker();
+
+			});
+		
 	}
 
 	function _bindData(data) {
@@ -655,7 +656,7 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 		requestViewModel.IsFullDay(false);
 		requestViewModel.FromDate(moment(date));
 		requestViewModel.ToDate(moment(date));
-	    $('#Schedule-addRequest-toDate-input').datepicker("setDate", parsedDate);
+	    //$('#Schedule-addRequest-toDate-input').datepicker("setDate", parsedDate);
 		$('#Text-request-tab').click();
 	}
 
