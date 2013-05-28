@@ -179,29 +179,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 
         }
 
-        /// <summary>
-        /// Verifies that a new correct DateTimePeriod (end time) is created on specific layer
-        /// </summary>
-        [Test]
-        public void CanChangePeriodEndTimeAccordingToTimeSpan()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.ChangeLayerPeriodEnd(new TimeSpan(0, 1, 0, 0));
-
-            Assert.AreEqual(layer.Period.StartDateTime, expectedLayer.Period.StartDateTime);
-            Assert.AreEqual(layer.Period.EndDateTime, expectedLayer.Period.EndDateTime);
-        }
-
         [Test]
         public void CanSetProperties()
         {
@@ -229,51 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             layer.Payload = null;
         }
 
-        /// <summary>
-        /// Verifies that the layer is moved forward in time
-        /// </summary>
-        [Test]
-        public void CanMoveLayerForward()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 19, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.MoveLayer(new TimeSpan(0, 2, 0, 0));
-
-            Assert.AreEqual(expectedLayer.Period.StartDateTime, layer.Period.StartDateTime);
-            Assert.AreEqual(expectedLayer.Period.EndDateTime, layer.Period.EndDateTime);
-        }
-
-        /// <summary>
-        /// Verifies that the layer is moved backwards in time
-        /// </summary>
-        [Test]
-        public void CanMoveLayerBackwards()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 14, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 15, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.MoveLayer(new TimeSpan(0, -2, 0, 0));
-
-            Assert.AreEqual(expectedLayer.Period.StartDateTime, layer.Period.StartDateTime);
-            Assert.AreEqual(expectedLayer.Period.EndDateTime, layer.Period.EndDateTime);
-        }
+       
 
         private class FakeLayerClass : Layer<IActivity>
         {
