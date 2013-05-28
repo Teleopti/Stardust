@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
-				Expect.Call(personAssignment.MainShift).Return(mainShift);
+				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
 			}
 			using (_mocks.Playback())
 			{
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
-				Expect.Call(personAssignment.MainShift).Return(mainShift);
+				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
 			}
 			using (_mocks.Playback())
 			{
