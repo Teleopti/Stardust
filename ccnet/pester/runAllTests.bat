@@ -12,10 +12,6 @@ SET TestPath="%rootdir%\.."
 SET TestPath="%~1"
 )
 
-ECHO %TestPath%
-PAUSE
-PAUSE
-
 ::install
 "%rootdir%\..\..\.nuget\nuget.exe" install pester -o "%rootdir%" -Version %currentPester%
 
