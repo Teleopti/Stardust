@@ -217,16 +217,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             var projection = CreateVisualLayerCollection(_layerPeriods, _layerWithMultiplicatorPeriods, _definitionSet);
             _target = new MultiplicatorProjectionService(_schedulePart, _dateOnly);
 
-            foreach (IVisualLayer layer in projection)
-            {
-                layer.Payload =
-                    new MeetingPayload(new Meeting(_person, new List<IMeetingPerson>(), "subj", "loc", "desc", _activity,
-                                                   null));
-            }
-
             using (_mocker.Record())
             {
-                //Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
