@@ -59,6 +59,10 @@ IF @stepName = 'Preferences'
 BEGIN
 	SELECT @thisTime = MAX(UpdatedOn) FROM PreferenceDay WHERE UpdatedOn >= @lastTime
 END
+IF @stepName = 'Availability'
+BEGIN
+	SELECT @thisTime = MAX(UpdatedOn) FROM StudentAvailabilityDay WHERE UpdatedOn >= @lastTime
+END
 IF @stepName = 'Schedules'
 BEGIN
 	INSERT INTO #PersonsUpdated (PersonId, BelongsToDate, InsertedOn)
