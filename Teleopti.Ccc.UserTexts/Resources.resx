@@ -11460,4 +11460,8 @@ Reduce the complexity to use these shifts.</value>
     <value>The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent.</value>
     <comment>Message for optimistic lock exception in messaging.</comment>
   </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>The team block period is not in legal state.</value>
+    <comment>When the period is not in legal state (you can see that in agent info)</comment>
+  </data>
 </root>

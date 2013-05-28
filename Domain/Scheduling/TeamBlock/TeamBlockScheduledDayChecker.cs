@@ -7,19 +7,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public static bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
         {
             if (teamBlockInfo == null) return false;
-            IScheduleRange rangeForPerson = null;
-            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+           
+            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
             {
-                rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-                break;
+                IScheduleRange rangeForPerson =  matrix.SchedulingStateHolder.Schedules[matrix.Person];
+                IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
+                if (!scheduleDay.IsScheduled())
+                {
+                    return false;
+                }
             }
-            if (rangeForPerson == null) return false;
 
-            IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-            if (!scheduleDay.IsScheduled())
-                return false;
-            
             return true;
+            
         }
     }
 }

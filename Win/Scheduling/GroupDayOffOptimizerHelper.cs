@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
 																				   groupPageDataProvider,
-																				   schedulingOptions.GroupOnGroupPageForTeamBlockPer,
+																				   schedulingOptions.GroupOnGroupPage,
 																				   true);
 			}
 			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
@@ -480,8 +480,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					optimizationPreferences.DaysOff,
 					100, 
 					_container.Resolve<IDayOffDecisionMaker>());
-
-			var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
+			var groupPersonBuilderFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
+			var groupPersonBuilderForOptimization = groupPersonBuilderFactory.Create(schedulingOptions);
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =
@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
 					_container.Resolve<ITeamBlockClearer>(),
-					teamBlockRestrictionOverLimitValidator
+                    teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
 					_container.Resolve<ITeamBlockClearer>(),
-					_container.Resolve<IStandardDeviationSumCalculator>()
+                    _container.Resolve<IStandardDeviationSumCalculator>(), _container.Resolve<ITeamBlockMaxSeatChecker >()
                     );
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;

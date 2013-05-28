@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockInfo _teamBlockInfo;
 		private List<IPerson> _selectedPersons;
 		private IVirtualSchedulePeriod _schedulePeriod;
+		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 			_dayOffTemplate = new DayOffTemplate(new Description("hej"));
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _dayOffOptimizationDecisionMakerFactory,
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamBlockSteadyStateValidator, _teamBlockClearer,
-			                                              _restrictionOverLimitValidator);
+														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker);
 		}
 
 		[Test]

@@ -22585,6 +22585,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The team block period is not in legal state..
+        /// </summary>
+        public static string TeamBlockNotInLegalState {
+            get {
+                return ResourceManager.GetString("TeamBlockNotInLegalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team members.
         /// </summary>
         public static string TeamMembers {

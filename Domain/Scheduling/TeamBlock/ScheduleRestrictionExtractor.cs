@@ -8,7 +8,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IScheduleRestrictionExtractor
 	{
-		IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
+		IEffectiveRestriction Extract(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
+
+		IEffectiveRestriction ExtractForOnePersonOneBlock(IEnumerable<DateOnly> dateOnlyList,
+		                                                  IEnumerable<IScheduleMatrixPro> matrixList,
+		                                                  ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
+
+		IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList,
+		                                              ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
 	}
 
 	public class ScheduleRestrictionExtractor : IScheduleRestrictionExtractor
@@ -22,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
-		public IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList,
+		public IEffectiveRestriction Extract(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList,
 		                                     ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
 		{
 			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -30,6 +37,49 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                                             new WorkTimeLimitation(), null, null, null,
 			                                                             new List<IActivityRestriction>());
 			if (dateOnlyList == null)
+				return restriction;
+            
+			if ( schedulingOptions.UseTeamBlockSameShift)
+			{
+				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixList);
+				if (sameShiftRestriction == null) return null;
+				restriction = restriction.Combine(sameShiftRestriction);
+			}
+            if ((schedulingOptions.UseTeamBlockPerOption &&  schedulingOptions.UseTeamBlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonStart ))
+			{
+				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
+				if (sameStartRestriction == null) return null;
+				restriction = restriction.Combine(sameStartRestriction);
+			}
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameEndTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonEnd ))
+			{
+				var sameEndRestriction = extractSameEndTime(dateOnlyList, matrixList, timeZone);
+				if (sameEndRestriction == null) return null;
+				restriction = restriction.Combine(sameEndRestriction);
+			}
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShiftCategory) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonCategory ))
+			{
+				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
+				if (sameShiftCategory == null) return null;
+				restriction = restriction.Combine(sameShiftCategory);
+			}
+
+
+			return restriction;
+		}
+
+		public IEffectiveRestriction ExtractForOnePersonOneBlock(IEnumerable<DateOnly> dateOnlyList,
+		                                                         IEnumerable<IScheduleMatrixPro> matrixList,
+		                                                         ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
+		{
+			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
+			                                                             new EndTimeLimitation(),
+			                                                             new WorkTimeLimitation(), null, null, null,
+			                                                             new List<IActivityRestriction>());
+			if (dateOnlyList == null)
+				return restriction;
+			
+			if (!schedulingOptions.UseTeamBlockPerOption) 
 				return restriction;
 
 			if (schedulingOptions.UseTeamBlockSameShift)
@@ -59,7 +109,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private IEffectiveRestriction extractSameShift(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
+		public IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList,
+		                                                     ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
+		{
+			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
+			                                                             new EndTimeLimitation(),
+			                                                             new WorkTimeLimitation(), null, null, null,
+			                                                             new List<IActivityRestriction>());
+			var dateOnlyList = new List<DateOnly> {dateOnly};
+
+			if (!schedulingOptions.UseGroupScheduling) return restriction;
+
+			if (schedulingOptions.UseGroupSchedulingCommonStart)
+			{
+				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
+				if (sameStartRestriction == null) return null;
+				restriction = restriction.Combine(sameStartRestriction);
+			}
+			if (schedulingOptions.UseGroupSchedulingCommonEnd)
+			{
+				var sameEndRestriction = extractSameEndTime(dateOnlyList, matrixList, timeZone);
+				if (sameEndRestriction == null) return null;
+				restriction = restriction.Combine(sameEndRestriction);
+			}
+			if (schedulingOptions.UseGroupSchedulingCommonCategory)
+			{
+				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
+				if (sameShiftCategory == null) return null;
+				restriction = restriction.Combine(sameShiftCategory);
+			}
+			return restriction;
+		}
+
+		private IEffectiveRestriction extractSameShift(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 													   new EndTimeLimitation(),
@@ -92,8 +174,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 			return restriction;
 		}
-		
-		private static IEffectiveRestriction extractSameShiftCategory(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
+
+		private static IEffectiveRestriction extractSameShiftCategory(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 													   new EndTimeLimitation(),
@@ -130,7 +212,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private static IEffectiveRestriction extractSameStartTime(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
+		private static IEffectiveRestriction extractSameStartTime(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
 		{
 			var startTimeLimitation = new StartTimeLimitation();
 			foreach (var matrix in matrixList)
@@ -163,7 +245,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private static IEffectiveRestriction extractSameEndTime(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
+		private static IEffectiveRestriction extractSameEndTime(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
 		{
 			var endTimeLimitation = new EndTimeLimitation();
 			foreach (var matrix in matrixList)

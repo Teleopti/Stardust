@@ -3667,25 +3667,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (!schedulingOptions.UseTeamBlockPerOption)
-				{
-					if (schedulingOptions.UseGroupScheduling)
-					{
-						var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-						_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays,
-						                                       allMatrixesOfSelectedPersons, schedulingOptions,
-						                                       _container.Resolve<IGroupPageHelper>(), allMatrixes);
-					}
-					else
-						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
+				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
+                {
+                    //when the advance scheduling is required
+					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
+
+                    
+                }
+                else
+                {
+                   	_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
 						                                                    allMatrixesOfSelectedPersons, true,
 						                                                    _backgroundWorkerScheduling, schedulingOptions);
-				}
-				else
-				{
-					//when the advance scheduling is required
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
-				}
+                }
 
 			}
 			else
@@ -3947,10 +3941,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					                                             allMatrixes);
 					break;
 				case OptimizationMethod.ReOptimize:
-					if (optimizerPreferences.Extra.UseTeams)
+
+					
+					if (!optimizerPreferences.Extra.UseTeamBlockOption && optimizerPreferences.Extra.UseTeams)
 					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-						_groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
+						var originalBlockType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+						schedulingOptions.BlockFinderTypeForAdvanceScheduling= BlockFinderType.SingleDay;
+
+						IList<IPerson> selectedPersons =
+							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
+																		_container.Resolve<IOptimizationPreferences>());
+						schedulingOptions.BlockFinderTypeForAdvanceScheduling = originalBlockType;
 						break;
 					}
 

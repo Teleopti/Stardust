@@ -97,6 +97,8 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             TimeSpan corrMax = minMax.Maximum.Subtract(sumCorrection);
             TimeSpan minLenght = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrix).StartTime.Subtract(corrMax);
 
+
+
             TimeSpan minForDay = PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions)[dayToSchedule].Minimum;
             if (minForDay > minLenght)
                 minLenght = minForDay;
@@ -264,68 +266,6 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             return _possibleMinMaxWorkShiftLengthState;
 
         }
-
-        //private IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix)
-        //{
-            
-        //        if (_possibleMinMaxWorkShiftLengthState == null)
-        //        {
-        //            _possibleMinMaxWorkShiftLengthState = new Dictionary<DateOnly, MinMax<TimeSpan>>();
-        //            foreach (var scheduleDayPro in matrix.FullWeeksPeriodDays)
-        //            {
-        //                _possibleMinMaxWorkShiftLengthState.Add(scheduleDayPro.Day,
-        //                    _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(scheduleDayPro.Day, matrix));
-        //            }
-        //        }
-
-        //        return _possibleMinMaxWorkShiftLengthState;
-            
-        //}
-
-        //private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix)
-        //{
-        //    TimeSpan min = TimeSpan.Zero;
-        //    TimeSpan max = TimeSpan.Zero;
-        //    foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
-        //    {
-        //        TimeSpan contractTime;
-        //        if (dayToSchedule.HasValue)
-        //        {
-        //            if (scheduleDayPro.Day == dayToSchedule.Value)
-        //            {
-        //                contractTime = TimeSpan.Zero;
-        //                min = min.Add(contractTime);
-        //                max = max.Add(contractTime);
-        //                continue;
-        //            }
-        //        }
-
-        //        SchedulePartView significant = scheduleDayPro.DaySchedulePart().SignificantPart();
-        //        if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)
-        //        {
-        //            contractTime =
-        //                scheduleDayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-        //            min = min.Add(contractTime);
-        //            max = max.Add(contractTime);
-        //        }
-        //        else
-        //        {
-        //            if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-        //            {
-        //                contractTime = TimeSpan.Zero;
-        //                min = min.Add(contractTime);
-        //                max = max.Add(contractTime);
-        //            }
-        //            else
-        //            {
-        //                min = min.Add(PossibleMinMaxWorkShiftLengths(matrix)[scheduleDayPro.Day].Minimum);
-        //                max = max.Add(PossibleMinMaxWorkShiftLengths(matrix)[scheduleDayPro.Day].Maximum);
-        //            }
-        //        }
-        //    }
-
-        //    return new MinMax<TimeSpan>(min, max);
-        //}
 
         private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {

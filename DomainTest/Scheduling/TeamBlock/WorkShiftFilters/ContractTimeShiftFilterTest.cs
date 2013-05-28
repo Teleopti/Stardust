@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			
-			
-
 			var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			using (_mocks.Record())
 			{
