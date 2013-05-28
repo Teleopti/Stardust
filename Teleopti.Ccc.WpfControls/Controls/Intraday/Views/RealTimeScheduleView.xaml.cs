@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
@@ -25,6 +26,12 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
             InitializeComponent();
             DataContextChanged += (RealTimeScheduleView_DataContextChanged);
         }
+
+		static RealTimeScheduleView()
+		{
+			Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline),
+															   new FrameworkPropertyMetadata { DefaultValue = 30 });
+		}
 
         private void RealTimeScheduleView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
