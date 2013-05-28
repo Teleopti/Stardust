@@ -62,7 +62,7 @@ Scenario: Add
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-09 00:00 |
 
-	@ignore
+@ignore
 Scenario: Add absence for shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -91,7 +91,7 @@ Scenario: Add absence for shift ending tomorrow
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-05-23 07:00 |
+	| Start time | 2013-05-23 22:00 |
 	| End time   | 2013-05-24 07:00 |
 
 @ignore
