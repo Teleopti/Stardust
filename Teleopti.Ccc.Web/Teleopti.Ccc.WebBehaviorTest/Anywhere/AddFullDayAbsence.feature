@@ -37,7 +37,8 @@ Scenario: View form
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 
-Scenario: Add
+@ignore
+Scenario: Add on shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -59,18 +60,81 @@ Scenario: Add
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-08 00:00 |
-	| End time   | 2013-04-09 00:00 |
+	| Start time | 2013-04-08 08:00 |
+	| End time   | 2013-04-08 17:00 |
 
 @ignore
-Scenario: Add absence for shift ending tomorrow
+Scenario: Add on empty day first day
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
-	| Start time     | 2013-05-22 22:00 |
-	| End time       | 2013-05-23 07:00 |
+	| Start time     | 2013-04-09 08:00 |
+	| End time       | 2013-04-09 17:00 |
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-04-09 |
+	And I click 'apply'
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 00:00 |
+	| End time   | 2013-04-09 17:00 |
+	
+@ignore
+Scenario: Add on empty day last day
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-04-08 08:00 |
+	| End time       | 2013-04-08 17:00 |
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-04-09 |
+	And I click 'apply'
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 08:00 |
+	| End time   | 2013-04-09 23:59 |
+
+@ignore
+Scenario: Add on shifts in sequence
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-04-08 08:00 |
+	| End time       | 2013-04-08 17:00 |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-04-09 09:00 |
+	| End time       | 2013-04-09 18:00 |
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-04-09 |
+	And I click 'apply'
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 08:00 |
+	| End time   | 2013-04-09 18:00 |
+
+@ignore
+Scenario: Add on shift ending tomorrow
+	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
