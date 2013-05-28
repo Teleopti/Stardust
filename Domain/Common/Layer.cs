@@ -78,12 +78,6 @@ namespace Teleopti.Ccc.Domain.Common
 			//return (Id.Value == other.Id.Value);
 		}
 
-
-        public virtual void MoveLayer(TimeSpan timeSpan)
-        {
-            _period = _period.MovePeriod(timeSpan);
-        }
-
         public virtual bool AdjacentTo(ILayer<T> layer)
         {
             InParameter.NotNull("layer", layer);

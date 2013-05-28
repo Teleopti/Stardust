@@ -56,12 +56,6 @@ namespace Teleopti.Interfaces.Domain
         object Payload { get; set; }
 
         /// <summary>
-        /// Moves both start time and end time according to supplied timespan
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        void MoveLayer(TimeSpan timeSpan);
-
-        /// <summary>
         /// Gets the index of the order.
         /// </summary>
         /// <value>The index of the order.</value>

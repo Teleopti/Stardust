@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public override void MoveLayer(TimeSpan timeSpan)
-		{
-			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
-			base.MoveLayer(timeSpan);
-		}
-
 		public virtual IMultiplicatorDefinitionSet DefinitionSet
 		{
 			get { return null; }
