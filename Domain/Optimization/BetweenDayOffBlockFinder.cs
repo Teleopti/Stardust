@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             IShiftCategory foundShiftCategory = null;
             if (significant == SchedulePartView.MainShift)
-                foundShiftCategory = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().MainShift.ShiftCategory;
+                foundShiftCategory = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().ShiftCategory;
 
             bool emptyDayFound = false;
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!scheduleDayPro.DaySchedulePart().IsScheduled())
                 iFoundEmptyDay = true;
             if (partView == SchedulePartView.MainShift)
-                foundShiftCategory = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().MainShift.ShiftCategory;
+                foundShiftCategory = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().ShiftCategory;
             bool conflictingCategoryFound = false;
             do
             {
@@ -184,11 +184,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                             if (foundShiftCategory == null)
                             {
                                 foundShiftCategory =
-                                    scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().MainShift.ShiftCategory;
+                                    scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().ShiftCategory;
                             }
                             else
                             {
-                                if (!foundShiftCategory.Equals(scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().MainShift.ShiftCategory))
+                                if (!foundShiftCategory.Equals(scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().ShiftCategory))
                                     conflictingCategoryFound = true;
                             }
                         }

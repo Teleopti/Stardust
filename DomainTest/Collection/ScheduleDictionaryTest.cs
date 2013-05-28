@@ -1543,7 +1543,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     Assert.IsFalse(container.CanRedo());
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 1));
-                    part.PersonAssignmentCollection()[0].ClearMainShift(MockRepository.GenerateMock<IPersonAssignmentRepository>()); 
+                    part.PersonAssignmentCollection()[0].ClearMainShiftLayers(); 
 
                     container.CreateBatch("a");
                     target.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { part }, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -1591,19 +1591,23 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					part.PersonAssignmentCollection()[0].ClearMainShift(MockRepository.GenerateMock<IPersonAssignmentRepository>());
+					part.PersonAssignmentCollection()[0].ClearMainShiftLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
                     CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
                                         PersonAssignmentCollection());
 
                     container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollection()[0].MainShift);
+#pragma warning disable 612,618
+					                                     PersonAssignmentCollection()[0].ToMainShift());
+#pragma warning restore 612,618
 
                     //should do nothing
                     container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollection()[0].MainShift);
+#pragma warning disable 612,618
+					                                     PersonAssignmentCollection()[0].ToMainShift());
+#pragma warning restore 612,618
 
                     container.Redo();
 					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
@@ -1639,8 +1643,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					var oldMainShift = part.PersonAssignmentCollection()[0].MainShift;
-					part.PersonAssignmentCollection()[0].ClearMainShift(MockRepository.GenerateMock<IPersonAssignmentRepository>());
+					var oldMainShift = part.GetEditorShift();
+					part.PersonAssignmentCollection()[0].ClearMainShiftLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
                     container.Undo();

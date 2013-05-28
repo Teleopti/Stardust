@@ -369,13 +369,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			var part = _mocks.DynamicMock<IScheduleDay>();
 			var cat = new ShiftCategory("katten");
 			var personAss = _mocks.DynamicMock<IPersonAssignment>();
-			var mainShift = _mocks.DynamicMock<IMainShift>();
 			
 			Expect.Call(part.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(part.PersonAssignmentCollection()).Return(
 				new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAss}));
-			Expect.Call(personAss.MainShift).Return(mainShift);
-			Expect.Call(mainShift.ShiftCategory).Return(cat);
+			Expect.Call(personAss.ShiftCategory).Return(cat);
 			_mocks.ReplayAll();
 			Assert.That(_target.DayHasShiftCategory(part, cat), Is.True);
 			_mocks.VerifyAll();

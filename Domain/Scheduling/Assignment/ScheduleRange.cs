@@ -250,13 +250,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     continue;
 
                 IPersonAssignment assignment = (IPersonAssignment)scheduleData;
-                if (assignment.MainShift == null)
+                if (assignment.ShiftCategory == null)
                     continue;
 
                 DayOfWeek dow =
                     TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime,
                                                   Person.PermissionInformation.DefaultTimeZone()).DayOfWeek;
-                ret.FairnessPoints += assignment.MainShift.ShiftCategory.DayOfWeekJusticeValues[dow];
+                ret.FairnessPoints += assignment.ShiftCategory.DayOfWeekJusticeValues[dow];
                 ret.TotalNumberOfShifts += 1;
             }
             //}

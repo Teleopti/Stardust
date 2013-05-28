@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         private IList<T> _sourceList;
         private readonly List<T> _originalCopy = new List<T>();
         private readonly int _rowHeaders;
-        private readonly int _colHeaders;
+		private readonly int _colHeaders;
         private bool _allowExtendedCopyPaste;
         public event EventHandler<SFGridColumnGridHelperEventArgs<T>> NewSourceEntityWanted;
         public event EventHandler PasteFromClipboardFinished;
@@ -112,11 +112,29 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             //GridRangeInfoList rangeList = _grid.Selections.GetSelectedRows(false, true);
             foreach (GridRangeInfo range in _grid.Selections)
             {
-                list.AddRange(GetItemsForRange(range));
+                list.AddRange(GetItemsForRange(range, _colHeaders));
             }
 
             return new ReadOnlyCollection<T>(list);
         }
+
+		public ReadOnlyCollection<T> FindSelectedItems(int colHeaders)
+		{
+			var list = new List<T>();
+			
+			foreach (GridRangeInfo range in _grid.Selections)
+			{
+				list.AddRange(GetItemsForRange(range, colHeaders));
+			}
+
+			for (var i = list.Count -1; i >= 0; i--)
+			{
+				if(list[i] == null)
+					list.RemoveAt(i);
+			}
+
+			return new ReadOnlyCollection<T>(list);
+		}
 
         public ReadOnlyCollection<T> FindItemsBySelectionOrPoint(Point point)
         {
@@ -157,7 +175,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             return retValue;
         }
 
-        protected ICollection<T> GetItemsForRange(GridRangeInfo range)
+        protected ICollection<T> GetItemsForRange(GridRangeInfo range, int colHeaders)
         {
         	int startIndex, count;
         	var parsed = TryGetRange(range, out startIndex, out count);
@@ -167,7 +185,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             {
                 if (startIndex < 0 && count < 0)
                 {
-                    startIndex = _colHeaders;
+                    startIndex = colHeaders;
                     count = _sourceList.Count;
                 }
 

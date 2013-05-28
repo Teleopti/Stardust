@@ -5,11 +5,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -48,7 +50,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IContractSchedule _contractSchedule;
         private IPartTimePercentage _partTimePercentage;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-
 
         [SetUp]
         public void Setup()
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             _team = TeamFactory.CreateSimpleTeam("Test Team");
             _team.SetId(Guid.NewGuid());
-            _team.Site = new Site("test site");
+            _team.Site = SiteFactory.CreateSimpleSite("test site");
             _teamDto = new TeamDto { Id = Guid.NewGuid(), Description = _team.Description.Name, SiteAndTeam = _team.SiteAndTeam};
 
             _skill = SkillFactory.CreateSkill("TestSkill");
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                     _contractScheduleRepository.Load(
                         _changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
                             _contractSchedule);              
-                Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
+                Expect.Call(_teamRepository.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
                     _team);
                 Expect.Call(_externalLogOnRepository.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
                 Expect.Call((() => unitOfWork.PersistAll()));
@@ -236,7 +237,31 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
         [Test]
         [ExpectedException(typeof(FaultException))]
-        public void ShouldThrowExceptionIfPersonContractOrTeamIsNull()
+        public void ShouldThrowExceptionIfPersonContractIsNull()
+        {
+            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
+            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+            _changePersonEmploymentCommandDto.PersonContract = null;
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
+                    Return(_person);
+                Expect.Call((() => unitOfWork.PersistAll()));
+                Expect.Call(unitOfWork.Dispose);
+            }
+            using (_mock.Playback())
+            {
+                _target.Handle(_changePersonEmploymentCommandDto);
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfTeamIsNull()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
@@ -249,6 +274,33 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
+                Expect.Call((() => unitOfWork.PersistAll()));
+                Expect.Call(unitOfWork.Dispose);
+            }
+            using (_mock.Playback())
+            {
+                _target.Handle(_changePersonEmploymentCommandDto);
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfTeamIsFromWrongBusinessUnit()
+        {
+            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
+            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+            ReflectionHelper.SetBusinessUnit(_team.Site, new BusinessUnit("asdf"));
+            _team.Site.BusinessUnit.SetId(Guid.NewGuid());
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
+                    Return(_person);
+                Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
+                    _team);
                 Expect.Call((() => unitOfWork.PersistAll()));
                 Expect.Call(unitOfWork.Dispose);
             }

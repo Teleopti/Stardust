@@ -227,10 +227,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (personAssignments.IsEmpty() )
                 return resultSoFar;
 
-            if(personAssignments[0].MainShift == null)
+#pragma warning disable 612,618
+            if(personAssignments[0].ToMainShift() == null)
+#pragma warning restore 612,618
                 return resultSoFar;
 
-            IShiftCategory cat = personAssignments[0].MainShift.ShiftCategory;
+            IShiftCategory cat = personAssignments[0].ShiftCategory;
             resultSoFar.HasShift = true;
             resultSoFar.DisplayColor = new ColorDto(cat.DisplayColor);
             resultSoFar.ScheduledItemName = cat.Description.Name;

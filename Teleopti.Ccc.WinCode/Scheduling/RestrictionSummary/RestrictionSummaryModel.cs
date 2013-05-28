@@ -294,11 +294,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
             cellData.HasShift = true;
             cellData.DisplayName =
-                schedulePart.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Description.Name;
+                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.Description.Name;
             cellData.DisplayShortName =
-                schedulePart.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Description.ShortName;
+                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.Description.ShortName;
             cellData.DisplayColor =
-                schedulePart.PersonAssignmentCollection()[0].MainShift.ShiftCategory.DisplayColor;
+                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.DisplayColor;
             cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), CurrentCultureInfo());
             cellData.StartEndScheduledShift = projection.Period().Value.TimePeriod(_schedulerState.TimeZoneInfo).ToShortTimeString(CurrentCultureInfo());
             return totalRestriction;

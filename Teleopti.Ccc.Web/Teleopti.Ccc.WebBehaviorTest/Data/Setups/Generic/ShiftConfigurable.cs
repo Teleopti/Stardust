@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(StartTime));
-
-			assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory));
+			var mainShift = MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory);
 
 			// add lunch
 			DateTimePeriod? lunchPeriod = null;
@@ -83,25 +82,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
 			}
 			if (lunchPeriod.HasValue)
-				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod.Value));
+				mainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod.Value));
+
+			assignment.SetMainShift(mainShift);
+
 
 			// simply publish the schedule changed event so that the read model is updated
 			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
 
 			assignmentRepository.Add(assignment);
-
-			
 		}
-
-		public TimeSpan GetContractTime()
-		{
-			// rolling my own contract time calculation.
-			// do we need to do a projection here really?
-			var contractTime = _assignmentPeriod.ElapsedTime();
-			if (Lunch3HoursAfterStart)
-				contractTime = contractTime.Subtract(TimeSpan.FromHours(1));
-			return contractTime;
-		}
-
 	}
 }

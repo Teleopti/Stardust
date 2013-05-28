@@ -73,7 +73,6 @@ using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.WpfControls.Controls.Editor;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WpfControls.Controls.Restriction;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -748,6 +747,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					}
 				}
 			}
+
+			if (e.KeyCode == Keys.Enter && toolStripTextBoxFilter.Focused)
+			{
+				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
 		
 			base.OnKeyDown(e);
 		}
@@ -1218,7 +1224,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (schedulePart.PersonDayOffCollection().Count == 0)
 					{
-						IMainShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
+						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
 						{
 							schedulePart.AddMainShift(selectedShift);
@@ -2019,14 +2025,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var part = (IScheduleDay)_schedulerState.Schedules[lst[0].Person].ReFetch(lst[0]).Clone();
 
 					part.Clear<IScheduleData>();
-					IMainShift mainShift = workShift.ToMainShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
-
+					IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
 					foreach (var cat in _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
 					{
 						mainShift.ShiftCategory = cat;
 					}
 
 					part.AddMainShift(mainShift);
+
 					_clipHandlerSchedule.Clear();
 					_clipHandlerSchedule.AddClip(0, 0, part);
 					_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
@@ -6197,9 +6203,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker), _requestView.SelectedAdapters());
 		}
 
-		private void toolStripButtonRequestClick(object sender, EventArgs e)
+		private void toolStripButtonFindRequestOnClick(object sender, EventArgs eventArgs)
 		{
-			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' ').ToList());
+			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
 		}
 		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)

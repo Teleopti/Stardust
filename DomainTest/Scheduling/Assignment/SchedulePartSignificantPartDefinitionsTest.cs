@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -190,9 +191,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasMainShiftDefinition()
         {
             //Definition: Assignment with "HighestZOrder" has Mainshift
-					IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-					IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithMainShift.SetMainShift(new MainShift(new ShiftCategory("mainShiftcategory")));
+			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+	        IMainShift mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+	                                                      new ShiftCategory("hej"));
+			personAssignmentWithMainShift.SetMainShift(mainShift);
 
             using (_mocker.Record())
             {
@@ -317,7 +320,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-			personAssignmentWithMainShift.SetMainShift(new MainShift(new ShiftCategory("mainShiftcategory")));
+			var mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+			                                                 new ShiftCategory("mainShiftcategory"));
+			personAssignmentWithMainShift.SetMainShift(mainShift);
 			IProjectionService projectionService = _mocker.StrictMock<IProjectionService>();
 			IVisualLayerCollection visualLayerCollection = _mocker.StrictMock<IVisualLayerCollection>();
 			IVisualLayer visualLayer = _mocker.StrictMock<IVisualLayer>();

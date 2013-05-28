@@ -28,8 +28,15 @@ namespace Teleopti.Ccc.Rta.TestApplication
         {
             _logOnCollection = new List<string>(ConfigurationManager.AppSettings["LogOn"].Split(','));
             _stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
-			_personIdForScheduleUpdate = new List<string>(ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(',')); 
+			_personIdForScheduleUpdate = new List<string>();
             _endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
+
+			foreach (var personId in ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(','))
+			{
+				Guid personGuid;
+				if (IsValidGuid(personId, out personGuid))
+					_personIdForScheduleUpdate.Add(personId);
+			}
 
             var strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
             if (!IsValidGuid(strPlatformTypeId, out _platformId))

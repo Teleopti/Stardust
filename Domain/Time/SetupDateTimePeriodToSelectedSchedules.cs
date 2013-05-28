@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Time
 
         public SetupDateTimePeriodToSelectedSchedules(IList<IScheduleDay> scheduleDays)
         {
-            _period = GetPeriodFromScheduleDays(scheduleDays);
+            _period = getPeriodFromScheduleDays(scheduleDays);
         }
 
-        private static DateTimePeriod GetPeriodFromScheduleDays(IList<IScheduleDay> scheduleDays)
+        private static DateTimePeriod getPeriodFromScheduleDays(IList<IScheduleDay> scheduleDays)
         {
-            if (IsOneScheduleDayWithMainShiftProjection(scheduleDays))
+            if (isOneScheduleDayWithMainShiftProjection(scheduleDays))
             {
                 ISetupDateTimePeriod setupDateTimePeriodToDefaultLocalHours =
                     new SetupDateTimePeriodDefaultLocalHoursForActivities(scheduleDays[0]);
@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.Domain.Time
             }
         }
 
-        private static bool IsOneScheduleDayWithMainShiftProjection(IEnumerable<IScheduleDay> scheduleDays)
+        private static bool isOneScheduleDayWithMainShiftProjection(IEnumerable<IScheduleDay> scheduleDays)
         {
             if (scheduleDays.Count() > 1) return false;
             var scheduleDay = scheduleDays.SingleOrDefault();
             if (scheduleDay == null) return false;
 
-            var assignment = scheduleDay.AssignmentHighZOrder();
-            return assignment!=null && assignment.MainShift!=null && assignment.MainShift.HasProjection;
+            var shift = scheduleDay.GetEditorShift();
+			return shift != null;
         }
 
         public DateTimePeriod Period

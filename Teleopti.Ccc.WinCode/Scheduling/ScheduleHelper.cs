@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (IScheduleDay schedule in schedules)
 			{
-				if (schedule.SignificantPartForDisplay() == SchedulePartView.MainShift && schedule.AssignmentHighZOrder().MainShift.ShiftCategory.Equals(shiftCategory))
+				if (schedule.SignificantPartForDisplay() == SchedulePartView.MainShift && schedule.AssignmentHighZOrder().ShiftCategory.Equals(shiftCategory))
 					schedulesWithShiftCategory.Add(schedule);
 			}
 

@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                             if (pa != null)
                             {
-                                if (pa.MainShift != null)
+                                if (pa.ShiftCategory != null)
                                 {
                                     if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsToday || ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsAndEndsToday)
                                     {
-                                        color2 = pa.MainShift.ShiftCategory.DisplayColor;
+                                        color2 = pa.ShiftCategory.DisplayColor;
                                         symbol = "|";
                                     }
                                 }

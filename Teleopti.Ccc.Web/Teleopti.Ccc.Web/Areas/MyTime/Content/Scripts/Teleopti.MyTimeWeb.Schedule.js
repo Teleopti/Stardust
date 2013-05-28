@@ -235,8 +235,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return new LayerViewModel(item, parent);
 		});
 		
-	    self.absenceRequestPermission = ko.computed(function() {
-	        return parent.absenceRequestPermission();
+		self.availability = ko.observable(day.Availability);
+	    
+		self.absenceRequestPermission = ko.computed(function () {
+		    if (!parent.absenceRequestPermission() || !self.availability())
+		        return false;
+		    else {
+		        return true;
+		    }	
 	    });
 
 	
@@ -406,12 +412,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
     
-    function _cleanBindings() {
-        ko.cleanNode($('#ScheduleWeek-body')[0]);
-        vm.days([]);
-        vm.timeLines([]);
-        vm = null;
-    }
+	function _cleanBindings() {
+		ko.cleanNode($('#ScheduleWeek-body')[0]);
+		if (vm) {
+			vm.days([]);
+			vm.timeLines([]);
+			vm = null;
+		}
+	}
 
 	return {
 		Init: function () {
@@ -439,6 +447,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
 				success: function (data) {
+				    Teleopti.MyTimeWeb.Schedule.Request.InitComboBoxes();
 					_bindData(data);
 					_subscribeForChanges();
 				}
@@ -522,7 +531,12 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 			;
 	}
 
-	function _initButtons() {
+    function _initComboBoxes() {
+        $("#Schedule-addRequest-section .combobox.time-input").combobox();
+        $("#Schedule-addRequest-section .combobox.absence-input").combobox();
+    }
+
+    function _initButtons() {
 		$('#Schedule-addRequest-ok-button')
 			.click(function () {
 				if ($('#Text-request-tab.selected-tab').length > 0) {
@@ -559,9 +573,7 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 		$('#Schedule-addRequest-section .date-input')
 			.datepicker()
 	    ;
-		$("#Schedule-addRequest-section .combobox.time-input").combobox();
-		$("#Schedule-addRequest-section .combobox.absence-input").combobox();
-
+		
 		$("#Absence-type-input").attr('readonly', 'true');
 
 		requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
@@ -671,7 +683,9 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 		PartialInit: function () {
 			_initEditSection();
 		},
-
+		InitComboBoxes: function() {
+		    _initComboBoxes();
+		},
 		ClearFormData: function (date) {
 			_clearFormData(date);
 		}

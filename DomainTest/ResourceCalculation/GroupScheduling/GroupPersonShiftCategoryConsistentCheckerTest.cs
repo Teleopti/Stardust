@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var ass = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -81,8 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Times(3);
-			Expect.Call(ass.MainShift).Return(mainShift).Repeat.Times(3);
-			Expect.Call(mainShift.ShiftCategory).Return(_category1).Repeat.Times(3);
+			Expect.Call(ass.ShiftCategory).Return(_category1).Repeat.Times(3);
 			_mocks.ReplayAll();
 			var result = _target.AllPersonsHasSameOrNoneShiftCategoryScheduled(_scheduleDictionary, _persons, date);
 			Assert.That(result, Is.True);
@@ -96,8 +94,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var date = new DateOnly(2010, 10, 4);
 			var ass = _mocks.StrictMock<IPersonAssignment>();
 			var assOther = _mocks.StrictMock<IPersonAssignment>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var mainShiftOther = _mocks.StrictMock<IMainShift>();
             Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
             Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
@@ -113,11 +109,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Times(2);
 			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
 
-			Expect.Call(ass.MainShift).Return(mainShift).Repeat.Times(2);
-			Expect.Call(assOther.MainShift).Return(mainShiftOther);
-
-			Expect.Call(mainShift.ShiftCategory).Return(_category1).Repeat.Times(2);
-			Expect.Call(mainShiftOther.ShiftCategory).Return(_category2);
+			Expect.Call(ass.ShiftCategory).Return(_category1).Repeat.Times(2);
+			Expect.Call(assOther.ShiftCategory).Return(_category2);
 			_mocks.ReplayAll();
 			var result = _target.AllPersonsHasSameOrNoneShiftCategoryScheduled(_scheduleDictionary, _persons, date);
 			Assert.That(result, Is.False);

@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -44,7 +45,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
-            MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+	        var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+					ass.SetMainShift(shift);
             ILayer<IActivity> firstLayer =
                 (from l in shift.LayerCollection
                  orderby l.OrderIndex
@@ -66,11 +69,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             {
                 //Execute MoveDown
                 _models.ExecuteCommandModel(model.MoveDownCommand);
-                Assert.IsTrue(model.Layer.OrderIndex == 1, "Orderindex should have changed to 1");
 
                 //Execute MoveUp
                 _models.ExecuteCommandModel(model.MoveUpCommand);
-                Assert.IsTrue(model.Layer.OrderIndex == 0, "Orderindex should have changed back to 0");
             }
         }
 
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyCanMoveUpDownCommand()
         {
             #region setup
-            MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+			var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
 
             IOrderedEnumerable<ILayer<IActivity>> layers =
                 from l in shift.LayerCollection
@@ -112,13 +113,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
          
-
             MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            ILayer<IActivity> firstLayer =
-                (from l in shift.LayerCollection
-                 orderby l.OrderIndex
-                 select l).First();
-            MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, firstLayer, shift, _eventAggregator);
+	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+					ass.SetMainShift(shift);
+#pragma warning disable 612,618
+	        var ms = ass.ToMainShift();
+#pragma warning restore 612,618
+					ILayer<IActivity> firstLayer =
+		(from l in shift.LayerCollection
+		 orderby l.OrderIndex
+		 select l).First();
+            MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, firstLayer, ms, _eventAggregator);
             
 
             #endregion
@@ -135,8 +140,5 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 _models.ExecuteCommandModel(model.DeleteCommand);
             }
         }
-
-
-
     }
 }

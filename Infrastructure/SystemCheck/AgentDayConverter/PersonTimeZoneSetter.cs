@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 	public class PersonTimeZoneSetter : IPersonAssignmentConverter
 	{
 		private const string updatePersonTimeZoneCommand = "update person set DefaultTimeZone=@timeZone where id=@personId";
-		private const string updatePersonAssignmentDateCommand = "update personAssignment set TheDate=@baseDate where person=@personId";
-		private const string updatePersonAssignmentAuditDateCommand = "update auditing.personAssignment_AUD set TheDate=@baseDate where person=@personId";
+		private const string updatePersonAssignmentDateCommand = "update personAssignment set [Date]=@baseDate where person=@personId";
+		private const string updatePersonAssignmentAuditDateCommand = "update auditing.personAssignment_AUD set [Date]=@baseDate where person=@personId";
 
 		public void Execute(SqlTransaction transaction, Guid personId, TimeZoneInfo timeZoneInfo)
 		{

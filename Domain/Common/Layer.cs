@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
 
-        private int findOrderIndex()
+        protected virtual int findOrderIndex()
         {
 			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
@@ -96,12 +96,6 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual void MoveLayer(TimeSpan timeSpan)
         {
             _period = _period.MovePeriod(timeSpan);
-        }
-
-        public virtual void Transform(ILayer<T> layer)
-        {
-            _period = layer.Period;
-            _payload = layer.Payload;
         }
 
         public virtual bool AdjacentTo(ILayer<T> layer)

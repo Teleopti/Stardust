@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.NavigationItems.ElementAt(1).Action.Should().Be("Index");
 			result.NavigationItems.ElementAt(1).Controller.Should().Be("TeamSchedule");
 			result.NavigationItems.ElementAt(2).Action.Should().Be("Index");
-			result.NavigationItems.ElementAt(2).Controller.Should().Be("StudentAvailability");
+			result.NavigationItems.ElementAt(2).Controller.Should().Be("Availability");
 			result.NavigationItems.ElementAt(3).Action.Should().Be("Index");
 			result.NavigationItems.ElementAt(3).Controller.Should().Be("Preference");
 			result.NavigationItems.ElementAt(4).Action.Should().Be("Index");

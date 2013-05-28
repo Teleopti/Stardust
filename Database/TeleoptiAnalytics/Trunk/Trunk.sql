@@ -98,3 +98,32 @@ CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED
 )
 GO
 GO
+
+----------------  
+--Name: David
+--Date: 2013-05-27
+--Desc: #23520 - New indexes to support delete by Scenario 
+-----------------
+--[mart].[fact_schedule]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[fact_schedule]') AND name = N'IX_fact_schedule_scenario_id')
+CREATE NONCLUSTERED INDEX IX_fact_schedule_scenario_id
+ON [mart].[fact_schedule] ([scenario_id])
+INCLUDE ([schedule_date_id],[person_id],[interval_id],[activity_starttime],[shift_startdate_id])
+GO
+
+--[stage].[stg_schedule_updated_ShiftStartDateUTC]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_schedule_updated_ShiftStartDateUTC]') AND type in (N'U'))
+DROP TABLE [stage].[stg_schedule_updated_ShiftStartDateUTC]
+GO
+CREATE TABLE [stage].[stg_schedule_updated_ShiftStartDateUTC](
+	[person_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL,
+	[interval_id] [int] NOT NULL,
+ CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC
+)
+)
+GO

@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IPersonAssignment CreatePersonAssignmentAggregate(IPerson agent,
                                                                      IMainShift mainShift,
                                                                      ICollection<IPersonalShift> personalShiftCollection,
-                                                                     IScenario scenario,
-																																		DateOnly dateOnly)
+                                                                     IScenario scenario, DateOnly dateOnly)
         {
             IPersonAssignment ret = new PersonAssignment(agent, scenario, dateOnly);
             ret.SetMainShift(mainShift);
@@ -90,7 +89,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
 	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
             PersonAssignment ass = new PersonAssignment(agent, scenario, date);
-            ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+	        var mainshift = MainShiftFactory.CreateMainShift(activity, period, category);
+            ass.SetMainShift(mainshift);
             return ass;
         }
 
