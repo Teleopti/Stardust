@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    private void hackToUpdateUnderlyingPersonAssignment()
 	    {
-		    var mainShiftLayer = Layer as ILayer<IActivity>;
+		    var mainShiftLayer = Layer as IMainShiftActivityLayer;
 		    if (mainShiftLayer != null)
 		    {
 			    var ms = (IMainShift) mainShiftLayer.Parent;

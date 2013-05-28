@@ -30,9 +30,11 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-			var owner = _owner as IEntity;
-			if(owner != null)
-				item.SetParent(owner);
+	        var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);						
+					}
         }
 
         public DateTimePeriod? Period()

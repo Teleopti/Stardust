@@ -12,19 +12,13 @@ namespace Teleopti.Interfaces.Domain
     /// Base class for all layers
     /// </summary>
     /// <typeparam name="T">The type of the "payload"</typeparam>
-    public interface ILayer<T> : ILayer, ICloneableEntity<ILayer<T>>, IPeriodized
+    public interface ILayer<T> : ILayer, ICloneableEntity<ILayer<T>>
     {
         /// <summary>
         /// Gets the name of the payload.
         /// </summary>
         /// <value>The name of the payload.</value>
         new T Payload { get; set; }
-        
-        /// <summary>
-        /// Gets the period.
-        /// </summary>
-        /// <value>The period.</value>
-        new DateTimePeriod Period { get; set; }
 
         /// <summary>
         /// Checks if to layers are adjacent.
@@ -37,17 +31,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-01-30
         /// </remarks>
         bool AdjacentTo(ILayer<T> layer);
-
-		/// <summary>
-		/// Added because all layers not are IEntity any longer
-		/// </summary>
-		/// <param name="parent"></param>
-		void SetParent(IEntity parent);
-
-		/// <summary>
-		/// The Parent
-		/// </summary>
-		IEntity Parent { get; }
 	}
 
     /// <summary>
@@ -58,7 +41,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-01-25
     /// </remarks>
-    public interface ILayer 
+		public interface ILayer : IPeriodized
     {
         /// <summary>
         /// Gets the period.
