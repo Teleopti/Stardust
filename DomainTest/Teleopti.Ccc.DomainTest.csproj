@@ -619,7 +619,6 @@
     <Compile Include="ResourceCalculation\SwapServiceTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
-    <Compile Include="Scheduling\AbsenceAssignmentSimulatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleExceptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartServiceTest.cs" />

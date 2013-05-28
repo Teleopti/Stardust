@@ -46,6 +46,16 @@ define([
 			return startPromise;
 		};
 
+	    var unsubscribePersonSchedule = function() {
+	        if (!personScheduleSubscription)
+	            return;
+	        startPromise.done(function() {
+	            incomingPersonSchedule = null;
+	            messagebroker.unsubscribe(personScheduleSubscription);
+	            personScheduleSubscription = null;
+	        });
+	    };
+	    
 	    return {
 	        start: start,
 	        
@@ -57,6 +67,7 @@ define([
 	        },
 	        
 	        subscribePersonSchedule: function (personId, date, callback) {
+	            unsubscribePersonSchedule();
 	            incomingPersonSchedule = callback;
 	            startPromise.done(function () {
 
@@ -70,20 +81,16 @@ define([
 	                        var momentDate = moment(date);
 	                        var startDate = helpers.Date.ToMoment(notification.StartDate);
 	                        var endDate = helpers.Date.ToMoment(notification.EndDate);
-	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0)
+	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0) {
 	                            personScheduleHub.server.personSchedule(personId, date);
+                            }
 	                    }
 	                });
 	                
 	            });
 	        },
 	        
-	        unsubscribePersonSchedule: function () {
-	            startPromise.done(function() {
-	                incomingPersonSchedule = null;
-	                messagebroker.unsubscribe(personScheduleSubscription);
-	            });
-	        }
+	        unsubscribePersonSchedule: unsubscribePersonSchedule
 	    };
 
 	});
