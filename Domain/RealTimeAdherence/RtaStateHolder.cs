@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -40,7 +41,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return _schedulingResultStateHolder; }
         }
-		
+
+	    public event EventHandler<CustomEventArgs<IActualAgentState>> AgentstateUpdated;
+
         public IDictionary<Guid, IActualAgentState> ActualAgentStates
         {
             get { return new ReadOnlyDictionary<Guid, IActualAgentState>(_actualAgentStates); }
@@ -52,6 +55,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	        if (person == null || person.Id == null)
                 return;
 			_actualAgentStates.AddOrUpdate((Guid)person.Id, actualAgentState, (key, oldState) => actualAgentState);
+	        var handler = AgentstateUpdated;
+			if (handler != null)
+				handler.Invoke(this, new CustomEventArgs<IActualAgentState>(actualAgentState));
         }
 
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)

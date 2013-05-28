@@ -206,6 +206,7 @@ namespace Teleopti.Ccc.Win.Intraday
             if (_presenter.RealTimeAdherenceEnabled || _presenter.EarlyWarningEnabled)
             {
                 var model = _presenter.CreateDayLayerViewModel();
+				model.InitializeRows();
                 dayLayerView1.SetDayLayerViewModel(model);
                 pinnedLayerView.SetDayLayerViewCollection(model);
 

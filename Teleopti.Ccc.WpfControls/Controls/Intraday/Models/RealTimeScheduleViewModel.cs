@@ -86,12 +86,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 
         private static void NowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            RealTimeScheduleViewModel model = (RealTimeScheduleViewModel)d;
+            var model = (RealTimeScheduleViewModel)d;
             model.TimelineModel.HoverTime = ((DateTimePeriod)e.NewValue).StartDateTime;
-
-
-            model.DayLayerViewModel.Refresh(model.NowPeriod.StartDateTime);
-
+			model.DayLayerViewModel.RefreshElapsedTime(model.NowPeriod.StartDateTime);
         }
 
         private static void PeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

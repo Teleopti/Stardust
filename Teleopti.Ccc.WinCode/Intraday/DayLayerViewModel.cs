@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _repositoryFactory = repositoryFactory;
             _dispatcherWrapper = dispatcherWrapper;
             _rtaStateHolder = rtaStateHolder;
-	        ModelSource = new CollectionViewSource {Source = Models};
+			_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
+	        ModelEditable = CollectionViewSource.GetDefaultView(Models) as IEditableCollectionView;
         }
 
-		public CollectionViewSource ModelSource { get; set; }
-
+		public IEditableCollectionView ModelEditable { get; private set; }
+		
         public ICollection<DayLayerModel> Models
         {
             get { return _models; }
@@ -100,28 +101,69 @@ namespace Teleopti.Ccc.WinCode.Intraday
             return i;
         }
 
-        public void Refresh(DateTime timestamp)
-        {
-            foreach (var dayLayerModel in Models)
-            {
-	            IActualAgentState agentState;
-	            if (dayLayerModel.Person.Id == null ||
-	                !_rtaStateHolder.ActualAgentStates.TryGetValue((Guid) dayLayerModel.Person.Id, out agentState))
-		            continue;
-	            dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
-	            dayLayerModel.EnteredCurrentState = agentState.StateStart;
-	            dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
-	            dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
-	            dayLayerModel.CurrentStateDescription = agentState.State;
-	            dayLayerModel.AlarmStart = agentState.AlarmStart;
+		public void InitializeRows()
+		{
+			foreach (var dayLayerModel in Models)
+			{
+				var agentState = getActualAgentState(dayLayerModel);
+				if (agentState == null) continue;
+				updateAgentState(dayLayerModel, agentState);
+			}
+		}
 
-	            if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
+	    public void RefreshElapsedTime(DateTime timestamp)
+	    {
+		    foreach (var dayLayerModel in Models)
+		    {
+
+			    var agentState = getActualAgentState(dayLayerModel);
+			    if (agentState == null) continue;
+			    dayLayerModel.EnteredCurrentState = agentState.StateStart;
+			    if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
+			    
+				ModelEditable.EditItem(dayLayerModel);
+			    dayLayerModel.StaffingEffect = agentState.StaffingEffect;
+			    dayLayerModel.ColorValue = agentState.Color;
+			    dayLayerModel.AlarmDescription = agentState.AlarmName;
+			    ModelEditable.CommitEdit();
+		    }
+	    }
+
+	    private void rtaStateHolderOnAgentstateUpdated(object sender, CustomEventArgs<IActualAgentState> customEventArgs)
+		{
+			var agentState = customEventArgs.Value;
+			var dayLayerModel = Models.FirstOrDefault(m => m.Person.Id == agentState.PersonId);
+			if (dayLayerModel == null) return;
+			_dispatcherWrapper.BeginInvoke(new Action(() => updateAgentState(dayLayerModel, agentState)));
+		}
+
+		private void updateAgentState(DayLayerModel dayLayerModel, IActualAgentState agentState)
+		{
+			ModelEditable.EditItem(dayLayerModel);
+			dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
+			dayLayerModel.EnteredCurrentState = agentState.StateStart;
+			dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
+			dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
+			dayLayerModel.CurrentStateDescription = agentState.State;
+			dayLayerModel.AlarmStart = agentState.AlarmStart;
+
+			if (DateTime.UtcNow > dayLayerModel.AlarmStart)
+			{
 				dayLayerModel.StaffingEffect = agentState.StaffingEffect;
 				dayLayerModel.ColorValue = agentState.Color;
-	            dayLayerModel.AlarmDescription = agentState.AlarmName;
-            }
-			ModelSource.View.Refresh();
-        }
+				dayLayerModel.AlarmDescription = agentState.AlarmName;
+			}
+			ModelEditable.CommitEdit();
+		}
+
+		private IActualAgentState getActualAgentState(DayLayerModel dayLayerModel)
+		{
+			IActualAgentState agentState;
+			if (dayLayerModel.Person.Id == null ||
+				!_rtaStateHolder.ActualAgentStates.TryGetValue((Guid)dayLayerModel.Person.Id, out agentState))
+				return null;
+			return agentState;
+		}
 
         public void RefreshProjection(IPerson person)
         {
@@ -164,6 +206,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (_rtaStateHolder != null)
             {
                 _rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified -= OnScheduleModified;
+	            _rtaStateHolder.AgentstateUpdated -= rtaStateHolderOnAgentstateUpdated;
             }
             _rtaStateHolder = null;
             _dispatcherWrapper = null;

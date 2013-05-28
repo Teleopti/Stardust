@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.Expect(r => r.ActualAgentStates).IgnoreArguments().Return(dictionary);
 			mocks.ReplayAll();
 
-			target.Refresh(DateTime.UtcNow);
+			target.RefreshElapsedTime(DateTime.UtcNow);
 			mocks.VerifyAll();
 
 			Assert.That(target.Models.First().Person.Id, Is.EqualTo(person.Id));
