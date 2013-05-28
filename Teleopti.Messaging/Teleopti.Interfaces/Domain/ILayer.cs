@@ -47,7 +47,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the period.
         /// </summary>
         /// <value>The period.</value>
-        DateTimePeriod Period { get; set; }
+        new DateTimePeriod Period { get; set; }
 
         /// <summary>
         /// Gets the name of the payload.
