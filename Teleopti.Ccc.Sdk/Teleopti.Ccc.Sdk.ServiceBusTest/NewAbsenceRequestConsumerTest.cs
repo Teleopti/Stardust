@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
