@@ -215,7 +215,10 @@ namespace Teleopti.Ccc.Win.Optimization
                 Preferences.BlockFinderTypeForAdvanceOptimization  =  BlockFinderType.BetweenDayOff ;
             else if((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString( ) )
                 Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SchedulePeriod;
-            Preferences.GroupPageOnTeamBlockPer = _singleAgentEntry;
+			if (!checkBoxTeamBlockPerBlockScheduling.Checked)
+				Preferences.GroupPageOnTeamBlockPer = _singleAgentEntry;
+			else
+				Preferences.GroupPageOnTeamBlockPer = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 	        Preferences.UseTeamBlockSameEndTime = false;
 	        Preferences.UseTeamBlockSameShift = checkBoxTeamBlockSameShift.Checked;
             Preferences.UseTeamBlockSameShiftCategory = checkBoxTeamBlockSameShiftCategory.Checked;
