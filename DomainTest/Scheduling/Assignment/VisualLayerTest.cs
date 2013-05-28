@@ -2,6 +2,7 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -67,5 +68,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             layerFactory.CreateShiftSetupLayer(null, period, person);
         }
+
+			[Test]
+			public void ShouldCloneWithNewPeriod()
+			{
+				var newPeriod = new DateTimePeriod(2000, 5, 6, 2000, 7, 8);
+				var res = (VisualLayer)target.CloneWithNewPeriod(newPeriod);
+				res.Period.Should().Be.EqualTo(newPeriod);
+				res.Payload.Should().Be.SameInstanceAs(target.Payload);
+				res.HighestPriorityAbsence.Should().Be.SameInstanceAs(target.HighestPriorityAbsence);
+				res.HighestPriorityActivity.Should().Be.SameInstanceAs(target.HighestPriorityActivity);
+			}
     }
 }
