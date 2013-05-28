@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private DateTime _dt = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
         private MockRepository mocks;
         private IAggregateSkillStaffPeriod _aggregateSkillStaffPeriod;
-        private SkillStaffPeriod stPeriod1;
+        private ISkillStaffPeriod stPeriod1;
         private ISkillStaffPeriod stPeriod2;
         private ISkillStaffPeriod stPeriod3;
         private ISkillStaffPeriod stPeriod4;
