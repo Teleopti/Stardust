@@ -56,12 +56,6 @@ namespace Teleopti.Interfaces.Domain
         object Payload { get; set; }
 
         /// <summary>
-        /// Changes a layer period end time with the time of a timespan
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        void ChangeLayerPeriodEnd(TimeSpan timeSpan);
-
-        /// <summary>
         /// Moves both start time and end time according to supplied timespan
         /// </summary>
         /// <param name="timeSpan"></param>
