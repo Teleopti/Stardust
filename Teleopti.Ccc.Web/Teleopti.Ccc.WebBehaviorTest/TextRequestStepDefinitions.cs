@@ -31,11 +31,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input text request values with subject '(.*)' for date '(.*)'")]
 		public void WhenIInputSubject(string subject, DateTime date)
 		{
-			TypeSubject(subject);
-			TypeMessage("A message. A very very very short message. Or maybe not.");
-
 			var time = date.AddHours(12);
 			SetValuesForDateAndTimeInSchedule(date, time, date, time.AddHours(1));
+			TypeSubject(subject);
+			TypeMessage("A message. A very very very short message. Or maybe not.");
 		}
 
         [When(@"I input text request values for date '(.*)'")]

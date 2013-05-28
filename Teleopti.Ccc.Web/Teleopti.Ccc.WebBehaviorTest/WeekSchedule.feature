@@ -296,7 +296,7 @@ Scenario: Keep user request input when schedules are refreshed
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I input text request values with subject 'request subject' for date '2013-10-03'
-	And My schedule between '2013-10-03 10:00' to '2013-10-03 15:00' reloads
+	And My schedule between '2013-10-03 12:00' to '2013-10-03 15:00' reloads
 	Then I should see request form with subject 'request subject'
 
 Scenario: Show black day summary text when background color is white 
