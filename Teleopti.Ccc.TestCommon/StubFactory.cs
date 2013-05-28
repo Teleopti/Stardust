@@ -190,8 +190,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IAbsenceLayer AbsenceLayerStub(IAbsence absence)
 		{
-			var absenceLayer = MockRepository.GenerateStub<IAbsenceLayer>();
-			absenceLayer.Payload = absence;
+			var absenceLayer = MockRepository.GenerateMock<IAbsenceLayer>();
+			absenceLayer.Expect(x => x.Payload).Return(absence);
 			return absenceLayer;
 		}
 
