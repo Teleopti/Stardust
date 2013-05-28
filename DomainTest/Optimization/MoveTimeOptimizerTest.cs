@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IProjectionService _projectionService;
     	private IVisualLayerCollection _visualLayerCollection;
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-		private IPersonAssignment _personAssignment;
-		private IMainShift _mainShift;
+		private IEditableShift _mainShift;
 		private IDictionary<DateOnly, IScheduleDay> _originalDays;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
@@ -80,8 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter =
 		    _mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 		    _projectionService = _mockRepository.StrictMock<IProjectionService>();
-		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-		    _mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+		    _mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 		    _originalDays = new Dictionary<DateOnly, IScheduleDay>{{_mostOverStaffDate, _mostOverStaffSchedulePart},{_mostUnderStaffDate, _mostUnderStaffSchedulePart}};
 
         	_target = new MoveTimeOptimizer(
@@ -320,8 +318,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
-			Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-			Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+			Expect.Call(_mostOverStaffSchedulePart.GetEditorShift()).Return(_mainShift);
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).
 				IgnoreArguments();
@@ -353,8 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
-			Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-			Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+			Expect.Call(_mostUnderStaffSchedulePart.GetEditorShift()).Return(_mainShift);
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments();
 			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()

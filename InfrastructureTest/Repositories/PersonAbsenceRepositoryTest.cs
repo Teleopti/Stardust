@@ -130,7 +130,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyUpdatedByAndUpdatedOnIsChangedWhenObjectIsUpdated()
         {
             DateTimePeriod period = new DateTimePeriod(2007, 8, 1, 2007, 8, 2);
-            DateTimePeriod period2 = new DateTimePeriod(2007, 8, 1, 2007, 8, 3);
             IAbsence absence = AbsenceFactory.CreateAbsence("Test");
             PersistAndRemoveFromUnitOfWork(absence);
             IPerson aTinyAgent = PersonFactory.CreatePerson("Nisse");
@@ -139,16 +138,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(scen);
             IAbsenceLayer layer = new AbsenceLayer(absence, period);
             IPersonAbsence agAbs = new PersonAbsence(aTinyAgent, scen, layer);
-            ILayer<IAbsence> layer2 = new AbsenceLayer(absence, period2);
             PersistAndRemoveFromUnitOfWork(agAbs);
             Assert.AreEqual(agAbs.UpdatedBy, agAbs.CreatedBy);
             Assert.AreEqual(agAbs.UpdatedOn, agAbs.UpdatedOn);
-
-            IPersonAbsence agAbsLoaded = rep.Load(agAbs.Id.Value);
-            ((AbsenceLayer)agAbsLoaded.Layer).Transform(layer2);
-            PersistAndRemoveFromUnitOfWork(agAbsLoaded);
-            Assert.IsNotNull(agAbsLoaded.UpdatedBy);
-            Assert.IsNotNull(agAbsLoaded.UpdatedOn);
         }
 
 

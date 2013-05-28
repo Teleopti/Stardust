@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
-			var ms = new MainShift(new ShiftCategory("shiftCategory"));
-			ms.LayerCollection.Add(new MainShiftActivityLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
-			personAssignment.SetMainShift(ms);
+			personAssignment.SetMainShiftLayers(
+				new[] {new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))},
+				new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -125,7 +125,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
@@ -142,7 +141,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000, 1, 1));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
@@ -158,7 +156,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var stubs = new StubFactory();
 			var period = new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc), new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc));
 			var personAssignment = stubs.PersonAssignmentStub(period);
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);

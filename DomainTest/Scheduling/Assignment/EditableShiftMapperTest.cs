@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -11,17 +10,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	public class EditorShiftMapperTest
+	public class EditableShiftMapperTest
 	{
-		//private MockRepository _mocks;
-		private IEditorShiftMapper _target;
+		private IEditableShiftMapper _target;
 		private IPersonAssignment _personAssignment;
 
 		[SetUp]
 		public void Setup()
 		{
-			//_mocks = new MockRepository();
-			_target = new EditorShiftMapper();
+			_target = new EditableShiftMapper();
 			_personAssignment = new PersonAssignment(new Person(), new Scenario("hej"), new DateOnly(2000, 1, 1));
 		}
 
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var shiftCategory = new ShiftCategory("hej");
 			var activity = new Activity("hopp");
-			var editorShift = new EditorShift(shiftCategory);
+			var editorShift = new EditableShift(shiftCategory);
 			var editorActivityLayer = new EditorActivityLayer(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			editorShift.LayerCollection.Add(editorActivityLayer);
 			_target.SetMainShiftLayers(_personAssignment, editorShift);

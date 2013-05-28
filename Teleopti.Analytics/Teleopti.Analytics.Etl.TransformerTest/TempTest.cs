@@ -31,15 +31,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 ProjectionsForAllAgentSchedulesFactory.CreateProjectionsForAllAgentSchedules(schedulePartList);
 
             ThreadObjects.GetThreadObjectsSplitByPeriod(scheduleProjectionServiceList, DateTime.Now, 1, _jobParameters);
-
-            //DataTable contractDataTable = ScheduleContractInfrastructure.AddColumnsToDataTable();
-
-            //IList<IPerson> p = PersonFactory.CreatePersonGraphCollection();
-            //var intervalBase = new IntervalBase(1, 1);
-
-            //ContractDataRowFactory.CreateContractDataRow(contractDataTable, DateTime.Now, p[0], intervalBase, 1,
-            //                                             BusinessUnitFactory.CreateSimpleBusinessUnit("bu 1"),
-            //                                             DateTime.Now);
         }
     }
 }

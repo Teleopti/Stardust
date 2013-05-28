@@ -158,6 +158,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             Assert.AreEqual(1, result.PersonAssignmentCollection().Count);
         }
 
+		[Test]
+		public void ShouldAddNewPersonAbsencesSpanOverSeveralDays()
+		{
+			_parameters = new ScheduleParameters(_scenario, _person, new DateTimePeriod(2000, 1, 1, 2001, 1, 3));
+			var newData = new List<IPersistableScheduleData>();
+			newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
+			var abs = PersonAbsenceFactory.CreatePersonAbsence(_parameters.Person, _parameters.Scenario,
+													 new DateTimePeriod(2000, 1, 1, 2001, 1, 3));
+			var currentScheduleDay = ExtractedSchedule.CreateScheduleDay(_dic, _parameters.Person, new DateOnly(2000, 1, 2));
+			currentScheduleDay.Add(abs);
+
+			var result = _target.Create(currentScheduleDay, newData);
+
+			Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
+			
+			currentScheduleDay = ExtractedSchedule.CreateScheduleDay(_dic, _parameters.Person, new DateOnly(2000, 1, 3));
+			currentScheduleDay.Add(abs);
+
+			result = _target.Create(currentScheduleDay, newData);
+
+			Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
+		}
+
         [Test]
         public void ShouldAddNewAbsences()
         {

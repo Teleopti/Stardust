@@ -223,7 +223,7 @@ ECHO.
 ECHO Trace files are generated on SQL 2012, I will try to "downgrade" them ...
 ping 127.0.0.1 -n 2 > NUL
 powershell set-executionpolicy unrestricted
-powerShell "%ROOTDIR%\helpers\ConvertTraceTo2008.ps1" "%ROOTDIR%\Data"
+powerShell -file "%ROOTDIR%\helpers\ConvertTraceTo2008.ps1" "%ROOTDIR%\Data"
 )
 ECHO.
 

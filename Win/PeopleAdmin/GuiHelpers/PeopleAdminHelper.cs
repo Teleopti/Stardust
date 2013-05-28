@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.PeopleAdmin.MessageBroker;
 using Teleopti.Ccc.Win.PeopleAdmin.MessageBroker.MessageBrokerHandlers;
 using Teleopti.Ccc.Win.PeopleAdmin.Views;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
+using log4net;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
     /// </remarks>
     public static class PeopleAdminHelper
     {
-
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (PeopleAdminHelper));
         private const string CANGRAY = "CanGray";
         private const string ISAVERAGEWORKTIMEPERDAYOVERRIDE = "IsAverageWorkTimePerDayOverride";
         private const string ISDAYOFFOVERRIDE = "IsDaysOffOverride";
@@ -769,21 +771,27 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             IMessageBrokerHandler messageBrokerHandler =
                 PeopleAdminMessageBrokerFactory.GetMessageBrokerHandler(view, e, stateHolder);
 
-            if (e.Message.DomainUpdateType == DomainUpdateType.Insert)
+            try
             {
-                messageBrokerHandler.HandleInsertFromMessageBroker();
-            }
+                if (e.Message.DomainUpdateType == DomainUpdateType.Insert)
+                {
+                    messageBrokerHandler.HandleInsertFromMessageBroker();
+                }
 
-            if (e.Message.DomainUpdateType == DomainUpdateType.Delete)
-            {
-                messageBrokerHandler.HandleDeleteFromMessageBroker();
-            }
+                if (e.Message.DomainUpdateType == DomainUpdateType.Delete)
+                {
+                    messageBrokerHandler.HandleDeleteFromMessageBroker();
+                }
 
-            if (e.Message.DomainUpdateType == DomainUpdateType.Update)
-            {
-                messageBrokerHandler.HandleUpdateFromMessageBroker();
+                if (e.Message.DomainUpdateType == DomainUpdateType.Update)
+                {
+                    messageBrokerHandler.HandleUpdateFromMessageBroker();
+                }
             }
-           
+            catch (DataSourceException exception)
+            {
+                Logger.Error("An error occured when trying to refresh an entity from the message broker.",exception);
+            }
         }
 
 

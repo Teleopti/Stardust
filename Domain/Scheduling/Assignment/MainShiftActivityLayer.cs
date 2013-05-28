@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public class MainShiftActivityLayer : PersistedActivityLayer, IMainShiftActivityLayer
     {
-		//private IEntity _parent;
-		//private Guid? _id;
+	    private readonly IMainShiftActivityLayerNew _thisShouldGoAway;
+
 
 	    public MainShiftActivityLayer(IActivity activity, DateTimePeriod period)
             : base(activity, period)
@@ -24,10 +24,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
         }
 
+
+			//hackeri hackera
+			public MainShiftActivityLayer(IMainShiftActivityLayerNew thisShouldGoAway)
+				:base(thisShouldGoAway.Payload, thisShouldGoAway.Period)
+			{
+				_thisShouldGoAway = thisShouldGoAway;
+				SetId(thisShouldGoAway.Id);
+			}
+			public override bool Equals(object other)
+			{
+				if (_thisShouldGoAway != null)
+				{
+					var that = other as MainShiftActivityLayer;
+					if (that == null)
+						return false;
+					return _thisShouldGoAway.Equals(that._thisShouldGoAway);					
+				}
+				return Equals((ILayer)other);
+			}
+			/// 
+
+
 				protected override int findOrderIndex()
 				{
 					//fix later
-					return ((IList<IMainShiftActivityLayer>)((IPersonAssignment)Parent).MainShiftActivityLayers).IndexOf(this);
+					return (((IMainShift)Parent).LayerCollection).IndexOf(this);
 				}
 
 		public override bool Equals(IEntity other)
@@ -40,6 +62,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return false;
 
 			return (Id.Value == other.Id.Value);
+		}
+
+		public override int GetHashCode()
+		{
+			throw new NotImplementedException("this class should disappear anyhow");
 		}
     }
 }

@@ -57,7 +57,20 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var shiftCategory = _shiftCategoryRepository.Load(command.ShiftCategoryId);
                 var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, command.LayerCollection);
-                scheduleDay.AddMainShift(mainShift);
+				IPersonAssignment currentAss = scheduleDay.AssignmentHighZOrder();
+				scheduleDay.MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
+				if (currentAss == null)
+				{
+					currentAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);
+					scheduleDay.Add(currentAss);
+				}
+				// use scheduleDay.AddMainShift again when MainShift is removed
+				var layerList = new List<IMainShiftActivityLayerNew>();
+				foreach (var layer in mainShift.LayerCollection)
+				{
+					layerList.Add(new MainShiftActivityLayerNew(layer.Payload, layer.Period));
+				}
+				currentAss.SetMainShiftLayers(layerList, mainShift.ShiftCategory);
 				_saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {

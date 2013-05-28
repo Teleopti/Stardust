@@ -4,13 +4,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public interface IEditorActivityLayer
 	{
-		void SetParent(IEditorShift parent);
-		IEditorShift Parent { get; }
+		void SetParent(IEditableShift parent);
+		IEditableShift Parent { get; }
 	}
 
 	public class EditorActivityLayer : ActivityLayer, IEditorActivityLayer
 	{
-		private IEditorShift _parent;
+		private IEditableShift _parent;
 
 		public EditorActivityLayer(IActivity activity, DateTimePeriod period)
 			: base(activity, period)
@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public new IEditorShift Parent
+		public new IEditableShift Parent
 		{
 			get { return _parent; }
 		}
 
-		public void SetParent(IEditorShift parent)
+		public void SetParent(IEditableShift parent)
 		{
 			_parent = parent;
 		}

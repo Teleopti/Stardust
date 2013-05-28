@@ -235,8 +235,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return new LayerViewModel(item, parent);
 		});
 		
-	    self.absenceRequestPermission = ko.computed(function() {
-	        return parent.absenceRequestPermission();
+		self.availability = ko.observable(day.Availability);
+	    
+		self.absenceRequestPermission = ko.computed(function () {
+		    if (!parent.absenceRequestPermission() || !self.availability())
+		        return false;
+		    else {
+		        return true;
+		    }	
 	    });
 
 	

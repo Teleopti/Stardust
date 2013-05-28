@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class PersonalShiftMeetingTimeCheckerTest
 	{
 		private PersonalShiftMeetingTimeChecker _target;
-		private IMainShift _mainShift;
+		private IEditableShift _mainShift;
 		private IShiftCategory _shiftCategory;
 		private IPersonMeeting _personMeeting;
 		private IPersonAssignment _personAssignment;
 		private IPersonalShift _personalShift1;
 		private IPersonalShift _personalShift2;
-		private MainShiftActivityLayer _mainShiftLayer;
-		private MainShiftActivityLayer _mainShiftLayerNotInWorkTime;
-		private MainShiftActivityLayer _mainShiftLayerNoOverwrite;
+		private EditorActivityLayer _mainShiftLayer;
+		private EditorActivityLayer _mainShiftLayerNotInWorkTime;
+		private EditorActivityLayer _mainShiftLayerNoOverwrite;
 		private IActivity _activity;
 		private IActivity _activityNotInWorktime;
 		private IActivity _activityNoOverwrite;
@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_activityNotInWorktime = new Activity("activityNotInWorktime") {AllowOverwrite = true};
 			_activityNoOverwrite = new Activity("activityNoOverwrite") { InWorkTime = true, AllowOverwrite = false };
 			_personalActivity = new Activity("personalActivity");
-			_mainShiftLayer = new MainShiftActivityLayer(_activity, _mainDateTimePeriod);
-			_mainShiftLayerNotInWorkTime = new MainShiftActivityLayer(_activityNotInWorktime, _mainDateTimePeriodNotInWorkTime);
-			_mainShiftLayerNoOverwrite = new MainShiftActivityLayer(_activityNoOverwrite, _mainDateTimePeriodNoOverwrite);
-			_mainShift = new MainShift(_shiftCategory);
+			_mainShiftLayer = new EditorActivityLayer(_activity, _mainDateTimePeriod);
+			_mainShiftLayerNotInWorkTime = new EditorActivityLayer(_activityNotInWorktime, _mainDateTimePeriodNotInWorkTime);
+			_mainShiftLayerNoOverwrite = new EditorActivityLayer(_activityNoOverwrite, _mainDateTimePeriodNoOverwrite);
+			_mainShift = new EditableShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayer);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNotInWorkTime);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldAllowNoOverwriteActivityBetweenPersonalShifts()
 		{
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			_mainShift = new MainShift(_shiftCategory);
+			_mainShift = new EditableShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
 			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
 			_personalActivity.InContractTime = false;

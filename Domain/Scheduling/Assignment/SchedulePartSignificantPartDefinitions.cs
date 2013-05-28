@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public bool HasMainShift()
         {
             IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
-            if (assignmentToCheck != null) return assignmentToCheck.ToMainShift() != null;
+            if (assignmentToCheck != null) return assignmentToCheck.ShiftCategory != null;
             return false;
         }
 

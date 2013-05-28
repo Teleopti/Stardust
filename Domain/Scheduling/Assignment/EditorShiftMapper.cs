@@ -1,25 +1,23 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public interface IEditorShiftMapper
+	public interface IEditableShiftMapper
 	{
-		IEditorShift CreateEditorShift(IPersonAssignment personassignment);
-		void SetMainShiftLayers(IPersonAssignment personassignment, IEditorShift editorShift);
+		IEditableShift CreateEditorShift(IPersonAssignment personassignment);
+		void SetMainShiftLayers(IPersonAssignment personassignment, IEditableShift editableShift);
 	}
 
-	public class EditorShiftMapper : IEditorShiftMapper
+	public class EditableShiftMapper : IEditableShiftMapper
 	{
-		 public IEditorShift CreateEditorShift(IPersonAssignment personassignment)
+		 public IEditableShift CreateEditorShift(IPersonAssignment personassignment)
 		 {
 			 if (!personassignment.MainShiftActivityLayers.Any())
 				 return null;
 
-			 var retShift = new EditorShift(personassignment.ShiftCategory);
+			 var retShift = new EditableShift(personassignment.ShiftCategory);
 			 foreach (var mainShiftActivityLayer in personassignment.MainShiftActivityLayers)
 			 {
 				 retShift.LayerCollection.Add(new EditorActivityLayer(mainShiftActivityLayer.Payload, mainShiftActivityLayer.Period));
@@ -28,17 +26,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return retShift;
 		 }
 
-		public void SetMainShiftLayers(IPersonAssignment personassignment, IEditorShift editorShift)
+		public void SetMainShiftLayers(IPersonAssignment personassignment, IEditableShift editableShift)
 		{
 			InParameter.NotNull("personassignment", personassignment);
-			InParameter.NotNull("editorShift", editorShift);
+			InParameter.NotNull("editableShift", editableShift);
 
-			IList<IActivityLayer> layerList = new List<IActivityLayer>();
-			foreach (var layer in editorShift.LayerCollection)
+			var layerList = new List<IMainShiftActivityLayerNew>();
+			foreach (var layer in editableShift.LayerCollection)
 			{
-				layerList.Add(new MainShiftActivityLayer(layer.Payload, layer.Period));
+				layerList.Add(new MainShiftActivityLayerNew(layer.Payload, layer.Period));
 			}
-			personassignment.SetMainShiftLayers(layerList, editorShift.ShiftCategory);
+			personassignment.SetMainShiftLayers(layerList, editableShift.ShiftCategory);
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
 	        var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+					ass.SetMainShift(shift);
             ILayer<IActivity> firstLayer =
                 (from l in shift.LayerCollection
                  orderby l.OrderIndex
@@ -110,13 +113,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
          
-
             MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            ILayer<IActivity> firstLayer =
-                (from l in shift.LayerCollection
-                 orderby l.OrderIndex
-                 select l).First();
-            MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, firstLayer, shift, _eventAggregator);
+	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+					ass.SetMainShift(shift);
+#pragma warning disable 612,618
+	        var ms = ass.ToMainShift();
+#pragma warning restore 612,618
+					ILayer<IActivity> firstLayer =
+		(from l in shift.LayerCollection
+		 orderby l.OrderIndex
+		 select l).First();
+            MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, firstLayer, ms, _eventAggregator);
             
 
             #endregion

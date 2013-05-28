@@ -407,7 +407,6 @@
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />
     <Compile Include="Optimization\MatrixOvertimeLocker.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreator.cs" />
     <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />
@@ -487,8 +486,9 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShift.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />

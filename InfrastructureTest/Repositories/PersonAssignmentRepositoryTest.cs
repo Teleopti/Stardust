@@ -136,7 +136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ToMainShift()));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftActivityLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
@@ -402,7 +401,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //Load
             IPersonAssignment loaded = _rep.Load(ass.Id.Value);
+#pragma warning disable 612,618
             bool mainShiftExists = (loaded.ToMainShift() != null);
+#pragma warning restore 612,618
             Assert.IsTrue(mainShiftExists); //ensures factory method creates mainshift
             int noOfPersonalShift = loaded.PersonalShiftCollection.Count;
             Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts

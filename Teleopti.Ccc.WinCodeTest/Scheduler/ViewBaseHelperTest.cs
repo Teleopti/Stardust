@@ -1191,12 +1191,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     	private IPersonAssignment CreatePersonAssignment()
         {
 					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));
-            IMainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period));
-            personAssignment.SetMainShift(mainShift);
+            mainShift.LayerCollection.Add(new EditorActivityLayer(ActivityFactory.CreateActivity("activity"), period));
+            new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
             return personAssignment;
         }

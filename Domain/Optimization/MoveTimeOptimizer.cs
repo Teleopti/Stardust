@@ -217,8 +217,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         	var dic = _workShiftOriginalStateContainer.OldPeriodDaysState;
         	IScheduleDay originalScheduleDay = dic[day];
-        	IPersonAssignment personAssignment = originalScheduleDay.AssignmentHighZOrder();
-			IMainShift originalShift = personAssignment.ToMainShift();
+			var originalShift = originalScheduleDay.GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
         	bool success = _scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions,
