@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             : this()
         {
             _shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>(shiftTradeSwapDetails);
-            CalculateAndSetPeriod();
-            NotifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
+            calculateAndSetPeriod();
+            notifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
         }
 
-        private void NotifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
+        private void notifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
         {
             if (!shiftTradeSwapDetails.IsEmpty())
             {
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        private void CalculateAndSetPeriod()
+        private void calculateAndSetPeriod()
         {
             if (_shiftTradeSwapDetails.Count>0)
             {
@@ -107,10 +107,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void AddShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             shiftTradeSwapDetail.SetParent(this);
             _shiftTradeSwapDetails.Add(shiftTradeSwapDetail);
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
 
             var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 
@@ -134,17 +134,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void ClearShiftTradeSwapDetails()
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             _shiftTradeSwapDetails.Clear();
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
         }
 
-        private void VerifyEditingShiftTradeIsAllowed()
+        private void verifyEditingShiftTradeIsAllowed()
         {
             if (shiftTradeStatus!=ShiftTradeStatus.OkByMe &&
                 shiftTradeStatus!=ShiftTradeStatus.Referred)
             {
-                throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
+				throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
             }
         }
 
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void NotifyToPersonAfterValidation()
         {
-            NotifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
+            notifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
         }
 
         private bool isShiftTradeRequestForOneDayOnly ()
