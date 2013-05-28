@@ -12,7 +12,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -27,6 +26,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+		}
+
+		[When(@"I input text request values with subject '(.*)' for date '(.*)'")]
+		public void WhenIInputSubject(string subject, DateTime date)
+		{
+			TypeSubject(subject);
+			TypeMessage("A message. A very very very short message. Or maybe not.");
+
+			var time = date.AddHours(12);
+			SetValuesForDateAndTimeInSchedule(date, time, date, time.AddHours(1));
 		}
 
         [When(@"I input text request values for date '(.*)'")]
@@ -219,7 +228,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see a save button")]
 		public void ThenIShouldNotSeeASaveButton()
 		{
-			//EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
 			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".bdd-request-edit-detail:nth-of-type(1) button[data-bind*=click: AddRequest]");
 		}
 	}

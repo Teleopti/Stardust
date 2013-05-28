@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"Subject should not be empty")]
 		public void SubjectShouldNotBeEmpty()
 		{
+
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value.Trim(), Is.Not.Empty);
 		}
 
@@ -138,6 +139,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text,
 															Is.EqualTo(reason));
+		}
+
+		[Then(@"I should see request form with subject '(.*)'")]
+		public void ThenIShouldSeeRequestFormWithSubject(string subject)
+		{
+			Browser.Interactions.AssertInputValue("#Schedule-addRequest-subject-input", subject);
 		}
 	}
 }
