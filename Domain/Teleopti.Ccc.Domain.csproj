@@ -745,7 +745,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultHolder.cs" />
-    <Compile Include="Scheduling\AbsenceAssignmentSimulator.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleException.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOption.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartService.cs" />
@@ -763,7 +762,6 @@
     <Compile Include="Scheduling\Assignment\VisualLayerFactory.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerOvertimeFactory.cs" />
     <Compile Include="Scheduling\ConfidentialPayloadValues.cs" />
-    <Compile Include="Scheduling\IAbsenceAssignmentSimulator.cs" />
     <Compile Include="Scheduling\ILoadSchedulingStateHolderForResourceCalculation.cs" />
     <Compile Include="Scheduling\LoadSchedulingStateHolderForResourceCalculation.cs" />
     <Compile Include="Scheduling\MeetingPayload.cs" />
