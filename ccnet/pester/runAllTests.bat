@@ -7,10 +7,14 @@ set obsoletePester=1.1.1;1.0.0
 set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 
 if "%1"=="" (
-SET TestPath=%rootdir%\..
+SET TestPath="%rootdir%\.."
 ) else (
-SET TestPath=%~1
+SET TestPath="%~1"
 )
+
+ECHO %TestPath%
+PAUSE
+PAUSE
 
 ::install
 "%rootdir%\..\..\.nuget\nuget.exe" install pester -o "%rootdir%" -Version %currentPester%
@@ -23,7 +27,7 @@ del /F /S /Q *.Tests.ps1 > NUL
 for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\Pester.%%a" rmdir "%rootdir%\Pester.%%a" /S /Q
 
 ::Run all test
-CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%TestPath%""
+CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" %TestPath%"
 
 ::Copy to "main" for ccnet to read
 COPY "%outputFile%" "%rootdir%\..\..\nunitPowerShell.xml"
