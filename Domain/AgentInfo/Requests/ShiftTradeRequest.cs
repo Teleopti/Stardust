@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (shiftTradeStatus!=ShiftTradeStatus.OkByMe &&
                 shiftTradeStatus!=ShiftTradeStatus.Referred)
             {
-                throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
+				throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
             }
         }
 
