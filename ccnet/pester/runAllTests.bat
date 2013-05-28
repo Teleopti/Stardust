@@ -16,7 +16,7 @@ del /F /S /Q *.Tests.ps1 > NUL
 for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\Pester.%%a" rmdir "%rootdir%\Pester.%%a" /S /Q
 
 ::Run all test
-CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%rootdir%\..\..""
+CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%rootdir%\..""
 
 ::Copy to "main" for ccnet to read
 COPY "%outputFile%" "%rootdir%\..\..\nunitPowerShell.xml"
