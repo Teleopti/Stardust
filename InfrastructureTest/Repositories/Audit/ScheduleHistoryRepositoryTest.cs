@@ -67,22 +67,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			}
 		}
 
-		[Test]
-		public void ShouldFindRevisionForModifiedAbsence()
-		{
-			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				uow.Reassociate(PersonAbsence);
-				PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
-				uow.PersistAll();
-			}
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				target.FindRevisions(Agent, new DateOnly(Today), 2)
-					.Should().Have.SameSequenceAs(expected);
-			}
-		}
+		// Can not modify absenc layer any more, is always a new layer
+		//[Test]
+		//public void ShouldFindRevisionForModifiedAbsence()
+		//{
+		//	var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
+		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		uow.Reassociate(PersonAbsence);
+		//		PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
+		//		uow.PersistAll();
+		//	}
+		//	using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		target.FindRevisions(Agent, new DateOnly(Today), 2)
+		//			.Should().Have.SameSequenceAs(expected);
+		//	}
+		//}
 
 		[Test]
 		public void ShouldFindRevisionForAddedDayOff()
@@ -216,22 +217,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			}
 		}
 
-		[Test]
-		public void ShouldNotFindMoreRevisionsThanSpecified()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				uow.Reassociate(PersonAbsence);
-				PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
-				uow.PersistAll();
-			}
+		// Can not modify absenc layer any more, is always a new layer
+		//[Test]
+		//public void ShouldNotFindMoreRevisionsThanSpecified()
+		//{
+		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		uow.Reassociate(PersonAbsence);
+		//		PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
+		//		uow.PersistAll();
+		//	}
 
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				target.FindRevisions(Agent, new DateOnly(Today), 1)
-					.Should().Have.SameSequenceAs(new Revision { Id = revisionNumberAfterOneUnitTestModification });
-			}
-		}
+		//	using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		target.FindRevisions(Agent, new DateOnly(Today), 1)
+		//			.Should().Have.SameSequenceAs(new Revision { Id = revisionNumberAfterOneUnitTestModification });
+		//	}
+		//}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]

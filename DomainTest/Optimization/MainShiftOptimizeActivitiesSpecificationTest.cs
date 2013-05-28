@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -59,27 +60,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.CorrectShiftCategory(shift));
         }
 
-        [Test]
-        public void VerifyCorrectEndTime()
-        {
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
-            shift.LayerCollection[0].ChangeLayerPeriodEnd(TimeSpan.FromMinutes(1));
-            IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.CorrectEnd(layers));
-
-            _preferences.KeepEndTime = true;
-            Assert.IsFalse(_target.CorrectEnd(layers));
-
-            shift.LayerCollection[0].ChangeLayerPeriodEnd(TimeSpan.FromMinutes(-1));
-            layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.CorrectEnd(layers));
-        }
-
+        
         [Test]
         public void VerifyAllowAlterBetween()
         {
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
-            shift.LayerCollection[3].MoveLayer(TimeSpan.FromMinutes(1));
+            var shift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+	        var layer = shift.LayerCollection[3];
+	        shift.LayerCollection.Remove(layer);
+			ILayer<IActivity> newLayer = new EditorActivityLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
+            shift.LayerCollection.Add(newLayer);
             IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
             Assert.IsTrue(_target.CorrectAlteredBetween(layers));
 
@@ -93,9 +82,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_target.CorrectAlteredBetween(layers));
 
             //reset shift
-            shift.LayerCollection[3].MoveLayer(TimeSpan.FromMinutes(-1));
+			layer = shift.LayerCollection[3];
+			shift.LayerCollection.Remove(layer);
+			newLayer = new EditorActivityLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(-1)));
+			shift.LayerCollection.Add(newLayer);
+
             //lengthen instead of move
-            shift.LayerCollection[3].ChangeLayerPeriodEnd(TimeSpan.FromMinutes(1));
+			layer = shift.LayerCollection[3];
+			shift.LayerCollection.Remove(layer);
+			newLayer = new EditorActivityLayer(layer.Payload, layer.Period.ChangeEndTime(TimeSpan.FromMinutes(1)));
+			shift.LayerCollection.Add(newLayer);
             layers = shift.ProjectionService().CreateProjection();
             period =
                 new TimePeriod(new TimeSpan(16, 10, 0),
