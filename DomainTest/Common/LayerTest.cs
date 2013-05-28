@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
-            actL2.Payload = actL.Payload;
 
             Assert.AreEqual(actL.Payload, actL2.Payload);
         }
@@ -209,24 +208,9 @@ namespace Teleopti.Ccc.DomainTest.Common
                 new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
                                    new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
             ActivityLayer layer = new ActivityLayer(fakeActivity, period);
-            Activity activity = ActivityFactory.CreateActivity("sdf");
             period= new DateTimePeriod(2000,1,1,2002,1,1);
             layer.Period = period;
-            layer.Payload = activity;
-
-            Assert.AreSame(activity, layer.Payload);
             Assert.AreEqual(period, layer.Period);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotSetNullAsPayload()
-        {
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(fakeActivity, period);
-            layer.Payload = null;
         }
 
         /// <summary>

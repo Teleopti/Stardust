@@ -32,17 +32,12 @@ namespace Teleopti.Ccc.Domain.Common
         object ILayer.Payload
         {
             get { return Payload; }
-            set { Payload = (T)value; }
+            set { _payload = (T)value; }
         }
 
         public virtual T Payload
         {
             get { return _payload; }
-            set 
-            {
-                InParameter.NotNull("value", value);
-                _payload = value; 
-            }
         }
 
         public virtual int OrderIndex

@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the name of the payload.
         /// </summary>
         /// <value>The name of the payload.</value>
-        new T Payload { get; set; }
+        new T Payload { get; }
 
         /// <summary>
         /// Checks if to layers are adjacent.
