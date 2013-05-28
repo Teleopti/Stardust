@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		public FactAvailabilityJobStep(IJobParameters jobParameters, bool isIntraday)
 			: base(jobParameters)
         {
-	        Name = "Fact Hourly Availability";
+	        Name = "fact_hourly_availability";
             JobCategory = JobCategoryType.Schedule;
 			_isIntraday = isIntraday;
         }

@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var target = new StageAvailabilityJobStep(jobParameters);
 			jobParameters.Helper = _mock.DynamicMock<IJobHelper>();
 			Assert.AreEqual(JobCategoryType.Schedule, target.JobCategory);
-			Assert.AreEqual("Stage Hourly Availability", target.Name);
+            Assert.AreEqual("stg_hourly_availability", target.Name);
 			Assert.IsFalse(target.IsBusinessUnitIndependent);
 		}
 

@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		public IntradayStageAvailabilityJobStep(IJobParameters jobParameters)
 			: base(jobParameters)
 		{
-			Name = "Stage Hourly Availability";
+            Name = "stg_hourly_availability";
 			JobCategory = JobCategoryType.Schedule;
 			Transformer = new IntradayHourlyAvailabilityTransformer();
 			
