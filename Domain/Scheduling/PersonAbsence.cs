@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 	{
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
-							IPersonAbsence personAbsence = NoneEntityClone();
-							personAbsence.Layer.Period = dateTimePeriod;
+							var newLayer = new AbsenceLayer(Layer.Payload, dateTimePeriod);
+							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer);
 							splitList.Add(personAbsence);
 						}
                 	}
@@ -222,8 +222,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             {
                 if (personAbsence.Period.Intersect(Period) || personAbsence.Period.Adjacent(Period))
                 {
-                    mergedPersonAbsence = NoneEntityClone();
-                    mergedPersonAbsence.Layer.Period = Period.MaximumPeriod(personAbsence.Period);
+	                var newLayer = new AbsenceLayer(Layer.Payload, Period.MaximumPeriod(personAbsence.Period));
+                    mergedPersonAbsence = new PersonAbsence(Person, Scenario, newLayer);
                 }
             }
 
