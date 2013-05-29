@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel'):contains(2)");
 		}
 
+		[Then(@"I should see that the test run has finished")]
+		public void ThenIShouldSeeThatTheTestRunHasFinished()
+		{
+			Browser.Interactions.AssertExists(".result-success");
+		}
+
 
 	}
 }
