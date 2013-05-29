@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
 		}
 
+		[When(@"I click new text request menu item in the toolbar")]
+		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
+		{
+			Browser.Interactions.Click(".bdd-add-text-request-link");
+		}
+
 		[When(@"I input text request values with subject '(.*)' for date '(.*)'")]
 		public void WhenIInputSubject(string subject, DateTime date)
 		{
@@ -52,6 +58,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIInputNewTextRequestValues()
 		{
 			TypeSubject("The cake is a.. cinnemon roll!");
+		}
+
+		[When(@"I click send request button")]
+		public void WhenIClickSendRequestButton()
+		{
+			Browser.Interactions.Click(".request-send");
 		}
 
 		[Then(@"I should see the request's values")]
@@ -115,12 +127,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void TypeSubject(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-subject-input", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-edit-subject", text);
 		}
 
 		private void TypeMessage(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-message-input", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-edit-message", text);
 		}
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)

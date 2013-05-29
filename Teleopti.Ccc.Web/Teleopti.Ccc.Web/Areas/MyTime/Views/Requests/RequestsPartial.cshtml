@@ -17,10 +17,10 @@
 <script type="text/html" id="text-request-detail-template">
 	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
         <span class="input-append">
@@ -47,17 +47,17 @@
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix" data-bind="if: IsEditable">
-        <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
+        <button class="btn btn-primary pull-right request-send" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
 
 <script type="text/html" id="absence-request-detail-template">
 	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
         <label>
@@ -95,7 +95,7 @@
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix" data-bind="if: IsEditable">
-        <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
+        <button class="btn btn-primary pull-right request-send" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
 
@@ -105,10 +105,10 @@
         <h4 data-bind="visible: AbsenceRequestHeaderVisible">@Resources.AbsenceRequest</h4>
     </div>
     <div>
-        <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject" />
+        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject" />
     </div>
     <div>
-        <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message" />
+        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
     </div>
     <div data-bind="visible: AbsenceRequestHeaderVisible">
         <label>
@@ -146,7 +146,7 @@
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix">
-        <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
+        <button class="btn btn-primary pull-right request-send" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
 

@@ -8,7 +8,7 @@ Scenario: Add text request
 	And I am viewing requests
 	When I click new text request menu item in the toolbar
 	And I input text request values
-	And I click the OK button
+	And I click send request button
 	Then I should see the text request in the list
 
 Scenario: Adding invalid text request values
