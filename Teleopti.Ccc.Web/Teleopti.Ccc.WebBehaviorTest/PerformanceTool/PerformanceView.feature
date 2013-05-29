@@ -11,7 +11,7 @@ Background:
 	| Field | Value    |
 	| Name  | Vacation |
 
-#No need to test this
+#Only for spec, not for testing
 @ignore
 Scenario: Default configuration for scenario add and remove full day absences
 	When I am viewing the performance view
