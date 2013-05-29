@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var projection2 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
 			var projection3 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
 			var scheduleDay1 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
-				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.RoyalBlue)))
+				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.ShiftCategoryStub(Color.RoyalBlue))
 				);
 			var scheduleDay2 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
-				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Pink)))
+				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.ShiftCategoryStub(Color.Pink))
 				);
 			var source = new ScheduleColorSource
 			             	{
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void ShouldGetDisplayColorFromScheduleDayPersonAssignment()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Blue)));
+			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.ShiftCategoryStub(Color.Blue));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, personAssignment);
 			var source = new ScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 

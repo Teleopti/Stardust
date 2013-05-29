@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertUrlContains(string url);
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);
-		void AssertInputValue(string selector, string value);
 		void DumpInfo(Action<string> writer);
 	}
 
@@ -26,9 +26,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.Javascript(string.Format(javascript, args));
 		}
 
+		public static void Javascript(this IBrowserInteractions interactions, Action<Action<string>> javascript, params object[] args)
+		{
+			var builder = new StringBuilder();
+			javascript.Invoke(s => builder.Append(s));
+			interactions.Javascript(string.Format(builder.ToString(), args));
+		}
+
 		public static void AssertExists(this IBrowserInteractions interactions, string selector, params object[] args)
 		{
 			interactions.AssertExists(string.Format(selector, args));
+		}
+
+		public static void AssertInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, string value)
+		{
+			interactions.AssertJavascriptResultContains("$('" + selector + "').val();", value);
 		}
 
 		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selectSelector, string text)
@@ -40,5 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector, optionSelector);
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
 		}
+
 	}
 }

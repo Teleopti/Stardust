@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
     	private IDictionary<DateOnly, IScheduleDay> _dic;
-    	private IPersonAssignment _personAssignment;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -59,9 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_mainShiftOptimizeActivitySpecificationSetter =
 				_mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
-			
-			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-
 			_target = new ExtendReduceTimeOptimizer(
 				_periodValueCalculator,
 				_dataExtractor,
@@ -307,9 +303,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _schedulingOptions)).IgnoreArguments()
                 .Return(_effectiveRestriction);
 			Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(_dic).Repeat.Any();
-			Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
-			Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
-			Expect.Call(_personAssignment.MainShift).Return(MainShiftFactory.CreateMainShiftWithThreeActivityLayers()).
+			Expect.Call(_scheduleDay1.GetEditorShift()).Return(EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
+				Repeat.Any();
+			Expect.Call(_scheduleDay2.GetEditorShift()).Return(EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
 				Repeat.Any();
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue))

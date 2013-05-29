@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit  Text Box</value>
@@ -5847,10 +5847,6 @@ These options are activated:
     <value>week</value>
     <comment>weeks in recurrent meeting page</comment>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
-    <comment>Student Availability</comment>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Enter values for the different combinations</value>
     <comment>EnterValuesForTheDifferentCombinations</comment>
@@ -5882,10 +5878,6 @@ These options are activated:
   <data name="Budgeting" xml:space="preserve">
     <value>Budgeting</value>
     <comment>Panel</comment>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
-    <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>New planning group</value>
@@ -6170,10 +6162,6 @@ These options are activated:
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Are you sure you want to delete '{0}' contract?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>New Student Availability</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolute Start</value>
@@ -6520,10 +6508,6 @@ These options are activated:
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Add Preference Restriction</value>
     <comment>Add Preference Restriction</comment>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Add Student Availability</value>
-    <comment>Add Student Availability</comment>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>Multiplicator</value>

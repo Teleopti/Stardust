@@ -122,6 +122,16 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapAvailability()
+		{
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.Availability.Should().Be.EqualTo((bool)domainData.Availability);
+		}
+
+		[Test]
 		public void ShouldMapStateToday()
 		{
 			var domainData = new WeekScheduleDayDomainData {Date = DateOnly.Today};
@@ -226,8 +236,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.Summary.TimeSpan.Should().Be.EqualTo(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
-			result.Summary.Title.Should().Be.EqualTo(scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name);
-			result.Summary.StyleClassName.Should().Be.EqualTo(scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass());
+			result.Summary.Title.Should().Be.EqualTo(scheduleDay.AssignmentHighZOrder().ShiftCategory.Description.Name);
+			result.Summary.StyleClassName.Should().Be.EqualTo(scheduleDay.AssignmentHighZOrder().ShiftCategory.DisplayColor.ToStyleClass());
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), CultureInfo.CurrentUICulture));
 		}
 

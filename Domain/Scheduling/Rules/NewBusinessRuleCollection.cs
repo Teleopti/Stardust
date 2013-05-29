@@ -16,11 +16,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private NewBusinessRuleCollection()
         {
             //put mandatory here
-            Add(new NewLayerOwnerNeedsAtLeastOneLayerRule());
             Add(new NewMaxOneDayOffRule());
             Add(new NewOverlappingAssignmentRule());
-            Add(new GapsInAssignmentRule(new GapsInAssignment()));
-					Add(new DataPartOfAgentDay());
+			Add(new DataPartOfAgentDay());
         }
 
         public static INewBusinessRuleCollection Minimum()

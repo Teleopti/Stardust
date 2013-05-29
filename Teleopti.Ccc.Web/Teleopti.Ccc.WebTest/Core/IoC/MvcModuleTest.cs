@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveStudentAvailabilityController()
 		{
-			var result = requestContainer.Resolve<StudentAvailabilityController>();
+			var result = requestContainer.Resolve<AvailabilityController>();
 			result.Should().Not.Be.Null();
 		}
 

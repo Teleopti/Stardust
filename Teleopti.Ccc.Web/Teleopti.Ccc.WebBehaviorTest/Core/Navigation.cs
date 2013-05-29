@@ -88,13 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoMobileReportsPage()
 		{
 			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoMobileReportsSettings()
 		{
 			GoToWaitForCompleted("MobileReports#report-settings-view");
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
@@ -130,15 +128,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
-		public static void GotoStudentAvailability()
+		public static void GotoAvailability()
 		{
-			GoToWaitForCompleted("MyTime#StudentAvailability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+			GoToWaitForCompleted("MyTime#Availability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
-		public static void GotoStudentAvailability(DateTime date)
+		public static void GotoAvailability(DateTime date)
 		{
-			GoToWaitForCompleted(string.Format("MyTime#StudentAvailability/Index/{0}/{1}/{2}",
+			GoToWaitForCompleted(string.Format("MyTime#Availability/Index/{0}/{1}/{2}",
 			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				 new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());

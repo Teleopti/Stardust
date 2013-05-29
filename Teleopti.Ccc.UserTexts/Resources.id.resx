@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>Panggilan diabaikan</value>
@@ -2677,12 +2677,6 @@ Opsi berikut diaktifkan:
   <data name="NextDayColon" xml:space="preserve">
     <value>Hari berikutnya:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Tidak ada shift tersedia untuk ketersediaan pelajar ini.</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Periode ketersediaan pelajar</value>
-  </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Anda seharusnya bekerja sedikitnya {0} jam. Waktu anda tersedia antara {1} jam dan {2} jam.</value>
   </data>
@@ -4508,9 +4502,6 @@ Tidak Termasuk</value>
   <data name="UndoAll" xml:space="preserve">
     <value>Batalkan Semua</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Ketersediaan Pelajar</value>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Masukkan nilai untuk kombinasi berbeda</value>
   </data>
@@ -4639,9 +4630,6 @@ Tidak Termasuk</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Apakah anda akan menghapus kontrak '{0}'?</value>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Ketersediaan Pelajar Baru</value>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Awal Absolut</value>
@@ -6711,9 +6699,6 @@ R&amp;D Teleopti</value>
   <data name="StaffEmployed" xml:space="preserve">
     <value>Staf bekerja</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Jam peajar</value>
-  </data>
   <data name="LoadForecastedHours" xml:space="preserve">
     <value>Mengeluarkan jam diprakirakan</value>
   </data>
@@ -6981,9 +6966,6 @@ R&amp;D Teleopti</value>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Metrik Antrian Agent</value>
   </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Buka ketersediaan pelajar</value>
-  </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
     <value>Hilang koneksi dengan database. Untuk memlihara konsistensi data, formulir akan ditutup. Maaf, perubahan yang anda lakukan akan hilang.</value>
   </data>
@@ -7019,9 +7001,6 @@ R&amp;D Teleopti</value>
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Kunci Restriksi</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Kunci Ketersediaan Pelajar</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Kunci Rotasi</value>

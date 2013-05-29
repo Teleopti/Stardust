@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -20,13 +21,16 @@ namespace Teleopti.Interfaces.Domain
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
-        /// <summary>
-        /// Gets the main shift.
-        /// </summary>
-        /// <value>The main shift.</value>
-        IMainShift MainShift { get; }
+			void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory);
 
-        /// <summary>
+	    /// <summary>
+	    /// Gets the main shift.
+	    /// </summary>
+	    /// <returns>The main shift.</returns>
+	    [Obsolete("Mainshift will not be supported in near future")]
+	    IMainShift ToMainShift();
+
+	    /// <summary>
         /// Gets the personal shift collection.
         /// </summary>
         /// <value>The personal shift collection.</value>
@@ -63,16 +67,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        /// <param name="personAssignmentRepository">The uow.</param>
-        /// <remarks>
-        /// Repository must be injected to let nhibernate delete
-        /// unreferenced mainshift from db.
-        /// NHibernate doesn't support "all-delete-orphan" on
-        /// one-to-one references.
-        /// Remove this injection later when/if this is supported
-        /// out-of-the-box.
-        /// </remarks>
-        void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository);
+        void ClearMainShiftLayers();
 
         /// <summary>
         /// Sets the main shift.
@@ -99,6 +94,9 @@ namespace Teleopti.Interfaces.Domain
 			/// The date
 			/// </summary>
 	    DateOnly Date { get; }
+
+	    IShiftCategory ShiftCategory { get; }
+	    IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.

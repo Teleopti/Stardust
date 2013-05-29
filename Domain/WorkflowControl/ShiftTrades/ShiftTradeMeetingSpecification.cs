@@ -18,29 +18,34 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			foreach (var shiftTradeSwapDetail in obj)
 			{
-				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.AssignmentHighZOrder();
-				var personMeetingsFrom = shiftTradeSwapDetail.SchedulePartFrom.PersonMeetingCollection();
-				if (personAssignmentFrom == null && personMeetingsFrom.Count == 0) continue;
+				var partFrom = shiftTradeSwapDetail.SchedulePartFrom;
+				var partTo = shiftTradeSwapDetail.SchedulePartTo;
 
-				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.AssignmentHighZOrder();
+				var personMeetingsFrom = partFrom.PersonMeetingCollection();
+				var shiftFrom = partFrom.GetEditorShift();
+				if (shiftFrom == null && personMeetingsFrom.Count == 0)
+					continue;
+
 				var personMeetingsTo = shiftTradeSwapDetail.SchedulePartTo.PersonMeetingCollection();
-				if(personAssignmentTo == null && personMeetingsTo.Count == 0) continue;
+				var shiftTo = partTo.GetEditorShift();
+				if (shiftTo == null && personMeetingsTo.Count == 0)
+					continue;
 
-				if(personAssignmentFrom != null && personAssignmentFrom.MainShift != null)
+				if (shiftFrom != null)
 				{
-					var periodFrom = personAssignmentFrom.MainShift.LayerCollection.Period();
+					var periodFrom = shiftFrom.LayerCollection.Period();
 					if (!periodFrom.HasValue) continue;
 
-					if (!CheckCover(personMeetingsTo, periodFrom.Value))
+					if (!checkCover(personMeetingsTo, periodFrom.Value))
 						return false;
 				}
 
-				if(personAssignmentTo != null && personAssignmentTo.MainShift != null)
+				if (shiftTo != null)
 				{
-					var periodTo = personAssignmentTo.MainShift.LayerCollection.Period();
+					var periodTo = shiftTo.LayerCollection.Period();
 					if (!periodTo.HasValue) continue;
 
-					if (!CheckCover(personMeetingsFrom, periodTo.Value))
+					if (!checkCover(personMeetingsFrom, periodTo.Value))
 						return false;
 				}
 			}
@@ -48,7 +53,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 
-		private static bool CheckCover(IEnumerable<IPersonMeeting> personMeetings, DateTimePeriod period)
+		private static bool checkCover(IEnumerable<IPersonMeeting> personMeetings, DateTimePeriod period)
 		{
 			foreach (var personMeeting in personMeetings)
 			{

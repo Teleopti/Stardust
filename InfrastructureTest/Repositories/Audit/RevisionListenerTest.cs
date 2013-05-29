@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			var rev = new Revision();
 			target.NewRevision(rev);
 
-			rev.ModifiedAt.Should().Be.IncludedIn(DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow.AddMinutes(1));
 			rev.ModifiedBy.Should().Be.SameInstanceAs(person);
 		}
 	}

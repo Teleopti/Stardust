@@ -126,62 +126,62 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             IList<IRevision> retList = new List<IRevision>();
             Revision rev = new Revision();
             rev.Id = 1;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p1"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p1"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 2;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p2"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p2"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 3;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p3"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p3"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 4;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p4"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p4"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 5;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p5"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p5"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 6;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p6"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p6"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 7;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p7"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p7"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 8;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p8"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p8"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 9;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p9"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p9"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 10;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p10"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p10"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 11;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p1"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p1"));
             retList.Add(rev);
 
             rev = new Revision();
             rev.Id = 12;
-            rev.SetRevisionData(PersonFactory.CreatePerson("p12"), new DateTime(2001, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+            rev.SetRevisionData(PersonFactory.CreatePerson("p12"));
             retList.Add(rev);
 
             return retList;

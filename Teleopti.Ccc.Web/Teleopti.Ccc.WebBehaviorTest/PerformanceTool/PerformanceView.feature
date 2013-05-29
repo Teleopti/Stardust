@@ -1,39 +1,31 @@
 ﻿Feature: Performance view
-	In order to prove performance of a web application
+	In order to evaluate performance of the backend processing
 	As a developer
-	I want to test, measure and view the performance
+	I want to test, measure and view timings of scenarios
 	
 Background:
-	Given 'Pierre Baldi' has a person period with
-	| Field      | Value      |
-	| Start date | 2013-05-01 |
+	Given I have a role with
+	| Field | Value     |
+	| Name  | Developer |
 	And there is an absence with
 	| Field | Value    |
-	| Name  | Vacation |			
-	
-Scenario: Add full day absences in Anywhere
-	Given I am a developer
-	And I view the performance view
-	When I select 'anywhere'
-	And I select 'add full day absences'
-	And I input that I want to add 1000 absences
-	And I click 'run'
-	Then I should see statistics when read models are updated
-	And I should see number of added absences
-	And I should see total run time
-	And I should see average run time
-	And I should see run time for each transaction
+	| Name  | Vacation |
 
-Scenario: Remove absences in Anywhere
-	Given I am a developer
-	And I view the performance view
-	And there are 1000 absences
-	When I select 'anywhere'
-	And I select 'remove absences'
-	And I input that I want to remove all absences
+#No need to test this
+@ignore
+Scenario: Default configuration for scenario add and remove full day absences
+	When I am viewing the performance view
+	And I select scenario 'Add and remove full day absence'
+	Then I should see a default configuration in json format
+
+@ignore
+Scenario: Measure add and remove full day absences
+	When I am viewing the performance view
+	And I select scenario 'Add and remove full day absence'
+	And I input a configuration in json format
 	And I click 'run'
-	Then I should see statistics when read models are updated
-	And I should see number of removed absences
+	Then I should see a count of messages received for each applicable model updated
+	And I should see that the test run has finished
 	And I should see total run time
-	And I should see average run time
-	And I should see run time for each transaction
+	And I should see total time to send commands
+	And I should see scenarios per second

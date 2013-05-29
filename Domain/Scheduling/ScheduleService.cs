@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					 	var res = (WorkShiftFinderResult)_finderResults[_finderService.FinderResult.PersonDateKey];
 					 	res.Successful = true;
 					 }
-                schedulePart.AddMainShift((IMainShift)cache.ShiftProjection.TheMainShift.EntityClone());
+                schedulePart.AddMainShift(cache.ShiftProjection.TheMainShift);
                 rollbackService.Modify(schedulePart);
 
             	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly,

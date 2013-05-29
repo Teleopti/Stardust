@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             IScheduleDay schedule = _partFactoryForDomain.CreatePartWithMainShift();
 
-            DateTimePeriod expectedtResult = schedule.PersonAssignmentCollection().First().MainShift.ProjectionService().CreateProjection().Period().Value;
+            DateTimePeriod expectedtResult = schedule.GetEditorShift().ProjectionService().CreateProjection().Period().Value;
 
             var target = new SetupDateTimePeriodToSelectedSchedules(new List<IScheduleDay> { schedule });
             Assert.AreEqual(expectedtResult, target.Period);

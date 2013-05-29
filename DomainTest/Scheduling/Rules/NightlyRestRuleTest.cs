@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyFindLongestWhenNoPersonPeriodReturnsCorrect()
         {
-            AddPersonAssignmentsToSchedulePart();
+            addPersonAssignmentsToSchedulePart();
 
 
             var pointInTime = new DateOnly(2007, 8, 7);
@@ -145,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
                                        new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
                                        TeamFactory.CreateSimpleTeam()));
-            AddPersonAssignmentsToSchedulePart();
+            addPersonAssignmentsToSchedulePart();
 
             var pointInTime = new DateOnly(2007, 8, 2);
             var start = new DateTime(2007, 8, 2, 12, 0, 0, DateTimeKind.Utc);
@@ -158,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         }
 
-        private void AddPersonAssignmentsToSchedulePart()
+        private void addPersonAssignmentsToSchedulePart()
         {
             IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
             assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Maskeret Redigeringstekstboks</value>
@@ -5855,10 +5855,6 @@ Disse muligheder er aktiveret:
     <value>uge</value>
     <comment>weeks in recurrent meeting page</comment>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Tilgængelighed for Studerende</value>
-    <comment>Student Availability</comment>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Indtast værdier for de forskellige kombinationer</value>
     <comment>EnterValuesForTheDifferentCombinations</comment>
@@ -5890,10 +5886,6 @@ Disse muligheder er aktiveret:
   <data name="Budgeting" xml:space="preserve">
     <value>Budgettering</value>
     <comment>Panel</comment>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Tilgængelighed for Studerende</value>
-    <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>Ny planlægningsgruppe</value>
@@ -6178,10 +6170,6 @@ Disse muligheder er aktiveret:
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Er du sikker på, at du ønsker at slette '{0}' kontrakt?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Ny Tilgængelighed for Studerende</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolut Start</value>
@@ -6528,10 +6516,6 @@ Disse muligheder er aktiveret:
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Tilføj Restriktion på Præference</value>
     <comment>Add Preference Restriction</comment>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Tilføj Tilgængelighed for Studerende</value>
-    <comment>Add Student Availability</comment>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>Multiplikator</value>

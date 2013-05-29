@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             InParameter.NotNull("persons", persons);
             var retList = new List<IPersonAssignment>();
-            //var multi = Session.CreateMultiCriteria();
 
             foreach (var personList in persons.Batch(400))
             {
@@ -80,10 +79,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private IEnumerable<ICriteria> personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
-            var assWithMain = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                        .SetFetchMode("MainShift", FetchMode.Join)
-                        .SetFetchMode("MainShift.LayerCollection", FetchMode.Join);
-
+	        var assWithMain = Session.CreateCriteria(typeof (PersonAssignment), "ass")
+	                                 .SetFetchMode("MainShiftActivityLayers", FetchMode.Join);
 
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
                     .SetFetchMode("PersonalShiftCollection", FetchMode.Join);
@@ -120,20 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Removes the main shift from the data source.
-        /// </summary>
-        /// <param name="personAssignment">The person assignment.</param>
-        /// <remarks>
-        /// Tested from Domain test.
-        /// </remarks>
-        void IPersonAssignmentRepository.RemoveMainShift(IPersonAssignment personAssignment)
-        {
-			  if(!Session.Contains(personAssignment))
-				  Session.Lock(personAssignment, LockMode.None);
-            Session.Delete(personAssignment.MainShift);
-        }
-
-        /// <summary>
         /// Loads the aggregate.
         /// </summary>
         /// <param name="id">The id.</param>
@@ -147,8 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IPersonAssignment ass = Session.CreateCriteria(typeof(PersonAssignment))
                         .SetFetchMode("PersonalShiftCollection", FetchMode.Join)
                         .SetFetchMode("PersonalShiftCollection.LayerCollection", FetchMode.Join)
-                        .SetFetchMode("MainShift", FetchMode.Join)
-                        .SetFetchMode("MainShift.LayerCollection", FetchMode.Join)
+                        .SetFetchMode("MainShiftActivityLayers", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection.LayerCollection", FetchMode.Join)
                         .Add(Restrictions.Eq("Id", id))

@@ -188,9 +188,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
-        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
+        private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
-            IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
+			IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
             IList<IScheduleMatrixOriginalStateContainer> result =
                 matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
                 .Cast<IScheduleMatrixOriginalStateContainer>().ToList();

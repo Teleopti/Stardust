@@ -407,7 +407,6 @@
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />
     <Compile Include="Optimization\MatrixOvertimeLocker.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreator.cs" />
     <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />
@@ -486,6 +485,10 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShift.cs" />
+    <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -742,7 +745,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultHolder.cs" />
-    <Compile Include="Scheduling\AbsenceAssignmentSimulator.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleException.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOption.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartService.cs" />
@@ -760,7 +762,6 @@
     <Compile Include="Scheduling\Assignment\VisualLayerFactory.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerOvertimeFactory.cs" />
     <Compile Include="Scheduling\ConfidentialPayloadValues.cs" />
-    <Compile Include="Scheduling\IAbsenceAssignmentSimulator.cs" />
     <Compile Include="Scheduling\ILoadSchedulingStateHolderForResourceCalculation.cs" />
     <Compile Include="Scheduling\LoadSchedulingStateHolderForResourceCalculation.cs" />
     <Compile Include="Scheduling\MeetingPayload.cs" />
@@ -816,12 +817,10 @@
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\StudentSpecification.cs" />
     <Compile Include="Scheduling\Rules\DataPartOfAgentDay.cs" />
-    <Compile Include="Scheduling\Rules\GapsInAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculator.cs" />
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollection.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRule.cs" />
-    <Compile Include="Scheduling\Rules\NewLayerOwnerNeedsAtLeastOneLayerRule.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxOneDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
@@ -1304,7 +1303,6 @@
     <Compile Include="Scheduling\PersonDayOff.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
-    <Compile Include="Scheduling\Assignment\GapsInAssignment.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
     <Compile Include="Scheduling\ShiftCategory.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />
@@ -1406,7 +1404,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\MainShift.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonalShift.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

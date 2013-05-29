@@ -13,13 +13,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layers in mainshift...
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
-                    if(assignment.MainShift == null)
+#pragma warning disable 612,618
+	                var mainShift = assignment.ToMainShift();
+#pragma warning restore 612,618
+					if (mainShift == null)
                         continue;
-                    if (assignment.MainShift.LayerCollection.Contains(layer))
+					if (mainShift.LayerCollection.Contains(layer))
                     {
-                        assignment.MainShift.LayerCollection.Remove(layer);
-                        if (assignment.MainShift.LayerCollection.Count == 0)
+						mainShift.LayerCollection.Remove(layer);
+						if (mainShift.LayerCollection.Count == 0)
                             part.DeleteMainShift(part);
+						else
+							assignment.SetMainShift(mainShift);
                         return part;
                     }
                 }

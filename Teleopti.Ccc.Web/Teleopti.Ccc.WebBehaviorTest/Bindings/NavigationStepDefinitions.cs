@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmViewingStudentAvailabilityForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoStudentAvailability(date);
+			Navigation.GotoAvailability(date);
 		}
 
 		[When(@"I am viewing the performance view")]

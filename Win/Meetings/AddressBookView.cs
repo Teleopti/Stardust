@@ -358,12 +358,12 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void textBoxExtRequiredParticipant_TextChanged(object sender, EventArgs e)
         {
-            _presenter.ParseRequiredParticipants(textBoxExtRequiredParticipant.Text);
+            //_presenter.ParseRequiredParticipants(textBoxExtRequiredParticipant.Text);
         }
 
         private void textBoxExtOptionalParticipant_TextChanged(object sender, EventArgs e)
         {
-            _presenter.ParseOptionalParticipants(textBoxExtOptionalParticipant.Text);
+            //_presenter.ParseOptionalParticipants(textBoxExtOptionalParticipant.Text);
         }
 
         private void gridControlPeople_CellDoubleClick(object sender, GridCellClickEventArgs e)
@@ -403,13 +403,40 @@ namespace Teleopti.Ccc.Win.Meetings
         
         private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas, true);
+			if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+			{
+				var textBox = ((TextBoxBase)ActiveControl);
+				var first = textBox.Text.Substring(0, textBox.SelectionStart);
+				var selectedIndexes = TextBoxNameExtender.SelectedIndexes(textBox);
+				_presenter.RemoveIndexesRequired(selectedIndexes);
+				textBox.Select(first.Length, 0);
+				TextBoxNameExtender.GetSelected(textBox);
+			}
+			else
+			{
+				_lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas, true);	
+			}
+			
             e.SuppressKeyPress = true;
         }
 
         private void textBoxExtOptionalParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas, true);
+			if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+			{
+				var textBox = ((TextBoxBase)ActiveControl);
+				var first = textBox.Text.Substring(0, textBox.SelectionStart);
+				var selectedIndexes = TextBoxNameExtender.SelectedIndexes(textBox);
+				_presenter.RemoveIndexesOptional(selectedIndexes);
+				textBox.Select(first.Length, 0);
+				TextBoxNameExtender.GetSelected(textBox);
+			}
+			else
+			{
+				_lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas, true);
+			}
+
+
             e.SuppressKeyPress = true;
         }
 

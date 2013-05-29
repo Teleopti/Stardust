@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             InParameter.NotNull("person2", person2);
             InParameter.NotNull("dates", dates);
             InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-            InParameter.ListCannotBeEmpty("dates", (IList)dates);
+            InParameter.ListCannotBeEmpty("dates", dates);
             if (person1 == person2)
                 throw new ArgumentException("The Persons must be different");
 

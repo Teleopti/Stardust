@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -79,23 +78,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift};
 			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
 
-			if (auditedAssignment.Entity.MainShift == null)
+			if (auditedAssignment.Entity.ShiftCategory == null)
 			{
-				// Ta bort detta if-block när denna är löst/portad https://hibernate.onjira.com/browse/HHH-5845
-				// Sätt då istället bara string.Empty på detail.
-				if (auditedAssignment.Operation == RevisionType.Deleted)
-				{
-					var shiftCategory = fetchShiftCategory(auditedAssignment.Entity.Id.Value, auditedAssignment.RevisionEntity.Id);
-					ret.Detail = shiftCategory == null ? string.Empty : shiftCategory.Description.Name;
-				}
-				else
-				{
-					ret.Detail = string.Empty;					
-				}
+					ret.Detail = string.Empty;
 			}
 			else
 			{
-				ret.Detail = auditedAssignment.Entity.MainShift.ShiftCategory.Description.Name;
+				ret.Detail = auditedAssignment.Entity.ShiftCategory.Description.Name;
 			}
 
 			if (auditedAssignment.Entity.DatabasePeriod.Equals(PersonAssignment.UndefinedPeriod))
@@ -110,17 +99,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			}
 
 			return ret;
-		}
-
-		private IShiftCategory fetchShiftCategory(Guid personAssignmentId, long revision)
-		{
-			const string shiftCategoryHql = @"select ms.ShiftCategory_Id from Teleopti.Ccc.Domain.Scheduling.Assignment.MainShift_AUD ms
-												where ms.originalId.Id = :paId and ms.originalId.REV = :rev";
-			var scId = session().CreateQuery(shiftCategoryHql)
-							.SetGuid("paId", personAssignmentId) //mainshift and personassignment has same id
-							.SetInt64("rev", revision)
-							.UniqueResult();
-			return scId == null ? null : session().Get<ShiftCategory>(scId);
 		}
 
 		private ScheduleAuditingReportData createDayOffAuditingData(IRevisionEntityInfo<PersonDayOff, Revision> auditedDayOff)
@@ -154,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 																Revision revision,
 																RevisionType revisionType)
 		{
-            scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _regional.TimeZone);
+			scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _regional.TimeZone);
 			scheduleAuditingReportData.ModifiedBy = revision.ModifiedBy.Name.ToString(NameOrderOption.FirstNameLastName);
 			scheduleAuditingReportData.ScheduledAgent = auditedEntity.Person.Name.ToString(NameOrderOption.FirstNameLastName);
 			addRevisionType(scheduleAuditingReportData, revisionType);

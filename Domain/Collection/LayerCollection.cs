@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-
     public class LayerCollection<T> : ReadOnlyCollection<ILayer<T>>, ILayerCollection<T>
     {
         private readonly ILayerCollectionOwner<T> _owner;
@@ -18,11 +17,6 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public LayerCollection() : base(new List<ILayer<T>>())
         {
-        }
-
-        public void Sort(ILayerSorter<T> sorter)
-        {
-            ((List<ILayer<T>>) Items).Sort(sorter);
         }
 
         public virtual bool Remove(ILayer<T> item)
@@ -39,11 +33,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			var owner = _owner as IEntity;
 			if(owner != null)
 				item.SetParent(owner);
-        }
-
-        public bool LayerIsOverlapping(ILayer<T> layer)
-        {
-	        return Items.Any(presentLayer => layer.Period.Intersect(presentLayer.Period));
         }
 
 	    public void MoveAllLayers(TimeSpan time)

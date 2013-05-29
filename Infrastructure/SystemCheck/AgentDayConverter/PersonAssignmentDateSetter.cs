@@ -7,7 +7,7 @@
 			get
 			{
 				return "select COUNT(*) as cnt from dbo.PersonAssignment " +
-							 "where TheDate=@baseDate " +
+							 "where [Date]=@baseDate " +
 				       "and Person=@personId";
 			}
 		}
@@ -16,10 +16,10 @@
 		{
 			get
 			{
-				return "select pa.Id, pa.Minimum, pa.TheDate " +
+				return "select pa.Id, pa.Minimum, pa.Date " +
 				       "from dbo.PersonAssignment pa " +
 				       "inner join Person p on pa.Person = p.id " +
-							 "where pa.TheDate=@baseDate " +
+							 "where pa.[Date]=@baseDate " +
 				       "and p.Id=@personId";
 			}
 		}
@@ -29,7 +29,7 @@
 			get
 			{
 				return "update dbo.PersonAssignment " +
-				       "set TheDate = @newDate, Version=Version+1 " +
+							 "set [Date]=@newDate, Version=Version+1 " +
 				       "where Id=@id";
 			}
 		}

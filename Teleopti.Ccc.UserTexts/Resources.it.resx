@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Activities" xml:space="preserve">
     <value>Attività</value>
@@ -2274,9 +2274,6 @@
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Sei sicuro di voler eliminare sil contratto '{0}'?</value>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Nuova disponibilità studenti</value>
-  </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Inizio assoluto</value>
   </data>
@@ -3439,9 +3436,6 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Hai {0} agenti attivi ma la tua licenza ne prevede solo {1}. Aggiorna la tua licenza persto per favore.</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Disponibilità studenti</value>
-  </data>
   <data name="ManageJusticeValues" xml:space="preserve">
     <value>Gestione valori di equità</value>
   </data>
@@ -4051,9 +4045,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="BudgetedStaff" xml:space="preserve">
     <value>Allocazione a Budget</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Ore studenti</value>
-  </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Aggiungi riduzione efficienza</value>
   </data>
@@ -4180,15 +4171,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="AvailabilityColon" xml:space="preserve">
     <value>Disponibilità:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Nessun turno presente per questa disponibilità studenti.</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Periodo disponibilità studenti</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Apri disponibiltà studenti</value>
-  </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
     <value>Connessione al databae interrotta. Per preservare la consistenza dei dati la maschera sarà chiusa. Siamo spiacenti ma i tuoi dati verranno persi.</value>
   </data>
@@ -4221,9 +4203,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Blocca limitazioni</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Blocca disponibilità studenti</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Blocca Rotazioni</value>
@@ -4387,9 +4366,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="MustHaves" xml:space="preserve">
     <value>Indispensabili</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Disponibilità studenti</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Team</value>
   </data>
@@ -4434,9 +4410,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>La richiesta di assenza {0} è stata rifiutata.</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Rispetto disponibilità studenti</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>Nuova richiesta di scambio turni {0}, approva o rifiuta dalla ltua lista delle richieste.</value>

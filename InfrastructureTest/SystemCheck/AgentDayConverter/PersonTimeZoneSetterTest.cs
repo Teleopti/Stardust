@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
@@ -83,8 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			                                                               snubbe,
 			                                                               new DateTimePeriod(start, start.AddHours(8)),
 			                                                               new ShiftCategory("d"), new Scenario("d"));
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.LayerCollection[0].Payload);
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.ShiftCategory);
+			PersistAndRemoveFromUnitOfWork(pa.MainShiftActivityLayers.First().Payload);
+			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
 			PersistAndRemoveFromUnitOfWork(pa);
 			return pa;

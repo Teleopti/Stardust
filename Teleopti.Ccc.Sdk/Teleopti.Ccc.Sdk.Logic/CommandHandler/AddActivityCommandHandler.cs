@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
                 if (personAssignment != null)
                 {
-                    shiftCategory = personAssignment.MainShift.ShiftCategory;
+                    shiftCategory = personAssignment.ShiftCategory;
                 }
                 else
                     throw new FaultException("A main shift should exist first before you add a new activity.");

@@ -95,39 +95,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _model.Description = description;
         }
 
-        public void ParseParticipants(string participantText)
-        {
-            var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                             StringSplitOptions.RemoveEmptyEntries);
-
-            var allParticipants = _model.RequiredParticipants.Concat(_model.OptionalParticipants).ToList();
-            
-            for (var i = 0; i < participantsFromText.Length; i++)
-            {
-                participantsFromText[i] = participantsFromText[i].Trim();
-            }
-            foreach (var viewModel in allParticipants)
-            {
-                var foundName = false;
-                if (participantsFromText.Contains(viewModel.FullName.Trim())) continue;
-                for (var j = 0; j < participantsFromText.Length; j++)
-                {
-                    if (participantsFromText[j].Length <= viewModel.FullName.Trim().Length) continue;
-                    var itemEnding = participantsFromText[j].Substring(
-                         0, viewModel.FullName.Trim().Length);
-                    if (viewModel.FullName.Trim() == itemEnding)
-                    {
-                        foundName = true;
-                    }
-                }
-                if (!foundName)
-                {
-                    _model.RemoveParticipant(viewModel);
-                }
-            }
-            _view.SetParticipants(_model.Participants);
-        }
-
         public void OnParticipantsSet()
         {
             _view.SetParticipants(_model.Participants);
@@ -214,6 +181,26 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				_view.SetEndTime(_model.EndTime);
 
 			_settingTime = false;
+		}
+
+		public void Remove(IList<int> allSelectedIndexes)
+		{
+			var optionalOffset = Model.RequiredParticipants.Count;
+			IList<ContactPersonViewModel> selected = new List<ContactPersonViewModel>();
+			foreach (var index in allSelectedIndexes)
+			{
+				if (index < Model.RequiredParticipants.Count)
+					selected.Add(Model.RequiredParticipants[index]);
+				else if ((index - optionalOffset) < Model.OptionalParticipants.Count)
+					selected.Add(Model.OptionalParticipants[index - optionalOffset]);
+			}
+
+			foreach (var contactPersonViewModel in selected)
+			{
+				Model.RemoveParticipant(contactPersonViewModel);
+			}
+
+			_view.SetParticipants(Model.Participants);
 		}
 
 		public void OnOutlookTimePickerEndTimeKeyDown(Keys keys, string inputText)

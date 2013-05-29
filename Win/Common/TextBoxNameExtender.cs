@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -258,6 +259,28 @@ namespace Teleopti.Ccc.Win.Common
 
             return lastSelectionWas;
         }
+
+		public static IList<int> SelectedIndexes(TextBoxBase textBox)
+		{
+			var selectStart = textBox.SelectionStart;
+			var selectEnd = selectStart + textBox.SelectionLength;
+			var selectedIndexes = new List<int>();
+			var currentIndex = 0;
+
+			for (int i = 0; i < textBox.TextLength; i++)
+			{
+				if (textBox.Text[i] == ';')
+					currentIndex++;
+
+				if(i >= selectStart && i < selectEnd && !selectedIndexes.Contains(currentIndex))
+					selectedIndexes.Add(currentIndex);
+
+				if (i >= selectEnd)
+					break;
+			}
+
+			return selectedIndexes;
+		}
 
         public static void GetSelected(TextBoxBase textBox)
         {

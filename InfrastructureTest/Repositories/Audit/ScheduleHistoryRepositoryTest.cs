@@ -1,5 +1,6 @@
 ﻿using System;
 using NHibernate.Criterion;
+using NHibernate.Envers;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
@@ -283,9 +284,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 														.UniqueResult<long>();
 					//insert empty revision for more realistic tests
 					//DO NOT DO THIS IN REAL CODE!
-					var dummyRevision = new Revision();
-					dummyRevision.SetRevisionData(Agent, DateTime.UtcNow);
-					tempSession.Save(dummyRevision);
+					var dummyRevision = tempSession.Auditer().GetCurrentRevision<Revision>(true);
+					dummyRevision.SetRevisionData(Agent);
 					tx.Commit();
 					revisionNumberAfterOneUnitTestModification = revisionNumberAtSetupStart + 2;
 				}

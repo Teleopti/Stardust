@@ -295,8 +295,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess is DenyAbsenceRequest);
 	        Assert.AreEqual(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo),
 	                        ((DenyAbsenceRequest) projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess).DenyReason);
-			Assert.IsTrue(projectedOpenAbsenceRequestPeriods[1].AbsenceRequestProcess is PendingAbsenceRequest);
-			Assert.IsTrue(projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess is DenyAbsenceRequest);
+            Assert.IsTrue(projectedOpenAbsenceRequestPeriods[1].AbsenceRequestProcess is PendingAbsenceRequest);
+            Assert.IsTrue(projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess is DenyAbsenceRequest);
 	        Assert.AreEqual(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo),
 	                        ((DenyAbsenceRequest) projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess).DenyReason);
         }

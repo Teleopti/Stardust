@@ -117,7 +117,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                 let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Projection(scheduleYesterday)
                                                 let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
 												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a=>a.Item1==day).Item2.TotalMinutes
-												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
+												let availabilityForDay = allowanceCollection != null && allowanceCollection.First(a => a.Item1 == day).Item3
+ 												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
 												
 												select new WeekScheduleDayDomainData
 														{
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															ScheduleDay = scheduleDay,
 															MinMaxTime = minMaxTime,
 															Allowance = allowanceForDay,
-															AbsenceTime = absenceTimeForDay
+															AbsenceTime = absenceTimeForDay,
+															Availability = availabilityForDay
 														}
 											   ).ToArray();
 

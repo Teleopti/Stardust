@@ -26,18 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return (Id.Value == other.Id.Value);
 		 }
 
-		 public virtual bool Equals(PersistedActivityLayer other)
-		 {
-			 if (other == null)
-				 return false;
-			 if (this == other)
-				 return true;
-			 if (!other.Id.HasValue || !Id.HasValue)
-				 return false;
-
-			 return (Id.Value == other.Id.Value);
-		 }
-
 		 public virtual Guid? Id
 		 {
 			 get { return _id; }
@@ -78,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			 while (root == null)
 			 {
-				 var internalParent = parent as IAggregateEntity;
+				 var internalParent = theParent as IAggregateEntity;
 				 if (internalParent == null)
 				 {
 					 throw new AggregateException("[" + ToString() + "]:s parent is null or not of type IAggregateEntity");

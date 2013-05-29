@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 																																		 new DateTimePeriod(start, start.AddHours(8)),
 																																		 new ShiftCategory("d"), new Scenario("d"));
 			var rep = new Repository(uow);
-			rep.Add(pa.MainShift.LayerCollection[0].Payload);
-			rep.Add(pa.MainShift.ShiftCategory);
+			rep.Add(pa.MainShiftActivityLayers.First().Payload);
+			rep.Add(pa.ShiftCategory);
 			pa.Scenario.DefaultScenario = true;
 			rep.Add(pa.Scenario);
 			rep.Add(pa);

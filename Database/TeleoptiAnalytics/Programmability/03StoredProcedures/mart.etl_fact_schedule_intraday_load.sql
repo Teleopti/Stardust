@@ -39,9 +39,6 @@ BEGIN
 	RETURN 0
 END
 
---fill "temporary" tables used for later Intraday loads
-exec [stage].[etl_stg_schedule_updated_special_load]
-
 DELETE fs
 FROM Stage.stg_schedule_changed stg
 INNER JOIN Stage.stg_schedule_updated_personLocal dp
