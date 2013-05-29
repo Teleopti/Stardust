@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    }
 
 		    var restrictionFromOneBlock = _scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(dateOnlyList,
-		                                                                                            matrixes,
+		                                                                                            matrixes.ToList(),
 		                                                                                            schedulingOptions,
 		                                                                                            timeZone);
 		    restriction = restriction.Combine(restrictionFromOneBlock);

@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			IActivity activity = new Activity("bo");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
@@ -167,11 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			IActivity activity = new Activity("bo");
-			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			var shiftCategory = new ShiftCategory("cat");
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
@@ -212,11 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			IActivity activity = new Activity("bo");
-			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			var shiftCategory = new ShiftCategory("cat");
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
@@ -256,11 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			IActivity activity = new Activity("bo");
-			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			var shiftCategory = new ShiftCategory("cat");
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };

@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
 
-		IEffectiveRestriction ExtractForOnePersonOneBlock(IEnumerable<DateOnly> dateOnlyList,
-		                                                  IEnumerable<IScheduleMatrixPro> matrixList,
+		IEffectiveRestriction ExtractForOnePersonOneBlock(IList<DateOnly> dateOnlyList,
+														  IList<IScheduleMatrixPro> matrixList,
 		                                                  ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
 
-		IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList,
+		IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                              ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
 	}
 
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		public IEffectiveRestriction ExtractForOnePersonOneBlock(IEnumerable<DateOnly> dateOnlyList,
-		                                                         IEnumerable<IScheduleMatrixPro> matrixList,
+		public IEffectiveRestriction ExtractForOnePersonOneBlock(IList<DateOnly> dateOnlyList,
+																 IList<IScheduleMatrixPro> matrixList,
 		                                                         ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
 		{
 			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		public IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList,
+		public IEffectiveRestriction ExtractForOneTeamOneDay(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                                     ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
 		{
 			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private IEffectiveRestriction extractSameShift(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
+		private IEffectiveRestriction extractSameShift(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList)
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 													   new EndTimeLimitation(),
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private static IEffectiveRestriction extractSameStartTime(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
+		private static IEffectiveRestriction extractSameStartTime(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
 		{
 			var startTimeLimitation = new StartTimeLimitation();
 			foreach (var matrix in matrixList)
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-		private static IEffectiveRestriction extractSameEndTime(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
+		private static IEffectiveRestriction extractSameEndTime(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, TimeZoneInfo timeZone)
 		{
 			var endTimeLimitation = new EndTimeLimitation();
 			foreach (var matrix in matrixList)
