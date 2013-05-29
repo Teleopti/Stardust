@@ -29,7 +29,7 @@ require([
         'jquery',
         'modernizr',
         'bootstrap',
-        'layout'
+        'view'
     ], function() {
 
     });
