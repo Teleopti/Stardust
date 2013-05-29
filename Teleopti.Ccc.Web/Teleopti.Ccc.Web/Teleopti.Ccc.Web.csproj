@@ -654,6 +654,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\scenario-addremovefulldayabsence.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\vm.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\view.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />

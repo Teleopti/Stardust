@@ -32,12 +32,48 @@ define([
                 };
             };
 
-            this.Count = ko.observable();
-
+            this.IterationsExpected = ko.observable();
+            this.IterationsDone = ko.observable(0);
+            this.CommandsDone = ko.observable(false);
+            this.RunDone = ko.observable(false);
+            
             this.ConfigurationChanged = function(configuration) {
-                self.Count(2);
-                progressItemPersonScheduleDayReadModel.Target(2);
+                self.IterationsExpected(5);
+                progressItemPersonScheduleDayReadModel.Target(10);
             };
+
+
+
+
+
+            var messageReceived = function() {
+                progressItemPersonScheduleDayReadModel.Increment();
+                
+                var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
+                if (calculatedInterationsDone > self.IterationsDone()) {
+                    self.IterationsDone(calculatedInterationsDone);
+                    if (self.IterationsDone() >= self.IterationsExpected()) {
+                        self.RunDone(true);
+                    }
+                }
+            };
+            
+            this.Run = function(callbacks) {
+                setTimeout(function() {
+                    self.CommandsDone(true);
+                }, 2500);
+                setTimeout(messageReceived, 1020);
+                setTimeout(messageReceived, 2770);
+                setTimeout(messageReceived, 3064);
+                setTimeout(messageReceived, 4500);
+                setTimeout(messageReceived, 5100);
+                setTimeout(messageReceived, 6342);
+                setTimeout(messageReceived, 7423);
+                setTimeout(messageReceived, 8442);
+                setTimeout(messageReceived, 9974);
+                setTimeout(messageReceived, 10346);
+            };
+
 
         };
 

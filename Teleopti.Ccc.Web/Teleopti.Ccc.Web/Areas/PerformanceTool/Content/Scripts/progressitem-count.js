@@ -11,14 +11,14 @@ define([
 	    this.Text = text;
 	    
 	    this.Target = ko.observable(0);
-	    var count = ko.observable(0);
+	    this.Count = ko.observable(0);
 	    
 	    this.Increment = function() {
-	        count(count() + 1);
+	        self.Count(self.Count() + 1);
 	    };
 	    
 	    this.Value = ko.computed(function() {
-	        return count() + " / " + self.Target();
+	        return self.Count() + " / " + self.Target();
 	    });
 
 	};

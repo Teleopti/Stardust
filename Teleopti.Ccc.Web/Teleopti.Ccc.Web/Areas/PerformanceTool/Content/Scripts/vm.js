@@ -1,9 +1,11 @@
 
 define([
         'knockout',
+        'moment',
         'scenario-addremovefulldayabsence'
 ], function (
     ko,
+    moment,
     AddRemoveFullDayAbsenceScenarioViewModel
 	) {
 
@@ -16,6 +18,10 @@ define([
         this.Scenario = ko.observable();
         this.Configuration = ko.observable();
         
+        this.Scenario.subscribe(function () {
+            self.Configuration(JSON.stringify(self.Scenario().LoadDefaultConfiguration(), null, 4));
+        });
+
         this.RunButtonEnabled = ko.observable();
         this.RunButtonText = ko.computed(function () {
             
@@ -29,12 +35,53 @@ define([
             var scenario = self.Scenario();
             scenario.ConfigurationChanged(configuration);
             self.RunButtonEnabled(true);
-            return "Run " + scenario.Count() + " scenarios";
+            return "Run " + scenario.IterationsExpected() + " scenarios";
         });
 
-        this.Scenario.subscribe(function() {
-            self.Configuration(JSON.stringify(self.Scenario().LoadDefaultConfiguration(), null, 4));
+        var currentTime = ko.observable();
+        var runStartTime;
+        var runEndTime;
+        var commandsEndTime;
+        
+        this.Run = function () {
+            var scenario = self.Scenario();
+
+            var commandsDoneSub = scenario.CommandsDone.subscribe(function () {
+                commandsEndTime = moment();
+                commandsDoneSub.dispose();
+            });
+
+            var runDoneSub = scenario.RunDone.subscribe(function() {
+                runEndTime = moment();
+                runDoneSub.dispose();
+            });
+            
+            runStartTime = moment();
+            
+            self.Scenario().Run();
+        };
+
+        var formatTimeDiff = function(first, second) {
+            var seconds = second.diff(first, 'seconds');
+            return seconds + " seconds";
+        };
+        
+        this.TotalRunTime = ko.computed(function () {
+            var clock = currentTime();
+            if (runStartTime)
+                if (runEndTime)
+                    return formatTimeDiff(runStartTime, runEndTime);
+                else
+                    return formatTimeDiff(runStartTime, clock);
+            return null;
         });
+        
+        this.TotalTimeToSendCommands = ko.observable();
+        this.ScenariosPerSecond = ko.observable();
+
+        setInterval(function() {
+            currentTime(moment());
+        }, 100);
     };
 
 });
