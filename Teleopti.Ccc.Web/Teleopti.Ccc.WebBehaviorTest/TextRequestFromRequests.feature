@@ -17,7 +17,7 @@ Scenario: Adding invalid text request values
 	When I click new text request menu item in the toolbar
 	And I input empty subject
 	And I input later start time than end time
-	And I click the OK button
+	And I click send request button
 	Then I should see texts describing my errors
 	And I should not see the text request in the list
 
@@ -26,7 +26,7 @@ Scenario: Adding too long text request
 	And I am viewing requests
 	When I click new text request menu item in the toolbar
 	And I input too long text request values
-	And I click the OK button
+	And I click send request button
 	Then I should see texts describing too long text error
 	And I should not see the text request in the list
 
@@ -35,7 +35,7 @@ Scenario: Adding too long subject request
 	And I am viewing requests
 	When I click new text request menu item in the toolbar
 	And I input too long subject request values
-	And I click the OK button
+	And I click send request button
 	Then I should see texts describing too long subject error
 	And I should not see the text request in the list
 
@@ -53,7 +53,7 @@ Scenario: Edit text request
 	And I am viewing requests
 	When I click on the request
 	And I input new text request values
-	And I click the OK button
+	And I click send request button
 	Then I should see the new text request values in the list
 
 Scenario: Delete new text request

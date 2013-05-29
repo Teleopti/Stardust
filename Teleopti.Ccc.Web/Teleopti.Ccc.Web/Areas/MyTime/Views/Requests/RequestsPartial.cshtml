@@ -17,33 +17,33 @@
 <script type="text/html" id="text-request-detail-template">
 	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+        <input type="text" class="input-block-level request-edit-subject request-edit" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+        <textarea class="input-block-level request-edit-message request-edit" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
+            <input class="request-edit" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
         </div>
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
+            <input class="request-edit" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
     </div>
     <label class="checkbox">
-        <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
+        <input type="checkbox" class="request-edit" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix" data-bind="if: IsEditable">
@@ -54,16 +54,16 @@
 <script type="text/html" id="absence-request-detail-template">
 	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+        <input type="text" class="input-block-level request-edit-subject request-edit" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+        <textarea class="input-block-level request-edit-message request-edit" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
         <label>
             @Resources.AbsenceType
         </label>
-        <select data-bind="value: AbsenceId, enable: IsEditable">
+        <select data-bind="value: AbsenceId, enable: IsEditable" class="request-edit">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
@@ -72,26 +72,26 @@
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
+            <input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" class="request-edit"/>
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
         </div>
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
+            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" class="request-edit" />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
     </div>
     <label class="checkbox">
-        <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
+        <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" class="request-edit" /> @Resources.FullDay
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix" data-bind="if: IsEditable">
@@ -108,41 +108,41 @@
         <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject" />
     </div>
     <div>
-        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
+        <textarea class="input-block-level request-edit-message request-edit" placeholder="@Resources.Message" data-bind="value: Message" />
     </div>
     <div data-bind="visible: AbsenceRequestHeaderVisible">
         <label>
             @Resources.AbsenceType
         </label>
-        <select data-bind="value: AbsenceId">
+        <select data-bind="value: AbsenceId" class="request-edit">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
 			}
-		</select>
+        </select>
     </div>
-    <div>
-        <span class="input-append">
-            <input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" />
-            <span class="add-on"><i class="icon-th"></i></span>
-        </span>
-        <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+	<div>
+		<span class="input-append">
+			<input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" class="request-edit"/>
+			<span class="add-on"><i class="icon-th"></i></span>
+		</span>
+		<div class="input-append bootstrap-timepicker">
+			<input type="text" class="input-small request-edit" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
         </div>
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <input class="request-edit" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
     </div>
     <label class="checkbox">
-        <input type="checkbox" data-bind="checked: IsFullDay" /> @Resources.FullDay
+        <input type="checkbox"  class="request-edit" data-bind="checked: IsFullDay" /> @Resources.FullDay
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix">
