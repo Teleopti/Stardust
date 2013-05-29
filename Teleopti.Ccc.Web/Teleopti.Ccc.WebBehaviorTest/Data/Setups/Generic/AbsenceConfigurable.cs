@@ -11,17 +11,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Color { get; set; }
 		public bool? InContractTime { get; set; }
 
+		public Absence Absence;
+
 		public void Apply(IUnitOfWork uow)
 		{
-			var absence = new Absence {Description = new Description(Name)};
+			Absence = new Absence {Description = new Description(Name)};
 
 			if (Color != null)
-				absence.DisplayColor = System.Drawing.Color.FromName(Color);
+				Absence.DisplayColor = System.Drawing.Color.FromName(Color);
 
 			if (InContractTime.HasValue)
-				absence.InContractTime = InContractTime.Value;
+				Absence.InContractTime = InContractTime.Value;
 			var absenceRepository = new AbsenceRepository(uow);
-			absenceRepository.Add(absence);
+			absenceRepository.Add(Absence);
 		}
 	}
 }

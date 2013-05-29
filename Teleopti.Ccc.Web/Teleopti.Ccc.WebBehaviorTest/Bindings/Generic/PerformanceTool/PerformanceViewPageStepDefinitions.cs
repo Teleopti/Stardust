@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -20,5 +21,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		{
 			Browser.Interactions.SelectOptionByTextUsingJQuery(".scenario-selector", scenario);
 		}
+
+		[When(@"I input a configuration in json format")]
+		public void WhenIInputAConfigurationInJsonFormat()
+		{
+			var configuration = new
+				{
+					PersonIds = new[]
+						{
+							UserFactory.User().Person.Id.Value.ToString()
+						},
+					AbsenceId = new[]
+						{
+							UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString()
+						},
+					DateRange = new
+						{
+							From = DateTime.Now.Date.ToShortDateString(),
+							To = DateTime.Now.Date.AddDays(1).ToShortDateString()
+						}
+				};
+			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+		}
+
 	}
 }
