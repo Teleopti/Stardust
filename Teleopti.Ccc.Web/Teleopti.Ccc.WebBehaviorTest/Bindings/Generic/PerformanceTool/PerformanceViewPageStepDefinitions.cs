@@ -45,5 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
+		[Then(@"I should see a count of messages received for each applicable model updated")]
+		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated()
+		{
+			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel'):contains(2)");
+		}
+
+
 	}
 }
