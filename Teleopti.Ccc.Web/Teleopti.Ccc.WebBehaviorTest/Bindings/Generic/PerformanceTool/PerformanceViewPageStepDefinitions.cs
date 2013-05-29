@@ -48,13 +48,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		[Then(@"I should see a count of messages received for each applicable model updated")]
 		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated()
 		{
-			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel'):contains(2)");
+			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel'):contains('2')");
 		}
 
 		[Then(@"I should see that the test run has finished")]
 		public void ThenIShouldSeeThatTheTestRunHasFinished()
 		{
 			Browser.Interactions.AssertExists(".result-success");
+		}
+
+		[Then(@"I should see total run time")]
+		public void ThenIShouldSeeTotalRunTime()
+		{
+			Browser.Interactions.AssertExists(".total-run-time");
 		}
 
 
