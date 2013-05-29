@@ -63,6 +63,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.AssertExists(".total-run-time");
 		}
 
+		[Then(@"I should see total time to send commands")]
+		public void ThenIShouldSeeTotalTimeToSendCommands()
+		{
+			Browser.Interactions.AssertExists(".total-time-to-send-commands");
+		}
 
+		[Then(@"I should see scenarios per second")]
+		public void ThenIShouldSeeScenariosPerSecond()
+		{
+			Browser.Interactions.AssertExists(".scenarios-per-second");
+		}
 	}
 }
