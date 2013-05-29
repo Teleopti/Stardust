@@ -15,6 +15,15 @@ $Ntml = "Ntlm"
 $None = "None"
 $InstallationAuthSetting = "Ntlm"
 
+#uninstall
+Describe "Check if msi uninstalled"{
+    It "Msi should be uninstalled"{
+        $return= Uninstall 
+        $return | Should Be 0  
+    }
+}
+
+
 #Add IIS admin module
 IISAdmin
 
