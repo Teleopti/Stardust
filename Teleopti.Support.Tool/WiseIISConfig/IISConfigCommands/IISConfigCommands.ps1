@@ -66,3 +66,42 @@ function Get-Authentication {
 function Get-defaultDocument{
 	Get-WebConfigurationProperty -Filter //defaultDocument/files/add -PSPath 'IIS:\Sites\Default Web Site' -Name value
 }
+
+function Uninstall{
+     
+     $exists64 = CheckRegistryUninstall64 
+     $exists32=  CheckRegistryUninstall32  
+        
+     if($exists64 -eq 0 ) {
+    	 $Args = @("/X{52613B22-2102-4BFB-AAFB-EF420F3A24B5}","/qn", "/L", "uninstall-server.log")
+         & MsiExec.exe $Args | out-null
+         return $LastExitCode
+        }
+    elseif($exists32 -eq 0 ){ 
+         $Args = @("/X{52613B22-2102-4BFB-AAFB-EF420F3A24B5}","/qn", "/L", "uninstall-server.log")
+         & MsiExec.exe $Args | out-null
+         return $LastExitCode
+        }
+    else{    
+        return 0
+    }
+       
+}
+
+function CheckRegistryUninstall64{
+#reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
+    
+    & reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5}" /v DisplayName | out-null
+    return $LastExitCode #0=found, 1=not found
+
+}
+
+function CheckRegistryUninstall32{
+#reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
+    
+    & reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5}" /v DisplayName | out-null
+    return $LastExitCode #0=found, 1=not found
+
+}
+
+
