@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheNewTextRequestValuesInTheList()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
+			Browser.Interactions.AssertContains(".bdd-request-body","cinnemon roll");
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
@@ -183,16 +183,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the text request's delete button")]
  		public void WhenIClickTheRequestSDeleteButton()
  		{
-			PersonRequest requestId = null;
-			if (UserFactory.User().HasSetup<ExistingTextRequest>())
-				requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingPendingTextRequest>())
-				requestId = UserFactory.User().UserData<ExistingPendingTextRequest>().PersonRequest;
-			if (requestId == null)
-				ScenarioContext.Current.Pending();
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId.Id.Value).Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).DisplayVisible(), Is.True);
-			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).EventualClick();
+			Browser.Interactions.Click(".bdd-request-body .close");
  		}
 
 		[Then(@"I should see texts describing my errors")]
