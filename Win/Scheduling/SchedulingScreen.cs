@@ -1241,6 +1241,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				swapSelectedSchedules();
+				Refresh();
+				RefreshSelection();
 			}
 		}
 
