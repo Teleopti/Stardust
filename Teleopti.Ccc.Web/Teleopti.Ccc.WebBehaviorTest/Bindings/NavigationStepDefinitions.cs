@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmViewingThePerformanceView()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToPerformanceToolPerformanceView();
+			Navigation.GoToPerformanceTool();
 		}
 
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
