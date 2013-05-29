@@ -73,6 +73,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoStudentAvailability(date);
 		}
 
+		[When(@"I am viewing the performance view")]
+		public void WhenIAmViewingThePerformanceView()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToPerformanceToolPerformanceView();
+		}
+
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{

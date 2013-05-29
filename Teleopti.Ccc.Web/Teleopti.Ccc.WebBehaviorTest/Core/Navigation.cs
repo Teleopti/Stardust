@@ -209,8 +209,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
+		public static void GoToPerformanceTool()
+		{
+			GoToWaitForUrlAssert("PerformanceTool", "PerformanceTool", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+		}
 
-
+		public static void GoToPerformanceToolPerformanceView()
+		{
+			GoToWaitForUrlAssert(
+				"PerformanceTool#PerformanceView", 
+				"PerformanceTool#PerformanceView",
+				new ApplicationStartupTimeout());
+		}
 
 		public static void GotoAnywhere()
 		{
