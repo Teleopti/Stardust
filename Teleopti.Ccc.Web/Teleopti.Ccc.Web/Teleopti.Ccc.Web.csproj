@@ -268,6 +268,8 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Core\IOpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Controllers\OpenIdController.cs" />
     <Compile Include="Areas\SSO\Core\OpenIdProviderWapper.cs" />
@@ -652,6 +654,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
+    <Content Include="Areas\PerformanceTool\Content\Templates\index.html" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />

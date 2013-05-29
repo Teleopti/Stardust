@@ -134,6 +134,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\PerformanceTool\Controllers\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolverTest.cs" />
