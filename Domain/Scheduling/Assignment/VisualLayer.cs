@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	    {
 		    var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person)
 			    {
-				    HighestPriorityAbsence = HighestPriorityAbsence
+				    HighestPriorityAbsence = HighestPriorityAbsence,
+						DefinitionSet = DefinitionSet
 			    };
 		    return ret;
 	    }

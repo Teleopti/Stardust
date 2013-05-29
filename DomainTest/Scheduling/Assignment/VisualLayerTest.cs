@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				res.Payload.Should().Be.SameInstanceAs(target.Payload);
 				res.HighestPriorityAbsence.Should().Be.SameInstanceAs(target.HighestPriorityAbsence);
 				res.HighestPriorityActivity.Should().Be.SameInstanceAs(target.HighestPriorityActivity);
+				res.DefinitionSet.Should().Be.SameInstanceAs(target.DefinitionSet);
 			}
     }
 }
