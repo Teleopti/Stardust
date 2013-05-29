@@ -11460,4 +11460,8 @@ Reduce the complexity to use these shifts.</value>
     <value>The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent.</value>
     <comment>Message for optimistic lock exception in messaging.</comment>
   </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Availability Per Agent</value>
+    <comment> the report Availability Per Agent</comment>
+  </data>
 </root>

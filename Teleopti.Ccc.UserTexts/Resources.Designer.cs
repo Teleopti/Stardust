@@ -18471,6 +18471,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Availability Per Agent.
+        /// </summary>
+        public static string ResReportAvailabilityPerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAvailabilityPerAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecast vs Actual Workload.
         /// </summary>
         public static string ResReportForecastvsActualWorkload {
