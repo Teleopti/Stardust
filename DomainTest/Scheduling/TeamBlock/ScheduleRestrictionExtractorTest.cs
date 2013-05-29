@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
 				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
 				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
 			}
 			using (_mocks.Playback())
@@ -117,6 +116,44 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					};
 
 				var result = _target.ExtractForOnePersonOneBlock(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+	
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldExtractSameShiftRestrictionFromOneBlockWhenBothBlockAndTeamScheduling()
+		{
+			_schedulingOptions.UseTeamBlockSameShift = true;
+			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseGroupScheduling = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			IActivity activity = new Activity("bo");
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
+			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1, scheduleMatrixPro2 };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro1.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+				                                        new EndTimeLimitation(),
+				                                        new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>())
+					{
+						CommonMainShift = mainShift
+					};
+
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
 				Assert.That(result, Is.EqualTo(expected));
 			}
 		}
@@ -193,7 +230,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay2.GetEditorShift()).Return(mainShift);
+				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
 			}
 			using (_mocks.Playback())
 			{
@@ -232,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
-				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
+				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory);
 			}
 			using (_mocks.Playback())
 			{
@@ -589,7 +627,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
 				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(null);
+				Expect.Call(scheduleDay1.GetEditorShift()).Return(null);
 			}
 			using (_mocks.Playback())
 			{

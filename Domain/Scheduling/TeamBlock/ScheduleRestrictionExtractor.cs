@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IScheduleRestrictionExtractor
 	{
-		IEffectiveRestriction Extract(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
+		IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
 
 		IEffectiveRestriction ExtractForOnePersonOneBlock(IEnumerable<DateOnly> dateOnlyList,
 		                                                  IEnumerable<IScheduleMatrixPro> matrixList,
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
-		public IEffectiveRestriction Extract(IEnumerable<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList,
+		public IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList,
 		                                     ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
 		{
 			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -38,14 +39,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                                             new List<IActivityRestriction>());
 			if (dateOnlyList == null)
 				return restriction;
-            
-			if ( schedulingOptions.UseTeamBlockSameShift)
+
+			if (schedulingOptions.UseTeamBlockSameShift)
 			{
-				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixList);
+				var matrixes = new List<IScheduleMatrixPro>();
+				if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling)
+					matrixes.Add(matrixList.First());
+				else matrixes.AddRange(matrixList);
+				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixes);
 				if (sameShiftRestriction == null) return null;
 				restriction = restriction.Combine(sameShiftRestriction);
 			}
-            if ((schedulingOptions.UseTeamBlockPerOption &&  schedulingOptions.UseTeamBlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonStart ))
+			if ((schedulingOptions.UseTeamBlockPerOption &&  schedulingOptions.UseTeamBlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonStart ))
 			{
 				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
 				if (sameStartRestriction == null) return null;
