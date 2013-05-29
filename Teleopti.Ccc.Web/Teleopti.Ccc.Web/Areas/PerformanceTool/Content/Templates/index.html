@@ -90,31 +90,22 @@
                         <fieldset>
                             <h2>Scenario</h2>
                             <label>Scenario</label>
-                            <select class="scenario-selector">
-                                <option>Add and remove full day absence</option>
-                            </select>
+                            <select class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', value: Scenario"></select>
                             <label>Configuration</label>
-                            <textarea class="scenario-configuration">{
-    "AbsenceId": "E171AA82-DED8-4776-9F10-B694D5E376BD",
-    "PersonIds": [
-        "05C03AD1-9473-4797-BFC7-B86C6ED7323B",
-        "2E76E514-202A-477A-BE40-B99AF3609714"
-    ],
-    "DateRange": {
-        "From": "2013-05-29",
-        "To": "2013-05-29"
-    }
-}</textarea>
+                            <textarea class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown'"></textarea>
                             <label></label>
-                            <button class="btn btn-large btn-primary run">Run 4 scenarios</button>
+                            <button class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled"></button>
                         </fieldset>
                     </form>
                 </div>
                 <div class="span6">
                     <h2>Progress</h2>
-                    <p class="message-count"><span class="badge badge-info">2 / 2</span> PersonScheduleDayReadModel</p>
-                    <p class="message-count"><span class="badge badge-info">2 / 2</span> Something else</p>
-                    <p class="message-count"><span class="badge badge-info">2 / 2</span> Yayayayado</p>
+                    <!-- ko foreach: Scenario().ProgressItems -->
+                    <p class="message-count">
+                        <span class="badge badge-info" data-bind="text: Value"></span>
+                        <span data-bind="text: Text"></span>
+                    </p>
+                    <!-- /ko -->
                 </div>
                 <div class="span6">
                     <h2>Result</h2>
