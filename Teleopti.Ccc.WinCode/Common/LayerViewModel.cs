@@ -347,7 +347,6 @@ namespace Teleopti.Ccc.WinCode.Common
 
         protected void TriggerShiftEditorUpdate()
         {
-	        hackToUpdateUnderlyingPersonAssignment();
 	        new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
         }
 
