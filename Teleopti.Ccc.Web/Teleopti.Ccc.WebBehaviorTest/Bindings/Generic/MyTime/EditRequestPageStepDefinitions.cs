@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not be able to input values")]
 		public void ThenIShouldNotBeAbleToInputValues()
 		{
-			//henke: inte helt korrekt!
 			Browser.Interactions.AssertNotExists(".bdd-request-edit-detail", ".request-edit[disabled=false]");
 		}
 

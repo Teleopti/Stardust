@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions
+﻿using System;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions
 {
 	public interface IBrowserInteractions
 	{
@@ -51,5 +53,6 @@
 			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selectSelector);
 			interactions.AssertJavascriptResultContains(js, "visible");
 		}
+
 	}
 }

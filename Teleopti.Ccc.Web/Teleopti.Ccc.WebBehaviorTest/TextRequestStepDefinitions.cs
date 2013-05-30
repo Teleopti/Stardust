@@ -71,19 +71,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var request= UserFactory.User().UserData<ExistingTextRequest>();
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), 
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value,
-																		Is.EqualTo(request.PersonRequest.GetMessage(new NoFormatting())));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value,
-																		Is.EqualTo(request.PersonRequest.GetSubject(new NoFormatting())));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
+			Browser.Interactions.AssertJavascriptResultContains("$('.date-from')[0].value", webDateString(request.PersonRequest.Request.Period.StartDateTime.Date));
+			Browser.Interactions.AssertJavascriptResultContains("$('.time-from')[0].value", webTimeString(request.PersonRequest.Request.Period.StartDateTime));
+			Browser.Interactions.AssertContains(".request-edit-message", request.PersonRequest.GetMessage(new NoFormatting()));
+			Browser.Interactions.AssertJavascriptResultContains("$('.request-edit-subject')[0].value", request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertJavascriptResultContains("$('.date-to')[0].value", webDateString(request.PersonRequest.Request.Period.EndDateTime.Date));
+			Browser.Interactions.AssertJavascriptResultContains("$('.time-to')[0].value", webTimeString(request.PersonRequest.Request.Period.EndDateTime));
 		}
 
 		[Then(@"I should see the new text request values in the list")]
@@ -232,5 +225,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".bdd-request-edit-detail:nth-of-type(1) button[data-bind*=click: AddRequest]");
 		}
+
+		#region helpersthatshouldbefixed
+		private static string webDateString(DateTime date)
+		{
+			return String.Format("{0:MM/dd/yyyy}", date);
+		}
+
+		private static string webTimeString(DateTime time)
+		{
+			return String.Format("{0:HH:mm}", time);
+		}
+		#endregion
 	}
 }

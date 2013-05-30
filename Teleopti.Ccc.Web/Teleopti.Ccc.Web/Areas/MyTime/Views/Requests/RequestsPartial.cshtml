@@ -24,21 +24,21 @@
     </div>
     <div>
         <span class="input-append">
-            <input class="request-edit" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
+            <input class="request-edit date-from" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit time-from" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
         </div>
     </div>
     <div>
         <span class="input-append">
-            <input class="request-edit" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
+            <input class="request-edit date-to" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
-            <input type="text" class="input-small request-edit" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-small request-edit time-to" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
     </div>
