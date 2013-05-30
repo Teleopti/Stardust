@@ -78,7 +78,7 @@ Scenario: Add on empty day first day
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
-	And I should see an absence in the absence list with
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 00:00 |
@@ -99,7 +99,7 @@ Scenario: Add on empty day last day
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
-	And I should see an absence in the absence list with
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 08:00 |
@@ -126,7 +126,7 @@ Scenario: Add on shifts in sequence
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
-	And I should see an absence in the absence list with
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 08:00 |
