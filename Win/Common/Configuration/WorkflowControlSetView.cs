@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _gridHelper = new SFGridColumnGridHelper<AbsenceRequestPeriodModel>(gridControlAbsenceRequestOpenPeriods,
                                                                                         gridColumns, new List<AbsenceRequestPeriodModel>());
             _gridHelper.UnbindClipboardPasteEvent();
-
+	        
             gridControlAbsenceRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
             gridControlAbsenceRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodSelected
         {
-            get { return _gridHelper.FindSelectedItems(); }
+            get { return _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1); }
         }
 
         public bool HandlePasteWhenCellIsCopied()
@@ -841,7 +841,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void deleteSelected()
         {
-            ReadOnlyCollection<AbsenceRequestPeriodModel> selectedPeriodModels = _gridHelper.FindSelectedItems();
+			ReadOnlyCollection<AbsenceRequestPeriodModel> selectedPeriodModels = _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1);
 
             _presenter.DeleteAbsenceRequestPeriod(new List<AbsenceRequestPeriodModel>(selectedPeriodModels));
         }
@@ -922,7 +922,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	AbsenceRequestPeriodModel rightClickedItem = _gridHelper.FindItemByPoint(_gridPoint);
         	if (rightClickedItem == null) return;
         	enableContextMenu(true);
-        	var selectedItems = _gridHelper.FindSelectedItems();
+			var selectedItems = _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1);
 
         	if (selectedItems.Contains(rightClickedItem)) return;
         	gridControlAbsenceRequestOpenPeriods.Selections.Clear();

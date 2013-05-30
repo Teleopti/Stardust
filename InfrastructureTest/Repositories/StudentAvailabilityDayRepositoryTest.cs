@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -102,9 +106,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private static IStudentAvailabilityDay CreateStudentAvailabilityDay(DateOnly date, IPerson person, bool notAvailable)
         {
             var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
-            var studentAvailabilityRestriction2 = new StudentAvailabilityRestriction();
-
-            var studentAvailabilityRestrictions = new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction, studentAvailabilityRestriction2 };
+            
+            var studentAvailabilityRestrictions = new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction };
             var studentAvailabilityDay = new StudentAvailabilityDay(person, date, studentAvailabilityRestrictions);
             studentAvailabilityDay.NotAvailable = notAvailable;
             return studentAvailabilityDay;
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IStudentAvailabilityDay org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
             Assert.AreEqual(org.RestrictionDate, loadedAggregateFromDatabase.RestrictionDate);
-            Assert.AreEqual(2, loadedAggregateFromDatabase.RestrictionCollection.Count);
+            Assert.AreEqual(1, loadedAggregateFromDatabase.RestrictionCollection.Count);
             Assert.IsFalse(loadedAggregateFromDatabase.NotAvailable);
         }
 
@@ -123,5 +126,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new StudentAvailabilityDayRepository(unitOfWork);
         }
+
+		[Test]
+		public void CanFindDaysNewerThan()
+		{
+			var newerThan = DateTime.UtcNow.AddHours(-1);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2013, 2, 2), _person, false));
+			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2013, 3, 2), _person, false));
+
+			var days = new StudentAvailabilityDayRepository(UnitOfWork).FindNewerThan(newerThan);
+			Assert.AreEqual(3, days.Count);
+			LazyLoadingManager.IsInitialized(days[0].RestrictionCollection.First().StartTimeLimitation).Should().Be.True();
+		}
     }
 }

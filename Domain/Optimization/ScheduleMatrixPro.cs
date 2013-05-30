@@ -39,6 +39,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulePeriod = schedulePeriod;
             _activeScheduleRange = stateHolder.Schedules[_person];
             createScheduleDays(periodCreator);
+			foreach (var scheduleDayPro in _effectivePeriodDays.Values)
+	        {
+				_unLockedDays.Add(scheduleDayPro.Day, scheduleDayPro);
+	        }
         }
 
         /// <summary>
@@ -136,34 +140,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        public ReadOnlyCollection<IScheduleDayPro> UnlockedDays
+        public ReadOnlyCollection<IScheduleDayPro>  UnlockedDays
         {
             get
             {
                 IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_unLockedDays.Values);
                 return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
-
-        //public IList<DateOnly> UserLockedDates
-        //{
-        //    get { return _userLockedDates; }
-        //}
-
-        //public void LockUserDate(DateOnly dateOnly)
-        //{
-        //    if(!_userLockedDates.Contains(dateOnly))
-        //        _userLockedDates.Add(dateOnly);
-        //}
-
-        public void UnlockPeriod(DateOnlyPeriod period)
-        {
-            foreach (var dateOnly in period.DayCollection())
-            {
-                if (!_effectivePeriodDays.ContainsKey(dateOnly))
-                    throw new ArgumentOutOfRangeException("period");
-                if(!_unLockedDays.ContainsKey(dateOnly))
-                    _unLockedDays.Add(dateOnly, _effectivePeriodDays[dateOnly]);
             }
         }
 

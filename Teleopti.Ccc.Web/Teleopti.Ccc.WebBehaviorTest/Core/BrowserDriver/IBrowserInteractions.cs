@@ -43,14 +43,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.AssertJavascriptResultContains("$('" + selector + "').val();", value);
 		}
 
-		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selectSelector, string text)
+		public static void AssertVisibleUsingJQuery(this IBrowserInteractions interactions, string selector)
 		{
-			selectSelector = selectSelector + ":enabled";
+			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selector);
+			interactions.AssertJavascriptResultContains(js, "visible");
+		}
+
+		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
+		{
+			var selectSelector = selector + ":enabled";
 			var optionSelector = string.Format(selectSelector + " option:contains('{0}')", text);
 			interactions.AssertExists(selectSelector);
 			interactions.AssertExists(optionSelector);
 			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector, optionSelector);
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
+		}
+
+		public static void TypeTextIntoInputTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
+		{
+			selector = selector + ":enabled";
+			interactions.AssertExists(selector);
+			interactions.Javascript("$(\"{0}\").val(\"{1}\");", selector, text);
+			interactions.Javascript("$(\"{0}\").change();", selector);
 		}
 
 	}

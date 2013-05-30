@@ -68,6 +68,9 @@ SELECT @WinUser = RIGHT(@csv, LEN(@csv) - @commaindex)
 UPDATE TeleoptiCCC7_Demo.dbo.WindowsAuthenticationInfo
 SET DomainName=@WinDomain, WindowsLogOnName=@WinUser WHERE person = @userid
 
+--delete unwanted Windows domains as they stall IIS -> AD-lookup in TeleoptiPM
+DELETE FROM TeleoptiCCC7_Demo.dbo.WindowsAuthenticationInfo
+WHERE DomainName <> @WinDomain
 
 --Add currect user to IIS-users: update aspnet_users
 UPDATE TeleoptiAnalytics_Demo.dbo.aspnet_Users

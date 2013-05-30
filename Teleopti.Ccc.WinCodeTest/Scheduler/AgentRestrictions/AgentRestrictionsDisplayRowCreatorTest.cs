@@ -70,8 +70,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(startDate)).Return(_scheduleDay);
 				Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(_scheduleDays)).Return(_scheduleMatrixPros);
-				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-				Expect.Call(() => _scheduleMatrixPro.UnlockPeriod(dateOnlyPeriod));
 				Expect.Call(_stateHolder.CommonAgentName(_person)).Return("Name");
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
 			}

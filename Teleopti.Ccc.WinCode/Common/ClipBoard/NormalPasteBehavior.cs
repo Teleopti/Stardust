@@ -53,20 +53,22 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
                                         IScheduleDay part = clip.ClipValue as IScheduleDay;
 
                                         T pasteResult;
-                                        if(IsFullDayAbsence(part))
-                                        {
-                                            Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)ReducedAbsence(part));
-
-                                            pasteResult = gridPasteAction.Paste(gridControl, reducedClip, row + reducedClip.RowOffset, col + reducedClip.ColOffset);
-                                            if (pasteResult != null)
-                                                pasteList.Add(pasteResult);
-                                        }
-                                        else
-                                        {
+										if(IsFullDayAbsence(part))
+										{
+											Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)ReducedAbsence(part));
+									
+											pasteResult = gridPasteAction.Paste(gridControl, reducedClip, row + reducedClip.RowOffset, col + reducedClip.ColOffset);
+											if (pasteResult != null)
+												pasteList.Add(pasteResult);
+											
+	
+										}
+										else
+										{
                                             pasteResult = gridPasteAction.Paste(gridControl, clip, row + clip.RowOffset, col + clip.ColOffset);
                                             if (pasteResult != null)
                                                 pasteList.Add(pasteResult);
-                                        }
+										}
                                     }
                                 }
                             }
@@ -103,7 +105,10 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 				part.Add(newPersonAbsence);
             }
 
+	        var ass = part.AssignmentHighZOrder();
+			if(ass != null) part.Remove(ass);
+	
             return part;
-        }
+        }	
     }
 }

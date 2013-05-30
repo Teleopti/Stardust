@@ -143,12 +143,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addPreferencesDays(retDic,
                                        _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(
                                            longDateOnlyPeriod, people));
-					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferenses)
-					{
-						addStudentAvailabilityDays(retDic,
+					addStudentAvailabilityDays(retDic,
 											   _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
 												   Find(longDateOnlyPeriod, people));
-
+					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+					{
 						addPersonAvailabilities(period, retDic, people);
 						addPersonRotations(period, retDic, people);
 					}
@@ -235,12 +234,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 if(scheduleDictionaryLoadOptions.LoadRestrictions)
                 {
                     addPreferencesDays(scheduleDictionary, _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferenses)
-	                {
-		                addStudentAvailabilityDays(scheduleDictionary,
+					addStudentAvailabilityDays(scheduleDictionary,
 													_repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
 																	.Find(longDateOnlyPeriod, visiblePersons));
-
+	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+	                {
 		                addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
 		                addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons);
 	                }
