@@ -437,52 +437,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	AND b.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,d.date_id,d.date_date,i.interval_id
 
-IF @adherence_id = 2
-BEGIN
---b) insert agent statistics outside schdeuled time
-INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	d.date_id,
-			d.date_date,
-			i.interval_id,
-			i.interval_name,
-			@intervals_per_day,
-			p.site_id,
-			p.site_name,
-			p.team_id,
-			p.team_name,
-			p.person_code,
-			p.person_id,
-			p.first_name,
-			p.last_name,
-			p.person_name,
-			isnull(fsd.deviation_schedule_s,0) 'deviation_s', --@adherence_id =2
-			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
-			-1,
-			-1,
-			@intervals_length_s AS 'adherence_calc_s', --Compare to full Interval since there's no Scheduled Time here
-			@selected_adherence_type,
-			@hide_time_zone,
-			2
-FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
-		ON fsd.person_id=p.person_id
-	INNER JOIN mart.bridge_time_zone b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-	INNER JOIN mart.dim_interval i
-		ON b.local_interval_id = i.interval_id
-	WHERE NOT EXISTS
-		(SELECT 1 FROM #fact_schedule fs
-			WHERE fsd.person_id=fs.person_id
-			AND fsd.date_id=fs.schedule_date_id
-			AND fsd.interval_id=fs.interval_id)
-	AND d.date_date = @date_from
-	AND b.time_zone_id=@time_zone_id
-END
-
 ----------
 --calculation of Agent adherence, team adherence
 ----------
@@ -490,7 +444,8 @@ END
 UPDATE #result
 SET adherence=
 CASE
-		WHEN adherence_calc_s = 0 THEN 1
+		WHEN adherence_calc_s = 0 AND @adherence_id <> 2 THEN 1
+		WHEN adherence_calc_s = 0 AND @adherence_id = 2 THEN 0
 		WHEN deviation_s > adherence_calc_s THEN 0
 		ELSE (adherence_calc_s - deviation_s)/ adherence_calc_s
 	END
@@ -505,7 +460,8 @@ GROUP by date_id,person_id
 UPDATE #result
 SET adherence_tot=
 	CASE
-		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id <> 2 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id = 2 THEN 0
 		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END,
@@ -522,7 +478,8 @@ GROUP by date_id,interval_id
 UPDATE #result
 SET team_adherence=
 	CASE
-		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id <> 2 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id = 2 THEN 0
 		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
@@ -548,7 +505,8 @@ GROUP by date_id
 UPDATE #result
 SET team_adherence_tot=
 	CASE
-		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id <> 2 THEN 1
+		WHEN a.adherence_calc_s = 0 AND @adherence_id = 2 THEN 0
 		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
