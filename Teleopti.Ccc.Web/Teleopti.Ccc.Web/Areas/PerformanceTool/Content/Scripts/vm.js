@@ -78,7 +78,11 @@ define([
         
         this.ScenariosPerSecond = ko.computed(function () {
             if (self.Scenario() && self.Scenario().IterationsDone()) {
-                return (self.Scenario().IterationsDone() / (currentTime().diff(runStartTime, 'seconds'))).toFixed(2);
+                if (runEndTime) {
+                    return (self.Scenario().IterationsDone() / (runEndTime.diff(runStartTime, 'seconds'))).toFixed(2);
+                } else {
+                    return (self.Scenario().IterationsDone() / (currentTime().diff(runStartTime, 'seconds'))).toFixed(2);
+                }
             }
             return null;
         });
