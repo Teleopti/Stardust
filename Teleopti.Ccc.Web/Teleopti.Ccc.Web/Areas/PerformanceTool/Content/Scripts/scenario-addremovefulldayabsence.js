@@ -27,7 +27,7 @@ define([
                     ],
                     "DateRange": {
                         "From": "2013-05-29",
-                        "To": "2013-05-29"
+                        "To": "2013-05-31"
                     }
                 };
             };
@@ -36,15 +36,20 @@ define([
             this.IterationsDone = ko.observable(0);
             this.CommandsDone = ko.observable(false);
             this.RunDone = ko.observable(false);
-            
+
             this.ConfigurationChanged = function(configuration) {
-                self.IterationsExpected(5);
-                progressItemPersonScheduleDayReadModel.Target(10);
+                
+                var numberOfDays = moment(configuration.DateRange.To).diff(moment(configuration.DateRange.From), 'days') + 1;
+
+                var numberOfIterations = configuration.PersonIds.length;
+                
+                if (numberOfDays > 1) {
+                    numberOfIterations = numberOfIterations * numberOfDays;
+                }
+
+                self.IterationsExpected(numberOfIterations);
+                progressItemPersonScheduleDayReadModel.Target(numberOfIterations * 2);
             };
-
-
-
-
 
             var messageReceived = function() {
                 progressItemPersonScheduleDayReadModel.Increment();
@@ -62,6 +67,7 @@ define([
                 setTimeout(function() {
                     self.CommandsDone(true);
                 }, 2500);
+                
                 setTimeout(messageReceived, 1020);
                 setTimeout(messageReceived, 2770);
                 setTimeout(messageReceived, 3064);
@@ -72,6 +78,8 @@ define([
                 setTimeout(messageReceived, 8442);
                 setTimeout(messageReceived, 9974);
                 setTimeout(messageReceived, 10346);
+                setTimeout(messageReceived, 12000);
+                setTimeout(messageReceived, 14000);
             };
 
 
