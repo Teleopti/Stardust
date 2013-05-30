@@ -11,6 +11,9 @@ Scenario: Stay signed in after server restart
 	And I navigate to an application page
 	Then I should be signed in
 
+#http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=23674
+#ignoring here, but enabling in newer version, where it can be or is fixed.
+@ignore
 Scenario: Signed out when cookie expires while I browse the internet
 	Given I am viewing an application page
 	Then I should be signed in
