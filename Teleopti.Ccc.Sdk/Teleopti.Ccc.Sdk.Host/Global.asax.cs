@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         {
             var builder = new ContainerBuilder();
 
-				var mbCacheModule = new MbCacheModule(null);
+				var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();

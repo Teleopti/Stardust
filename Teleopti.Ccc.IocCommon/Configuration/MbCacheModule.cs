@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		public MbCacheModule(ILockObjectGenerator lockObjectGenerator)
 		{
-			Builder = new CacheBuilder(new LinFuProxyFactory());
-			Builder
-				.SetLockObjectGenerator(lockObjectGenerator)
-				.SetCacheKey(new TeleoptiCacheKey());
+			Builder = new CacheBuilder(new LinFuProxyFactory())
+							.SetCache(cache)
+							.SetCacheKey(new TeleoptiCacheKey())
+							.SetLockObjectGenerator(lockObjectGenerator);
 		}
 
 		public CacheBuilder Builder { get; private set; }

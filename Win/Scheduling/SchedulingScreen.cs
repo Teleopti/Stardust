@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -3696,11 +3697,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                                                                     (), maxCalculatMinMaxCacheEnries);
 			if (turnOfCache)
 			{
-				_workShiftWorkTime = new WorkShiftWorkTime(_container.Resolve<IRuleSetProjectionService>());
+				_container.Resolve<IMbCacheFactory>().DisableCache<IWorkShiftWorkTime>();
 			}
 			else
 			{
-				_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
 			}
 		}
 
