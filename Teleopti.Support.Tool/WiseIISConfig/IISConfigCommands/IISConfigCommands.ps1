@@ -117,8 +117,9 @@ function Get-UninstallRegPath {
             'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     
+    #check if any of them is acutally a folder path
     foreach ($path in $paths.GetEnumerator()) {
-		if (Test-path $path) {
+		if ((Test-Path -Path $path -PathType Container)) {
 			return $path    
 		}
 		else {
@@ -168,4 +169,31 @@ Function Uninstall-ByRegPath(){
 		throw
 		}
 	}
+}
+
+function UnZip-File(){
+    param(
+        [string]$zipfilename,
+        [string] $destination
+        )
+
+    if(test-path($zipfilename))
+    { 
+        $shellApplication = new-object -com shell.application
+        $zipPackage = $shellApplication.NameSpace($zipfilename)
+        $destinationFolder = $shellApplication.NameSpace($destination)
+        $destinationFolder.CopyHere($zipPackage.Items(),20)
+    }
+} 
+
+function Copy-ZippedMsi{
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
+    $destFolder='c:\temp'
+
+    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
+    
+    if (!(Test-Path "$destFolder\$zipFileName")) {
+        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
+    }
+    return @("$destFolder\$zipFileName")
 }

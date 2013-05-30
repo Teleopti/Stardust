@@ -41,17 +41,22 @@ Describe "Tear down previous test"{
         $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
         $isInstalled | Should Be $False
     }
-    
+}
+
+
+Describe "Setup test"{  
     It "Copy latest .zip-file from build server"{
         $zipFile = Copy-ZippedMsi
         Test-Path $zipFile | Should Be $True
     }
-}
 
-Describe "Check if msi uninstalled"{
-    It "Msi should be uninstalled"{
-        [bool] $isInstalled = ProductIsInstalled -MsiKey $CccServerMsiKey
-        $isInstalled | Should Be $False
+    It "unzip file"{
+        $zipFile = Copy-ZippedMsi
+        $zipFile = Get-Item $zipFile
+
+        $MsiFile = $zipFile.fullname -replace ".zip", ".exe"
+        UnZip-File –zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
+        
     }
 }
 
@@ -87,4 +92,4 @@ If ($InstallationAuthSetting -eq $None) {
 			$enabled | Should Be "True"
 		}
 	}
-	}
+}
