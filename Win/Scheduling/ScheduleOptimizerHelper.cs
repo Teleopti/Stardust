@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
 
-            var selectedPeriod = ScheduleViewBase.AllSelectedDates(unlockedSchedules);
+			var selectedPeriod = ScheduleViewBase.AllSelectedDates(allSelectedSchedules);
             var sorted = new List<DateOnly>(selectedPeriod);
             sorted.Sort();
             var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
@@ -299,6 +299,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_daysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 				_daysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+
+				//lock none selected days
+				foreach (var scheduleMatrixPro in matrixList)
+	            {
+					foreach (var effectivePeriodDay in scheduleMatrixPro.EffectivePeriodDays)
+		            {
+						if (!selectedPeriod.Contains(effectivePeriodDay.Day))
+			            {
+							scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(effectivePeriodDay.Day, effectivePeriodDay.Day));
+			            }
+		            }
+	            }
+				unlockedSchedules = (from scheduleMatrixPro in matrixList
+										 from scheduleDayPro in scheduleMatrixPro.UnlockedDays
+										 select scheduleDayPro.DaySchedulePart()).ToList();
+
+				if (!unlockedSchedules.Any())
+					return;
 
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
 					CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules, new DateOnlyPeriod(selectedPeriod.First(), selectedPeriod.Last()));
