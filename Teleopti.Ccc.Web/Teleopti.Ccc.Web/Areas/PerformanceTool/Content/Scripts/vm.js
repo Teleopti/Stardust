@@ -50,7 +50,7 @@ define([
                 commandsEndTime = moment();
                 commandsDoneSub.dispose();
             });
-
+            
             var runDoneSub = scenario.RunDone.subscribe(function() {
                 runEndTime = moment();
                 runDoneSub.dispose();
@@ -76,9 +76,23 @@ define([
             return null;
         });
         
-        this.TotalTimeToSendCommands = ko.observable();
-        this.ScenariosPerSecond = ko.observable();
-
+        this.ScenariosPerSecond = ko.computed(function () {
+            if (self.Scenario() && self.Scenario().IterationsDone()) {
+                return (self.Scenario().IterationsDone() / (currentTime().diff(runStartTime, 'seconds'))).toFixed(2);
+            }
+            return null;
+        });
+        
+        this.TotalTimeToSendCommands = ko.computed(function () {
+            var clock = currentTime();
+            if (runStartTime)
+                if (commandsEndTime)
+                    return formatTimeDiff(runStartTime, commandsEndTime);
+                else
+                    return formatTimeDiff(runStartTime, clock);
+            return null;
+        });
+       
         setInterval(function() {
             currentTime(moment());
         }, 100);
