@@ -60,33 +60,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyAllDaysAreLockedWhenCreated()
+        public void VerifyAllDaysAreUnLockedWhenCreated()
         {
-            Assert.AreEqual(0, _target.UnlockedDays.Count);
-        }
-
-        [Test]
-        public void VerifyPeriodCouldBeUnlocked()
-        {
-            _target.UnlockPeriod(_period);
             Assert.AreEqual(7, _target.UnlockedDays.Count);
-        }
-
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyUnlockingOutsidePeriod()
-        {
-            DateOnlyPeriod partlyOutsidePeriod = new DateOnlyPeriod(2010, 1, 9, 2010, 1, 15);
-            _target.UnlockPeriod(partlyOutsidePeriod);
-        }
-
-        [Test]
-        public void VerifyPeriodCouldBeLocked()
-        {
-            _target.UnlockPeriod(_period);
-            Assert.AreEqual(7, _target.UnlockedDays.Count);
-            DateOnlyPeriod twoDayPeriod = new DateOnlyPeriod(2010, 1, 10, 2010, 1, 11);
-            _target.LockPeriod(twoDayPeriod);
-            Assert.AreEqual(5, _target.UnlockedDays.Count);
         }
 
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
