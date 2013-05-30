@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			registerAopComponents(builder);
 
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
