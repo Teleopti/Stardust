@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MbCache.Configuration;
 using MbCache.Core;
 using NUnit.Framework;
 using Autofac;
