@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
             NormalPasteBehavior normalBehavior = new NormalPasteBehavior();
 
             IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
+	        var personAssignment = mockRep.StrictMock<IPersonAssignment>();
 
             using (GridControl gridControl = new GridControl())
             {
@@ -192,6 +193,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(null);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
+	                Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
+	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
                 }
 
                 using (mockRep.Playback())
