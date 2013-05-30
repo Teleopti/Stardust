@@ -42,11 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (schedulingOptions.UseTeamBlockSameShift)
 			{
-				var matrixes = new List<IScheduleMatrixPro>();
-				if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling)
-					matrixes.Add(matrixList.First());
-				else matrixes.AddRange(matrixList);
-				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixes);
+				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixList);
 				if (sameShiftRestriction == null) return null;
 				restriction = restriction.Combine(sameShiftRestriction);
 			}

@@ -128,6 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -153,7 +156,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				runOneMatrixMocks(false, false, false);
-				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);			
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -195,6 +200,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -229,6 +237,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

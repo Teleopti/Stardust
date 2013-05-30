@@ -133,9 +133,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1, scheduleMatrixPro2 };
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1 };
 			using (_mocks.Record())
 			{
 				Expect.Call(scheduleMatrixPro1.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);

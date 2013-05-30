@@ -187,6 +187,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 
                 expectCallForChecker(scheduleDay);
+
+				Expect.Call(scheduleDay.IsScheduled()).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -199,15 +201,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    {
 	        IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+		    var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
 
-            Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-	        
-	        Expect.Call(_matrix1.SchedulePeriod).Return(virtualSchedulePeriod);
-	        
-	        Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
-	        Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
-	        Expect.Call(_matrix1.Person).Return(_person);
-	        Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
+			Expect.Call(_matrix1.SchedulePeriod).Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
+
+			Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+		    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
+			Expect.Call(_matrix1.Person).Return(_person).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
 	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -247,6 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 
                 expectCallForChecker(scheduleDay);
+				Expect.Call(scheduleDay.IsScheduled()).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -288,6 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(null);
 
                 expectCallForChecker(scheduleDay);
+				Expect.Call(scheduleDay.IsScheduled()).Return(true);
             }
             using (_mocks.Playback())
             {
@@ -325,10 +330,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
                 expectCallForChecker(scheduleDay);
+				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
+				Assert.IsFalse(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
 				                                            new List<IPerson>()));
 			}
 		}
@@ -405,6 +411,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
 
                 expectCallForChecker(scheduleDay);
+				Expect.Call(scheduleDay.IsScheduled()).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -489,10 +496,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>{_person}));
 
                 expectCallForChecker(scheduleDay);
+				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
+				Assert.IsFalse(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
 				                                            new List<IPerson>()));
 			}
 		}
