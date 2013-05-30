@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
+using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Messaging.SignalR;
 using log4net;
