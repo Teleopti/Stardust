@@ -48,10 +48,6 @@ function IISAdmin {
 	}
 }
 
-function Get-Banan {
-return "banan"
-}
-
 function Get-Authentication {
     param(
         $path, #TeleoptiCCC/SDK
@@ -67,41 +63,109 @@ function Get-defaultDocument{
 	Get-WebConfigurationProperty -Filter //defaultDocument/files/add -PSPath 'IIS:\Sites\Default Web Site' -Name value
 }
 
-function Uninstall{
-     
-     $exists64 = CheckRegistryUninstall64 
-     $exists32=  CheckRegistryUninstall32  
-        
-     if($exists64 -eq 0 ) {
-    	 $Args = @("/X{52613B22-2102-4BFB-AAFB-EF420F3A24B5}","/qn", "/L", "uninstall-server.log")
-         & MsiExec.exe $Args | out-null
-         return $LastExitCode
-        }
-    elseif($exists32 -eq 0 ){ 
-         $Args = @("/X{52613B22-2102-4BFB-AAFB-EF420F3A24B5}","/qn", "/L", "uninstall-server.log")
-         & MsiExec.exe $Args | out-null
-         return $LastExitCode
-        }
-    else{    
-        return 0
+
+function Test-RegistryKeyValue
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]
+        # The path to the registry key
+        $Path,
+
+        [Parameter(Mandatory=$true)]
+        [string]
+        # The name of the value
+        $Name
+    )
+
+    if( -not (Test-Path -Path $Path -PathType Container) )
+    {
+        return $false
     }
-       
+
+    $properties = Get-ItemProperty -Path $Path 
+    if( -not $properties )
+    {
+        return $false
+    }
+
+    $member = Get-Member -InputObject $properties -Name $Name
+    if( $member )
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+
 }
 
-function CheckRegistryUninstall64{
-#reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
+function Get-UninstallRegPath {
+    param(
+        $MsiKey
+    )
+
+    # paths: x86 and x64 registry keys are different
+    if ([IntPtr]::Size -eq 4) {
+        $paths = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
+    }
+    else {
+        $paths = @(
+            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
+            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
+    }
     
-    & reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5}" /v DisplayName | out-null
-    return $LastExitCode #0=found, 1=not found
-
+    foreach ($path in $paths.GetEnumerator()) {
+		if (Test-path $path) {
+			return $path    
+		}
+		else {
+			return null
+		}
+	}
 }
 
-function CheckRegistryUninstall32{
-#reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5} /v DisplayName
-    
-    & reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{52613B22-2102-4BFB-AAFB-EF420F3A24B5}" /v DisplayName | out-null
-    return $LastExitCode #0=found, 1=not found
+Function Uninstall-ByRegPath(){
+    [CmdletBinding()]
+    Param (
+    [Parameter(Position=1,Mandatory=$true, ValueFromPipelineByPropertyName=$true,HelpMessage="Regkey to the Application to be uninstalled")] [Alias("a")] [string]$path
+    )
+    Process {
+		$Error.Clear()
+		try {
 
+			$appKey = Get-Item -Path $path
+
+			#Write-Host $appKey.gettype()
+			if ($appKey -is [Microsoft.Win32.RegistryKey]) # If it is a system.object or something else this will fail.
+			{
+				$UninstallString = $appKey.GetValue("UninstallString")
+			}
+			else
+			{ #The application was not found.
+				Write-Host "The application $appName was not found so no uninstallation was performed."
+			}
+			
+			#check to make sure this is an MSI based application so we don't get unexpected behavior
+			if ($UninstallString.StartsWith("msiexec.exe","CurrentCultureIgnoreCase"))
+			{
+				$Arguments = @()
+				$Arguments += "/Q"
+				$Arguments += "/X"
+				$Arguments += $UninstallString.substring($UninstallString.indexof("{"),$UninstallString.Length - $UninstallString.indexof("{"))
+				$ExitCode = (Start-Process -FilePath "msiexec.exe" -ArgumentList $Arguments -Wait -Passthru).ExitCode
+				if ($ExitCode -ne 0)
+				{
+				throw "The MSI failed to get uninstalled. MSIEXEC.exe returned an exit code of $ExitCode."
+				} 
+			}
+		}
+
+		catch [Exception] {
+		$EMsg = Write-Host  "Failed in WinUtils::uninstall-application : " + $_.Exception 
+		throw
+		}
+	}
 }
-
-
