@@ -84,12 +84,6 @@ namespace Teleopti.Interfaces.Domain
         IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary { get; }
 
         /// <summary>
-        /// Unlock a period of days.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        void UnlockPeriod(DateOnlyPeriod period);
-
-        /// <summary>
         /// Locks the given dateonly period.
         /// </summary>
         /// <param name="period">The period.</param>
