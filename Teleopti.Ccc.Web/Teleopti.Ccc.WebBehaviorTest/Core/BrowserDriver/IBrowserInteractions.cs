@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		public static void AssertVisibleUsingJQuery(this IBrowserInteractions interactions, string selector)
 		{
-			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selector);
+			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selector.JSEncode());
 			interactions.AssertJavascriptResultContains(js, "visible");
 		}
 
@@ -55,17 +55,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			var optionSelector = string.Format(selectSelector + " option:contains('{0}')", text);
 			interactions.AssertExists(selectSelector);
 			interactions.AssertExists(optionSelector);
-			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector, optionSelector);
-			interactions.Javascript("$(\"{0}\").change();", selectSelector);
+			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector.JSEncode(), optionSelector.JSEncode());
+			interactions.Javascript("$(\"{0}\").change();", selectSelector.JSEncode());
 		}
 
 		public static void TypeTextIntoInputTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
 		{
 			selector = selector + ":enabled";
 			interactions.AssertExists(selector);
-			interactions.Javascript("$(\"{0}\").val(\"{1}\");", selector, text);
-			interactions.Javascript("$(\"{0}\").change();", selector);
+			interactions.Javascript("$(\"{0}\").val(\"{1}\");", selector.JSEncode(), text.JSEncode());
+			interactions.Javascript("$(\"{0}\").change();", selector.JSEncode());
 		}
 
+		private static string JSEncode(this string value)
+		{
+			return System.Web.HttpUtility.JavaScriptStringEncode(value);
+		}
 	}
 }
