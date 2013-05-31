@@ -10,8 +10,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -205,6 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), true);
 
             _target.SelectedBudgetGroup.Should().Be.InstanceOf<EmptyBudgetGroup>();
+	        _target.SelectedBudgetGroup.Name.Should().Be.EqualTo(Resources.Empty);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
