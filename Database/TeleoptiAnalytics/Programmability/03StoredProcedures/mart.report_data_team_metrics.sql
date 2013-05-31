@@ -41,7 +41,8 @@ SET NOCOUNT ON;
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
-	acd_login_id int
+	acd_login_id int,
+	person_code uniqueidentifier
 	)
 
 CREATE TABLE  #rights_agents
@@ -102,10 +103,11 @@ SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_c
 --a) agent allowed = #rights_agents
 --b) selected = #agents
 INSERT INTO #person_acd_subSP
-SELECT a.right_id, acd.acd_login_id
+SELECT a.right_id, acd.acd_login_id, person_code
 FROM #rights_agents a
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
+LEFT JOIN [mart].[dim_person] p ON p.person_id = acd.person_id
 
 --Get needed dates and intervals from bridge time zone into temp table
 INSERT INTO #bridge_time_zone
