@@ -44,25 +44,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			DeleteScheduleDataAsAnotherUser();
 
 			ScheduleDictionary.TakeSnapshot();
-			ModifyScheduleData();
+			modifyScheduleData();
 
 			var result = TryPersistScheduleScreen();
 			Assert.That(result.Saved, Is.False);
 			Assert.That(result.ScheduleDictionaryConflicts.Count(), Is.EqualTo(1));
 		}
 
-		private void ModifyScheduleData()
+		private void modifyScheduleData()
 		{
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-#pragma warning disable 612,618
-			var ms = personAssignment.ToMainShift();
-#pragma warning restore 612,618
-			var activity = ms.LayerCollection[0].Payload;
-			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-			ms.LayerCollection.Add(layer);
-			personAssignment.SetMainShift(ms);
+			var msLayers = new List<IMainShiftActivityLayerNew>(personAssignment.MainShiftActivityLayers);
+			msLayers.Add(new MainShiftActivityLayerNew(msLayers.First().Payload, FirstDayDateTimePeriod));
+			personAssignment.SetMainShiftLayers(msLayers, personAssignment.ShiftCategory);
 		
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
