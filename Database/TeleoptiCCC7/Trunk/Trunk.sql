@@ -258,3 +258,25 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+------------------
+-- Name: David
+-- Date: 2013-05-31
+-- Desc: #23740 - rename PKs to match table name
+-------------------------
+DECLARE @PKName nvarchar(1000)
+SELECT @PKName= '[Auditing].[Security].['+name+']' FROM sys.indexes
+WHERE OBJECT_NAME(object_id) = 'Security'
+AND index_id = 1
+AND is_primary_key = 1
+SELECT @PKName
+EXEC sp_rename @PKName, N'PK_Security', N'INDEX'
+GO
+DECLARE @PKName nvarchar(1000)
+SELECT @PKName= '[ReadModel].[ScheduleDay].['+name+']' FROM sys.indexes
+WHERE OBJECT_NAME(object_id) = 'ScheduleDay'
+AND is_primary_key = 1
+SELECT @PKName
+EXEC sp_rename @PKName, N'PK_ScheduleDay', N'INDEX'
+GO
+
