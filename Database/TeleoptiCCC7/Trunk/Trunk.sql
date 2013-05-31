@@ -174,6 +174,22 @@ GO
 ----------------  
 --Name: David
 --Date: 2013-05-31
+--Desc: #23675 - Add clustered index
+-----------------
+ALTER TABLE [mart].[LastUpdatedPerStep]
+ALTER COLUMN [BusinessUnit] [uniqueidentifier] NOT NULL
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[LastUpdatedPerStep]') AND name = N'PK_LastUpdatedPerStep')
+ALTER TABLE [mart].[LastUpdatedPerStep] ADD  CONSTRAINT [PK_LastUpdatedPerStep] PRIMARY KEY CLUSTERED 
+(
+	[StepName] ASC,
+	[BusinessUnit] ASC
+)
+GO
+
+----------------  
+--Name: David
+--Date: 2013-05-31
 --Desc: #23675 - Force ETL permission to run once
 -----------------
 DECLARE @isoDate datetime
