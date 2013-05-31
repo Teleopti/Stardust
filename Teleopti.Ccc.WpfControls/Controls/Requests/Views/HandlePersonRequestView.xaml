@@ -79,7 +79,7 @@
 		<Controls:DataGrid.Columns>
 			<Controls:DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Width="27"
-                                             CanUserReorder="False"
+                                             SortMemberPath="Headers"
                                              x:Name="Headers">
 				<Controls:DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>

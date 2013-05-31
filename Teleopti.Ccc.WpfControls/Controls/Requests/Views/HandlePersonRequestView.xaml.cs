@@ -101,11 +101,14 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
 		    var dependencyObject = (DependencyObject) e.OriginalSource;
 		    while (dependencyObject != null && !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader))
 			    dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-			if (dependencyObject == null || !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader) || !(sender is DataGrid)) return;
+		    if (dependencyObject == null 
+				|| !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader) 
+				|| !(sender is DataGrid)) return;
 		    if (requestGrid.Items.IsEmpty)
 			    return;
 
 			var header = dependencyObject as Microsoft.Windows.Controls.Primitives.DataGridColumnHeader;
+			if (header.Column.SortMemberPath == "Headers") return;
 		    var direction = ListSortDirection.Ascending;
 		    if (_sortDirections.Any(s => s.PropertyName == header.Column.SortMemberPath))
 		    {
