@@ -19,7 +19,9 @@ define([
         this.Configuration = ko.observable();
         
         this.Scenario.subscribe(function () {
-            self.Configuration(JSON.stringify(self.Scenario().LoadDefaultConfiguration(), null, 4));
+            self.Scenario().LoadDefaultConfiguration(function (data) {
+                self.Configuration(JSON.stringify(data, null, 4));
+            });
         });
 
         this.RunButtonEnabled = ko.observable();

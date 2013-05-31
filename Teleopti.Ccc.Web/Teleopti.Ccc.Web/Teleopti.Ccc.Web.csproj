@@ -211,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProvider.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationController.cs" />
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Core\IOpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Controllers\OpenIdController.cs" />
