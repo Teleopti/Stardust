@@ -16,15 +16,6 @@
 .request-not-selected {
 	background: #f8f8f8;
 }
-.request-list 
-{
-    padding-top: 1.5em;
-	width: 483px;
-}
-.rtl .request-list
-{
-    margin-right: 483px;
-}
 .request-body-inner .request-item
 {
 	padding-top: 0.5em;

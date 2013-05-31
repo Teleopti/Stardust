@@ -126,8 +126,8 @@ Scenario: Can not edit approved absence requests
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should see the detail form for request at position '1' in the list
-	And I should not be able to input values for absence request for request at position '1' in the list
-	And I should not see a save button
+	And I should not be able to input values for absence request at position '1' in the list
+	And I should not see a save button for absence request at position '1' in the list
 
 Scenario: Can not edit denied absence requests
 	Given I am an agent
@@ -135,20 +135,20 @@ Scenario: Can not edit denied absence requests
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should see the detail form for request at position '1' in the list
-	And I should not be able to input values for absence request for request at position '1' in the list
-	And I should not see a save button
+	And I should not be able to input values for absence request at position '1' in the list
+	And I should not see a save button for absence request at position '1' in the list
 
 Scenario: Can not delete approved absence request
 	Given I am an agent
 	And I have an approved absence request
 	When I am viewing requests
-	Then I should not see a delete button
+	Then I should not see a delete button for request at position '1' in the list
 
 Scenario: Can not delete denied absence request
 	Given I am an agent
 	And I have a denied absence request
 	When I am viewing requests
-	Then I should not see a delete button
+	Then I should not see a delete button for request at position '1' in the list
 	
 Scenario: Can see why absence request was denied
 	Given I am an agent
@@ -156,12 +156,4 @@ Scenario: Can see why absence request was denied
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should see the detail form for request at position '1' in the list
-	And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'
-
-Scenario: Clear deny reason when adding new absence request
-	Given I am an agent
-	And I have a denied absence request beacuse of missing workflow control set
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	When I click to add a new absence request
-	Then I should not see the deny reason
+	And I should see that request at position '1' in the list was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'

@@ -166,6 +166,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.DateTo = ko.observable(moment().startOf('day'));
     self.TimeFromInternal = ko.observable($('#Request-detail-default-start-time').text());
     self.TimeToInternal = ko.observable($('#Request-detail-default-end-time').text());
+    self.DateFormat = ko.observable($('#Request-detail-datepicker-format').val().toUpperCase());
     self.TimeFrom = ko.computed({
         read: function() {
             if (self.IsFullDay()) {
