@@ -14,6 +14,10 @@ namespace Teleopti.Ccc.Web.Broker.Backplane
 		protected void Application_Start(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
+		    
+            var storage = new IdStorage();
+            storage.OnStart();
+
 			RouteTable.Routes.MapConnection<SignalRBackplane>("backplane", "backplane");
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
@@ -56,7 +60,8 @@ namespace Teleopti.Ccc.Web.Broker.Backplane
 
 		protected void Application_End(object sender, EventArgs e)
 		{
-
+		    var storage = new IdStorage();
+            storage.OnStop();
 		}
 	}
 }
