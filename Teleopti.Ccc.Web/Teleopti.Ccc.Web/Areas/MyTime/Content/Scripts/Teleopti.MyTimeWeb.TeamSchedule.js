@@ -69,7 +69,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 					{
 						data: data,
 						containerCssClass: containerCss,
-						dropdownCssClass: "team-select2-dropdown"
+						dropdownCssClass: "team-select2-dropdown",
+						formatResult: function (item) { return item.text; },
+						formatSelection: function (item) { return item.text; }
 					}
 				);
 

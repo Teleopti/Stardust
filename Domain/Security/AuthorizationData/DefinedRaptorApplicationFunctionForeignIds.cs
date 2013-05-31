@@ -90,6 +90,7 @@
         // Intraday
         public const string IntradayRealTimeAdherence = "0034";
         public const string IntradayEarlyWarning = "0035";
+		public const string IntradayReForecasting = "0085";
 
         // Performance Manager
         public const string CreatePerformanceManagerReport = "0041";

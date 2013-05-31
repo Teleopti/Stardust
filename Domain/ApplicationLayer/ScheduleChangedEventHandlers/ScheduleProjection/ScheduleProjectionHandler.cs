@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
@@ -24,11 +24,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			createReadModel(@event);
 		}
 
+		public void Handle(ProjectionChangedEventForScheduleProjection @event)
+		{
+			createReadModel(@event);
+		}
+
 		private void createReadModel(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
-			var nearestLayerToNow = new ProjectionChangedEventLayer();
-			nearestLayerToNow.StartDateTime = DateTime.MaxValue; 
+			var nearestLayerToNow = new ProjectionChangedEventLayer
+				{
+					StartDateTime = DateTime.MaxValue
+				};
+
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var date = new DateOnly(scheduleDay.Date);
@@ -40,32 +48,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				foreach (var layer in scheduleDay.Layers)
 				{
-						if (date == DateTime.UtcNow.Date &&
-						    ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
-						      layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
-						     ||
-						     (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
-						      layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime())))
-							nearestLayerToNow = layer;
+					if (isCurrentLayerCloser(date, layer, nearestLayerToNow))
+						nearestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
-
 				}
 			}
-			if (nearestLayerToNow.StartDateTime != DateTime.MaxValue)
-				_serviceBus.Publish(new UpdatedScheduleDay
-					{
-						Datasource = @event.Datasource,
-						BusinessUnitId = @event.BusinessUnitId,
-						PersonId = @event.PersonId,
-						ActivityStartDateTime = nearestLayerToNow.StartDateTime,
-						ActivityEndDateTime = nearestLayerToNow.EndDateTime,
-						Timestamp = DateTime.UtcNow
-					});
+			
+			if (@event.ScheduleDays.All(x => x.Date != DateTime.UtcNow.Date))
+				return;
+
+			if (!haveChanged(nearestLayerToNow))
+				layersHaveBeenRemoved(nearestLayerToNow);
+
+			_serviceBus.Publish(new UpdatedScheduleDay
+				{
+					Datasource = @event.Datasource,
+					BusinessUnitId = @event.BusinessUnitId,
+					PersonId = @event.PersonId,
+					ActivityStartDateTime = nearestLayerToNow.StartDateTime,
+					ActivityEndDateTime = nearestLayerToNow.EndDateTime,
+					Timestamp = DateTime.UtcNow
+				});
 		}
 
-		public void Handle(ProjectionChangedEventForScheduleProjection @event)
+		private static void layersHaveBeenRemoved(ProjectionChangedEventLayer nearestLayerToNow)
 		{
-			createReadModel(@event);
+			nearestLayerToNow.StartDateTime = DateTime.UtcNow;
+			nearestLayerToNow.EndDateTime = DateTime.UtcNow.AddDays(1);
+		}
+
+		private static bool haveChanged(ProjectionChangedEventLayer nearestLayerToNow)
+		{
+			return nearestLayerToNow.StartDateTime != DateTime.MaxValue;
+		}
+
+		private static bool isCurrentLayerCloser(DateOnly date, ProjectionChangedEventLayer layer, ProjectionChangedEventLayer nearestLayerToNow)
+		{
+			return date == DateTime.UtcNow.Date &&
+			       ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
+			         layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
+			        ||
+			        (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
+			         layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime()));
 		}
 	}
 }
