@@ -2,6 +2,13 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[repo
 DROP PROCEDURE [mart].[report_data_agent_schedule_result]
 GO
 
+/*
+exec mart.report_data_agent_schedule_result @date_from='2013-05-01 00:00:00',@date_to='2013-05-31 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',
+@agent_set=N'9f0311d3-b4ca-4481-a344-a00b00a2d494,AF4C77D7-7782-4E8D-A517-A00B009EC05B'
+,@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
+
+2277 - Abdulaziz-AlLagman - AF4C77D7-7782-4E8D-A517-A00B009EC05B
+*/
 --exec [mart].[report_data_agent_schedule_result] @date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=12,@language_id=1053
 --exec [mart].[report_data_agent_schedule_result] @date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1053,@business_unit_code='5BC41544-6BF8-444E-A34D-A01A0128A204'
 --exec [mart].[mart.report_data_team_metrics_new] @date_from='2010-12-13 00:00:00',@date_to='2010-12-13 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=12,@language_id=1053
@@ -57,9 +64,10 @@ SET NOCOUNT ON
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
-	acd_login_id int
+	acd_login_id int,
+	person_code uniqueidentifier
 	)
-
+	
 CREATE TABLE  #rights_agents
 	(
 	right_id int
@@ -161,12 +169,13 @@ ELSE
 --a) allowed to see = #rights_agents
 --b) selected		= #agents
 INSERT INTO #person_acd_subSP
-SELECT b.id, acd.acd_login_id
+SELECT b.id, acd.acd_login_id, person_code
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = b.id
+LEFT JOIN [mart].[dim_person] p ON p.person_id = acd.person_id
 
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]

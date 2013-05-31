@@ -43,13 +43,6 @@ namespace Teleopti.Interfaces.Domain
         void AddPersonalShift(IPersonalShift personalShift);
 
         /// <summary>
-        /// Inserts  a personal shift.
-        /// </summary>
-        /// <param name="personalShift"></param>
-        /// <param name="index"></param>
-        void InsertPersonalShift(IPersonalShift personalShift, int index);
-
-        /// <summary>
         /// Clears the personal shift.
         /// </summary>
         void ClearPersonalShift();

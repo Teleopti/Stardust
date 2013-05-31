@@ -347,13 +347,12 @@ namespace Teleopti.Ccc.WinCode.Common
 
         protected void TriggerShiftEditorUpdate()
         {
-	        hackToUpdateUnderlyingPersonAssignment();
 	        new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
         }
 
 	    private void hackToUpdateUnderlyingPersonAssignment()
 	    {
-		    var mainShiftLayer = Layer as ILayer<IActivity>;
+		    var mainShiftLayer = Layer as IMainShiftActivityLayer;
 		    if (mainShiftLayer != null)
 		    {
 			    var ms = (IMainShift) mainShiftLayer.Parent;

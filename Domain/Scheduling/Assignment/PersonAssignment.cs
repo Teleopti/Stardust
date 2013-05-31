@@ -216,11 +216,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InsertPersonalShiftInternal(personalShift, _personalShiftCollection.Count);
 		}
 
-		public virtual void InsertPersonalShift(IPersonalShift personalShift, int index)
-		{
-			InsertPersonalShiftInternal(personalShift, index);
-		}
-
 		private void InsertPersonalShiftInternal(IPersonalShift personalShift, int index)
 		{
 			InParameter.NotNull("personalShift", personalShift);

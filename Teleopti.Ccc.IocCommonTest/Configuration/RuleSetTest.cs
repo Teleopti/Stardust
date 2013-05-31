@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MbCache.Configuration;
 using MbCache.Core;
 using NUnit.Framework;
 using Autofac;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void VerifyProjectionServiceIsCached()
 		{
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			using (var container = containerBuilder.Build())
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ProjectionServiceIsCachedPerScope()
 		{
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldCacheWorkShiftWorkTime()
 		{
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
 		{
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldNotCacheRuleSetWithNoId()
 		{
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(false);
