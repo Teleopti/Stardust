@@ -35,7 +35,13 @@ define([
             }
             
             var scenario = self.Scenario();
-            scenario.ConfigurationChanged(configuration);
+            try {
+                scenario.ConfigurationChanged(configuration);
+            } catch (e) {
+                self.RunButtonEnabled(false);
+                return e;
+            }
+            
             self.RunButtonEnabled(true);
             return "Run " + scenario.IterationsExpected() + " scenarios";
         });
@@ -74,7 +80,8 @@ define([
             var startTime = runInfo.StartTime();
             var endTime = runInfo.EndTime() || currentTime();
             if (iterations) {
-                return (iterations / (endTime.diff(startTime, 'seconds'))).toFixed(2);
+                var seconds = endTime.diff(startTime, 'seconds');
+                return (iterations / seconds).toFixed(2);
             }
             return null;
         });

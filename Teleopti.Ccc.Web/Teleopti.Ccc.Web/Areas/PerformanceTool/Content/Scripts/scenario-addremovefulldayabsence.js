@@ -54,20 +54,41 @@ define([
                 });
             };
 
+            var iterations = [];
+            
             this.IterationsExpected = ko.observable();
 
             this.ConfigurationChanged = function(configuration) {
-                
-                var numberOfDays = moment(configuration.DateRange.To).diff(moment(configuration.DateRange.From), 'days') + 1;
+                var startDate = moment(configuration.DateRange.From);
+                var endDate = moment(configuration.DateRange.To);
+                var numberOfDays = endDate.diff(startDate, 'days') + 1;
+                var personIds = configuration.PersonIds;
 
-                var numberOfIterations = configuration.PersonIds.length;
+                iterations = [];
                 
-                if (numberOfDays > 1) {
-                    numberOfIterations = numberOfIterations * numberOfDays;
+                for (var i = 0; i < personIds.length; i++) {
+                    var personId = personIds[i];
+                    var date = startDate.clone();
+                    for (var j = 0; j < numberOfDays; j++) {
+                        date.add('days', j);
+
+                        iterations.push({
+                            absenceId: configuration.AbsenceId,
+                            personId: personId,
+                            date: date.format()
+                        });
+
+                        if (iterations.length > 2000) {
+                            self.IterationsExpected(undefined);
+                            progressItemPersonScheduleDayReadModel.Target(undefined);
+                            throw "Too many combinations";
+                        }
+
+                    }
                 }
-
-                self.IterationsExpected(numberOfIterations);
-                progressItemPersonScheduleDayReadModel.Target(numberOfIterations * 2);
+                
+                self.IterationsExpected(iterations.length);
+                progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
 
 
@@ -90,8 +111,13 @@ define([
                     }
                 }
             };
-            
+
             this.Run = function () {
+                for (var i = 0; i < iterations.length; i++) {
+                    var iteration = iterations[i];
+                    //..
+                }
+
                 progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
                 
