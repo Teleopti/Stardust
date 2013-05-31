@@ -401,9 +401,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //Load
             IPersonAssignment loaded = _rep.Load(ass.Id.Value);
-#pragma warning disable 612,618
-            bool mainShiftExists = (loaded.ToMainShift() != null);
-#pragma warning restore 612,618
+            bool mainShiftExists = (loaded.ShiftCategory != null);
             Assert.IsTrue(mainShiftExists); //ensures factory method creates mainshift
             int noOfPersonalShift = loaded.PersonalShiftCollection.Count;
             Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts
