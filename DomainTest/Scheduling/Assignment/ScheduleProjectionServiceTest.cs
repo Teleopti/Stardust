@@ -104,12 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var resWrapper = new List<IVisualLayer>(target.CreateProjection());
 			Assert.AreEqual(5, resWrapper.Count);
 			VisualLayer layer = (VisualLayer)resWrapper[0];
-#pragma warning disable 612,618
-			ILayer<IActivity> actLayer1 = ass1.ToMainShift().LayerCollection[0];
-#pragma warning restore 612,618
-#pragma warning disable 612,618
-			ILayer<IActivity> actLayer2 = ass2.ToMainShift().LayerCollection[0];
-#pragma warning restore 612,618
+			var actLayer1 = ass1.MainShiftActivityLayers.First();
+			var actLayer2 = ass2.MainShiftActivityLayers.First();
 
 			Assert.AreEqual("60", layer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
 			Assert.AreEqual(createPeriod(2, 3), layer.Period);

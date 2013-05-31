@@ -714,16 +714,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setShiftCategoryJusticeValues(low, 1);
 			IShiftCategory high = ShiftCategoryFactory.CreateShiftCategory("High");
 			setShiftCategoryJusticeValues(high, 5);
-			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 2,
-																											  2000, 1, 3));
-			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 5,
-																											  2000, 1, 6));
-#pragma warning disable 612,618
-			ass1.ToMainShift().ShiftCategory = low;
-			ass2.ToMainShift().ShiftCategory = high;
-#pragma warning restore 612,618
+
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("d"), _person,
+			                                                                 new DateTimePeriod(2000, 1, 2, 2000, 1, 3), low,
+			                                                                 _scenario);
 
 			((ScheduleRange)dic1[_person]).Add(ass1);
 

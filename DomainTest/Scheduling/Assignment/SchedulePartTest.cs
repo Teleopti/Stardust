@@ -1262,9 +1262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the main shift is removed
 			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-#pragma warning disable 612,618
-			Assert.IsNull(destination.PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+			Assert.IsNull(destination.PersonAssignmentCollection()[0].ShiftCategory);
 
 			//merge
 			destination.Merge(destination, true);
@@ -1272,9 +1270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the day off is removed
 			Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-#pragma warning disable 612,618
-			Assert.IsNull(destination.PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+			Assert.IsNull(destination.PersonAssignmentCollection()[0].ShiftCategory);
 
 			//merge
 			destination.Merge(destination, true);
@@ -1707,9 +1703,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//mainshift + personal shift
 			source.Add(personAssignmentSource);
 			source.DeleteMainShift(source);
-#pragma warning disable 612,618
-			Assert.IsNull(source.PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+			Assert.IsNull(source.PersonAssignmentCollection()[0].ShiftCategory);
 			Assert.AreEqual(1, source.PersonAssignmentCollection()[0].PersonalShiftCollection.Count);
 
 			//mainshift + overtime shift
@@ -1948,9 +1942,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if (options.DayOff && part.PersonDayOffCollection().Count > 0)
 				retValue = false;
 
-#pragma warning disable 612,618
-			if (options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ToMainShift() != null)
-#pragma warning restore 612,618
+			if (options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ShiftCategory != null)
 				retValue = false;
 
 			if (options.Overtime && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count > 0)
@@ -1991,9 +1983,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if (!options.DayOff && part.PersonDayOffCollection().Count == 0)
 				retValue = false;
 
-#pragma warning disable 612,618
-			if ((!options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ToMainShift() == null) ||
-#pragma warning restore 612,618
+			if ((!options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ShiftCategory == null) ||
 				(!options.MainShift && part.PersonAssignmentCollection().Count == 0))
 				retValue = false;
 

@@ -1602,17 +1602,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                         PersonAssignmentCollection());
 
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-#pragma warning disable 612,618
-					                                     PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
 
                     //should do nothing
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-#pragma warning disable 612,618
-					                                     PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
 
                     container.Redo();
 					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
