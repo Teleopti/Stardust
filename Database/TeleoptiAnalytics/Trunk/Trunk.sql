@@ -118,12 +118,11 @@ GO
 CREATE TABLE [stage].[stg_schedule_updated_ShiftStartDateUTC](
 	[person_id] [int] NOT NULL,
 	[shift_startdate_id] [int] NOT NULL,
-	[interval_id] [int] NOT NULL,
  CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
 (
 	[shift_startdate_id] ASC,
-	[interval_id] ASC,
 	[person_id] ASC
 )
 )
 GO
+
