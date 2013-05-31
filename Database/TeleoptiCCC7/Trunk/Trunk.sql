@@ -169,3 +169,25 @@ IF (SELECT COUNT(1) FROM dbo.ActivityExtenderWrongOrderIndex WHERE Batch=@Batch)
 PRINT 'Shifts have been updated'
 
 SET NOCOUNT OFF
+GO
+
+----------------  
+--Name: David
+--Date: 2013-05-31
+--Desc: #23675 - Force ETL permission to run once
+-----------------
+DECLARE @isoDate datetime
+SET @isoDate = '2001-01-01T00:00:00.000'
+
+INSERT INTO [mart].[LastUpdatedPerStep]
+SELECT
+	[StepName] =  'Permissions',
+	[BusinessUnit] = bu.Id,
+	[Date] = @isoDate
+FROM  dbo.BusinessUnit bu
+WHERE NOT EXISTS (
+			SELECT *
+			FROM [mart].[LastUpdatedPerStep] a
+			WHERE bu.Id = a.BusinessUnit
+			)
+GO
