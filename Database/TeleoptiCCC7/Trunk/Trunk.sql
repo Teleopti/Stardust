@@ -176,11 +176,17 @@ GO
 --Date: 2013-05-31
 --Desc: #23741 - Add clustered index
 -----------------
-ALTER TABLE [mart].[LastUpdatedPerStep]
-ALTER COLUMN [BusinessUnit] [uniqueidentifier] NOT NULL
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[LastUpdatedPerStep]') AND type in (N'U'))
+DROP TABLE [mart].[LastUpdatedPerStep]
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[LastUpdatedPerStep]') AND name = N'PK_LastUpdatedPerStep')
+CREATE TABLE [mart].[LastUpdatedPerStep](
+	[StepName] [varchar](500) NOT NULL,
+	[BusinessUnit] [uniqueidentifier] NOT NULL,
+	[Date] [datetime] NOT NULL
+)
+GO
+
 ALTER TABLE [mart].[LastUpdatedPerStep] ADD  CONSTRAINT [PK_LastUpdatedPerStep] PRIMARY KEY CLUSTERED 
 (
 	[StepName] ASC,
