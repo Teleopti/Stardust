@@ -106,12 +106,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                      IPerson person, 
                                                                      DateTimePeriod period)
         {
-            return CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"),
+            return CreateAssignmentWithMainShift(scenario,
                                                  person,
                                                  period,
-                                                 ShiftCategoryFactory.CreateShiftCategory("sdf"),
-                                                 scenario);
+                                                 ShiftCategoryFactory.CreateShiftCategory("sdf"));
         }
+
+				public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
+																															 IPerson person,
+																															 DateTimePeriod period,
+																															IShiftCategory shiftCategory)
+				{
+					return CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"),
+																							 person,
+																							 period,
+																							 shiftCategory,
+																							 scenario);
+				}
 
         /// <summary>
         /// Creates an assignment with personal shift.
