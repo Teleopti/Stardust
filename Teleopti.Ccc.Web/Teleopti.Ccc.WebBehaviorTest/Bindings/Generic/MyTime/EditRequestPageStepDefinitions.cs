@@ -17,35 +17,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the New Absence Request menu item")]
 		public void ThenIShouldNotSeeTheNewAbsenceRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-absence-request-link");
+			Browser.Interactions.AssertNotExists(".text-request-add", ".absence-request-add");
 		}
 
 		[Then(@"I should not see the New Shift Trade Request menu item")]
 		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-shifttrade-request-link");
+			Browser.Interactions.AssertNotExists(".text-request-add", ".shifttrade-request-add");
 		}
 
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
-			Browser.Interactions.Click(".bdd-add-absence-request-link");
-			Browser.Interactions.Click(".bdd-add-absence-request-link");
+			Browser.Interactions.Click(".absence-request-add");
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
-				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "false")
-				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "false")
+				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
 
@@ -79,9 +78,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
-			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeFrom]",
-			                                    TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
-			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=timepicker: TimeTo]",
+			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-timefrom",
+												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-timeto",
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertElementsAreVisible(string.Format(".bdd-request-edit-detail:nth-of-type({0})", position));
+			Browser.Interactions.AssertElementsAreVisible(string.Format(".request-edit:nth-child({0})", position));
 		}
 
 		[Then(@"I should see the add text request form")]
@@ -126,24 +125,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
 		}
 
-		[Then(@"I should not see the deny reason")]
-		public void ThenIShouldNotSeeTheDenyReason()
+		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
+		public void ThenIShouldSeeThatRequestAtPositionInTheListWasDeniedWithReason(int position, string reason)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text, Is.Null);
+			Browser.Interactions.AssertContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
 		}
 
-		[Then(@"I should see that my request was denied with reason '(.*)'")]
-		public void ThenIShouldSeeThatMyRequestWasDeniedWithGivenReason(string reason)
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text,
-															Is.EqualTo(reason));
 		}
 
 		[Then(@"I should see request form with subject '(.*)'")]
 		public void ThenIShouldSeeRequestFormWithSubject(string subject)
 		{
 			Browser.Interactions.AssertInputValue("#Schedule-addRequest-subject-input", subject);
-		}
 	}
 }

@@ -92,10 +92,10 @@ Scenario: Can not delete approved text request
 	Given I am an agent
 	And I have an approved text request
 	When I am viewing requests
-	Then I should not see a delete button
+	Then I should not see a delete button for request at position '1' in the list
 
 Scenario: Can not delete denied text request
 	Given I am an agent
 	And I have a denied text request
 	When I am viewing requests
-	Then I should not see a delete button
+	Then I should not see a delete button for request at position '1' in the list

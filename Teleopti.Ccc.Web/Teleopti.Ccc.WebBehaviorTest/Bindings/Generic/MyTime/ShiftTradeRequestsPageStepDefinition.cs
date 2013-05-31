@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Browser.Interactions.Click(".bdd-add-shifttrade-request-link");
+			Browser.Interactions.Click(".shifttrade-request-add");
 			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 		}
 

@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
 		public RequestPermission RequestPermission { get; set; }
+		public string DatePickerFormat { get; set; }
 	}
 
 	public class RequestViewModel

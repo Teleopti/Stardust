@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click on the request at position '(.*)' in the list")]
 		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.Click(string.Format(".bdd-request-body:nth-of-type({0})", position));
+			Browser.Interactions.Click(string.Format(".request-body:nth-child({0})", position));
 		}
 		
 		[When(@"I click the delete button on the shift trade request")]

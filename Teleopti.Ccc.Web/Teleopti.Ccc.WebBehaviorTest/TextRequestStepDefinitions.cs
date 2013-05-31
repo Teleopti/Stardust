@@ -91,14 +91,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var today = DateTime.Today;
 
-			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateFrom]", today.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains("#Request-add-section input[data-bind*=datepicker: DateTo]", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind='value: Subject']", string.Empty);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", string.Empty);
 		}
 
 		[When(@"I input too long message request values")]
@@ -120,25 +120,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void TypeSubject(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-edit-subject", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-subject", text);
 		}
 
 		private void TypeMessage(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-edit-message", text);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-message", text);
 		}
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
 		{
 			EnableTimePickersByUncheckingFullDayCheckbox();
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateFrom\"]').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  fromDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeFrom']", fromTime.ToShortTimeString(UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(UserFactory.User().Culture));
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section input[data-bind*=\"datepicker: DateTo\"]').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
 							  toDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section input[data-bind*='timepicker: TimeTo']", toTime.ToShortTimeString(UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timeto", toTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 		private void SetValuesForDateAndTimeInSchedule(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		
 		private void EnableTimePickersByUncheckingFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
-				Browser.Interactions.Click("#Request-add-section input[type='checkbox']");
+			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
         [When(@"I input later start time than end time for date '(.*)'")]
@@ -182,20 +182,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", string.Format(Resources.InvalidTimeValue, Resources.Period));
-			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MissingSubject);
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MissingSubject);
 		}
 
         [Then(@"I should see texts describing too long text error")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.MessageTooLong);
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MessageTooLong);
         }
 
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			Browser.Interactions.AssertContains("#Request-add-section .alert-danger", Resources.TheNameIsTooLong);
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
 		}
 
 		[Then(@"I should not see the absence request in the list")]
@@ -214,16 +214,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(0));
 		}
 
-		[Then(@"I should not see a delete button")]
-		public void ThenIShouldNotSeeADeleteButton()
+		[Then(@"I should not see a delete button for request at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeADeleteButtonForRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-request-body .close");
+			Browser.Interactions.AssertNotExists(".request-list", string.Format(".request-list .request-body:nth-child({0}) .request-delete", position));
 		}
 
-		[Then(@"I should not see a save button")]
-		public void ThenIShouldNotSeeASaveButton()
+		[Then(@"I should not see a save button for absence request at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeASaveButtonForAbsenceRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".bdd-request-edit-detail:nth-of-type(1) button[data-bind*=click: AddRequest]");
+			Browser.Interactions.AssertNotExists("#Requests-body-inner",
+			                                     string.Format(
+				                                     ".request-list .request-edit:nth-child({0}) .request-edit-update", position));
 		}
 
 		#region helpersthatshouldbefixed
