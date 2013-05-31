@@ -37,7 +37,25 @@ Scenario: View form
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 
-@ignore
+	Scenario: Add on shift on empty day
+	Given I have the role 'Anywhere Team Green'
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-04-08 |
+	And I click 'apply'
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
+	| Color      | Red   |
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 08:00 |
+	| End time   | 2013-04-08 16:00 |
+
 Scenario: Add on shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with

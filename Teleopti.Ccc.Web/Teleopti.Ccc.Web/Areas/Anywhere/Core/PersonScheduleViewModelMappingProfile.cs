@@ -4,6 +4,7 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -28,26 +29,69 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							});
 						return layers;
 					}))
-				;
+				.ForMember(x => x.PersonAbsences, o => o.ResolveUsing(s =>
+					{
+						var shift=s.Shift;
 
-			CreateMap<IPersonAbsence, PersonScheduleViewModelPersonAbsence>()
-				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Layer.Payload.DisplayColor.ToHtml()))
-				.ForMember(x => x.Name, o => o.ResolveUsing(s => s.Layer.Payload.Description.Name))
-				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
-					{
-						if (s.Layer.Period.StartDateTime == DateTime.MinValue)
-							return null;
-						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo).ToFixedDateTimeFormat();
-					}))
-				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
-					{
-						if (s.Layer.Period.EndDateTime == DateTime.MinValue)
-							return null;
-						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo).ToFixedDateTimeFormat();
-					}))
-				;
+						DateTime minimumTime = DateTime.MinValue;
+						DateTime maximumTime = DateTime.MaxValue;
+
+						if (shift != null)
+						{
+							var projection = s.Shift.Projection as IEnumerable<dynamic>;
+							if (projection != null)
+							{
+								minimumTime = projection.Min(p => p.Start);
+								maximumTime = projection.Max(p => p.End);
+							}
+						}
+						
+						var res = new List<PersonScheduleViewModelPersonAbsence>();
+						foreach (var absence in s.PersonAbsences)
+						{
+							var timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+							var personAbsence = new PersonScheduleViewModelPersonAbsence
+								{
+									Id = absence.Id.ToString(),
+									Color = absence.Layer.Payload.DisplayColor.ToHtml(),
+									Name = absence.Layer.Payload.Description.Name,
+									StartTime =
+										minimumTime ==
+										DateTime.MinValue
+											? null
+											: TimeZoneInfo.ConvertTimeFromUtc(
+												minimumTime, timeZoneInfo)
+											              .ToFixedDateTimeFormat(),
+									EndTime =
+										maximumTime == DateTime.MinValue
+											? null
+											: TimeZoneInfo.ConvertTimeFromUtc(
+												maximumTime, timeZoneInfo)
+											              .ToFixedDateTimeFormat()
+								};
+							res.Add(personAbsence);
+						}
+						return res;
+					}));
+
+			//CreateMap<IPersonAbsence, PersonScheduleViewModelPersonAbsence>()
+			//	.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Layer.Payload.DisplayColor.ToHtml()))
+			//	.ForMember(x => x.Name, o => o.ResolveUsing(s => s.Layer.Payload.Description.Name))
+			//	.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
+			//		{
+			//			if (s.Layer.Period.StartDateTime == DateTime.MinValue)
+			//				return null;
+			//			TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+			//			return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo).ToFixedDateTimeFormat();
+			//		}))
+			//	.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
+			//		{
+			//			if (s.Layer.Period.EndDateTime == DateTime.MinValue)
+			//				return null;
+			//			TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+			//			return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo).ToFixedDateTimeFormat();
+			//		}))
+			//	;
 
 			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
 			
