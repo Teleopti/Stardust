@@ -89,6 +89,7 @@
         // Intraday
         public const string IntradayRealTimeAdherence = "Raptor/Intraday/RTA";
         public const string IntradayEarlyWarning = "Raptor/Intraday/EW";
+		public const string IntradayReForecasting = "Raptor/Intraday/ReForecasting";
 
         // Performance Manager
         public const string CreatePerformanceManagerReport = "Raptor/PerformanceManager/CreatePerformanceManagerReport";
