@@ -127,9 +127,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-#pragma warning disable 612,618
-                Assert.IsNull(entity.ToMainShift().Id);
-#pragma warning restore 612,618
                 Assert.AreEqual(1, entity.MainShiftActivityLayers.Count());
                 Assert.AreEqual(1, entity.PersonalShiftCollection.Count);
                 Assert.AreEqual(dto.PersonalShiftCollection.First().Id, entity.PersonalShiftCollection[0].Id);
@@ -196,16 +193,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Assert.AreEqual(0, dto.Version);
             Assert.AreEqual(ass.Id, dto.Id);
-#pragma warning disable 612,618
-            Assert.AreEqual(ass.ToMainShift().Id, dto.MainShift.Id);
-#pragma warning restore 612,618
             Assert.AreEqual(ass.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
-#pragma warning disable 612,618
-            Assert.AreEqual(ass.ToMainShift().LayerCollection.Count, dto.MainShift.LayerCollection.Count);
-            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Id, firstMainShiftLayer.Activity.Id);
-            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Period,
-#pragma warning restore 612,618
-			new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
+            Assert.AreEqual(ass.MainShiftActivityLayers.Count(), dto.MainShift.LayerCollection.Count);
+            Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Id, firstMainShiftLayer.Activity.Id);
+            Assert.AreEqual(ass.MainShiftActivityLayers.First().Period,	new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
             Assert.AreEqual(ass.PersonalShiftCollection[0].Id, dto.PersonalShiftCollection.First().Id);
             Assert.AreEqual(ass.PersonalShiftCollection.Count, dto.PersonalShiftCollection.Count);
             Assert.AreEqual(ass.OvertimeShiftCollection[0].Id, dto.OvertimeShiftCollection.First().Id);
