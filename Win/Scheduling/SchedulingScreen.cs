@@ -4782,7 +4782,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private PersonsFilterView _cachedPersonsFilterView;
 		private PersonsFilterView getCachedPersonsFilterView()
 		{
-			if (_cachedPersonsFilterView == null)
+			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
 				var permittedPersons = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
