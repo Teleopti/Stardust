@@ -113,7 +113,7 @@
                     <p class="total-time-to-send-commands"><span class="badge badge-info" data-bind="text: TotalTimeToSendCommands"></span> Total time to send commands</p>
                     <p class="scenarios-per-second"><span class="badge badge-info" data-bind="text: ScenariosPerSecond"></span> Scenarios per second</p>
                 </div>
-                <div class="span6" data-bind="if: Scenario().RunDone">
+                <div class="span6" data-bind="if: RunDone">
                     <br/>
                     <br/>
                     <div class="alert alert-success result-success">Finished!</div>

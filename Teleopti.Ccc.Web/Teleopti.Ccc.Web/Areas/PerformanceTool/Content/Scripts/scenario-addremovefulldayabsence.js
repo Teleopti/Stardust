@@ -1,10 +1,12 @@
 
 define([
         'knockout',
-        'progressitem-count'
+        'progressitem-count',
+        'result'
     ], function(
         ko,
-        ProgressItemCountViewModel
+        ProgressItemCountViewModel,
+        ResultViewModel
     ) {
 
         return function() {
@@ -53,9 +55,6 @@ define([
             };
 
             this.IterationsExpected = ko.observable();
-            this.IterationsDone = ko.observable(0);
-            this.CommandsDone = ko.observable(false);
-            this.RunDone = ko.observable(false);
 
             this.ConfigurationChanged = function(configuration) {
                 
@@ -71,35 +70,44 @@ define([
                 progressItemPersonScheduleDayReadModel.Target(numberOfIterations * 2);
             };
 
-            var messageReceived = function() {
+
+
+
+            var result;
+
+            var messageReceived = function () {
+                if (!result)
+                    return;
+                
                 progressItemPersonScheduleDayReadModel.Increment();
                 
                 var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
-                if (calculatedInterationsDone > self.IterationsDone()) {
-                    self.IterationsDone(calculatedInterationsDone);
-                    if (self.IterationsDone() >= self.IterationsExpected()) {
-                        self.RunDone(true);
+                if (calculatedInterationsDone > result.IterationsDone()) {
+                    result.IterationsDone(calculatedInterationsDone);
+                    if (result.IterationsDone() >= self.IterationsExpected()) {
+                        result.RunDone(true);
+                        result = null;
                     }
                 }
             };
             
-            this.Run = function(callbacks) {
-                setTimeout(function() {
-                    self.CommandsDone(true);
-                }, 2500);
+            this.Run = function () {
+                progressItemPersonScheduleDayReadModel.Reset();
+                result = new ResultViewModel();
                 
-                setTimeout(messageReceived, 1020);
-                setTimeout(messageReceived, 2770);
-                setTimeout(messageReceived, 3064);
-                setTimeout(messageReceived, 4500);
-                setTimeout(messageReceived, 5100);
-                setTimeout(messageReceived, 6342);
-                setTimeout(messageReceived, 7423);
-                setTimeout(messageReceived, 8442);
-                setTimeout(messageReceived, 9974);
-                setTimeout(messageReceived, 10346);
-                setTimeout(messageReceived, 12000);
-                setTimeout(messageReceived, 14000);
+                setTimeout(function() {
+                    result.CommandsDone(true);
+                }, 1200);
+
+                var fakeMessage = function() {
+                    messageReceived();
+                    if (!result)
+                        return;
+                    setTimeout(fakeMessage, 1300);
+                };
+                setTimeout(fakeMessage, 1300);
+
+                return result;
             };
 
 

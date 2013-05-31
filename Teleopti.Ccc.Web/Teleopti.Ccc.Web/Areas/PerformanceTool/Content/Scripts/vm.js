@@ -41,64 +41,63 @@ define([
         });
 
         var currentTime = ko.observable();
-        var runStartTime;
-        var runEndTime;
-        var commandsEndTime;
+        var run = ko.observable();
         
         this.Run = function () {
-            var scenario = self.Scenario();
-
-            var commandsDoneSub = scenario.CommandsDone.subscribe(function () {
-                commandsEndTime = moment();
-                commandsDoneSub.dispose();
-            });
-            
-            var runDoneSub = scenario.RunDone.subscribe(function() {
-                runEndTime = moment();
-                runDoneSub.dispose();
-            });
-            
-            runStartTime = moment();
-            
-            self.Scenario().Run();
+            var result = self.Scenario().Run();
+            result.StartTime(moment());
+            run(result);
         };
 
         var formatTimeDiff = function(first, second) {
             var seconds = second.diff(first, 'seconds');
             return seconds + " seconds";
         };
-        
-        this.TotalRunTime = ko.computed(function () {
-            var clock = currentTime();
-            if (runStartTime)
-                if (runEndTime)
-                    return formatTimeDiff(runStartTime, runEndTime);
-                else
-                    return formatTimeDiff(runStartTime, clock);
+
+        this.TotalRunTime = ko.computed(function() {
+            var runInfo = run();
+            if (!runInfo)
+                return null;
+            var startTime = runInfo.StartTime();
+            if (startTime) {
+                var endTime = runInfo.EndTime() || currentTime();
+                return formatTimeDiff(startTime, endTime);
+            }
             return null;
         });
         
         this.ScenariosPerSecond = ko.computed(function () {
-            if (self.Scenario() && self.Scenario().IterationsDone()) {
-                if (runEndTime) {
-                    return (self.Scenario().IterationsDone() / (runEndTime.diff(runStartTime, 'seconds'))).toFixed(2);
-                } else {
-                    return (self.Scenario().IterationsDone() / (currentTime().diff(runStartTime, 'seconds'))).toFixed(2);
-                }
+            var runInfo = run();
+            if (!runInfo)
+                return null;
+            var iterations = runInfo.IterationsDone();
+            var startTime = runInfo.StartTime();
+            var endTime = runInfo.EndTime() || currentTime();
+            if (iterations) {
+                return (iterations / (endTime.diff(startTime, 'seconds'))).toFixed(2);
             }
             return null;
         });
         
         this.TotalTimeToSendCommands = ko.computed(function () {
-            var clock = currentTime();
-            if (runStartTime)
-                if (commandsEndTime)
-                    return formatTimeDiff(runStartTime, commandsEndTime);
-                else
-                    return formatTimeDiff(runStartTime, clock);
+            var runInfo = run();
+            if (!runInfo)
+                return null;
+            var startTime = runInfo.StartTime();
+            if (startTime) {
+                var endTime = runInfo.CommandEndTime() || currentTime();
+                return formatTimeDiff(startTime, endTime);
+            }
             return null;
         });
-       
+
+        this.RunDone = ko.computed(function () {
+            var runInfo = run();
+            if (runInfo)
+                return runInfo.RunDone();
+            return false;
+        });
+
         setInterval(function() {
             currentTime(moment());
         }, 100);
