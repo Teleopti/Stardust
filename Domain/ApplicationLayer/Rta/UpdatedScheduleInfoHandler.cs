@@ -29,15 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Handle(PersonWithExternalLogOn message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
-
-			DateTime? startTime;
-			startTime =
-				_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-			if (startTime == null)
-			{
-				Logger.Info("No next activity found. Ignoring this update");
-				return;
-			}
+			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			
 			try
@@ -48,6 +40,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			catch (Exception exception)
 			{
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
+			}
+
+			if (startTime == null)
+			{
+				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
+				return;
 			}
 
 			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
@@ -71,26 +69,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		        return;
 		    }
 
-		    DateTime? startTime;
-			startTime =
-				_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-			if (startTime == null)
-			{
-				Logger.Info("No next activity found. Ignoring this update");
-				return;
-			}
+			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
-			
-			//send message to the web service.
 			try
 			{
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
-				
 			}
 			catch (Exception exception)
 			{
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
+			}
+			if (startTime == null)
+			{
+				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
+				return;
 			}
 
 			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
