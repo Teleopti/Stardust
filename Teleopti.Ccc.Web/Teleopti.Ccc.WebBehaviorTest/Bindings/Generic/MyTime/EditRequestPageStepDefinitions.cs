@@ -26,6 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists(".text-request-add", ".shifttrade-request-add");
 		}
 
+		[When(@"I click to add a new text request")]
+		public void WhenIClickToAddANewTextRequest()
+		{
+			Browser.Interactions.Click(".text-request-add");
+			Browser.Interactions.AssertExists("#Request-add-section");
+		}
+
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
@@ -56,18 +63,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value.Trim(), Is.Not.Empty);
 		}
 
-
-		[Then(@"I should see the edit text request form")]
-		public void ThenIShouldSeeTheEditTextRequestForm()
+		[Then(@"I should not be able to input values for text request at position '(.*)' in the list")]
+		public void ThenIShouldNotBeAbleToInputValuesForTextRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertElementsAreVisible(".bdd-request-edit-detail");
-		}
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-subject:not(:enabled)", position));
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-message:not(:enabled)", position));
 
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-datefrom:not(:enabled)", position));
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timefrom:not(:enabled)", position));
 
-		[Then(@"I should not be able to input values")]
-		public void ThenIShouldNotBeAbleToInputValues()
-		{
-			Browser.Interactions.AssertNotExists(".bdd-request-edit-detail", ".request-edit[disabled=false]");
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-dateto:not(:enabled)", position));
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timeto:not(:enabled)", position));
+
+			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-fullday:not(:enabled)", position));
 		}
 
 		[Then(@"I should see (.*) - (.*) as the default times")]
@@ -131,11 +139,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
 		}
 
-		}
-
 		[Then(@"I should see request form with subject '(.*)'")]
 		public void ThenIShouldSeeRequestFormWithSubject(string subject)
 		{
 			Browser.Interactions.AssertInputValue("#Schedule-addRequest-subject-input", subject);
+		}
 	}
 }

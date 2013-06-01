@@ -60,7 +60,7 @@ Scenario: Adding invalid absence request values
 	And I input later start time than end time
 	And I click the send button
 	Then I should see texts describing my errors
-	And I should not see the absence request in the list
+	And I should not see any requests in the list
 
 Scenario: Adding too long message on absence request
 	Given I am an agent
@@ -69,7 +69,7 @@ Scenario: Adding too long message on absence request
 	And I input too long message request values
 	And I click the send button
 	Then I should see texts describing too long text error
-	And I should not see the absence request in the list
+	And I should not see any requests in the list
 
 Scenario: Adding too long subject on absence request
 	Given I am an agent
@@ -78,7 +78,7 @@ Scenario: Adding too long subject on absence request
 	And I input too long subject request values
 	And I click the send button
 	Then I should see texts describing too long subject error
-	And I should not see the absence request in the list
+	And I should not see any requests in the list
 
 Scenario: View absence types
 	Given I am an agent
@@ -106,8 +106,8 @@ Scenario: Edit absence request
 	| ListPosistion | 1              |
 	| Absence       | Illness        |
 	| Subject       | my new subject |
-	And I click the update button
-	Then I should see the updated request values in the list with
+	And I click the update button on the request at position '1' in the list
+	Then I should see the updated absence request values in the list with
 	| Field         | Value          |
 	| ListPosistion | 1              |
 	| Absence       | Illness        |
@@ -118,7 +118,7 @@ Scenario: Delete absence request
 	And I have an existing absence request
 	And I am viewing requests
 	When I click the absence request's delete button for request at position '1' in the list
-	Then I should not see the absence request in the list
+	Then I should not see any requests in the list
 
 Scenario: Can not edit approved absence requests
 	Given I am an agent
@@ -127,7 +127,7 @@ Scenario: Can not edit approved absence requests
 	When I click on the request at position '1' in the list
 	Then I should see the detail form for request at position '1' in the list
 	And I should not be able to input values for absence request at position '1' in the list
-	And I should not see a save button for absence request at position '1' in the list
+	And I should not see a save button for request at position '1' in the list
 
 Scenario: Can not edit denied absence requests
 	Given I am an agent
@@ -136,7 +136,7 @@ Scenario: Can not edit denied absence requests
 	When I click on the request at position '1' in the list
 	Then I should see the detail form for request at position '1' in the list
 	And I should not be able to input values for absence request at position '1' in the list
-	And I should not see a save button for absence request at position '1' in the list
+	And I should not see a save button for request at position '1' in the list
 
 Scenario: Can not delete approved absence request
 	Given I am an agent

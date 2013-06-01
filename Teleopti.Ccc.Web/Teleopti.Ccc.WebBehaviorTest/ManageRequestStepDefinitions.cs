@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.Click("#Request-add-section .request-new-send");
 		}
 
-		[When(@"I click the update button")]
-		public void WhenIClickTheUpdateButton()
+		[When(@"I click the update button on the request at position '(.*)' in the list")]
+		public void WhenIClickTheUpdateButtonOnTheRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.Click(".request-edit .request-edit-update");
+			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-edit-update", position));
 		}
 	}
 }

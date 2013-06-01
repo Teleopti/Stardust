@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -54,36 +49,57 @@ namespace Teleopti.Ccc.WebBehaviorTest
             
         }
 
-		[When(@"I input new text request values")]
-		public void WhenIInputNewTextRequestValues()
+		[When(@"I change the text request values with")]
+		public void WhenIChangeTheTextRequestValuesWith(Table table)
 		{
-			TypeSubject("The cake is a.. cinnemon roll!");
+			var subject = table.Rows[1][1];
+			var position = table.Rows[0][1];
+
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(
+				string.Format(".request:nth-child({0}) .request-edit-subject", position), subject);
+		}
+
+		[Then(@"I should see the updated text request values in the list with")]
+		public void ThenIShouldSeeTheUpdatedTextRequestValuesInTheListWith(Table table)
+		{
+			var subject = table.Rows[1][1];
+			var position = table.Rows[0][1];
+
+			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
+			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
 		}
 
 		[When(@"I click send request button")]
 		public void WhenIClickSendRequestButton()
 		{
-			Browser.Interactions.Click(".request-send");
+			Browser.Interactions.Click(".request-new-send");
 		}
-
-		[Then(@"I should see the request's values")]
-		public void ThenIShouldSeeTheRequestsValues()
+		
+		[Then(@"I should see the text request's values at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)
 		{
-			var request= UserFactory.User().UserData<ExistingTextRequest>();
+			var request = UserFactory.User().UserData<ExistingTextRequest>();
 
-			Browser.Interactions.AssertJavascriptResultContains("$('.date-from')[0].value", webDateString(request.PersonRequest.Request.Period.StartDateTime.Date));
-			Browser.Interactions.AssertJavascriptResultContains("$('.time-from')[0].value", webTimeString(request.PersonRequest.Request.Period.StartDateTime));
-			Browser.Interactions.AssertContains(".request-edit-message", request.PersonRequest.GetMessage(new NoFormatting()));
-			Browser.Interactions.AssertJavascriptResultContains("$('.request-edit-subject')[0].value", request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertJavascriptResultContains("$('.date-to')[0].value", webDateString(request.PersonRequest.Request.Period.EndDateTime.Date));
-			Browser.Interactions.AssertJavascriptResultContains("$('.time-to')[0].value", webTimeString(request.PersonRequest.Request.Period.EndDateTime));
-		}
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
+				request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-message", position),
+				request.PersonRequest.GetMessage(new NoFormatting()));
 
-		[Then(@"I should see the new text request values in the list")]
-		public void ThenIShouldSeeTheNewTextRequestValuesInTheList()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(1));
-			Browser.Interactions.AssertContains(".bdd-request-body","cinnemon roll");
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
@@ -173,11 +189,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			SetValuesForDateAndTime(date.AddDays(1), date.AddHours(1), date, date.AddHours(-2));
         }
 
-		[When(@"I click the text request's delete button")]
- 		public void WhenIClickTheRequestSDeleteButton()
- 		{
-			Browser.Interactions.Click(".bdd-request-body .close");
- 		}
+		[When(@"I click the delete button of request at position '(.*)' in the list")]
+		public void WhenIClickTheDeleteButtonOfRequestAtPositionInTheList(int position)
+		{
+			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-delete", position));
+		}
 
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
@@ -198,21 +214,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
 		}
 
-		[Then(@"I should not see the absence request in the list")]
-		[Then(@"I should not see the text request in the list")]
-		public void ThenIShouldNotSeeTheTextRequestInTheList()
+		[Then(@"I should not see any requests in the list")]
+		public void ThenIShouldNotSeeAnyRequestsInTheList()
 		{
-			var existingTextRequest = UserFactory.User().UserData<ExistingTextRequest>();
-			if (existingTextRequest != null)
-			{
-				var requestId = existingTextRequest.PersonRequest.Id.Value;
-				EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId).Exists, Is.False);
-				Navigation.GotoRequests();
-				EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId).Exists, Is.False);
-				return;
-			}
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(0));
+			Browser.Interactions.AssertNotExists(".request-list", ".request-list .request");
 		}
+
 
 		[Then(@"I should not see a delete button for request at position '(.*)' in the list")]
 		public void ThenIShouldNotSeeADeleteButtonForRequestAtPositionInTheList(int position)
@@ -220,24 +227,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertNotExists(".request-list", string.Format(".request-list .request-body:nth-child({0}) .request-delete", position));
 		}
 
-		[Then(@"I should not see a save button for absence request at position '(.*)' in the list")]
-		public void ThenIShouldNotSeeASaveButtonForAbsenceRequestAtPositionInTheList(int position)
+		[Then(@"I should not see a save button for request at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeASaveButtonForRequestAtPositionInTheList(int position)
 		{
 			Browser.Interactions.AssertNotExists("#Requests-body-inner",
 			                                     string.Format(
 				                                     ".request-list .request-edit:nth-child({0}) .request-edit-update", position));
 		}
-
-		#region helpersthatshouldbefixed
-		private static string webDateString(DateTime date)
-		{
-			return String.Format("{0:MM/dd/yyyy}", date);
-		}
-
-		private static string webTimeString(DateTime time)
-		{
-			return String.Format("{0:HH:mm}", time);
-		}
-		#endregion
 	}
 }

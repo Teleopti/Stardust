@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				string.Format(".request:nth-child({0}) .request-edit-subject", position), subject);
 		}
 
-		[Then(@"I should see the updated request values in the list with")]
-		public void ThenIShouldSeeTheUpdatedRequestValuesInTheListWith(Table table)
+		[Then(@"I should see the updated absence request values in the list with")]
+		public void ThenIShouldSeeTheUpdatedAbsenceRequestValuesInTheListWith(Table table)
 		{
 			var absence = table.Rows[1][1];
 			var subject = table.Rows[2][1];
@@ -107,6 +107,41 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+		}
+
+		[Then(@"I should see the absence request's edit values at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheAbsenceRequestSEditValuesAtPositionInTheList(int position)
+		{
+			var request = UserFactory.User().UserData<ExistingAbsenceRequest>();
+
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-subject", position),
+				request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-message", position),
+				request.PersonRequest.GetMessage(new NoFormatting()));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-absence option:checked", position),
+				request.AbsenceRequest.Absence.Description.Name);
+
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-datefrom", position),
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-timefrom", position),
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-dateto", position),
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValue(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-timeto", position),
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-list .request:nth-child({0}) .request-edit-fullday checkbox:checked", position),
+				request.AbsenceRequest.Absence.Description.Name);
 		}
 
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
