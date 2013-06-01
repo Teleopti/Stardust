@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface ISaveSchedulePartService
     {
-		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection);
+		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag);
     }
 
     public class SaveSchedulePartService : ISaveSchedulePartService
@@ -32,13 +33,22 @@ namespace Teleopti.Ccc.Sdk.Logic
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
+		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
         {
             var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();
-
-            var invalidList = dic.Modify(ScheduleModifier.Scheduler,
+            IEnumerable<IBusinessRuleResponse> invalidList;
+            if (scheduleTag != null)
+            {
+                invalidList = dic.Modify(ScheduleModifier.Scheduler,
+                                         scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
+            }
+            else
+            {
+                invalidList = dic.Modify(ScheduleModifier.Scheduler,
                                          scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            }
+            
 
 			if (invalidList != null && invalidList.Any())
 			{

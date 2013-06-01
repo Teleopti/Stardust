@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
                 {
                     IScheduleDay schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
-                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum());
+                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum(),null);
 
                     uow.PersistAll();
                 }

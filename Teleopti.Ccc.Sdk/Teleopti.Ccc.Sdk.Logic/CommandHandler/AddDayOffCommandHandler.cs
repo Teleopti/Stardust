@@ -1,6 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,8 +18,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+        private readonly IScheduleTagRepository _scheduleTagRepository;
 
-        public AddDayOffCommandHandler(IDayOffRepository dayOffRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+        public AddDayOffCommandHandler(IDayOffRepository dayOffRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagRepository scheduleTagRepository)
         {
             _dayOffRepository = dayOffRepository;
             _scheduleRepository = scheduleRepository;
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _saveSchedulePartService = saveSchedulePartService;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+            _scheduleTagRepository = scheduleTagRepository;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -55,7 +58,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 scheduleDay.DeletePersonalStuff();
                 
                 scheduleDay.CreateAndAddDayOff(dayOff);
-				_saveSchedulePartService.Save(scheduleDay, rules);
+
+                IScheduleTag scheduleTagEntity=null;
+
+                if (command.ScheduleTag.Id.HasValue)
+                {
+                    scheduleTagEntity = _scheduleTagRepository.Get(command.ScheduleTag.Id.GetValueOrDefault());
+                }
+                _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

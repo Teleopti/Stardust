@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private AddDayOffCommandDto _addAbsenceCommandDto;
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+        private IScheduleTagRepository _scheduleTagRepository;
 
         [SetUp]
         public  void Setup()
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
+            _scheduleTagRepository = _mock.DynamicMock<IScheduleTagRepository>();
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -61,14 +64,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _dayOff = DayOffFactory.CreateDayOff();
             _dayOff.SetId(Guid.NewGuid());
 
-            _target = new AddDayOffCommandHandler(_dayOffRepository,_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
+            _target = new AddDayOffCommandHandler(_dayOffRepository,_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagRepository);
             _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
 
             _addAbsenceCommandDto = new AddDayOffCommandDto
             {
                 PersonId = _person.Id.GetValueOrDefault(),
                 Date = _dateOnydto,
-                DayOffInfoId = _dayOff.Id.GetValueOrDefault()
+                DayOffInfoId = _dayOff.Id.GetValueOrDefault(),
+                ScheduleTag = new ScheduleTagDto() { Id = Guid.NewGuid(), Description = "test" }
             };
         }
 
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            var scheduleTag = new ScheduleTag() { Description = "test" }; 
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -92,7 +96,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
                 Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
             	Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-                Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules));
+                Expect.Call(_scheduleTagRepository.Get(_addAbsenceCommandDto.ScheduleTag.Id.GetValueOrDefault())).Return(scheduleTag);
+                Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules, scheduleTag));
             }
             using (_mock.Playback())
             {
@@ -110,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            var scheduleTag = new ScheduleTag() { Description = "test" };
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -122,7 +127,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules));
+                Expect.Call(_scheduleTagRepository.Get(_addAbsenceCommandDto.ScheduleTag.Id.GetValueOrDefault())).Return(scheduleTag);
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules, scheduleTag));
 			}
 			using (_mock.Playback())
 			{
