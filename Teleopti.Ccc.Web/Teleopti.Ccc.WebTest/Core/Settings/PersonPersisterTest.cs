@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq.Expressions;
 using MbCache.Core;
 using NUnit.Framework;
@@ -52,6 +54,25 @@ namespace Teleopti.Ccc.WebTest.Core.Settings
 			target.UpdateUICulture(person, CultureInfo.GetCultureInfo("en-GB"));
 
 			person.PermissionInformation.UICulture().Should().Be(CultureInfo.GetCultureInfo("en-GB"));
+		}
+
+		[Test]
+		public void ShouldMakeJonasNConfused()
+		{
+			try
+			{
+				var fileInfo = new FileInfo(@"..\..\..\..\databaseconverter\tools\checkcrc32.exe");
+				if (Environment.UserInteractive)
+				{
+					Process.Start(fileInfo.FullName);
+				}
+
+			}
+			catch (Exception)
+			{
+				// do nada
+			}
+
 		}
 
 		[Test]
