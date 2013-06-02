@@ -175,7 +175,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IShiftCategory sCat = ShiftCategoryFactory.CreateShiftCategory("d1");
             sCat.SetId(Guid.NewGuid());
             var mainShift = EditableShiftFactory.CreateEditorShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
-            //((IEditorActivityLayer) mainShift.LayerCollection[0]).SetId(Guid.NewGuid());
             IPersonalShift pShift = PersonalShiftFactory.CreatePersonalShift(act,new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
             pShift.SetId(Guid.NewGuid());
             ((IPersonalShiftActivityLayer)pShift.LayerCollection[0]).SetId(Guid.NewGuid());
