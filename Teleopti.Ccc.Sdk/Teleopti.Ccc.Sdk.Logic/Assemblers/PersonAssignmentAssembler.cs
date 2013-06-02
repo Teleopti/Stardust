@@ -92,13 +92,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if(dto.MainShift!=null)
             {
                 IShiftCategory shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
-                var mainShift = new EditableShift(shiftCategory);
+                var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, dto.MainShift.LayerCollection);
-                new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
+                assignment.SetMainShift(mainShift);
             }
         }
 
-        private void addLayersToMainShift(IEditableShift mainShift, IEnumerable<ActivityLayerDto> layerDtos)
+        private void addLayersToMainShift(IMainShift mainShift, IEnumerable<ActivityLayerDto> layerDtos)
         {
             _mainActivityLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(mainShift.LayerCollection.Add);
         }
