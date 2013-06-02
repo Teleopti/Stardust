@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
-			IMainShiftActivityLayer activityLayer = new MainShiftActivityLayer(activity, period);
+			var activityLayer = new MainShiftActivityLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			_target.CreateAndAddActivity(activityLayer, shiftCategory);
@@ -290,9 +290,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMainShiftActivityLayer activityLayer = new MainShiftActivityLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
-			IMainShift newMainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("m"), nightPeriod,
-			                                                           shiftCategory);
-			_target.PersonAssignmentCollection()[0].SetMainShift(newMainShift);
+
+			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
 
 			_target.CreateAndAddActivity(activityLayer, shiftCategory);
 			Assert.AreEqual(2, _target.PersonAssignmentCollection()[0].MainShiftActivityLayers.Count());
@@ -358,9 +358,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonalShiftActivityLayer layer = new PersonalShiftActivityLayer(activity, period);
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
-			IMainShift newMainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("m"), nightPeriod,
-																	   shiftCategory);
-			_target.PersonAssignmentCollection()[0].SetMainShift(newMainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
 
 			_target.CreateAndAddPersonalActivity(layer);
 			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].PersonalShiftCollection.Count);
@@ -452,9 +451,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																						  parameters.Period);
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
-			IMainShift newMainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("m"), nightPeriod,
-																	   shiftCategory);
-			ass.SetMainShift(newMainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
+			new EditableShiftMapper().SetMainShiftLayers(ass, mainShift);
 
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
@@ -585,10 +583,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			end = new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc);
 			period = new DateTimePeriod(start, end);
 
-			IMainShift mainShift1 = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("test1"), period,
+			var mainShift1 = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test1"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreatePersonAssignment(_target.Person, _target.Scenario);
-			personAssignment.SetMainShift(mainShift1);
+			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift1);
 			_target.Add(personAssignment);
 
 			Assert.AreEqual(2, _target.PersonAssignmentCollection().Count);
@@ -1710,7 +1708,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var options = new DeleteOption {PersonalShift = true};
 			((ExtractedSchedule)source).Remove(options);
 			source.CreateAndAddOvertime(layer);
-			source.PersonAssignmentCollection()[0].SetMainShift(new MainShift(new ShiftCategory("cat")));
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
 			source.DeleteMainShift(source);
             Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
 

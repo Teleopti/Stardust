@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -173,9 +174,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             definitionSet.SetId(Guid.NewGuid());
             IShiftCategory sCat = ShiftCategoryFactory.CreateShiftCategory("d1");
             sCat.SetId(Guid.NewGuid());
-            IMainShift mainShift = MainShiftFactory.CreateMainShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
-            mainShift.SetId(Guid.NewGuid());
-            ((IMainShiftActivityLayer) mainShift.LayerCollection[0]).SetId(Guid.NewGuid());
+            var mainShift = EditableShiftFactory.CreateEditorShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
+            //((IEditorActivityLayer) mainShift.LayerCollection[0]).SetId(Guid.NewGuid());
             IPersonalShift pShift = PersonalShiftFactory.CreatePersonalShift(act,new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
             pShift.SetId(Guid.NewGuid());
             ((IPersonalShiftActivityLayer)pShift.LayerCollection[0]).SetId(Guid.NewGuid());
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IOvertimeShift oShift = OvertimeShiftFactory.CreateOvertimeShift(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet,ass);
             oShift.SetId(Guid.NewGuid());
             ((IOvertimeShiftActivityLayer)oShift.LayerCollection[0]).SetId(Guid.NewGuid());
-            ass.SetMainShift(mainShift);
+            new EditableShiftMapper().SetMainShiftLayers(ass, mainShift);
             ass.AddPersonalShift(pShift);
             ass.AddOvertimeShift(oShift);
 

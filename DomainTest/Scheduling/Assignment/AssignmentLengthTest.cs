@@ -46,14 +46,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// </remarks>
         protected override IPersonAssignment CreateInvalidEntityToVerify()
         {
-            MainShift ms1 = new MainShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
+            var ms1 = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 6, 0, 0, DateTimeKind.Utc));
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
+            var layer1 = new EditorActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
 
             ms1.LayerCollection.Add(layer1);
-            _testPersonAssignment.SetMainShift(ms1);
+            new EditableShiftMapper().SetMainShiftLayers(_testPersonAssignment, ms1);
 
             PersonalShift ps1 = new PersonalShift();
             DateTimePeriod period2 =
@@ -77,14 +77,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// </remarks>
         protected override IPersonAssignment CreateValidEntityToVerify()
         {
-            MainShift ms1 = new MainShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
+			var ms1 = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 11, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 1, 0, 0, DateTimeKind.Utc));
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
+			var layer1 = new EditorActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
 
             ms1.LayerCollection.Add(layer1);
-            _testPersonAssignment.SetMainShift(ms1);
+			new EditableShiftMapper().SetMainShiftLayers(_testPersonAssignment, ms1);
 
             return _testPersonAssignment;
         }
