@@ -280,3 +280,46 @@ SELECT @PKName
 EXEC sp_rename @PKName, N'PK_ScheduleDay', N'INDEX'
 GO
 
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-04
+--Desc: Bug #23760 rearrange and add indexes for better performance
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[MeetingPerson]') AND name = N'CIX_MeetingPerson_Parent')
+BEGIN
+	SET NOCOUNT ON
+
+	CREATE TABLE [dbo].[MeetingPerson_new](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+		[Optional] [bit] NOT NULL,
+	 CONSTRAINT [PK_MeetingPerson_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_MeetingPerson_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Parent] ASC
+	)
+
+	INSERT INTO [dbo].[MeetingPerson_new] ([Id],[Person],[Parent],[Optional])
+	SELECT [Id],[Person],[Parent],[Optional]
+	FROM [dbo].[MeetingPerson]
+
+	DROP TABLE [dbo].[MeetingPerson]
+
+	CREATE NONCLUSTERED INDEX [IX_MeetingPerson_Person_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Person] ASC
+	)
+	INCLUDE ([Parent])
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson_new]', @newname = N'MeetingPerson', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson].[PK_MeetingPerson_new]', @newname = N'PK_MeetingPerson', @objtype =N'INDEX'
+
+	SET NOCOUNT OFF
+END
+GO
