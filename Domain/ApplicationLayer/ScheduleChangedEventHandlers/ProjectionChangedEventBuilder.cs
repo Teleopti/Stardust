@@ -45,6 +45,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							IsWorkday = isWorkDay(significantPart),
 						};
 
+					if (scheduleDay.PersonAssignmentCollection().Count != 0)
+						eventScheduleDay.HasUnderlyingShift = true;
+
 					switch (significantPart)
 					{
 						case SchedulePartView.MainShift:

@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					Id = schedule.PersonId.ToString(),
 					ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
 					WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-					Projection = new List<SimpleLayer>()
+					Projection = new List<SimpleLayer>(),
+					HasUnderlyingShift = scheduleDay.HasUnderlyingShift
 				};
 
 				foreach (var layer in scheduleDay.Layers)
