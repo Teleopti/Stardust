@@ -51,8 +51,7 @@
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Contrib.SignalR.SignalRMessageBus.Backend, Version=1.1.2.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Contrib.SignalR.SignalRMessageBus.Backend">
       <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.Backend.1.1.2\lib\net40\Contrib.SignalR.SignalRMessageBus.Backend.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
@@ -92,7 +91,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
