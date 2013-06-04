@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_peopleAndSkillLoaderDecider.FilterSkills(skills);
 
 			var personsProvider = _personProviderMaker.Invoke(requestedPersons);
+			personsProvider.DoLoadByPerson = true;
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
