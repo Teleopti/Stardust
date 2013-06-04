@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
-            
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson>{_person});
+
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				ExpectPersistOfDictionary();
 				ExpectLoadOfSchedules();
 
-                _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> {_person});
+				_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
                 Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _person)).Return(
                     new List<IBusinessRuleResponse>());
 
@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 PrepareAbsenceRequest();
 				ExpectLoadOfSchedules();
 
-            	_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> {_person});
+            	_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> {_person});
                 Expect.Call(_absenceRequest.Parent).Return(_personRequest);
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             }
@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 PrepareAbsenceRequest();
 				ExpectLoadOfSchedules();
 
-                _loader.Execute(_scenario,  _period.ChangeStartTime(TimeSpan.FromDays(-1)),
+				_loader.LoadForRequest(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)),
                                                                     new List<IPerson> { _person });
                 Expect.Call(_absenceRequest.Parent).Return(_personRequest);
             }
