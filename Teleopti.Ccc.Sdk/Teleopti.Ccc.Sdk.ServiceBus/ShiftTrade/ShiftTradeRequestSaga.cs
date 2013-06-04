@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons)
         {
-            _loadSchedulingStateHolderForResourceCalculation.Execute(_defaultScenario, period, persons);
+            _loadSchedulingStateHolderForResourceCalculation.LoadForRequest(_defaultScenario, period, persons.ToList());
         }
 
         private class IsRequestReadyForProcessingSpecification : Specification<IPersonRequest>
