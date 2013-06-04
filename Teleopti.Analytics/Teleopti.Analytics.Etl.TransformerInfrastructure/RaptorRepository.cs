@@ -292,6 +292,40 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		}
 
+		public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+		{
+			//Convert time back to local time before sp call
+			var startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
+			var endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+
+			//Prepare sql parameters
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("start_date", startDate.Date),
+					new SqlParameter("end_date", endDate.Date),
+					new SqlParameter("business_unit_code", businessUnit.Id)
+				};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_hourly_availability_load]", parameterList,
+											  _dataMartConnectionString);
+
+		}
+
+		public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", businessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
+				};
+
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_hourly_availability_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
 			var parameterList = new List<SqlParameter>
@@ -304,6 +338,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_intraday_load", parameterList,
 											  _dataMartConnectionString);
+		}
+
+		public int PersistAvailability(DataTable dataTable)
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_availability_delete", _dataMartConnectionString);
+			return HelperFunctions.BulkInsert(dataTable, "[stage].[stg_hourly_availability]", _dataMartConnectionString);
 		}
 
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
@@ -731,6 +771,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var rep = new PreferenceDayRepository(uow);
+				return rep.FindNewerThan(lastTime);
+			}
+		}
+		
+		public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime,
+																			IBusinessUnit currentBusinessUnit)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new StudentAvailabilityDayRepository(uow);
 				return rep.FindNewerThan(lastTime);
 			}
 		}

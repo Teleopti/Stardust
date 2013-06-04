@@ -365,32 +365,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		/// <summary>
-		/// Verifies that it is possible to insert a PersonalShift into the PersonalShifts list.
-		/// </summary>
-		[Test]
-		public void CanInsertPersonalShiftToPersonalShiftsListWithSpecificIndex()
-		{
-			PersonalShift ps1 = new PersonalShift();
-			PersonalShift ps2 = new PersonalShift();
-			PersonalShift ps3 = new PersonalShift();
-			DateTimePeriod period =
-				new DateTimePeriod(new DateTime(2007, 8, 10, 10, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2007, 8, 10, 12, 0, 0, DateTimeKind.Utc));
-			PersonalShiftActivityLayer layer1 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Möte"), period);
-			PersonalShiftActivityLayer layer2 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Läkare"), period);
-			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Samtal"), period);
-			ps1.LayerCollection.Add(layer1);
-			ps2.LayerCollection.Add(layer2);
-			ps3.LayerCollection.Add(layer3);
-			target.AddPersonalShift(ps1);
-			target.AddPersonalShift(ps2);
-
-			target.InsertPersonalShift(ps3, 1);
-
-			Assert.AreEqual(layer3.Payload.Description.Name, target.PersonalShiftCollection[1].LayerCollection[0].Payload.Description.Name);
-		}
-
-		/// <summary>
 		/// Verifies the restriction set is checked.
 		/// </summary>
 		/// <remarks>

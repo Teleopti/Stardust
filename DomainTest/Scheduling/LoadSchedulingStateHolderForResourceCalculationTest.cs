@@ -90,6 +90,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				_target.Execute(scenario, period, requestedPeople);
 			}
 		}
+	
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldLoadSchedulesForRequest()
+		{
+			var period = new DateTimePeriod(2010,2,1,2010,2,2);
+			var scenario = _mocks.StrictMock<IScenario>();
+			var person = PersonFactory.CreatePerson();
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var personsInOrganizationProvider = _mocks.StrictMock<IPersonProvider>();
+		    var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+
+			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
+			var requestedPeople = new List<IPerson> {person};
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
+				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
+					().Return(scheduleDictionary);
+				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
+				_peopleAndSkillLoadDecider.Execute(scenario,period,requestedPeople);
+				Expect.Call(_peopleAndSkillLoadDecider.FilterSkills(skills)).Return(0);
+				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario)).Return(
+																		new Dictionary<ISkill, IList<ISkillDay>>());
+			}
+			using (_mocks.Playback())
+			{
+				_target.LoadForRequest(scenario, period, requestedPeople);
+			}
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyExecuteWithAllPersonsFilteredAway()

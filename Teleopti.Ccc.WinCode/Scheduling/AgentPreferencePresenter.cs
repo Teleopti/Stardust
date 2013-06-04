@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Remove(IAgentPreferenceRemoveCommand removeCommand)
 		{
-			if (removeCommand == null) throw new ArgumentNullException("removeCommand");
+			InParameter.NotNull("removeCommand", removeCommand);
 
 			removeCommand.Execute();
 			UpdateView();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Add(IAgentPreferenceAddCommand addCommand)
 		{
-			if (addCommand == null) throw new ArgumentNullException("addCommand");
+			InParameter.NotNull("addCommand", addCommand);
 
 			addCommand.Execute();
 			UpdateView();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Edit(IAgentPreferenceEditCommand editCommand)
 		{
-			if (editCommand == null) throw new ArgumentNullException("editCommand");
+			InParameter.NotNull("editCommand", editCommand);
 
 			editCommand.Execute();
 			UpdateView();
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public AgentPreferenceExecuteCommand CommandToExecute(IAgentPreferenceData data, IAgentPreferenceDayCreator dayCreator)
 		{
-			if (dayCreator == null) throw new ArgumentNullException("dayCreator");
+			InParameter.NotNull("dayCreator", dayCreator);
 
 			var preferenceDay = _scheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().FirstOrDefault();
 

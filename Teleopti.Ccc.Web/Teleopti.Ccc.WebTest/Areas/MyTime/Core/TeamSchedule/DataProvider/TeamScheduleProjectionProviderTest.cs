@@ -63,8 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var startTime = new DateTime(2011, 1, 2, 8, 0, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
-			var layer = stubs.VisualLayerStub();
-			layer.Period = period;
+			var layer = stubs.VisualLayerStub(period);
 			var projection = stubs.ProjectionStub(new[] { layer });
 
 			var projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
@@ -123,8 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var startTime = new DateTime(2011, 1, 2, 8, 0, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
-			var layer = stubs.VisualLayerStub();
-			layer.Period = period;
+			var layer = stubs.VisualLayerStub(period);
 			var projection = stubs.ProjectionStub(new[] { layer });
 			var dayOff = stubs.PersonDayOffStub(period);
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);

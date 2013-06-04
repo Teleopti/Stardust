@@ -2,6 +2,7 @@
 using System.Security.Policy;
 using System.Security.Principal;
 using Autofac;
+using MbCache.Configuration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using log4net;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var builder = new ContainerBuilder();
 
-			var mbCacheModule = new MbCacheModule(null);
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			return builder.Build();

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retObj = (MainShift)MemberwiseClone();
 			retObj.SetId(null);
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => layer.NoneEntityClone()))
+			foreach (IPersistedLayer<IActivity> newLayer in _layerCollection.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retObj);
 				retObj._layerCollection.Add(newLayer);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retObj = (MainShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => layer.EntityClone()))
+			foreach (IPersistedLayer<IActivity> newLayer in _layerCollection.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retObj);
 				retObj._layerCollection.Add(newLayer);

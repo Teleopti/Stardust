@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 				foreach (var scheduleMatrixPro in matrixLists)
 				{
-					scheduleMatrixPro.UnlockPeriod(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod);
 					var displayRow = new AgentRestrictionsDisplayRow(scheduleMatrixPro) {AgentName = _stateHolder.CommonAgentName(scheduleMatrixPro.Person)};
 					displayRows.Add(displayRow);
 				}

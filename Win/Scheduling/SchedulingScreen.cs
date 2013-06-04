@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -1241,6 +1242,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				swapSelectedSchedules();
+				Refresh();
+				RefreshSelection();
 			}
 		}
 
@@ -3724,11 +3727,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                                                                     (), maxCalculatMinMaxCacheEnries);
 			if (turnOfCache)
 			{
-				_workShiftWorkTime = new WorkShiftWorkTime(_container.Resolve<IRuleSetProjectionService>());
+				_container.Resolve<IMbCacheFactory>().DisableCache<IWorkShiftWorkTime>();
 			}
 			else
 			{
-				_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
 			}
 		}
 
@@ -4805,7 +4808,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private PersonsFilterView _cachedPersonsFilterView;
 		private PersonsFilterView getCachedPersonsFilterView()
 		{
-			if (_cachedPersonsFilterView == null)
+			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
 				var permittedPersons = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 

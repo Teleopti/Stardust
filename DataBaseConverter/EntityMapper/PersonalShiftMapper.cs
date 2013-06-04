@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             ActivityLayerMapper actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.PersonalShift, _date, TimeZone);
             foreach (global::Domain.ActivityLayer actLayer in oldEntity.ProjectedLayers())
             {
-                IActivityLayer newActLayer = actLayerMapper.Map(actLayer);
+                var newActLayer = actLayerMapper.Map(actLayer);
                 if (newActLayer != null)
                     retShift.LayerCollection.Add(newActLayer);
             }
