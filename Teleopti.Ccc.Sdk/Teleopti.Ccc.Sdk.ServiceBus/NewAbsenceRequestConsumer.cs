@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private bool LoadDataForResourceCalculation(NewAbsenceRequestCreated message)
         {
             DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
-        	_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.LoadDefaultScenario(),
+			_loadSchedulingStateHolderForResourceCalculation.LoadForRequest(_scenarioRepository.LoadDefaultScenario(),
         	                                                         periodForResourceCalc,
         	                                                         new List<IPerson> {_absenceRequest.Person});
             if (Logger.IsDebugEnabled)
