@@ -37,7 +37,14 @@ Scenario: View form
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 
-	Scenario: Add on shift on empty day
+	#The following scenario shows a different behaviour between web and win app.
+	#In win, the contract is taken into account when an full day absence is added to 
+	# an empty day (that is a day without shift). If the logic would be the same as in win app
+	# the absence in the absence list would look like this:
+	#	| Name       | Vacation         |
+	#	| Start time | 2013-04-08 08:00 |
+	#	| End time   | 2013-04-08 16:00 |
+	Scenario: Add on empty day
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
 	And I input these full day absence values
@@ -53,8 +60,8 @@ Scenario: View form
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-08 08:00 |
-	| End time   | 2013-04-08 16:00 |
+	| Start time | 2013-04-08 00:00 |
+	| End time   | 2013-04-08 23:59 |
 
 Scenario: Add on shift
 	Given I have the role 'Anywhere Team Green'

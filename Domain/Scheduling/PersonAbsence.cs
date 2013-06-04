@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
-			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24).AddMinutes(-1), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
 
 			_person = person;
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
