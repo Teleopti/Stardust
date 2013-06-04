@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
                 Expect.Call(personRequestRepository.Get(created.PersonRequestId)).Return(personRequest);
                 Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario).Repeat.AtLeastOnce();
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
+                Expect.Call(() => loader.LoadForRequest(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                           statusChecker);
                 Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             {
                 ExpectCreationOfCommonRepositories(created.PersonRequestId);
                 Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(false));
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
+				Expect.Call(() => loader.LoadForRequest(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
                 
                 ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
+				Expect.Call(() => loader.LoadForRequest(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetRequestApprovalService(null, null)).Constraints(new[]{Is.Matching<NewBusinessRuleCollection>(
                     b =>
                         { ruleCollection = b;
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(validator.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
 
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
+				Expect.Call(() => loader.LoadForRequest(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
                 
                 ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
+				Expect.Call(() => loader.LoadForRequest(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
