@@ -79,19 +79,23 @@
             registerHubProxies(proxies, false);
         });
 
-        proxies.personScheduleHub = this.createHubProxy('personScheduleHub');
-        proxies.personScheduleHub.client = {};
-        proxies.personScheduleHub.server = {
-            subscribePersonSchedule: function (personId, date) {
-                return proxies.personScheduleHub.invoke.apply(proxies.personScheduleHub, $.merge(["SubscribePersonSchedule"], $.makeArray(arguments)));
-            }
-        };
+        proxies.MessageBrokerHub = this.createHubProxy('MessageBrokerHub');
+        proxies.MessageBrokerHub.client = {};
+        proxies.MessageBrokerHub.server = {
+            addSubscription: function (subscription) {
+                return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["AddSubscription"], $.makeArray(arguments)));
+            },
 
-        proxies.teamScheduleHub = this.createHubProxy('teamScheduleHub');
-        proxies.teamScheduleHub.client = {};
-        proxies.teamScheduleHub.server = {
-            subscribeTeamSchedule: function (teamId, date) {
-                return proxies.teamScheduleHub.invoke.apply(proxies.teamScheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
+            notifyClients: function (notification) {
+                return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClients"], $.makeArray(arguments)));
+            },
+
+            notifyClientsMultiple: function (notifications) {
+                return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClientsMultiple"], $.makeArray(arguments)));
+            },
+
+            removeSubscription: function (route) {
+                return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
             }
         };
 

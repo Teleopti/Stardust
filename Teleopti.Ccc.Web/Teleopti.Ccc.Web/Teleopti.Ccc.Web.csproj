@@ -1021,7 +1021,6 @@
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\Anywhere\Views\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
