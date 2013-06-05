@@ -400,13 +400,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// object is persisted. It will only be set when fetched from database
 		/// </summary>
 		public virtual DateTimePeriod DatabasePeriod { get; protected set; }
-
-		public override bool Equals(IEntity other)
-		{
-			//to prevent equal with Mainshift (has same Id)
-			if (!(other is IPersonAssignment))
-				return false;
-			return base.Equals(other);
-		}
 	}
 }
