@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, null));
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, calculator, specification));
                 Assert.IsFalse(result.IsValid);
             }
         }
