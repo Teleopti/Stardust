@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
-			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-timefrom",
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-timefrom",
 												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-timeto",
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-timeto",
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see request form with subject '(.*)'")]
 		public void ThenIShouldSeeRequestFormWithSubject(string subject)
 		{
-			Browser.Interactions.AssertInputValue("#Schedule-addRequest-subject-input", subject);
+			Browser.Interactions.AssertInputValueUsingJQuery("#Schedule-addRequest-subject-input", subject);
 		}
 	}
 }

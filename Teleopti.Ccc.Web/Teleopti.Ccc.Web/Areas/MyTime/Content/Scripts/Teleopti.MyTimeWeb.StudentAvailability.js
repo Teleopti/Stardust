@@ -38,7 +38,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
         self.setCurrentDate = function (date) {
             self.selectedDate(date);
             self.selectedDate.subscribe(function (d) {
-                Teleopti.MyTimeWeb.Portal.NavigateTo("StudentAvailability/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+                Teleopti.MyTimeWeb.Portal.NavigateTo("Availability/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
             });
         };
 

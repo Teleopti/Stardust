@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var today = DateTime.Today;
 
-			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValue("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[When(@"I input empty subject")]
