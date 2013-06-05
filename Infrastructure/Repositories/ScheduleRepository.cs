@@ -231,7 +231,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addAgentDayScheduleTags(scheduleDictionary, _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
                 }
 
-                //if (personsProvider.LoadRestrictions)
                 if(scheduleDictionaryLoadOptions.LoadRestrictions)
                 {
                     addPreferencesDays(scheduleDictionary, _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
