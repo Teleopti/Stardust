@@ -47,7 +47,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
 	        var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
 	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+#pragma warning disable 612,618
 					ass.SetMainShift(shift);
+#pragma warning restore 612,618
             ILayer<IActivity> firstLayer =
                 (from l in shift.LayerCollection
                  orderby l.OrderIndex
@@ -115,7 +117,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
             MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
 	        var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+#pragma warning disable 612,618
 					ass.SetMainShift(shift);
+#pragma warning restore 612,618
 #pragma warning disable 612,618
 	        var ms = ass.ToMainShift();
 #pragma warning restore 612,618

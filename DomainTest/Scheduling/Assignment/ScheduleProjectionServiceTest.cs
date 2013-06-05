@@ -242,11 +242,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyOverlappingTwoAssignmentsWithDifferentActivities()
 		{
-			PersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			MainShift shift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("sdf"));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
-			ass.SetMainShift(shift);
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetMainShiftLayers(
+				new[]
+					{
+						new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1)),
+						new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1))
+					},
+				ShiftCategoryFactory.CreateShiftCategory("sdf"));
 
 			IPersonAbsence abs = createPersonAbsence(100, new DateTimePeriod(1900, 6, 1, 2100, 6, 2));
 			scheduleDay.Add(ass);

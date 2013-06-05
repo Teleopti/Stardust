@@ -69,7 +69,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
             PersonAssignment ass = new PersonAssignment(agent, scenario, date);
 	        var mainshift = MainShiftFactory.CreateMainShift(activity, period, category);
+#pragma warning disable 612,618
             ass.SetMainShift(mainshift);
+#pragma warning restore 612,618
             return ass;
         }
 

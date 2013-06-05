@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _mainShiftActivityLayers; }
 		}
 
-		//remove me later!
+		[Obsolete("Mainshift will not be supported in near future")]
 		public virtual void SetMainShift(IMainShift mainShift)
 		{
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
