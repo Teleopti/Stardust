@@ -243,8 +243,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 							                                     Shift =
 								                                     @"{HasUnderlyingShift:true,Projection:[{Color:'#FF0000',Start:'2013-04-08T08:00:00Z',End:'2013-04-08T16:00:00Z',Minutes:480,Title:'Vacation'}]}"
 						                                     });
-					 var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-					 person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
 
 					 var personAbsences = new[] { new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
@@ -262,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 					 var target = new PersonScheduleViewModelMapper();
 
 					 var startTime = new DateTime(2013, 04, 8, 0, 0, 0, DateTimeKind.Utc);
-					 var endTime = new DateTime(2013, 04, 8, 23, 0, 0, DateTimeKind.Utc);
+					 var endTime = new DateTime(2013, 04, 8, 20, 0, 0, DateTimeKind.Utc);
 					 var shiftEnd = new DateTime(2013, 04, 8, 16, 0, 0, DateTimeKind.Utc);
 					 var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(startTime, endTime));
 
@@ -275,8 +273,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 															 Shift =
 																 @"{HasUnderlyingShift:true,Projection:[{Color:'#FF0000',Start:'2013-04-08T08:00:00Z',End:'2013-04-08T16:00:00Z',Minutes:480,Title:'Vacation'}]}"
 														 });
-					 var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-					 person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
 
 					 var personAbsences = new[] { new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
