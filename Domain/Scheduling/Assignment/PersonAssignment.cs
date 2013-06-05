@@ -148,6 +148,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory)
 		{
+			//todo: make sure not reusing layer from another assignment...
+			//* either do a check here or 
+			//* don't expose and accept IMainShiftACtivityLayerNew but another type
+
 			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
 			//clear or new list?
 			ClearMainShiftLayers();
