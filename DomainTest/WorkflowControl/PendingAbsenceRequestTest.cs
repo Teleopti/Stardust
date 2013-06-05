@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _personRequest = (IPersonRequest)_absenceRequest.Parent;
             _validator = _mocks.StrictMock<IAbsenceRequestValidator>();
             _validators = new List<IAbsenceRequestValidator>{_validator};
-            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+            _validatedRequest = new ValidatedRequest{IsValid = true, ValidationErrors = ""};
             _authorization = _mocks.StrictMock<IPersonRequestCheckAuthorization>();
             _target = new PendingAbsenceRequest();
         }
@@ -42,16 +42,17 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
 
+            var handling = new RequiredForHandlingAbsenceRequest();
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); // false;
+                Expect.Call(_validator.Validate(_absenceRequest,handling)).Return(_validatedRequest);
                 Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
 
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, _authorization, _validators);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null,null,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsDenied);
         }
@@ -61,16 +62,17 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             _validatedRequest.IsValid = true;
             _validatedRequest.ValidationErrors = "";
-            
+
+            var handling = new RequiredForHandlingAbsenceRequest();
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  //true;
+                Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
 
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, _authorization, _validators);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null,null,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsPending);
         }
@@ -82,10 +84,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
 
+            var handling = new RequiredForHandlingAbsenceRequest();
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  // false;
-                //Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
+                Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
                 undoRedoContainer.UndoAll();
                 Expect.Call(() => _authorization.VerifyEditRequestPermission(_personRequest));
             }
@@ -93,8 +95,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.UndoRedoContainer = undoRedoContainer;
-            _target.Process(null, _absenceRequest, _authorization, _validators);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,null,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsDenied);
             _mocks.VerifyAll();
@@ -107,17 +108,17 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _validatedRequest.IsValid = true;
             _validatedRequest.ValidationErrors = "";
 
+            var handling = new RequiredForHandlingAbsenceRequest();
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  //true;
+                Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
                 undoRedoContainer.UndoAll();
             }
 
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.UndoRedoContainer = undoRedoContainer;
-            _target.Process(null, _absenceRequest, _authorization, _validators);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, null, _authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsPending);
             _mocks.VerifyAll();
@@ -128,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var newInstance = _target.CreateInstance();
             Assert.IsTrue(typeof(PendingAbsenceRequest).IsInstanceOfType(newInstance));
-            Assert.IsNull(newInstance.RequestApprovalService);
             Assert.AreEqual(UserTexts.Resources.No,_target.DisplayText);
         }
 

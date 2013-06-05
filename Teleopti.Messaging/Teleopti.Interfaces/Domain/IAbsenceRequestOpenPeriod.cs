@@ -115,36 +115,11 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Gets the selected validator list.
         /// </summary>
-        /// <param name="schedulingResultStateHolder">The scheduling result state holder.</param>
-        /// <param name="resourceOptimizationHelper">The resource optimization helper.</param>
-        /// <param name="personAccountBalanceCalculator">The person account balance calculator.</param>
-        /// <param name="budgetGroupAllowanceSpecification">The budget group alloance specification.</param>
-        /// <param name="budgetGroupAllowanceCalculator">The budget group alloance calculator.</param>
-        /// <param name="budgetGroupHeadCountSpecification">The budget group head count specification.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: henryg
         /// Created date: 2010-04-22
         /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-        IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(
-            ISchedulingResultStateHolder schedulingResultStateHolder,
-            IResourceOptimizationHelper resourceOptimizationHelper,
-            IPersonAccountBalanceCalculator personAccountBalanceCalculator,
-            IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
-            IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator,
-            IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification);
-
-        /// <summary>
-        /// Gets the selected process.
-        /// </summary>
-        /// <param name="requestApprovalService">The request approval service.</param>
-        /// <param name="undoRedoContainer">The undo redo container.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2010-04-23
-        /// </remarks>
-        IProcessAbsenceRequest GetSelectedProcess(IRequestApprovalService requestApprovalService, IUndoRedoContainer undoRedoContainer);
+        IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList();
     }
 }
