@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using System.Linq;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -31,8 +32,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly IRequestFactory _factory;
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
         private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
+
         private IPersonRequest _personRequest;
         private IAbsenceRequest _absenceRequest;
+        private IPersonAbsenceAccount personAccount;
         
         private static readonly IsNullOrNotNewSpecification PersonRequestSpecification = new IsNullOrNotNewSpecification();
         private static readonly IsNullSpecification AbsenceRequestSpecification = new IsNullSpecification();
@@ -45,7 +48,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
-    	private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
+        private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
+        private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
         private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
         private IProcessAbsenceRequest _process;
@@ -56,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
                                          IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
-                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
+                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -73,7 +77,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
     		_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
     		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
-    		_alreadyAbsentSpecification = alreadyAbsentSpecification;
+    	    _loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
+    	    _alreadyAbsentSpecification = alreadyAbsentSpecification;
     	    _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
     	    _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 
@@ -81,8 +86,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                    {
                                        LoadAndCheckPersonRequest,
                                        GetAndCheckAbsenceRequest,
-                                       LoadDefaultScenario,
-                                       LoadDataForResourceCalculation
+                                       LoadDefaultScenario
                                    };
             if (Logger.IsInfoEnabled)
             {
@@ -110,21 +114,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     }
                 }
 
-                var undoRedoContainer = new UndoRedoContainer(400);
-                _schedulingResultStateHolder.Schedules.TakeSnapshot();
-                _schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
-
                 var agentTimeZone = _absenceRequest.Person.PermissionInformation.DefaultTimeZone();
                 var dateOnlyPeriod = _absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
                 IEnumerable<IAbsenceRequestValidator> validatorList = null;
-                IPersonAbsenceAccount personAccount = null;
+                IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
+                IRequestApprovalService requestApprovalServiceScheduler = null;
+                var undoRedoContainer = new UndoRedoContainer(400);
 
                 if (!HasWorkflowControlSet())
                 {
-                    denyAbsenceRequest(undoRedoContainer, UserTexts.Resources.ResourceManager.GetString(
-                                                                                                        "RequestDenyReasonNoWorkflow", 
-                                                                                                        _absenceRequest.Person.PermissionInformation.Culture()));
+                    denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow", _absenceRequest.Person.PermissionInformation.Culture()));
 					
                     if (Logger.IsWarnEnabled)
                     {
@@ -137,13 +137,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
                 if (HasWorkflowControlSet())
                 {
+                    IOpenAbsenceRequestPeriodExtractor extractor =
+                        _absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence(_absenceRequest.Absence);
+                    extractor.ViewpointDate = DateOnly.Today;
+
+                    var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, _absenceRequest.Person.PermissionInformation.Culture());
+
+                    var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
+
+                    validatorList = mergedPeriod.GetSelectedValidatorList();
+
+                    _process = mergedPeriod.AbsenceRequestProcess;
+
+                    LoadDataForResourceCalculation(validatorList);
+
+                    _schedulingResultStateHolder.Schedules.TakeSnapshot();
+                    _schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
+
+
                     IPersonAccountCollection allAccounts = _personAbsenceAccountProvider.Find(_absenceRequest.Person);
                     foreach (IPersonAbsenceAccount personAbsenceAccount in allAccounts)
                     {
                         undoRedoContainer.SaveState(personAbsenceAccount);
                     }
 
-                    IPersonAccountBalanceCalculator personAccountBalanceCalculator;
                     personAccount = allAccounts.Find(_absenceRequest.Absence); //Find for all later periods
                     if (personAccount == null)
                     {
@@ -172,8 +189,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
                     var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod();
                     var allNewRules = NewBusinessRuleCollection.Minimum();
-                    var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
-                	                                                                         _scenarioRepository.
+                    requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
+                                                                                         _scenarioRepository.
                 	                                                                         	Current());
                     var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
                                                                                              _absenceRequest.Period,
@@ -190,27 +207,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                         Logger.Debug("Simulated approving absence successfully");
                     }
 
-                    IOpenAbsenceRequestPeriodExtractor extractor =
-                        _absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence
-                            (_absenceRequest.Absence);
-                    extractor.ViewpointDate = DateOnly.Today;
-
-                	var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, _absenceRequest.Person.PermissionInformation.Culture());
-
-                    var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
-
-                    validatorList = mergedPeriod.GetSelectedValidatorList(_schedulingResultStateHolder,
-                                                                          _resourceOptimizationHelper,
-                                                                          personAccountBalanceCalculator,
-                                                                          _budgetGroupAllowanceSpecification,
-                                                                           _budgetGroupAllowanceCalculator,
-                                                                           _budgetGroupHeadCountSpecification);
-                    
-                    _process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
-
                     if (_process.GetType() == typeof (GrantAbsenceRequest) && alreadyAbsent)
                     {
-						denyAbsenceRequest(undoRedoContainer, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", _absenceRequest.Person.PermissionInformation.Culture()));
+						denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", _absenceRequest.Person.PermissionInformation.Culture()));
 
                         if (Logger.IsWarnEnabled)
                         {
@@ -221,9 +220,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                               message.PersonRequestId);
                         }
                     }
-                }
 
-                HandleInvalidSchedule(undoRedoContainer);
+                    HandleInvalidSchedule();
+                }
 
                 //Will issue a rollback for simulated schedule data
                 if (Logger.IsInfoEnabled)
@@ -232,7 +231,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                       _process.GetType());
                 }
 
-                _process.Process(null, _absenceRequest, _authorization, validatorList);
+                _process.Process(null, _absenceRequest,
+                                 new RequiredForProcessingAbsenceRequest(undoRedoContainer,
+                                                                         requestApprovalServiceScheduler, _authorization),
+                                 new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+                                                                       personAccountBalanceCalculator,
+                                                                       _resourceOptimizationHelper,
+                                                                       _budgetGroupAllowanceSpecification,
+                                                                       _budgetGroupAllowanceCalculator,
+                                                                       _budgetGroupHeadCountSpecification),
+                                 validatorList);
 
                 if (_personRequest.IsApproved)
                 {
@@ -280,9 +288,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		return _alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest);
     	}
 
-    	private void denyAbsenceRequest(UndoRedoContainer undoRedoContainer, string reasonResourceKey)
+    	private void denyAbsenceRequest(string reasonResourceKey)
     	{
-    		_denyAbsenceRequest.UndoRedoContainer = undoRedoContainer;
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;
 			_process = _denyAbsenceRequest;
     	}
@@ -294,14 +301,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _scheduleDictionaryModifiedCallback.Callback(_schedulingResultStateHolder.Schedules, persistResult.ModifiedEntities, persistResult.AddedEntities, persistResult.DeletedEntities);
         }
 
-        private void HandleInvalidSchedule(IUndoRedoContainer undoRedoContainer)
+        private void HandleInvalidSchedule()
         {
             if (_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder))
             {
                 if (_process.GetType() != typeof (DenyAbsenceRequest))
                 {
                     _process = _pendingAbsenceRequest;
-                    _process.UndoRedoContainer = undoRedoContainer;
                 }
             }
         }
@@ -343,17 +349,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             }
         }
 
-        private bool LoadDataForResourceCalculation(NewAbsenceRequestCreated message)
+        private void LoadDataForResourceCalculation(IEnumerable<IAbsenceRequestValidator> validatorList)
         {
-            DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
-        	_loadSchedulingStateHolderForResourceCalculation.LoadForRequest(_scenarioRepository.Current(),
-        	                                                         periodForResourceCalc,
-        	                                                         new List<IPerson> {_absenceRequest.Person});
-            if (Logger.IsDebugEnabled)
+            var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
+            if (shouldLoadDataForResourceCalculation)
             {
-                Logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})", periodForResourceCalc);
+                DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
+                _loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
+                                                                         periodForResourceCalc,
+                                                                         new List<IPerson> {_absenceRequest.Person});
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
+                                       periodForResourceCalc);
+                }
             }
-            return true;
+            else
+            {
+                DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
+                _loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
+                                                                         periodForResourceCalc,
+                                                                         new List<IPerson> { _absenceRequest.Person });
+                if (Logger.IsDebugEnabled)
+                {
+                    Logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
+                                       periodForResourceCalc);
+                }
+            }
         }
 
         private bool LoadDefaultScenario(NewAbsenceRequestCreated message)

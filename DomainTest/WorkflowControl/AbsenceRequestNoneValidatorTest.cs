@@ -8,13 +8,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     public class AbsenceRequestNoneValidatorTest
     {
         private IAbsenceRequestValidator _target;
-        //private IValidatedRequest _validatedRequest;
-
-
+        
         [SetUp]
         public void Setup()
         {
-            //_validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _target = new AbsenceRequestNoneValidator();
         }
 
@@ -27,22 +24,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyValidateAlwaysReturnsTrue()
         {
-            //Assert.IsNotNullOrEmpty(_target.Validate(null));
-            var result = _target.Validate(null);
+            var result = _target.Validate(null, new RequiredForHandlingAbsenceRequest());
             Assert.IsTrue(result.IsValid);
         }
 
         [Test]
         public void VerifyProperties()
         {
-            Assert.IsNull(_target.PersonAccountBalanceCalculator);
-            Assert.IsNull(_target.SchedulingResultStateHolder);
-
-            _target.PersonAccountBalanceCalculator = null;
-            _target.SchedulingResultStateHolder = null;
-
-            Assert.IsNull(_target.PersonAccountBalanceCalculator);
-            Assert.IsNull(_target.SchedulingResultStateHolder);
             Assert.AreEqual(UserTexts.Resources.No, _target.DisplayText);
         }
 

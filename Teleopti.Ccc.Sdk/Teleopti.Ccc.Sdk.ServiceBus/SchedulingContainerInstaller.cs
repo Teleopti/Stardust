@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
+			builder.RegisterType<LoadSchedulesForRequestWithoutResourceCalculation>().As<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
