@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using NHibernate.Criterion;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -95,16 +94,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShift(_dummyCat);
-					mainShift.LayerCollection.Add(new MainShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2)));
-            IList<IPersonalShift> persShifts = new List<IPersonalShift> {new PersonalShift(), new PersonalShift()};
+	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
+	        ass.SetMainShiftLayers(
+		        new[] {new MainShiftActivityLayerNew(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
+					ass.AddPersonalShift(new PersonalShift());
+					ass.AddPersonalShift(new PersonalShift());
 
-        	IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignmentAggregate(_dummyAgent,
-                                                                                        mainShift,
-                                                                                        persShifts,
-                                                                                        _dummyScenario,
-																																												new DateOnly(2000,1,1));
-            IOvertimeShift ot = new OvertimeShift();
+						IOvertimeShift ot = new OvertimeShift();
             ass.AddOvertimeShift(ot);
             ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
             return ass;

@@ -15,27 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     /// </summary>
     public static class PersonAssignmentFactory
     {
-        public static IPersonAssignment CreatePersonAssignmentAggregate(IPerson agent,
-                                                                     IMainShift mainShift,
-                                                                     ICollection<IPersonalShift> personalShiftCollection,
-                                                                     IScenario scenario, DateOnly dateOnly)
-        {
-            IPersonAssignment ret = new PersonAssignment(agent, scenario, dateOnly);
-            ret.SetMainShift(mainShift);
-            //todo: rk - lägg till en AddRange istället!
-            foreach (IPersonalShift personalShift in personalShiftCollection)
-            {
-                ret.AddPersonalShift(personalShift);
-            }
-            return ret;
-        }
-
-
-        /// <summary>
-        /// Creates a person assignment test data.
-        /// </summary>
-        /// <param name="agent">The agent.</param>
-        /// <returns></returns>
         public static IPersonAssignment CreatePersonAssignment(IPerson agent)
         {
             return CreatePersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate());
