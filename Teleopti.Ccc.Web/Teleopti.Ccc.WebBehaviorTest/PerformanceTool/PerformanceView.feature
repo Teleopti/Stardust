@@ -24,8 +24,8 @@ Scenario: Measure add and remove full day absences
 	And I select scenario 'Add and remove full day absence'
 	And I input a configuration in json format
 	And I click 'run'
-	Then I should see a count of messages received for each applicable model updated
-	And I should see that the test run has finished
+	Then I should see that the test run has finished
+	And I should see a count of messages received for each applicable model updated
 	And I should see total run time
 	And I should see total time to send commands
 	And I should see scenarios per second
