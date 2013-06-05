@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
                  {
 					 _personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
                           Mapper.Reset();
-						  Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_personScheduleDayReadModelRepository)));
+						  Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_personScheduleDayReadModelRepository, new NewtonsoftJsonDeserializer())));
                  }
 
                  // cant get this green with dynamics involved

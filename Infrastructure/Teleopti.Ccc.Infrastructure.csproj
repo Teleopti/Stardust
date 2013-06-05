@@ -101,6 +101,10 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -136,6 +140,7 @@
     <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
+    <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />

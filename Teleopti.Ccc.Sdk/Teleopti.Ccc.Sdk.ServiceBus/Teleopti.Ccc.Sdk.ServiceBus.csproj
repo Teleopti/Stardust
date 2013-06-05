@@ -162,7 +162,6 @@
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
-    <Compile Include="NewtonsoftJsonSerializer.cs" />
     <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />

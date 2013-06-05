@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,10 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModelMappingProfile : Profile
 	{
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
+		private readonly IJsonDeserializer _deserializer;
 
-		public PersonScheduleViewModelMappingProfile(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository)
+		public PersonScheduleViewModelMappingProfile(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IJsonDeserializer deserializer)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
+			_deserializer = deserializer;
 		}
 
 		protected override void Configure()
@@ -100,13 +101,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		}
 
-		private static DateTime getShiftStartOnAbsenceStartDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnStartDay)
+		private DateTime getShiftStartOnAbsenceStartDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnStartDay)
 		{
 			DateTime shiftStart = DateTime.MaxValue;
 			if (personScheduleDayReadModelOnStartDay != null && personScheduleDayReadModelOnStartDay.Shift != null)
 			{
 				dynamic shiftOnStartDay =
-					Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(personScheduleDayReadModelOnStartDay.Shift);
+					_deserializer.DeserializeObject(personScheduleDayReadModelOnStartDay.Shift);
 				
 				if (shiftOnStartDay != null && shiftOnStartDay.HasUnderlyingShift)
 				{
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			if (personScheduleDayReadModelOnEndDay != null && personScheduleDayReadModelOnEndDay.Shift != null)
 			{
 				dynamic shiftOnEndDay =
-					Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(personScheduleDayReadModelOnEndDay.Shift);
+					_deserializer.DeserializeObject(personScheduleDayReadModelOnEndDay.Shift);
 
 				if (shiftOnEndDay != null && shiftOnEndDay.HasUnderlyingShift)
 				{
