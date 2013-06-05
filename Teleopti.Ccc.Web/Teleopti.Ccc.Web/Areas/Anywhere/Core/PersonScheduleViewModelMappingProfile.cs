@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						var shiftStartLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftStart, timeZoneInfo);
 						var startTime = absenceStartLocal.Date < shiftStartLocal.Date
 							                ? absenceStartLocal.ToFixedDateTimeFormat()
-							                : shiftStartLocal.ToFixedDateTimeFormat();
+							                : (absenceStartLocal < shiftStartLocal
+								                   ? shiftStartLocal.ToFixedDateTimeFormat()
+								                   : absenceStartLocal.ToFixedDateTimeFormat());
 						return startTime;
 					}))
 				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
@@ -76,8 +78,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						var absenceEndLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceEnd, timeZoneInfo);
 						var shiftEndLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftEnd, timeZoneInfo);
 						var endTime = shiftEndLocal.Date < absenceEndLocal.Date
-							                 ? absenceEndLocal.ToFixedDateTimeFormat()
-							                 : shiftEndLocal.ToFixedDateTimeFormat();
+							              ? absenceEndLocal.ToFixedDateTimeFormat()
+							              : (shiftEndLocal < absenceEndLocal
+								                 ? shiftEndLocal.ToFixedDateTimeFormat()
+								                 : absenceEndLocal.ToFixedDateTimeFormat());
 						return endTime;
 					}))
 				;

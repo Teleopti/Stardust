@@ -147,7 +147,6 @@ Scenario: Add on shifts in sequence
 	| Start time | 2013-04-08 08:00 |
 	| End time   | 2013-04-09 18:00 |
 
-@ignore
 Scenario: Add on shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -173,7 +172,6 @@ Scenario: Add on shift ending tomorrow
 	| Start time | 2013-05-23 22:00 |
 	| End time   | 2013-05-24 07:00 |
 
-@ignore
 Scenario: Add absence on a day with a night shift starting yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -188,8 +186,7 @@ Scenario: Add absence on a day with a night shift starting yesterday
 	| Absence  | Vacation   |
 	| End date | 2013-05-23 |
 	And I click 'apply'
-	Then I should not see any shift
-	And I should see an absence in the absence list with
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-05-23 07:00 |
