@@ -29,8 +29,6 @@ Background:
 	| Day   |
 	| Night |
 
-
-
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
 	| Field								| Value						|
@@ -45,7 +43,6 @@ Scenario: No workflow control set
 	And I do not have a workflow control set
 	When I view Add Shift Trade Request
 	Then I should see a message text saying I am missing a workflow control set
-	And I should not see the datepicker
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
@@ -58,8 +55,9 @@ Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
-	When I view Add Shift Trade Request for date '2030-02-15'
-	Then the selected date should be '2030-01-31'
+	When I view Add Shift Trade Request for date '2030-02-01'
+	And I click on the next date
+	Then the selected date should be '2030-02-01'
 
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
@@ -212,7 +210,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
-	And I click 'send button'
+	And I click send shifttrade button
 	Then Add Shift Trade Request view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
@@ -477,6 +475,7 @@ Given I have the role 'Full access to mytime'
 	| To			| Ashley Andeen			|
 	| DateTo		| 2030-01-01				|
 	| DateFrom	| 2030-01-01				|
+	| Pending	| True						|
 	| Pending	| True						|
 	| Subject	| Swap with me	|
 	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|

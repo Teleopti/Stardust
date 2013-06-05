@@ -6,7 +6,6 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void AssertShowingDay(DateOnly date)
 		{
-			Browser.Current.Url.EndsWith(string.Format("{0}/{1}/{2}", date.Year, date.Month, date.Day));
+			Browser.Interactions.AssertUrlContains(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
 
 		[Then(@"I should not see the absence's color")]
@@ -327,7 +326,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Container.InnerHtml, Contains.Substring(theOtherSitesTeam));
+			Browser.Interactions.AssertContains(".select2-container .select2-choice span", theOtherSitesTeam);
 		}
 
 		[Then(@"the team-picker should have my team selected")]
@@ -350,23 +349,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name);
-			EventualAssert.That(() => agent.Exists, Is.True, () => name + " not found");
+			Browser.Interactions.AssertExists(string.Format(".teamschedule-agent-name:contains({0})", name));
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)

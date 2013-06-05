@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(1)");
 		}
 
 		public Div ToolTipContainer()

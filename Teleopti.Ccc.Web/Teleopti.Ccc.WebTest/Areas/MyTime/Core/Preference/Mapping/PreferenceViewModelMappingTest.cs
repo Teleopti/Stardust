@@ -1,12 +1,17 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceViewModelMappingTest
 	{
 		private PreferenceDomainData data;
+		private IPreferenceOptionsProvider preferenceOptionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -34,11 +40,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								},
 						MaxMustHave = 8
 					};
+			preferenceOptionProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new PreferenceViewModelMappingProfile());
+			                  		c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}

@@ -1,25 +1,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
-	public class Select2Box : Control<TextField>
+	public class Select2Box : Control<SelectList>
 	{
-		public Div Container { get { return Element.PreviousSibling as Div; } }
+		public Div Container
+		{
+			get { return Element.Parent.DomContainer.Div(Find.BySelector("#s2id_" + Element.Id)); }
+		}
 
 		public string Value
 		{
-			get { return Element.Value; }
+			get { return Element.SelectedOption.Value; }
 		}
 
 		public bool IsClosed {
 			get
 			{
-				return Container.Div(QuicklyFind.ByClass("select2-offscreen")).Exists;
+				return Container.Div(Find.BySelector(".select2-offscreen")).Exists;
 			}
 		}
 
@@ -27,8 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			get
 			{
-				var div = Element.DomContainer.Div(QuicklyFind.ByClass("team-select2-dropdown"));
-				return div.Exists && div.DisplayVisible();
+				return !Container.Div(Find.BySelector(".select2-offscreen")).Exists;
 			}
 		}
 
@@ -58,6 +59,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");
 			EventualAssert.That(() => Container.InnerHtml, Contains.Substring(text));
 		}
-
 	}
 }

@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
@@ -15,63 +15,27 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Request = (function ($) {
 
-	function _initRequestToolbar() {
-		_activateAddRequestMenu();
-		_initAddRequestMenuItems();
+    function _initNavigationViewModel() {
+        //Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick()
+
+        ko.applyBindings({}, $('div.navbar')[1]);
 	}
 
-	function _initAddRequestMenuItems() {
-		$('#Requests-addTextRequest-menuItem')
-			.click(function () {
-				Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
-			});
-		$('#Requests-addAbsenceRequest-menuItem')
-			.click(function () {
-				Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
-			});
-		$('#Requests-addShiftTradeRequest-menuItem')
-			.click(function () {
-				Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();
-			});
-	}
-
-	function _hideAddRequestMenu() {
-		$("#Requests-addRequest-dropdown dd ul").hide();
-	}
-
-	function _activateAddRequestMenu() {
-		$(document).on("click", "#Requests-addRequest-dropdown dt span", function () {
-			$("#Requests-addRequest-dropdown dd ul").toggle();
-		});
-
-		$(document).on("click", "#Requests-addRequest-dropdown dd ul", function () {
-			_hideAddRequestMenu();
-		});
-
-
-		$(document).bind('click', function (e) {
-			var $clicked = $(e.target);
-			if (!$clicked.parents('#Requests-addRequest-dropdown').length > 0)
-				_hideAddRequestMenu();
-		});
-
-		$("#Requests-addRequest-dropdown a").hover(function () {
-			$(this).addClass('ui-state-hover');
-		}, function () {
-			$(this).removeClass('ui-state-hover');
-		});
-	}
+    function _activatePlaceHolderText() {
+        $('textarea, :text, :password').placeholder();
+    }
 
 	return {
 		Init: function () {
-			_initRequestToolbar();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
-			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback);
+
+			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
+		    _activatePlaceHolderText();
 		}
 	};
 

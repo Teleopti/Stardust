@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -95,16 +96,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyCulture()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureUiSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]
@@ -131,12 +130,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ChangeUiCulture(UserTexts.Resources.BrowserDefault);
 		}
 
-		[Then(@"I should see US date format")]
+		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			Navigation.GotoTeamSchedule();
-			var page = Browser.Current.Page<TeamSchedulePage>();
-			EventualAssert.That(() => page.DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
+			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
+			                                                DateTime.Today.ToShortDateString()));
 		}
 
 
@@ -180,7 +179,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureSelect.Select(culture);
+
+			IOpenTheCulturePicker();
+			page.CultureSelect.SelectItemByText(culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
 		}
 
@@ -189,8 +191,31 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureUiSelect.Select(culture);
+
+			IOpenTheCultureUiPicker();
+			page.CultureUiSelect.SelectItemByText(culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
+		}
+
+		private static void IOpenTheCultureUiPicker()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			var picker = page.CultureUiSelect;
+			if (picker.IsClosed)
+				picker.Open();
+
+			EventualAssert.That(() => picker.IsOpen, Is.True);
+		}
+
+		private static void IOpenTheCulturePicker()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			var picker = page.CultureSelect;
+			if (picker.IsClosed)
+				picker.Open();
+
+			EventualAssert.That(() => picker.IsOpen, Is.True);
 		}
 
 	}

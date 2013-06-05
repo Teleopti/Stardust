@@ -1,4 +1,6 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js"/>
+
+if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
@@ -8,21 +10,48 @@
 
 
 Teleopti.MyTimeWeb.Settings = (function ($) {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	function _init() {
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
+    var vm;
+
+    var settingsViewModel = function() {
+        var self = this;
+
+        self.avoidReload = false;
+        self.cultures = ko.observableArray();
+        self.selectedUiCulture = ko.observable();
+        self.selectedCulture = ko.observable();
+
+        self.selectedUiCulture.subscribe(function(newValue) {
+            if (!self.avoidReload)
+                _selectorChanged(newValue, "Settings/UpdateUiCulture");
+        });
+        
+        self.selectedCulture.subscribe(function (newValue) {
+            if (!self.avoidReload)
+                _selectorChanged(newValue, "Settings/UpdateCulture");
+        });
+    };
+
+    function _init() {
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Settings.PartialInit);
 	}
 
-	function _partialInit() {
-		_initSelectors();
+    function _bindData() {
+        ko.applyBindings(vm, $('#page')[0]);
+    };
+
+    function _partialInit() {
+        vm = new settingsViewModel();
+        _loadCultures();
+        _bindData();
+
 		_passwordEvents();
 		_initButton();
 	}
 
 	function _initButton() {
-		$("input#passwordButton")
-			.button()
+		$("#passwordButton")
 			.click(function () {
 				_updatePassword($("input#oldPassword").val(), $("input#password").val());
 			});
@@ -31,15 +60,15 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _passwordEvents() {
 		$("input#password, input#passwordValidation").keyup(function () {
 			var incorrectLabel = $("#nonMatchingPassword");
-			var passwordButton = $("input#passwordButton");
+			var passwordButton = $("#passwordButton");
 			var pw = $("input#password").val();
 			var pw2 = $("input#passwordValidation").val();
 			if (pw != pw2) {
 				incorrectLabel.show();
-				passwordButton.button("disable");
+				passwordButton.attr('disabled','disabled');
 			} else {
 				incorrectLabel.hide();
-				passwordButton.button("enable");
+				passwordButton.removeAttr('disabled');
 			}
 		});
 
@@ -68,7 +97,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				updatedLabel.show();
 				$("#incorrectOldPassword").hide();
 				$("#invalidNewPassword").hide();
-				$("#passwordDiv input").reset();
+				$("#settings input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -86,23 +115,26 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _initSelectors() {
-		$('#cultureSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateCulture");
-				}
-			})
-			;
-		$('#cultureUiSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-				}
-			})
-			;
+	function _loadCultures() {
+	    ajax.Ajax({
+	        url: "Settings/Cultures",
+	        dataType: "json",
+	        type: "GET",
+	        global: false,
+	        cache: false,
+	        success: function (data, textStatus, jqXHR) {
+	            vm.cultures(data.Cultures);
+	            vm.avoidReload = true;
+	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
+	            vm.selectedCulture(data.ChoosenCulture.id);
+	            vm.avoidReload = false;
+	        },
+	        error: function(e) {
+	            //console.log(e);
+	        }
+	    });
 	}
-
+    
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };
 		ajax.Ajax({
@@ -121,6 +153,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
+	function _activatePlaceHolderText() {
+	    $(':text, :password').placeholder();
+	}
+
 	return {
 		Init: function () {
 			_init();
@@ -129,6 +165,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			_partialInit();
 			readyForInteraction();
 			completelyLoaded();
+		    _activatePlaceHolderText();
 		}
 	};
 })(jQuery);

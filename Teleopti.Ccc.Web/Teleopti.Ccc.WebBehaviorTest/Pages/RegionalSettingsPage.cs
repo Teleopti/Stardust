@@ -5,10 +5,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class RegionalSettingsPage : PortalPage
 	{
-		[FindBy(Id = "cultureSelect-container")]
-		public SelectBox CultureSelect;
+		[FindBy(Id = "Culture-Picker")]
+		public Select2Box CultureSelect;
 
-		[FindBy(Id = "cultureUiSelect-container")]
-		public SelectBox CultureUiSelect;
+		[FindBy(Id = "CultureUi-Picker")]
+		public Select2Box CultureUiSelect;
 	}
 }

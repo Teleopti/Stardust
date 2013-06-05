@@ -679,7 +679,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessageDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.List.js" />
@@ -780,6 +780,10 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
+    <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
+    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
+    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.min.js" />
     <Content Include="Content\bootstrap\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap\bootstrap.css" />
@@ -791,8 +795,8 @@
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
-    <Content Include="Content\jqueryui\jquery-ui-1.10.1.custom.js" />
-    <Content Include="Content\jqueryui\jquery-ui-1.10.1.custom.min.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\animated-overlay.gif" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -807,8 +811,8 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.1.custom.css" />
-    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.1.custom.min.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.css" />
@@ -864,6 +868,7 @@
     <Content Include="Content\Mobile\jquery.mobile.theme-1.3.0.min.css" />
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
+    <Content Include="Content\moment-datepicker\moment-datepicker-ko-original.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
@@ -985,6 +990,8 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
+    <None Include="Properties\PublishProfiles\Local iis.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

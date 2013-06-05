@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					                                               : null))
 				.ForMember(s => s.PersonAssignment,
 				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
+
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
 				.ForMember(d => d.StyleClassName, o => o.ResolveUsing(s =>
 					{
