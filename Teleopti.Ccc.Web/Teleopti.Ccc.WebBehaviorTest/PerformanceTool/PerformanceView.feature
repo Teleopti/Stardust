@@ -7,6 +7,9 @@ Background:
 	Given I have a role with
 	| Field | Value     |
 	| Name  | Developer |
+	And I have a person period with
+    | Field      | Value      |	
+	| Start date | 2013-06-01 |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
