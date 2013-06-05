@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-    	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
+    	private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
     	private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
         private IPersonRequest _personRequest;
         private ShiftTradeRequestValidationResult _validationResult;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
+    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _validator = validator;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
-    			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
+    	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 
     		Logger.Info("New instance of Shift Trade saga was created");
         }
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons)
         {
-            _loadSchedulingStateHolderForResourceCalculation.LoadForRequest(_defaultScenario, period, persons.ToList());
+            _loadSchedulingDataForRequestWithoutResourceCalculation.Execute(_defaultScenario, period, persons.ToList());
         }
 
         private class IsRequestReadyForProcessingSpecification : Specification<IPersonRequest>

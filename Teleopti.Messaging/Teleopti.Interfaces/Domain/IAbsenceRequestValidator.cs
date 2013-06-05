@@ -10,25 +10,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IAbsenceRequestValidator
     {
         /// <summary>
-        /// Gets or sets the scheduling result state holder.
-        /// </summary>
-        /// <value>The scheduling result state holder.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-19
-        /// </remarks>
-        ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
-        /// <summary>
-        /// Gets or sets the person account balance calculator.
-        /// </summary>
-        /// <value>The person account balance calculator.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-19
-        /// </remarks>
-        IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; set; }
-
-        /// <summary>
         /// Gets the invalid reason text.
         /// </summary>
         /// <value>The invalid reason.</value>
@@ -37,16 +18,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-04-19
         /// </remarks>
         string InvalidReason { get; }
-
-        /// <summary>
-        /// Gets or sets the resource optimization helper.
-        /// </summary>
-        /// <value>The resource optimization helper.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-20
-        /// </remarks>
-        IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
 
         /// <summary>
         /// Gets the display text.
@@ -62,13 +33,13 @@ namespace Teleopti.Interfaces.Domain
         /// Validates the specified absence request.
         /// </summary>
         /// <param name="absenceRequest">The absence request.</param>
+        /// <param name="requiredForHandlingAbsenceRequest">The required state holders for approving an absence request.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: HenryG
         /// Created date: 2010-04-19
         /// </remarks>
-        IValidatedRequest Validate(IAbsenceRequest absenceRequest);
-        //bool Validate(IAbsenceRequest absenceRequest);
+        IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest);
 
         /// <summary>
         /// Creates a new instance of the same validator type. To avoid threading issues.
@@ -79,22 +50,82 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-04-19
         /// </remarks>
         IAbsenceRequestValidator CreateInstance();
+    }
 
-        /// <summary>
-        /// Specification for validate whether an absence request exceeds the allowance or not.
-        /// </summary>
-        IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct RequiredForHandlingAbsenceRequest
+    {
+        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private readonly IPersonAccountBalanceCalculator _personAccountBalanceCalculator;
+        private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
+        private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
+        private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
+        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
         /// <summary>
         /// 
         /// </summary>
-        IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
+        /// <param name="schedulingResultStateHolder"></param>
+        /// <param name="personAccountBalanceCalculator"></param>
+        /// <param name="resourceOptimizationHelper"></param>
+        /// <param name="budgetGroupAllowanceSpecification"></param>
+        /// <param name="budgetGroupAllowanceCalculator"></param>
+        /// <param name="budgetGroupHeadCountSpecification"></param>
+        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+        {
+            _resourceOptimizationHelper = resourceOptimizationHelper;
+            _budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
+            _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
+            _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
+            _schedulingResultStateHolder = schedulingResultStateHolder;
+            _personAccountBalanceCalculator = personAccountBalanceCalculator;
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-        IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
+        public ISchedulingResultStateHolder SchedulingResultStateHolder
+        {
+            get { return _schedulingResultStateHolder; }
+        }
 
-     }
+        /// <summary>
+        /// 
+        /// </summary>
+        public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator
+        {
+            get { return _personAccountBalanceCalculator; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification
+        {
+            get { return _budgetGroupAllowanceSpecification; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator
+        {
+            get { return _budgetGroupAllowanceCalculator; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IResourceOptimizationHelper ResourceOptimizationHelper
+        {
+            get { return _resourceOptimizationHelper; }
+        }
+
+        public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification
+        {
+            get { return _budgetGroupHeadCountSpecification; }
+        }
+    }
 }

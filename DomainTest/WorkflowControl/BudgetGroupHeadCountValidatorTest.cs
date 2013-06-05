@@ -75,9 +75,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                _target.BudgetGroupHeadCountSpecification = specification;
-                _target.BudgetGroupAllowanceCalculator = calculator;
-                var result = _target.Validate(absenceRequest);
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, null));
                 Assert.IsFalse(result.IsValid);
             }
         }

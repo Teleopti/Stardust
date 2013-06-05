@@ -74,43 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
 
 			if (skills != null)
-				skills.ForEach(_schedulingResultStateHolder.Skills.Add);
+			{
+			    skills.ForEach(_schedulingResultStateHolder.Skills.Add);
+			}
 
 		    _schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
-		}
-
-		public void LoadForRequest(IScenario scenario, DateTimePeriod period, IList<IPerson> requestedPersons)
-		{
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
-
-			_schedulingResultStateHolder.PersonsInOrganization = requestedPersons;
-
-			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod);
-			_workloadRepository.LoadAll();
-
-			_peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
-			_peopleAndSkillLoaderDecider.FilterSkills(skills);
-
-			var personsProvider = _personProviderMaker.Invoke(requestedPersons);
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-
-			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
-			_schedulingResultStateHolder.Schedules =
-				_scheduleRepository.FindSchedulesForPersons(
-					scheduleDateTimePeriod,
-					scenario,
-					personsProvider,
-					scheduleDictionaryLoadOptions,
-					requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
-
-			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
-
-			if (skills != null)
-				skills.ForEach(_schedulingResultStateHolder.Skills.Add);
-
-			_schedulingResultStateHolder.SkillDays =
-				_skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
 		}
 	}
 }
