@@ -61,16 +61,17 @@ define([
             this.ConfigurationChanged = function(configuration) {
                 var startDate = moment(configuration.DateRange.From);
                 var endDate = moment(configuration.DateRange.To);
-                var numberOfDays = endDate.diff(startDate, 'days') + 1;
+                var numberOfDays = endDate.diff(startDate, 'days') +1;
                 var personIds = configuration.PersonIds;
 
                 iterations = [];
                 
                 for (var i = 0; i < personIds.length; i++) {
                     var personId = personIds[i];
-                    var date = startDate.clone();
+                    var date = startDate.clone().subtract('days', 1);
+                    
                     for (var j = 0; j < numberOfDays; j++) {
-                        date.add('days', j);
+                        date.add('days', 1);
 
                         iterations.push({
                             absenceId: configuration.AbsenceId,
