@@ -551,12 +551,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			var actCtr = new Activity("phone");
 			var actNoCtr = new Activity("lunch") { InContractTime = false };
-			var main = new MainShift(new ShiftCategory("d"));
-			main.LayerCollection.Add(new MainShiftActivityLayer(actCtr, createPeriod(8, 17)));
-			main.LayerCollection.Add(new MainShiftActivityLayer(actNoCtr, createPeriod(11, 12)));
-#pragma warning disable 612,618
-			ass.SetMainShift(main);
-#pragma warning restore 612,618
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftActivityLayerNew(actCtr, createPeriod(8, 17)),
+					new MainShiftActivityLayerNew(actNoCtr, createPeriod(11, 12))
+				}, new ShiftCategory("d"));
 			var absLayer = new AbsenceLayer(new Absence { InContractTime = true }, createPeriod(10, 20));
 			var personAbs = new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, absLayer);
 			scheduleDay.Add(ass);
