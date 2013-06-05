@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the edit button in student availability")]
 		public void WhenIClickTheEditButtonInStudentAvailability()
 		{
-			Browser.Interactions.Javascript("$('#StudentAvailability-edit-button').mousedown();");
+			Browser.Interactions.Javascript("$('#Availability-edit-button').mousedown();");
 		}
 
 		[When(@"I click the delete button in student availability")]
 		public void WhenIClickTheDeleteButtonInStudentAvailability()
 		{
-			Browser.Interactions.Click("#StudentAvailability-delete-button");
+			Browser.Interactions.Click("#Availability-delete-button");
 		}
 
 		[When(@"I input student availability with")]
