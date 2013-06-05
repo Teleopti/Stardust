@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -36,11 +35,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
             _schedulingResultStateHolder.Schedules = _dictionary;
-            _target.SchedulingResultStateHolder = _schedulingResultStateHolder;
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-            _target.ResourceOptimizationHelper = _resourceOptimizationHelper;
             _personRequestFactory = new PersonRequestFactory();
-            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+            _validatedRequest = new ValidatedRequest{IsValid = true, ValidationErrors = ""};
             _person = new Person();
             _person.SetId(new Guid());
             _person.PermissionInformation.SetCulture(new CultureInfo(1033));
@@ -64,8 +61,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.SchedulingResultStateHolder = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null,null,_resourceOptimizationHelper,null,null));
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -73,14 +69,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.ResourceOptimizationHelper = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
-        }
-
-        [Test]
-        public void VerifyPersonAccountBalanceCalculatorCanBeNull()
-        {
-            Assert.IsNull(_target.PersonAccountBalanceCalculator);
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,null,null,null));
         }
 
         [Test]
@@ -107,16 +96,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "Not Valid";
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
                 Expect.Call(()=>_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(3);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true));
@@ -131,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest);
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
                 Assert.IsFalse(result.IsValid);
             }
             _mocks.VerifyAll();
@@ -153,16 +140,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "Not Valid";
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(2);
                 Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
@@ -175,12 +160,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest);
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
                 Assert.IsFalse(result.IsValid);
             }
             _mocks.VerifyAll();
         }
-
 
         [Test]
         public void CanValidateWithAgentInDifferentTimeZone()
@@ -202,17 +186,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true);
                 Expect.Call(
                     () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true))
                       .Repeat.Twice();
@@ -236,9 +214,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
             Assert.IsFalse(result.IsValid);
-            
         }
 
         [Test]
@@ -272,8 +249,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_skillDay.SetCalculatedStaffCollection(updatedValues);
             updatedValues.BatchCompleted();
 
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
@@ -295,10 +272,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
             Assert.IsTrue(result.IsValid);
-
-            //Assert.IsTrue(_target.Validate(absenceRequest));
         }
 
 		[Test]
@@ -347,8 +322,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(validateUnderStaffingSkillDay1.IsValid);
             Assert.IsTrue(validatedUnderStaffingSkillDay2.IsValid);
-			//Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0] }));
-			//Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay2.SkillStaffPeriodCollection[0] }));
 		}
 
 		[Test]
@@ -392,14 +365,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                  _person);
 
 			Assert.IsFalse(validatedUnderStaffing.IsValid);
-            //Assert.IsFalse(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0], skillDay2.SkillStaffPeriodCollection[0] }));
 		}
 
         [Test]
         public void ShouldValidateWhenUnderstaffingForMaxFortyPercentForOnlyDayOnly()
         {
             var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
-            //var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
 
             _skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
             _skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
@@ -424,7 +395,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                                                                                           _person);
 
             Assert.IsFalse(validatedUnderStaffing.IsValid);
-            //Assert.IsFalse(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0], skillDay2.SkillStaffPeriodCollection[0] }));
         }
 
         private void createSkillDay(DateTimePeriod period)
@@ -492,12 +462,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             skillStaffPeriod.IsAvailable = true;
             _skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, requestedDateTimePeriod.ToDateOnlyPeriod(_skill.TimeZone));
-            var updatedValues = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> (){});
+            var updatedValues = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod>());
             _skillDay.SetCalculatedStaffCollection(updatedValues);
             updatedValues.BatchCompleted();
 
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
@@ -518,7 +488,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
             Assert.IsTrue(result.IsValid);
         }
 
@@ -541,8 +511,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingDates = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>(){"2012-12-01, 2012-12-02, 2012-12-03,2012-12,04,2012-12-05,2012-12-06"});
-            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string>() { "2012-12-01, 2012-12-02,2012-12-03,2012-12,04,2012-12-05,2012-12-06" });
+            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>{"2012-12-01, 2012-12-02, 2012-12-03,2012-12,04,2012-12-05,2012-12-06"});
+            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string> { "2012-12-01, 2012-12-02,2012-12-03,2012-12,04,2012-12-05,2012-12-06" });
 
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033));
@@ -555,8 +525,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingHours = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
-            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
+            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string> { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
+            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string> { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
 
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033),_person.PermissionInformation.DefaultTimeZone(), new DateTime(2012,01,01));

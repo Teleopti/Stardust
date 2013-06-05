@@ -440,6 +440,7 @@
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
+    <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />

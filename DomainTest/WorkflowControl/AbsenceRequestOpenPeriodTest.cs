@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
@@ -109,38 +108,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void CanGetSelectedValidatorList()
         {
-            var mocks = new MockRepository();
-            var mockedSchedulingResultStateHolder = mocks.StrictMock<ISchedulingResultStateHolder>();
-            var mockedPersonAccountBalanceCalculator = mocks.StrictMock<IPersonAccountBalanceCalculator>();
-            var mockedResourceOptimizationHelper = mocks.StrictMock<IResourceOptimizationHelper>();
-            var allowanceSpecification =  mocks.StrictMock<IBudgetGroupAllowanceSpecification>();
-            var budgetGroupAllowanceCalculator = mocks.DynamicMock<IBudgetGroupAllowanceCalculator>();
-
             var absenceRequestValidators =
-                Target.GetSelectedValidatorList(mockedSchedulingResultStateHolder, mockedResourceOptimizationHelper,
-                                                mockedPersonAccountBalanceCalculator, allowanceSpecification, budgetGroupAllowanceCalculator);
+                Target.GetSelectedValidatorList();
             Assert.AreEqual(2, absenceRequestValidators.Count());
-            foreach (var absenceRequestValidator in absenceRequestValidators)
-            {
-                Assert.AreEqual(mockedSchedulingResultStateHolder,absenceRequestValidator.SchedulingResultStateHolder);
-                Assert.AreEqual(mockedPersonAccountBalanceCalculator,absenceRequestValidator.PersonAccountBalanceCalculator);
-                Assert.AreEqual(mockedResourceOptimizationHelper, absenceRequestValidator.ResourceOptimizationHelper);
-                Assert.AreEqual(allowanceSpecification, absenceRequestValidator.BudgetGroupAllowanceSpecification);
-            }
         }
 
         [Test]
         public void VerifyGetSelectedProcess()
         {
-            MockRepository mocks = new MockRepository();
-            IRequestApprovalService requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
-            IUndoRedoContainer undoRedoContainer = mocks.StrictMock<IUndoRedoContainer>();
-
-            IProcessAbsenceRequest processAbsenceRequest = Target.GetSelectedProcess(requestApprovalService,
-                                                                                     undoRedoContainer);
+            IProcessAbsenceRequest processAbsenceRequest = Target.AbsenceRequestProcess;
             Assert.AreEqual(Target.AbsenceRequestProcess,processAbsenceRequest);
-            Assert.AreEqual(requestApprovalService, processAbsenceRequest.RequestApprovalService);
-            Assert.AreEqual(undoRedoContainer, processAbsenceRequest.UndoRedoContainer);
         }
 
         [Test]

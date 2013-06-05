@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             {
                 Assert.IsTrue(_personRequest.IsNew);
 
-                _target.Process(null, _absenceRequest, _authorization, null);
+                _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null,null,_authorization), new RequiredForHandlingAbsenceRequest(), null);
 
                 Assert.IsTrue(_personRequest.IsDenied);
             }
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             {
                 Assert.IsTrue(_personRequest.IsNew);
 
-                _target.Process(null, _absenceRequest, _authorization, null);
+                _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null, null, _authorization), new RequiredForHandlingAbsenceRequest(), null);
 
                 Assert.IsTrue(_personRequest.IsDenied);
             }
@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.UndoRedoContainer = undoRedoContainer;
-            _target.Process(null, _absenceRequest, _authorization, null);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, null, _authorization), new RequiredForHandlingAbsenceRequest(), null);
 
             Assert.IsTrue(_personRequest.IsDenied);
             _mocks.VerifyAll();
@@ -98,8 +97,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.UndoRedoContainer = undoRedoContainer;
-            _target.Process(null, _absenceRequest, _authorization, null);
+            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,null,_authorization), new RequiredForHandlingAbsenceRequest(), null);
 
             Assert.IsTrue(_personRequest.IsDenied);
             _mocks.VerifyAll();
@@ -110,7 +108,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var newInstance = _target.CreateInstance();
             Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(newInstance));
-            Assert.IsNull(newInstance.RequestApprovalService);
             Assert.AreEqual(UserTexts.Resources.Deny,_target.DisplayText);
         }
 
@@ -137,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Assert.AreEqual("RequestDenyReasonAutodeny", denyAbsenceRequest.DenyReason);
                 denyAbsenceRequest.DenyReason = "MyKeyForAnotherReason";
 
-                _target.Process(null, _absenceRequest, _authorization, null);
+                _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null, null, _authorization), new RequiredForHandlingAbsenceRequest(), null);
 
                 Assert.IsTrue(_personRequest.IsDenied);
                 Assert.AreEqual("MyKeyForAnotherReason", _personRequest.DenyReason);

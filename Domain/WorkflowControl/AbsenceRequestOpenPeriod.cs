@@ -107,27 +107,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             }
         }
 
-        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator)
+        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList()
         {
-            IList<IAbsenceRequestValidator> validatorList = new List<IAbsenceRequestValidator>
-                                                                { PersonAccountValidator, StaffingThresholdValidator};
-            foreach (IAbsenceRequestValidator requestValidator in validatorList)
-            {
-                requestValidator.SchedulingResultStateHolder = schedulingResultStateHolder;
-                requestValidator.PersonAccountBalanceCalculator = personAccountBalanceCalculator;
-                requestValidator.ResourceOptimizationHelper = resourceOptimizationHelper;
-                requestValidator.BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
-                requestValidator.BudgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
-            }
-            return validatorList;
-        }
-
-        public virtual IProcessAbsenceRequest GetSelectedProcess(IRequestApprovalService requestApprovalService, IUndoRedoContainer undoRedoContainer)
-        {
-            var process = AbsenceRequestProcess;
-            process.RequestApprovalService = requestApprovalService;
-            process.UndoRedoContainer = undoRedoContainer;
-            return process;
+            return new List<IAbsenceRequestValidator> { PersonAccountValidator, StaffingThresholdValidator};
         }
 
         public virtual IAbsenceRequestValidator PersonAccountValidator
