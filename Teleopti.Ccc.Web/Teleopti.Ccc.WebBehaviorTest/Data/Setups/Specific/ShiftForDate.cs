@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -49,17 +50,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
-
-			var editorShift = EditableShiftFactory.CreateEditorShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory);
+			var msLayers = new List<IMainShiftActivityLayerNew>();
+			msLayers.Add(new MainShiftActivityLayerNew(TestData.ActivityPhone, _assignmentPeriod));
 
 			// add lunch
 			if (_withLunch)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
-				editorShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
+				msLayers.Add(new MainShiftActivityLayerNew(TestData.ActivityLunch, lunchPeriod));
 			}
 
-			new EditableShiftMapper().SetMainShiftLayers(assignment, editorShift);
+			assignment.SetMainShiftLayers(msLayers, ShiftCategory);
 
 
 			assignmentRepository.Add(assignment);
