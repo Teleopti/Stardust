@@ -393,12 +393,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get { return Person; }
 		}
-
-		/// <summary>
-		/// The period stored in the database. Must not be set explicitly.
-		/// Note - this value will not ever change in ram, not even when
-		/// object is persisted. It will only be set when fetched from database
-		/// </summary>
-		public virtual DateTimePeriod DatabasePeriod { get; protected set; }
 	}
 }

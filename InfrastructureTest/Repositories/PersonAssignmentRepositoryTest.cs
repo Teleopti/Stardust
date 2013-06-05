@@ -115,15 +115,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.OvertimeShiftCollection[0].LayerCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection[0].LayerCollection.Count);
         }
 
-		 [Test]
-		 public void VerifyDatabasePeriod()
-		 {
-		 	PersonAssignment ass = (PersonAssignment) CreateAggregateWithCorrectBusinessUnit();
-			 PersistAndRemoveFromUnitOfWork(ass);
-			 Session.Refresh(ass);
-		 	ass.DatabasePeriod.Should().Be.EqualTo(ass.Period);
-		 }
-
 			[Test]
         public void VerifyLoadGraphById()
         {

@@ -265,15 +265,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyDatabasePeriod()
-		{
-			var testShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-			new EditableShiftMapper().SetMainShiftLayers(target, testShift);
-
-			((PersonAssignment)target).DatabasePeriod.Should().Be.EqualTo(new DateTimePeriod());
-		}
-
-		[Test]
 		public void VerifyOnlyPersonalShifts()
 		{
 			DateTime start = new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc);
