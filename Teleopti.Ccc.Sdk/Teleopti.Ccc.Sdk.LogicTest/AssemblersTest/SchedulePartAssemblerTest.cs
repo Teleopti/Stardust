@@ -87,11 +87,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var schedDay = ExtractedSchedule.CreateScheduleDay(schedDic, new Person(), new DateOnly(2000, 2, 1));
 			schedDay.Person.SetId(Guid.NewGuid());
 			var ass = new PersonAssignment(schedDay.Person, schedDay.Scenario, new DateOnly(2000,1,1));
-			var ms = new MainShift(new ShiftCategory("sdf"));
-			ms.LayerCollection.Add(new MainShiftActivityLayer(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12))));
-#pragma warning disable 612,618
-			ass.SetMainShift(ms);
-#pragma warning restore 612,618
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftActivityLayerNew(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)))
+				}, new ShiftCategory("asd"));
 			schedDay.Add(ass);
 			using (mocks.Record())
 			{
@@ -499,11 +498,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDictionary, new Person(), new DateOnly(2000, 2, 1));
             scheduleDay.Person.SetId(Guid.NewGuid());
             var assignment = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000,1,1));
-            var mainShift = new MainShift(new ShiftCategory("sdf"));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(activity, period));
-#pragma warning disable 612,618
-            assignment.SetMainShift(mainShift);
-#pragma warning restore 612,618
+					assignment.SetMainShiftLayers(new[]
+						{
+							new MainShiftActivityLayerNew(activity, period)
+						}, new ShiftCategory("sdf"));
             scheduleDay.Add(assignment);
 
             var absence = AbsenceFactory.CreateAbsence("absence");
