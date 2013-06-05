@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							s.Person.Id.HasValue
 								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceStartLocal), s.Person.Id.Value)
 								: null;
-						var shiftStart = getShiftStartOnAbsenceStartDate(personScheduleDayReadModelOnStartDay);
+						var shiftStart = getUnderlyingShiftStartOnAbsenceStartDate(personScheduleDayReadModelOnStartDay);
 
 						if (absenceStart == DateTime.MinValue)
 							return null;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							s.Person.Id.HasValue
 								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceEndLocal), s.Person.Id.Value)
 								: null;
-						var shiftEnd = getShiftEndOnAbsenceEndDate(personScheduleDayReadModelOnEndDay);
+						var shiftEnd = getUnderlyingShiftEndOnAbsenceEndDate(personScheduleDayReadModelOnEndDay);
 						if (absenceEnd == DateTime.MaxValue)
 							return null;
 						var shiftEndLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftEnd, timeZoneInfo);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		}
 
-		private DateTime getShiftStartOnAbsenceStartDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnStartDay)
+		private DateTime getUnderlyingShiftStartOnAbsenceStartDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnStartDay)
 		{
 			DateTime shiftStart = DateTime.MaxValue;
 			if (personScheduleDayReadModelOnStartDay != null && personScheduleDayReadModelOnStartDay.Shift != null)
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return shiftStart;
 		}
 
-		private DateTime getShiftEndOnAbsenceEndDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnEndDay)
+		private DateTime getUnderlyingShiftEndOnAbsenceEndDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnEndDay)
 		{
 			DateTime shiftEnd = DateTime.MinValue;
 			if (personScheduleDayReadModelOnEndDay != null && personScheduleDayReadModelOnEndDay.Shift != null)
