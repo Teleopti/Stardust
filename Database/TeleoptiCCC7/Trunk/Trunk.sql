@@ -171,3 +171,15 @@ BEGIN
 	SET NOCOUNT OFF
 END
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-05
+--Desc: Bug #23770 - try to reduce some of the I/O
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonPeriod]') AND name = N'IX_PersonPeriod_StartDate')
+CREATE NONCLUSTERED INDEX [IX_PersonPeriod_StartDate] ON [dbo].[PersonPeriod]
+(
+	[StartDate] ASC
+)
+INCLUDE ([Parent],[Team])
