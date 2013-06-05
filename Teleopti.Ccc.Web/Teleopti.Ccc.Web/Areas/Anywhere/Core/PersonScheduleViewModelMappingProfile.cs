@@ -47,15 +47,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					{
 						var timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
 						var absenceStart = s.Layer.Period.StartDateTime;
+						var absenceStartLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceStart, timeZoneInfo);
 						var personScheduleDayReadModelOnStartDay =
 							s.Person.Id.HasValue
-								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceStart), s.Person.Id.Value)
+								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceStartLocal), s.Person.Id.Value)
 								: null;
 						var shiftStart = getShiftStartOnAbsenceStartDate(personScheduleDayReadModelOnStartDay);
 
 						if (absenceStart == DateTime.MinValue)
 							return null;
-						var absenceStartLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceStart, timeZoneInfo);
 						var shiftStartLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftStart, timeZoneInfo);
 						var startTime = absenceStartLocal.Date < shiftStartLocal.Date
 							                ? absenceStartLocal.ToFixedDateTimeFormat()
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					{
 						var timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
 						var absenceEnd = s.Layer.Period.EndDateTime;
+						var absenceEndLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceEnd, timeZoneInfo);
 						var personScheduleDayReadModelOnEndDay =
 							s.Person.Id.HasValue
-								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceEnd), s.Person.Id.Value)
+								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceEndLocal), s.Person.Id.Value)
 								: null;
 						var shiftEnd = getShiftEndOnAbsenceEndDate(personScheduleDayReadModelOnEndDay);
 						if (absenceEnd == DateTime.MaxValue)
 							return null;
-						var absenceEndLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceEnd, timeZoneInfo);
 						var shiftEndLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftEnd, timeZoneInfo);
 						var endTime = shiftEndLocal.Date < absenceEndLocal.Date
 							              ? absenceEndLocal.ToFixedDateTimeFormat()
