@@ -23,14 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.Click(string.Format(".request-body:nth-child({0})", position));
 		}
 		
-		[When(@"I click the delete button on the shift trade request")]
-		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
-		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.True);
-			_page.RequestDeleteButtonById(requestId).EventualClick();
-		}
-
 		[When(@"I navigate to the requests page")]
 		public void WhenINavigateToTheRequestsPage()
 		{
