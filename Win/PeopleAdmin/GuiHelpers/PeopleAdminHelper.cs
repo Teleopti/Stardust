@@ -8,16 +8,11 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.PeopleAdmin.MessageBroker;
-using Teleopti.Ccc.Win.PeopleAdmin.MessageBroker.MessageBrokerHandlers;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
-using log4net;
+
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
@@ -30,10 +25,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
     /// </remarks>
     public static class PeopleAdminHelper
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (PeopleAdminHelper));
-        private const string CANGRAY = "CanGray";
-        private const string ISAVERAGEWORKTIMEPERDAYOVERRIDE = "IsAverageWorkTimePerDayOverride";
-        private const string ISDAYOFFOVERRIDE = "IsDaysOffOverride";
+        private const string Cangray = "CanGray";
+        private const string Isaverageworktimeperdayoverride = "IsAverageWorkTimePerDayOverride";
+        private const string Isdayoffoverride = "IsDaysOffOverride";
 
         #region Methods
 
@@ -100,7 +94,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// </remarks>
         public static bool HasPersonPeriodDuplicates2(IEnumerable<IPersonPeriod> personPeriods)
         {
-            PersonPeriodComparer x = new PersonPeriodComparer();
+            var x = new PersonPeriodComparer();
 
             IEnumerable<IPersonPeriod> periods = personPeriods.Distinct(x);
 
@@ -287,7 +281,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public static void GrayColumn<T>(PropertyReflector propertyReflector, T dataItem,
             GridQueryCellInfoEventArgs e)
         {
-            if ((bool)propertyReflector.GetValue(dataItem, CANGRAY))
+            if ((bool)propertyReflector.GetValue(dataItem, Cangray))
             {
                 e.Style.BackColor = Color.Silver;
                 e.Style.CellType = "Test";
@@ -443,8 +437,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="propertyReflector">The property reflector.</param>
         /// <param name="dataItem">The data item.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> 
-        /// instance containing the event data.</param>
         /// <returns>
         /// 	<c>true</c> if [is new value] [the specified property reflector]; otherwise, <c>false</c>.
         /// </returns>
@@ -454,12 +446,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// </remarks>
         public static bool IsAverageWorkTimeOverridable<T>(PropertyReflector propertyReflector, T dataItem)
         {
-            return (bool)propertyReflector.GetValue(dataItem, ISAVERAGEWORKTIMEPERDAYOVERRIDE);
+            return (bool)propertyReflector.GetValue(dataItem, Isaverageworktimeperdayoverride);
         }
 
         public static bool IsDayOffOverridable<T>(PropertyReflector propertyReflector, T dataItem)
         {
-            return (bool)propertyReflector.GetValue(dataItem, ISDAYOFFOVERRIDE);
+            return (bool)propertyReflector.GetValue(dataItem, Isdayoffoverride);
         }
 
 
@@ -674,51 +666,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             return canBold;
         }
 
-        /// <summary>
-        /// Determines whether [is can bold] [the specified person account].
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="personAccount">The person account.</param>
-        /// <param name="personAccountChildGridViewCollection">The person account child grid view collection.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is can bold] [the specified person account]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-11-17
-        /// </remarks>
-        //public static bool IsCanBold(IPersonAccount personAccount,
-        //  ReadOnlyCollection<IPersonAccountChildModel> personAccountChildGridViewCollection)
-        //{
-        //    bool canBold = false;
-
-        //    if (personAccountChildGridViewCollection != null && personAccount != null)
-        //    {
-        //        IList<IPersonAccountChildModel> adaptercollection = personAccountChildGridViewCollection.
-        //                                                       Where(p => p.ContainedEntity.Id == personAccount.Id).ToList();
-
-        //        if (adaptercollection.Count > 0)
-        //        {
-        //            canBold = adaptercollection[0].CanBold;
-        //        }
-        //    }
-
-        //    return canBold;
-        //}
-
-        /// <summary>
-        /// Determines whether [is can bold] [the specified person account].
-        /// </summary>
-        /// <param name="personAccount">The person account.</param>
-        /// <param name="personAccountChildGridViewCollection">The person account child grid view collection.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is can bold] [the specified person account]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-11-17
-        /// </remarks>
-        public static bool IsCanBold(IAccount account,ReadOnlyCollection<IPersonAccountChildModel> personAccountChildGridViewCollection)
+	    
+	    /// <remarks>
+	    /// Created by: Dinesh Ranasinghe
+	    /// Created date: 2008-11-17
+	    /// </remarks>
+	    public static bool IsCanBold(IAccount account,ReadOnlyCollection<IPersonAccountChildModel> personAccountChildGridViewCollection)
         {
             bool canBold = false;
 
@@ -754,46 +707,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             return canBold;
         }
-
-
-        /// <summary>
-        /// Handles the message broker.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="e">The e.</param>
-        /// <param name="stateHolder">The state holder.</param>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-12-18
-        /// </remarks>
-        public static void HandleMessageBroker(ViewType view, EventMessageArgs e, FilteredPeopleHolder stateHolder)
-        {
-            IMessageBrokerHandler messageBrokerHandler =
-                PeopleAdminMessageBrokerFactory.GetMessageBrokerHandler(view, e, stateHolder);
-
-            try
-            {
-                if (e.Message.DomainUpdateType == DomainUpdateType.Insert)
-                {
-                    messageBrokerHandler.HandleInsertFromMessageBroker();
-                }
-
-                if (e.Message.DomainUpdateType == DomainUpdateType.Delete)
-                {
-                    messageBrokerHandler.HandleDeleteFromMessageBroker();
-                }
-
-                if (e.Message.DomainUpdateType == DomainUpdateType.Update)
-                {
-                    messageBrokerHandler.HandleUpdateFromMessageBroker();
-                }
-            }
-            catch (DataSourceException exception)
-            {
-                Logger.Error("An error occured when trying to refresh an entity from the message broker.",exception);
-            }
-        }
-
 
         #endregion
     }
