@@ -38,12 +38,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
 			grid.CellModels.Add("DatePickerCell", cellModel);
-
-			OnEventMessageHandlerChanged += RotationBaseGridViewOnEventMessageHandlerChanged;
-
 			_viewType = viewType;
 			_parentAdapterCollection = parentAdapterCollection;
-			RegisterForMessageBroker();
 		}
 
 		// This is used to indicate grid in cell column index in parent grid
@@ -361,16 +357,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()), selectedEntity);
 				screen.Show();
 			}
-		}
-
-		private void RegisterForMessageBroker()
-		{
-			if (_viewType == ViewType.PersonRotationView)
-				RegisterForMessageBrokerEvents(typeof(IRotation));
-
-			if (_viewType == ViewType.PersonAvailabilityView)
-				RegisterForMessageBrokerEvents(typeof(IAvailabilityRotation));
-
 		}
 
 		internal override void AddNewGridRow<T>(object sender, T eventArgs)
@@ -1603,17 +1589,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		void RotationBaseGridViewOnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-		{
-			if (_viewType == ViewType.PersonRotationView)
-			{
-				PeopleAdminHelper.HandleMessageBroker(ViewType.PersonRotationView, e, FilteredPeopleHolder);
-			}
-			else if (_viewType == ViewType.PersonAvailabilityView)
-			{
-				PeopleAdminHelper.HandleMessageBroker(ViewType.PersonAvailabilityView, e, FilteredPeopleHolder);
-			}
-		}
 
 		internal override IList<IPerson> GetSelectedPersons()
 		{

@@ -280,7 +280,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 view.Grid.CellDoubleClick += gridWorksheet_CellDoubleClick;
                 view.Grid.ClipboardCanCopy += gridWorksheet_ClipboardCanCopy;
                 view.Grid.ClipboardCanPaste += Grid_ClipboardCanPaste;
-                view.OnEventMessageHandlerChanged += view_OnEventMessageHandlerChanged;
             }
 
             splitContainerWorksheet.Panel1.Controls.Add(view.Grid);
@@ -330,18 +329,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             _filteredPeopleHolder.SelectedPersonAccountAbsenceType = currentType;
             return currentType;
-        }
-
-        private void view_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action<object, EventMessageArgs>(view_OnEventMessageHandlerChanged), sender, e);
-            }
-            else
-            {
-                RefreshAfterMessageBroker();
-            }
         }
 
         private void RefreshAfterMessageBroker()
@@ -1485,11 +1472,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void PeopleWorksheet_FormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach (KeyValuePair<ViewType, GridViewBase> view in _gridConstructor.ViewCache)
-            {
-                view.Value.UnregisterForMessageBrokerEvents();
-            }
-
             unregisterEventsForFormKill();
 
             DisposeAllChildGrids();
