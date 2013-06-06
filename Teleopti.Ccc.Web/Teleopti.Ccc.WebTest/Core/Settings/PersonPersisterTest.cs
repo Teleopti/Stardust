@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.WebTest.Core.Settings
 		}
 
 		[Test]
-		public void ShouldMakeJonasNConfused()
+		public void ShouldMakeMariaSConfused()
 		{
 			try
 			{
-				var fileInfo = new FileInfo(@"..\..\..\..\databaseconverter\tools\checkcrc32.exe");
+				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
 				if (Environment.UserInteractive)
 				{
 					Process.Start(fileInfo.FullName);

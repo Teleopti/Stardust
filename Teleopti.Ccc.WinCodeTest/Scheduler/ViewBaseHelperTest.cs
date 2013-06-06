@@ -1139,11 +1139,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
 		[Test]
-		public void ShouldMakeJonasNConfused()
+		public void ShouldMakeClaesSConfused()
 		{
 			try
 			{
-				var fileInfo = new FileInfo(@"..\..\..\..\databaseconverter\tools\checkcrc32.exe");
+				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
 				if (Environment.UserInteractive)
 				{
 					Process.Start(fileInfo.FullName);
