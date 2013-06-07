@@ -296,7 +296,7 @@ Scenario: Close details when approving shift trade request
 	| From       | Ashley Andeen	|
 	| Pending  | True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	And I click the Approve button on the shift request
 	Then  Details should be closed
 
@@ -309,7 +309,7 @@ Scenario: Can not approve or deny shift trade request created by me
 	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should not see the approve button
 	And I should not see the deny button
 
@@ -320,7 +320,7 @@ Scenario: Deny shift trade request
 	| From    | Ashley |
 	| Pending | True   |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	And I click the Deny button on the shift request
 	Then Details should be closed
 
@@ -356,7 +356,7 @@ Scenario: Show name of sender of a received shifttrade
 	| DateFrom | 2030-01-01    |
 	| Pending | True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see 'Ashley Andeen' as the sender of the request
 
 Scenario: Show name of the person of a shifttrade that I have created
@@ -383,7 +383,7 @@ Scenario: Show name of the person of a shifttrade that I have created
 	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
 Scenario: Show schedules of the shift trade 
@@ -411,7 +411,7 @@ Given I have the role 'Full access to mytime'
 	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see details with a schedule from
 	| Field			| Value |
 	| Start time	| 06:00 |
@@ -449,7 +449,7 @@ Scenario: Show day off in a shifttrade
 	| DateFrom | 2030-01-04		|
 	| Pending  | True			|
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see my details scheduled day off 'DayOff'
 	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
 
@@ -480,7 +480,7 @@ Given I have the role 'Full access to mytime'
 	| Subject	| Swap with me	|
 	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see details with subject 'Swap with me'
 	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
@@ -490,7 +490,7 @@ Scenario: Show information that we dont show schedules in a shifttrade that isnt
 	| Field			| Value		|
 	| IsPending		| False		|
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should see details with message that tells the user that the status of the shifttrade is new
 	And I should not see timelines
 
@@ -501,6 +501,6 @@ Scenario: Can not approve or deny shift trade request that is already approved
 	| From			| Ashley Andeen	|
 	| Approved		| True          |
 	And I am viewing requests
-	When I click on the request
+	When I click on the request at position '1' in the list
 	Then I should not see the approve button
 	And I should not see the deny button
