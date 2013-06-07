@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					var projection = shiftOnStartDay.Projection as IEnumerable<dynamic>;
 					if (projection != null && !projection.IsEmpty())
 					{
-						shiftStart = projection.Min(p => p.Start);
+						shiftStart = projection.Min(p => (DateTime) p.Start);
 					}
 				}
 			}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					var projection = shiftOnEndDay.Projection as IEnumerable<dynamic>;
 					if (projection != null && !projection.IsEmpty())
 					{
-						shiftEnd = projection.Max(p => p.End);
+						shiftEnd = projection.Max(p => (DateTime) p.End);
 					}
 				}
 			}
