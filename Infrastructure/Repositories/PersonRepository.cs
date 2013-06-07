@@ -549,19 +549,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private static DetachedCriteria personPeriodTeamAndSites(DateOnlyPeriod period)
         {
-            return DetachedCriteria.For<Person>("per")
-                .Add(Restrictions.Or(
-                         Restrictions.IsNull("TerminalDate"),
-                         Restrictions.Ge("TerminalDate", period.StartDate)
-                         ))
-                .Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-                .AddOrder(Order.Asc("Name.LastName"))
-                .AddOrder(Order.Asc("Name.FirstName"));
+	        return DetachedCriteria.For<Person>("per")
+									.Add(Restrictions.Or(
+										Restrictions.IsNull("TerminalDate"),
+										Restrictions.Ge("TerminalDate", period.StartDate)
+											))
+									.Add(Subqueries.Exists(findPeriodMatch(period)))
+									.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
+	        // don't order here because it will order in tempdb and take too much resources
+	        //.AddOrder(Order.Asc("Name.LastName"))
+	        //.AddOrder(Order.Asc("Name.FirstName"));
         }
 
         private static IEnumerable<DetachedCriteria> personPeriodContract(DateOnlyPeriod period)
