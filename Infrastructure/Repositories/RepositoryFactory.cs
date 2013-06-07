@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -245,6 +246,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IStudentAvailabilityDayRepository CreateStudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
         {
             return new StudentAvailabilityDayRepository(unitOfWork);
+        }
+
+        public IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork)
+        {
+            return new OvertimeAvailabilityRepository(unitOfWork );
         }
 
         public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)

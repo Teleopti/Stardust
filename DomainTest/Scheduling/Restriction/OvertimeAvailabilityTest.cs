@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         private DateOnly _dateOnly;
         private IDateOnlyAsDateTimePeriod _dateAndPeriod;
         private DateOnlyPeriod _dateOnlyPeriod;
+        private TimeSpan? _startTime;
+        private TimeSpan? _endTime;
 
 
         [SetUp]
@@ -26,7 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             _dateOnly = DateOnly.Today ;
             _dateOnlyPeriod = new DateOnlyPeriod(_dateOnly,_dateOnly );
             _dateAndPeriod = new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Local);
-            _target = new OvertimeAvailability(_person, _dateOnly);
+            _startTime = TimeSpan.FromHours(8);
+            _endTime = TimeSpan.FromHours(10);
+            _target = new OvertimeAvailability(_person, _dateOnly,_startTime,_endTime);
         }
 
         [Test]
@@ -76,6 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.IsFalse( _target.NotAvailable );
 
         }
+
+        
 
     }
 }
