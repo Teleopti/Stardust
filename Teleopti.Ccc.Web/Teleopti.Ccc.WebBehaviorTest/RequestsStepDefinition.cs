@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see a delete button on the request")]
 		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
 		{
-			Browser.Interactions.AssertNotExists(".bdd-request-body", ".close");	
+			Browser.Interactions.AssertNotExists(".request-data-subject", ".close");	
 		}
 
 		[Then(@"I should see '(.*)' as the sender of the request")]
