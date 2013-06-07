@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
+                   default-access="field.camelcase-underscore">
+
+  <class name="OvertimeAvailability">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+		  access="nosetter.camelcase-underscore"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+ 
+    <!--IEntity-->
+
+    <many-to-one name="Person"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true" foreign-key="FK_OvertimeAvialability_Person"/>
+    
+    <property name="DateOfOvertime"
+					not-null="true"
+					type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+    <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Interfaces">
+      <property name="StartTime" column="WorkTimeMinimum" />
+      <property name="EndTime" column="WorkTimeMaximum" />
+    </component>
+    
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
+{
+    [TestFixture]
+    public class OvertimeAvailabilityTest
+    {
+        private IOvertimeAvailability _target;
+        private IPerson _person;
+        private DateOnly _dateOnly;
+        private IDateOnlyAsDateTimePeriod _dateAndPeriod;
+        private DateOnlyPeriod _dateOnlyPeriod;
+
+
+        [SetUp]
+        public void SetUp()
+        {
+            _person = new Person() {Name = new Name("Test", "test2")};
+            _dateOnly = DateOnly.Today ;
+            _dateOnlyPeriod = new DateOnlyPeriod(_dateOnly,_dateOnly );
+            _dateAndPeriod = new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Local);
+            _target = new OvertimeAvailability(_person, _dateOnly);
+        }
+
+        [Test]
+        public void TestPersonBeingPopulated()
+        {
+           Assert.AreEqual(_target.Person ,_person );
+        }
+      
+        [Test]
+        public void TestClone()
+        {
+            IOvertimeAvailability  targetClone = (IOvertimeAvailability) _target.Clone();
+            Assert.AreEqual(targetClone.Person,_target.Person  );
+            Assert.AreEqual(targetClone.Period ,_target.Period );
+        }
+
+        [Test]
+        public void TestBelongsToPeriodDateAndPeriod()
+        {
+            Assert.IsTrue(_target.BelongsToPeriod(_dateAndPeriod));
+        }
+        
+        [Test]
+        public void TestBelongsToPeriodDateOnlyPeriod()
+        {
+            Assert.IsTrue(_target.BelongsToPeriod(_dateOnlyPeriod));
+        }
+
+        [Test]
+        public void TestMainRoot()
+        {
+            Assert.AreEqual( _target.MainRoot,_person );
+
+        }
+
+        [Test]
+        public void TestCreateTransient()
+        {
+            Assert.IsNull( _target.CreateTransient().Id , null);
+
+        }
+
+        [Test]
+        public void TestNotAvailable()
+        {
+            _target.NotAvailable = false;
+            Assert.IsFalse( _target.NotAvailable );
+
+        }
+
+    }
+}
