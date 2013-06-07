@@ -33,31 +33,53 @@ $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
 
 Describe "Tear down previous test"{
     [string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
-    It "Uninstall product"{
+	
+    It "should uninstall product"{
         [bool] $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
         if ($isInstalled) {
             Uninstall-ByRegPath -path $path
         }
+
         $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
         $isInstalled | Should Be $False
+	}
+
+	It "should have a default web site" {
+		$computerName=(get-childitem -path env:computername).Value
+		$httpStatus=Check-HttpStatus -url "http://$computerName/"
+		$httpStatus | Should Be $True
+	}
+		
+	It "should throw exeption when http URL does not exist" {
+		$computerName=(get-childitem -path env:computername).Value
+		{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
     }
 }
 
-
 Describe "Setup test"{  
-    It "Copy latest .zip-file from build server"{
+    It "should copy latest .zip-file from build server"{
         $zipFile = Copy-ZippedMsi
         Test-Path $zipFile | Should Be $True
     }
 
-    It "unzip file"{
+    It "should unzip file into MSI"{
         $zipFile = Copy-ZippedMsi
         $zipFile = Get-Item $zipFile
 
-        $MsiFile = $zipFile.fullname -replace ".zip", ".exe"
+        $MsiFile = $zipFile.fullname -replace ".zip", ".msi"
         UnZip-File –zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
-        
     }
+	
+	It "shuold install integrated security in SQL Server"{
+		$zipFile = Copy-ZippedMsi
+        $zipFile = Get-Item $zipFile
+		$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+        
+        $BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
+      
+		Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
+
+	}
 }
 
 #Add IIS admin module
