@@ -197,3 +197,38 @@ function Copy-ZippedMsi{
     }
     return @("$destFolder\$zipFileName")
 }
+
+
+function Check-HttpStatus {     
+	param(
+	[string] $url
+	)
+
+	[net.httpWebRequest] $req = [net.webRequest]::create($url)
+	$req.Method = "HEAD"
+
+	[net.httpWebResponse] $res = $req.getResponse()
+
+	if ($res.StatusCode -ge "200") {
+		return $true
+	}
+	else {
+		return $false
+	}
+}
+
+function Install-TeleoptiCCCServer
+{
+    param (
+    [string]$BatchFile,
+    [string]$MsiFile,
+    [string]$machineConfig,
+    [string]@WinUser,
+    [string]@WinPassword
+    )
+    [string]$ErrorMessage = "Execution of command failed.`n$Command"
+    & "$BatchFile" "$MsiFile" "$machineConfig"
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}
