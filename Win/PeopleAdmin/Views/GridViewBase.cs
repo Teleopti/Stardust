@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.PeopleAdmin.MessageBroker;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
-    public abstract class GridViewBase : IDisposable, IPeopleAdminMessageBroker
+    public abstract class GridViewBase : IDisposable
     {
         private FilteredPeopleHolder _filteredPeopleHolder;
 
@@ -27,7 +23,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid = grid;
             CurrentGrid = grid;
             _filteredPeopleHolder = filteredPeopleHolder;
-            Init();
+            init();
         }
 
         public void SetFilteredPerson(FilteredPeopleHolder filteredPeopleHolder)
@@ -35,7 +31,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             _filteredPeopleHolder = filteredPeopleHolder;
         }
 
-        private void Init()
+        private void init()
         {
             // Show the grid like an Excel Worksheet.
             GridHelper.GridStyle(Grid);
@@ -77,12 +73,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         public virtual void RefreshParentGrid()
         {
-        }
-
-        public void UnregisterForMessageBrokerEvents()
-        {
-            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.
-                UnregisterEventSubscription(OnEventMessageHandler);
         }
 
         internal abstract ViewType Type { get; }
@@ -367,24 +357,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         internal virtual void DisposeChildGrids()
         {
-        }
-
-        public void RegisterForMessageBrokerEvents(Type type)
-        {
-            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription
-                (OnEventMessageHandler, type);
-
-        }
-
-        public event EventHandler<EventMessageArgs> OnEventMessageHandlerChanged;
-
-        private void OnEventMessageHandler(object sender, EventMessageArgs e)
-        {
-        	var handler = OnEventMessageHandlerChanged;
-            if (handler != null)
-            {
-                handler(sender, e);
-            }
         }
 
         public virtual void SetView(IShiftCategoryLimitationView view) { }

@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				if (_addNewPersonMenuItem != null) _addNewPersonMenuItem.Dispose();
 				if (_addNewPersonFromClipboardMenuItem != null) _addNewPersonFromClipboardMenuItem.Dispose();
 				if (_deleteSelectedPeopleMenuItem != null) _deleteSelectedPeopleMenuItem.Dispose();
-                UnregisterForMessageBrokerEvents();
 			}
 		}
 
@@ -76,10 +75,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideTodayButton();
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
-
-			OnEventMessageHandlerChanged += GeneralGridView_OnEventMessageHandlerChanged;
-
-			RegisterForMessageBrokerEvents(typeof(IOptionalColumn));
 		}
 
 		public override void Sort(bool isAscending)
