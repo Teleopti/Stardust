@@ -9791,7 +9791,7 @@ Teleopti R&amp;D</value>
     <value>您没有权限访问Web门户网站。</value>
   </data>
   <data name="NotWorking" xml:space="preserve">
-    <value>不工作。</value>
+    <value>不工作</value>
   </data>
   <data name="MobileReports" xml:space="preserve">
     <value>手机报告</value>
