@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var projection = shift.Projection as IEnumerable<dynamic>;
 					if (projection != null && !projection.IsEmpty())
 					{
-						shiftEnd = projection.Max(p => p.End);
+						shiftEnd = projection.Max(p => (DateTime) p.End);
 					}
 				}
 			}
