@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 
                 scheduleDay.CreateAndAddDayOff(dayOff);
 
-                IScheduleTag scheduleTagEntity=null;
+                IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
 
                 if (command.ScheduleTag.Id.HasValue)
                 {

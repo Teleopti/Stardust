@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var activity = _activityRepository.Load(command.ActivityId);
 				var personalShiftActivityLayer = new PersonalShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				scheduleDay.CreateAndAddPersonalActivity(personalShiftActivityLayer);
-                IScheduleTag scheduleTagEntity=null;
+                IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
 
                 if (command.ScheduleTag.Id.HasValue)
 			    {

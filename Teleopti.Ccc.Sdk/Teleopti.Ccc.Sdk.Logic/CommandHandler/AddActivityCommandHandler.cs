@@ -72,12 +72,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);
 
-                IScheduleTag scheduleTagEntity=null;
+                IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
 
                 if (command.ScheduleTag.Id.HasValue)
                 {
                     scheduleTagEntity = _scheduleTagRepository.Get(command.ScheduleTag.Id.GetValueOrDefault());
                 }
+
                 _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {

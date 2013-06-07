@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var absence = _absenceRepository.Load(command.AbsenceId);
 				var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				scheduleDay.CreateAndAddAbsence(absenceLayer);
-			    IScheduleTag scheduleTagEntity=null;
+			    IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
 
                 if (command.ScheduleTag.Id.HasValue)
                 {

@@ -38,19 +38,11 @@ namespace Teleopti.Ccc.Sdk.Logic
             var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();
             IEnumerable<IBusinessRuleResponse> invalidList;
-            if (scheduleTag != null)
-            {
-                invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                         scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
-            }
-            else
-            {
-                invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                         scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
-            }
             
+            invalidList = dic.Modify(ScheduleModifier.Scheduler,
+                                        scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
 
-			if (invalidList != null && invalidList.Any())
+            if (invalidList != null && invalidList.Any())
 			{
 				throw new FaultException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture, "At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,

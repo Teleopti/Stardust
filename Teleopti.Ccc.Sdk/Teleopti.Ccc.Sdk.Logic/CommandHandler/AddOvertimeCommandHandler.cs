@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var overtimeDefinition = _multiplicatorDefinitionSetRepository.Load(command.OvertimeDefinitionSetId);
                 var overtimeLayer = new OvertimeShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
                 scheduleDay.CreateAndAddOvertime(overtimeLayer);
-                IScheduleTag scheduleTagEntity=null;
+                IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
 
                 if (command.ScheduleTag.Id.HasValue)
                 {
