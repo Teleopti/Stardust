@@ -280,7 +280,6 @@
     <Compile Include="Domain\IScheduleTagSetter.cs" />
     <Compile Include="Domain\ISchedulingObjectContainer.cs" />
     <Compile Include="Domain\IPersonSkillPeriodsDataHolderManager.cs" />
-    <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />

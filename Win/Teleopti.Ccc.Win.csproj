@@ -1268,7 +1268,6 @@
     <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
       <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
     </Compile>
