@@ -33,10 +33,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
 
 				setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
-				if(dates.Count > 0)
-#pragma warning disable 612,618
-					matrix.SelectedPeriod = selectedPeriod;
-#pragma warning restore 612,618
             }
         }
 

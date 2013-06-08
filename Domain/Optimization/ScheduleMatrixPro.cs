@@ -145,17 +145,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        //public IList<DateOnly> UserLockedDates
-        //{
-        //    get { return _userLockedDates; }
-        //}
-
-        //public void LockUserDate(DateOnly dateOnly)
-        //{
-        //    if(!_userLockedDates.Contains(dateOnly))
-        //        _userLockedDates.Add(dateOnly);
-        //}
-
         public void UnlockPeriod(DateOnlyPeriod period)
         {
             foreach (var dateOnly in period.DayCollection())
@@ -194,13 +183,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             get { return _activeScheduleRange; }
         }
-
-    	[Obsolete("Do not use this as it can return any period, not just the period in this matrix")]
-		public DateOnlyPeriod SelectedPeriod
-    	{
-    		get { return _selectedPeriod; }
-    		set { _selectedPeriod = value; }
-    	}
 
     	#endregion
 
