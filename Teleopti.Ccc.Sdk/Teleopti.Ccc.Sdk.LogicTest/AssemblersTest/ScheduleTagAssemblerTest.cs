@@ -54,5 +54,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(scheduleTag.Description , "test");
         }
 
+		[Test]
+		public void ShouldReturnNullInstanceOnNullDto()
+		{
+			var result = _target.DtoToDomainEntity(null);
+			Assert.That(result, Is.EqualTo(NullScheduleTag.Instance));
+			
+		}
     }
 }

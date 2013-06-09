@@ -1,10 +1,14 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class ScheduleTagAssembler :Assembler<IScheduleTag, ScheduleTagDto>
+	public interface IScheduleTagAssembler :IAssembler<IScheduleTag, ScheduleTagDto>
+	{}
+
+	public class ScheduleTagAssembler : Assembler<IScheduleTag, ScheduleTagDto>, IScheduleTagAssembler
     {
         private readonly IScheduleTagRepository _scheduleTagRepository;
 
@@ -25,8 +29,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override IScheduleTag DtoToDomainEntity(ScheduleTagDto dto)
         {
-            IScheduleTag scheduleTag = null;
-            if (dto.Id.HasValue)
+            IScheduleTag scheduleTag = NullScheduleTag.Instance;
+			if (dto != null && dto.Id.HasValue)
             {
                 scheduleTag = _scheduleTagRepository.Get(dto.Id.GetValueOrDefault());
             }

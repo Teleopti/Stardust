@@ -232,7 +232,8 @@ namespace SdkTestWinGui
                     isDayOff = true;
                     dayOffName = agentDay.Dto.PersonDayOff.Name;
                 }
-                VisualProjection projection = new VisualProjection(agentDay.Agent.Dto.Name, layerCollection, isDayOff, dayOffName, agentDay.PublicNote);
+				
+                VisualProjection projection = new VisualProjection(agentDay.Agent.Dto.Name, layerCollection, isDayOff, dayOffName, agentDay.PublicNote, agentDay.Dto.ScheduleTag.Description);
                 schedules.Add(projection);
             }
             return schedules;
@@ -287,6 +288,7 @@ namespace SdkTestWinGui
                     row.HeaderCell.ToolTipText = visualProjection.PublicNote;
                     row.HeaderCell.Value = row.HeaderCell.Value + "*";
                 }
+				row.HeaderCell.ToolTipText = row.HeaderCell.ToolTipText + Environment.NewLine + visualProjection.ScheduleTag;
                 row.Cells["schedule"].Value = visualProjection;
             }
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -332,6 +334,9 @@ namespace SdkTestWinGui
                     }
                     agentDay.MainShift.Dto.LayerCollection = layers.ToArray();
 
+					if (comboScheduleTag.SelectedItem != null)
+						agentDay.Dto.ScheduleTag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
+					
                     Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
                 }
             }
@@ -375,10 +380,12 @@ namespace SdkTestWinGui
             {
                 if (agentDay.MainShift != null)
                 {
-                    agentDay.MainShift.LayerCollection[0].Dto.Period.UtcStartTime =
+					agentDay.MainShift.LayerCollection[0].Dto.Period.UtcStartTime =
                         agentDay.MainShift.LayerCollection[0].Dto.Period.UtcStartTime.AddMinutes(-17);
                     agentDay.MainShift.LayerCollection[0].Dto.Period.UtcEndTime =
                         agentDay.MainShift.LayerCollection[0].Dto.Period.UtcEndTime.AddMinutes(-17);
+					if (comboScheduleTag.SelectedItem != null)
+						agentDay.Dto.ScheduleTag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
                     Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
                 }
             }
@@ -458,6 +465,8 @@ namespace SdkTestWinGui
                     if(agentDay.MainShift.LayerCollection.Count != toKeep.Count)
                     {
                         agentDay.MainShift.Dto.LayerCollection = toKeep.ToArray();
+						if (comboScheduleTag.SelectedItem != null)
+							agentDay.Dto.ScheduleTag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
                         Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
                     }
                 }
@@ -468,6 +477,10 @@ namespace SdkTestWinGui
 		private void AddDayOffToSelectedAgents()
 		{
 			var daysOff = Service.SchedulingService.GetDaysOffs(new LoadOptionDto {LoadDeleted = false, LoadDeletedSpecified = true});
+			ScheduleTagDto tag = null;
+			if (comboScheduleTag.SelectedItem != null)
+				tag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
+
 			foreach (var agentDay in _schedules)
 			{
 				Service.InternalService.ExecuteCommand(new AddDayOffCommandDto
@@ -475,7 +488,8 @@ namespace SdkTestWinGui
 				                                       		Date = agentDay.Dto.Date,
 				                                       		PersonId = agentDay.Agent.Dto.Id,
 				                                       		DayOffInfoId = daysOff[0].Id,
-				                                       		ScenarioId = null
+				                                       		ScenarioId = null,
+															ScheduleTag = tag
 				                                       	});
 			}
 
@@ -655,6 +669,14 @@ namespace SdkTestWinGui
         private void comboBoxScenarios_SelectedIndexChanged(object sender, EventArgs e)
         {
             loadSchedules(treeView1.SelectedNode);
+	        loadTags();
         }
+	    
+		private void loadTags()
+		{
+			var tags = _service.SchedulingService.GetScheduleTagByQuery(new GetAllScheduleTagsDto());
+			comboScheduleTag.DataSource = tags;
+			comboScheduleTag.DisplayMember = "Description";
+		}
     }
 }

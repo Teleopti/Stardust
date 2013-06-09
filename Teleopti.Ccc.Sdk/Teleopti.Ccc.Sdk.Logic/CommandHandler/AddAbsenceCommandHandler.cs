@@ -23,9 +23,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
-        private readonly IScheduleTagRepository _scheduleTagRepository;
+		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 
-        public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagRepository scheduleTagRepository)
+
+		public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _absenceRepository = absenceRepository;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _saveSchedulePartService = saveSchedulePartService;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
-            _scheduleTagRepository = scheduleTagRepository;
+			_scheduleTagAssembler = scheduleTagAssembler;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -59,13 +60,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var absence = _absenceRepository.Load(command.AbsenceId);
 				var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				scheduleDay.CreateAndAddAbsence(absenceLayer);
-			    IScheduleTag scheduleTagEntity=NullScheduleTag.Instance;
+				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 
-                if (command.ScheduleTag.Id.HasValue)
-                {
-                    scheduleTagEntity = _scheduleTagRepository.Get(command.ScheduleTag.Id.GetValueOrDefault());
-                }
-                
                 _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{

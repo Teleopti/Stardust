@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, command.LayerCollection);
                 scheduleDay.AddMainShift(mainShift);
-                _saveSchedulePartService.Save(scheduleDay, rules, null);
+                _saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

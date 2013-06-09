@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface ISaveSchedulePartService
     {
+	    void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection);
 		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag);
     }
 
@@ -31,6 +32,11 @@ namespace Teleopti.Ccc.Sdk.Logic
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
     		_unitOfWorkFactory = unitOfWorkFactory;
         }
+
+		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			Save(scheduleDay, newBusinessRuleCollection, NullScheduleTag.Instance);
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)

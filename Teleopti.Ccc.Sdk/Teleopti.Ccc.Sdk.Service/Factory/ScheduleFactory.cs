@@ -23,8 +23,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
+		private readonly IAssembler<IScheduleTag, ScheduleTagDto> _scheduleTagAssembler;
 
-		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, ICurrentScenario scenarioRepository)
+	    public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService,
+			  ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, 
+			  SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
+			  ICurrentScenario scenarioRepository, IAssembler<IScheduleTag, ScheduleTagDto> scheduleTagAssembler)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
@@ -33,6 +37,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             _scheduleDayAssembler = scheduleDayAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _scenarioRepository = scenarioRepository;
+			  _scheduleTagAssembler = scheduleTagAssembler;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
@@ -131,10 +136,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             using (new MessageBrokerSendEnabler())
             {
-                using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+                using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
                 {
-                    IScheduleDay schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
-                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum(),null);
+                    var schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
+	                var tag = _scheduleTagAssembler.DtoToDomainEntity(schedulePartDto.ScheduleTag);
+                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum(),tag);
 
                     uow.PersistAll();
                 }
