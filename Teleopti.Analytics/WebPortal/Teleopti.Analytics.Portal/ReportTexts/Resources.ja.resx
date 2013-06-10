@@ -118,1119 +118,868 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommonCollapse" xml:space="preserve">
-    <value>Dra ihop</value>
+    <value>折り畳む</value>
   </data>
   <data name="CommonExpand" xml:space="preserve">
-    <value>Expandera</value>
+    <value>展開する</value>
   </data>
   <data name="InvalidValueErrorMessage" xml:space="preserve">
-    <value>Du har angett ett ogiltigt värde i: </value>
+    <value>無効な値が入力されました:</value>
   </data>
   <data name="MissingValueErrorMessage" xml:space="preserve">
-    <value>Du har inte angett något i: </value>
+    <value>何も入力されていません:</value>
   </data>
   <data name="ResAbandonedCalls" xml:space="preserve">
-    <value>Tappade samtal</value>
+    <value>放棄呼</value>
   </data>
   <data name="ResAbandonRate" xml:space="preserve">
-    <value>Tappade %</value>
+    <value>放棄率</value>
   </data>
   <data name="ResAgentName" xml:space="preserve">
-    <value>Agent</value>
+    <value>エージェント</value>
   </data>
   <data name="ResAnsweredCalls" xml:space="preserve">
-    <value>Besvarade samtal</value>
+    <value>応答呼</value>
   </data>
   <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
-    <value>Besvarade utanför servicenivå</value>
+    <value>サービスレベル外呼数</value>
   </data>
   <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
-    <value>Besvarade inom servicenivå</value>
+    <value>サービスレベル内呼数</value>
   </data>
   <data name="ResDate" xml:space="preserve">
-    <value>Datum</value>
+    <value>日付</value>
   </data>
   <data name="ResDateColon" xml:space="preserve">
-    <value>Datum:</value>
+    <value>日付:</value>
   </data>
   <data name="ResDateFromColon" xml:space="preserve">
-    <value>Datum från:</value>
+    <value>日付　from:</value>
   </data>
   <data name="ResDateToColon" xml:space="preserve">
-    <value>Datum till:</value>
+    <value>日付　to:</value>
   </data>
   <data name="ResGrandTotal" xml:space="preserve">
-    <value>Grand Total</value>
+    <value>総計</value>
   </data>
   <data name="ResInterval" xml:space="preserve">
-    <value>Intervall</value>
+    <value>インターバル</value>
   </data>
   <data name="ResIntervalColon" xml:space="preserve">
-    <value>Intervall:</value>
-  </data>
-  <data name="ResServiceLevelPercent" xml:space="preserve">
-    <value>Servicenivå (%)</value>
-    <comment>Servicenivå (%)</comment>
-  </data>
-  <data name="ResSiteNameColon" xml:space="preserve">
-    <value>Enhet:</value>
-  </data>
-  <data name="ResSkillColon" xml:space="preserve">
-    <value>Kompetens:</value>
-  </data>
-  <data name="ResTeamNameColon" xml:space="preserve">
-    <value>Team:</value>
-  </data>
-  <data name="ResWorkloadColon" xml:space="preserve">
-    <value>Workload:</value>
-  </data>
-  <data name="ResShowReport" xml:space="preserve">
-    <value>Visa rapport</value>
-  </data>
-  <data name="ResIntervalFromColon" xml:space="preserve">
-    <value>Intervall från:</value>
-  </data>
-  <data name="ResIntervalToColon" xml:space="preserve">
-    <value>Intervall till:</value>
-  </data>
-  <data name="ResIntervalType" xml:space="preserve">
-    <value>Periodtyp:</value>
-  </data>
-  <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>Frånvaro (%)</value>
-    <comment>Frånvaro (%)</comment>
-  </data>
-  <data name="KpiAdherence" xml:space="preserve">
-    <value>Schemauppföljning (%)</value>
-    <comment>Schemauppföljning(%)</comment>
-  </data>
-  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>Besvarade samtal per schemalagd telefontimme</value>
-    <comment>Besvarade samtal per schemalagd telefontid</comment>
-  </data>
-  <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Snitt Efterbearbetningstid (s)</value>
-    <comment>Snitt Efterbearbetningstid (s)</comment>
-  </data>
-  <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Snitt Hanteringstid (s)</value>
-    <comment>Snitt Hanterings tid (s)</comment>
-  </data>
-  <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Snitt Samtalstid (s)</value>
-    <comment>Snitt Samtalstid (s)</comment>
-  </data>
-  <data name="KpiReadiness" xml:space="preserve">
-    <value>Tillgänglighet (%)</value>
-    <comment>Tillgänglighet (%)</comment>
-  </data>
-  <data name="ResActual" xml:space="preserve">
-    <value>Nuvarande</value>
-  </data>
-  <data name="ResKpi" xml:space="preserve">
-    <value>Kpi</value>
-  </data>
-  <data name="ResPreviousPeriod" xml:space="preserve">
-    <value>Förra perioden</value>
-  </data>
-  <data name="ResTarget" xml:space="preserve">
-    <value>Mål</value>
-  </data>
-  <data name="ResTeamActual" xml:space="preserve">
-    <value>Teamets nuvarande</value>
-  </data>
-  <data name="ResTrend" xml:space="preserve">
-    <value>Trend</value>
-  </data>
-  <data name="LogInButton" xml:space="preserve">
-    <value>Logga in</value>
-  </data>
-  <data name="LogInError" xml:space="preserve">
-    <value>Din inloggning misslyckades. Var god försök igen.</value>
-  </data>
-  <data name="LogInName" xml:space="preserve">
-    <value>Användarnamn:</value>
-  </data>
-  <data name="LogInNewPasswordLabelText" xml:space="preserve">
-    <value>Nytt lösenord</value>
-  </data>
-  <data name="LogInPassRequired" xml:space="preserve">
-    <value>Lösenord är obligatoriskt.</value>
-  </data>
-  <data name="LogInPassword" xml:space="preserve">
-    <value>Lösenord:</value>
-  </data>
-  <data name="LogInRemember" xml:space="preserve">
-    <value>Kom ihåg mig nästa gång</value>
-  </data>
-  <data name="LogInTitle" xml:space="preserve">
-    <value>Logga in</value>
-  </data>
-  <data name="LogInUserRequired" xml:space="preserve">
-    <value>Användarnamn är obligatoriskt.</value>
-  </data>
-  <data name="ShowReportTooltip" xml:space="preserve">
-    <value>Visa rapport</value>
-  </data>
-  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Andel tappade exkl korta tappade (%)</value>
-  </data>
-  <data name="ResAbandonRatePercent" xml:space="preserve">
-    <value>Andel tappade (%)</value>
-  </data>
-  <data name="ResAnswerRatePercent" xml:space="preserve">
-    <value>Andel besvarade (%)</value>
-  </data>
-  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
-    <value>Medel svarstid (s)</value>
-  </data>
-  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>Medel väntetid tappade samtal (s)</value>
-  </data>
-  <data name="ResDatePeriodColon" xml:space="preserve">
-    <value>Datumintervall:</value>
-  </data>
-  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
-    <value>Längsta väntetid tappade samtal (s)</value>
-  </data>
-  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
-    <value>Längsta väntetid besvarade samtal (s)</value>
-  </data>
-  <data name="ResPeriod" xml:space="preserve">
-    <value>Period</value>
-  </data>
-  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
-    <value>Tapp och svarstider</value>
-  </data>
-  <data name="ResSeconds" xml:space="preserve">
-    <value>Sekunder</value>
-  </data>
-  <data name="ResTimeToAbandon" xml:space="preserve">
-    <value>Väntetid tappade samtal</value>
-    <comment>Väntetid tappade samtal</comment>
-  </data>
-  <data name="ResTotalsColon" xml:space="preserve">
-    <value>Totalt:</value>
-  </data>
-  <data name="ResPercent" xml:space="preserve">
-    <value>Procent</value>
-  </data>
-  <data name="ResActualACW" xml:space="preserve">
-    <value>Verklig ACW</value>
-    <comment>Verklig ACW</comment>
-  </data>
-  <data name="ResActualATT" xml:space="preserve">
-    <value>Verklig ATT</value>
-    <comment>Verklig ATT</comment>
-  </data>
-  <data name="ResACW" xml:space="preserve">
-    <value>Efterbearbetningstid (ACW)</value>
-    <comment>Efterbearbetningstid (ACW)</comment>
-  </data>
-  <data name="ResATT" xml:space="preserve">
-    <value>Samtalstid (ATT)</value>
-    <comment>ATT</comment>
-  </data>
-  <data name="ResCalculatedCalls" xml:space="preserve">
-    <value>Beräknade samtal</value>
-    <comment>Beräknade samtal</comment>
-  </data>
-  <data name="ResCalls" xml:space="preserve">
-    <value>Samtal</value>
-    <comment>Samtal</comment>
-  </data>
-  <data name="ResForecastedACW" xml:space="preserve">
-    <value>Prognostiserad ACW</value>
-    <comment>Prognos ACW</comment>
-  </data>
-  <data name="ResForecastedATT" xml:space="preserve">
-    <value>Prognostiserad ATT</value>
-    <comment>Prognos ATT</comment>
-  </data>
-  <data name="ResForecastedCalls" xml:space="preserve">
-    <value>Prognostiserade samtal</value>
-    <comment>Prognos samtal</comment>
-  </data>
-  <data name="ResNumberOf" xml:space="preserve">
-    <value>Antal</value>
-    <comment>Antal</comment>
-  </data>
-  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Prognos vs verklig workload</value>
-    <comment>Prognos vs Verklig Workload</comment>
-  </data>
-  <data name="ResAgentsReady" xml:space="preserve">
-    <value>Agenter redo</value>
-    <comment>Agenter Ready</comment>
-  </data>
-  <data name="ResAgentsScheduled" xml:space="preserve">
-    <value>Schemalagda agenter</value>
-    <comment>Schemalagda Agenter</comment>
-  </data>
-  <data name="ResRelativeDifferencePercent" xml:space="preserve">
-    <value>Relativ skillnad (%)</value>
-    <comment>Relativ skillnad (%)</comment>
-  </data>
-  <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>Prognostiserad tid (tt:mm)</value>
-    <comment>Prognos tid (hh:mm)</comment>
-  </data>
-  <data name="ResOfferedCalls" xml:space="preserve">
-    <value>Inkommande samtal</value>
-    <comment>Inkommande samtal</comment>
-  </data>
-  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
-    <value>Inkommande / agent redo</value>
-    <comment>Inkommande samtal/Agent Ready</comment>
-  </data>
-  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
-    <value>Inkommande / schemalagd agent redo</value>
-    <comment>Inkommande samtal/Schemalagd Agent</comment>
-  </data>
-  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>Prognos vs Schemalagda timmar</value>
-    <comment>Prognos vs Schemalagda timmar</comment>
-  </data>
-  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Servicenivå och Agenter redo</value>
-    <comment>Servicenivå och Agenter Ready</comment>
-  </data>
-  <data name="ResScheduledReadyTime" xml:space="preserve">
-    <value>Schemalagd redotid</value>
-    <comment>Schemalagd ready tid</comment>
-  </data>
-  <data name="ResScheduledvsReady" xml:space="preserve">
-    <value>Schemalagda vs agenter redo</value>
-    <comment>Schemalagda vs Agenter Ready</comment>
-  </data>
-  <data name="ResSmoothnessPercent" xml:space="preserve">
-    <value>Jämnhet (%)</value>
-    <comment>Jämnhet (%)</comment>
-  </data>
-  <data name="ResWeekdayAndSkill" xml:space="preserve">
-    <value>Veckodag / Kompetens</value>
-    <comment>Veckodag / Kompetens</comment>
-  </data>
-  <data name="ResAgentCategoryColon" xml:space="preserve">
-    <value>Agentkategori:</value>
-    <comment>Agentkategori:</comment>
-  </data>
-  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
-    <value>Agentkategorityp:</value>
-    <comment>Agentkategorityp:</comment>
-  </data>
-  <data name="ResAgentsColon" xml:space="preserve">
-    <value>Agenter:</value>
-    <comment>Agenter:</comment>
-  </data>
-  <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Agent  - Schemaresultat</value>
-    <comment>Agent  - Schemaresultat</comment>
-  </data>
-  <data name="ResAdherencePercent" xml:space="preserve">
-    <value>Följsamhet (%)</value>
-    <comment>Följsamhet (%)</comment>
-  </data>
-  <data name="ResAgentDate" xml:space="preserve">
-    <value>Agent / Datum</value>
-    <comment>Agent / Datum</comment>
-  </data>
-  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
-    <value>Besvarade samtal / Schemalagd redotimme</value>
-    <comment>Besvarade samtal / schemalagd ready timme</comment>
-  </data>
-  <data name="ResOccupancyPercent" xml:space="preserve">
-    <value>Nyttjandegrad (%)</value>
-    <comment>Occupancy (%)</comment>
-  </data>
-  <data name="ResReadinessPercent" xml:space="preserve">
-    <value>Readiness (%)</value>
-    <comment>Readiness (%)</comment>
-  </data>
-  <data name="ResReadyTime" xml:space="preserve">
-    <value>Redotid</value>
-    <comment>Ready tid</comment>
-  </data>
-  <data name="ResAdherenceCalculationColon" xml:space="preserve">
-    <value>Följsamhetsberäkning:</value>
-    <comment>Följsamhetsberäkning:</comment>
-  </data>
-  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
-    <value>Inkommande samtal / agent</value>
-    <comment>Inkommande samtal / agent</comment>
-  </data>
-  <data name="ResServiceLevel" xml:space="preserve">
-    <value>Servicenivå</value>
-    <comment>Servicenivå</comment>
-  </data>
-  <data name="ResServiceLevelCalcColon" xml:space="preserve">
-    <value>Servicenivåberäkning:</value>
-    <comment>Servicenivåberäkning:</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Schemaföljsamhet</value>
-    <comment>Agent - Schemaföljsamhet</comment>
-  </data>
-  <data name="ResSortByColon" xml:space="preserve">
-    <value>Sortera efter:</value>
-    <comment>Sortera efter:</comment>
-  </data>
-  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Redotid / Schemalagd redotid (%)</value>
-    <comment>Ready tid / Schemalagd ready tid (%)</comment>
-  </data>
-  <data name="ResScheduledAgentsReady" xml:space="preserve">
-    <value>Schemalagda agenter redo</value>
-    <comment>Schemalagda agenter ready</comment>
-  </data>
-  <data name="ResDeviationMinute" xml:space="preserve">
-    <value>Avvikelse (m)</value>
-    <comment>Avvikelse (m)</comment>
-  </data>
-  <data name="ResNext" xml:space="preserve">
-    <value>Nästa</value>
-    <comment>Nästa</comment>
-  </data>
-  <data name="ResPrevious" xml:space="preserve">
-    <value>Föregående</value>
-    <comment>Föregående</comment>
-  </data>
-  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>Följsamhet / intervall (%)</value>
-    <comment>Följsamhet / intervall (%)</comment>
-  </data>
-  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
-    <value>Avvikelse / intervall (m)</value>
-    <comment>Avvikelse / intervall (m)</comment>
-  </data>
-  <data name="ResQueueColon" xml:space="preserve">
-    <value>Kö:</value>
-    <comment>Kö:</comment>
-  </data>
-  <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>Köstatistik</value>
-    <comment>Köstatistik</comment>
-  </data>
-  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
-    <value>Tappade inom servicenivå</value>
-    <comment>Tappade inom servicenivå</comment>
-  </data>
-  <data name="ResAbandonedShortCalls" xml:space="preserve">
-    <value>Tappade korta samtal</value>
-    <comment>Tappade korta samtal</comment>
-  </data>
-  <data name="ResHandleTime" xml:space="preserve">
-    <value>Hanteringstid</value>
-    <comment>Hanteringstid</comment>
-  </data>
-  <data name="ResSpeedOfAnswer" xml:space="preserve">
-    <value>Svarstid</value>
-    <comment>Svarstid</comment>
-  </data>
-  <data name="ResTalkTime" xml:space="preserve">
-    <value>Samtalstid</value>
-    <comment>Samtalstid</comment>
-  </data>
-  <data name="ResTransferredCalls" xml:space="preserve">
-    <value>Transfersamtal</value>
-    <comment>Transfer samtal</comment>
-  </data>
-  <data name="ResQueue" xml:space="preserve">
-    <value>Kö</value>
-    <comment>Kö</comment>
-  </data>
-  <data name="ResTimeZoneColon" xml:space="preserve">
-    <value>Tidszon:</value>
-    <comment>Tidszon:</comment>
-  </data>
-  <data name="ResLongestTimeToAbandon" xml:space="preserve">
-    <value>Längsta väntetid tappade samtal</value>
-    <comment>Längsta väntetid tappade samtal</comment>
-  </data>
-  <data name="ResLongestTimeToAnswer" xml:space="preserve">
-    <value>Längsta väntetid besvarade samtal</value>
-    <comment>Längsta väntetid besvarade samtal</comment>
-  </data>
-  <data name="ResTimeToAbandonSec" xml:space="preserve">
-    <value>Väntetid tappade samtal (s)</value>
-    <comment>Väntetid tappade samtal (s)</comment>
-  </data>
-  <data name="ResHelp" xml:space="preserve">
-    <value>Hjälp</value>
-    <comment>Hjälp</comment>
-  </data>
-  <data name="ResAcdLoginName" xml:space="preserve">
-    <value>Acd login</value>
-    <comment>Acd login</comment>
-  </data>
-  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Agent köstatistik</value>
-    <comment>Agent kö statistik</comment>
-  </data>
-  <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>Agentstatistik</value>
-    <comment>Agentstatistik</comment>
-  </data>
-  <data name="ResAdminTime" xml:space="preserve">
-    <value>Admintid</value>
-    <comment>Admin tid</comment>
-  </data>
-  <data name="ResDirectIncomingCalls" xml:space="preserve">
-    <value>Inkommande direktsamtal</value>
-    <comment>Inkommande direktsamtal</comment>
-  </data>
-  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
-    <value>Samtalstid inkommande direktsamtal</value>
-    <comment>Samtalstid inkommande direktsamtal</comment>
-  </data>
-  <data name="ResDirectOutboundCalls" xml:space="preserve">
-    <value>Utgående direktsamtal</value>
-    <comment>Utgående direktsamtal</comment>
-  </data>
-  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
-    <value>Samtalstid utgående direktsamtal</value>
-    <comment>Samtalstid utgående direktsamtal</comment>
-  </data>
-  <data name="ResIdleTime" xml:space="preserve">
-    <value>Väntetid</value>
-    <comment>Väntetid</comment>
-  </data>
-  <data name="ResLoggedInTime" xml:space="preserve">
-    <value>Inloggad tid</value>
-    <comment>Inloggad tid</comment>
-  </data>
-  <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Paustid</value>
-    <comment>Ej ready tid</comment>
-  </data>
-  <data name="ResDateInterval" xml:space="preserve">
-    <value>Datum / Intervall</value>
-    <comment>Datum / Intervall</comment>
-  </data>
-  <data name="ResPermissionDenied" xml:space="preserve">
-    <value>Rättigheter saknas</value>
-    <comment>Rättigheter saknas</comment>
-  </data>
-  <data name="ResOverflowInCalls" xml:space="preserve">
-    <value>Overflow samtal in </value>
-    <comment>Overflow in</comment>
-  </data>
-  <data name="ResOverflowOutCalls" xml:space="preserve">
-    <value>Overflow samtal ut</value>
-    <comment>Overflow ut</comment>
-  </data>
-  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>Prognostiserad tid inkl. shrinkage (tt:mm)</value>
-    <comment>Prognos tid (shrinkage) (hh:mm)</comment>
-  </data>
-  <data name="ResScheduledTimeH" xml:space="preserve">
-    <value>Schemalagd tid (tt:mm)</value>
-    <comment>Schemalagd tid (hh:mm)</comment>
-  </data>
-  <data name="ResStandardDeviation" xml:space="preserve">
-    <value>Standardavvikelse</value>
-    <comment>Standardavvikelse</comment>
-  </data>
-  <data name="ResWeekColon" xml:space="preserve">
-    <value>Vecka:</value>
-    <comment>Vecka:</comment>
-  </data>
-  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>Schemalagd tid per agent</value>
-    <comment>Schemalagd tid per agent</comment>
-  </data>
-  <data name="ResScheduledAbsenceTime" xml:space="preserve">
-    <value>Schemalagd frånvaro (tt:mm)</value>
-    <comment>Scheduled frånvaro (hh:mm)</comment>
-  </data>
-  <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>Schemalagd övertid (tt:mm)</value>
-    <comment>Schemalagd övertid (hh:mm)</comment>
-  </data>
-  <data name="ResAbsenceColon" xml:space="preserve">
-    <value>Frånvaro:</value>
-    <comment>Frånvaro:</comment>
-  </data>
-  <data name="ResActivityColon" xml:space="preserve">
-    <value>Aktivitet:</value>
-    <comment>Aktivitet:</comment>
-  </data>
-  <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>Prognostiserade timmar (tt:mm)</value>
-    <comment>Prognos timmar (hh:mm)</comment>
-  </data>
-  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Prognostiserade timmar (shrinkage) (tt:mm)</value>
-    <comment>Prognos timmar (shrinkage) (hh:mm)</comment>
-  </data>
-  <data name="ResScheduledHoursH" xml:space="preserve">
-    <value>Schemalagda timmar (tt:mm)</value>
-    <comment>Schemalagda timmar (hh:mm)</comment>
-  </data>
-  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>Relativ skillnad inkl. shrinkage (%)</value>
-    <comment>Relativ skillnad (shrinkage) (%)</comment>
-  </data>
-  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Skiftkategori per dag</value>
-    <comment>Skiftkategori per dag</comment>
-  </data>
-  <data name="ResShiftCategoryColon" xml:space="preserve">
-    <value>Skiftkategori:</value>
-    <comment>Skiftkategori:</comment>
-  </data>
-  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Skiftkategori och heldagsfrånvaro per agent</value>
-    <comment>Skiftkategori och heldagsfrånvaro per agent</comment>
-  </data>
-  <data name="ResDayOffColon" xml:space="preserve">
-    <value>Fridag:</value>
-    <comment>Fridag:</comment>
-  </data>
-  <data name="ResSelections" xml:space="preserve">
-    <value>Urval</value>
-    <comment>Urval</comment>
-  </data>
-  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>Schemalagd tid per aktivitet</value>
-    <comment>Schemalagd tid per aktivitet</comment>
-  </data>
-  <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>Teammätvärden</value>
-    <comment>Team mätvärden</comment>
-  </data>
-  <data name="ResTeamDate" xml:space="preserve">
-    <value>Team / Datum</value>
-    <comment>Team / Datum</comment>
-  </data>
-  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
-    <value>Besvarade samtal / redotimme</value>
-    <comment>Besvarade samtal / Ready timme</comment>
-  </data>
-  <data name="ResContractAbsenceTimeH" xml:space="preserve">
-    <value>Frånvaro kontraktstid (tt:mm)</value>
-    <comment>Frånvaro kontraktstid (hh:mm)</comment>
-  </data>
-  <data name="ResContractTimeH" xml:space="preserve">
-    <value>Kontraktstid (tt:mm)</value>
-    <comment>Kontraktstid (hh:mm)</comment>
-  </data>
-  <data name="ResPaidTimeH" xml:space="preserve">
-    <value>Betald tid (tt:mm)</value>
-    <comment>Betald tid (hh:mm)</comment>
-  </data>
-  <data name="ResWorkTimeH" xml:space="preserve">
-    <value>Arbetstid (tt:mm)</value>
-    <comment>Arbetstid (hh:mm)</comment>
-  </data>
-  <data name="ResPreferencesAccepted" xml:space="preserve">
-    <value>Accepterade önskemål</value>
-    <comment>Accepterade önskemål</comment>
-  </data>
-  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
-    <value>Accepterade önskemål (%)</value>
-    <comment>Accepterade önskemål (%)</comment>
-  </data>
-  <data name="ResPreferencesDeclined" xml:space="preserve">
-    <value>Avvisade önskemål</value>
-    <comment>Avvisade önskemål</comment>
-  </data>
-  <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>Önskemål</value>
-    <comment>Önskemål</comment>
-  </data>
-  <data name="ResPreferenceCategory" xml:space="preserve">
-    <value>Önskemålskategori</value>
-    <comment>Önskemålskategori</comment>
-  </data>
-  <data name="ResReportPreferencesPerDay" xml:space="preserve">
-    <value>Önskemål per dag</value>
-    <comment>Önskemål per dag</comment>
-  </data>
-  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>Önskemål per agent</value>
-    <comment>Önskemål per agent</comment>
-  </data>
-  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Schemalagda agenter per intervall och team</value>
-    <comment>Schemalagda agenter per interval och team</comment>
-  </data>
-  <data name="ResReportImprove" xml:space="preserve">
-    <value>IMPROVE</value>
-    <comment>IMPROVE</comment>
-  </data>
-  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
-    <value>Hanteringstid / Betald tid (%)</value>
-    <comment>Hanteringstid / Betald tid (%)</comment>
-  </data>
-  <data name="ResDayOfWeekFriday" xml:space="preserve">
-    <value>Fredag</value>
-    <comment>Friday</comment>
-  </data>
-  <data name="ResDayOfWeekMonday" xml:space="preserve">
-    <value>Måndag</value>
-    <comment>Monday</comment>
-  </data>
-  <data name="ResDayOfWeekSaturday" xml:space="preserve">
-    <value>Lördag</value>
-    <comment>Saturday</comment>
-  </data>
-  <data name="ResDayOfWeekSunday" xml:space="preserve">
-    <value>Söndag</value>
-    <comment>Sunday</comment>
-  </data>
-  <data name="ResDayOfWeekThursday" xml:space="preserve">
-    <value>Torsdag</value>
-    <comment>Thursday</comment>
-  </data>
-  <data name="ResDayOfWeekTuesday" xml:space="preserve">
-    <value>Tisdag</value>
-    <comment>Tuesday</comment>
-  </data>
-  <data name="ResDayOfWeekWednesday" xml:space="preserve">
-    <value>Onsdag</value>
-    <comment>Wednesday</comment>
-  </data>
-  <data name="ResMonthApril" xml:space="preserve">
-    <value>April </value>
-    <comment>April </comment>
-  </data>
-  <data name="ResMonthAugust" xml:space="preserve">
-    <value>Augusti</value>
-    <comment>August</comment>
-  </data>
-  <data name="ResMonthDecember" xml:space="preserve">
-    <value>December</value>
-    <comment>December</comment>
-  </data>
-  <data name="ResMonthFebruary" xml:space="preserve">
-    <value>Februari</value>
-    <comment>February</comment>
-  </data>
-  <data name="ResMonthJanuary" xml:space="preserve">
-    <value>Januari</value>
-    <comment>January </comment>
-  </data>
-  <data name="ResMonthJuly" xml:space="preserve">
-    <value>Juli</value>
-    <comment>July</comment>
-  </data>
-  <data name="ResMonthJune" xml:space="preserve">
-    <value>Juni</value>
-    <comment>June</comment>
-  </data>
-  <data name="ResMonthMarch" xml:space="preserve">
-    <value>Mars</value>
-    <comment>March</comment>
-  </data>
-  <data name="ResMonthMay" xml:space="preserve">
-    <value>Maj</value>
-    <comment>May</comment>
-  </data>
-  <data name="ResMonthNovember" xml:space="preserve">
-    <value>November</value>
-    <comment>November</comment>
-  </data>
-  <data name="ResMonthOctober" xml:space="preserve">
-    <value>Oktober</value>
-    <comment>October</comment>
-  </data>
-  <data name="ResMonthSeptember" xml:space="preserve">
-    <value>September</value>
-    <comment>September</comment>
-  </data>
-  <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Agent scorecard</value>
-    <comment>Agent Scorecard</comment>
-  </data>
-  <data name="ResAbsencePaidTimeH" xml:space="preserve">
-    <value>Betald tid  (tt:mm)</value>
-    <comment>Betald frånvarotid  (hh:mm)</comment>
-  </data>
-  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
-    <value>Arbetstid (tt:mm)</value>
-    <comment>Frånvaro inkluderad i arbetstid (hh:mm)</comment>
-  </data>
-  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>Frånvaro per agent</value>
-    <comment>Frånvaro per agent</comment>
-  </data>
-  <data name="ResAbsenceDayCount" xml:space="preserve">
-    <value>Frånvaro heldag</value>
-    <comment>Frånvaro heldag</comment>
-  </data>
-  <data name="ResAbsencePartDayCount" xml:space="preserve">
-    <value>Del av dag</value>
-    <comment>Frånvaro del av dag</comment>
-  </data>
-  <data name="AuthenticationFailedForUser" xml:space="preserve">
-    <value>Verifiering av användaren misslyckades</value>
-    <comment>Verifiering av användaren misslyckades</comment>
-  </data>
-  <data name="AuthenticationMixedFailure" xml:space="preserve">
-    <value>När Windowsverifiering används på webbapplikationen är det inte tillåtet att använda Applikationsverifiering på klienten.</value>
-    <comment>När Windows verifiering används på webb applikationen är det fel att använda Applikation verifiering på klienten.</comment>
-  </data>
-  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>Använd applikationsinloggning istället.</value>
-    <comment>Använd applikation inloggning istället.</comment>
-  </data>
-  <data name="PossibleSolution" xml:space="preserve">
-    <value>Förslag på lösning</value>
-    <comment>Förslag på lösning</comment>
-  </data>
-  <data name="PossibleSolution1" xml:space="preserve">
-    <value>Säkerställ att rättigheterna är synkroniserade ordentligt med ETL tjänsten.</value>
-    <comment>Säkerställ att rättigheter är synkroniserade ordentligt med ETL tjänsten.</comment>
-  </data>
-  <data name="PossibleSolution2" xml:space="preserve">
-    <value>Stäng klienten och logga in på nytt med Windowsinloggning eller be systemadministratören ändra webbinloggningen till Forms. </value>
-    <comment>Either close the client and log back on using Windows authentication or a system administrator can change web authentication to Forms.</comment>
-  </data>
-  <data name="TechnicalInformation" xml:space="preserve">
-    <value>Teknisk information</value>
-    <comment>Teknisk information</comment>
-  </data>
-  <data name="UnknownError" xml:space="preserve">
-    <value>Okänt fel</value>
-    <comment>Okänt fel</comment>
-  </data>
-  <data name="ResAbsence" xml:space="preserve">
-    <value>Frånvaro</value>
-    <comment>Frånvaro</comment>
-  </data>
-  <data name="ResActivity" xml:space="preserve">
-    <value>Aktivitet</value>
-    <comment>Aktivitet</comment>
-  </data>
-  <data name="ResAdherence" xml:space="preserve">
-    <value>Följsamhet</value>
-    <comment>Följsamhet</comment>
-  </data>
-  <data name="ResAll" xml:space="preserve">
-    <value>Alla</value>
-    <comment>Alla</comment>
-  </data>
-  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>Besvarade samtal inom servicenivå / Besvarade samtal</value>
-    <comment>Besvarade samtal inom svarsmål / Besvarade samtal</comment>
-  </data>
-  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarade och tappade samtal inom servicenivå / Inkommande samtal</value>
-    <comment>Besvarade och tappade samtal inom svarsmål / Inkommande samtal</comment>
-  </data>
-  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarade samtal inom servicenivå / Inkommande samtal</value>
-    <comment>Besvarade samtal inom svarsmål / Inkommande samtal</comment>
-  </data>
-  <data name="ResDay" xml:space="preserve">
-    <value>Dag</value>
-    <comment>Dag</comment>
-  </data>
-  <data name="ResDayOff" xml:space="preserve">
-    <value>Fridag</value>
-    <comment>Fridag</comment>
-  </data>
-  <data name="ResExtendedPreference" xml:space="preserve">
-    <value>Utökat önskemål</value>
-    <comment>Utökat önskemål</comment>
-  </data>
-  <data name="ResFirstName" xml:space="preserve">
-    <value>Förnamn</value>
-    <comment>Förnamn</comment>
-  </data>
-  <data name="ResFriday" xml:space="preserve">
-    <value>fredag</value>
-    <comment>fredag</comment>
-  </data>
-  <data name="ResHalfHour" xml:space="preserve">
-    <value>Halvtimme</value>
-    <comment>Halvtimme</comment>
-  </data>
-  <data name="ResHour" xml:space="preserve">
-    <value>Timme</value>
-    <comment>Timme</comment>
-  </data>
-  <data name="ResLastName" xml:space="preserve">
-    <value>Efternamn</value>
-    <comment>Efternamn</comment>
-  </data>
-  <data name="ResMonday" xml:space="preserve">
-    <value>måndag</value>
-    <comment>måndag</comment>
-  </data>
-  <data name="ResMonth" xml:space="preserve">
-    <value>Månad</value>
-    <comment>Månad</comment>
-  </data>
-  <data name="ResNotDefined" xml:space="preserve">
-    <value>Ej Definierad</value>
-    <comment>Ej Definierad</comment>
-  </data>
-  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Redotid vs Schemalagd kontraktstid</value>
-    <comment>Ready tid vs Schemalagd konstraktstid</comment>
-  </data>
-  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Redotid vs Schemalagd redotid</value>
-    <comment>Ready tid vs Schemalagd ready tid</comment>
-  </data>
-  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Redotid vs Schemalagd tid (inkl tid före och efter skiftstart)</value>
-    <comment>Ready tid vs Schemalagd tid (inkl tid före och efter skiftstart)</comment>
-  </data>
-  <data name="ResSaturday" xml:space="preserve">
-    <value>lördag</value>
-    <comment>lördag</comment>
-  </data>
-  <data name="ResShiftCategory" xml:space="preserve">
-    <value>Skiftkategori</value>
-    <comment>Skiftkategori</comment>
-  </data>
-  <data name="ResShiftStartTime" xml:space="preserve">
-    <value>Skiftstart</value>
-    <comment>Skiftstart</comment>
-  </data>
-  <data name="ResSunday" xml:space="preserve">
-    <value>söndag</value>
-    <comment>söndag</comment>
-  </data>
-  <data name="ResThursday" xml:space="preserve">
-    <value>torsdag</value>
-    <comment>torsdag</comment>
-  </data>
-  <data name="ResTuesday" xml:space="preserve">
-    <value>tisdag</value>
-    <comment>tisdag</comment>
-  </data>
-  <data name="ResWednesday" xml:space="preserve">
-    <value>onsdag</value>
-    <comment>onsdag</comment>
-  </data>
-  <data name="ResWeek" xml:space="preserve">
-    <value>Vecka</value>
-    <comment>Vecka</comment>
-  </data>
-  <data name="ResWeekday" xml:space="preserve">
-    <value>Veckodag</value>
-    <comment>Veckodag</comment>
-  </data>
-  <data name="ResAgentColon" xml:space="preserve">
-    <value>Agent:</value>
-    <comment>Agent:</comment>
+    <value>インターバル:</value>
   </data>
   <data name="ResScheduledTime" xml:space="preserve">
-    <value>Schemalagd tid</value>
+    <value>スケジュール時間</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>サービスレベル (%)</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>サイト名:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>スキル名:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>チーム:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>ワークロード:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>レポートの表示</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>インターバル from:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>インターバル to:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>期間の種類:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>かい離率 (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>遵守率 (%)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>スケジュール時間内応答呼（時間）</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>平均アフターコールワーク時間</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>平均処理時間</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>平均通話時間</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>レディネス (%)</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>実値</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>KPI</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>前の期間</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>ターゲット</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>チーム実値</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>トレンド</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>ログインに失敗しました。再度ログインしてください。</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>ユーザー名:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>新しいパスワード</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>パスワードが必要です。</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>パスワード:</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>このユーザーを記憶</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>ユーザー名が必要です。</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>レポートの表示</value>
   </data>
   <data name="ResScenarioColon" xml:space="preserve">
-    <value>Scenario:</value>
+    <value>シナリオ:</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>放棄呼(短通話以外%）</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>放棄率 (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>応答率 (%)</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>平均応答速度 (秒)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>平均放棄時間 (秒)</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>日付期間:</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>最長遅延（キュー、放棄）</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>最長遅延（キュー、応答）</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>期間</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>放棄呼と応答速度</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>放棄までの時間</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>総計</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>パーセント</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>アフターコールワーク　実値</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>平均通話時間　実値</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>アフターコールワーク（ACW）</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>平均通話時間（ATT）</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>計算呼量</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>通話</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>アフターコールワーク　予測値</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>平均通話時間　予測値</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>予測呼量</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>の数</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>予測　実測</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>レディ状態エージェント</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>予定エージェント</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>相対差異 (%)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>予測時間（時：分）</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>着信呼</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>着信呼/レディ状態エージェント</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>着信呼/レディ状態の予定エージェント</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>予測時間に対する予定時間</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>サービスレベルとレディ状態エージェント</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>予定レディ時間</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>予定エージェントに対するレディ状態エージェント</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>スムーズ率 (%)</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>平日/スキル</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>エージェントカテゴリ:</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>エージェントカテゴリの種類:</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>エージェント:</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>エージェントの評価指標</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>遵守率 (%)</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>エージェント/日付</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>応答呼/予定レディ時間</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>稼働率 (%)</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>レディネス (%)</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>レディ時間</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>遵守率の計算:</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>着信呼/エージェント</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>サービスレベル</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>サービスレベルの計算:</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>ソート方法:</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>レディ時間/予定レディ時間 (%)</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>レディ状態の予定エージェント</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>逸脱 (分)</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>遵守率/インターバル (%)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>逸脱/インターバル (分)</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>キュー:</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>キューの統計値</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>サービスレベル内の放棄</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>ショートコールの放棄</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>処理時間</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>応答速度</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>通話時間</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>転送呼</value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>キュー</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>タイムゾーン:</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>キューにおける放棄呼の最長遅延時間</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>キューにおける応答呼の最長遅延時間</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>放棄までの時間 (秒)</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>自動呼分配ログイン</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>エージェントキューの統計値</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>エージェントの統計値</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>管理時間</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>直接着信呼</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>直接着信呼の通話時間</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>直接発信呼</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>直接発信呼の通話時間</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>アイドル時間</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>ログイン時間</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>非レディ時間</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>日付/インターバル</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>否認されました</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>着信呼のオーバーフロー</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>発信呼のオーバーフロー</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>目減りを含む予測時間（時:分）</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>予定時間（時:分）</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>標準偏差</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>週:</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>エージェントあたりの予定時間</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>予定欠勤時間（時:分）</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>予定残業時間（時:分）</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>欠勤:</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>活動:</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>予測時間（時:分）</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>予定時間（時:分）</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>予測時間（目減り）（時:分）</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>目減りを含む相対差異 (%)</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>1日あたりのシフトカテゴリ</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>シフトカテゴリ:</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>エージェントあたりのシフトカテゴリと全日欠勤</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>休暇:</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>活動あたりの予定時間</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>チームの評価指標</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>チーム/日付</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>応答呼/レディ時間</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>契約不在時間（時:分）</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>契約時間（時:分）</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>有給時間（時:分）</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>勤務時間（時:分）</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>承認されたプリファレンス</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>プリファレンス承認率 (%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>否認されたプリファレンス</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>要求されたプリファレンス</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>プリファレンスカテゴリ</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>1日あたりのプリファレンス</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>エージェントあたりのプリファレンス</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>インターバルおよびチームあたりの予定エージェント</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>改善</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>処理時間/有給時間 (%)</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>金曜日</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>月曜日</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>土曜日</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>日曜日</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>木曜日</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>火曜日</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>水曜日</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>4月</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>8月</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>12月</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>2月</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>1月</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>7月</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>6月</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>3月</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>5月</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>11月</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>10月</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>9月</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>エージェントのスコアカード</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>有給時間（時:分）</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>勤務時間（時:分）</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>エージェントあたりの欠勤時間</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>全日</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>パートタイム</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>ユーザーの認証に失敗しました。</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>WebアプリケーションにてWindowsによる認証を使用している場合、クライアント側ではアプリケーションによる認証を行うことができません。</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>アプリケーションのログインを使用してください。</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>考えられるソリューション</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>権限の設定がETLサービスと正しく同期されていることを確認してください。</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>クライアントを終了してWindowsによる認証を使用するか、システム管理者に依頼してフォームに対するWeb認証方式を変更してください。</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>技術情報</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>不明なエラー</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>欠勤</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>活動</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>遵守率</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>全て</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼/応答呼</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼と放棄呼/着信呼</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼/着信呼</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>休暇</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>拡張プリファレンス</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>名</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>金曜日</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>30分</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>姓</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>月曜日</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>未定義</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>レディ時間に対する契約予定時間</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>レディ時間に対する予定レディ時間</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>レディ時間に対する予定時間（シフト開始前後の時間を含む）</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>シフトカテゴリ</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>シフト開始時刻</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>日曜日</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>木曜日</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>火曜日</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>水曜日</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>週</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>平日</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>エージェント:</value>
   </data>
   <data name="ResNoScorecardAvailable" xml:space="preserve">
-    <value>Inget scorecard tillgängligt</value>
-    <comment>No scorecard available</comment>
+    <value>利用可能なスコアカードはありません</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>Frånvarotid per frånvaro</value>
-    <comment>Frånvarotid per frånvaro</comment>
+    <value>欠勤あたりの欠勤時間</value>
   </data>
   <data name="Main" xml:space="preserve">
-    <value>Organisationsstruktur</value>
-    <comment>Group page main tab page</comment>
+    <value>業務階層</value>
   </data>
   <data name="Contracts" xml:space="preserve">
-    <value>Kontrakt</value>
-    <comment>Contracts</comment>
+    <value>契約</value>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>Kontraktsschema</value>
-    <comment>Contract schedule</comment>
+    <value>契約
+スケジュール</value>
   </data>
   <data name="Note" xml:space="preserve">
-    <value>Notering</value>
-    <comment>Note</comment>
+    <value>メモ</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Deltidsprocent</value>
-    <comment>Part time percentages</comment>
+    <value>パートタイム率</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Skiftpåse</value>
-    <comment>Rule Set Bag</comment>
+    <value>シフトバッグ</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
-    <value>Gruppering:</value>
-    <comment>Gruppering:</comment>
+    <value>グループページ:</value>
   </data>
   <data name="ResGroupPageGroupColon" xml:space="preserve">
-    <value>Grupp:</value>
-    <comment>Grupp:</comment>
+    <value>グループ:</value>
   </data>
   <data name="Skill" xml:space="preserve">
-    <value>Kompetens</value>
-    <comment>Skill</comment>
+    <value>スキル</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Schemalagd övertid per agent</value>
-    <comment>Schemalagd övertid per agent</comment>
+    <value>エージェントあたりの予定残業時間</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
-    <value>Övertid:</value>
-    <comment>Övertid:</comment>
+    <value>残業:</value>
   </data>
   <data name="ResOvertimeTypeColon" xml:space="preserve">
-    <value>Övertidstyp:</value>
-    <comment>Övertidstyp:</comment>
+    <value>残業の種類:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Snitt Efterbearbetningstid (s)</value>
-    <comment>Snitt Efterbearbetningstid (s)</comment>
+    <value>平均アフターコールワーク (秒)</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Snitt Hanteringstid (s)</value>
-    <comment>Snitt Hanterings tid (s)</comment>
+    <value>平均処理時間 (秒)</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Snitt Samtalstid (s)</value>
-    <comment>Snitt Samtalstid (s)</comment>
+    <value>平均通話時間 (秒)</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agent - Mätvärden per kö</value>
-    <comment>Agent - Köresultat</comment>
+    <value>エージェントキューの評価指標</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktivitetstid per agent</value>
-    <comment>Activity Time per Agent</comment>
+    <value>エージェントあたりの活動時間</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
-    <value>Övertid (tt:mm)</value>
-    <comment>Overtime (hh:mm)</comment>
+    <value>残業時間（時:分）</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
-    <value>Skiftslut</value>
-    <comment>Shift End Time</comment>
+    <value>シフト終了時刻</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Skiftkategori och heldagsfrånvaro per dag</value>
-    <comment>Skiftkategori och heldagsfrånvaro per dag</comment>
+    <value>シフトカテゴリおよび全休</value>
   </data>
   <data name="ResRequestTypeAbsence" xml:space="preserve">
-    <value>Frånvaro</value>
+    <value>欠勤</value>
   </data>
   <data name="ResRequestTypeShiftTrade" xml:space="preserve">
-    <value>Skiftbyte</value>
+    <value>シフト交代</value>
   </data>
   <data name="ResRequestTypeText" xml:space="preserve">
-    <value>Text</value>
-  </data>
-  <data name="ResRequestsDayCount" xml:space="preserve">
-    <value>Begärda dagar</value>
-    <comment>Önskade dagar</comment>
-  </data>
-  <data name="ResRequestsStartDayCount" xml:space="preserve">
-    <value>Förfrågningar</value>
-    <comment>Förfrågningar</comment>
+    <value>テキスト</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Förfrågningar per agent</value>
+    <value>エージェントあたりの要求</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
-    <value>Godkända</value>
-    <comment>Godkända</comment>
+    <value>承認</value>
   </data>
   <data name="ResRequestStatusDenied" xml:space="preserve">
-    <value>Avslagna</value>
-    <comment>Avslagna</comment>
+    <value>否認</value>
   </data>
   <data name="ResRequestStatusPending" xml:space="preserve">
-    <value>Pågående</value>
-    <comment>Pågående</comment>
+    <value>保留</value>
   </data>
   <data name="ResRequestTypeColon" xml:space="preserve">
-    <value>Förfrågningstyp:</value>
+    <value>要求の種類:</value>
   </data>
   <data name="ResRequestStatusColon" xml:space="preserve">
-    <value>Status:</value>
-    <comment>Status:</comment>
-  </data>
-  <data name="ResRequestType" xml:space="preserve">
-    <value>Typ</value>
+    <value>状態:</value>
   </data>
   <data name="ResRequestStatus" xml:space="preserve">
-    <value>Status</value>
-    <comment>Status</comment>
+    <value>状態</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>要求日</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>種類</value>
   </data>
   <data name="ResApplicationDate" xml:space="preserve">
-    <value>Ansökningsdatum</value>
-    <comment>Ansökningsdatum</comment>
+    <value>適用日</value>
   </data>
   <data name="ResRequestPeriod" xml:space="preserve">
-    <value>Förfrågningsperiod</value>
-    <comment>Förfrågningsperiod</comment>
+    <value>要求期間</value>
   </data>
   <data name="RedirectNow" xml:space="preserve">
-    <value>Omdirigera nu</value>
+    <value>今すぐリダイレクト</value>
   </data>
   <data name="SessionExpiredHeader" xml:space="preserve">
-    <value>Sessionen löpte ut</value>
+    <value>セッションが切断されました</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
-    <value>Din session löpte ut på grund av en längre period av inaktivitet. Du kommer snart att omdirigeras till inloggningssidan.</value>
+    <value>一定時間操作が行われなかったため、セッションが切断されました。ログオンページに再度リダイレクトされます。</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Följsamhet per agent</value>
+    <value>エージェント当たりの遵守率</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>Följsamhet per dag</value>
+    <value>1日あたりの遵守率</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>Schemalagda agenter per aktivitet</value>
+    <value>活動あたりの予定エージェント</value>
   </data>
   <data name="ResTotals" xml:space="preserve">
-    <value>Totalt</value>
+    <value>トータル</value>
   </data>
   <data name="ResSignOut" xml:space="preserve">
-    <value>Logga ut</value>
+    <value>サインアウト</value>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
-    <value>Datum (då skiften påbörjas):</value>
+    <value>日付（シフト開始）:</value>
   </data>
   <data name="ResShiftStartDateFromColon" xml:space="preserve">
-    <value>Från datum (då skiften påbörjas):</value>
+    <value>開始日（シフト開始）:</value>
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
-    <value>Till datum (då skiften påbörjas):</value>
-  </data>
-  <data name="ResFulfilled" xml:space="preserve">
-    <value>Uppfyllda</value>
-    <comment>Uppfyllda</comment>
-  </data>
-  <data name="ResFulfillmentPercent" xml:space="preserve">
-    <value>Uppfyllda (%)</value>
-    <comment>Uppfyllda (%)</comment>
-  </data>
-  <data name="ResUnfulfilled" xml:space="preserve">
-    <value>Ouppfyllda</value>
-    <comment>Ouppfyllda</comment>
-  </data>
-  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>Maxtiden för kopplingen till databasen löpte ut, försök begränsa sökvillkoren.</value>
-  </data>
-  <data name="ResMustHaves" xml:space="preserve">
-    <value>Veton</value>
-  </data>
-  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
-    <value>Tillgänglighet per agent</value>
-  </data>
-  <data name="ResAvailableDays" xml:space="preserve">
-    <value>Tillgängliga dagar</value>
-  </data>
-  <data name="ResAvailableTime" xml:space="preserve">
-    <value>Tillgänglig tid</value>
-  </data>
-  <data name="ResScheduledDays" xml:space="preserve">
-    <value>Schemalagda dagar</value>
-  </data>
-  <data name="ResUtilization" xml:space="preserve">
-    <value>Utnyttjat</value>
+    <value>終了日（シフト開始）:</value>
   </data>
 </root>
