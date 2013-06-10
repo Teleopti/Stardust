@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// <param name="password">The password.</param>
 		private static void InnerLogon(string userName, string password)
 		{
-			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);

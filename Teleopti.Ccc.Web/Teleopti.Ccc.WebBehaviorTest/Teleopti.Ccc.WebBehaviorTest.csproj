@@ -363,7 +363,6 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
@@ -389,7 +388,6 @@
     </Compile>
     <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
