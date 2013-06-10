@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -12,9 +13,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
-		private readonly IJsonDeserializer _deserializer;
+		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer<ExpandoObject> deserializer)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
