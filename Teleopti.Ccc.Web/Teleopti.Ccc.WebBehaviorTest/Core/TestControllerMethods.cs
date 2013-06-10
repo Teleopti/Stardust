@@ -81,26 +81,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// making a second request seems to enforce the cookie somehow..
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 		}
 
 		public static void TestMessage(string message)
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
 		}
 
 	}
