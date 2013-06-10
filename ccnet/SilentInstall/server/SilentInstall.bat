@@ -38,10 +38,6 @@ goto :start
 ::remove any double quotes
 set msipath=%msipath:"=%
 
-::uninstall
-cmd /C "%~dp0UnInstall.bat"
-cls
-
 ::set log file path
 CALL :SetLogPath "%msipath%" logFile
 
