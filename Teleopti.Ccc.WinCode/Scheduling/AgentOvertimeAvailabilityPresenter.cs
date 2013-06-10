@@ -75,13 +75,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
 
-			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Select(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection.FirstOrDefault()).FirstOrDefault(restriction => restriction != null);
-			if (availiabilityRestriction != null)
+			var overtimeAvailability = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
+			if (overtimeAvailability != null)
 			{
-				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
-				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;	
+				startTime = overtimeAvailability.StartTime;
+				endTime = overtimeAvailability.EndTime;
 			}
-
 			_view.Update(startTime, endTime);
 		}
 
@@ -89,18 +88,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
 
-			var studentAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
+			var overtimeAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
 			bool startError;
 			bool endError;
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
-			if (studentAvailabilityday != null && !canCreate && startError && endError)
+			if (overtimeAvailabilityday != null && !canCreate && startError && endError)
 				return AgentOvertimeAvailabilityExecuteCommand.Remove;
 
-			if (studentAvailabilityday == null && canCreate)
+			if (overtimeAvailabilityday == null && canCreate)
 				return AgentOvertimeAvailabilityExecuteCommand.Add;
 
-			if (studentAvailabilityday != null && canCreate)
+			if (overtimeAvailabilityday != null && canCreate)
 				return AgentOvertimeAvailabilityExecuteCommand.Edit;
 
 			return AgentOvertimeAvailabilityExecuteCommand.None;
