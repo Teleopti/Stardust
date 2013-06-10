@@ -6,10 +6,10 @@
 
   <class name="OvertimeAvailability">
     <!--IEntity-->
-    <id name="Id"
-            type="guid"
-		  access="nosetter.camelcase-underscore"
-            unsaved-value="null">
+    <id name="Id" 
+        type="guid" 
+        access="nosetter.camelcase-underscore" 
+        unsaved-value="null">
       <generator class="guid.comb" />
     </id>
 
@@ -36,16 +36,19 @@
                  not-null="true" foreign-key="FK_OvertimeAvialability_Person"/>
     
     <property name="DateOfOvertime"
-					not-null="true"
-					type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+					    not-null="true"
+					    type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 
-   <property name="StartTime" column="StartTime" />
-   <property name="EndTime" column="EndTime" />
+   <property name="StartTime" 
+             column="StartTime" />
+   <property name="EndTime" 
+             column="EndTime" />
 
-    <many-to-one name="BusinessUnit"
-      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-      access="nosetter.camelcase-underscore"
-      not-null="true" foreign-key="FK_OvertimeAvailability_BusinessUnit"/>
+   <many-to-one name="BusinessUnit"
+                class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+                access="nosetter.camelcase-underscore"
+                not-null="true" 
+                foreign-key="FK_OvertimeAvailability_BusinessUnit"/>
     <filter name="businessUnitFilter"
             condition=":businessUnitParameter = BusinessUnit" />
    

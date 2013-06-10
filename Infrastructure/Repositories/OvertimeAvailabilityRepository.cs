@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                     .SetFetchMode("Restriction", FetchMode.Join);
             IList<IOvertimeAvailability> retList = crit.List<IOvertimeAvailability>();
 
-            InitializeStudentDays(retList);
+            initializeStudentDays(retList);
             return retList;
         }
 
@@ -58,17 +58,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             foreach (var personList in persons.Batch(400))
             {
-                ICriteria crit = FilterByPeriod(period)
+                ICriteria crit = filterByPeriod(period)
                     .Add(personCriterion(personList.ToArray()))
                     .SetResultTransformer(Transformers.DistinctRootEntity);
                 result.AddRange(crit.List<IOvertimeAvailability>());
             }
 
-            InitializeStudentDays(result);
+            initializeStudentDays(result);
             return result;
         }
 
-        private ICriteria FilterByPeriod(DateOnlyPeriod period)
+        private ICriteria filterByPeriod(DateOnlyPeriod period)
         {
             return Session.CreateCriteria(typeof(OvertimeAvailability))
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                           .AddOrder(Order.Asc("DateOfOvertime"));
         }
 
-        private static void InitializeStudentDays(IEnumerable<IOvertimeAvailability> overtimeDays)
+        private static void initializeStudentDays(IEnumerable<IOvertimeAvailability> overtimeDays)
         {
             foreach (IOvertimeAvailability day in overtimeDays)
             {

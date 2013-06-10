@@ -1410,7 +1410,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Common\BusinessUnit.hbm.xml" />
     <EmbeddedResource Include="Common\Scenario.hbm.xml" />
-    <EmbeddedResource Include="Scheduling\Restriction\StudentAvailabilityDay.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Restriction\StudentAvailabilityDay.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ShiftCategory.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

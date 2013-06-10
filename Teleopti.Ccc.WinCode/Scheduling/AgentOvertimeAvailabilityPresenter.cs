@@ -75,12 +75,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
 
-			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Select(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection.FirstOrDefault()).FirstOrDefault(restriction => restriction != null);
-			if (availiabilityRestriction != null)
-			{
-				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
-				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;	
-			}
+		    var overtimeCollection = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>();
+		    startTime = overtimeCollection.Select(overtimeAvailbility => overtimeAvailbility.StartTime).First();
+		    endTime = overtimeCollection.Select(overtimeAvailbility => overtimeAvailbility.EndTime).First();
 
 			_view.Update(startTime, endTime);
 		}
@@ -89,18 +86,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
 
-			var studentAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
+			var overtimeAvailability = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability >().FirstOrDefault();
 			bool startError;
 			bool endError;
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
-			if (studentAvailabilityday != null && !canCreate && startError && endError)
+			if (overtimeAvailability != null && !canCreate && startError && endError)
 				return AgentOvertimeAvailabilityExecuteCommand.Remove;
 
-			if (studentAvailabilityday == null && canCreate)
+			if (overtimeAvailability == null && canCreate)
 				return AgentOvertimeAvailabilityExecuteCommand.Add;
 
-			if (studentAvailabilityday != null && canCreate)
+			if (overtimeAvailability != null && canCreate)
 				return AgentOvertimeAvailabilityExecuteCommand.Edit;
 
 			return AgentOvertimeAvailabilityExecuteCommand.None;
