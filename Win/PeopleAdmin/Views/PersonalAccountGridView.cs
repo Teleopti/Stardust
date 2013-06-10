@@ -588,20 +588,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             e.QueryCellInfoEventArg.Style.DataSource = FilteredPeopleHolder.FilteredAbsenceCollection;
         }
 
-        void PersonalAccountGridView_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-        {
-            PeopleAdminHelper.HandleMessageBroker(ViewType.PersonalAccountGridView, e, FilteredPeopleHolder);
-        }
 
         public PersonalAccountGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder)
             : base(grid, filteredPeopleHolder)
         {
             Init();
-
-            OnEventMessageHandlerChanged += PersonalAccountGridView_OnEventMessageHandlerChanged;
-
-            RegisterForMessageBroker();
-
         }
 
         private void Init()
@@ -1659,9 +1650,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             return selectedPersons;
         }
 
-        private void RegisterForMessageBroker()
-        {
-            RegisterForMessageBrokerEvents(typeof(IAbsence));
-        }
     }
 }

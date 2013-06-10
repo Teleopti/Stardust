@@ -157,3 +157,67 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-04
+--Desc: Bug #23760 rearrange and add indexes for better performance
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[MeetingPerson]') AND name = N'CIX_MeetingPerson_Parent')
+BEGIN
+	SET NOCOUNT ON
+
+	CREATE TABLE [dbo].[MeetingPerson_new](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+		[Optional] [bit] NOT NULL,
+	 CONSTRAINT [PK_MeetingPerson_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_MeetingPerson_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Parent] ASC
+	)
+
+	INSERT INTO [dbo].[MeetingPerson_new] ([Id],[Person],[Parent],[Optional])
+	SELECT [Id],[Person],[Parent],[Optional]
+	FROM [dbo].[MeetingPerson]
+
+	DROP TABLE [dbo].[MeetingPerson]
+
+	CREATE NONCLUSTERED INDEX [IX_MeetingPerson_Person_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Person] ASC
+	)
+	INCLUDE ([Parent])
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson_new]', @newname = N'MeetingPerson', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson].[PK_MeetingPerson_new]', @newname = N'PK_MeetingPerson', @objtype =N'INDEX'
+
+	ALTER TABLE [dbo].[MeetingPerson]  WITH CHECK ADD  CONSTRAINT [FK_MeetingPerson_Meeting] FOREIGN KEY([Parent])
+	REFERENCES [dbo].[Meeting] ([Id])
+	ALTER TABLE [dbo].[MeetingPerson] CHECK CONSTRAINT [FK_MeetingPerson_Meeting]
+
+	ALTER TABLE [dbo].[MeetingPerson]  WITH CHECK ADD  CONSTRAINT [FK_MeetingPerson_Person] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[MeetingPerson] CHECK CONSTRAINT [FK_MeetingPerson_Person]
+
+	SET NOCOUNT OFF
+END
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-05
+--Desc: Bug #23770 - try to reduce some of the I/O
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonPeriod]') AND name = N'IX_PersonPeriod_StartDate')
+CREATE NONCLUSTERED INDEX [IX_PersonPeriod_StartDate] ON [dbo].[PersonPeriod]
+(
+	[StartDate] ASC
+)
+INCLUDE ([Parent],[Team])
