@@ -57,5 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public ICollection<ProjectionChangedEventLayer> Layers { get; set; }
 
 		public bool NotScheduled { get; set; }
+
+		public bool HasUnderlyingShift { get; set; }
 	}
 }

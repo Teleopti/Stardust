@@ -103,6 +103,7 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -137,6 +138,7 @@
     <Compile Include="ApplicationLayer\Rta\UpdatedScheduleInfoHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CanNotPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ISendDelayedMessages.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IJsonDeserializer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IJsonSerializer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelsCreator.cs" />
@@ -529,6 +531,7 @@
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
     <Compile Include="ApplicationLayer\FullDayAbsenceAddedEvent.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
+    <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />

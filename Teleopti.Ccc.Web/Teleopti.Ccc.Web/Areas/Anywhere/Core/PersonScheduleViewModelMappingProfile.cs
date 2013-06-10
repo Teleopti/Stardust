@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PersonScheduleViewModelMappingProfile : Profile
 	{
+		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
+		private readonly IJsonDeserializer _deserializer;
+
+		public PersonScheduleViewModelMappingProfile(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IJsonDeserializer deserializer)
+		{
+			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
+			_deserializer = deserializer;
+		}
+
 		protected override void Configure()
 		{
 			CreateMap<PersonScheduleData, PersonScheduleViewModel>()
@@ -27,25 +38,51 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 								l.TimeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
 							});
 						return layers;
-					}))
-				;
+					}));
 
 			CreateMap<IPersonAbsence, PersonScheduleViewModelPersonAbsence>()
 				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Layer.Payload.DisplayColor.ToHtml()))
 				.ForMember(x => x.Name, o => o.ResolveUsing(s => s.Layer.Payload.Description.Name))
 				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
 					{
-						if (s.Layer.Period.StartDateTime == DateTime.MinValue)
+						var timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+						var absenceStart = s.Layer.Period.StartDateTime;
+						var absenceStartLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceStart, timeZoneInfo);
+						var personScheduleDayReadModelOnStartDay =
+							s.Person.Id.HasValue
+								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceStartLocal), s.Person.Id.Value)
+								: null;
+						var shiftStart = getUnderlyingShiftStartOnAbsenceStartDate(personScheduleDayReadModelOnStartDay);
+
+						if (absenceStart == DateTime.MinValue)
 							return null;
-						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo).ToFixedDateTimeFormat();
+						var shiftStartLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftStart, timeZoneInfo);
+						var startTime = absenceStartLocal.Date < shiftStartLocal.Date
+							                ? absenceStartLocal.ToFixedDateTimeFormat()
+							                : (absenceStartLocal < shiftStartLocal
+								                   ? shiftStartLocal.ToFixedDateTimeFormat()
+								                   : absenceStartLocal.ToFixedDateTimeFormat());
+						return startTime;
 					}))
 				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
 					{
-						if (s.Layer.Period.EndDateTime == DateTime.MinValue)
+						var timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+						var absenceEnd = s.Layer.Period.EndDateTime;
+						var absenceEndLocal = TimeZoneInfo.ConvertTimeFromUtc(absenceEnd, timeZoneInfo);
+						var personScheduleDayReadModelOnEndDay =
+							s.Person.Id.HasValue
+								? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(absenceEndLocal), s.Person.Id.Value)
+								: null;
+						var shiftEnd = getUnderlyingShiftEndOnAbsenceEndDate(personScheduleDayReadModelOnEndDay);
+						if (absenceEnd == DateTime.MaxValue)
 							return null;
-						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo).ToFixedDateTimeFormat();
+						var shiftEndLocal = TimeZoneInfo.ConvertTimeFromUtc(shiftEnd, timeZoneInfo);
+						var endTime = shiftEndLocal.Date < absenceEndLocal.Date
+							              ? absenceEndLocal.ToFixedDateTimeFormat()
+							              : (shiftEndLocal < absenceEndLocal
+								                 ? shiftEndLocal.ToFixedDateTimeFormat()
+								                 : absenceEndLocal.ToFixedDateTimeFormat());
+						return endTime;
 					}))
 				;
 
@@ -66,6 +103,46 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
 				;
 
+		}
+
+		private DateTime getUnderlyingShiftStartOnAbsenceStartDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnStartDay)
+		{
+			DateTime shiftStart = DateTime.MaxValue;
+			if (personScheduleDayReadModelOnStartDay != null && personScheduleDayReadModelOnStartDay.Shift != null)
+			{
+				dynamic shiftOnStartDay =
+					_deserializer.DeserializeObject(personScheduleDayReadModelOnStartDay.Shift);
+				
+				if (shiftOnStartDay != null && shiftOnStartDay.HasUnderlyingShift)
+				{
+					var projection = shiftOnStartDay.Projection as IEnumerable<dynamic>;
+					if (projection != null && !projection.IsEmpty())
+					{
+						shiftStart = projection.Min(p => (DateTime) p.Start);
+					}
+				}
+			}
+			return shiftStart;
+		}
+
+		private DateTime getUnderlyingShiftEndOnAbsenceEndDate(IPersonScheduleDayReadModel personScheduleDayReadModelOnEndDay)
+		{
+			DateTime shiftEnd = DateTime.MinValue;
+			if (personScheduleDayReadModelOnEndDay != null && personScheduleDayReadModelOnEndDay.Shift != null)
+			{
+				dynamic shiftOnEndDay =
+					_deserializer.DeserializeObject(personScheduleDayReadModelOnEndDay.Shift);
+
+				if (shiftOnEndDay != null && shiftOnEndDay.HasUnderlyingShift)
+				{
+					var projection = shiftOnEndDay.Projection as IEnumerable<dynamic>;
+					if (projection != null && !projection.IsEmpty())
+					{
+						shiftEnd = projection.Max(p => (DateTime) p.End);
+					}
+				}
+			}
+			return shiftEnd;
 		}
 	}
 }

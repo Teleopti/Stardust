@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return new PendingAbsenceRequest();
         }
 
-        public override void Process(IPerson processingPerson,IAbsenceRequest absenceRequest, IPersonRequestCheckAuthorization authorization, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
+        public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
         {
-            if (!CheckValidatorList(processingPerson, absenceRequest, authorization, absenceRequestValidatorList)) return;
+            if (!CheckValidatorList(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, absenceRequestValidatorList)) return;
 
-            UndoAll();
+            UndoAll(requiredForProcessingAbsenceRequest);
 
             IPersonRequest personRequest = (IPersonRequest)absenceRequest.Parent;
             personRequest.Pending();
@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             unchecked
             {
-                int result = (RequestApprovalService != null ? RequestApprovalService.GetHashCode() : 0);
-                result = (result * 397) ^ (GetType().GetHashCode());
+                int result = (GetType().GetHashCode());
                 return result;
             }
         }
