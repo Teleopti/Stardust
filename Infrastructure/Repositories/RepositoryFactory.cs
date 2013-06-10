@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

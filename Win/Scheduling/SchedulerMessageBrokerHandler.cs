@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.InfrastructureTest.Repositories;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;

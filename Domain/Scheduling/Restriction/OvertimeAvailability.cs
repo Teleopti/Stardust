@@ -5,8 +5,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-        TimeSpan? StartTime { get;  }
-        TimeSpan? EndTime { get;  }
     public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability
     {
         private readonly IPerson _person;

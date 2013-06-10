@@ -7,11 +7,10 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public interface IOvertimeAvailabilityRepository : IRepository<IOvertimeAvailability>, ILoadAggregateById<IOvertimeAvailability >
     {

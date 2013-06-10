@@ -1849,7 +1849,9 @@
     <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Restriction\OvertimeAvailability.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Restriction\OvertimeAvailability.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

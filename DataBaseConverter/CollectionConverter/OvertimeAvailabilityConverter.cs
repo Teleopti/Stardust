@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.InfrastructureTest.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
