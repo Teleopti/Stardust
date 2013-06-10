@@ -71,40 +71,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click skip button")]
 		public void WhenIClickSkipButton()
 		{
-			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick();
+			Pages.Pages.SignInPage.SkipButton.EventualClick();
 		}
 
 		[When(@"I change my password with")]
 		public void WhenIChangeMyPasswordWith(Table table)
 		{
 			var password = table.CreateInstance<PasswordConfigurable>();
-			Pages.Pages.CurrentSignInPage.ChangePassword(password.Password, password.ConfirmedPassword, password.OldPassword);
+			Pages.Pages.SignInPage.ChangePassword(password.Password, password.ConfirmedPassword, password.OldPassword);
 		}
 
 		[Then(@"I should see change password page with warning '(.*)'")]
 		public void ThenIShouldSeeChangePasswordPageWithWarning(string resourceText)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordExpireSoonError.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordExpireSoonError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.SignInPage.PasswordExpireSoonError.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.SignInPage.PasswordExpireSoonError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 		[Then(@"I should see must change password page with warning '(.*)'")]
 		public void ThenIShouldSeeMustChangePasswordPageWithWarning(string resourceText)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordAlreadyExpiredError.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordAlreadyExpiredError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.SignInPage.PasswordAlreadyExpiredError.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.SignInPage.PasswordAlreadyExpiredError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 		[Then(@"I should not see skip button")]
 		public void ThenIShouldNotSeeSkipButton()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.SkipButton.DisplayVisible(), Is.False);
+			EventualAssert.That(() => Pages.Pages.SignInPage.SkipButton.DisplayVisible(), Is.False);
 		}
 		
 		[Then(@"I should see an error '(.*)'")]
 		public void ThenIShouldSeeAnError(string resourceText)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ChangePasswordErrorMessage.Text, new StringContainsAnyLanguageResourceConstraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.SignInPage.ChangePasswordErrorMessage.Text, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 	}

@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item3, Is.EqualTo(true));
+			Assert.That(result.First().Item4, Is.EqualTo(true));
 		}
 
 		[Test]
@@ -372,7 +372,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item3, Is.EqualTo(false));
+			Assert.That(result.First().Item3, Is.EqualTo(TimeSpan.Zero));
+			Assert.That(result.First().Item4, Is.EqualTo(false));
 		}
 
 		[Test]
@@ -410,7 +411,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item3, Is.EqualTo(false));
+			Assert.That(result.First().Item4, Is.EqualTo(false));
 		}
 
 
@@ -449,7 +450,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item3, Is.EqualTo(false));
+			Assert.That(result.First().Item4, Is.EqualTo(false));
 		}
 
 		#region helpers
@@ -473,7 +474,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user.WorkflowControlSet = workflowControlSet;
 		}
 
-		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan, bool>> allowanceDays)
+		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan, TimeSpan, bool>> allowanceDays)
 		{
 			Assert.That(allowanceDays.Sum(a => a.Item2.TotalMinutes), Is.EqualTo(0));
 		}

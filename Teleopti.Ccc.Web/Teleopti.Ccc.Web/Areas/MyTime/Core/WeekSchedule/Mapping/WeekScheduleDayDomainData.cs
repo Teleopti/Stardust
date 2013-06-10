@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public double Allowance { get; set; }
 		public double AbsenceTime { get; set; }
 		public bool Availability { get; set; }
+		public double FulltimeEquivalent { get; set; }
 	}
 }

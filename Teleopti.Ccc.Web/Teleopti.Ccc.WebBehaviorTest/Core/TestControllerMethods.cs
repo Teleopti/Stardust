@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// <param name="password">The password.</param>
 		private static void InnerLogon(string userName, string password)
 		{
-			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
@@ -81,26 +80,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// making a second request seems to enforce the cookie somehow..
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 		}
 
 		public static void TestMessage(string message)
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
 		}
 
 	}
