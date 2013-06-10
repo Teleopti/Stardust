@@ -49,13 +49,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
+		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
 		{
-			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
-			endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
-
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
 			AddEvent(new FullDayAbsenceAddedEvent
@@ -64,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
 					AbsenceId = absence.Id.Value,
 					PersonId = person.Id.Value,
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
+					StartDateTime = startDateTimeInUtc,
+					EndDateTime = endDateTimeInUtc,
 					ScenarioId = _scenario.Id.Value
 				});
 		}
