@@ -1,5 +1,7 @@
-function IISAdmin {
-	$ModuleName = "WebAdministration"
+function Load-SnapIn {
+    param(
+        $ModuleName
+    )
 	$ModuleLoaded = $false
 	$LoadAsSnapin = $false
 
@@ -223,8 +225,8 @@ function Install-TeleoptiCCCServer
     [string]$BatchFile,
     [string]$MsiFile,
     [string]$machineConfig,
-    [string]@WinUser,
-    [string]@WinPassword
+    [string]$WinUser,
+    [string]$WinPassword
     )
     [string]$ErrorMessage = "Execution of command failed.`n$Command"
     & "$BatchFile" "$MsiFile" "$machineConfig"
