@@ -43,6 +43,8 @@ Scenario: No access to preferences menu item
 	When I am viewing an application page
 	Then I should not be able to see preferences link
 
+#23776 disabling in previous versions
+@ignore
 Scenario: No access to preferences page
 	Given I am an agent without access to preferences
 	When I am viewing an application page
