@@ -34,9 +34,6 @@
     <many-to-one name="Person"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true" foreign-key="FK_StudentAvailabilityDay_Person"/>
-    <property name="NotAvailable"
-              type="Boolean"
-              not-null="true"/>
     
     <property name="RestrictionDate"
 					not-null="true"

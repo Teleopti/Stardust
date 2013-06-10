@@ -8,66 +8,72 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
     public interface IOvertimeAvailability : IPersistableScheduleData
     {
         bool NotAvailable { get; set; }
+        TimeSpan? StartTime { get;  }
+        TimeSpan? EndTime { get;  }
     }
 
     public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability
     {
         private readonly IPerson _person;
-        private DateOnly _overtimeDate;
+        private DateOnly _dateOfOvertime;
         private readonly TimeSpan? _startTime;
         private readonly TimeSpan? _endTime;
 
 
-        public OvertimeAvailability(IPerson person, DateOnly overtimeDate, TimeSpan? startTime, TimeSpan? endTime)
+        public OvertimeAvailability(IPerson person, DateOnly dateOfOvertime, TimeSpan? startTime, TimeSpan? endTime)
         {
             _person = person;
-            _overtimeDate = overtimeDate;
+            _dateOfOvertime = dateOfOvertime;
             _startTime = startTime;
             _endTime = endTime;
         }
 
-        public DateTimePeriod Period
+        public virtual  DateTimePeriod Period
         {
             get
             {
-                return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_overtimeDate.Date,
-                                                                            _overtimeDate.Date.AddDays(1),
+                return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dateOfOvertime.Date,
+                                                                            _dateOfOvertime.Date.AddDays(1),
                                                                             _person.PermissionInformation
                                                                                    .DefaultTimeZone());
             }
         }
 
-        public IPerson Person { get { return _person; } }
-        public IScenario Scenario { get { return null; } }
-        public object   Clone()
+        public virtual DateOnly DateOfOvertime { get { return _dateOfOvertime; } }
+
+        protected OvertimeAvailability() { }
+
+        public virtual IPerson Person { get { return _person; } }
+        public virtual IScenario Scenario { get { return null; } }
+        public virtual  object   Clone()
         {
             var clone = (OvertimeAvailability )MemberwiseClone();
             return clone;
         }
 
-        public bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
+        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
         {
-            return dateAndPeriod.DateOnly == _overtimeDate ;
+            return dateAndPeriod.DateOnly == _dateOfOvertime ;
         }
 
-        public bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
+        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
         {
-            return dateOnlyPeriod.Contains(_overtimeDate );
+            return dateOnlyPeriod.Contains(_dateOfOvertime );
         }
 
-        public bool BelongsToScenario(IScenario scenario)
+        public virtual bool BelongsToScenario(IScenario scenario)
         {
             return true;
         }
 
-        public IAggregateRoot MainRoot { get { return Person; } }
+        public virtual IAggregateRoot MainRoot { get { return Person; } }
 
-        public string FunctionPath
+        public virtual string FunctionPath
         {
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public IPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             var ret = (OvertimeAvailability )Clone();
             ret.SetId(null);
@@ -75,9 +81,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             return ret;
         }
 
-        public bool NotAvailable { get; set; }
+        public virtual bool NotAvailable { get; set; }
 
-        public TimeSpan? StartTime { get { return _startTime; } }
-        public TimeSpan? EndTime { get { return _endTime ; } }
+        public virtual TimeSpan? StartTime { get { return _startTime; } }
+        public virtual TimeSpan? EndTime { get { return _endTime ; } }
     }
 }

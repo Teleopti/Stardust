@@ -12,6 +12,22 @@
             unsaved-value="null">
       <generator class="guid.comb" />
     </id>
+
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_OvertimeAvialability_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_OvertimeAvialability_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
  
     <!--IEntity-->
 
@@ -23,10 +39,15 @@
 					not-null="true"
 					type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 
-    <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Interfaces">
-      <property name="StartTime" column="WorkTimeMinimum" />
-      <property name="EndTime" column="WorkTimeMaximum" />
-    </component>
-    
+   <property name="StartTime" column="StartTime" />
+   <property name="EndTime" column="EndTime" />
+
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_OvertimeAvailability_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+            condition=":businessUnitParameter = BusinessUnit" />
+   
   </class>
 </hibernate-mapping>

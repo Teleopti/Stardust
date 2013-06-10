@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private ICriteria FilterByPeriod(DateOnlyPeriod period)
         {
-            return Session.CreateCriteria(typeof(StudentAvailabilityDay))
+            return Session.CreateCriteria(typeof(OvertimeAvailability))
 
-                          .Add(Restrictions.Between("RestrictionDate", period.StartDate, period.EndDate))
+                          .Add(Restrictions.Between("DateOfOvertime", period.StartDate, period.EndDate))
                           .AddOrder(Order.Asc("Person"))
-                          .AddOrder(Order.Asc("RestrictionDate"));
+                          .AddOrder(Order.Asc("DateOfOvertime"));
         }
 
         private static void InitializeStudentDays(IEnumerable<IOvertimeAvailability> overtimeDays)
