@@ -298,7 +298,7 @@
     <value>Gerarchia Business Unit</value>
   </data>
   <data name="CalculatedCalls" xml:space="preserve">
-    <value>Chiamate calcolate</value>
+    <value>Chiamate ricevute</value>
   </data>
   <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
     <value>Occupazione % calcolata</value>
@@ -604,7 +604,7 @@
     <value>Tempo conversazione previsto</value>
   </data>
   <data name="Forecasts" xml:space="preserve">
-    <value>Previsioni</value>
+    <value>Forecasts</value>
   </data>
   <data name="Forward" xml:space="preserve">
     <value>Avanti</value>
@@ -661,10 +661,10 @@
     <value>Inserisci</value>
   </data>
   <data name="InsertNewPerson" xml:space="preserve">
-    <value>Inserisci nuova persona</value>
+    <value>Inserisci nuovo dipendente</value>
   </data>
   <data name="InsertNewPersonFromClipboard" xml:space="preserve">
-    <value>Inserisci nuova persona dagli appunti</value>
+    <value>Inserisci nuovo dipendente dagli appunti</value>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
     <value>Aggiungi colonna opzionale</value>
@@ -781,7 +781,7 @@
     <value>Nessun Set di regole disponibile</value>
   </data>
   <data name="Note" xml:space="preserve">
-    <value>Annotazione</value>
+    <value>Note</value>
   </data>
   <data name="NotInHierarchy" xml:space="preserve">
     <value>Utenti</value>
@@ -799,10 +799,10 @@
     <value>Orari di apertura</value>
   </data>
   <data name="OpenPersonAdminPage" xml:space="preserve">
-    <value>Personale</value>
+    <value>People</value>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
-    <value>Pianificazioni</value>
+    <value>Schedules</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opzioni</value>
@@ -868,10 +868,10 @@
     <value>Incolla speciale</value>
   </data>
   <data name="PeopleAdminScreen" xml:space="preserve">
-    <value>Personale</value>
+    <value>People</value>
   </data>
   <data name="PeoplePeriods" xml:space="preserve">
-    <value>Periodi persona</value>
+    <value>Periodi di Anagrafica</value>
   </data>
   <data name="Percentage" xml:space="preserve">
     <value>Percentuale</value>
@@ -889,7 +889,7 @@
     <value>Permessi</value>
   </data>
   <data name="PersonAdmin" xml:space="preserve">
-    <value>Personale</value>
+    <value>People</value>
   </data>
   <data name="PersonalizeYourAgentPortal" xml:space="preserve">
     <value>Personalizza MyTime</value>
@@ -1012,7 +1012,7 @@
     <value>Scenario:</value>
   </data>
   <data name="Schedule" xml:space="preserve">
-    <value>Pianificazione</value>
+    <value>Schedules</value>
   </data>
   <data name="ScheduleDescripton" xml:space="preserve">
     <value>Descrizione pianificazione</value>
@@ -1027,16 +1027,16 @@
     <value>Agenti pianificati</value>
   </data>
   <data name="SchedulePeriods" xml:space="preserve">
-    <value>Periodi di pianificazione</value>
+    <value>Periodi di Pianificazione</value>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>Pianificazioni</value>
+    <value>Schedules</value>
   </data>
   <data name="ScheduleSelected" xml:space="preserve">
     <value>Pianificazione selezionata</value>
   </data>
   <data name="ScheduleViews" xml:space="preserve">
-    <value>Vieste pianificazione</value>
+    <value>Viste pianificazione</value>
   </data>
   <data name="Scheduling" xml:space="preserve">
     <value>Pianificazione</value>
@@ -1054,7 +1054,7 @@
     <value>Seleziona dati strorici</value>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
-    <value>Seleziona sito:</value>
+    <value>Seleziona Sito:</value>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
     <value>Livello di servizio (%)</value>
@@ -1078,7 +1078,7 @@
     <value>Categoria turni:</value>
   </data>
   <data name="ShiftCreator" xml:space="preserve">
-    <value>Turni</value>
+    <value>Shifts</value>
   </data>
   <data name="ShiftEditor" xml:space="preserve">
     <value>Modifica turni</value>
@@ -1099,7 +1099,7 @@
     <value>Mostra turno successivo</value>
   </data>
   <data name="ShowPersonalShifts" xml:space="preserve">
-    <value>Mostra turni personali</value>
+    <value>Mostra turni dipendente</value>
   </data>
   <data name="ShowPrevious" xml:space="preserve">
     <value>Mostra precedente</value>
@@ -1198,13 +1198,13 @@
     <value>Vista Team</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Previsione - Teleopti CCC</value>
+    <value>Forecasts - Teleopti CCC</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portale principale</value>
+    <value>Teleopti CCC -</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Pianificazione - Teleopti CCC</value>
+    <value>Schedules - Teleopti CCC</value>
   </data>
   <data name="TenMinutes" xml:space="preserve">
     <value>10 minuti</value>
@@ -1360,7 +1360,7 @@
     <value>Messaggio</value>
   </data>
   <data name="NewContract" xml:space="preserve">
-    <value>Nuovo contratto</value>
+    <value>Nuovo Contratto</value>
   </data>
   <data name="NoPeopleAvailable" xml:space="preserve">
     <value>Nessuna persona disponibile</value>
@@ -1372,19 +1372,19 @@
     <value>Una funzione disponibile</value>
   </data>
   <data name="OnePersonAvailable" xml:space="preserve">
-    <value>Una persona disponibile</value>
+    <value>Un dipendente disponibile</value>
   </data>
   <data name="OneRoleAvailable" xml:space="preserve">
     <value>Un ruolo disponibile</value>
   </data>
   <data name="PeopleAvailable" xml:space="preserve">
-    <value>Personale disponibile</value>
+    <value>dipendenti disponibili</value>
   </data>
   <data name="RequestDate" xml:space="preserve">
     <value>Data richiesta</value>
   </data>
   <data name="RequestStatus" xml:space="preserve">
-    <value>Stato richiesta</value>
+    <value>Stato richieste</value>
   </data>
   <data name="RolesAvailable" xml:space="preserve">
     <value>Ruoli disponibili</value>
@@ -1444,7 +1444,7 @@
     <value>&amp;Aggiungi alla barra di accesso rapido</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Nome Login appl.</value>
+    <value>Login applicativo</value>
   </data>
   <data name="AvailableScorecards" xml:space="preserve">
     <value>Scorecard disponibili</value>
@@ -1510,7 +1510,7 @@
     <value>Home</value>
   </data>
   <data name="Intraday" xml:space="preserve">
-    <value>Infragiornaliero</value>
+    <value>Intraday</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
     <value>Chiamate risposte per ore telefoniche pianificate</value>
@@ -1570,7 +1570,7 @@
     <value>Blocca categoria turni</value>
   </data>
   <data name="MainGrid" xml:space="preserve">
-    <value>Pianificazioni</value>
+    <value>Schedules</value>
   </data>
   <data name="MainScreen" xml:space="preserve">
     <value>Finestra principale</value>
@@ -1591,10 +1591,10 @@
     <value>Unisci</value>
   </data>
   <data name="MultisiteDayTemplate" xml:space="preserve">
-    <value>Modello giornaliero multisito</value>
+    <value>Modello giornaliero multi-sito</value>
   </data>
   <data name="MultisiteTemplate" xml:space="preserve">
-    <value>Modello multisito</value>
+    <value>Modello multi-sito</value>
   </data>
   <data name="SkillDayTemplate" xml:space="preserve">
     <value>Modello giornaliero Skill</value>
@@ -1714,7 +1714,7 @@
     <value>A</value>
   </data>
   <data name="NewAbsenceRequest" xml:space="preserve">
-    <value>Nuova richeista di assenza</value>
+    <value>Nuova richiesta di assenza</value>
   </data>
   <data name="Requests" xml:space="preserve">
     <value>Richieste</value>
@@ -1735,7 +1735,7 @@
     <value>Nome nuovo gruppo</value>
   </data>
   <data name="TerminalDate" xml:space="preserve">
-    <value>Data di uscita</value>
+    <value>Data termine rapporto</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
     <value>Teleopti CCC Agent Schedule Messenger</value>
@@ -1744,7 +1744,7 @@
     <value>Apri ASM</value>
   </data>
   <data name="WeekView" xml:space="preserve">
-    <value>Vista settimanale</value>
+    <value>Vista settimana</value>
   </data>
   <data name="ShowAll" xml:space="preserve">
     <value>Mostra tutto</value>
@@ -1756,7 +1756,7 @@
     <value>Incolla turno</value>
   </data>
   <data name="Shifts" xml:space="preserve">
-    <value>Turni</value>
+    <value>Shifts</value>
   </data>
   <data name="AddMainLayer" xml:space="preserve">
     <value>Aggiungi livello principale</value>
@@ -1825,10 +1825,10 @@
     <value>Inizializzazione</value>
   </data>
   <data name="MultisiteSkill" xml:space="preserve">
-    <value>Skill multisito</value>
+    <value>Skill multi-sito</value>
   </data>
   <data name="MultisiteSkillLoading" xml:space="preserve">
-    <value>Caricamento Skill multisito</value>
+    <value>Caricamento Skill multi-sito</value>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
     <value>Giorni Skill caricati</value>
@@ -1840,7 +1840,7 @@
     <value>Modelli caricati</value>
   </data>
   <data name="TemplateTargetMultisite" xml:space="preserve">
-    <value>Skill multisito</value>
+    <value>Skill multi-sito</value>
   </data>
   <data name="TemplateTargetSkill" xml:space="preserve">
     <value>Skill</value>
@@ -1852,7 +1852,7 @@
     <value>Giorno</value>
   </data>
   <data name="WorkingIntervalIntraday" xml:space="preserve">
-    <value>Infragiornaliero</value>
+    <value>Intraday</value>
   </data>
   <data name="WorkingIntervalMonth" xml:space="preserve">
     <value>Mese</value>
@@ -1882,7 +1882,7 @@
     <value>Modelli</value>
   </data>
   <data name="AddNewGroupPage" xml:space="preserve">
-    <value>Aggiungi nuova pagina del gruppo</value>
+    <value>Aggiungi nuovo Raggruppamento</value>
   </data>
   <data name="ManageGroupings" xml:space="preserve">
     <value>Gestione raggruppamenti</value>
@@ -1891,7 +1891,7 @@
     <value>Non raggruppare</value>
   </data>
   <data name="EditGroupPage" xml:space="preserve">
-    <value>Modifica pagina del gruppo</value>
+    <value>Modifica Raggruppamento</value>
   </data>
   <data name="GroupByPersonNote" xml:space="preserve">
     <value>Nota</value>
@@ -1906,13 +1906,13 @@
     <value>Cartella turni</value>
   </data>
   <data name="GroupPage" xml:space="preserve">
-    <value>Pagina del gruppo</value>
+    <value>Raggruppamento</value>
   </data>
   <data name="GroupPageDetails" xml:space="preserve">
-    <value>Dettagli pagina del gruppo</value>
+    <value>Dettagli Raggruppamento</value>
   </data>
   <data name="GroupPageName" xml:space="preserve">
-    <value>Nome pagina del gruppo</value>
+    <value>Nome Raggruppamento</value>
   </data>
   <data name="OptionalColumn" xml:space="preserve">
     <value>Colonna opzionale</value>
@@ -1921,16 +1921,16 @@
     <value>Anteprima raggruppamento</value>
   </data>
   <data name="GroupPagePreviewScreen" xml:space="preserve">
-    <value>Anteprima pagina del gruppo</value>
+    <value>Anteprima Raggruppamento</value>
   </data>
   <data name="RootGroup" xml:space="preserve">
     <value>Gruppo radice</value>
   </data>
   <data name="NewGroupPageName" xml:space="preserve">
-    <value>Nome pagina del nuovo gruppo</value>
+    <value>Nome nuovo Raggruppamento</value>
   </data>
   <data name="RenameGroupPage" xml:space="preserve">
-    <value>Rinomina pagina del gruppo</value>
+    <value>Rinomina Raggruppamento</value>
   </data>
   <data name="HoursPerDay" xml:space="preserve">
     <value>Ore per giorno</value>
@@ -1942,10 +1942,10 @@
     <value>Ore periodo</value>
   </data>
   <data name="PersonPeriodError" xml:space="preserve">
-    <value>Errore periodo personale</value>
+    <value>Errore periodo di anagrafica</value>
   </data>
   <data name="SchedulePeriodError" xml:space="preserve">
-    <value>Errore periodo di pianificazione</value>
+    <value>Errore Periodo di pianificazione</value>
   </data>
   <data name="Friday" xml:space="preserve">
     <value>Venerdì</value>
@@ -1975,7 +1975,7 @@
     <value>Da</value>
   </data>
   <data name="Person" xml:space="preserve">
-    <value>Persona</value>
+    <value>Dipendente</value>
   </data>
   <data name="StartWeek" xml:space="preserve">
     <value>Settimana iniziale</value>
@@ -2227,7 +2227,7 @@
     <value>Inserisci nome del nuovo raggruppamento</value>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Assegnamento persona non valido. {0}</value>
+    <value>Assegnamento dipendente non valido. {0}</value>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
     <value>Modifica rotazioni</value>
@@ -2418,7 +2418,7 @@ Teleopti R&amp;D</value>
     <value>Dettagli</value>
   </data>
   <data name="DeleteMeeting" xml:space="preserve">
-    <value>Elimina riunione</value>
+    <value>Elimina Meeting</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
     <value>Approvata</value>
@@ -2433,10 +2433,10 @@ Teleopti R&amp;D</value>
     <value>Rifiutata</value>
   </data>
   <data name="RequestStatusDtoPending" xml:space="preserve">
-    <value>In attesa</value>
+    <value>In sospeso</value>
   </data>
   <data name="RequestStatusPending" xml:space="preserve">
-    <value>In attesa</value>
+    <value>In sospeso</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
     <value>La somma dei valori di distribuzione tra i sotto-Skill deve essere 100%</value>
@@ -2559,7 +2559,7 @@ Teleopti R&amp;D</value>
     <value>Teleopti CCC - Sistema ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Avvertimento Sistema</value>
+    <value>Teleopti CCC - Avviso di Sistema</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Pianificazione + Limitazioni</value>
@@ -2592,7 +2592,7 @@ Teleopti R&amp;D</value>
     <value>Non convalidato</value>
   </data>
   <data name="NoSchedulePeriodIsSelected" xml:space="preserve">
-    <value>Nessun periodo di pianificazione selezionato</value>
+    <value>Nessun Periodo di pianificazione selezionato</value>
   </data>
   <data name="AddNewMultiplicator" xml:space="preserve">
     <value>Aggiungi nuovo moltiplicatore</value>
@@ -2724,10 +2724,10 @@ Teleopti R&amp;D</value>
     <value>Livello di servizio e agenti in attesa</value>
   </data>
   <data name="FromContract" xml:space="preserve">
-    <value>Da contratto</value>
+    <value>Da Contratto</value>
   </data>
   <data name="FromSchedulePeriod" xml:space="preserve">
-    <value>Dal periodo di pianificazione</value>
+    <value>Da Periodo di pianificazione</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
     <value>Non sei autorizzato ad accedere al portale Web.</value>
@@ -2751,10 +2751,10 @@ Teleopti R&amp;D</value>
     <value>I modelli non possono essere salvati a causa di un errore nella convalidazione. Controlla che la somma di ogni intervallo dia 100%. Informazione errore: {0}</value>
   </data>
   <data name="MultisiteSkillWizard" xml:space="preserve">
-    <value>Wizard Skill multisito</value>
+    <value>Wizard Skill multi-sito</value>
   </data>
   <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
-    <value>Nuovo Skill multisito</value>
+    <value>Nuovo Skill multi-sito...</value>
   </data>
   <data name="NewWorkload" xml:space="preserve">
     <value>Nuovo Carico di lavoro</value>
@@ -2811,19 +2811,19 @@ Teleopti R&amp;D</value>
     <value>Impossibile trovare il modulo Smart Part</value>
   </data>
   <data name="GroupPageSettings" xml:space="preserve">
-    <value>Finestra Impostazioni pagina gruppi</value>
+    <value>Finestra Impostazioni Raggruppamenti</value>
   </data>
   <data name="DuplicatePersonPeriodMessage" xml:space="preserve">
-    <value>Non è consentita la duplicazione di date nei Periodi personali.</value>
+    <value>Non è consentita la duplicazione di date in Periodi di Anagrafica</value>
   </data>
   <data name="DuplicateSchedulePeriodMessage" xml:space="preserve">
-    <value>Non è consentita la duplicazione di date nei Periodi di pianificazione.</value>
+    <value>Non è consentita la duplicazione di date nei Periodi di Pianificazione</value>
   </data>
   <data name="ManageActivities" xml:space="preserve">
     <value>Gestione attività</value>
   </data>
   <data name="Main" xml:space="preserve">
-    <value>Gerarchia organizzazione</value>
+    <value>Struttura Organizzativa</value>
   </data>
   <data name="Rotations" xml:space="preserve">
     <value>Rotazioni</value>
@@ -2835,16 +2835,16 @@ Teleopti R&amp;D</value>
     <value>Inserisci la tua posizione!</value>
   </data>
   <data name="MeetingSubjectRequired" xml:space="preserve">
-    <value>Inserisci il tuo soggetto!</value>
+    <value>Inserisci l'oggetto!</value>
   </data>
   <data name="Subject" xml:space="preserve">
-    <value>Soggetto</value>
+    <value>Oggetto</value>
   </data>
   <data name="Location" xml:space="preserve">
     <value>Posizione</value>
   </data>
   <data name="DuplicatePersonRotationMessage" xml:space="preserve">
-    <value>Non è consentita la duplicazione di date in Rotazioni personali.</value>
+    <value>Non è consentita la duplicazione di date in Rotazioni dipendente.</value>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
     <value>Agenti con riduzione</value>
@@ -2856,7 +2856,7 @@ Teleopti R&amp;D</value>
     <value>Posizione:</value>
   </data>
   <data name="SubjectColon" xml:space="preserve">
-    <value>Soggetto:</value>
+    <value>Oggetto:</value>
   </data>
   <data name="AEW" xml:space="preserve">
     <value>AEW</value>
@@ -2973,7 +2973,7 @@ Teleopti R&amp;D</value>
     <value>Tempo medio gestione convalidato</value>
   </data>
   <data name="OrganizationHierarchy" xml:space="preserve">
-    <value>Gerarchia organizzazione</value>
+    <value>Struttura Organizzativa</value>
   </data>
   <data name="RotationsCouldNotBeLoaded" xml:space="preserve">
     <value>Le rotazione non possono essere caricate. Potrebbe non essere presente alcuna Rotazione nel database.</value>
@@ -2985,7 +2985,7 @@ Teleopti R&amp;D</value>
     <value>Verifica autorizzazioni...</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Personale - Teleopti CCC</value>
+    <value>People - Teleopti CCC</value>
   </data>
   <data name="AutomaticScheduling" xml:space="preserve">
     <value>Pianificazione automatica</value>
@@ -2997,10 +2997,10 @@ Teleopti R&amp;D</value>
     <value>Autorizzazioni - Teleopti CCC</value>
   </data>
   <data name="PeopleInsertScreen" xml:space="preserve">
-    <value>Finestra di inserimento personale</value>
+    <value>Finestra Inserimento Dipendente</value>
   </data>
   <data name="SelectPeopleToAddToRole" xml:space="preserve">
-    <value>Seleziona Personale da aggiungere al Ruolo</value>
+    <value>Seleziona dipendenti da aggiungere al Ruolo</value>
   </data>
   <data name="DeleteActivity" xml:space="preserve">
     <value>Elimina attività</value>
@@ -3027,7 +3027,7 @@ Teleopti R&amp;D</value>
     <value>Elimina ruolo</value>
   </data>
   <data name="DuplicatePersonAccountMessage" xml:space="preserve">
-    <value>Non è consentita la duplicazione di date in Rotazioni personali.</value>
+    <value>Non è consentita la duplicazione di date in Rotazioni dipendente.</value>
   </data>
   <data name="PersonAccountDay" xml:space="preserve">
     <value>Giorno</value>
@@ -3039,28 +3039,28 @@ Teleopti R&amp;D</value>
     <value>Riduzione %:</value>
   </data>
   <data name="OpenScheduler" xml:space="preserve">
-    <value>Apri Pianificazioni</value>
+    <value>Apri Schedules</value>
   </data>
   <data name="PersonAccounts" xml:space="preserve">
-    <value>Contatori personali</value>
+    <value>Contatori</value>
   </data>
   <data name="DeletePersonFromRole" xml:space="preserve">
-    <value>Elimina Persona da Ruolo</value>
+    <value>Elimina Dipendente da Ruolo</value>
   </data>
   <data name="NewPersonAccount" xml:space="preserve">
-    <value>Nuovo Contatore personale</value>
+    <value>Nuovo Contatore</value>
   </data>
   <data name="NewPersonPeriod" xml:space="preserve">
-    <value>Nuovo periodo personale</value>
+    <value>Nuovo Periodo di anagrafica</value>
   </data>
   <data name="NewPersonRotation" xml:space="preserve">
-    <value>Nuova Rotazione persone</value>
+    <value>Nuova Rotazione dipendenti</value>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
     <value>La tua pianificazione è cambiata. Fai click quì per vedere la pianificazione modificata.</value>
   </data>
   <data name="OpenPeople" xml:space="preserve">
-    <value>Apri personale</value>
+    <value>Apri People</value>
   </data>
   <data name="Created" xml:space="preserve">
     <value>Creato</value>
@@ -3075,7 +3075,7 @@ Teleopti R&amp;D</value>
     <value>Compiti entranti</value>
   </data>
   <data name="CreateMeeting" xml:space="preserve">
-    <value>Crea riunione</value>
+    <value>Crea Meeting</value>
   </data>
   <data name="BudgetForecasting" xml:space="preserve">
     <value>Previsione Budget</value>
@@ -3117,7 +3117,7 @@ Teleopti R&amp;D</value>
     <value>Sito/Team</value>
   </data>
   <data name="PersonRequestEmptySubjectError" xml:space="preserve">
-    <value>Il soggetto non può essere vuoto</value>
+    <value>L'oggetto non può essere vuoto</value>
   </data>
   <data name="Site" xml:space="preserve">
     <value>Sito</value>
@@ -3138,16 +3138,16 @@ Teleopti R&amp;D</value>
     <value>Gestione Carico di lavoro</value>
   </data>
   <data name="ChangeYourOrganizationTree" xml:space="preserve">
-    <value>Modifica la struttura dell'organizzazione</value>
+    <value>Modifica la Struttura Organizzativa</value>
   </data>
   <data name="OrganizationTree" xml:space="preserve">
-    <value>Struttura organizzazione</value>
+    <value>Struttura Organizzativa</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGrouping" xml:space="preserve">
     <value>Sei sicuro di voler eliminare il raggruppamento '{0}'?</value>
   </data>
   <data name="CannotDeleteSiteColon" xml:space="preserve">
-    <value>Impossibile elimnare sito:</value>
+    <value>Impossibile elimnare Sito:</value>
   </data>
   <data name="CannotDeleteTeamColon" xml:space="preserve">
     <value>Impossibile eliminare Team:</value>
@@ -3210,7 +3210,7 @@ Teleopti R&amp;D</value>
     <value>Elimina la conferma</value>
   </data>
   <data name="AddNewSite" xml:space="preserve">
-    <value>Aggiungi nuovo sito</value>
+    <value>Aggiungi nuovo Sito</value>
   </data>
   <data name="AddNewTeam" xml:space="preserve">
     <value>Aggiungi nuovo Team</value>
@@ -3219,25 +3219,25 @@ Teleopti R&amp;D</value>
     <value>Il testo del nodo non può essere nullo... !</value>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
-    <value>Il nome di Sito / Team non può essere nullo... !</value>
+    <value>Il nome Sito / Team non può essere vuoto... !</value>
   </data>
   <data name="OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage" xml:space="preserve">
     <value>Uno o più mesasggio sono troppo lunghi. Prova con uno più corto per favore.</value>
   </data>
   <data name="DuplicatePersonAvailabilityMessage" xml:space="preserve">
-    <value>Non è consentita la duplicazione di date nelle Disponibilità personali.</value>
+    <value>Non è consentita la duplicazione di date in Disponibilità personale</value>
   </data>
   <data name="PersonAvailability" xml:space="preserve">
-    <value>Disponibilità persona</value>
+    <value>Disponibilità personale</value>
   </data>
   <data name="PersonAvailabilityError" xml:space="preserve">
-    <value>Errore disponibilità persona</value>
+    <value>Errore Disponibilità dipendente</value>
   </data>
   <data name="PersonRotationError" xml:space="preserve">
     <value>Errore Rotazione persone</value>
   </data>
   <data name="NewPersonAvailability" xml:space="preserve">
-    <value>Nuova disponibilità persona</value>
+    <value>Nuova Disponibilità personale</value>
   </data>
   <data name="AvailabilitiesCouldNotBeLoaded" xml:space="preserve">
     <value>Le disponibilità non possono essere caricate. Potrebbe non essere presente alcuna Disponibilità nel database.</value>
@@ -3261,7 +3261,7 @@ Teleopti R&amp;D</value>
     <value>Seleziona desponibilità:</value>
   </data>
   <data name="PersonRotations" xml:space="preserve">
-    <value>Rotazioni persone</value>
+    <value>Rotazioni dipendente</value>
   </data>
   <data name="TargetDaysOff" xml:space="preserve">
     <value>Riposi</value>
@@ -3312,7 +3312,7 @@ Teleopti R&amp;D</value>
     <value>Trovata duplicazione di creadenziali utente... !</value>
   </data>
   <data name="FilterPeopleColon" xml:space="preserve">
-    <value>Filtro personale:</value>
+    <value>Filtro dipendenti:</value>
   </data>
   <data name="AgentTeam" xml:space="preserve">
     <value>Team agenti</value>
@@ -3333,13 +3333,13 @@ Teleopti R&amp;D</value>
     <value>Tempo</value>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
-    <value>Per caricare la vista del Periodo personale, aggiungi Contratti, Applicabilità contratti, Percentuali part-time e Team nella pagina delle impostazioni per favore.</value>
+    <value>Per caricare la vista del Periodo di anagrafica, è necessario aggiungere Contratti, Applicabilità contratti, Percentuali part-time e Team nella pagina delle impostazioni.</value>
   </data>
   <data name="People" xml:space="preserve">
-    <value>personale</value>
+    <value>dipendenti</value>
   </data>
   <data name="ConfirmPeopleRemove" xml:space="preserve">
-    <value>Conferma eliminazione personale</value>
+    <value>Conferma eliminazione Dipendente</value>
   </data>
   <data name="ConfirmRoleDelete" xml:space="preserve">
     <value>Conferma eliminazione ruolo</value>
@@ -3431,7 +3431,7 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Non hai ancora inserito una licenza, fallo ora per favore.</value>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>Impossibile caricare i contatori personali. Deve essere definita almeno un'assenza con tracciamento nelle opzioni.</value>
+    <value>Impossibile caricare i Contatori. Deve essere definita almeno un'assenza con tracciamento nelle opzioni.</value>
   </data>
   <data name="ForecasterWillBeClosedDot" xml:space="preserve">
     <value>Il Forecaster sarà chiuso.</value>
@@ -3467,10 +3467,10 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Apri Budget...</value>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
-    <value>Impossibile creare una riunione. Il sistema potrebbe non contenere attività.</value>
+    <value>Impossibile creare Meeting. Il sistema potrebbe non contenere attività.</value>
   </data>
   <data name="MaxMoveDayPerPersonPerIteration" xml:space="preserve">
-    <value>Max spostamento giorno per iterazione di Periodo personale</value>
+    <value>Max spostamento giorno per iterazione di Periodo di anagrafica</value>
   </data>
   <data name="CalculatingResourcesInTheBackground" xml:space="preserve">
     <value>Calcolo delle risorse in background</value>
@@ -3503,7 +3503,7 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Nessuna disponibilità definita per {0}</value>
   </data>
   <data name="NoPersonPeriodIsDefinedForTheDate" xml:space="preserve">
-    <value>Nessun periodo personale definito per la data</value>
+    <value>Nessun periodo di anagrafica definito per la data</value>
   </data>
   <data name="NoRotationDefinedFor" xml:space="preserve">
     <value>Nessuna rotazione definita per {0}</value>
@@ -3518,7 +3518,7 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Elimina moltiplicatore</value>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
-    <value>Filtro contatori personali</value>
+    <value>Filtro Contatori</value>
   </data>
   <data name="SchedulingDays" xml:space="preserve">
     <value>Pianificazione {0} giorno/i</value>
@@ -3530,10 +3530,10 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Performance Manager</value>
   </data>
   <data name="ModifyPeopleWithinGroupPage" xml:space="preserve">
-    <value>Modifica personale in pagina gruppo</value>
+    <value>Modifica dipendente nel Raggruppamento</value>
   </data>
   <data name="DeleteGroupPage" xml:space="preserve">
-    <value>Elimina pagina gruppo</value>
+    <value>Elimina Raggruppamento</value>
   </data>
   <data name="CreateSkillSummery" xml:space="preserve">
     <value>Crea sommario Skill</value>
@@ -3587,13 +3587,13 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Insiemi di definizione moltiplicatore</value>
   </data>
   <data name="PersonPeriod" xml:space="preserve">
-    <value>Periodo personale</value>
+    <value>Periodo di anagrafica</value>
   </data>
   <data name="NewDefinitionSet" xml:space="preserve">
     <value>Nuovo insieme di definizione</value>
   </data>
   <data name="PayrollSettings" xml:space="preserve">
-    <value>Impostazioni Paghe</value>
+    <value>Impostazioni Payroll</value>
   </data>
   <data name="DateTimeMultiplicatorDefinitions" xml:space="preserve">
     <value>Definizione data e ora del moltiplicatore</value>
@@ -3617,7 +3617,7 @@ Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per acceder
     <value>Insiemi di definizione connessi:</value>
   </data>
   <data name="MeetingErrorMessageWithOneParameter" xml:space="preserve">
-    <value>Rimuovi {0} da questa riunione per favore perché non possiedi sufficienti diritti per questa persona.</value>
+    <value>Rimuovi {0} da questo Meeting per favore perché non possiedi sufficienti diritti su questo dipendente.</value>
   </data>
   <data name="DeleteSkillSummery" xml:space="preserve">
     <value>Elimina sommario Skill</value>
@@ -3636,16 +3636,16 @@ Creato il: {1}</value>
     <value>Prima deve essere creato almeno uno scenario.</value>
   </data>
   <data name="CreatePayrollExport" xml:space="preserve">
-    <value>Crea esportazione paghe</value>
+    <value>Crea Esportazione Payroll</value>
   </data>
   <data name="PayrollExportWizard" xml:space="preserve">
-    <value>Wizard Esportazione paghe</value>
+    <value>Wizard Esportazione Payroll</value>
   </data>
   <data name="UseShrinkage" xml:space="preserve">
     <value>Usa riduzione</value>
   </data>
   <data name="BusinessRulePersonAccountError1" xml:space="preserve">
-    <value>Contatori personali di {0}, valori maturati oltrepassati a partire dal {1}</value>
+    <value>Contatori di {0}, valore maturato oltrepassato a partire dal {1}</value>
   </data>
   <data name="TeamSettings" xml:space="preserve">
     <value>Impostazioni Team</value>
@@ -3654,7 +3654,7 @@ Creato il: {1}</value>
     <value>Protezione scrittura (giorni)</value>
   </data>
   <data name="LoadingPeopleTreeDots" xml:space="preserve">
-    <value>Caricamento Personale...</value>
+    <value>Caricamento People...</value>
   </data>
   <data name="CreatedByColon" xml:space="preserve">
     <value>Creato da:</value>
@@ -3714,16 +3714,16 @@ Creato il: {1}</value>
     <value>Il file è utilizzato da un altro programma. Chiudilo e riprova.</value>
   </data>
   <data name="BuiltInSiteManagerRole" xml:space="preserve">
-    <value>Manager di sito</value>
+    <value>Manager di Sito</value>
   </data>
   <data name="BuiltInTeamLeaderRole" xml:space="preserve">
     <value>Team Leader</value>
   </data>
   <data name="GroupPageDeleteQuestion" xml:space="preserve">
-    <value>Sei sicuro di voler eliminare la pagina di gruppo '{0}'?</value>
+    <value>Sei sicuro di voler eliminare il Raggruppamento '{0}'?</value>
   </data>
   <data name="GroupPageDeleteQuestionCaption" xml:space="preserve">
-    <value>Conferma eliminazione pagina gruppo</value>
+    <value>Conferma eliminazione Raggruppamento</value>
   </data>
   <data name="ConfirmDeletion" xml:space="preserve">
     <value>Conferma eliminazione</value>
@@ -3741,7 +3741,7 @@ Creato il: {1}</value>
     <value>Visualizzazione pianificazioni</value>
   </data>
   <data name="ModifyPersonRestriction" xml:space="preserve">
-    <value>Modifica limitazioni persona</value>
+    <value>Modifica limitazioni dipendente</value>
   </data>
   <data name="NoStateGroupPresent" xml:space="preserve">
     <value>Nessun Gruppo di stati presente</value>
@@ -3750,7 +3750,7 @@ Creato il: {1}</value>
     <value>Totale tempo allarme incrementale</value>
   </data>
   <data name="PayrollExportGenerationWillStartOnServer" xml:space="preserve">
-    <value>La generazione dell'esportazione dei dati sulle paghe inizierà ora sul server. Potrai continuare a lavorare nel sistema su altre funzionalità.</value>
+    <value>La generazione dell'esportazione dei dati di Payroll inizierà ora sul server. Potrai continuare a lavorare nel sistema su altre funzionalità.</value>
   </data>
   <data name="SystemIsBusyWithBackgroundRequest" xml:space="preserve">
     <value>Il sistema è impegnato a lavorare in background su un altra richiesta. Riprova più tardi per favore.</value>
@@ -3822,7 +3822,7 @@ Teleopti R&amp;D</value>
     <value>Sei sicuro di voler eliminare {0}?</value>
   </data>
   <data name="AreYouSureYouWantToDeleteMeeting" xml:space="preserve">
-    <value>Sei sicuro di voler eliminare la riunione {0}?</value>
+    <value>Sei sicuro di voler eliminare il Meeting {0}?</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
     <value>Nuova richiesta di scambio turni {0} - {1}, approva o rifiuta dalla ltua lista delle richieste.</value>
@@ -3873,7 +3873,7 @@ Teleopti R&amp;D</value>
     <value>Usa solo preferenze indispensabili</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
-    <value>Una o più assenze non sono state salvate. Non è permesso modificare il tipo di tracciamento di un'assenza quando è utilizzata da un contatore personale.</value>
+    <value>Una o più assenze non sono state salvate. Non è permesso modificare il tipo di tracciamento di un'assenza quando è utilizzata da un Contatore.</value>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
     <value>Categorie turni pre-pianificazione in conflitto. Blocco non valido</value>
@@ -3891,7 +3891,7 @@ Teleopti R&amp;D</value>
     <value>Modifica con inserimento</value>
   </data>
   <data name="CheckPersonAccount" xml:space="preserve">
-    <value>Controllo contatori personali</value>
+    <value>Controllo Contatori</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
     <value>Scegliere la regola di Workflow da modificare</value>
@@ -3903,7 +3903,7 @@ Teleopti R&amp;D</value>
     <value>Insieme di regole di Workflow:</value>
   </data>
   <data name="WorkflowControlSetToolTip" xml:space="preserve">
-    <value>Controllo contatori personali: {0}
+    <value>Controllo Contatori: {0}
 Controllo allocazione: {1}
 Approvazione automatica: {2}
 Periodo: {3}</value>
@@ -3936,7 +3936,7 @@ Periodo: {3}</value>
     <value>Scambio turno rifiutato per incompatibilità tra i tuoi Skill e quelli del destinatario.</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>Scambio turno rifiutato per incompatibilità delle regole di Workflow tua e del destinatario.</value>
+    <value>Scambio turno rifiutato per incompatibilità tra le regole di Workflow tue e destinatario.</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
     <value>Scambio turno negato per eccedenza sulla tolleranza delle ore pianificate da contratto.</value>
@@ -4031,7 +4031,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Creato {0}. Pagina {1} di {2}</value>
   </data>
   <data name="FilterPersonAccount" xml:space="preserve">
-    <value>Filtro contatore personale</value>
+    <value>Filtro Contatori</value>
   </data>
   <data name="SchedulingProgress" xml:space="preserve">
     <value>Pianificazione: {0} giorni su {1} pianificati...</value>
@@ -4076,7 +4076,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Usa Pianificazione per Team</value>
   </data>
   <data name="CustomEfficiencyShrinkage" xml:space="preserve">
-    <value>Rifuzione efficienza personalizzata</value>
+    <value>Riduzione efficienza personalizzata</value>
   </data>
   <data name="CustomShrinkage" xml:space="preserve">
     <value>Riduzione personalizzata</value>
@@ -4088,22 +4088,22 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Impossibile pianificare il Team perché possiede giù differenti categorie turni</value>
   </data>
   <data name="CouldNotAddOverTimeNoPersonPeriods" xml:space="preserve">
-    <value>Impossibile aggiungere straordinari per presenza di agenti senza periodi personali nella selezione</value>
+    <value>Impossibile aggiungere straordinari per presenza nella selezione di agenti senza Periodi di anagrafica</value>
   </data>
   <data name="MeetingErrorMessageA" xml:space="preserve">
     <value>Per favore elimina</value>
   </data>
   <data name="MeetingErrorMessageB" xml:space="preserve">
-    <value>dalla riunione, fino a quando non hai autorizazioni adeguate.</value>
+    <value>dal Meeting in quanto non hai autorizazioni adeguate.</value>
   </data>
   <data name="GeneralView" xml:space="preserve">
     <value>Vista generale</value>
   </data>
   <data name="PeoplePeriodView" xml:space="preserve">
-    <value>Periodo personale</value>
+    <value>Periodo di anagrafica</value>
   </data>
   <data name="PersonalAccountView" xml:space="preserve">
-    <value>Contatore personale</value>
+    <value>Contatori</value>
   </data>
   <data name="PersonalSkillView" xml:space="preserve">
     <value>Skill personali</value>
@@ -4121,7 +4121,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Periodi</value>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
-    <value>Inserire proprietà del sito</value>
+    <value>Inserire proprietà del Sito</value>
   </data>
   <data name="ManageSites" xml:space="preserve">
     <value>Gestione Siti</value>
@@ -4151,7 +4151,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Rinomina riduzione</value>
   </data>
   <data name="ViewSchedulePeriodCalculation" xml:space="preserve">
-    <value>Visualizzazione calcolo periodo di pianificazione</value>
+    <value>Visualizzazione calcolo Periodo di pianificazione</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
     <value>Un turno con Attività Master non può essere usato nelle pianificazioni!</value>
@@ -4169,10 +4169,10 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Ore pianificate vs obiettivo</value>
   </data>
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
-    <value>Vuoi eliminare la riunione {0}?</value>
+    <value>Vuoi eliminare il Meeting {0}?</value>
   </data>
   <data name="MeetingOverview" xml:space="preserve">
-    <value>Panoramica riunione</value>
+    <value>Panoramica Meeting</value>
   </data>
   <data name="TargetSkillColon" xml:space="preserve">
     <value>Skill obiettivo</value>
@@ -4199,7 +4199,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Scambio turno rifiutato per attività personale con fine oltre il turno.</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>Scambio turno rifiutato per riunione con fine oltre il turno.</value>
+    <value>Scambio turno rifiutato per Meeting con fine oltre il turno.</value>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
     <value>La categoria turni nella limitazione è in conflitto con quella nelle Opzioni.</value>
@@ -4238,13 +4238,13 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>{0} ha impedito la terminazione dell'applicazione. Vuoi forzare la chiusura dell'applicazione?</value>
   </data>
   <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
-    <value>Nessun periodo personale trovato per questo utente</value>
+    <value>Nessun periodo di anagrafica trovato per questo dipendente</value>
   </data>
   <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
-    <value>Mostra anche le riunioni create da me ma a cui non ho partecipato.</value>
+    <value>Mostra anche i Meeting da me creati a cui non ho partecipato.</value>
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
-    <value>Riunione creata da me</value>
+    <value>Meeting creato da me</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Hai quasi raggiunto il numero limite di {0} postazioni indicato nella licenza. Aggiorna la tua licenza presto per favore.</value>
@@ -4256,13 +4256,13 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Insieme di regole di Workflow mancante</value>
   </data>
   <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Per usare questo servizio il tuo indirizzo e-mail dovrebbe essere configurato nel modulo Personale.</value>
+    <value>Per usare questo servizio il tuo indirizzo e-mail dovrebbe essere configurato nel modulo People.</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Login Customer Web</value>
   </data>
   <data name="SelectMultisiteSkills" xml:space="preserve">
-    <value>Seleziona Skill multisito</value>
+    <value>Seleziona Skill multi-sito</value>
   </data>
   <data name="TargetBusinessUnit" xml:space="preserve">
     <value>Business Unit obiettivo</value>
@@ -4334,7 +4334,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Sei sicuro di voler eliminare l'elemento {0}?</value>
   </data>
   <data name="MissingSubject" xml:space="preserve">
-    <value>Soggetto mancante</value>
+    <value>Oggetto mancante</value>
   </data>
   <data name="DeleteTag" xml:space="preserve">
     <value>Elimina etichetta</value>
@@ -4376,7 +4376,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Valore obiettivo</value>
   </data>
   <data name="CustomReports" xml:space="preserve">
-    <value>Report personalizzati</value>
+    <value>Report Custom</value>
   </data>
   <data name="Block" xml:space="preserve">
     <value>Blocco</value>
@@ -4622,7 +4622,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Sposta giorni max</value>
   </data>
   <data name="EmploymentTypeFixedStaffNormalWorkTime" xml:space="preserve">
-    <value>Personale fisso con ore di lavoro normale</value>
+    <value>Personale fissoi con ore di lavoro normale</value>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
     <value>Allocazione Min Max</value>
@@ -4730,7 +4730,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Ricorre ogni</value>
   </data>
   <data name="RecurrentMeeting" xml:space="preserve">
-    <value>Riunione ricorrente</value>
+    <value>Meeting ricorrente</value>
   </data>
   <data name="RemoveRecurrence" xml:space="preserve">
     <value>Elimina ricorrenza</value>
@@ -4787,7 +4787,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Nessuna cartella di Set di regole definita</value>
   </data>
   <data name="NoSchedulePeriodIsDefinedForTheDate" xml:space="preserve">
-    <value>Nessun periodo di pianificazione definito per il giorno</value>
+    <value>Nessun Periodo di pianificazione definito per il giorno</value>
   </data>
   <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
     <value>Nessun turno di lavoro disponibile</value>
@@ -4796,10 +4796,10 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Nome</value>
   </data>
   <data name="TheEmploymentTypeIsNotFixedStaff" xml:space="preserve">
-    <value>Il tipo impiego non è personale fisso</value>
+    <value>Il tipo impiego non è Personale fisso</value>
   </data>
   <data name="TheEmploymentTypeIsNotHourlyStaff" xml:space="preserve">
-    <value>Il tipo impiego non è personale a ore</value>
+    <value>Il tipo impiego non è Personale a ore</value>
   </data>
   <data name="WorkShiftsAfter" xml:space="preserve">
     <value>Turni di lavoro dopo</value>
@@ -4820,7 +4820,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Aggiungi moltiplicatore</value>
   </data>
   <data name="AddPerson" xml:space="preserve">
-    <value>Aggiungi persona</value>
+    <value>Aggiungi dipendente</value>
   </data>
   <data name="NewReport" xml:space="preserve">
     <value>Nuovo Report</value>
@@ -4829,7 +4829,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>per</value>
   </data>
   <data name="ModifyGroupPage" xml:space="preserve">
-    <value>Modifica pagina gruppo</value>
+    <value>Modifica Raggruppamento</value>
   </data>
   <data name="Impact" xml:space="preserve">
     <value>Impatto</value>
@@ -4883,13 +4883,13 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Richiede Skill</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
-    <value>Aggiungi riunione</value>
+    <value>Aggiungi Meeting</value>
   </data>
   <data name="PersonSkills" xml:space="preserve">
-    <value>Skill persona</value>
+    <value>Skill dipendente</value>
   </data>
   <data name="ModifyMeetings" xml:space="preserve">
-    <value>Modifica riunioni</value>
+    <value>Modifica Meeting</value>
   </data>
   <data name="MultiplicatorVisualizer" xml:space="preserve">
     <value>Visualizzatore moltiplicatori</value>
@@ -4922,22 +4922,22 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>ESL</value>
   </data>
   <data name="PayrollCode" xml:space="preserve">
-    <value>Codice sistema paghe</value>
+    <value>Codice sistema Payroll</value>
   </data>
   <data name="Payrolls" xml:space="preserve">
-    <value>Esporta dati paghe</value>
+    <value>Esporta dati Payroll</value>
   </data>
   <data name="LoadingSchedulesTreeDots" xml:space="preserve">
-    <value>Caricamento pianificazioni...</value>
+    <value>Caricamento Schedules...</value>
   </data>
   <data name="LoadingSkillDataTreeDots" xml:space="preserve">
     <value>Caricamento dati previsione...</value>
   </data>
   <data name="PayrollIntegration" xml:space="preserve">
-    <value>Integrazione paghe</value>
+    <value>Payroll Integration</value>
   </data>
   <data name="PersonSelection" xml:space="preserve">
-    <value>Selezione persona</value>
+    <value>Selezione dipendente</value>
   </data>
   <data name="UpdatedByColon" xml:space="preserve">
     <value>Modificato da:</value>
@@ -4952,7 +4952,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Non rimuovibile</value>
   </data>
   <data name="PayrollExport" xml:space="preserve">
-    <value>Esportazione paghe</value>
+    <value>Esportazione Payroll</value>
   </data>
   <data name="CopyrightColon" xml:space="preserve">
     <value>Copyright:</value>
@@ -5114,7 +5114,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Personale fisso con lavoro a periodo</value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
-    <value>Questo è l'ultimo partecipante a questa riunione. Vuoi cancellare la riunione "{0}"?</value>
+    <value>Questo è l'ultimo partecipante al Meeting. Vuoi cancellare l'evento "{0}"?</value>
   </data>
   <data name="OverStaff" xml:space="preserve">
     <value>Sovracopertura</value>
@@ -5168,7 +5168,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Personale impiegato</value>
   </data>
   <data name="LoadStaffEmployed" xml:space="preserve">
-    <value>Carica personale impiegato</value>
+    <value>Carica Dipendente impiegato</value>
   </data>
   <data name="NetNetStaff" xml:space="preserve">
     <value>Allocazione netta</value>
@@ -5243,7 +5243,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Ore in contratto</value>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
-    <value>La persona {0} non ha un contratto definito nel giorno {1}.</value>
+    <value>Il dipendente {0} non ha un contratto definito nel giorno {1}.</value>
   </data>
   <data name="FilterOnContractTimeLimitations" xml:space="preserve">
     <value>Filtro sui limiti di ore contrattuali</value>
@@ -5393,13 +5393,13 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>hh:mm</value>
   </data>
   <data name="Meetings" xml:space="preserve">
-    <value>Riunioni</value>
+    <value>Meeting</value>
   </data>
   <data name="Participants" xml:space="preserve">
     <value>Partecipanti</value>
   </data>
   <data name="MeetingOrganizer" xml:space="preserve">
-    <value>Riunioni</value>
+    <value>Meeting</value>
   </data>
   <data name="RestoreAgentPortal" xml:space="preserve">
     <value>Ripristina MyTime</value>
@@ -5465,7 +5465,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Ora di fine:</value>
   </data>
   <data name="Meeting" xml:space="preserve">
-    <value>Riunione</value>
+    <value>Meeting</value>
   </data>
   <data name="StartTimeColon" xml:space="preserve">
     <value>Ora inizio:</value>
@@ -5591,10 +5591,10 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Aumenta decimali</value>
   </data>
   <data name="EditMeeting" xml:space="preserve">
-    <value>Modifica riunione</value>
+    <value>Modifica Meeting</value>
   </data>
   <data name="MeetingPicker" xml:space="preserve">
-    <value>Seleziona riunione</value>
+    <value>Seleziona Meeting</value>
   </data>
   <data name="ModifyAbsence" xml:space="preserve">
     <value>Modifica assenza</value>
@@ -5609,7 +5609,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Modifica turno principale</value>
   </data>
   <data name="ModifyPersonalShift" xml:space="preserve">
-    <value>Modifica turno personale</value>
+    <value>Modifica turno dipendente</value>
   </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
     <value>Modifica nome e password</value>
@@ -5749,7 +5749,7 @@ Dettagli errore:
     <value>Non puoi inserire preferenze prima del {0}</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitations" xml:space="preserve">
-    <value>Filtro su limitazioni di periodo personali</value>
+    <value>Filtro su limitazioni di periodo di anagrafica</value>
   </data>
   <data name="ThisDayIsADayOffInAPreference" xml:space="preserve">
     <value>Questo giorno un riposo nelle preferenze</value>
@@ -5764,7 +5764,7 @@ Dettagli errore:
     <value>Filtro su limitazioni di ore da contratto (turni con ore contrattuali tra {0} e {1}</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
-    <value>Filtro su limitazioni di periodi personali (turni nel periodo {0} - {1})</value>
+    <value>Filtro su limitazioni di periodi di anagrafica (turni nel periodo {0} - {1})</value>
   </data>
   <data name="InReadyTime" xml:space="preserve">
     <value>In tempo Ready </value>
@@ -5884,7 +5884,7 @@ Dettagli errore:
     <value>La preferenza non può essere aggiunta perchè l'elemento selezionato '{0}' non è più disponibile.</value>
   </data>
   <data name="ClosePreviousPeriod" xml:space="preserve">
-    <value>Chiusi periodo precedente</value>
+    <value>Chiudi periodo precedente</value>
   </data>
   <data name="ClosingPreviousPeriod" xml:space="preserve">
     <value>Chiusura periodo precedente...</value>
@@ -5929,7 +5929,7 @@ Dettagli errore:
     <value>Filtro:</value>
   </data>
   <data name="NoMeetingIsSelected" xml:space="preserve">
-    <value>Nessuna riunione selezionata!</value>
+    <value>Nessun Meeting selezionato!</value>
   </data>
   <data name="CopyToThreeDots" xml:space="preserve">
     <value>Copia in...</value>
@@ -6004,7 +6004,7 @@ Dettagli errore:
     <value>Tempo gestione originale</value>
   </data>
   <data name="DefineOrganization" xml:space="preserve">
-    <value>Definisci organizzazione</value>
+    <value>Definisci Struttura</value>
   </data>
   <data name="ShowRequests" xml:space="preserve">
     <value>mostra richieste</value>
@@ -6019,7 +6019,7 @@ Dettagli errore:
     <value>Nuovo Set di regole</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Turni - Teleopti CCC</value>
+    <value>Shifts - Teleopti CCC</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nome Set di regole &gt;</value>
@@ -6211,7 +6211,7 @@ Dettagli errore:
     <value>Rinomina ruolo</value>
   </data>
   <data name="Used" xml:space="preserve">
-    <value>Usato</value>
+    <value>Goduto</value>
   </data>
   <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
     <value>Occupazione massima %:</value>
@@ -6220,16 +6220,16 @@ Dettagli errore:
     <value>Occupazione minima %:</value>
   </data>
   <data name="AddPersonToRole" xml:space="preserve">
-    <value>Aggiungi persona al ruolo</value>
+    <value>Aggiungi dipendente al ruolo</value>
   </data>
   <data name="AddRole" xml:space="preserve">
     <value>Aggiungi ruolo</value>
   </data>
   <data name="NewPerson" xml:space="preserve">
-    <value>Nuova persona</value>
+    <value>Nuovo dipendente</value>
   </data>
   <data name="NewSchedulePeriod" xml:space="preserve">
-    <value>Nuovo periodo di pianificazione</value>
+    <value>Nuovo Periodo di pianificazione</value>
   </data>
   <data name="Thresholds" xml:space="preserve">
     <value>Soglia</value>
@@ -6238,7 +6238,7 @@ Dettagli errore:
     <value>Agente</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Infragiornaliero - Teleopti CCC</value>
+    <value>Intraday - Teleopti CCC</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portale agente</value>
@@ -6253,7 +6253,7 @@ Dettagli errore:
     <value>Approvato</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pendente</value>
+    <value>In sospeso</value>
   </data>
   <data name="RequestType" xml:space="preserve">
     <value>Tipo richiesta</value>
@@ -6289,7 +6289,7 @@ Dettagli errore:
     <value>Fax previsti</value>
   </data>
   <data name="ForecastedHandlingTime" xml:space="preserve">
-    <value>Tempo di gesione previsto</value>
+    <value>Tempo di gestione previsto</value>
   </data>
   <data name="EndDate" xml:space="preserve">
     <value>Fine</value>
@@ -6325,7 +6325,7 @@ Dettagli errore:
     <value>Caricamento</value>
   </data>
   <data name="DetailedForecastSmartPart" xml:space="preserve">
-    <value>Previsione dettagliata</value>
+    <value>Forecasts di dettaglio</value>
   </data>
   <data name="ChangedBy" xml:space="preserve">
     <value>Modificato da</value>
@@ -6476,7 +6476,7 @@ Messaggio errore: {0}</value>
     <value>Utente</value>
   </data>
   <data name="OptimizingIntraday" xml:space="preserve">
-    <value>Ottimizzazione infragiornaliero</value>
+    <value>Ottimizzazione Intraday</value>
   </data>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
     <value>Tempo di gestione e-mail campagna</value>
@@ -6524,7 +6524,7 @@ Messaggio errore: {0}</value>
     <value>per max:</value>
   </data>
   <data name="PayrollCodeColon" xml:space="preserve">
-    <value>Codice paghe:</value>
+    <value>Codice Payroll:</value>
   </data>
   <data name="MaxUsedSeats" xml:space="preserve">
     <value>Max postazioni usate:</value>
@@ -6647,13 +6647,13 @@ Messaggio errore: {0}</value>
     <value>Nome utente necessario</value>
   </data>
   <data name="ExportMeetings" xml:space="preserve">
-    <value>Esporta riunioni</value>
+    <value>Esporta Meeting</value>
   </data>
   <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
-    <value>Seleziona un periodo di tempo da cui prendere le riunioni e uno scenario in cui esportarle.</value>
+    <value>Seleziona un periodo di tempo da cui prendere i Meeting e uno scenario in cui esportarli.</value>
   </data>
   <data name="SuccessfullyExportedMeetings" xml:space="preserve">
-    <value>Esportate {0} riunioni in un altro scenario con successo</value>
+    <value>Esportati {0} Meeting in un altro scenario con successo</value>
   </data>
   <data name="NoAllowedScenarios" xml:space="preserve">
     <value>Non sei autorizzato a visualizzare alcuno scenario!</value>
@@ -6677,13 +6677,13 @@ Messaggio errore: {0}</value>
     <value>Accordo di licenza</value>
   </data>
   <data name="TeleoptiLicenseAgreementProgram" xml:space="preserve">
-    <value>Accordo di licenza Teleopti per Software</value>
+    <value>Termini licenza software Teleopti</value>
   </data>
   <data name="PersonalActivity" xml:space="preserve">
     <value>Attività personale</value>
   </data>
   <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
-    <value>Nessun periodo di pianificazione trovato per questo utente</value>
+    <value>Nessun Periodo di pianificazione trovato per questo utente</value>
   </data>
   <data name="SendASM" xml:space="preserve">
     <value>Invia messaggio (ASM)</value>
@@ -6731,7 +6731,7 @@ Messaggio errore: {0}</value>
     <value>Devi selezionare almento uno Skill.</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
-    <value>Impossibile visualizzare tutte le riunioni contemporaneamente!</value>
+    <value>Impossibile visualizzare tutti i Meeting contemporaneamente!</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
     <value>Valore orario non valido '{0}'</value>
@@ -6788,7 +6788,7 @@ Messaggio errore: {0}</value>
     <value>Tutti</value>
   </data>
   <data name="PersonFinderFieldOrganization" xml:space="preserve">
-    <value>Organizzazione</value>
+    <value>Struttura Organizzativa</value>
   </data>
   <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
     <value>Percentuale Part-Time</value>
@@ -6917,10 +6917,10 @@ Messaggio errore: {0}</value>
     <value>Funzioni</value>
   </data>
   <data name="Persons" xml:space="preserve">
-    <value>Persone</value>
+    <value>Dipendenti</value>
   </data>
   <data name="ThePersonsRoles" xml:space="preserve">
-    <value>Ruoli pesona</value>
+    <value>Ruoli dipendente</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>Storico richiesta</value>
@@ -7013,10 +7013,10 @@ Messaggio errore: {0}</value>
     <value>Maturato</value>
   </data>
   <data name="BalanceIn" xml:space="preserve">
-    <value>Saldo In</value>
+    <value>Residuo precedente</value>
   </data>
   <data name="BalanceOut" xml:space="preserve">
-    <value>Saldo Out</value>
+    <value>Disponibilità totale</value>
   </data>
   <data name="Balance" xml:space="preserve">
     <value>Saldo</value>
@@ -7572,7 +7572,7 @@ Messaggio errore: {0}</value>
 * Compra una licenza (informazioni e contatti qui www.teleopti.com)
 * Ricevi il file di licenza (per es. via e-mail)
 * Salva la licenza su disco
-* Se hai un lavoro pendente salvato nell'applicazione, salvalo prima di applicare la licenza
+* Se hai un lavoro in corso nell'applicazione, salvalo prima di applicare la licenza
 * Naviga il file di licenza usando il bottone di navigazione sottostante
 * Applica la licenza
 * L'applicazione si arresterà
@@ -7723,7 +7723,7 @@ Le seguenti opzioni sono attivate:
     <value>Salva come scenario</value>
   </data>
   <data name="MeetingCanNotLoadWithoutScenarios" xml:space="preserve">
-    <value>Impossibile caricare riunioni. Il sistema potrebbe non contenere scenari.</value>
+    <value>Impossibile caricare Meeting. Il sistema potrebbe non contenere scenari.</value>
   </data>
   <data name="label7" xml:space="preserve">
     <value>label7</value>
@@ -7750,7 +7750,7 @@ Le seguenti opzioni sono attivate:
     <value>Durata Max</value>
   </data>
   <data name="ValidatingPersons" xml:space="preserve">
-    <value>Convalidazione {0} persona/e</value>
+    <value>Convalidazione {0} Dipendente/i</value>
   </data>
   <data name="EndByColon" xml:space="preserve">
     <value>Concluso da:</value>
@@ -7801,7 +7801,7 @@ Le seguenti opzioni sono attivate:
     <value>Intervallo stdev</value>
   </data>
   <data name="TeleoptiLicenseException" xml:space="preserve">
-    <value>Errore di licenza Teleopti</value>
+    <value>Errore licenza software Teleopti</value>
   </data>
   <data name="EmploymentType" xml:space="preserve">
     <value>Tipo impiego</value>
@@ -7865,7 +7865,7 @@ Aggiornato il: {1}</value>
     <value>Ruolo Super Amministratore</value>
   </data>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
-    <value>Informazioni generali esportazione paghe</value>
+    <value>Informazioni generali Esportazione Payroll</value>
   </data>
   <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Il numero massimo di ore settimanali non può essere superiore a 168 ore</value>
@@ -7889,7 +7889,7 @@ Aggiornato il: {1}</value>
     <value>Approvazione richiesta per {0}</value>
   </data>
   <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifica richiesta persona per {0}</value>
+    <value>Modifica richiesta dipendente per {0}</value>
   </data>
   <data name="UndoRedoModifySchedule" xml:space="preserve">
     <value>Modifica piano per {0}, data {1}</value>
@@ -8087,7 +8087,7 @@ Aggiornato il: {1}</value>
     <value>Una richiesta di scambio turni {0} - {1} necessita di essere nuovamente accettata a causa di successiva modifica al piano.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Una richiesta di testo {0} - {1} è stata rifutata</value>
+    <value>Una richiesta di testo è stata approvata.</value>
   </data>
   <data name="BusinessOrientation" xml:space="preserve">
     <value>Requisiti di Business</value>
@@ -8168,7 +8168,7 @@ Aggiornato il: {1}</value>
     <value>Azione impossibile per causa di fusi orari diversi.</value>
   </data>
   <data name="MinTimeSchedulePeriodColon" xml:space="preserve">
-    <value>Tempo Min per periodo di pianificazione:</value>
+    <value>Tempo Min per Periodo di pianificazione</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
     <value>Non:</value>
@@ -8243,7 +8243,7 @@ Aggiornato il: {1}</value>
     <value>Ripristino pianificazione per</value>
   </data>
   <data name="AgentPerformance" xml:space="preserve">
-    <value>Prestazioni agente</value>
+    <value>Prestazioni Agente</value>
   </data>
   <data name="EmployeeInformation" xml:space="preserve">
     <value>Informazioni dipendenti</value>
@@ -8408,10 +8408,10 @@ Aggiornato il: {1}</value>
     <value>Data pianificazione A (UTC):</value>
   </data>
   <data name="NoGoodSlotsFound" xml:space="preserve">
-    <value>Nessuna buona posizione trovata per la riunione!</value>
+    <value>Nessuna buona posizione trovata per il Meeting!</value>
   </data>
   <data name="PickBestMeetingSlot" xml:space="preserve">
-    <value>Prendi la posizione migliore per la riunione</value>
+    <value>Scegli la posizione migliore per il Meeting</value>
   </data>
   <data name="SlotsFound" xml:space="preserve">
     <value>Posizioni trovate.</value>
@@ -8423,10 +8423,10 @@ Aggiornato il: {1}</value>
     <value>Tempo scaduto durante l'attesa di elaborazione.</value>
   </data>
   <data name="PlanningTimeBankLimitError" xml:space="preserve">
-    <value>Il Saldo Out è oltre il limite</value>
+    <value>Disponibilità totale è oltre il limite</value>
   </data>
   <data name="SetBalanceOut" xml:space="preserve">
-    <value>Imposta Saldo Out</value>
+    <value>Imposta Disponibilità totale</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>Produttività (%)</value>
