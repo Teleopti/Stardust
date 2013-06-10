@@ -40,7 +40,7 @@ Scenario: Show the user a green indication when allowance exceeds used absence
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
 	| Date						| 2013-04-01			|
-	| Allowance					| 2						|
+	| Allowance					| 3 					|
 	| FulltimeEquivalentHours	| 8						|
 	And I have the role 'Full access to mytime'
 	And there is absence time for
@@ -294,6 +294,74 @@ Scenario: Show the user a red indication when absence requests are auto denied f
 	And I have the workflow control set 'Auto deny'
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
+
+Scenario: Show the user a red indication when left absence is less than one fulltime equivalent
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-01           |
+	| Allowance					| 6                    |
+	| FulltimeEquivalentHours	| 8                    |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 41					|
+	| Absence		| holiday				|
+	And I have the workflow control set 'Open absence period'
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
+
+Scenario: Show the user a green indication when left absence is more than two fulltime equivalents and more than 30 percent
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-01           |
+	| Allowance					| 6                    |
+	| FulltimeEquivalentHours	| 8                    |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 31					|
+	| Absence		| holiday				|
+	And I have the workflow control set 'Open absence period'
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
+
+Scenario: Show the user a yellow indication when left absence is more than two fulltime equivalents and less than 30 percent
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-01           |
+	| Allowance					| 20                   |
+	| FulltimeEquivalentHours	| 5                    |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 80					|
+	| Absence		| holiday				|
+	And I have the workflow control set 'Open absence period'
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
+	
+Scenario: Show the user a yellow indication when left absence is more than one fulltime equivalent
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-01           |
+	| Allowance					| 6                    |
+	| FulltimeEquivalentHours	| 8                    |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 35					|
+	| Absence		| holiday				|
+	And I have the workflow control set 'Open absence period'
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
 
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
