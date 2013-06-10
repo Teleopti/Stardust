@@ -5,11 +5,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public interface IOvertimeAvailability : IPersistableScheduleData
-    {
-        bool NotAvailable { get; set; }
-    }
-
     public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability
     {
         private readonly IPerson _person;

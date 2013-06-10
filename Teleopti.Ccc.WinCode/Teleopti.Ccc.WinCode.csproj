@@ -583,6 +583,11 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\IAgentOvertimeAvailabilityView.cs" />
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityAddCommand.cs" />
