@@ -26,6 +26,9 @@ function Copy-ZippedMsi{
     return @("$destFolder\$zipFileName")
 }
 
+#Add IIS admin module
+Load-SnapIn -ModuleName "WebAdministration"
+
 $Ntml = "Ntlm"
 $None = "None"
 $InstallationAuthSetting = "Ntlm"
@@ -81,9 +84,6 @@ Describe "Setup test"{
 
 	}
 }
-
-#Add IIS admin module
-IISAdmin
 
 If ($InstallationAuthSetting -eq $Ntml) {
 	#Installation is done with Windows+App login
