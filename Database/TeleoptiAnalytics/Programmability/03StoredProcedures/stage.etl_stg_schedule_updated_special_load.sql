@@ -39,7 +39,7 @@ INNER JOIN Stage.stg_schedule_changed stg
 
 --create utc shift_date_id for local agent schedule day
 INSERT INTO Stage.stg_schedule_updated_ShiftStartDateUTC
-SELECT
+SELECT DISTINCT
 	person_id			= dp.person_id,
 	shift_startdate_id	= btz.date_id
 FROM Stage.stg_schedule_updated_personLocal dp
