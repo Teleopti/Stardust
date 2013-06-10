@@ -14,7 +14,9 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Request = (function ($) {
-
+    var readyForInteraction = function () { };
+    var completelyLoaded = function () { };
+    
     function _initNavigationViewModel() {
         //Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick()
 
@@ -30,8 +32,17 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+		    readyForInteraction = readyForInteractionCallback;
+		    completelyLoaded = completelyLoadedCallback;
+		    
+		    if (!$('#Requests-body-inner').length) {
+		        readyForInteraction();
+		        completelyLoaded();
+		        return;
+		    }
+
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
-			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback);
+			Teleopti.MyTimeWeb.Request.List.Init(readyForInteraction, completelyLoaded);
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
