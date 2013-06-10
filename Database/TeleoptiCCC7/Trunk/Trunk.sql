@@ -331,3 +331,33 @@ BEGIN
 	SET NOCOUNT OFF
 END
 GO
+
+----------------  
+--Name: Asad Mirza
+--Date: 2013-06-10
+--Desc: Added a new table for overtime availability day
+----------------
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OvertimeAvailability]') AND type in (N'U'))
+
+BEGIN
+
+	CREATE TABLE [dbo].[OvertimeAvailability](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[DateOfOvertime] [date] NOT NULL,
+		[StartTime] [bigint] NULL,
+		[EndTime] [bigint] NULL,
+		[BusinessUnit] [uniqueidentifier] NOT NULL,
+		[CreatedBy] [uniqueidentifier] NOT NULL,
+		[UpdatedBy] [uniqueidentifier] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[UpdatedOn] [datetime] NOT NULL
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_BusinessUnit] FOREIGN KEY([BusinessUnit])
+	REFERENCES [dbo].[BusinessUnit] ([Id])
+	
+	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_Person] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+
+END
