@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view.Update(startTime, endTime);
 		}
 
+
 		public AgentOvertimeAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator)
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
