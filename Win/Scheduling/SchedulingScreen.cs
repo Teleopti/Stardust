@@ -7127,6 +7127,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			enableSave();
 		}
+
+		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var selectedDay = _scheduleView.SelectedSchedules()[0];
+			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
+			{
+				view.ShowDialog(this);
+			}
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
