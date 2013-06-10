@@ -6155,10 +6155,6 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>vecka på:</value>
     <comment>recurrence meeting text</comment>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Ny tillgänglighet för timanställd</value>
-    <comment>AP context menu item</comment>
-  </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>Tapp och svarstider</value>
   </data>
@@ -9429,7 +9425,7 @@ period</comment>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Tillgänglighetsperiod för timanställd</value>
+    <value>Tillgänglighetsperiod</value>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
@@ -10291,7 +10287,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Rotation Fulfillment</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Studenttillgänglighetsuppfyllnad</value>
+    <value>Tillgänglighetsuppfyllnad för timanställd</value>
     <comment>Student Availability Fulfillment</comment>
   </data>
   <data name="ImportWorkload" xml:space="preserve">
@@ -10864,7 +10860,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Snabbprognosen kommer att startas som ett bakgrundsjobb när denna guide avslutas. Titta i jobbhistoriken för att se status. </value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny eller godkänd. </value>
+    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny, nekad eller godkänd. </value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nytt namn på mall</value>
@@ -10972,7 +10968,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Var god välj minst ett av alternativen "Samma skiftkategori", "Samma starttid" eller "Samma skift" vid blockoptimering. </value>
   </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
-    <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skifteditor, använd klipp ut och klistra in i stället.</value>
+    <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skiftredigeraren. Använd klipp ut och klistra in istället.</value>
     <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
@@ -11001,5 +10997,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="Improved" xml:space="preserve">
     <value>Förbättrat</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Mottagaren har svarat på ditt tidigare meddelande. Uppdatera fönstret för att se svaret. Ditt meddelande kommer inte att skickas.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Tillgänglighet per agent</value>
   </data>
 </root>
