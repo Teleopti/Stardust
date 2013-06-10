@@ -240,7 +240,7 @@ Scenario: Cancel a shift trade request before sending
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
-	And I click 'Cancel button'
+	And I click cancel button
 	Then I should see OtherAgent in the shift trade list
 	And I should see OtherAgent2 in the shift trade list
 

@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
 		}
 
-		[When(@"I click '(.*)'")]
-		public void WhenIClick(string p0)
+		[When(@"I click cancel button")]
+		public void WhenIClickCancelButton()
 		{
 			Browser.Interactions.Click(".cancel-button");
 		}
