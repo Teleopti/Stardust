@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateTime Date { get; set; }
 		public int WorkTimeMinutes { get; set; }
 		public int ContractTimeMinutes { get; set; }
-		public bool HasUnderlyingShift { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<SimpleLayer> Projection { get; set; }

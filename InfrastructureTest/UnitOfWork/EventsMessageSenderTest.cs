@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var target = new EventsMessageSender(eventsPublisher);
 
 			var root = new PersonAbsence(new FakeCurrentScenario().Current());
-			root.FullDayAbsence("", PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), DateTime.Today, DateTime.Today, DateTime.Today, DateTime.Today);
+			root.FullDayAbsence("", PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), DateTime.Today, DateTime.Today);
 			var expected = root.AllEvents();
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
