@@ -12,15 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             IPersonAssignment assAfter = null;
             var approximateTime = DateTime.SpecifyKind(dateToCheck.Date.AddHours(12), DateTimeKind.Unspecified);
             DateTime approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime, timeZone);
-
-            //var schedules = current.ScheduledDayCollection(current.Period.ToDateOnlyPeriod(timeZone));
 			var partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
 																				dateToCheck.AddDays(3)));
 			foreach (IScheduleDay scheduleDay in partCollection)
             {
                 foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
                 {
-                    if (ass.ToMainShift() != null)
+                    if (ass.ShiftCategory != null)
                     {
                         if (ass.Period.StartDateTime <= approxUtc && ass.Period.EndDateTime >= approxUtc)
                         {
@@ -39,8 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 }
             }
             
-            DateTime earliestStartTime = EndTimeOnAssignmentBefore(current, assBefore);
-            DateTime latestEndTime = StartTimeOnAssignmentAfter(current, assAfter);
+            DateTime earliestStartTime = endTimeOnAssignmentBefore(current, assBefore);
+            DateTime latestEndTime = startTimeOnAssignmentAfter(current, assAfter);
 
             if (latestEndTime < earliestStartTime)
             {
@@ -49,12 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return new DateTimePeriod(earliestStartTime, latestEndTime);
         }
 
-        private static DateTime EndTimeOnAssignmentBefore(IScheduleRange currentCompleteRange, IPersonAssignment assBefore)
+        private static DateTime endTimeOnAssignmentBefore(IScheduleRange currentCompleteRange, IPersonAssignment assBefore)
         {
             return assBefore == null ? currentCompleteRange.Period.StartDateTime : assBefore.Period.EndDateTime;
         }
 
-        private static DateTime StartTimeOnAssignmentAfter(IScheduleRange currentCompleteRange, IPersonAssignment assAfter)
+        private static DateTime startTimeOnAssignmentAfter(IScheduleRange currentCompleteRange, IPersonAssignment assAfter)
         {
             return assAfter == null ? currentCompleteRange.Period.EndDateTime : assAfter.Period.StartDateTime;
         }

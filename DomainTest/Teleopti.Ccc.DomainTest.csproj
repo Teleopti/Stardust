@@ -350,10 +350,11 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShiftMapperTest.cs" />
-    <Compile Include="Scheduling\Assignment\EditorShiftTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
+    <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
@@ -619,7 +620,6 @@
     <Compile Include="ResourceCalculation\SwapServiceTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
-    <Compile Include="Scheduling\AbsenceAssignmentSimulatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleExceptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartServiceTest.cs" />

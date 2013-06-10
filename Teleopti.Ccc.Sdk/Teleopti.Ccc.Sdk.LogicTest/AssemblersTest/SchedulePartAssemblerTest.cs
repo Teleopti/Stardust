@@ -91,8 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			schedDay.Person.SetId(Guid.NewGuid());
 			var ass = new PersonAssignment(schedDay.Person, schedDay.Scenario, new DateOnly(2000,1,1));
 			var ms = new MainShift(new ShiftCategory("sdf"));
-			ms.LayerCollection.Add(new MainShiftActivityLayer(act, schedDay.DateOnlyAsPeriod.Period()));
-			ms.LayerCollection[0].MoveLayer(TimeSpan.FromHours(12));
+			ms.LayerCollection.Add(new MainShiftActivityLayer(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12))));
 			ass.SetMainShift(ms);
 			schedDay.Add(ass);
 			using (mocks.Record())

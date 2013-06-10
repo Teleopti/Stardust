@@ -32,17 +32,12 @@ namespace Teleopti.Ccc.Domain.Common
         object ILayer.Payload
         {
             get { return Payload; }
-            set { Payload = (T)value; }
+            set { _payload = (T)value; }
         }
 
         public virtual T Payload
         {
             get { return _payload; }
-            set 
-            {
-                InParameter.NotNull("value", value);
-                _payload = value; 
-            }
         }
 
         public virtual int OrderIndex
@@ -82,27 +77,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 			//return (Id.Value == other.Id.Value);
 		}
-
-        public virtual void ChangeLayerPeriodEnd(TimeSpan timeSpan)
-        {
-            _period = _period.ChangeEndTime(timeSpan);
-        }
-
-        public virtual void ChangeLayerPeriodStart(TimeSpan timeSpan)
-        {
-            _period = _period.ChangeStartTime(timeSpan);
-        }
-
-        public virtual void MoveLayer(TimeSpan timeSpan)
-        {
-            _period = _period.MovePeriod(timeSpan);
-        }
-
-        public virtual void Transform(ILayer<T> layer)
-        {
-            _period = layer.Period;
-            _payload = layer.Payload;
-        }
 
         public virtual bool AdjacentTo(ILayer<T> layer)
         {

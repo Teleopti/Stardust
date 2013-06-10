@@ -62,30 +62,36 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
-				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.PopulateShiftCategories());
-				Expect.Call(() => _view.PopulateAbsences());
-				Expect.Call(() => _view.PopulateDayOffs());
-				Expect.Call(() => _view.PopulateActivities());
-				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
-				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
-				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
-				Expect.Call(() => _view.UpdateMustHave(true));
+				updateViewMocks();
 			}
 
 			using (_mock.Playback())
 			{
 				_presenter.UpdateView();
 			}
+		}
+
+		private void updateViewMocks()
+		{
+			Expect.Call(_scheduleDay.PersistableScheduleDataCollection())
+			      .Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> {_preferenceDay}));
+			Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
+			Expect.Call(() => _view.PopulateShiftCategories());
+			Expect.Call(() => _view.PopulateAbsences());
+			Expect.Call(() => _view.PopulateDayOffs());
+			Expect.Call(() => _view.PopulateActivities());
+			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+			Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+			Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> {_preferenceRestriction});
+			Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+			Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+			Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
+			Expect.Call(() => _view.UpdateMustHave(true));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -386,6 +392,54 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var restriction = _presenter.PreferenceRestriction();
 				Assert.AreEqual(_preferenceRestriction, restriction);
+			}
+		}
+
+		[Test]
+		public void ShouldCallRemoveCommand()
+		{
+			var command = _mock.StrictMock<IAgentPreferenceRemoveCommand>();
+			using (_mock.Record())
+			{
+				Expect.Call(() => command.Execute());
+				updateViewMocks();
+			}
+
+			using (_mock.Playback())
+			{
+				_presenter.Remove(command);
+			}
+		}
+
+		[Test]
+		public void ShouldCallAddCommand()
+		{
+			var command = _mock.StrictMock<IAgentPreferenceAddCommand>();
+			using (_mock.Record())
+			{
+				Expect.Call(() => command.Execute());
+				updateViewMocks();
+			}
+
+			using (_mock.Playback())
+			{
+				_presenter.Add(command);
+			}
+		}
+
+		[Test]
+		public void ShouldCallEditCommand()
+		{
+			var command = _mock.StrictMock<IAgentPreferenceEditCommand>();
+			using (_mock.Record())
+			{
+				Expect.Call(() => command.Execute());
+				updateViewMocks();
+			}
+
+			using (_mock.Playback())
+			{
+				_presenter.Edit(command);
 			}
 		}
 	}

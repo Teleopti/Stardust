@@ -159,7 +159,8 @@ namespace Teleopti.Ccc.WinCode.Matrix
                 "D45A8874-57E1-4EB9-826D-E216A4CBC45B",
                 "EB977F5B-86C6-4D98-BEDF-B79DC562987B",
                 "E15400E7-892A-4EDE-9377-AE693AA56829",
-                "8DE1AB0F-32C2-4619-A2B2-97385BE4C49C"};
+                "8DE1AB0F-32C2-4619-A2B2-97385BE4C49C",
+				"A56B3EEF-17A2-4778-AA8A-D166232073D2"};
         }
 
         private static IEnumerable<string> agentReports()

@@ -761,7 +761,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 1));
                     part.Remove(dOff2BeRemoved);
-                    part.PersonAbsenceCollection()[0].Layer.MoveLayer(TimeSpan.FromDays(10));
+	                var personAbsence = part.PersonAbsenceCollection()[0];
+	                var oldLayer = personAbsence.Layer;
+	                var newLayer = new AbsenceLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(TimeSpan.FromDays(10)));
+					part.Remove(personAbsence);
+	                var newPersonAbsence = new PersonAbsence(personAbsence.Person, personAbsence.Scenario, newLayer);
+					part.Add(newPersonAbsence);
                     part.Add(pAss2BeAdded);
 
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -1598,12 +1603,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
+#pragma warning disable 612,618
 					                                     PersonAssignmentCollection()[0].ToMainShift());
+#pragma warning restore 612,618
 
                     //should do nothing
                     container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
+#pragma warning disable 612,618
 					                                     PersonAssignmentCollection()[0].ToMainShift());
+#pragma warning restore 612,618
 
                     container.Redo();
 					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
@@ -1639,7 +1648,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					var oldMainShift = part.PersonAssignmentCollection()[0].ToMainShift();
+					var oldMainShift = part.GetEditorShift();
 					part.PersonAssignmentCollection()[0].ClearMainShiftLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 

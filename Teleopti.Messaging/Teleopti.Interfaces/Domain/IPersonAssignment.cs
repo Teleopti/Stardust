@@ -27,6 +27,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// Gets the main shift.
 	    /// </summary>
 	    /// <returns>The main shift.</returns>
+	    [Obsolete("Mainshift will not be supported in near future")]
 	    IMainShift ToMainShift();
 
 	    /// <summary>
@@ -40,13 +41,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="personalShift">The personal shift.</param>
         void AddPersonalShift(IPersonalShift personalShift);
-
-        /// <summary>
-        /// Inserts  a personal shift.
-        /// </summary>
-        /// <param name="personalShift"></param>
-        /// <param name="index"></param>
-        void InsertPersonalShift(IPersonalShift personalShift, int index);
 
         /// <summary>
         /// Clears the personal shift.

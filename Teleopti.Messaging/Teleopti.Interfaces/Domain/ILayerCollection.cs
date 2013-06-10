@@ -10,12 +10,6 @@ namespace Teleopti.Interfaces.Domain
     public interface ILayerCollection<T> : IList<ILayer<T>>
     {
         /// <summary>
-        /// Moves all layers.
-        /// </summary>
-        /// <param name="time">The time.</param>
-        void MoveAllLayers(TimeSpan time);
-
-        /// <summary>
         /// Get the period with the earliest start and the latest end.
         /// </summary>
         /// <returns></returns>

@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     continue;
 
                 IPersonAssignment assignment = (IPersonAssignment)scheduleData;
-                if (assignment.ToMainShift() == null)
+                if (assignment.ShiftCategory == null)
                     continue;
 
                 DayOfWeek dow =

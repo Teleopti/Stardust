@@ -190,8 +190,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IAbsenceLayer AbsenceLayerStub(IAbsence absence)
 		{
-			var absenceLayer = MockRepository.GenerateStub<IAbsenceLayer>();
-			absenceLayer.Payload = absence;
+			var absenceLayer = MockRepository.GenerateMock<IAbsenceLayer>();
+			absenceLayer.Expect(x => x.Payload).Return(absence);
 			return absenceLayer;
 		}
 
@@ -312,8 +312,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayColor()).Return(displayColor);
-			visualLayer.Stub(x => x.Period).PropertyBehavior();
-			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
+			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			return visualLayer;
 		}
 
@@ -321,8 +320,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayDescription()).Return(new Description(activtyName));
-			visualLayer.Stub(x => x.Period).PropertyBehavior();
-			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
+			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			return visualLayer;
 		}
 

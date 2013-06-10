@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -1224,7 +1225,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (schedulePart.PersonDayOffCollection().Count == 0)
 					{
-						IMainShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
+						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
 						{
 							schedulePart.AddMainShift(selectedShift);
@@ -1241,6 +1242,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				swapSelectedSchedules();
+				Refresh();
+				RefreshSelection();
 			}
 		}
 
@@ -2025,14 +2028,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var part = (IScheduleDay)_schedulerState.Schedules[lst[0].Person].ReFetch(lst[0]).Clone();
 
 					part.Clear<IScheduleData>();
-					IMainShift mainShift = workShift.ToMainShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
-
+					IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
 					foreach (var cat in _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
 					{
 						mainShift.ShiftCategory = cat;
 					}
 
 					part.AddMainShift(mainShift);
+
 					_clipHandlerSchedule.Clear();
 					_clipHandlerSchedule.AddClip(0, 0, part);
 					_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
@@ -3724,11 +3727,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                                                                     (), maxCalculatMinMaxCacheEnries);
 			if (turnOfCache)
 			{
-				_workShiftWorkTime = new WorkShiftWorkTime(_container.Resolve<IRuleSetProjectionService>());
+				_container.Resolve<IMbCacheFactory>().DisableCache<IWorkShiftWorkTime>();
 			}
 			else
 			{
-				_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
 			}
 		}
 
@@ -4805,7 +4808,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private PersonsFilterView _cachedPersonsFilterView;
 		private PersonsFilterView getCachedPersonsFilterView()
 		{
-			if (_cachedPersonsFilterView == null)
+			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
 				var permittedPersons = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 

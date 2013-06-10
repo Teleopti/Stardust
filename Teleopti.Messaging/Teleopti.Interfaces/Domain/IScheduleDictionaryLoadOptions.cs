@@ -14,6 +14,6 @@
         /// </summary>
         bool LoadNotes { get; set; }
 
-		bool LoadOnlyPreferenses { get; set; }
+		bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
     }
 }

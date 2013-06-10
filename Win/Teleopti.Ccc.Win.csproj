@@ -103,11 +103,11 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1106,20 +1106,7 @@
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\AbsenceMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractScheduleMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\BudgetGroupMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\OptionalColumnMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonRotationMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonAvailabilityMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\IPeopleAdminMessageBroker.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminConstants.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\IMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PartTimePercentageMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\PeopleAdminMessageBrokerFactory.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\RuleSetBagMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\TeamMessageBrokerHandler.cs" />
     <Compile Include="PeopleAdmin\Views\GeneralGridView.cs" />
     <Compile Include="PeopleAdmin\Views\PersonFinderView.cs">
       <SubType>Form</SubType>

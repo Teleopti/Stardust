@@ -17496,6 +17496,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent..
+        /// </summary>
+        public static string RecipientAnsweredToEarlierMessage {
+            get {
+                return ResourceManager.GetString("RecipientAnsweredToEarlierMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recruitment.
         /// </summary>
         public static string Recruitment {
@@ -18458,6 +18467,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportAgentStatistics {
             get {
                 return ResourceManager.GetString("ResReportAgentStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Availability Per Agent.
+        /// </summary>
+        public static string ResReportAvailabilityPerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAvailabilityPerAgent", resourceCulture);
             }
         }
         

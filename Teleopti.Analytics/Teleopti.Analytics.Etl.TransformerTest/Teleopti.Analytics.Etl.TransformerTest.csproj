@@ -95,7 +95,11 @@
   <ItemGroup>
     <Compile Include="BaseConfigurationTest.cs" />
     <Compile Include="ConfigurationHandlerTest.cs" />
+    <Compile Include="IntradayAvailabilityTransformerTest.cs" />
+    <Compile Include="HourlyAvailabilityTransformerTest.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformerTest.cs" />
+    <Compile Include="Job\Steps\FactIntradayRequestJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageAvailabilityJobStepTest.cs" />
     <Compile Include="Job\Steps\IntradayStageRequestJobStepTest.cs" />
     <Compile Include="Job\Steps\IntradayStageSchedulePreferenceJobStepTest.cs" />
     <Compile Include="Job\Steps\IntradayStageScheduleDayOffCountJobStepTest.cs" />

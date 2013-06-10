@@ -83,7 +83,7 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         SchedulePartView SignificantPartForDisplay();
 
-	    IEditorShift GetEditorShift();
+	    IEditableShift GetEditorShift();
 
         #region Shouldn't be here!
         /// <summary>

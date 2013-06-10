@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class SchedulePeriodBlockFinderTest
     {
-        //private SchedulePeriodBlockFinder _target;
         private IBlockFinder _interface;
         private IScheduleMatrixPro _matrix;
         private MockRepository _mocks;
@@ -295,12 +294,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_schedulePartEarly.IsScheduled()).Return(true).Repeat.Any();
 			Expect.Call(_schedulePartLate.IsScheduled()).Return(true).Repeat.Any();
             Expect.Call(_schedulePartEarly.AssignmentHighZOrder()).Return(earlyAssignment).Repeat.Any();
-            Expect.Call(earlyAssignment.ToMainShift()).Return(earlyShift).Repeat.Any();
-						Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
+			Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
             Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
-            Expect.Call(lateAssignment.ToMainShift()).Return(lateShift).Repeat.Any();
-						Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
+			Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
             Expect.Call(_matrix.Person).Return(person).Repeat.Any();
         }
     }

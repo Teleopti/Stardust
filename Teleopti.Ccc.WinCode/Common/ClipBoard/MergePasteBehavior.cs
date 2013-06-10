@@ -1,5 +1,6 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 
@@ -55,9 +56,19 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 
         protected static IScheduleDay ExtendAbsence(IScheduleDay part, int days)
         {
-            foreach (IPersonAbsence personAbsence in part.PersonAbsenceCollection())
+			IList<IPersonAbsence> allAbsences = new List<IPersonAbsence>(part.PersonAbsenceCollection());
+			foreach (IPersonAbsence personAbsence in part.PersonAbsenceCollection())
+			{
+				part.Remove(personAbsence);
+			}
+			foreach (IPersonAbsence personAbsence in allAbsences)
             {
-                personAbsence.Layer.ChangeLayerPeriodEnd(TimeSpan.FromDays(days));
+				var oldLayer = personAbsence.Layer;
+				var oldPeriod = oldLayer.Period;
+				var newPeriod = oldPeriod.ChangeEndTime(TimeSpan.FromDays(days));
+				IAbsenceLayer newLayer = new AbsenceLayer(oldLayer.Payload, newPeriod);
+				IPersonAbsence newPersonAbsence = new PersonAbsence(personAbsence.Person, part.Scenario, newLayer);
+				part.Add(newPersonAbsence);
             }
             return part;
         }

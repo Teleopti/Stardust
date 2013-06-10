@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -98,8 +99,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				{
 					if (dateTimePeriod.ElapsedTime()>TimeSpan.Zero)
 					{
-						var newLayer = layer.NoneEntityClone();
-						newLayer.Period = dateTimePeriod;
+						var newLayer = new OvertimeShiftActivityLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
 						overtimeShift.LayerCollection.Add(newLayer);
 					}
 				}

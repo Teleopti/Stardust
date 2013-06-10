@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
-			InParameter.ListCannotBeEmpty("list", (IList)list);
+			InParameter.ListCannotBeEmpty("list", list);
 			IList<IScheduleDay> returnList = new List<IScheduleDay>();
 			if (backgroundWorker == null)
 				throw new ArgumentNullException("backgroundWorker");

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                             if (pa != null)
                             {
-                                if (pa.ToMainShift() != null)
+                                if (pa.ShiftCategory != null)
                                 {
                                     if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsToday || ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsAndEndsToday)
                                     {

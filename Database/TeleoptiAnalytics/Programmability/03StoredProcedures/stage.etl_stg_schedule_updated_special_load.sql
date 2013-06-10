@@ -41,8 +41,7 @@ INNER JOIN Stage.stg_schedule_changed stg
 INSERT INTO Stage.stg_schedule_updated_ShiftStartDateUTC
 SELECT
 	person_id			= dp.person_id,
-	shift_startdate_id	= btz.date_id,
-	interval_id = btz.interval_id
+	shift_startdate_id	= btz.date_id
 FROM Stage.stg_schedule_updated_personLocal dp
 INNER JOIN stage.stg_schedule_changed stg
 	ON stg.person_code = dp.person_code
@@ -51,8 +50,6 @@ INNER JOIN mart.dim_date dd
 INNER JOIN mart.bridge_time_zone btz
 	ON	btz.local_date_id = dd.date_id
 	AND btz.time_zone_id =	dp.time_zone_id
-INNER JOIN mart.dim_interval di
-	ON btz.local_interval_id = di.interval_id
 END
 
 GO

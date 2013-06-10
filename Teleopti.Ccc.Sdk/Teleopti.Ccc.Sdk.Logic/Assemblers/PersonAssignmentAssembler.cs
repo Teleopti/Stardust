@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 Id = entity.Id,
                 Version = entity.Version.GetValueOrDefault(0)
             };
+#pragma warning disable 612,618
 	        var entityMs = entity.ToMainShift();
+#pragma warning restore 612,618
             if (entityMs != null)
 							retDto.MainShift = CreateMainShiftDto(entityMs, entity.Person);
             foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)

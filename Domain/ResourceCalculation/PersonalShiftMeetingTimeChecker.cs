@@ -6,14 +6,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IPersonalShiftMeetingTimeChecker
 	{
-		bool CheckTimeMeeting(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings);
-		bool CheckTimePersonAssignment(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments);
+		bool CheckTimeMeeting(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings);
+		bool CheckTimePersonAssignment(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments);
 	}
 
 	public class PersonalShiftMeetingTimeChecker : IPersonalShiftMeetingTimeChecker
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool CheckTimeMeeting(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
+		public bool CheckTimeMeeting(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						return false;
 				}
 
-				var layer = new MainShiftActivityLayer(personMeeting.BelongsToMeeting.Activity, personMeeting.Period);
+				var layer = new EditorActivityLayer(personMeeting.BelongsToMeeting.Activity, personMeeting.Period);
 				clone.LayerCollection.Add(layer);	
 			}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool CheckTimePersonAssignment(IMainShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments)
+		public bool CheckTimePersonAssignment(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonAssignment> personAssignments)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					foreach (var personalLayer in personalShift.LayerCollection)
 					{
-						var layer = new MainShiftActivityLayer(personalLayer.Payload, personalLayer.Period);
+						var layer = new EditorActivityLayer(personalLayer.Payload, personalLayer.Period);
 						clone.LayerCollection.Add(layer);
 					}
 				}

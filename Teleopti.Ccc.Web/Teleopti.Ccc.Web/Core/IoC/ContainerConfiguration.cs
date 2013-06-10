@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			registerAopComponents(builder);
 
-			var mbCacheModule = new MbCacheModule(new FixedNumberOfLockObjects(100));
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
+			builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
@@ -83,14 +84,5 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<UnitOfWorkAspect>();
 		}
 
-	}
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
-	public class NewtonsoftJsonSerializer : IJsonSerializer
-	{
-		public string SerializeObject(object value)
-		{
-			return Newtonsoft.Json.JsonConvert.SerializeObject(value);
-		}
 	}
 }

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             LayerCollection<IActivity> activityLayerCollection = new LayerCollection<IActivity>();
             foreach (global::Domain.ActivityLayer actLayer in oldEntity.LayerCollection)
             {
-                IActivityLayer newLayer = actLayerMapper.Map(actLayer);
+                var newLayer = actLayerMapper.Map(actLayer);
                 if (newLayer != null)
                     activityLayerCollection.Add(newLayer);
             }

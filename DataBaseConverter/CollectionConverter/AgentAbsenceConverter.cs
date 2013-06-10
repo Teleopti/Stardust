@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.DatabaseConverter.EntityMapper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -128,9 +129,10 @@ namespace Teleopti.Ccc.DatabaseConverter.CollectionConverter
                             //set merged to be deleted
                             upForDelete.Add(mergedAbsence);
                             //set new absence
-                            newPersonAbsence = mergedAbsence.NoneEntityClone();
-                            //set merged period for new absence
-                            newPersonAbsence.Layer.Period = mergedAbsence.Period.MaximumPeriod(originalPersonAbsence.Period);
+	                        var newLayer = new AbsenceLayer(mergedAbsence.Layer.Payload,
+	                                                        mergedAbsence.Period.MaximumPeriod(originalPersonAbsence.Period));
+							newPersonAbsence = new PersonAbsence(mergedAbsence.Person, mergedAbsence.Scenario, newLayer);
+
                         }
                     }
                 }
