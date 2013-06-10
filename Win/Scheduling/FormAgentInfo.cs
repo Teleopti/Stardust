@@ -295,6 +295,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             handleRotations(extractor.RotationList);
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
+
+	        createAndAddItem(listViewRestrictions, "xxOverTimeAvailability", "", 1);
+
+			//TEST replace with "real" data
+	        var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, TimeSpan.FromHours(8),TimeSpan.FromHours(10));
+			//var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, null, null);
+	        //testOvertimeAvailability.NotAvailable = true;
+	        var testOvertimeAvailabilityList = new List<IOvertimeAvailability> {testOvertimeAvailability};
+			//TEST
+
+	        handleOvertimeAvailabilities(testOvertimeAvailabilityList);
+
             createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
             handlePreferences(extractor.PreferenceList);
             createAndAddItem(listViewRestrictions, Resources.ShiftCategoryLimitations, "", 1);
@@ -448,6 +460,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
+		private void handleOvertimeAvailabilities(IEnumerable<IOvertimeAvailability> overtimeAvailabilityList)
+		{
+			foreach (var overtimeAvailability in overtimeAvailabilityList)
+			{
+				addOvertimeAvailability(overtimeAvailability, 2);
+			}
+		}
+
+
         private void handlePreferences(IEnumerable<IPreferenceRestriction> preferenceList)
         {
            foreach (IPreferenceRestriction restriction in preferenceList)
@@ -495,6 +516,24 @@ namespace Teleopti.Ccc.Win.Scheduling
                 createAndAddItem(listViewRestrictions, Resources.MaxWorkTime, restrictionBase.WorkTimeLimitation.EndTimeString, indent);
             }
         }
+
+		private void addOvertimeAvailability(IOvertimeAvailability overtimeAvailability, int indent)
+		{
+			if (overtimeAvailability.StartTime.HasValue)
+			{
+				createAndAddItem(listViewRestrictions, Resources.EarliestStartTime, overtimeAvailability.StartTime.ToString(), indent);
+			}
+
+			if (overtimeAvailability.EndTime.HasValue)
+			{
+				createAndAddItem(listViewRestrictions, Resources.LatestEndTime, overtimeAvailability.EndTime.ToString(), indent);
+			}
+
+			if (overtimeAvailability.NotAvailable)
+			{
+				createAndAddItem(listViewRestrictions, Resources.Available, (!overtimeAvailability.NotAvailable).ToString(CultureInfo.CurrentCulture), 2);	
+			}
+		}
 
         private void updatePersonPeriodData(IPerson person, DateOnly dateOnly)
         {
