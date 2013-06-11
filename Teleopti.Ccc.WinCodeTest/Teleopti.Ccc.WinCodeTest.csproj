@@ -309,7 +309,6 @@
     <Compile Include="Common\PersonalShiftLayerViewModelTest.cs" />
     <Compile Include="Common\MainShiftLayerViewModelTest.cs" />
     <Compile Include="Common\DateTimePeriodPanelTest.cs" />
-    <Compile Include="Common\LayerViewModelTest.cs" />
     <Compile Include="Common\MeetingLayerViewModelTest.cs" />
     <Compile Include="Common\SearchPersonPresenterTest.cs" />
     <Compile Include="Common\Time\DateTimeViewModelTest.cs" />
