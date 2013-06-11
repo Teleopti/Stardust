@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -297,15 +298,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
 
 	        createAndAddItem(listViewRestrictions, "xxOverTimeAvailability", "", 1);
+			var scheduleDay = getScheduleDay(person, dateOnly, state);
+			if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
 
 			//TEST replace with "real" data
-	        var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, TimeSpan.FromHours(8),TimeSpan.FromHours(10));
+	        //var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, TimeSpan.FromHours(8),TimeSpan.FromHours(10));
 			//var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, null, null);
 	        //testOvertimeAvailability.NotAvailable = true;
-	        var testOvertimeAvailabilityList = new List<IOvertimeAvailability> {testOvertimeAvailability};
+ 
+	        //var testOvertimeAvailabilityList = new List<IOvertimeAvailability> {testOvertimeAvailability};
 			//TEST
 
-	        handleOvertimeAvailabilities(testOvertimeAvailabilityList);
+	        //handleOvertimeAvailabilities(testOvertimeAvailabilityList);
 
             createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
             handlePreferences(extractor.PreferenceList);
@@ -459,6 +463,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
         }
+
+		private IScheduleDay getScheduleDay(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+		{
+			IScheduleDay schedulePart = null;
+			var scheduleRange = state.Schedules[person];
+			if (scheduleRange != null) schedulePart = scheduleRange.ScheduledDay(dateOnly);
+			
+			return schedulePart;
+		}
 
 		private void handleOvertimeAvailabilities(IEnumerable<IOvertimeAvailability> overtimeAvailabilityList)
 		{
