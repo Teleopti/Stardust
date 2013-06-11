@@ -90,22 +90,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
 			Assert.IsNull(_target.Parent);
 			Assert.IsFalse(_target.IsChanged);
-			Assert.AreEqual(_layerWithPayload, _target.Layer);
 			Assert.AreSame(_scheduleDay, _target.SchedulePart);
 			Assert.IsFalse(_target.CanMoveAll);
 			Assert.AreEqual(true, _target.Opaque);
-			_mocks.BackToRecordAll();
-
-			ILayer testLayer = _mocks.StrictMock<ILayer>();
-
-			_mocks.ReplayAll();
 
 			_target.SchedulePart = _scheduleDay;
-			_target.Layer = testLayer;
 			_target.Interval = TimeSpan.FromHours(1);
 
 			Assert.AreEqual(_scheduleDay, _target.SchedulePart);
-			Assert.AreEqual(testLayer, _target.Layer);
 			Assert.AreEqual(TimeSpan.FromHours(1), _target.Interval);
 		}
 

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             Assert.AreEqual(0,payloads.Filters.Count);
             _target.Layer = _layerViewModel;
             Assert.AreEqual(1, payloads.Filters.Count);
-            Assert.AreEqual(payloads.Filters[0],_layerViewModel.Layer.Payload.GetType());
+            Assert.AreEqual(payloads.Filters[0],_layerViewModel.Payload.GetType());
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _target.SelectablePayloads.Add(_activity);
             _target.SelectablePayloads.Add(anotherActivity);
 
-            _layerViewModel.Layer.Payload = anotherActivity;
+            _layerViewModel.Payload = anotherActivity;
             _target.Layer = _layerViewModel;
             
             //Check the view
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             CollectionViewSource.GetDefaultView(_target.SelectablePayloads).MoveCurrentTo(anotherActivity);
             TesterForCommandModels models = new TesterForCommandModels();
             models.ExecuteCommandModel(_target.UpdateLayerCommand);
-            Assert.AreEqual(_layerViewModel.Layer.Payload,anotherActivity);
+            Assert.AreEqual(_layerViewModel.Payload,anotherActivity);
 
         }
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             CollectionViewSource.GetDefaultView(_target.SelectablePayloads).MoveCurrentTo(activity);
             _commandTester.ExecuteCommandModel(_target.ChangePayloadCommand);
 
-            Assert.AreEqual(_target.Layer.Layer.Payload,activity);
+            Assert.AreEqual(_target.Layer.Payload,activity);
         }
 
         [Test]
