@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -16,10 +18,10 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), subscription.Route().GetHashCode());
+				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), RouteToGroupName(subscription.Route()));
 			}
 			var route = subscription.Route();
-			Groups.Add(Context.ConnectionId, createRouteHash(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+            Groups.Add(Context.ConnectionId, RouteToGroupName(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
 			return route;
 		}
 
@@ -38,12 +40,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("New notification from client {0} with routes {1} (Id's: {2}).", Context.ConnectionId, string.Join(", ", notification.Routes()), string.Join(", ", notification.Routes().Select(r => r.GetHashCode())));
+				Logger.DebugFormat("New notification from client {0} with routes {1} (Id's: {2}).", Context.ConnectionId, string.Join(", ", notification.Routes()), string.Join(", ", notification.Routes().Select(RouteToGroupName)));
 			}
 
 			foreach (var route in routes)
 			{
-				Clients.Group(createRouteHash(route)).onEventMessage(notification, route);
+                Clients.Group(RouteToGroupName(route)).onEventMessage(notification, route);
 			}
 		}
 
@@ -55,10 +57,16 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		private static string createRouteHash(string route)
+		public static string RouteToGroupName(string route)
 		{
 			//gethashcode won't work in 100% of the cases...
-			return route.GetHashCode().ToString();
+            UInt64 hashedValue = 3074457345618258791ul;
+            for (int i = 0; i < route.Length; i++)
+            {
+                hashedValue += route[i];
+                hashedValue *= 3074457345618258799ul;
+            }
+            return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }
