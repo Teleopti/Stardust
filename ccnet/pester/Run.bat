@@ -4,12 +4,6 @@ set rootdir=%~dp0
 SET rootdir=%rootdir:~0,-1%
 set obsoletePester=1.1.1;1.0.0
 
-if "%1"=="" (
-SET TestPath="%rootdir%\.."
-) else (
-SET TestPath="%~1"
-)
-
 ::install
 "%rootdir%\..\..\.nuget\nuget.exe" install pester -o "%rootdir%" -Version %currentPester%
 
@@ -21,8 +15,8 @@ del /F /S /Q *.Tests.ps1 > NUL
 for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\Pester.%%a" rmdir "%rootdir%\Pester.%%a" /S /Q
 
 ::Run all test
-echo CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" %TestPath%"
-CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" %TestPath%"
+echo CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%~1""
+CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%~1""
 
 goto :eof
 
