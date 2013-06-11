@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				: base(observer, layer, null, eventAggregator)
 			{
 			}
-			public static AbsenceLayerViewModel CreateForProjection(ILayer layer)
+			public static AbsenceLayerViewModel CreateForProjection(IVisualLayer layer)
 			{
 				return new AbsenceLayerViewModel(null, layer, null);
 			}
