@@ -92,10 +92,11 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
 
         public void TrySetProgress(IJobResultProgress exportProgress)
         {
-            if (_model.Id.Equals(exportProgress.JobResultId))
-            {
+            if (!_model.Id.Equals(exportProgress.JobResultId)) return;
+
+            var currentProgress = Progress;
+            if (currentProgress!=null && currentProgress.Percentage <= exportProgress.Percentage)
                 Progress = exportProgress;
-            }
         }
 
         public IJobResultProgress Progress
