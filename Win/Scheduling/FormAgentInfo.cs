@@ -301,16 +301,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleDay = getScheduleDay(person, dateOnly, state);
 			if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
 
-			//TEST replace with "real" data
-	        //var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, TimeSpan.FromHours(8),TimeSpan.FromHours(10));
-			//var testOvertimeAvailability = new OvertimeAvailability(person, dateOnly, null, null);
-	        //testOvertimeAvailability.NotAvailable = true;
- 
-	        //var testOvertimeAvailabilityList = new List<IOvertimeAvailability> {testOvertimeAvailability};
-			//TEST
-
-	        //handleOvertimeAvailabilities(testOvertimeAvailabilityList);
-
             createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
             handlePreferences(extractor.PreferenceList);
             createAndAddItem(listViewRestrictions, Resources.ShiftCategoryLimitations, "", 1);
