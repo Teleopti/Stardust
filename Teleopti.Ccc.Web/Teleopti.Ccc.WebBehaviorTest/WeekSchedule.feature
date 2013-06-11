@@ -290,6 +290,8 @@ Scenario: Update schedule when schedule has changed
 	And My schedule between '2013-08-28 12:00' to '2013-08-28 15:00' reloads
 	Then I should see activities on date '2012-08-28'
 
+@ignore
+#Ignored for now. See TextRequestFromSchedule.feature. /Maria S
 Scenario: Keep user request input when schedules are refreshed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
