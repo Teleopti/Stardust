@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Messaging.SignalR;
@@ -50,13 +51,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				};
 		}
 	}
-
-	public class NewtonsoftJsonSerializer : IJsonSerializer
-	{
-		public string SerializeObject(object value)
-		{
-			return Newtonsoft.Json.JsonConvert.SerializeObject(value);
-		}
-	}
-
 }

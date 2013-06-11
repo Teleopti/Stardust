@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -47,20 +49,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate, DateTime shiftEndOnDayBeforeStartDate, DateTime shiftEndOnEndDate)
+		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
 		{
-			var start = shiftEndOnDayBeforeStartDate > startDate.Date ? shiftEndOnDayBeforeStartDate : startDate.Date;
-			var startDateTime =
-				TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(start, DateTimeKind.Unspecified),
-				                              person.PermissionInformation.DefaultTimeZone());
-			var end = endDate.Date.AddHours(24).AddMinutes(-1);
-			var endDateTime =
-				TimeZoneInfo.ConvertTimeToUtc(
-					DateTime.SpecifyKind(end > shiftEndOnEndDate ? end : shiftEndOnEndDate, DateTimeKind.Unspecified),
-					person.PermissionInformation.DefaultTimeZone());
-
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
 			AddEvent(new FullDayAbsenceAddedEvent
@@ -69,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
 					AbsenceId = absence.Id.Value,
 					PersonId = person.Id.Value,
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
+					StartDateTime = startDateTimeInUtc,
+					EndDateTime = endDateTimeInUtc,
 					ScenarioId = _scenario.Id.Value
 				});
 		}

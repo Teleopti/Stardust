@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,18 +14,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IWriteSideRepository<IPerson> _personRepository;
 		private readonly IWriteSideRepository<IAbsence> _absenceRepository;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
-		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
-		private readonly IJsonDeserializer _deserializer;
+		private readonly IScheduleRepository _scheduleRepository;
 
-		public AddFullDayAbsenceCommandHandler(ICurrentDataSource dataSource, ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IJsonDeserializer deserializer)
+		public AddFullDayAbsenceCommandHandler(ICurrentDataSource dataSource, ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IScheduleRepository scheduleRepository)
 		{
 			_dataSource = dataSource;
 			_scenario = scenario;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
 			_personAbsenceRepository = personAbsenceRepository;
-			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
-			_deserializer = deserializer;
+			_scheduleRepository = scheduleRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -35,39 +31,71 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
+			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
+			var scheduleDays = getScheduleDaysForPeriod(period, person);
+
+			var previousDay = scheduleDays.First();
+			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
-
-			var shiftEndOnDayBeforeStartDate = getUnderlyingShiftEnd(command.StartDate.AddDays(-1), person);
-			var shiftEndOnEndDate = getUnderlyingShiftEnd(command.EndDate, person);
-
-			personAbsence.FullDayAbsence(_dataSource.CurrentName(), person, absence, command.StartDate, command.EndDate, shiftEndOnDayBeforeStartDate, shiftEndOnEndDate);
+			personAbsence.FullDayAbsence(_dataSource.CurrentName(), person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime);
 
 			_personAbsenceRepository.Add(personAbsence);
 		}
 
-		private DateTime getUnderlyingShiftEnd(DateTime date, IPerson person)
+		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var personScheduleDayReadModel =
-				person.Id.HasValue
-					? _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), person.Id.Value)
-					: null;
-			var shiftEnd = DateTime.MinValue;
-			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
-			{
-				dynamic shift =
-					_deserializer.DeserializeObject(personScheduleDayReadModel.Shift);
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 
-				if (shift != null && shift.HasUnderlyingShift)
+			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
+				new PersonProvider(new[] {person}),
+				new ScheduleDictionaryLoadOptions(false, false),
+				dateTimePeriod,
+				_scenario.Current());
+
+			var scheduleDays = dictionary[person].ScheduledDayCollection(period);
+			return scheduleDays;
+		}
+
+		private DateTimePeriod getDateTimePeriodForAbsence(IEnumerable<IScheduleDay> scheduleDaysInPeriod, IScheduleDay previousDay)
+		{
+			var firstDayDateTime = getDateTimePeriodForDay(scheduleDaysInPeriod.First());
+			var lastDayDateTime = getDateTimePeriodForDay(scheduleDaysInPeriod.Last());
+			var previousday = getDateTimePeriodForDay(previousDay);
+			var startTime = previousday.EndDateTime > firstDayDateTime.StartDateTime ? previousday.EndDateTime : firstDayDateTime.StartDateTime;
+			var endTime = lastDayDateTime.EndDateTime;
+			return new DateTimePeriod(startTime, endTime);
+		}
+
+		private DateTimePeriod getDateTimePeriodForDay(IScheduleDay scheduleDay)
+		{
+			var startTime = DateTime.MaxValue;
+			var endTime = DateTime.MinValue;
+			var personAssignments = scheduleDay.PersonAssignmentCollection();
+
+			foreach (var personAssignment in personAssignments)
+			{
+				var personAssignmentStartDateTime = personAssignment.Period.StartDateTime;
+				var personAssignmentEndDateTime = personAssignment.Period.EndDateTime;
+
+				if (personAssignmentStartDateTime <= startTime)
 				{
-					var projection = shift.Projection as IEnumerable<dynamic>;
-					if (projection != null && !projection.IsEmpty())
-					{
-						shiftEnd = projection.Max(p => (DateTime) p.End);
-					}
+					startTime = personAssignmentStartDateTime;
+				}
+
+				if (personAssignmentEndDateTime >= endTime)
+				{
+					endTime = personAssignmentEndDateTime;
 				}
 			}
-			return shiftEnd;
+			if (personAssignments.Count < 1)
+			{
+				startTime = scheduleDay.Period.StartDateTime;
+				endTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);
+			}
+
+			return new DateTimePeriod(startTime, endTime);
 		}
 	}
 }
