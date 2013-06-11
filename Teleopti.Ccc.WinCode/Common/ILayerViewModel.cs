@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Common
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }
         TimeSpan Interval { get; set; }
-        ILayer Layer { get; set; }
+        ILayer Layer { get; }
         DateTimePeriod Period { get; set; }
         Color DisplayColor { get; }
         string Description { get; }

@@ -6,6 +6,7 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -24,8 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IEventAggregator _eventAggregator = new EventAggregator();
 		private AbsenceLayerViewModel _target;
 		private MockRepository mocks;
-		private IVisualLayer _layerWithPayload;
-		private IPayload payload;
+		private ILayer<IAbsence> _layerWithPayload;
 		private IScheduleDay scheduleDay;
 		private CrossThreadTestRunner testRunner;
 		private PropertyChangedListener _listener;
@@ -82,20 +82,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_listener = new PropertyChangedListener();
 			_testerForCommandModels = new TesterForCommandModels();
 			mocks = new MockRepository();
-			_layerWithPayload = Mocks.StrictMock<IVisualLayer>();
-			payload = ActivityFactory.CreateActivity("dfsdf");
 			scheduleDay = Mocks.StrictMock<IScheduleDay>();
 			person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			Expect.Call(_layerWithPayload.Payload).Return(payload).Repeat.Any();
-			Expect.Call(_layerWithPayload.Period).PropertyBehavior().Return(_period).IgnoreArguments().Repeat.Any();
+			_layerWithPayload = new AbsenceLayer(new Absence(), _period);
 			Expect.Call(scheduleDay.Person).Return(person).Repeat.Any();
 			Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			Mocks.ReplayAll();
 
 			_layerWithPayload.Period = _period;
-			_target = new AbsenceLayerViewModel(_layerWithPayload);
+			_target = new AbsenceLayerViewModel(null,_layerWithPayload,null);
 
 			testRunner = new CrossThreadTestRunner();
 		}
@@ -125,7 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		
 			_target.SchedulePart = scheduleDay;
 
-			var payloadFromLayer = (IPayload)_layerWithPayload.Payload;
+			var payloadFromLayer = _layerWithPayload.Payload;
 
 			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(person, new DateOnly(2008, 12, 5)), _target.DisplayColor);
 			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person, new DateOnly(2008, 12, 5)).Name, _target.Description);
@@ -133,22 +130,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
 			Assert.IsNull(_target.Parent);
 			Assert.IsFalse(_target.IsChanged);
-			Assert.AreEqual(_layerWithPayload, _target.Layer);
 			Assert.AreSame(scheduleDay, _target.SchedulePart);
 			Assert.IsFalse(_target.CanMoveAll);
 			Assert.AreEqual(Opaque, _target.Opaque);
-			Mocks.BackToRecordAll();
-
-			ILayer testLayer = Mocks.StrictMock<ILayer>();
-
-			Mocks.ReplayAll();
 
 			_target.SchedulePart = scheduleDay;
-			_target.Layer = testLayer;
 			_target.Interval = TimeSpan.FromHours(1);
 
 			Assert.AreEqual(scheduleDay, _target.SchedulePart);
-			Assert.AreEqual(testLayer, _target.Layer);
 			Assert.AreEqual(TimeSpan.FromHours(1), _target.Interval);
 		}
 
@@ -196,8 +185,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanSetPeriod()
 		{
-		
-			Mocks.BackToRecord(_layerWithPayload);
 			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			Mocks.ReplayAll();
 
@@ -210,10 +197,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			
-			Mocks.BackToRecord(_layerWithPayload);
 			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			LastCall.Repeat.Twice();
 			Mocks.ReplayAll();
 
 			_target.IsChanged = true;

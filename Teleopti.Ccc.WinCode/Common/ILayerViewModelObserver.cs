@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
@@ -8,8 +7,6 @@ namespace Teleopti.Ccc.WinCode.Common
         void MoveAllLayers(ILayerViewModel sender,TimeSpan timeSpanToMove);
 
         void LayerMovedVertically(ILayerViewModel sender);
-
-        IRemoveLayerFromScheduleService RemoveService { get; }
 
         void RemoveActivity(ILayerViewModel sender);
 

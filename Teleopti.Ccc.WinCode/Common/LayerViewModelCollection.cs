@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WinCode.Common
         public IRemoveLayerFromScheduleService RemoveService
         {
             get { return _removeService; }
-            set { _removeService = value; }
         }
 
         public void RemoveActivity(ILayerViewModel sender)
