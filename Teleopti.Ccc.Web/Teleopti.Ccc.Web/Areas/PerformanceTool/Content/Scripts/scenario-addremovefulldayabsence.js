@@ -98,6 +98,7 @@ define([
             
             var startPromise = messagebroker.start();
             var personScheduleDayReadModelSubscription;
+            var personAbsenceSubscription;
             var result;
 
             var personScheduleDayUpdated = function () {
@@ -120,6 +121,8 @@ define([
                         result = null;
                         messagebroker.unsubscribe(personScheduleDayReadModelSubscription);
                         personScheduleDayReadModelSubscription = null;
+                        messagebroker.unsubscribe(personAbsenceSubscription);
+                        personAbsenceSubscription = null;
                     }
                 }
             };
@@ -129,12 +132,20 @@ define([
                 progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
 
+                $.each(iterations, function (i, e) {
+                    e.addCommandSentPromise = $.Deferred();
+                    e.removeCommandSentPromise = $.Deferred();
+                    e.commandsSentPromise = $.when(e.addCommandSentPromise, e.removeCommandSentPromise);
+                });
+
                 startPromise.done(function () {
                     
                     personScheduleDayReadModelSubscription = messagebroker.subscribe({
                         domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
+                            
                             console.log(notification);
+                            
                             var startDate = helpers.Date.ToMoment(notification.StartDate);
                             var endDate = helpers.Date.ToMoment(notification.EndDate);
                             var matchedIterations = $.grep(iterations, function(item) {
@@ -143,44 +154,85 @@ define([
 
                             if (matchedIterations.length > 0) {
                                 personScheduleDayUpdated();
-                                personScheduleDayUpdated();
                             }
                         }
                     });
+                    
+                    personAbsenceSubscription = messagebroker.subscribe({
+                        domainType: 'IPersonAbsence',
+                        callback: function (notification) {
+                            
+                            console.log(notification);
+
+                            var startDate = helpers.Date.ToMoment(notification.StartDate);
+                            var endDate = helpers.Date.ToMoment(notification.EndDate);
+                            var personAbsenceId = notification.DomainId;
+
+                            var matchedIterations = $.grep(iterations, function (item) {
+                                return notification.DomainReferenceId == item.personId;
+                                //return item.date.diff(startDate) == 0 && item.date.diff(endDate) == 0 && notification.DomainReferenceId == item.personId;
+                            });
+
+                            if (matchedIterations.length > 0) {
+
+                                $.ajax({
+                                    url: 'Anywhere/PersonScheduleCommand/RemovePersonAbsence',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    contentType: 'application/json',
+                                    cache: false,
+                                    data: JSON.stringify(
+                                        {
+                                            PersonAbsenceId: personAbsenceId
+                                        }),
+                                    success: function(data, textStatus, jqXHR) {
+
+                                    },
+                                    error: function() {
+                                        personScheduleDayFailed();
+                                    },
+                                    complete: function () {
+                                        i.removeCommandSentPromise.resolve();
+                                    }
+                                });
+
+                            }
 
 
-                    var addPromises = [];
+                        }
+                    });
 
-                    for (var i = 0; i < iterations.length; i++) {
-                        var iteration = iterations[i];
+                    $.each(iterations, function (i, e) {
+                        
+                        $.ajax({
+                            url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            cache: false,
+                            data: JSON.stringify({
+                                StartDate: e.date,
+                                EndDate: e.date,
+                                AbsenceId: e.absenceId,
+                                PersonId: e.personId
+                            }),
+                            success: function (data, textStatus, jqXHR) {
 
-                        var sendData = JSON.stringify({
-                            StartDate: iteration.date,
-                            EndDate: iteration.date,
-                            AbsenceId: iteration.absenceId,
-                            PersonId: iteration.personId
+                            },
+                            error: function () {
+                                personScheduleDayFailed();
+                                personScheduleDayFailed();
+                            },
+                            complete: function () {
+                                e.addCommandSentPromise.resolve();
+                            }
                         });
+                    });
 
-                        addPromises.push(
-                            $.ajax({
-                                url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
-                                type: 'POST',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                cache: false,
-                                data: sendData,
-                                success: function (data, textStatus, jqXHR) {
-
-                                },
-                                error: function () {
-                                    personScheduleDayFailed();
-                                    personScheduleDayFailed();
-                                }
-                            })
-                        );
-                    }
-
-                    $.when(addPromises).then(function () {
+                    var commandsSentPromises = $.map(iterations, function (e) {
+                        return e.commandsSentPromise;
+                    });
+                    $.when(commandsSentPromises).then(function () {
                         result.CommandsDone(true);
                     });
 
