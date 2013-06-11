@@ -12,7 +12,8 @@ define([
 	    var hub = $.connection.MessageBrokerHub;
 
 	    hub.client.onEventMessage = function (notification, route) {
-	        $.each(subscriptions, function (key, value) {
+	        var clone = subscriptions.slice(0);
+	        $.each(clone, function (key, value) {
 	            if (value.route == route) {
 	                value.callback(notification);
 	            }
