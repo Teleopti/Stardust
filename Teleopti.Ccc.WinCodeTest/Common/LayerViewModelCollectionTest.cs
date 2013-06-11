@@ -270,34 +270,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void VerifyCurrentAndNext()
-        {
-            DateTimePeriod nowPeriod = period;
-            DateTimePeriod nextPeriod = new DateTimePeriod(period.EndDateTime, period.EndDateTime.AddHours(1));
-            IPerson person = new Person();
-
-            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer nowLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
-            ActivityLayer nextLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("testAnother"), nextPeriod);
-            mainShift.LayerCollection.Add(nowLayer);
-            mainShift.LayerCollection.Add(nextLayer);
-            using (mocks.Record())
-            {
-                IScheduleDay part = createPart(person, new DateOnly(nowPeriod.StartDateTime));
-                part.AddMainShift(mainShift);
-                target.CreateViewModels(part);
-            }
-
-            using (mocks.Playback())
-            {
-                CompareLayersForPeriodAndPayLoad(nowLayer, target.CurrentLayer(nowPeriod.StartDateTime));
-                CompareLayersForPeriodAndPayLoad(nextLayer, target.NextLayer(nowPeriod.StartDateTime));
-                CompareLayersForPeriodAndPayLoad(nextLayer, target.CurrentLayer(nextPeriod.StartDateTime.Add(TimeSpan.FromMinutes(5))));
-                Assert.IsNull(target.NextLayer(nextPeriod.StartDateTime.Add(TimeSpan.FromMinutes(5))));
-            }
-        }
-
-        [Test]
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);

@@ -263,37 +263,5 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             return ((ILayerViewModel)layer).IsProjectionLayer;
         }
-
-        /// <summary>
-        /// Returns the current Layer (used for RTA)
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2009-06-25
-        /// </remarks>
-        public ILayer CurrentLayer(DateTime dateTime)
-        {
-            InParameter.VerifyDateIsUtc("dateTime", dateTime);
-            var ret = this.FirstOrDefault((l => (l.IsProjectionLayer && l.Period.Contains(dateTime))));
-            return ret != null ? ret.Layer : null;
-        }
-
-        /// <summary>
-        /// Returns the next Layer (used for RTA)
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2009-06-25
-        /// </remarks>
-        public ILayer NextLayer(DateTime dateTime)
-        {
-            InParameter.VerifyDateIsUtc("dateTime", dateTime);
-            var ret = this.FirstOrDefault(l => (l.IsProjectionLayer && l.Period.StartDateTime > dateTime));
-            return ret != null ? ret.Layer : null;
-        }
     }
 }
