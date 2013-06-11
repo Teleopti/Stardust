@@ -1,47 +1,40 @@
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
-	public class Select2Box : Control<SelectList>
+	public static class Select2Box
 	{
-		public Div Container
+		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)
 		{
-			get { return Element.Parent.DomContainer.Div(Find.BySelector("#s2id_" + Element.Id)); }
+			Browser.Interactions.Javascript(string.Format(
+				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
 		}
 
-		public string Value
+		public static void AssertSelectedOptionText(string select2Id, string optionText)
 		{
-			get { return Element.SelectedOption.Value; }
-		}
-		
-		public bool IsOpen
-		{
-			get
-			{
-				return !Container.Div(Find.BySelector(".select2-offscreen")).Exists;
-			}
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
 		}
 
-		public IEnumerable<string> OptionsTexts
+		public static void AssertSelectedOptionValue(string select2Id, string optionValue)
 		{
-			get
-			{
-				EventualAssert.That(() => IsOpen, Is.True);
-				var items = Element.DomContainer.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-				return from item in items select item.Children().First().Text;
-			}
-		}
-		
-		public void SelectItemByIdAndText(string id, string text)
-		{
-			Element.DomContainer.Eval("$('#" + Element.Id + "').select2('data', {id:'" + id + "', text:'" + text + "'}).trigger('change')");
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option[value=\"{0}\"]:selected').length;", optionValue), "1");
 		}
 
+		public static void AssertOptionExist(string select2Id, string optionText)
+		{
+			AssertIsOpen(select2Id);
+			Browser.Interactions.AssertExists(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
+		}
+
+		public static string FirstOptionText
+		{
+			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:first-child');"); }
+		}
+
+		public static string LastOptionText
+		{
+			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:last-child');"); }
+		}
 
 		public static void AssertIsOpen(string select2Id)
 		{
@@ -62,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		
 		public static void SelectItemByText(string select2Id, string text)
 		{
-			Browser.Interactions.AssertExists(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", text));
+			AssertOptionExist(select2Id, text);
 			Browser.Interactions.Javascript("$('.select2-result-selectable div:contains(\"" + text + "\")').trigger('mouseup');");
 			Browser.Interactions.AssertExists(string.Format("#s2id_{0} .select2-choice span:contains('{1}')", select2Id, text));
 		}

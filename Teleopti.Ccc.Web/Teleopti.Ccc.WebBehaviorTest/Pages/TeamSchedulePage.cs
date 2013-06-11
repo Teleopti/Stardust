@@ -92,8 +92,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return Document.Div(QuicklyFind.ByClass("tooltip-container"));
 		}
-
-		[FindBy(Id = "Team-Picker")]
-		public Select2Box TeamPicker { get; set; }
 	}
 }
