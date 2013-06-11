@@ -88,12 +88,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _personRequest.Request; }
         }
 
-        public DateOnlyPeriod RequestedDate
+        public string RequestedDate
         {
             get
             {
-	            return _personRequest.Request.Period.ToDateOnlyPeriod(TimeZoneInfo.Local);
-	            //return ResolveRequestDate();
+                return ResolveRequestDate();
             }
         }
 

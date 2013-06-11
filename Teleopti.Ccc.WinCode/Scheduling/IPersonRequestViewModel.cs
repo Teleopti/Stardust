@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         bool IsWithinSchedulePeriod { get; }
         IPersonRequest PersonRequest { get; }
-        DateOnlyPeriod RequestedDate { get; }
+        string RequestedDate { get; }
         string Name { get; }
         int Seniority { get; }
         string RequestType { get; }

@@ -1176,7 +1176,6 @@
       <DependentUpon>TimeZoomView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ColorConverterSoft.cs" />
-    <Compile Include="Converters\DateOnlyPeriodConverter.cs" />
     <Compile Include="Converters\DateTimeResolutionConverter.cs" />
     <Compile Include="Converters\DateTimeToDateConverter.cs" />
     <Compile Include="Converters\DateTimeToHourConverter.cs" />

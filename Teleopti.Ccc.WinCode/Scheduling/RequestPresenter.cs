@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var personRequestStartDate = element.PersonRequest.Request.Period.StartDateTime;
             var personRequestEndDate = element.PersonRequest.Request.Period.EndDateTime;
 
-            if (requestedDate.ToString().Contains(filterText))
+            if (requestedDate.Contains(filterText))
                 return true;
 
             if (foundDateTextIfAny(personRequestStartDate, personRequestEndDate, filterText))

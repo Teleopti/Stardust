@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (readModelLayers.Any())
 				LoggingSvc.InfoFormat("Found {0} layers", readModelLayers.Count);
 			else
-				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (readModelLayers.Any())
 				LoggingSvc.InfoFormat("Found {0} layers", readModelLayers.Count);
 			else
-				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
