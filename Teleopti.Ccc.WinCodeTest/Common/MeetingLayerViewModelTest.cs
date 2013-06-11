@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             ILayer meetingLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("test"), Period);
             MockRepository mocks = new MockRepository();
             IShift shift = mocks.StrictMock<IShift>();
-            MeetingLayerViewModel model = new MeetingLayerViewModel(meetingLayer,shift,null);
+            MeetingLayerViewModel model = new MeetingLayerViewModel(meetingLayer,null);
             using (mocks.Record())
             {
                 Expect.Call(shift.LayerCollection).Repeat.Never();
