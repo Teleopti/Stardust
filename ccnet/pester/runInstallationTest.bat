@@ -10,4 +10,4 @@ set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 copy "%outputFile%" "%rootdir%\..\..\%~n0.xml"
 
 ::For test by Mr.Ryding
-notepad "%rootdir%\..\..\%~n0.xml"
+notepad "%rootdir%\..\..\nunit.%~n0n.PowerShell.xml"

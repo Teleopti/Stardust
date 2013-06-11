@@ -26,7 +26,7 @@ for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\
 CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" %TestPath%"
 
 ::Copy to "main" for ccnet to read
-COPY "%outputFile%" "%rootdir%\..\..\nunitPowerShell.xml"
+COPY "%outputFile%" "%rootdir%\..\..\nunit.RunAllTests.PowerShell.xml"
 
 goto :eof
 
