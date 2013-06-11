@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private DateTimePeriod _period;
 	    private bool _expectMovePermitted = true;
      
-	
-
         [Test]
         public void VerifyCannotMoveAbsenceLayerVertical()
         {

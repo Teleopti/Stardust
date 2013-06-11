@@ -18,56 +18,48 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     public class MeetingLayerViewModelTest 
     {
        
-
-        private LayerViewModel CreateTestInstance(ILayer layer)
-        {
-            return new MeetingLayerViewModel(layer,null);
-        }
-
-	    private bool _expectMovePermitted = false;
-
-	    private bool _expectIsPayloadChangePermitted = false;
-
-		private LayerViewModel target;
-		private MockRepository mocks;
-		private ILayer layerWithPayload;
-		private IPayload payload;
-		private IScheduleDay scheduleDay;
+	    private bool _expectMovePermitted;
+		private MeetingLayerViewModel _target;
+		private MockRepository _mocks;
+		private ILayer _layerWithPayload;
+		private IPayload _payload;
+		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner testRunner;
 		private PropertyChangedListener _listener;
-		private IPerson person;
-		protected TesterForCommandModels TesterForCommandModels { get; private set; }
-		protected DateTimePeriod Period { get; private set; }
+		private IPerson _person;
+	    private TesterForCommandModels _testerForCommandModels;
+	    private DateTimePeriod _period;
+
 		[SetUp]
 		public void Setup()
 		{
+			_expectMovePermitted = false;
 			_listener = new PropertyChangedListener();
-			TesterForCommandModels = new TesterForCommandModels();
-			mocks = new MockRepository();
-			layerWithPayload = mocks.StrictMock<ILayer<IPayload>>();
-			payload = ActivityFactory.CreateActivity("dfsdf");
-			scheduleDay = mocks.StrictMock<IScheduleDay>();
-			person = PersonFactory.CreatePerson();
-			Period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			Expect.Call(layerWithPayload.Payload).Return(payload).Repeat.Any();
-			Expect.Call(layerWithPayload.Period).PropertyBehavior().Return(Period).IgnoreArguments().Repeat.Any();
-			Expect.Call(scheduleDay.Person).Return(person).Repeat.Any();
-			Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
+			_testerForCommandModels = new TesterForCommandModels();
+			_mocks = new MockRepository();
+			_layerWithPayload = _mocks.StrictMock<ILayer<IPayload>>();
+			_payload = ActivityFactory.CreateActivity("dfsdf");
+			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_person = PersonFactory.CreatePerson();
+			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
+			Expect.Call(_layerWithPayload.Payload).Return(_payload).Repeat.Any();
+			Expect.Call(_layerWithPayload.Period).PropertyBehavior().Return(_period).IgnoreArguments().Repeat.Any();
+			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
-			mocks.ReplayAll();
-
+			_mocks.ReplayAll();
+			_layerWithPayload.Period = _period;
+			_target = new MeetingLayerViewModel(_layerWithPayload,null);
 			testRunner = new CrossThreadTestRunner();
 		}
-
-		
 
 		[Test]
 		public void VerifyCanMoveUpDoesNotCheckShiftWhenMoveNotPermitted()
 		{
-			ILayer meetingLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("test"), Period);
-			MockRepository mocks = new MockRepository();
-			IShift shift = mocks.StrictMock<IShift>();
-			MeetingLayerViewModel model = new MeetingLayerViewModel(meetingLayer, null);
+			ILayer meetingLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("test"), _period);
+			var mocks = new MockRepository();
+			var shift = mocks.StrictMock<IShift>();
+			var model = new MeetingLayerViewModel(meetingLayer, null);
 			using (mocks.Record())
 			{
 				Expect.Call(shift.LayerCollection).Repeat.Never();
@@ -82,119 +74,105 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCorrectDescription()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			Assert.AreEqual(UserTexts.Resources.Meeting, target.LayerDescription);
+			Assert.AreEqual(UserTexts.Resources.Meeting, _target.LayerDescription);
 		}
 
 
 		[Test]
 		public void VerifyProperties()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			target.SchedulePart = scheduleDay;
+			_target.SchedulePart = _scheduleDay;
 
-			var payloadFromLayer = (IPayload)layerWithPayload.Payload;
+			var payloadFromLayer = (IPayload)_layerWithPayload.Payload;
 
-			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(person, new DateOnly(2008, 12, 5)), target.DisplayColor);
-			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person, new DateOnly(2008, 12, 5)).Name, target.Description);
-			Assert.AreEqual(layerWithPayload.Period, target.Period);
-			Assert.AreEqual(TimeSpan.FromMinutes(15), target.Interval);
-			Assert.IsNull(target.Parent);
-			Assert.IsFalse(target.IsChanged);
-			Assert.AreEqual(layerWithPayload, target.Layer);
-			Assert.AreSame(scheduleDay, target.SchedulePart);
-			Assert.IsFalse(target.CanMoveAll);
-			Assert.AreEqual(false, target.Opaque);
-			mocks.BackToRecordAll();
+			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(_person, new DateOnly(2008, 12, 5)), _target.DisplayColor);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(_person, new DateOnly(2008, 12, 5)).Name, _target.Description);
+			Assert.AreEqual(_layerWithPayload.Period, _target.Period);
+			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
+			Assert.IsNull(_target.Parent);
+			Assert.IsFalse(_target.IsChanged);
+			Assert.AreEqual(_layerWithPayload, _target.Layer);
+			Assert.AreSame(_scheduleDay, _target.SchedulePart);
+			Assert.IsFalse(_target.CanMoveAll);
+			Assert.AreEqual(false, _target.Opaque);
+			_mocks.BackToRecordAll();
 
-			ILayer testLayer = mocks.StrictMock<ILayer>();
+			ILayer testLayer = _mocks.StrictMock<ILayer>();
 
-			mocks.ReplayAll();
+			_mocks.ReplayAll();
 
-			target.SchedulePart = scheduleDay;
-			target.Layer = testLayer;
-			target.Interval = TimeSpan.FromHours(1);
+			_target.SchedulePart = _scheduleDay;
+			_target.Layer = testLayer;
+			_target.Interval = TimeSpan.FromHours(1);
 
-			Assert.AreEqual(scheduleDay, target.SchedulePart);
-			Assert.AreEqual(testLayer, target.Layer);
-			Assert.AreEqual(TimeSpan.FromHours(1), target.Interval);
+			Assert.AreEqual(_scheduleDay, _target.SchedulePart);
+			Assert.AreEqual(testLayer, _target.Layer);
+			Assert.AreEqual(TimeSpan.FromHours(1), _target.Interval);
 		}
 
 		[Test]
 		public void VerifyCanMoveAll()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
 			bool succeeded = false;
-			target.PropertyChanged += (x, y) =>
+			_target.PropertyChanged += (x, y) =>
 			{
 				succeeded = true;
 				Assert.AreEqual("CanMoveAll", y.PropertyName);
 			};
-			target.CanMoveAll = true;
+			_target.CanMoveAll = true;
 			Assert.IsTrue(succeeded);
 		}
 
 		[Test]
 		public void VerifyIsSelected()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			Assert.IsFalse(target.IsSelected);
+			Assert.IsFalse(_target.IsSelected);
 
-			_listener.ListenTo(target);
-			target.IsSelected = true;
+			_listener.ListenTo(_target);
+			_target.IsSelected = true;
 			Assert.IsTrue(_listener.HasFired("IsSelected"));
-			Assert.IsTrue(target.IsSelected);
+			Assert.IsTrue(_target.IsSelected);
 
 		}
 
 		[Test]
 		public void VerifyCanSetIsChanged()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
 			bool succeeded = false;
-			target.PropertyChanged += (x, y) =>
+			_target.PropertyChanged += (x, y) =>
 			{
 				succeeded = true;
 				Assert.AreEqual("IsChanged", y.PropertyName);
 			};
-			target.IsChanged = true;
+			_target.IsChanged = true;
 			Assert.IsTrue(succeeded);
 		}
 
 		[Test]
 		public void VerifyCanSetPeriod()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			mocks.BackToRecord(layerWithPayload);
-			layerWithPayload.Period = Period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			mocks.ReplayAll();
+			_mocks.BackToRecord(_layerWithPayload);
+			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
+			_mocks.ReplayAll();
 
-			_listener.ListenTo(target);
+			_listener.ListenTo(_target);
 
-			target.Period = Period.ChangeStartTime(TimeSpan.FromMinutes(-5));
+			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			Assert.IsTrue(_listener.HasFired("Period"));
 		}
 
 		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			mocks.BackToRecord(layerWithPayload);
-			layerWithPayload.Period = Period.ChangeStartTime(TimeSpan.FromMinutes(-5));
+			_mocks.BackToRecord(_layerWithPayload);
+			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			LastCall.Repeat.Twice();
-			mocks.ReplayAll();
+			_mocks.ReplayAll();
 
-			target.IsChanged = true;
-			target.Period = Period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			target.UpdatePeriod();
-			Assert.IsFalse(target.IsChanged);
+			_target.IsChanged = true;
+			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
+			_target.UpdatePeriod();
+			Assert.IsFalse(_target.IsChanged);
 		}
 
 		[Test]
@@ -203,22 +181,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.SchedulePart = scheduleDay;
-					target.StartTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.SchedulePart = _scheduleDay;
+					_target.StartTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
-		private DateTimePeriodPanel GetPanel()
+		private DateTimePeriodPanel getPanel()
 		{
-			DateTimePeriodPanel panel = new DateTimePeriodPanel();
+			var panel = new DateTimePeriodPanel();
 			FieldInfo fieldSize = typeof(UIElement).GetField("_size", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 			fieldSize.SetValue(panel, new System.Windows.Size(10, 2));
 			DateTimePeriodPanel.SetClipPeriod(panel, false);
-			DateTimePeriodPanel.SetDateTimePeriod(panel, Period);
+			DateTimePeriodPanel.SetDateTimePeriod(panel, _period);
 			return panel;
 		}
 
@@ -228,12 +204,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.SchedulePart = scheduleDay;
-					target.EndTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.SchedulePart = _scheduleDay;
+					_target.EndTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -243,12 +217,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.SchedulePart = scheduleDay;
-					target.TimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.SchedulePart = _scheduleDay;
+					_target.TimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -258,11 +230,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.StartTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.StartTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -272,11 +242,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.EndTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.EndTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -286,48 +254,40 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					layerWithPayload.Period = Period;
-					target = CreateTestInstance(layerWithPayload);
-					DateTimePeriodPanel panel = GetPanel();
-					target.TimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, target.IsChanged);
+					DateTimePeriodPanel panel = getPanel();
+					_target.TimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
 		[Test]
 		public void VerifyMoveUpDownReturnsFalseIfParentCollectionIsNull()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			Assert.IsFalse(target.CanMoveUp);
-			Assert.IsFalse(target.CanMoveDown);
+			Assert.IsFalse(_target.CanMoveUp);
+			Assert.IsFalse(_target.CanMoveDown);
 		}
 
 		[Test]
 		public void VerifyCanExecuteDeleteCommand()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			Assert.AreEqual(TesterForCommandModels.CanExecute(target.DeleteCommand), target.IsMovePermitted());
-			Assert.AreEqual(target.DeleteCommand.Text, UserTexts.Resources.Delete);
+			Assert.AreEqual(_testerForCommandModels.CanExecute(_target.DeleteCommand), _target.IsMovePermitted());
+			Assert.AreEqual(_target.DeleteCommand.Text, UserTexts.Resources.Delete);
 		}
 
 		[Test]
 		public void VerifyPeriodElapsedTime()
 		{
-			layerWithPayload.Period = Period;
-			target = CreateTestInstance(layerWithPayload);
-			PropertyChangedListener listener = new PropertyChangedListener().ListenTo(target);
-			target.Period = target.Period.MovePeriod(TimeSpan.FromHours(2));
+			PropertyChangedListener listener = new PropertyChangedListener().ListenTo(_target);
+			_target.Period = _target.Period.MovePeriod(TimeSpan.FromHours(2));
 			Assert.IsTrue(listener.HasFired("ElapsedTime"));
-			Assert.AreEqual(target.Period.ElapsedTime(), target.ElapsedTime);
+			Assert.AreEqual(_target.Period.ElapsedTime(), _target.ElapsedTime);
 
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			mocks.VerifyAll();
+			_mocks.VerifyAll();
 		}
     }
 }
