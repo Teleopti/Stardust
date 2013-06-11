@@ -5,8 +5,10 @@ using System.Text;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -72,14 +74,21 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         {
             //Meetings should never move for now, only when using MeetingEditor!
 
-            MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(_actLayer,_eventAggregator);
-            MeetingLayerViewModel anohterMeetingLayerViewModel = new MeetingLayerViewModel(_actLayer, _eventAggregator);
+            MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(null, createPersonMeeting(),_eventAggregator);
+            MeetingLayerViewModel anohterMeetingLayerViewModel = new MeetingLayerViewModel(null, createPersonMeeting(), _eventAggregator);
 
             Assert.IsFalse(meetingLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel),"not moved when mainshift is moved");
             Assert.IsFalse(meetingLayerViewModel.ShouldBeIncludedInGroupMove(anohterMeetingLayerViewModel), "not moved when another meeting is moved");
             Assert.IsFalse(meetingLayerViewModel.ShouldBeIncludedInGroupMove(meetingLayerViewModel), "not moved when same is moved");
 
         }
+
+			private static IPersonMeeting createPersonMeeting()
+			{
+				var meetingPerson = new MeetingPerson(new Person(), false);
+				var meeting = new Meeting(new Person(), new[] { meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
+				return new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			}
 
         [Test]
         public void VerifyOvertimeLayerViewModelGroupMove()
