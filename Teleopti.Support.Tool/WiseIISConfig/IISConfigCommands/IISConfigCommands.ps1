@@ -235,17 +235,22 @@ function Install-TeleoptiCCCServer
 {
     param (
     [string]$BatchFile,
-    [string]$MsiFile,
-    [string]$machineConfig,
-    [string]$WinUser,
-    [string]$WinPassword
+    [array]$ArgArray
     )
-    [string]$ErrorMessage = "Execution of command failed"
-    & "$BatchFile" "$MsiFile" "$machineConfig" "$WinUser" "$WinPassword"
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
-	return $LastExitCode
+	write-host $BatchFile
+	write-host $ArgArray
+	
+	Start-Process -FilePath $BatchFile -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	$stdout=Get-Content stdout.log
+	$stderr=Get-Content stderr.log
+	write-host $stderr
+	write-host $stdout
+	Remove-Item stdout.log
+	Remove-Item stderr.log
+	
+#LastExitCode does not work with Start-Process
+#skipping error handling at MSI-level
+
 }
 
 function Copy-ZippedMsi{
@@ -300,18 +305,6 @@ function Create-LocalGroup
 		$objUser = $objOU.Create("Group", $groupName)
 		$objUser.SetInfo()
 	}
-}
-
-function Add-CccLicenseToDemo
-{
-    $dir = Split-Path $MyInvocation.ScriptName
-    $batchFile = "$dir\Add-CccLicenseToDemo.bat"
-    
-    [string]$ErrorMessage = "Add-CccLicenseToDemo failed!"
-    & "$BatchFile" | Out-Null
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
 }
 
 function Stop-TeleoptiCCC
