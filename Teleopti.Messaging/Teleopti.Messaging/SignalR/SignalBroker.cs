@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -24,7 +24,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private SignalWrapper _wrapper;
 		private readonly object WrapperLock = new object();
-		private static ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -35,7 +35,18 @@ namespace Teleopti.Messaging.SignalR
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
-		}
+
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+        }
+
+        private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            if (!e.Observed)
+            {
+                Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+                e.SetObserved();
+            }
+        }
 
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
@@ -61,43 +72,47 @@ namespace Teleopti.Messaging.SignalR
 			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
 		}
 
-private IEnumerable<Notification> CreateNotifications(string dataSource, string businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-{
-	IList<Type> types;
-	if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
-	{
-		var referenceObjectTypeString = (referenceObjectType == null)
-		                                	? null
-		                                	: FilterManager.LookupType(referenceObjectType);
-		var eventStartDateString = Subscription.DateToString(eventStartDate);
-		var eventEndDateString = Subscription.DateToString(eventEndDate);
-		var moduleIdString = Subscription.IdToString(moduleId);
-		var domainObjectIdString = Subscription.IdToString(domainObjectId);
-		var domainQualifiedTypeString = types[0].AssemblyQualifiedName;
-		var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
-		var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
-		foreach (var type in types)
-		{
-			yield return new Notification
-			             	{
-			             		StartDate = eventStartDateString,
-			             		EndDate = eventEndDateString,
-			             		DomainId = domainObjectIdString,
-			             		DomainType = type.Name,
-			             		DomainQualifiedType = domainQualifiedTypeString,
-			             		DomainReferenceId = domainReferenceIdString,
-			             		DomainReferenceType = referenceObjectTypeString,
-			             		ModuleId = moduleIdString,
-			             		DomainUpdateType = (int) updateType,
-			             		DataSource = dataSource,
-			             		BusinessUnitId = businessUnitId,
-			             		BinaryData = domainObjectString
-			             	};
-		}
-}
-}
+	    private IEnumerable<Notification> CreateNotifications(string dataSource, string businessUnitId,
+	                                                          DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
+	                                                          Guid referenceObjectId, Type referenceObjectType,
+	                                                          Guid domainObjectId, Type domainObjectType,
+	                                                          DomainUpdateType updateType, byte[] domainObject)
+	    {
+	        IList<Type> types;
+	        if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
+	        {
+	            var referenceObjectTypeString = (referenceObjectType == null)
+	                                                ? null
+	                                                : FilterManager.LookupType(referenceObjectType);
+	            var eventStartDateString = Subscription.DateToString(eventStartDate);
+	            var eventEndDateString = Subscription.DateToString(eventEndDate);
+	            var moduleIdString = Subscription.IdToString(moduleId);
+	            var domainObjectIdString = Subscription.IdToString(domainObjectId);
+	            var domainQualifiedTypeString = types[0].AssemblyQualifiedName;
+	            var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
+	            var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
+	            foreach (var type in types)
+	            {
+	                yield return new Notification
+	                    {
+	                        StartDate = eventStartDateString,
+	                        EndDate = eventEndDateString,
+	                        DomainId = domainObjectIdString,
+	                        DomainType = type.Name,
+	                        DomainQualifiedType = domainQualifiedTypeString,
+	                        DomainReferenceId = domainReferenceIdString,
+	                        DomainReferenceType = referenceObjectTypeString,
+	                        ModuleId = moduleIdString,
+	                        DomainUpdateType = (int) updateType,
+	                        DataSource = dataSource,
+	                        BusinessUnitId = businessUnitId,
+	                        BinaryData = domainObjectString
+	                    };
+	            }
+	        }
+	    }
 
-		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+	    public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
 			var notificationList = CreateNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
 			                                           eventEndDate, moduleId, referenceObjectId,

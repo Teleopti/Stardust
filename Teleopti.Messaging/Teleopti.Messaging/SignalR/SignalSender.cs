@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Security;
+using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
+using log4net;
 using Teleopti.Messaging.Coders;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
@@ -25,9 +26,22 @@ namespace Teleopti.Messaging.SignalR
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
+
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 		}
 
-		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+	    {
+	        if (!e.Observed)
+            {
+                var logger = LogManager.GetLogger(typeof(SignalSender));
+            
+                logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+                e.SetObserved();
+            }
+	    }
+
+	    private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
