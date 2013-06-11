@@ -48,11 +48,5 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
         }
 
-        [Test]
-        public void VerifyOverloadedConstructor()
-        {
-            ILayer meetingLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("test"), Period);
-            Assert.IsNotNull(new MeetingLayerViewModel(null,meetingLayer,null));
-        }
     }
 }

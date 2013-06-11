@@ -18,11 +18,6 @@ namespace Teleopti.Ccc.WinCode.Common
         {
         }
 
-        public MeetingLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
-            : base(observer,layer, null,eventAggregator)
-        {
-        }
-
         public MeetingLayerViewModel(ILayerViewModelObserver observer, IPersonMeeting meeting, IEventAggregator eventAggregator)
             : base(observer, meeting.ToLayer(), null,eventAggregator)
         {
