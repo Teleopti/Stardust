@@ -11,20 +11,25 @@ define([
 	    this.Text = text;
 	    
 	    this.Target = ko.observable(0);
-	    this.Count = ko.observable(0);
+	    this.Successes = ko.observable(null);
+	    this.Failures = ko.observable(null);
 
 	    this.Reset = function() {
-	        self.Count(0);
+	        self.Successes(null);
+	        self.Failures(null);
 	    };
 	    
-	    this.Increment = function() {
-	        self.Count(self.Count() + 1);
+	    this.Success = function() {
+	        self.Successes((self.Successes() | 0) + 1);
 	    };
 	    
-	    this.Value = ko.computed(function() {
-	        return self.Count() + " / " + self.Target();
-	    });
+	    this.Failure = function () {
+	        self.Failures((self.Failures() | 0) + 1);
+	    };
 
+	    this.Count = ko.computed(function() {
+	        return (self.Successes() | 0) + (self.Failures() | 0);
+	    });
 	};
 
 });

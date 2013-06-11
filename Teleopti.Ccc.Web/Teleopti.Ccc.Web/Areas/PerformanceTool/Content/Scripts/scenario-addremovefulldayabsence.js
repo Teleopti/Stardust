@@ -101,11 +101,16 @@ define([
             var result;
 
             var personScheduleDayUpdated = function () {
-                progressItemPersonScheduleDayReadModel.Increment();
+                progressItemPersonScheduleDayReadModel.Success();
                 calculateRunDone();
             };
 
-            var calculateRunDone = function() {
+            var personScheduleDayFailed = function () {
+                progressItemPersonScheduleDayReadModel.Failure();
+                calculateRunDone();
+            };
+
+            var calculateRunDone = function () {
                 var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
                 if (calculatedInterationsDone > result.IterationsDone()) {
                     result.IterationsDone(calculatedInterationsDone);
@@ -167,8 +172,8 @@ define([
 
                                 },
                                 error: function () {
-                                    personScheduleDayUpdated();
-                                    personScheduleDayUpdated();
+                                    personScheduleDayFailed();
+                                    personScheduleDayFailed();
                                 }
                             })
                         );

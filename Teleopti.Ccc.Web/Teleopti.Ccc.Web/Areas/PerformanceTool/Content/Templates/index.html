@@ -102,7 +102,9 @@
                     <h2>Progress</h2>
                     <!-- ko foreach: Scenario().ProgressItems -->
                     <p class="message-count">
-                        <span class="badge badge-info" data-bind="text: Value"></span>
+                        <span class="badge badge-success" data-bind="text: Successes"></span>
+                        <span class="badge badge-important" data-bind="text: Failures"></span>
+                        <span class="badge badge-info" data-bind="text: Target"></span>
                         <span data-bind="text: Text"></span>
                     </p>
                     <!-- /ko -->
