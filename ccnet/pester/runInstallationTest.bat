@@ -7,4 +7,4 @@ set currentPester=2.0.3
 call "%rootdir%\run.bat" "%rootdir%\..\..\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands"
 
 set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
-copy "%outputFile%" "%rootdir%\..\..\%~n0.xml"
+copy "%outputFile%" "%rootdir%\..\..\nunit.%~n0.PowerShell.xml"
