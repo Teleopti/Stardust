@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 orderby l.OrderIndex
                 select l;
 
-            MainShiftLayerViewModel highest = new MainShiftLayerViewModel(layers.First(), shift, _eventAggregator);
-            MainShiftLayerViewModel lowest = new MainShiftLayerViewModel(layers.Last(), shift, _eventAggregator);
+            MainShiftLayerViewModel highest = new MainShiftLayerViewModel(null, layers.First(), shift, _eventAggregator);
+            MainShiftLayerViewModel lowest = new MainShiftLayerViewModel(null, layers.Last(), shift, _eventAggregator);
             #endregion
 
             Assert.IsTrue(_models.CanExecute(highest.MoveDownCommand), "Can move down because there are other layers below");

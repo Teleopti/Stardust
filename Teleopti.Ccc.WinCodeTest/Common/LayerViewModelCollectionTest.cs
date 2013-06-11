@@ -389,8 +389,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(firstLayer.First(), shift, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(firstLayer.Last(), shift, null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, firstLayer.First(), shift, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, firstLayer.Last(), shift, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(overtime, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(absenceLayer, null);
