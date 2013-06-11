@@ -301,8 +301,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
             ILayer layer = new ActivityLayer(new Activity("for test"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-            ILayerViewModel model1 = new MainShiftLayerViewModel(layer, null) { Interval = TimeSpan.FromMinutes(12) };
-            ILayerViewModel model2 = new MainShiftLayerViewModel(layer, null) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(layer) { Interval = TimeSpan.FromMinutes(12) };
+            ILayerViewModel model2 = new MainShiftLayerViewModel(layer) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, firstLayer.First(), shift, null);
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, firstLayer.Last(), shift, null);
-			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(overtime, null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(overtime);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
             AbsenceLayerViewModel absenceLayerViewModel = AbsenceLayerViewModel.CreateForProjection(absenceLayer);
             MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(fakeActivityLayer, null);

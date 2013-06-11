@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(ILayer layer) : base(layer,null)
+            public ModelForTest(ILayer layer) : base(layer)
             {
                 MovePermitted = true;
             }

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
-            return new MainShiftLayerViewModel(layer, null);
+            return new MainShiftLayerViewModel(layer);
         }
 
         protected override bool ExpectMovePermitted
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyCannotMoveUpOrDownIfNoShift()
         {
-            MainShiftLayerViewModel modelWithoutParent = new MainShiftLayerViewModel(new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), Period), null);
+            MainShiftLayerViewModel modelWithoutParent = new MainShiftLayerViewModel(new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), Period));
             TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
             Assert.IsNull(modelWithoutParent.Parent);
             Assert.IsFalse(testerForCommandModels.CanExecute(modelWithoutParent.MoveUpCommand));

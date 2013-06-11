@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
-            return new OvertimeLayerViewModel(layer,null);
+            return new OvertimeLayerViewModel(layer);
         }
 
         protected override bool ExpectMovePermitted
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             Mocks.ReplayAll();
 
-            var target = new OvertimeLayerViewModel(overtimeLayer,null);
+            var target = new OvertimeLayerViewModel(overtimeLayer);
             Assert.AreEqual("Qualified overtime",target.LayerDescription);
         }
     }

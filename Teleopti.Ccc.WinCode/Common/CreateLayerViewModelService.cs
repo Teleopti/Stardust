@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.WinCode.Common
     public class CreateLayerViewModelService : ICreateLayerViewModelService
     {
 
-        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, IEventAggregator eventAggregator, TimeSpan interval)
+        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, TimeSpan interval)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, eventAggregator);
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
             else if (visualLayer.Payload is IAbsence) visualLayerViewModel = AbsenceLayerViewModel.CreateForProjection(visualLayer);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, eventAggregator);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
             ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
 
             visualLayerViewModel.Interval = interval;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)
                     {
-                        var viewModel = createViewModelFromVisualLayer(visualLayer, eventAggregator, interval);
+                        var viewModel = createViewModelFromVisualLayer(visualLayer, interval);
                         viewModel.SchedulePart = scheduleDay;
                         retList.Add(viewModel);
                     }
@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.WinCode.Common
             return retList;
         }
 
-        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, IEventAggregator eventAggregator, TimeSpan interval)
+        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, TimeSpan interval)
         {
             IList<ILayerViewModel> projectionViewModels = new List<ILayerViewModel>();
             if (projectionSource != null)
             {
                 foreach (IVisualLayer visualLayer in projectionSource.ProjectionService().CreateProjection())
                 {
-                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, eventAggregator, interval));
+                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, interval));
                 }
             }
             return projectionViewModels;

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyThatSelectedLayerStillSelectedByCallingWithASelectorIfALayerIsSelected()
         {
             MainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("dummy"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-            ILayerViewModel layer = new MainShiftLayerViewModel(mainShiftActivityLayer, _eventAggregator);
+            ILayerViewModel layer = new MainShiftLayerViewModel(mainShiftActivityLayer);
             _shifteditorViewModel.SelectedLayer = layer;
 
             using (_mocker.Record())

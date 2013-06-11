@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             _actLayer = new ActivityLayer(ActivityFactory.CreateActivity("test"), _period);
 
-            _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer, _eventAggregator);
+            _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
             _absenceLayerViewModel = AbsenceLayerViewModel.CreateForProjection(new AbsenceLayer(_abs, _period));
-            _overtimeLayerViewModel = new OvertimeLayerViewModel(_actLayer, _eventAggregator);
+            _overtimeLayerViewModel = new OvertimeLayerViewModel(_actLayer);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyMainShiftLayerViewModelGroupMove()
         {
-            MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer, _eventAggregator);
+            MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
 
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move when an absecnelayerviewmodel is moved");
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "Should not move when its the SAME layer");
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyOvertimeLayerViewModelGroupMove()
         {
-            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(_actLayer, _eventAggregator);
+            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(_actLayer);
 
             Assert.IsFalse(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel), "not moved when absencelayerviewmodel layer is moved");
             Assert.IsTrue(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(anotherOvertimeLayerViewModel), "should be moved when another overtime layer is moved");

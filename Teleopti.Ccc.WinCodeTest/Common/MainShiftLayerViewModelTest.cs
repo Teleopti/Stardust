@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
-            return new MainShiftLayerViewModel(layer, null);
+            return new MainShiftLayerViewModel(layer);
         }
 
         protected override bool ExpectMovePermitted

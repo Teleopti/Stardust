@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 Remove(layer);
             }
 
-            _createLayerViewModelService.CreateProjectionViewModelsFromProjectionSource(projectionSource, _eventAggregator, Interval).ForEach(Add);
+            _createLayerViewModelService.CreateProjectionViewModelsFromProjectionSource(projectionSource, Interval).ForEach(Add);
         }
 
         public void AddFromProjection(IScheduleRange range, DateTimePeriod period)
@@ -249,9 +249,9 @@ namespace Teleopti.Ccc.WinCode.Common
         private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, _eventAggregator);
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
             else if (visualLayer.Payload is IAbsence) visualLayerViewModel = AbsenceLayerViewModel.CreateForProjection(visualLayer);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, _eventAggregator);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
             ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
 
             visualLayerViewModel.Interval = Interval;
