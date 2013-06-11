@@ -1,4 +1,6 @@
 @echo off
+powershell set-executionpolicy unrestricted
+
 SETLOCAL
 set rootdir=%~dp0
 SET rootdir=%rootdir:~0,-1%
