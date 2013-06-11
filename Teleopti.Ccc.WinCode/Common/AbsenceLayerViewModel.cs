@@ -7,19 +7,15 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class AbsenceLayerViewModel : LayerViewModel
     {
-	    private AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
+	    public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
 				: base(observer, layer, null, eventAggregator)
 			{
 			}
-			public static AbsenceLayerViewModel CreateForProjection(IVisualLayer layer)
-			{
-				return new AbsenceLayerViewModel(null, layer, null);
-			}
-			public static AbsenceLayerViewModel CreateForSchedule(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
-			{
-				return new AbsenceLayerViewModel(observer, layer, eventAggregator);
-			}
 
+			public AbsenceLayerViewModel(IVisualLayer layer)
+				: base(null, layer, null, null)
+			{
+			}
 
         public override string LayerDescription
         {
