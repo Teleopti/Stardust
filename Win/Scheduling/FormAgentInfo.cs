@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -297,11 +298,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
 
-	        createAndAddItem(listViewRestrictions, Resources.OvertimeAvailability, "", 1);
-			var scheduleDay = getScheduleDay(person, dateOnly, state);
-			if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
+	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability))
+	        {
+		        createAndAddItem(listViewRestrictions, Resources.OvertimeAvailability, "", 1);
+		        var scheduleDay = getScheduleDay(person, dateOnly, state);
+		        if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
+	        }
 
-            createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
+	        createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
             handlePreferences(extractor.PreferenceList);
             createAndAddItem(listViewRestrictions, Resources.ShiftCategoryLimitations, "", 1);
             handleShiftCategoryLimitations(person, dateOnly);
