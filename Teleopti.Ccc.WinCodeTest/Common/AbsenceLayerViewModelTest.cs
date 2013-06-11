@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Mocks.ReplayAll();
 
 			_layerWithPayload.Period = _period;
-			_target = new AbsenceLayerViewModel(_layerWithPayload,null);
+			_target = AbsenceLayerViewModel.CreateForProjection(_layerWithPayload);
 
 			testRunner = new CrossThreadTestRunner();
 		}
