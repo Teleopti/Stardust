@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             PersonRequestViewModel shiftTradePersonRequestViewModel =
                 new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
-            Assert.IsTrue(shiftTradePersonRequestViewModel.RequestedDate.Contains(UserTexts.Resources.MultipleValuesParanteses));
+            Assert.IsTrue(shiftTradePersonRequestViewModel.RequestedDate.ToString().Contains(UserTexts.Resources.MultipleValuesParanteses));
         }
 
         [Test]

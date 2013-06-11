@@ -4,7 +4,8 @@
     xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
 	xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
-    guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
+             xmlns:converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
+             guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
 <UserControl.Resources>
                 <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
@@ -12,9 +13,11 @@
             <ResourceDictionary Source="..\..\..\Resources\CommonBrushes.xaml"/>
             <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
         </ResourceDictionary.MergedDictionaries>
+					
+			<converters:ElapsedTimeConverter x:Key="DateOnlyPeriodConverter" />
 
-            
-            <Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaSpecialHeaderStyle">
+
+			<Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaSpecialHeaderStyle">
             <!--<Setter Property="Margin" Value="4,0,0,0"></Setter>-->
         </Style>
 
@@ -96,7 +99,7 @@
                                              Header="{x:Static Member=userTexts:Resources.Date}" 
                                              Width="*"
                                              SortMemberPath="RequestedDate" 
-                                             Binding="{Binding Path=RequestedDate, Mode=OneWay}">
+                                             Binding="{Binding Path=RequestedDate, Mode=OneWay, Converter={StaticResource DateOnlyPeriodConverter}}">
             </Controls:DataGridTextColumn>
 			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Agent}" 
