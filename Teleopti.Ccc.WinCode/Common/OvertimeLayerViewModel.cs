@@ -7,15 +7,17 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
+	    private readonly IOvertimeShiftActivityLayer _layer;
         public OvertimeLayerViewModel(ILayer layer)
             : base(layer)
         {
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IEventAggregator eventAggregator)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IEventAggregator eventAggregator)
             : base(observer, layer, null, eventAggregator)
         {
+	        _layer = layer;
         }
 
         public override bool Opaque
@@ -25,12 +27,9 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public override string LayerDescription
         {
-            get {
-                IOvertimeShiftActivityLayer overtimeShiftActivityLayer = Layer as IOvertimeShiftActivityLayer;
-                if (overtimeShiftActivityLayer != null)
-                    return overtimeShiftActivityLayer.DefinitionSet.Name;
-                
-                return UserTexts.Resources.Overtime; 
+            get
+            {
+	            return _layer != null ? _layer.DefinitionSet.Name : UserTexts.Resources.Overtime;
             }
         }
 

@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 if (_period != value)
                 {
                     _period = value;
-                    Layer.Period = _period;
+                    _layer.Period = _period;
                     SendPropertyChanged("Period");
                     SendPropertyChanged("ElapsedTime");
                 }
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (IsChanged)
             {
-                Layer.Period = Period;
+							_layer.Period = Period;
                 if (_part != null)
                 {
 									hackToUpdateUnderlyingPersonAssignment();
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 	            if (this is MeetingLayerViewModel)
 		            return OrderIndexBase + 1;
-	            return OrderIndexBase + Layer.OrderIndex;
+							return OrderIndexBase + _layer.OrderIndex;
             }
         }
 
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    private void hackToUpdateUnderlyingPersonAssignment()
 	    {
-		    var mainShiftLayer = Layer as IMainShiftActivityLayer;
+				var mainShiftLayer = _layer as IMainShiftActivityLayer;
 		    if (mainShiftLayer != null)
 		    {
 			    var ms = (IMainShift) mainShiftLayer.Parent;

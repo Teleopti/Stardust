@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                  model.Period.Start = layer.Period.StartDateTime;
                  model.Period.End = layer.Period.EndDateTime;
                  layer.PropertyChanged += model.LayerPropertyChanged;
-                 model._selectablePayloads.SetFilter(layer.Layer.Payload.GetType());
+                 model._selectablePayloads.SetFilter(layer.Payload.GetType());
                  model.IsEnabled = true;
                 
                 //Pick the correct Payload if it exists in the collection:
-                if(CollectionViewSource.GetDefaultView(model.SelectablePayloads).Contains(layer.Layer.Payload)) 
+                if(CollectionViewSource.GetDefaultView(model.SelectablePayloads).Contains(layer.Payload)) 
                 {
-                    CollectionViewSource.GetDefaultView(model.SelectablePayloads).MoveCurrentTo(layer.Layer.Payload);
+                    CollectionViewSource.GetDefaultView(model.SelectablePayloads).MoveCurrentTo(layer.Payload);
                 }
             }
             else
