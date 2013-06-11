@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -38,13 +39,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_listener = new PropertyChangedListener();
 			_testerForCommandModels = new TesterForCommandModels();
 			_mocks = new MockRepository();
-			_layerWithPayload = _mocks.StrictMock<IOvertimeShiftActivityLayer>();
 			_payload = ActivityFactory.CreateActivity("dfsdf");
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			Expect.Call(_layerWithPayload.Payload).Return(_payload).Repeat.Any();
-			Expect.Call(_layerWithPayload.Period).PropertyBehavior().Return(_period).IgnoreArguments().Repeat.Any();
+			_layerWithPayload = new OvertimeShiftActivityLayer(_payload, _period, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCorrectDescription()
 		{
-			Assert.AreEqual(UserTexts.Resources.Overtime, _target.LayerDescription);
+			Assert.AreEqual(_layerWithPayload.DefinitionSet.Name, _target.LayerDescription);
 		}
 
 		[Test]
@@ -151,7 +150,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanSetPeriod()
 		{
-			_mocks.BackToRecord(_layerWithPayload);
 			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_mocks.ReplayAll();
 
@@ -164,9 +162,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			_mocks.BackToRecord(_layerWithPayload);
 			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			LastCall.Repeat.Twice();
 			_mocks.ReplayAll();
 
 			_target.IsChanged = true;
