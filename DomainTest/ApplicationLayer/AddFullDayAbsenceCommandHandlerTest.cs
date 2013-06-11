@@ -222,6 +222,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsence.Person.Should().Be(_personRepository.Single());
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(5));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate.AddHours(5));
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
 		}
 
 		[Test]
@@ -268,6 +272,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsence.Person.Should().Be(_personRepository.Single());
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddHours(5));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddHours(5));
 		}
 
 		[Test]
@@ -315,6 +322,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
 		}
 
 		[Test]
@@ -365,6 +376,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(17));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(17));
 		}
 
 		[Test]
@@ -414,6 +429,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddMinutes(-1));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
+			@event.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddMinutes(-1));
 		}
 
 		[Test]
@@ -463,6 +482,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate);
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate);
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
 		}
 
 	}
