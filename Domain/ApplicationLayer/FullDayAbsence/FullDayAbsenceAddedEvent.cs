@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.FullDayAbsence
 {
 	[Serializable]
 	public class FullDayAbsenceAddedEvent : RaptorDomainEvent
