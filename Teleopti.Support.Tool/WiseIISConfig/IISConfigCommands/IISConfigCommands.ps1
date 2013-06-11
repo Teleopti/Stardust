@@ -240,11 +240,12 @@ function Install-TeleoptiCCCServer
     [string]$WinUser,
     [string]$WinPassword
     )
-    [string]$ErrorMessage = "Execution of command failed.`n$Command"
-    & "$BatchFile" "$MsiFile" "$machineConfig"
+    [string]$ErrorMessage = "Execution of command failed"
+    & "$BatchFile" "$MsiFile" "$machineConfig" "$WinUser" "$WinPassword"
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
+	return $LastExitCode
 }
 
 function Copy-ZippedMsi{

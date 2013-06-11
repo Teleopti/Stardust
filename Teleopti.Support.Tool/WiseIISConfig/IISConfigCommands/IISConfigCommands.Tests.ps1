@@ -96,8 +96,8 @@ function Test-InstallationSQLLogin {
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
 		  
-			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
-
+			$returnCode=Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
+			$returnCode | Should Be 0
 		}
 		
 		It "SDK should be windows" {
@@ -188,4 +188,3 @@ function Test-InstallationWinAuth {
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin
-TearDown
