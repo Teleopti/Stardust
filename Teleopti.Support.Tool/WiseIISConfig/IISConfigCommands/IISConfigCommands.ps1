@@ -234,3 +234,69 @@ function Install-TeleoptiCCCServer
         throw "Exec: $ErrorMessage"
     }
 }
+
+function Copy-ZippedMsi{
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
+    $destFolder='c:\temp'
+
+    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
+    
+    if (!(Test-Path "$destFolder\$zipFileName")) {
+        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
+    }
+    return @("$destFolder\$zipFileName")
+}
+
+function Add-UserToLocalGroup{
+     Param(
+        $groupName,
+        $computer=$env:computername,
+        $userdomain,
+        $username
+    )
+		if(![ADSI]::Exists("WinNT://$computer/$groupName")) { 
+			Write-Host "No group with that name: '$groupName'"
+			return
+		}
+		
+	$Group= [ADSI]"WinNT://$computer/$groupName,group"
+    $members= $Group.psbase.invoke("Members") | %{$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+    $userFound = $members -contains $username
+    
+	if ($userFound)
+		{"The user '$username' already exists in group '$groupName'."}
+	else {
+			([ADSI]"WinNT://$computer/$groupName,group").psbase.Invoke("Add",([ADSI]"WinNT://$userdomain/$username").path)
+		}
+}
+
+function Create-LocalGroup
+{
+	Param(
+		$groupName,
+		$computer=$env:computername
+	)
+	if(!$groupName)
+	{
+		$(Throw 'A value for $groupName is required!')
+	}
+
+	if(![ADSI]::Exists("WinNT://$computer/$groupName")) { 
+		$computer=$env:computername
+		$objOu = [ADSI]"WinNT://$computer"
+		$objUser = $objOU.Create("Group", $groupName)
+		$objUser.SetInfo()
+	}
+}
+
+function Add-CccLicenseToDemo
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "$dir\Add-CccLicenseToDemo.bat"
+    
+    [string]$ErrorMessage = "Add-CccLicenseToDemo failed!"
+    & "$BatchFile" | Out-Null
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}

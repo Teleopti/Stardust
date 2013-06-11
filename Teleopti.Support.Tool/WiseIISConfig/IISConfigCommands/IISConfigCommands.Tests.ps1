@@ -14,18 +14,6 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 #5 step step ("F10")
 ##============
 
-function Copy-ZippedMsi{
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder='c:\temp'
-
-    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
-    
-    if (!(Test-Path "$destFolder\$zipFileName")) {
-        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
-    }
-    return @("$destFolder\$zipFileName")
-}
-
 #Add IIS admin module
 Load-SnapIn -ModuleName "WebAdministration"
 
@@ -34,46 +22,76 @@ $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
 
-Describe "Tear down previous test"{
-    [string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
-	
-    It "should uninstall product"{
-        [bool] $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
-        if ($isInstalled) {
-            Uninstall-ByRegPath -path $path
-        }
-
-        $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
-        $isInstalled | Should Be $False
-	}
-
-	It "should have a default web site" {
-		$computerName=(get-childitem -path env:computername).Value
-		$httpStatus=Check-HttpStatus -url "http://$computerName/"
-		$httpStatus | Should Be $True
-	}
+function TearDown {
+	Describe "Tear down previous test"{
+		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
 		
-	It "should throw exeption when http URL does not exist" {
-		$computerName=(get-childitem -path env:computername).Value
-		{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
-    }
+		It "should uninstall product"{
+			[bool] $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			if ($isInstalled) {
+				Uninstall-ByRegPath -path $path
+			}
+
+			$isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			$isInstalled | Should Be $False
+		}
+
+		It "should have a default web site" {
+			$computerName=(get-childitem -path env:computername).Value
+			$httpStatus=Check-HttpStatus -url "http://$computerName/"
+			$httpStatus | Should Be $True
+		}
+			
+		It "should throw exeption when http URL does not exist" {
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
+		}
+	}
 }
 
-Describe "Setup test"{  
-    It "should copy latest .zip-file from build server"{
-        $zipFile = Copy-ZippedMsi
-        Test-Path $zipFile | Should Be $True
-    }
+function Setup-PreReqs {
+	Describe "Copy and Unzip the latest .zip file into local MSI"{  
+		It "should copy latest .zip-file from build server"{
+			$zipFile = Copy-ZippedMsi
+			Test-Path $zipFile | Should Be $True
+		}
 
-    It "should unzip file into MSI"{
-        $zipFile = Copy-ZippedMsi
-        $zipFile = Get-Item $zipFile
+		It "should unzip file into MSI"{
+			$zipFile = Copy-ZippedMsi
+			$zipFile = Get-Item $zipFile
 
-        $MsiFile = $zipFile.fullname -replace ".zip", ".msi"
-        UnZip-File –zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
-    }
-	
-	It "shuold install integrated security in SQL Server"{
+			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+			UnZip-File –zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
+		}
+		
+		It "should create a local group in Windows"{
+			$groupName = "TeleoptiCCC_Users"
+			Create-LocalGroup -groupName "$groupName"
+			[ADSI]::Exists("WinNT://./$groupName") | Should be $True
+		}
+		
+		It "should add domain user to a local group"{
+			$userDomain = "Toptinet"
+			$username = "TfsIntegration"
+            $groupName = "TeleoptiCCC_Users"
+
+			Add-UserToLocalGroup -groupName "$groupName" -userdomain "$userDomain" -userName "$username"
+            
+            $strcomputer = [ADSI]("WinNT://.,computer")
+            $Group = $strcomputer.psbase.children.find("$groupName")
+            $members= $Group.psbase.invoke("Members") | %{$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+
+			$members -contains $username | Should Be $True
+		}
+	}
+}
+
+TearDown
+Setup-PreReqs
+
+Describe "Installation test - SQL DB Login"{  
+
+	It "Should install integrated security in SQL Server"{
 		$zipFile = Copy-ZippedMsi
         $zipFile = Get-Item $zipFile
 		$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
@@ -83,35 +101,61 @@ Describe "Setup test"{
 		Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
 
 	}
-}
-
-If ($InstallationAuthSetting -eq $Ntml) {
-	#Installation is done with Windows+App login
-	Describe "Check SDK is Windows enabled only" {
-		It "SDK should be windows" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
-			$enabled | Should Be "True"
-		}
-
-		It "SDK should not be anonymous" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
-			$enabled | Should Be "False"
-		}
+	
+	It "SDK should be windows" {
+		$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
+		$enabled | Should Be "True"
 	}
-}
 
-If ($InstallationAuthSetting -eq $None) {
-
-	#Installation is done with App login only
-	Describe "Check SDK is Windows enabled only" {
-		It "SDK should be windows" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
-			$enabled | Should Be "False"
-		}
-
-		It "SDK should not be anonymous" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
-			$enabled | Should Be "True"
-		}
+	It "SDK should not be anonymous" {
+		$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
+		$enabled | Should Be "False"
 	}
+	
+	It "Nhib file should exist and contain SQL Auth connection string" {
+		$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+		$computerName=(get-childitem -path env:computername).Value
+		$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
+		$nhibFile | Should Exist
+		$nhibFile | Should Contain "$connectionString"
+	}
+	
+	Add-CccLicenseToDemo
 }
+
+TearDown
+
+Describe "Installation test - Win Integrated Login"{ 
+
+	It "Should install integrated security in SQL Server"{
+		$zipFile = Copy-ZippedMsi
+        $zipFile = Get-Item $zipFile
+		$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+        
+        $BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
+      
+		Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbIntegrated" -WinUser "toptinet\tfsintegration" -WinPassword "m8kemew0rk"
+	}
+	
+	It "SDK should be windows" {
+		$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
+		$enabled | Should Be "True"
+	}
+
+	It "SDK should not be anonymous" {
+		$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
+		$enabled | Should Be "False"
+	}
+	
+	It "Nhib file should exist and contain Win Auth connection string" {
+		$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+		$computerName=(get-childitem -path env:computername).Value
+		$connectionString="Data Source=$computerName;Integrated Security=SSPI;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
+		$nhibFile | Should Exist
+		$nhibFile | Should Contain "$connectionString"
+	}
+	
+	Add-CccLicenseToDemo
+}
+
+TearDown
