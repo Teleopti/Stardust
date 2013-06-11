@@ -351,7 +351,11 @@ BEGIN
 		[CreatedBy] [uniqueidentifier] NOT NULL,
 		[UpdatedBy] [uniqueidentifier] NOT NULL,
 		[CreatedOn] [datetime] NOT NULL,
-		[UpdatedOn] [datetime] NOT NULL
+		[UpdatedOn] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
 	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_BusinessUnit] FOREIGN KEY([BusinessUnit])
