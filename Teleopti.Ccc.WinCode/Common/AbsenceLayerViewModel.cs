@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
         }
 
-        public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
+        public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
             : base(observer,layer, null,eventAggregator)
         {
         }
