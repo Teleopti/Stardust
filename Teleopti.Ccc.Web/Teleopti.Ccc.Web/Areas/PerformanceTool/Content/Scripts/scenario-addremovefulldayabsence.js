@@ -2,11 +2,15 @@
 define([
         'knockout',
         'progressitem-count',
-        'result'
+        'result',
+        'messagebroker',
+        'helpers'
     ], function(
         ko,
         ProgressItemCountViewModel,
-        ResultViewModel
+        ResultViewModel,
+        messagebroker,
+        helpers
     ) {
 
         return function() {
@@ -91,9 +95,10 @@ define([
                 self.IterationsExpected(iterations.length);
                 progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
-
-
-
+            
+            var startPromise = messagebroker.start();
+            
+            var scheduleChangeSubscription = null;
 
             var result;
 
@@ -114,25 +119,63 @@ define([
             };
 
             this.Run = function () {
-                for (var i = 0; i < iterations.length; i++) {
-                    var iteration = iterations[i];
-                    //..
-                }
-
+                
                 progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
-                
-                setTimeout(function() {
-                    result.CommandsDone(true);
-                }, 1200);
 
-                var fakeMessage = function() {
-                    messageReceived();
-                    if (!result)
-                        return;
-                    setTimeout(fakeMessage, 1300);
-                };
-                setTimeout(fakeMessage, 1300);
+                for (var i = 0; i < iterations.length; i++) {
+                    var iteration = iterations[i];
+                    
+                    startPromise.done(function() {
+                        messagebroker.subscribe({
+                            domainReferenceType: 'Person',
+                            domainReferenceId: iteration.personId,
+                            domainType: 'IPersonScheduleDayReadModel',
+                            callback: function(notification) {
+                                var momentDate = moment(iteration.date);
+                                var startDate = helpers.Date.ToMoment(notification.StartDate);
+                                var endDate = helpers.Date.ToMoment(notification.EndDate);
+                                if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0) {
+                                    messageReceived();
+                                }
+                            }
+                        });
+                    });
+
+                    var sendData = JSON.stringify({
+                        StartDate: iteration.date,
+                        EndDate: iteration.date,
+                        AbsenceId: iteration.absenceId,
+                        PersonId: iteration.personId
+                    });
+
+                    $.ajax({
+                        url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        cache: false,
+                        data: sendData,
+                        success: function (data, textStatus, jqXHR) {
+                           
+                        }
+                    }
+                    );
+                }
+
+               result.CommandsDone(true);
+                
+                //setTimeout(function() {
+                //    result.CommandsDone(true);
+                //}, 1200);
+
+                //var fakeMessage = function() {
+                //    messageReceived();
+                //    if (!result)
+                //        return;
+                //    setTimeout(fakeMessage, 1300);
+                //};
+                //setTimeout(fakeMessage, 1300);
 
                 return result;
             };
