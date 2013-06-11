@@ -7134,8 +7134,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
 			{
 				view.ShowDialog(this);
+				if (_scheduleView == null || view.ScheduleDay == null) return;
+				updateOvertimeAvailability(view.ScheduleDay);
 			}
 		}
+
+		private void updateOvertimeAvailability(IScheduleDay scheduleDay)
+		{
+			if (_scheduleView == null || scheduleDay == null) return;
+			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
+			_scheduleView.Presenter.UpdateOvertimeAvailability();
+			enableSave();
+		}
+
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
