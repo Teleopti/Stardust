@@ -975,6 +975,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripMenuItemMeetingOrganizer.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
 			toolStripMenuItemWriteProtectSchedule.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 
 			_backgroundWorkerRunning = true;
