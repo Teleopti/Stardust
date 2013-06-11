@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private OvertimeLayerViewModel _target;
 		private MockRepository _mocks;
-		private ILayer _layerWithPayload;
-		private IPayload _payload;
+		private IOvertimeShiftActivityLayer _layerWithPayload;
+		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;
 		private PropertyChangedListener _listener;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_listener = new PropertyChangedListener();
 			_testerForCommandModels = new TesterForCommandModels();
 			_mocks = new MockRepository();
-			_layerWithPayload = _mocks.StrictMock<ILayer<IPayload>>();
+			_layerWithPayload = _mocks.StrictMock<IOvertimeShiftActivityLayer>();
 			_payload = ActivityFactory.CreateActivity("dfsdf");
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 			_layerWithPayload.Period = _period;
-			_target = new OvertimeLayerViewModel(_layerWithPayload);
+			_target = new OvertimeLayerViewModel(null, _layerWithPayload, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			var target = new OvertimeLayerViewModel(overtimeLayer);
+			var target = new OvertimeLayerViewModel(null, overtimeLayer, null);
 			Assert.AreEqual("Qualified overtime", target.LayerDescription);
 		}
 

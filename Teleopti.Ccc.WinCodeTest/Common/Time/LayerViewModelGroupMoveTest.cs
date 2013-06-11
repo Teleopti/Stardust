@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Practices.Composite.Events;
+﻿using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +34,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
 
             _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
             _absenceLayerViewModel = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period),null);
-            _overtimeLayerViewModel = new OvertimeLayerViewModel(_actLayer);
+	        _overtimeLayerViewModel = new OvertimeLayerViewModel(null,
+	                                                             new OvertimeShiftActivityLayer(
+		                                                             ActivityFactory.CreateActivity("d"), _period,
+		                                                             new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)),
+	                                                             null);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyOvertimeLayerViewModelGroupMove()
         {
-            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(_actLayer);
+            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(null, new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2), new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)), null);
 
             Assert.IsFalse(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel), "not moved when absencelayerviewmodel layer is moved");
             Assert.IsTrue(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(anotherOvertimeLayerViewModel), "should be moved when another overtime layer is moved");

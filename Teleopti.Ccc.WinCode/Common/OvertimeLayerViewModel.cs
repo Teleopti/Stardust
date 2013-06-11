@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
 	    private readonly IOvertimeShiftActivityLayer _layer;
-        public OvertimeLayerViewModel(ILayer layer)
+        public OvertimeLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
