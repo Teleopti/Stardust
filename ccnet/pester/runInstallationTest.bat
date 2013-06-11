@@ -8,6 +8,3 @@ call "%rootdir%\run.bat" "%rootdir%\..\..\Teleopti.Support.Tool\WiseIISConfig\II
 
 set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 copy "%outputFile%" "%rootdir%\..\..\%~n0.xml"
-
-::For test by Mr.Ryding
-notepad "%rootdir%\..\..\nunit.%~n0.PowerShell.xml"
