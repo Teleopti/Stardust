@@ -7,13 +7,8 @@ using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class SignInPage : Page, ISignInPage
+	public class SignInPage : Page
 	{
-		[FindBy(Id = "Username-input")]
-		public TextField UserNameTextField { get; set; }
-
-	    [FindBy(Id = "Password-input")]
-	    public TextField PasswordTextField { get; set; }
 
 	    [FindBy(Id = "Signin-error")]
 		public Element ValidationSummary { get; set; }
@@ -43,30 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button ChangePasswordButton { get; set; }
 		[FindBy(Id = "Password-change-error")]
 		public Div ChangePasswordErrorMessage { get; set; }
-
-		public void SelectApplicationTestDataSource()
-		{
-			DataSources.WaitUntilDisplayed();
-			var dataSource = DataSources.Element(Find.BySelector(".application a:contains(TestData)"));
-			EventualAssert.That(() => dataSource.Exists, Is.True);
-			dataSource.EventualClick();
-		}
-
-		public void SelectWindowsTestDataSource()
-		{
-			DataSources.WaitUntilDisplayed();
-			var dataSource = DataSources.Element(Find.BySelector(".windows a:contains(TestData)"));
-			EventualAssert.That(() => dataSource.Exists, Is.True);
-			dataSource.EventualClick();
-		}
-
-		public void SignInApplication(string username, string password)
-		{
-		    UserNameTextField.ChangeValue(username);
-		    PasswordTextField.ChangeValue(password);
-			EventualAssert.That(() => PasswordTextField.Value.Equals(password), Is.True);
-		    LoginButton.EventualClick();
-		}
 
 		public void ChangePassword(string newPassword, string confirmedNewPassword, string oldPassword)
 		{

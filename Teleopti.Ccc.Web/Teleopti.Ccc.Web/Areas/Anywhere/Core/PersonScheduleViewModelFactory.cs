@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -13,19 +12,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IJsonDeserializer _deserializer;
 
-		public PersonScheduleViewModelFactory(
-			IPersonRepository personRepository, 
-			IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, 
-			IAbsenceRepository absenceRepository, 
-			IPersonScheduleViewModelMapper personScheduleViewModelMapper, 
-			IPersonAbsenceRepository personAbsenceRepository)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_absenceRepository = absenceRepository;
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 			_personAbsenceRepository = personAbsenceRepository;
+			_deserializer = deserializer;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
@@ -45,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				};
 
 			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
-				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(data.PersonScheduleDayReadModel.Shift);
+				data.Shift = _deserializer.DeserializeObject(data.PersonScheduleDayReadModel.Shift);
 
 			return _personScheduleViewModelMapper.Map(data);
 		}

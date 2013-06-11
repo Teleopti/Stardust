@@ -23,10 +23,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks = new MockRepository();
             DateTimePeriod schedulingDateTimePeriod = new DateTimePeriod(2010, 02, 01, 2010, 02, 28);
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
-            _target.SchedulingResultStateHolder = _schedulingResultStateHolder;
             _personAccountBalanceCalculator = _mocks.StrictMock<IPersonAccountBalanceCalculator>();
             _personRequestFactory = new PersonRequestFactory();
-            _target.PersonAccountBalanceCalculator = _personAccountBalanceCalculator;
         }
 
         [Test]
@@ -47,9 +45,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
-            //IValidatedRequest validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
-
-
+            
             using (_mocks.Record())
             {
                 Expect.Call(
@@ -60,9 +56,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest,
+                                          new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+                                                                                _personAccountBalanceCalculator, null,
+                                                                                null, null));
             Assert.IsTrue(result.IsValid);
-            //Assert.IsTrue(_target.Validate(absenceRequest));
         }
 
         [Test]
@@ -71,9 +69,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
-            //IValidatedRequest validatedRequest = new ValidatedRequest() { IsValid = true, ValidationErrors = "" };
-
-
+            
             using (_mocks.Record())
             {
                 Expect.Call(
@@ -84,7 +80,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest,
+                                          new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+                                                                                _personAccountBalanceCalculator, null,
+                                                                                null, null));
             Assert.IsFalse(result.IsValid);
         }
 
@@ -93,8 +92,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.SchedulingResultStateHolder = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
+
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
+                             new RequiredForHandlingAbsenceRequest(null, _personAccountBalanceCalculator, null, null,
+                                                                   null));
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -102,8 +103,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.PersonAccountBalanceCalculator = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
+
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
+                             new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder, null, null, null, null));
         }
 
         [Test]

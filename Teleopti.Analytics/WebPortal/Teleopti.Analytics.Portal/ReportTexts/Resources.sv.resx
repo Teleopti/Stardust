@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Dra ihop</value>
@@ -1212,22 +1212,25 @@
     <value>Ouppfyllda</value>
     <comment>Ouppfyllda</comment>
   </data>
-  <data name="ResFulfilled" xml:space="preserve">
-    <value>Uppfyllda</value>
-    <comment>Uppfyllda</comment>
-  </data>
-  <data name="ResFulfillmentPercent" xml:space="preserve">
-    <value>Uppfyllda (%)</value>
-    <comment>Uppfyllda (%)</comment>
-  </data>
-  <data name="ResUnfulfilled" xml:space="preserve">
-    <value>Ouppfyllda</value>
-    <comment>Ouppfyllda</comment>
-  </data>
   <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
     <value>Maxtiden för kopplingen till databasen löpte ut, försök begränsa sökvillkoren.</value>
   </data>
   <data name="ResMustHaves" xml:space="preserve">
     <value>Veton</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Tillgänglighet per agent</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Tillgängliga dagar</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Tillgänglig tid</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Schemalagda dagar</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utnyttjat</value>
   </data>
 </root>

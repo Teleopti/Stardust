@@ -354,6 +354,7 @@
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
+    <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />

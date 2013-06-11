@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
     public class PersonAccountBalanceValidator : IAbsenceRequestValidator
     {
-        public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
-        public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; set; }
-        public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
-        public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
-        public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
         public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-
         public string InvalidReason
         {
             get { return "RequestDenyReasonPersonAccount"; }
@@ -21,17 +15,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             get { return UserTexts.Resources.Yes; }
         }
 
-        public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
+        public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
         {
-            InParameter.NotNull("SchedulingResultStateHolder", SchedulingResultStateHolder);
-            InParameter.NotNull("PersonAccountBalanceCalculator", PersonAccountBalanceCalculator);
+            InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
+            InParameter.NotNull("PersonAccountBalanceCalculator", requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator);
 
             var person = absenceRequest.Person;
 
             var validatedRequest = new ValidatedRequest();
-            validatedRequest.IsValid = PersonAccountBalanceCalculator.CheckBalance(SchedulingResultStateHolder.Schedules[person],
-                                                            absenceRequest.Period.ToDateOnlyPeriod(
-                                                                person.PermissionInformation.DefaultTimeZone()));
+            validatedRequest.IsValid =
+                requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator.CheckBalance(
+                    requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[person],
+                    absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 
             if (!validatedRequest.IsValid)
                 validatedRequest.ValidationErrors =
@@ -55,13 +50,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             unchecked
             {
-                int result = (SchedulingResultStateHolder != null ? SchedulingResultStateHolder.GetHashCode() : 0);
-                result = (result * 397) ^ (PersonAccountBalanceCalculator != null ? PersonAccountBalanceCalculator.GetHashCode() : 0);
-                result = (result * 397) ^ (ResourceOptimizationHelper != null ? ResourceOptimizationHelper.GetHashCode() : 0);
-                result = (result * 397) ^ (BudgetGroupAllowanceSpecification != null ? BudgetGroupAllowanceSpecification.GetHashCode() : 0);
-                result = (result * 397) ^ (BudgetGroupAllowanceCalculator != null ? BudgetGroupAllowanceCalculator.GetHashCode() : 0);
+                int result = (GetType().GetHashCode());
                 result = (result * 397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
-                result = (result * 397) ^ (GetType().GetHashCode());
                 return result;
             }
         }

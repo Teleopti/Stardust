@@ -16,33 +16,14 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="processingPerson">The processing person.</param>
         /// <param name="absenceRequest">The absence request.</param>
-        /// <param name="authorization">The authorization checker.</param>
+        /// <param name="requiredForProcessingAbsenceRequest">The stuff required for processing an absence request.</param>
+        /// <param name="requiredForHandlingAbsenceRequest"></param>
         /// <param name="absenceRequestValidatorList">The absence request validator list.</param>
         /// <remarks>
         /// Created by: HenryG
         /// Created date: 2010-04-21
         /// </remarks>
-        void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, IPersonRequestCheckAuthorization authorization, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList);
-
-        /// <summary>
-        /// Gets or sets the request approval service.
-        /// </summary>
-        /// <value>The request approval service.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-21
-        /// </remarks>
-        IRequestApprovalService RequestApprovalService { get; set; }
-
-        /// <summary>
-        /// Gets or sets the undo redo container. Mainly used to do a rollback on the simulated approval.
-        /// </summary>
-        /// <value>The undo redo container.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2010-04-22
-        /// </remarks>
-        IUndoRedoContainer UndoRedoContainer { get; set; }
+        void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList);
 
         /// <summary>
         /// Gets the display text.
@@ -63,5 +44,52 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-04-21
         /// </remarks>
         IProcessAbsenceRequest CreateInstance();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct RequiredForProcessingAbsenceRequest
+    {
+        private readonly IUndoRedoContainer _undoRedoContainer;
+        private readonly IRequestApprovalService _requestApprovalService;
+        private readonly IPersonRequestCheckAuthorization _authorization;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="undoRedoContainer"></param>
+        /// <param name="requestApprovalService"></param>
+        /// <param name="authorization"></param>
+        public RequiredForProcessingAbsenceRequest(IUndoRedoContainer undoRedoContainer, IRequestApprovalService requestApprovalService, IPersonRequestCheckAuthorization authorization)
+        {
+            _undoRedoContainer = undoRedoContainer;
+            _requestApprovalService = requestApprovalService;
+            _authorization = authorization;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IRequestApprovalService RequestApprovalService
+        {
+            get { return _requestApprovalService; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IUndoRedoContainer UndoRedoContainer
+        {
+            get { return _undoRedoContainer; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IPersonRequestCheckAuthorization Authorization
+        {
+            get { return _authorization; }
+        }
     }
 }

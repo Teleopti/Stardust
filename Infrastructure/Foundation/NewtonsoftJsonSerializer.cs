@@ -1,14 +1,14 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
+﻿using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
 	public class NewtonsoftJsonSerializer : IJsonSerializer
 	{
 		public string SerializeObject(object value)
 		{
-			return Newtonsoft.Json.JsonConvert.SerializeObject(value);
+			return JsonConvert.SerializeObject(value);
 		}
 	}
 }

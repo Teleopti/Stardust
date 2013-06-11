@@ -606,11 +606,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			SetDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
 		}
 
-		void PeoplePeriodGridView_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-		{
-			PeopleAdminHelper.HandleMessageBroker(ViewType.PeoplePeriodView, e, FilteredPeopleHolder);
-		}
-
 		public PeoplePeriodGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder) :
 			base(grid, filteredPeopleHolder)
 		{
@@ -619,14 +614,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
 			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
-			OnEventMessageHandlerChanged += PeoplePeriodGridView_OnEventMessageHandlerChanged;
-
-			RegisterForMessageBrokerEvents(typeof(IContract));
-			RegisterForMessageBrokerEvents(typeof(ITeam));
-			RegisterForMessageBrokerEvents(typeof(IContractSchedule));
-			RegisterForMessageBrokerEvents(typeof(IPartTimePercentage));
-			RegisterForMessageBrokerEvents(typeof(IRuleSetBag));
-			RegisterForMessageBrokerEvents(typeof(IBudgetGroup));
 
 			Grid.HorizontalScroll += Grid_HorizontalScroll;
 		}

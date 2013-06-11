@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Xml;
 using Teleopti.Ccc.Sdk.Common.Contracts;
@@ -28,22 +29,26 @@ namespace Teleopti.Ccc.Sdk.Notification
 			//var smsMessage = message.Subject;
 
 			// list for messages receiver send
-            IList<string> messagesToSendList = GetSmsMessagesToSend(message);
+			var containUnicode = message.Subject.Any(t => char.GetUnicodeCategory(t) == UnicodeCategory.OtherLetter);
+			IList<string> messagesToSendList = GetSmsMessagesToSend(message, containUnicode);
 		    
             foreach(var msg in messagesToSendList)
             {
-                SendSmsNotifications(msg, receiver);
+                sendSmsNotifications(msg, receiver, containUnicode);
             }
 
         }
 
-        public IList<string> GetSmsMessagesToSend(INotificationMessage message)
+        public IList<string> GetSmsMessagesToSend(INotificationMessage message, bool containUnicode)
         {
 			IList<string> messagesToSendList = new List<string>();
-            const int maxSmsLength = 160;
 			var temp = message.Subject + " ";
+			
+			var maxSmsLength = 160;
+	        if (containUnicode)
+		        maxSmsLength = 70;
 
-			for (var i = 0; i < message.Messages.Count; )
+	        for (var i = 0; i < message.Messages.Count; )
 			{
                 if (temp.Length + message.Messages[i].Length < maxSmsLength)
 				{
@@ -67,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.Notification
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-		private void SendSmsNotifications(string smsMessage, string mobileNumber)
+		private void sendSmsNotifications(string smsMessage, string mobileNumber, bool containUnicode)
 		{
 			using (var client = new WebClient())
 			{
@@ -76,8 +81,17 @@ namespace Teleopti.Ccc.Sdk.Notification
 				var smsString = _notificationConfigReader.Data;
 
 				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User, _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
-										 smsMessage);
+				if (containUnicode)
+					smsMessage = smsMessage.Aggregate(@"",
+					                                  (current, c) =>
+					                                  current +
+					                                  string.Format("{0:x4}",
+					                                                Convert.ToUInt32(((int) c).ToString(CultureInfo.InvariantCulture))))
+					                       .ToUpper();
+				
+				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
+				                            _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
+				                            smsMessage, containUnicode ? 1 : 0);
 
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
