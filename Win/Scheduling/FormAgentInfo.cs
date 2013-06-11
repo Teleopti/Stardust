@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
 
-	        createAndAddItem(listViewRestrictions, "xxOverTimeAvailability", "", 1);
+	        createAndAddItem(listViewRestrictions, Resources.OvertimeAvailability, "", 1);
 			var scheduleDay = getScheduleDay(person, dateOnly, state);
 			if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
 
@@ -524,12 +524,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (overtimeAvailability.StartTime.HasValue)
 			{
-				createAndAddItem(listViewRestrictions, Resources.EarliestStartTime, overtimeAvailability.StartTime.ToString(), indent);
+				var startTime = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)overtimeAvailability.StartTime, CultureInfo.CurrentCulture);
+				createAndAddItem(listViewRestrictions, Resources.EarliestStartTime, startTime, indent);
 			}
 
 			if (overtimeAvailability.EndTime.HasValue)
 			{
-				createAndAddItem(listViewRestrictions, Resources.LatestEndTime, overtimeAvailability.EndTime.ToString(), indent);
+				var endTime = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)overtimeAvailability.EndTime, CultureInfo.CurrentCulture);
+				createAndAddItem(listViewRestrictions, Resources.LatestEndTime, endTime, indent);
 			}
 
 			if (overtimeAvailability.NotAvailable)
