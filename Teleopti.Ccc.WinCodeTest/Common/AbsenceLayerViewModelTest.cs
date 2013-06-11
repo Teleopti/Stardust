@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
-            AbsenceLayerViewModel model = AbsenceLayerViewModel.CreateForSchedule(observer, absenceLayer, _eventAggregator);
+            AbsenceLayerViewModel model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
 
             #endregion
             #region expectations
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Mocks.ReplayAll();
 
 			_layerWithPayload.Period = _period;
-			_target = AbsenceLayerViewModel.CreateForProjection(_layerWithPayload);
+			_target = new AbsenceLayerViewModel(_layerWithPayload);
 
 			testRunner = new CrossThreadTestRunner();
 		}
