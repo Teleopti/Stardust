@@ -21,7 +21,6 @@ Scenario: Default configuration for scenario add and remove full day absences
 	And I select scenario 'Add and remove full day absence'
 	Then I should see a default configuration in json format
 
-@ignore
 Scenario: Measure add and remove full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add and remove full day absence'
