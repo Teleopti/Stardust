@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
         public OvertimeLayerViewModel(ILayer layer,IEventAggregator eventAggregator)
-            : base(layer,null,eventAggregator)
+            : base(null, layer, null, eventAggregator)
         {
         }
 

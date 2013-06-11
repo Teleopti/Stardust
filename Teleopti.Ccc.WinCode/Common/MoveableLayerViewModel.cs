@@ -1,5 +1,4 @@
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -9,11 +8,6 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </summary>
     public abstract class MoveableLayerViewModel : LayerViewModel
     {
-        protected MoveableLayerViewModel(ILayer layer, IShift parent,IEventAggregator eventAggregator)
-				: base(null, layer, parent, eventAggregator)
-        {
-        }
-
         protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent,IEventAggregator eventAggregator)
             : base(observer, layer, parent,eventAggregator)
         {
