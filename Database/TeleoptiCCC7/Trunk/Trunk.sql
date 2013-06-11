@@ -338,7 +338,6 @@ GO
 --Desc: Added a new table for overtime availability day
 ----------------
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OvertimeAvailability]') AND type in (N'U'))
-
 BEGIN
 
 	CREATE TABLE [dbo].[OvertimeAvailability](
@@ -352,16 +351,19 @@ BEGIN
 		[UpdatedBy] [uniqueidentifier] NOT NULL,
 		[CreatedOn] [datetime] NOT NULL,
 		[UpdatedOn] [datetime] NOT NULL,
-PRIMARY KEY CLUSTERED 
+		CONSTRAINT [PK_OvertimeAvailability] PRIMARY KEY NONCLUSTERED
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
+))
 	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_BusinessUnit] FOREIGN KEY([BusinessUnit])
 	REFERENCES [dbo].[BusinessUnit] ([Id])
 	
 	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_Person] FOREIGN KEY([Person])
 	REFERENCES [dbo].[Person] ([Id])
+	
+	CREATE CLUSTERED INDEX [CIX_OvertimeAvailability] ON [dbo].[OvertimeAvailability]
+	(
+		[Person] ASC
+	)
 
 END
