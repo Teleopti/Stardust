@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IEventAggregator _eventAggregator = new EventAggregator();
 		private AbsenceLayerViewModel _target;
 		private MockRepository mocks;
-		private ILayer _layerWithPayload;
+		private IVisualLayer _layerWithPayload;
 		private IPayload payload;
 		private IScheduleDay scheduleDay;
 		private CrossThreadTestRunner testRunner;
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_listener = new PropertyChangedListener();
 			_testerForCommandModels = new TesterForCommandModels();
 			mocks = new MockRepository();
-			_layerWithPayload = Mocks.StrictMock<ILayer<IPayload>>();
+			_layerWithPayload = Mocks.StrictMock<IVisualLayer>();
 			payload = ActivityFactory.CreateActivity("dfsdf");
 			scheduleDay = Mocks.StrictMock<IScheduleDay>();
 			person = PersonFactory.CreatePerson();
