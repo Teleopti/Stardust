@@ -80,7 +80,7 @@ define([
                         iterations.push({
                             absenceId: configuration.AbsenceId,
                             personId: personId,
-                            date: date.format()
+                            date: date.clone()
                         });
 
                         if (iterations.length > 2000) {
@@ -97,85 +97,88 @@ define([
             };
             
             var startPromise = messagebroker.start();
-            
-            var scheduleChangeSubscription = null;
-
+            var personScheduleDayReadModelSubscription;
             var result;
 
-            var messageReceived = function () {
-                if (!result)
-                    return;
-                
+            var personScheduleDayUpdated = function () {
                 progressItemPersonScheduleDayReadModel.Increment();
-                
+                calculateRunDone();
+            };
+
+            var calculateRunDone = function() {
                 var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
                 if (calculatedInterationsDone > result.IterationsDone()) {
                     result.IterationsDone(calculatedInterationsDone);
                     if (result.IterationsDone() >= self.IterationsExpected()) {
                         result.RunDone(true);
                         result = null;
+                        messagebroker.unsubscribe(personScheduleDayReadModelSubscription);
+                        personScheduleDayReadModelSubscription = null;
                     }
                 }
             };
-
+            
             this.Run = function () {
                 
                 progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
 
-                for (var i = 0; i < iterations.length; i++) {
-                    var iteration = iterations[i];
+                startPromise.done(function () {
                     
-                    startPromise.done(function() {
-                        messagebroker.subscribe({
-                            domainReferenceType: 'Person',
-                            domainReferenceId: iteration.personId,
-                            domainType: 'IPersonScheduleDayReadModel',
-                            callback: function(notification) {
-                                var momentDate = moment(iteration.date);
-                                var startDate = helpers.Date.ToMoment(notification.StartDate);
-                                var endDate = helpers.Date.ToMoment(notification.EndDate);
-                                if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0) {
-                                    messageReceived();
-                                }
+                    personScheduleDayReadModelSubscription = messagebroker.subscribe({
+                        domainType: 'IPersonScheduleDayReadModel',
+                        callback: function (notification) {
+                            console.log(notification);
+                            var startDate = helpers.Date.ToMoment(notification.StartDate);
+                            var endDate = helpers.Date.ToMoment(notification.EndDate);
+                            var matchedIterations = $.grep(iterations, function(item) {
+                                return item.date.diff(startDate) == 0 && item.date.diff(endDate) == 0 && notification.DomainReferenceId == item.personId;
+                            });
+
+                            if (matchedIterations.length > 0) {
+                                personScheduleDayUpdated();
+                                personScheduleDayUpdated();
                             }
-                        });
-                    });
-
-                    var sendData = JSON.stringify({
-                        StartDate: iteration.date,
-                        EndDate: iteration.date,
-                        AbsenceId: iteration.absenceId,
-                        PersonId: iteration.personId
-                    });
-
-                    $.ajax({
-                        url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
-                        type: 'POST',
-                        dataType: 'json',
-                        contentType: 'application/json',
-                        cache: false,
-                        data: sendData,
-                        success: function (data, textStatus, jqXHR) {
-                           
                         }
+                    });
+
+
+                    var addPromises = [];
+
+                    for (var i = 0; i < iterations.length; i++) {
+                        var iteration = iterations[i];
+
+                        var sendData = JSON.stringify({
+                            StartDate: iteration.date,
+                            EndDate: iteration.date,
+                            AbsenceId: iteration.absenceId,
+                            PersonId: iteration.personId
+                        });
+
+                        addPromises.push(
+                            $.ajax({
+                                url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                cache: false,
+                                data: sendData,
+                                success: function (data, textStatus, jqXHR) {
+
+                                },
+                                error: function () {
+                                    personScheduleDayUpdated();
+                                    personScheduleDayUpdated();
+                                }
+                            })
+                        );
                     }
-                    );
-                }
 
-               result.CommandsDone(true);
-                
-                //setTimeout(function() {
-                //    result.CommandsDone(true);
-                //}, 1200);
+                    $.when(addPromises).then(function () {
+                        result.CommandsDone(true);
+                    });
 
-                //var fakeMessage = function() {
-                //    messageReceived();
-                //    if (!result)
-                //        return;
-                //    setTimeout(fakeMessage, 1300);
-                //};
-                //setTimeout(fakeMessage, 1300);
+                });
 
                 return result;
             };
