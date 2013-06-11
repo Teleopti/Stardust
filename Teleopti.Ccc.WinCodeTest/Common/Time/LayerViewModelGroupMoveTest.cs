@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyPersonalShiftLayerViewModelGroupMove()
         {
-            PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(_actLayer, _eventAggregator);
-            PersonalShiftLayerViewModel anotherPersonalShiftLayerViewModel = new PersonalShiftLayerViewModel(_actLayer, _eventAggregator);
+            PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, _actLayer, null, _eventAggregator);
+            PersonalShiftLayerViewModel anotherPersonalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, _actLayer, null, _eventAggregator);
 
             Assert.IsFalse(personalShiftLayerViewModel.ShouldBeIncludedInGroupMove(_overtimeLayerViewModel), "not moved when an overtimelayerviewmodel layer is moved");
             Assert.IsFalse(personalShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "not moved when a main shift layer is moved");
