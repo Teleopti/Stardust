@@ -109,14 +109,13 @@ function Get-UninstallRegPath {
         $MsiKey
     )
 
+    $WmiQuery = Get-WmiObject -Class Win32_OperatingSystem | Select-Object OSArchitecture
     # paths: x86 and x64 registry keys are different
-    if ([IntPtr]::Size -eq 4) {
-        $paths = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
+    if ($WmiQuery.OSArchitecture -eq "64-bit") {
+        $paths = @('HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     else {
-        $paths = @(
-            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
-            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
+        $paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     
     #check if any of them is acutally a folder path
@@ -130,6 +129,20 @@ function Get-UninstallRegPath {
 	}
 }
 
+function Check-ProductIsInstalled
+{
+    param(
+        $DisplayName
+    )
+    $r = Get-WmiObject Win32_Product | Where {$_.Name -match "$DisplayName"}
+    if ($r -ne $null) {
+        return $True
+        }
+    else  {
+        return $False
+    }
+}
+
 Function Uninstall-ByRegPath(){
     [CmdletBinding()]
     Param (
@@ -141,7 +154,6 @@ Function Uninstall-ByRegPath(){
 
 			$appKey = Get-Item -Path $path
 
-			#Write-Host $appKey.gettype()
 			if ($appKey -is [Microsoft.Win32.RegistryKey]) # If it is a system.object or something else this will fail.
 			{
 				$UninstallString = $appKey.GetValue("UninstallString")

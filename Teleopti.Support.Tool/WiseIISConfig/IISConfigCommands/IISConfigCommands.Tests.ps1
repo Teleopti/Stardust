@@ -9,8 +9,8 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 #2 open all .ps1 file of interest *.ps1 + *Tests.ps1
 #3 set a break point ("F9") in *.Tests.ps1 file
 #4 from the "command line" in ISE:
-#    Import-Module "C:\data\main\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
-#    Invoke-Pester "C:\data\main\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
+#    Import-Module "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
+#    Invoke-Pester "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
 #5 step step ("F10")
 ##============
 
@@ -21,18 +21,18 @@ $Ntml = "Ntlm"
 $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
-
+$displayName = "Teleopti CCC Server, version 7"
 function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
 		
 		It "should uninstall product"{
-			[bool] $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			[bool] $isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			if ($isInstalled) {
 				Uninstall-ByRegPath -path $path
 			}
 
-			$isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			$isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			$isInstalled | Should Be $False
 		}
 
@@ -187,5 +187,5 @@ function Test-InstallationWinAuth {
 #Main	
 TearDown
 Setup-PreReqs
-Test-InstallationSQLLogin
+#Test-InstallationSQLLogin
 TearDown
