@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </summary>
     public abstract class LayerViewModel : DataModel, ILayerViewModel
     {
-        #region fields
         private ILayer _layer;
         private DateTimePeriod _period;
         private TimeSpan _interval = TimeSpan.FromMinutes(15);
@@ -28,7 +27,19 @@ namespace Teleopti.Ccc.WinCode.Common
         private IEventAggregator _eventAggregator;
         private bool _isSelected;
 
-        #endregion
+
+				protected LayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
+				{
+					_parentObservingCollection = observer;
+					_eventAggregator = eventAggregator;
+					_layer = layer;
+					_period = _layer.Period;
+					_parent = parent;
+					MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
+					MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
+					DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
+				}
+
 
         #region properties
 
@@ -168,17 +179,6 @@ namespace Teleopti.Ccc.WinCode.Common
 
         #endregion
 
-        protected LayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-        {
-            _eventAggregator = eventAggregator;
-            _layer = layer;
-            _period = _layer.Period;
-            _parent = parent;
-            MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
-            MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
-            DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
-        }
-
         public bool CanDelete()
         {
             return IsMovePermitted();
@@ -240,12 +240,6 @@ namespace Teleopti.Ccc.WinCode.Common
             if (TimeSpan.FromMinutes(start.Minute) == Interval) start.ToInterval((int) Interval.TotalMinutes);
             if (TimeSpan.FromMinutes(end.Minute) == Interval) end.ToInterval((int) Interval.TotalMinutes);
             Period = new DateTimePeriod(start, end);
-        }
-
-        protected LayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : this(layer, parent, eventAggregator)
-        {
-            _parentObservingCollection = observer;
         }
         
         public virtual void UpdatePeriod()

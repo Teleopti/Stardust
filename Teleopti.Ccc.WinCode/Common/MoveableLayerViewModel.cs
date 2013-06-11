@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public abstract class MoveableLayerViewModel : LayerViewModel
     {
         protected MoveableLayerViewModel(ILayer layer, IShift parent,IEventAggregator eventAggregator)
-            : base(layer, parent, eventAggregator)
+				: base(null, layer, parent, eventAggregator)
         {
         }
 
