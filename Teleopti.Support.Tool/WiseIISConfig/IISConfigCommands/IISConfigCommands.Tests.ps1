@@ -86,76 +86,106 @@ function Setup-PreReqs {
 	}
 }
 
+function Test-InstallationSQLLogin {
+	Describe "Installation test - SQL DB Login"{  
+
+		It "Should install integrated security in SQL Server"{
+			$zipFile = Copy-ZippedMsi
+			$zipFile = Get-Item $zipFile
+			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+			
+			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
+		  
+			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
+
+		}
+		
+		It "SDK should be windows" {
+			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
+			$enabled | Should Be "True"
+		}
+
+		It "SDK should not be anonymous" {
+			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
+			$enabled | Should Be "False"
+		}
+		
+		It "Nhib file should exist and contain SQL Auth connection string" {
+			$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+			$computerName=(get-childitem -path env:computername).Value
+			$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
+			$nhibFile | Should Exist
+			$nhibFile | Should Contain "$connectionString"
+		}
+		
+		Add-CccLicenseToDemo
+		
+		It "should stop system" {
+			Stop-TeleoptiCCC
+			
+			Check-ServiceIsRunning "TeleoptiETLService" | Should Be $False
+			Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $False
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "ttp://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
+		}
+
+		It "should start system" {
+			Start-TeleoptiCCC
+		}
+	
+		It "should have a working SDK" {
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+		}
+		
+		It "should have a ETL Service running" {
+		Check-ServiceIsRunning "TeleoptiETLService" | Should Be $True
+		}
+
+		It "should have a Service Bus running" {
+		Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $True
+		}
+	}
+}
+
+function Test-InstallationWinAuth {
+
+	Describe "Installation test - Win Integrated Login"{ 
+
+		It "Should install integrated security in SQL Server"{
+			$zipFile = Copy-ZippedMsi
+			$zipFile = Get-Item $zipFile
+			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+			
+			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
+		  
+			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbIntegrated" -WinUser "toptinet\tfsintegration" -WinPassword "m8kemew0rk"
+		}
+		
+		It "SDK should be windows" {
+			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
+			$enabled | Should Be "True"
+		}
+
+		It "SDK should not be anonymous" {
+			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
+			$enabled | Should Be "False"
+		}
+		
+		It "Nhib file should exist and contain Win Auth connection string" {
+			$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+			$computerName=(get-childitem -path env:computername).Value
+			$connectionString="Data Source=$computerName;Integrated Security=SSPI;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
+			$nhibFile | Should Exist
+			$nhibFile | Should Contain "$connectionString"
+		}
+		
+		Add-CccLicenseToDemo
+	}
+}
+
+#Main	
 TearDown
 Setup-PreReqs
-
-Describe "Installation test - SQL DB Login"{  
-
-	It "Should install integrated security in SQL Server"{
-		$zipFile = Copy-ZippedMsi
-        $zipFile = Get-Item $zipFile
-		$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
-        
-        $BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
-      
-		Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
-
-	}
-	
-	It "SDK should be windows" {
-		$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
-		$enabled | Should Be "True"
-	}
-
-	It "SDK should not be anonymous" {
-		$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
-		$enabled | Should Be "False"
-	}
-	
-	It "Nhib file should exist and contain SQL Auth connection string" {
-		$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
-		$computerName=(get-childitem -path env:computername).Value
-		$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
-		$nhibFile | Should Exist
-		$nhibFile | Should Contain "$connectionString"
-	}
-	
-	Add-CccLicenseToDemo
-}
-
-TearDown
-
-Describe "Installation test - Win Integrated Login"{ 
-
-	It "Should install integrated security in SQL Server"{
-		$zipFile = Copy-ZippedMsi
-        $zipFile = Get-Item $zipFile
-		$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
-        
-        $BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
-      
-		Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbIntegrated" -WinUser "toptinet\tfsintegration" -WinPassword "m8kemew0rk"
-	}
-	
-	It "SDK should be windows" {
-		$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
-		$enabled | Should Be "True"
-	}
-
-	It "SDK should not be anonymous" {
-		$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
-		$enabled | Should Be "False"
-	}
-	
-	It "Nhib file should exist and contain Win Auth connection string" {
-		$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
-		$computerName=(get-childitem -path env:computername).Value
-		$connectionString="Data Source=$computerName;Integrated Security=SSPI;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
-		$nhibFile | Should Exist
-		$nhibFile | Should Contain "$connectionString"
-	}
-	
-	Add-CccLicenseToDemo
-}
-
+Test-InstallationSQLLogin
 TearDown

@@ -300,3 +300,41 @@ function Add-CccLicenseToDemo
         throw "Exec: $ErrorMessage"
     }
 }
+
+function Stop-TeleoptiCCC
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StopSystem.bat"
+    
+    [string]$ErrorMessage = "Stop system failed!"
+    & "$BatchFile" | Out-Null
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}
+
+function Start-TeleoptiCCC
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StartSystem.bat"
+    
+    [string]$ErrorMessage = "Start system failed!"
+    & "$BatchFile" | Out-Null
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}
+
+
+function Check-ServiceIsRunning{
+	param(
+		$ServiceName
+		)
+    $arrService = Get-Service -Name $ServiceName
+    if ($arrService.Status -eq "Running") {
+    	return $True
+    }
+    else {
+	return $False
+    }
+}
