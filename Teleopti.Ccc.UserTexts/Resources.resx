@@ -11464,4 +11464,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>
   </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Overtime Availability...</value>
+    <comment>Add overtime availability on a day</comment>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Overtime Availability</value>
+    <comment>Caption for the dialog to add overtime availability</comment>
+  </data>
 </root>
