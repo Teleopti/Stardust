@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				return new AbsenceLayerViewModel(null, layer, null);
 			}
-			public static AbsenceLayerViewModel CreateNormal(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
+			public static AbsenceLayerViewModel CreateForSchedule(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
 			{
 				return new AbsenceLayerViewModel(observer, layer, eventAggregator);
 			}

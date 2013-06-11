@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			
             foreach (IPersonAbsence persAbs in scheduleDay.PersonAbsenceCollection())
             {
-                layerViewModels.Add(AbsenceLayerViewModel.CreateNormal(observer, persAbs.Layer, eventAggregator));
+                layerViewModels.Add(AbsenceLayerViewModel.CreateForSchedule(observer, persAbs.Layer, eventAggregator));
             }
 
             //Set interval and part....refact to ctor

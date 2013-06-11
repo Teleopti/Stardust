@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
-            AbsenceLayerViewModel model = AbsenceLayerViewModel.CreateNormal(observer, absenceLayer, _eventAggregator);
+            AbsenceLayerViewModel model = AbsenceLayerViewModel.CreateForSchedule(observer, absenceLayer, _eventAggregator);
 
             #endregion
             #region expectations
