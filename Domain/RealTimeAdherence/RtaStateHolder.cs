@@ -51,7 +51,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == actualAgentState.PersonId);
 	        if (person == null || person.Id == null)
                 return;
-			_actualAgentStates.AddOrUpdate((Guid)person.Id, actualAgentState, (key, oldState) => actualAgentState);
+			_actualAgentStates.AddOrUpdate((Guid)person.Id, actualAgentState, (key, oldState) =>
+			    {
+			        if (oldState.ReceivedTime > actualAgentState.ReceivedTime)
+			            return oldState;
+
+			        return actualAgentState;
+			    });
         }
 
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
