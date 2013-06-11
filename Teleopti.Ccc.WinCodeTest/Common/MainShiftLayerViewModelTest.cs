@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_mocks.ReplayAll();
 
 			_layerWithPayload.Period = _period;
-			_target =  new MainShiftLayerViewModel(_layerWithPayload, null);
+			_target =  new MainShiftLayerViewModel(_layerWithPayload);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
