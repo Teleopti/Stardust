@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             ILayerViewModel visualLayerViewModel;
             if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, _eventAggregator);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, _eventAggregator);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = AbsenceLayerViewModel.CreateForProjection(visualLayer);
             else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, _eventAggregator);
             ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
 

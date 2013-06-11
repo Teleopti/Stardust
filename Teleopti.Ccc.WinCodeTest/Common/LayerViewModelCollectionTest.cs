@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, firstLayer.Last(), shift, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(overtime, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
-            AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(absenceLayer, null);
+            AbsenceLayerViewModel absenceLayerViewModel = AbsenceLayerViewModel.CreateForProjection(absenceLayer);
             MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(fakeActivityLayer, null);
             #endregion
 			mocks.ReplayAll();

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
-            return new AbsenceLayerViewModel(layer, null);
+            return AbsenceLayerViewModel.CreateForProjection(layer);
         }
 
         protected override bool ExpectMovePermitted
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
-            AbsenceLayerViewModel model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
+            AbsenceLayerViewModel model = AbsenceLayerViewModel.CreateNormal(observer, absenceLayer, _eventAggregator);
 
             #endregion
             #region expectations

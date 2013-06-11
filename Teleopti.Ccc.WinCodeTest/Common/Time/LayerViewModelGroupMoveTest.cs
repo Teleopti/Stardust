@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _actLayer = new ActivityLayer(ActivityFactory.CreateActivity("test"), _period);
 
             _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer, _eventAggregator);
-            _absenceLayerViewModel = new AbsenceLayerViewModel(new AbsenceLayer(_abs, _period), _eventAggregator);
+            _absenceLayerViewModel = AbsenceLayerViewModel.CreateForProjection(new AbsenceLayer(_abs, _period));
             _overtimeLayerViewModel = new OvertimeLayerViewModel(_actLayer, _eventAggregator);
         }
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         public void VerifyAbsenceLayerGroupMove()
         {
          
-            ILayerViewModel anotherAbsenceLayer = new AbsenceLayerViewModel(new AbsenceLayer(_abs, _period),_eventAggregator);
+            ILayerViewModel anotherAbsenceLayer = AbsenceLayerViewModel.CreateForProjection(new AbsenceLayer(_abs, _period));
 
             Assert.IsFalse(_absenceLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move, because its the SAME layer");
             Assert.IsTrue(_absenceLayerViewModel.ShouldBeIncludedInGroupMove(anotherAbsenceLayer), "Should  move");

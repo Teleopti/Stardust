@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             ILayerViewModel visualLayerViewModel;
             if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, eventAggregator);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, eventAggregator);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = AbsenceLayerViewModel.CreateForProjection(visualLayer);
             else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, eventAggregator);
             ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			
             foreach (IPersonAbsence persAbs in scheduleDay.PersonAbsenceCollection())
             {
-                layerViewModels.Add(new AbsenceLayerViewModel(observer, persAbs.Layer, eventAggregator));
+                layerViewModels.Add(AbsenceLayerViewModel.CreateNormal(observer, persAbs.Layer, eventAggregator));
             }
 
             //Set interval and part....refact to ctor
