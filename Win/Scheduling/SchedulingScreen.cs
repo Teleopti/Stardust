@@ -6200,6 +6200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonApproveRequestClick(object sender, EventArgs e)
 		{
 			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+			allNewBusinessRules.Remove(typeof(NewPersonAccountRule));
 			changeRequestStatus(
 				new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter, _handleBusinessRuleResponse,
 												_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
