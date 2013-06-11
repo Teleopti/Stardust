@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private bool _isSelected;
 
 
-				protected LayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
+				protected LayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator, bool isProjectionLayer)
 				{
 					_parentObservingCollection = observer;
 					_eventAggregator = eventAggregator;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WinCode.Common
 					MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
 					MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
 					DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
+					IsProjectionLayer = isProjectionLayer;
 				}
 
 
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public bool IsProjectionLayer
         {
             get;
-            set;
+            private set;
         }
 
 

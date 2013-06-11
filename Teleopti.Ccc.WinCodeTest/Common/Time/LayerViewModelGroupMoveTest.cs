@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             _actLayer = new ActivityLayer(ActivityFactory.CreateActivity("test"), _period);
 
-            _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
+            _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null);
             _absenceLayerViewModel = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period),null);
 	        _overtimeLayerViewModel = new OvertimeLayerViewModel(null,
 	                                                             new OvertimeShiftActivityLayer(
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             Assert.IsTrue(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel));
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_overtimeLayerViewModel), "not moved when overtime layer is moved");
 
-            ((MainShiftLayerViewModel)_mainShiftLayerViewModel).IsProjectionLayer = true;
+	        _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
             Assert.IsTrue(_mainShiftLayerViewModel.IsProjectionLayer,"Just checking that it's a Projectionlayer");
             Assert.False(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel),"Projectionlayers should not be moved");
            

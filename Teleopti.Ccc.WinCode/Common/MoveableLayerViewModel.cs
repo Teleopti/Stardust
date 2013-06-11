@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.WinCode.Common
 	    private readonly ILayer<IActivity> _layer;
 
         protected MoveableLayerViewModel(ILayer layer)
-						: base(null, layer, null, null)
+						: base(null, layer, null, null, true)
         {
         }
 
         protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent,IEventAggregator eventAggregator)
-            : base(observer, layer, parent,eventAggregator)
+            : base(observer, layer, parent,eventAggregator, false)
         {
 	        _layer = layer;
         }
