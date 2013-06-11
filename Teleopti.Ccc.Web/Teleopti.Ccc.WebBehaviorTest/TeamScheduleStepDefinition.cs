@@ -11,6 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 using Div = WatiN.Core.Div;
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			IOpenTheTeamPicker();
 
-			Pages.Pages.TeamSchedulePage.TeamPicker.SelectItemByText(optionText);
+			Select2Box.SelectItemByText("Team-Picker", optionText);
 		}
 
 
@@ -215,11 +216,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the team-picker")]
 		public void IOpenTheTeamPicker()
 		{
-			var teamPicker = Pages.Pages.TeamSchedulePage.TeamPicker;
-			if (teamPicker.IsClosed)
-				teamPicker.Open();
-
-			EventualAssert.That(() => teamPicker.IsOpen, Is.True);
+			Select2Box.Open("Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker with both teams")]

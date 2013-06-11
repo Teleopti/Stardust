@@ -34,7 +34,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
     function _init() {
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
-		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Settings.PartialInit);
 	}
 
     function _bindData() {
@@ -45,74 +44,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         vm = new settingsViewModel();
         _loadCultures();
         _bindData();
-
-		_passwordEvents();
-		_initButton();
-	}
-
-	function _initButton() {
-		$("#passwordButton")
-			.click(function () {
-				_updatePassword($("input#oldPassword").val(), $("input#password").val());
-			});
-	}
-
-	function _passwordEvents() {
-		$("input#password, input#passwordValidation").keyup(function () {
-			var incorrectLabel = $("#nonMatchingPassword");
-			var passwordButton = $("#passwordButton");
-			var pw = $("input#password").val();
-			var pw2 = $("input#passwordValidation").val();
-			if (pw != pw2) {
-				incorrectLabel.show();
-				passwordButton.attr('disabled','disabled');
-			} else {
-				incorrectLabel.hide();
-				passwordButton.removeAttr('disabled');
-			}
-		});
-
-		$("input#oldPassword").keyup(function () {
-			$("#incorrectOldPassword").hide();
-		});
-
-		$("input#password").keyup(function () {
-			$("#invalidNewPassword").hide();
-		});
-		$("input#passwordValidation").keyup(function () {
-			$("#invalidNewPassword").hide();
-		});
-	}
-
-	function _updatePassword(oldPassword, newPassword) {
-		var data = { OldPassword: oldPassword, NewPassword: newPassword };
-		ajax.Ajax({
-			url: "Settings/ChangePassword",
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: 'POST',
-			data: JSON.stringify(data),
-			success: function (data, textStatus, jqXHR) {
-				var updatedLabel = $("label#updated");
-				updatedLabel.show();
-				$("#incorrectOldPassword").hide();
-				$("#invalidNewPassword").hide();
-				$("#settings input").reset();
-				setTimeout(function () { updatedLabel.hide(); }, 2000);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var error = $.parseJSON(jqXHR.responseText);
-					if (error.IsAuthenticationSuccessful) {
-						$("#invalidNewPassword").show();
-					} else {
-						$("#incorrectOldPassword").show();
-					}
-					return;
-				}
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
 	}
 
 	function _loadCultures() {
@@ -153,19 +84,111 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _activatePlaceHolderText() {
-	    $(':text, :password').placeholder();
-	}
-
 	return {
 		Init: function () {
 			_init();
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
-			_partialInit();
-			readyForInteraction();
-			completelyLoaded();
-		    _activatePlaceHolderText();
+
+		    $('#Test-Picker').select2();
+		    _partialInit();
+		    readyForInteraction();
+		    completelyLoaded();
 		}
 	};
+})(jQuery);
+
+
+Teleopti.MyTimeWeb.Password = (function ($) {
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
+
+    function _init() {
+        Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Password.PartialInit);
+    }
+
+    function _partialInit() {
+        _passwordEvents();
+        _initButton();
+    }
+
+    function _initButton() {
+        $("#passwordButton")
+			.click(function () {
+			    _updatePassword($("input#oldPassword").val(), $("input#password").val());
+			});
+    }
+
+    function _passwordEvents() {
+        $("input#password, input#passwordValidation").keyup(function () {
+            var incorrectLabel = $("#nonMatchingPassword");
+            var passwordButton = $("#passwordButton");
+            var pw = $("input#password").val();
+            var pw2 = $("input#passwordValidation").val();
+            if (pw != pw2) {
+                incorrectLabel.show();
+                passwordButton.attr('disabled', 'disabled');
+            } else {
+                incorrectLabel.hide();
+                passwordButton.removeAttr('disabled');
+            }
+        });
+
+        $("input#oldPassword").keyup(function () {
+            $("#incorrectOldPassword").hide();
+        });
+
+        $("input#password").keyup(function () {
+            $("#invalidNewPassword").hide();
+        });
+        $("input#passwordValidation").keyup(function () {
+            $("#invalidNewPassword").hide();
+        });
+    }
+
+    function _updatePassword(oldPassword, newPassword) {
+        var data = { OldPassword: oldPassword, NewPassword: newPassword };
+        ajax.Ajax({
+            url: "Settings/ChangePassword",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST',
+            data: JSON.stringify(data),
+            success: function (data, textStatus, jqXHR) {
+                var updatedLabel = $("label#updated");
+                updatedLabel.show();
+                $("#incorrectOldPassword").hide();
+                $("#invalidNewPassword").hide();
+                $("#settings input").reset();
+                setTimeout(function () { updatedLabel.hide(); }, 2000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 400) {
+                    var error = $.parseJSON(jqXHR.responseText);
+                    if (error.IsAuthenticationSuccessful) {
+                        $("#invalidNewPassword").show();
+                    } else {
+                        $("#incorrectOldPassword").show();
+                    }
+                    return;
+                }
+                Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+            }
+        });
+    }
+
+    function _activatePlaceHolderText() {
+        $(':text, :password').placeholder();
+    }
+
+    return {
+        Init: function () {
+            _init();
+        },
+        PartialInit: function (readyForInteraction, completelyLoaded) {
+            _partialInit();
+            readyForInteraction();
+            completelyLoaded();
+            _activatePlaceHolderText();
+        }
+    };
 })(jQuery);

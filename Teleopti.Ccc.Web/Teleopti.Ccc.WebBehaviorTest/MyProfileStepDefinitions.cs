@@ -9,6 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -176,46 +177,34 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void ChangeCulture(string culture)
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 
 			IOpenTheCulturePicker();
-			page.CultureSelect.SelectItemByText(culture);
+			Select2Box.SelectItemByText("Culture-Picker", culture);
 
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
 		}
 
 		private static void ChangeUiCulture(string culture)
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
 
 			IOpenTheCultureUiPicker();
-			page.CultureUiSelect.SelectItemByText(culture);
+			Select2Box.SelectItemByText("CultureUi-Picker", culture);
 
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
 		}
 
 		private static void IOpenTheCultureUiPicker()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			var picker = page.CultureUiSelect;
-			if (picker.IsClosed)
-				picker.Open();
-
-			EventualAssert.That(() => picker.IsOpen, Is.True);
+			Select2Box.Open("CultureUi-Picker");
 		}
 
 		private static void IOpenTheCulturePicker()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			var picker = page.CultureSelect;
-			if (picker.IsClosed)
-				picker.Open();
-
-			EventualAssert.That(() => picker.IsOpen, Is.True);
+			Select2Box.Open("Culture-Picker");
 		}
 
 	}
