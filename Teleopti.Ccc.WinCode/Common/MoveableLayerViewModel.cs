@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return Parent != null && IsMovePermitted() ?
-                Parent.LayerCollection.CanMoveUpLayer(Layer as ILayer<IActivity>) : false;
+                return Parent != null && IsMovePermitted() && Parent.LayerCollection.CanMoveUpLayer(Layer as ILayer<IActivity>);
             }
         }
 
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return Parent != null && IsMovePermitted() ?
-                Parent.LayerCollection.CanMoveDownLayer(Layer as ILayer<IActivity>) : false;
+                return Parent != null && IsMovePermitted() && Parent.LayerCollection.CanMoveDownLayer(Layer as ILayer<IActivity>);
             }
         }
 
