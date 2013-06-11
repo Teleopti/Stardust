@@ -208,11 +208,6 @@ namespace Teleopti.Ccc.WinCode.Common
             layers.ForEach(Add);
         }
 
-        public int IndexOfLayer(ILayer layer)
-        {
-            return IndexOf(this.FirstOrDefault(l => l.Layer == layer));
-        }
-
         public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
         {
             IEnumerable<ILayerViewModel> listToCheck;
