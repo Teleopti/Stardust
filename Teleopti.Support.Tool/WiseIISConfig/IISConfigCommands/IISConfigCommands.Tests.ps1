@@ -187,5 +187,5 @@ function Test-InstallationWinAuth {
 #Main	
 TearDown
 Setup-PreReqs
-#Test-InstallationSQLLogin
+Test-InstallationSQLLogin
 TearDown
