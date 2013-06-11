@@ -8,12 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public class AbsenceLayerViewModel : LayerViewModel
     {
         public AbsenceLayerViewModel(ILayer layer,IEventAggregator eventAggregator)
-            : this(layer,null,eventAggregator)
-        {
-        }
-
-        public AbsenceLayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : base(null, layer, parent,eventAggregator)
+							: base(null, layer, null, eventAggregator)
         {
         }
 
