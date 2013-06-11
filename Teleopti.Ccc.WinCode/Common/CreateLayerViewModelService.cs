@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
                 {
                     foreach (
-                        IOvertimeShiftActivityLayer layer in overtimeShift.LayerCollectionWithDefinitionSet())
+                        var layer in overtimeShift.LayerCollectionWithDefinitionSet())
                     {
                         layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, eventAggregator));
                     }

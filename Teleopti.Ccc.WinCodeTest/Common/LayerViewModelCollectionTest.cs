@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyMoveAllTriggersParentCollection()
         {
             TimeSpan toMove = TimeSpan.FromHours(2);
-            ILayer layer = mocks.StrictMock<ILayer>();
+            var layer = mocks.StrictMock<ILayer<IActivity>>();
             IShift shift = mocks.StrictMock<IShift>();
             using (mocks.Record())
             {

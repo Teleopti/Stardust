@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.WinCode.Common
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
         public MainShiftLayerViewModel(ILayer layer, IEventAggregator eventAggregator)
-            : base(null, layer, null, eventAggregator)
+            : base(layer, eventAggregator)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
             : base(observer,layer, parent, eventAggregator)
         {
         }
