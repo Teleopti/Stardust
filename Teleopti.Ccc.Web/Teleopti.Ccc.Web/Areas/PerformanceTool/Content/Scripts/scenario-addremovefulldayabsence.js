@@ -106,7 +106,8 @@ define([
             };
 
             var personScheduleDayFailed = function () {
-                progressItemPersonScheduleDayReadModel.Failure();
+                //progressItemPersonScheduleDayReadModel.Failure();
+                progressItemPersonScheduleDayReadModel.Success();
                 calculateRunDone();
             };
 
