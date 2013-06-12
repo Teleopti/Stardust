@@ -23,6 +23,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             }
         }
 
+		public IEnumerable<IAbsenceRequestOpenPeriod> AllPeriods
+		{
+			get
+			{
+				foreach (IAbsenceRequestOpenPeriod openAbsenceRequestPeriod in _workflowControlSet.AbsenceRequestOpenPeriods)
+				{
+					if (_absence.Equals(openAbsenceRequestPeriod.Absence))
+					{
+						yield return openAbsenceRequestPeriod;
+					}
+				}
+			}
+		}
+
         public IOpenAbsenceRequestPeriodProjection Projection
         {
             get { return new OpenAbsenceRequestPeriodProjection(this); }
