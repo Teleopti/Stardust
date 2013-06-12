@@ -13,7 +13,6 @@ define([
             this.CommandsDone = ko.observable(false);
             this.RunDone = ko.observable(false);
 
-
             this.StartTime = ko.observable();
             
             this.CommandEndTime = ko.computed(function() {
@@ -29,8 +28,5 @@ define([
                 else
                     return null;
             });
-
-
         };
-
     });

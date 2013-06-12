@@ -94,7 +94,7 @@
                             <label>Configuration</label>
                             <textarea class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown'"></textarea>
                             <label></label>
-                            <button class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
+                            <button class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled && !IsRunning(), click: Run"></button>
                         </fieldset>
                     </form>
                 </div>

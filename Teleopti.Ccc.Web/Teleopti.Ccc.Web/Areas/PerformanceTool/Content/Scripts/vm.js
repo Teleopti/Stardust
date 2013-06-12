@@ -98,6 +98,13 @@ define([
             return null;
         });
 
+        this.IsRunning = ko.computed(function() {
+            var runInfo = run();
+            if (runInfo && !runInfo.RunDone())
+                return true;
+            return false;
+        });
+
         this.RunDone = ko.computed(function () {
             var runInfo = run();
             if (runInfo)
