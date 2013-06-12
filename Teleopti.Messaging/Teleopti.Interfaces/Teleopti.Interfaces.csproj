@@ -487,7 +487,6 @@
     <Compile Include="Domain\IAbsenceLayer.cs" />
     <Compile Include="Domain\IActiveAgentCount.cs" />
     <Compile Include="Domain\IActivity.cs" />
-    <Compile Include="Domain\IActivityLayer.cs" />
     <Compile Include="Domain\IAggregateEntity.cs">
       <SubType>Code</SubType>
     </Compile>

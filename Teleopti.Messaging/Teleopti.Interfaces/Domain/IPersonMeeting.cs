@@ -28,6 +28,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-10-12
         /// </remarks>
-        IActivityLayer ToLayer();
+        ILayer<IActivity> ToLayer();
     }
 }
