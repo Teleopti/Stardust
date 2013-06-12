@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		}
 	}
 
+	[Serializable()]
 	public class BrowserInteractionException : Exception
 	{
 		public BrowserInteractionException(string message, Exception innerException)
