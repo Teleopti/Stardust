@@ -118,7 +118,7 @@
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
-    <Compile Include="ApplicationLayer\FullDayAbsence\AddFullDayAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
@@ -521,7 +521,7 @@
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
-    <Compile Include="ApplicationLayer\FullDayAbsence\FullDayAbsenceAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\FullDayAbsenceAddedEvent.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
