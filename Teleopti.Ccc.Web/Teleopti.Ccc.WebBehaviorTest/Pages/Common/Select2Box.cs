@@ -4,12 +4,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
 	public static class Select2Box
 	{
-		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)
-		{
-			Browser.Interactions.Javascript(string.Format(
-				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
-		}
-
 		public static void AssertSelectedOptionText(string select2Id, string optionText)
 		{
 			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
@@ -58,6 +52,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			AssertOptionExist(select2Id, text);
 			Browser.Interactions.Javascript("$('.select2-result-selectable div:contains(\"" + text + "\")').trigger('mouseup');");
 			Browser.Interactions.AssertExists(string.Format("#s2id_{0} .select2-choice span:contains('{1}')", select2Id, text));
+		}
+
+		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)
+		{
+			Browser.Interactions.Javascript(string.Format(
+				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
+			AssertSelectedOptionValue(select2Id, optionValue);
 		}
 	}
 }
