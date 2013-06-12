@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 	    void SynchronizeWithDomainRoger();
         bool IsSelected { get; set; }
-        IShift Parent { get; }
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }
         TimeSpan Interval { get; set; }
