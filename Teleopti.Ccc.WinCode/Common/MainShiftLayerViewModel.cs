@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (ParentObservingCollection != null)
 			{
-				ParentObservingCollection.RemoveActivity(this);
+				ParentObservingCollection.RemoveActivity(this,Layer as ILayer<IActivity>,SchedulePart);
 				TriggerShiftEditorUpdate();
 			}
 		}

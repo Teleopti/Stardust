@@ -106,23 +106,23 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _removeService; }
         }
 
-        public void RemoveActivity(ILayerViewModel sender)
-        {
-            RemoveService.Remove(sender.SchedulePart, sender.Layer as ILayer<IActivity>);
-            CreateProjectionViewModels(sender.SchedulePart);
+		public void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer, IScheduleDay scheduleDay)
+		{
+			RemoveService.Remove(scheduleDay, activityLayer);
+			CreateProjectionViewModels(scheduleDay);
 
-            Remove(sender);
-        }
+			Remove(sender);
+		}
 
-        public void RemoveAbsence(ILayerViewModel sender)
-        {
-            RemoveService.Remove(sender.SchedulePart, sender.Layer as ILayer<IAbsence>);
-            CreateProjectionViewModels(sender.SchedulePart);
+	    public void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay)
+	    {
+			RemoveService.Remove(scheduleDay, absenceLayer);
+			CreateProjectionViewModels(scheduleDay);
 
-            Remove(sender);
-        }
+			Remove(sender);
+	    }
 
-        public void SelectLayer(ILayerViewModel model)
+	    public void SelectLayer(ILayerViewModel model)
         {
             //deselect all other models:
             if (model != ScheduleLayers.CurrentItem || !model.IsSelected)
@@ -240,7 +240,8 @@ namespace Teleopti.Ccc.WinCode.Common
             CreateProjectionViewModels(_part);
         }
 
-        private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
+	   
+	    private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
         {
             ILayerViewModel visualLayerViewModel;
             if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);

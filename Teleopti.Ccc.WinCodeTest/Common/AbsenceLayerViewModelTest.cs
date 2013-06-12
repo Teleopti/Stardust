@@ -53,17 +53,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyDeleteCommandCallsObserver()
         {
             #region setup
-            ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
+            var observer = _mocks.StrictMock<ILayerViewModelObserver>();
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
-            AbsenceLayerViewModel model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
+            var model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
 
             #endregion
             #region expectations
             using (_mocks.Record())
             {
-                Expect.Call(() => observer.RemoveAbsence(model));            
+                Expect.Call(() => observer.RemoveAbsence(model,absenceLayer,model.SchedulePart));            
                
             }
             #endregion

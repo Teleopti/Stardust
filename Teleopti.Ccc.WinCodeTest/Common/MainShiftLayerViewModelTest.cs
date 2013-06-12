@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			#region expectations
 			using (_mocks.Record())
 			{
-				Expect.Call(() => observer.RemoveActivity(model));
+				Expect.Call(() => observer.RemoveActivity(model,firstLayer,model.SchedulePart));
 			}
 			#endregion
 

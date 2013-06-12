@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
@@ -8,9 +9,9 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void LayerMovedVertically(ILayerViewModel sender);
 
-        void RemoveActivity(ILayerViewModel sender);
+        void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer,IScheduleDay scheduleDay);
 
-        void RemoveAbsence(ILayerViewModel sender);
+		void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay);
 
         void SelectLayer(ILayerViewModel model);
 
