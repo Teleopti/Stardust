@@ -207,45 +207,41 @@ create table #PersonAbsenceRemove (Id uniqueidentifier)
 
 insert into #PersonAbsenceRemove (Id)
 select Id from PersonAbsence
-where id not in 
-
+where id not in
 (
-	--get the single one that we want to keep from the duplicates, count(*) > 1
-	select id
+	--keep longest Abscence with lowest Guid from the duplicates, count(*) > 1
+	select t1.Id
 	from PersonAbsence t1
 	inner join (
-		select person, Minimum, PayLoad, max(Maximum) Maximum
+		select cast(min(cast(id as varchar(36))) as uniqueidentifier) Id, person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
 		from PersonAbsence
-		group by person, Minimum,PayLoad
+		group by person, Scenario, Minimum,PayLoad
 		having count(*) > 1
 	) t2
 	on t1.Person = t2.Person
+		and t1.Id = t2.Id --t2.Id is lowest one -> manipulated string/Id cast above
 		and t1.Minimum = t2.Minimum
 		and t1.PayLoad = t2.PayLoad
-		and t1.Maximum = t2.Maximum
+		and t1.Maximum = t2.Maximum --t2.Maximum is the longest one
+		and t1.Scenario= t2.Scenario
+
 	union all
 	
 	--get all the correct ones, count(*) = 1
-	select Id
+	select t1.Id
 	from PersonAbsence t1
 	inner join (
-		select person, Minimum, PayLoad, max(Maximum) Maximum
+		select person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
 		from PersonAbsence
-		group by person, Minimum,PayLoad
+		group by person, Scenario, Minimum,PayLoad
 		having count(*) = 1
 	) t2
 	on t1.Person = t2.Person
 		and t1.Minimum = t2.Minimum
 		and t1.PayLoad = t2.PayLoad
 		and t1.Maximum = t2.Maximum
+		and t1.Scenario= t2.Scenario
 )
-
---finally get any duplicates left
---cast GUID to string and back to handle SQL 2005
-insert into #PersonAbsenceRemove (Id)
-select Id from PersonAbsence
-where Id not in (select Id from #PersonAbsenceRemove)
-and Id not in (select cast(min(cast(id as varchar(36))) as uniqueidentifier) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
 
 --delete PersonAbsence_AUD
 delete aud
