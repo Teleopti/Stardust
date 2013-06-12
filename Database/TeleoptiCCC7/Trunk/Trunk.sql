@@ -264,7 +264,8 @@ where id not in
 )
 
 --finally delete any duplicates left
+--cast GUID to string and back to handle SQL 2005
 delete from PersonAbsence
 where id not in 
-(select min(id) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
+(select cast(min(cast(id as varchar(36))) as uniqueidentifier) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
 GO
