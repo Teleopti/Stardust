@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -36,11 +37,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public bool CanExecute()
 		{
-			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			if (_scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 			{
-				if (persistableScheduleData is IOvertimeAvailability) return false;
+				if (_scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().Count() == 2) return false;
 			}
-
+			else
+			{
+				foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+				{
+					if (persistableScheduleData is IOvertimeAvailability) return false;
+				}
+			}
+			
 			bool startTimeError;
 			bool endTimeError;
 			if (!_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)) return false;

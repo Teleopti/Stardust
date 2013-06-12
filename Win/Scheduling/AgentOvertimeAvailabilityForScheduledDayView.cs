@@ -124,14 +124,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (!result)
 			{
-				if (startTimeError) setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
+				setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
 			}
 
 			result = _dayCreator.CanCreate(_shiftTimePeriod.EndTime, endTime, out shiftEndsTimeError, out endTimeError);
 
 			if (!result)
 			{
-				if (endTimeError) setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
+				setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
 			}
 			
 			return result;

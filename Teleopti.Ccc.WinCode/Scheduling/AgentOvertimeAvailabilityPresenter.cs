@@ -74,13 +74,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
-
-			var overtimeAvailability = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
-			if (overtimeAvailability != null)
+			if (_scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 			{
-				startTime = overtimeAvailability.StartTime;
-				endTime = overtimeAvailability.EndTime;
+				var overtimeAvailabilities =
+					_scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().ToList();
+				if (overtimeAvailabilities.Count == 2)
+				{
+					startTime = overtimeAvailabilities[0].StartTime;
+					endTime = overtimeAvailabilities[1].EndTime;
+				}
 			}
+			else
+			{
+				var overtimeAvailability =
+					_scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
+				if (overtimeAvailability != null)
+				{
+					startTime = overtimeAvailability.StartTime;
+					endTime = overtimeAvailability.EndTime;
+				}
+			}
+
 			_view.Update(startTime, endTime);
 		}
 
