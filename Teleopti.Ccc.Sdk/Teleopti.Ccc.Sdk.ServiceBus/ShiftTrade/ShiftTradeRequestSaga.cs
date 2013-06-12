@@ -227,6 +227,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             var rules = NewBusinessRuleCollection.All(_schedulingResultStateHolder);
             rules.Remove(typeof (NewPersonAccountRule));
             rules.Remove(typeof (NewShiftCategoryLimitationRule));
+            rules.Remove(typeof (OpenHoursRule));
             rules.SetUICulture(_personRequest.Person.PermissionInformation.UICulture());
             return rules;
         }
