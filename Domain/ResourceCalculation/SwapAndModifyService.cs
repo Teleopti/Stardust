@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
             }
 
-            var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
-
+			var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
 
 			//if rules on the day that are not overriden return them
 			var ruleRepsonsesOnDay = new List<IBusinessRuleResponse>(ruleRepsonses)
@@ -44,12 +43,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (ruleRepsonsesOnDay.Count > 0)
 				return ruleRepsonsesOnDay;
 
-
 			// if no response on day just override them and try again
 			ruleRepsonses.ToList().ForEach(newBusinessRuleCollection.Remove);
 
 			ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
-			
 			
 			return ruleRepsonses.Where(r => !r.Overridden).ToList();
         }
