@@ -33,44 +33,4 @@
 		bool AdjacentTo(IPeriodized layer);
 
 	}
-
-	/// <summary>
-	/// Base interface for all layers
-	/// Do not use this explicitly, use generic type instead
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-01-25
-	/// </remarks>
-	public interface ILayer : IPeriodized
-	{
-		/// <summary>
-		/// Gets the period.
-		/// </summary>
-		/// <value>The period.</value>
-		new DateTimePeriod Period { get; set; }
-
-		/// <summary>
-		/// Gets the name of the payload.
-		/// </summary>
-		/// <value>The name of the payload.</value>
-		object Payload { get; set; }
-
-		/// <summary>
-		/// Gets the index of the order.
-		/// </summary>
-		/// <value>The index of the order.</value>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-01-25
-		/// </remarks>
-		int OrderIndex { get; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		bool Equals(ILayer other);
-	}
 }
