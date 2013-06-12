@@ -234,7 +234,6 @@ insert into #PersonAbsenceRemove (Id)
 select Id from PersonAbsence
 where Id not in (select Id from #PersonAbsenceRemove)
 and Id not in (select cast(min(cast(id as varchar(36))) as uniqueidentifier) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
-GO
 
 --delete PersonAbsence_AUD
 delete aud
