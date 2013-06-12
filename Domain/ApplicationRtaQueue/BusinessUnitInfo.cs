@@ -1,6 +1,7 @@
 ﻿using System;
+using Teleopti.Interfaces.Messages;
 
-namespace Teleopti.Interfaces.Messages.Rta
+namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 {
     /// <summary>
     /// 

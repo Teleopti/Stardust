@@ -1,8 +1,9 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using log4net;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 {
 	public class UpdatedScheduleInfoHandler : 
 		IHandleEvent<PersonWithExternalLogOn>,
