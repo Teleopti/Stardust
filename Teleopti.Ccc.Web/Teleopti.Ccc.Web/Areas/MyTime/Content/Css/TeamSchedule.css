@@ -166,10 +166,6 @@
 	 width: 110px;
 }
 
-.teamschedule-agent-schedule .tooltip {
-	position: absolute;
-}
-
 .teamschedule-agent-schedule .tooltip-container {
 	top: -55px;
 	height: 57px;

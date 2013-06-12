@@ -25,7 +25,6 @@
 	 background-repeat: repeat-x;
 }
 
-.body-weekview { }
 .body-weekview-inner {
 	border: 1px solid #dfdfdf;
 	background: #f8f8f8;
@@ -40,7 +39,6 @@
 
 .body-weekview-inner ul.today{background-position: 0 0; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
 .body-weekview-inner ul.ui-selected{background-position: 0 -2000px;}
-.body-weekview-inner ul:first-child{}
 
 .weekview-day
 {
@@ -191,17 +189,12 @@ select.absence-input
 	border-right: 1px solid #dfdfdf;
 }
 .weekview-timeline-label {
-	border: 1px solid #dfdfdf;
 	font-size: 6pt;
-	border-radius: 2px;
 	width: 29px;
-	height: 10px;
+	height: 20px;
 	text-align: center;
 	overflow: hidden;
 	white-space: pre-wrap;
-}
-.rgba .weekview-timeline-label {
-	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .fourth {
 	height: 15px;

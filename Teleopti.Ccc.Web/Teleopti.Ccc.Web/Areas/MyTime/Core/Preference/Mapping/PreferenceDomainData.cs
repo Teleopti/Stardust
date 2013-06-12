@@ -16,5 +16,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		public DateOnly Date { get; set; }
 	}
-
 }

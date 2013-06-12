@@ -1,63 +1,64 @@
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
-	public class Select2Box : Control<TextField>
+	public static class Select2Box
 	{
-		public Div Container { get { return Element.PreviousSibling as Div; } }
-
-		public string Value
+		public static void AssertSelectedOptionText(string select2Id, string optionText)
 		{
-			get { return Element.Value; }
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
 		}
 
-		public bool IsClosed {
-			get
-			{
-				return Container.Div(QuicklyFind.ByClass("select2-offscreen")).Exists;
-			}
-		}
-
-		public bool IsOpen
+		public static void AssertSelectedOptionValue(string select2Id, string optionValue)
 		{
-			get
-			{
-				var div = Element.DomContainer.Div(QuicklyFind.ByClass("team-select2-dropdown"));
-				return div.Exists && div.DisplayVisible();
-			}
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option[value=\"{0}\"]:selected').length;", optionValue), "1");
 		}
 
-		public IEnumerable<string> OptionsTexts
+		public static void AssertOptionExist(string select2Id, string optionText)
 		{
-			get
-			{
-				EventualAssert.That(() => IsOpen, Is.True);
-				var items = Element.DomContainer.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-				return from item in items select item.Children().First().Text;
-			}
+			AssertIsOpen(select2Id);
+			Browser.Interactions.AssertExists(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
 		}
 
-		public void Open()
+		public static string FirstOptionText
 		{
-			Element.DomContainer.Eval("$('#" + Element.Id + "').select2('open')");
+			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:first-child');"); }
 		}
 
-		public void SelectItemByIdAndText(string id, string text)
+		public static string LastOptionText
 		{
-			Element.DomContainer.Eval("$('#" + Element.Id + "').select2('data', {id:'" + id + "', text:'" + text + "'}).trigger('change')");
+			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:last-child');"); }
 		}
 
-		public void SelectItemByText(string text)
+		public static void AssertIsOpen(string select2Id)
 		{
-			EventualAssert.That(() => OptionsTexts.Contains(text), Is.True);
-			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");
-			EventualAssert.That(() => Container.InnerHtml, Contains.Substring(text));
+			Browser.Interactions.AssertExists(string.Format("#s2id_{0}.select2-dropdown-open", select2Id));
 		}
 
+		public static void AssertIsClosed(string select2Id)
+		{
+			Browser.Interactions.AssertNotExists(string.Format("#s2id_{0}", select2Id), string.Format("#s2id_{0}.select2-dropdown-open", select2Id));
+		}
+
+		public static void Open(string select2Id)
+		{
+			AssertIsClosed(select2Id);
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			AssertIsOpen(select2Id);
+		}
+		
+		public static void SelectItemByText(string select2Id, string text)
+		{
+			AssertOptionExist(select2Id, text);
+			Browser.Interactions.Javascript("$('.select2-result-selectable div:contains(\"" + text + "\")').trigger('mouseup');");
+			Browser.Interactions.AssertExists(string.Format("#s2id_{0} .select2-choice span:contains('{1}')", select2Id, text));
+		}
+
+		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)
+		{
+			Browser.Interactions.Javascript(string.Format(
+				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
+			AssertSelectedOptionValue(select2Id, optionValue);
+		}
 	}
 }
