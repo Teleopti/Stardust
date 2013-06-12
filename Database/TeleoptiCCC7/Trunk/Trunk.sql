@@ -221,12 +221,51 @@ CREATE NONCLUSTERED INDEX [IX_PersonPeriod_StartDate] ON [dbo].[PersonPeriod]
 	[StartDate] ASC
 )
 INCLUDE ([Parent],[Team])
+GO
 
 ----------------  
 --Name: David Jonsson
 --Date: 2013-06-12
 --Desc: Bug #23815 - remove duplicates from PersonAbsence
 ---------------- 
+--first remove duplicates but keep the Absence with the biggest time span
 delete from PersonAbsence
 where id not in 
-(select min(id) from PersonAbsence group by person, Minimum);
+
+(
+	--get the single one that we want to keep from the duplicates, count(*) > 1
+	select id
+	from PersonAbsence t1
+	inner join (
+		select person, Minimum, PayLoad, max(Maximum) Maximum
+		from PersonAbsence
+		group by person, Minimum,PayLoad
+		having count(*) > 1
+	) t2
+	on t1.Person = t2.Person
+		and t1.Minimum = t2.Minimum
+		and t1.PayLoad = t2.PayLoad
+		and t1.Maximum = t2.Maximum
+	union all
+	
+	--get all the correct ones, count(*) = 1
+	select Id
+	from PersonAbsence t1
+	inner join (
+		select person, Minimum, PayLoad, max(Maximum) Maximum
+		from PersonAbsence
+		group by person, Minimum,PayLoad
+		having count(*) = 1
+	) t2
+	on t1.Person = t2.Person
+		and t1.Minimum = t2.Minimum
+		and t1.PayLoad = t2.PayLoad
+		and t1.Maximum = t2.Maximum
+)
+
+--finally delete any duplicates left
+--cast GUID to string and back to handle SQL 2005
+delete from PersonAbsence
+where id not in 
+(select cast(min(cast(id as varchar(36))) as uniqueidentifier) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
+GO
