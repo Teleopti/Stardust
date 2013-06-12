@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -56,14 +57,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyMainShiftLayerViewModelGroupMove()
         {
-            MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
+            MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null,null);
 
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move when an absecnelayerviewmodel is moved");
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "Should not move when its the SAME layer");
             Assert.IsTrue(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel));
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_overtimeLayerViewModel), "not moved when overtime layer is moved");
 
-	        _mainShiftLayerViewModel = new MainShiftLayerViewModel(_actLayer);
+	        _mainShiftLayerViewModel = new MainShiftLayerViewModel(MockRepository.GenerateMock<IVisualLayer>());
             Assert.IsTrue(_mainShiftLayerViewModel.IsProjectionLayer,"Just checking that it's a Projectionlayer");
             Assert.False(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel),"Projectionlayers should not be moved");
            

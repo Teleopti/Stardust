@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </summary>
     public abstract class LayerViewModel : DataModel, ILayerViewModel
     {
-        private ILayer _layer;
+        private ILayer<IPayload> _layer;
         private DateTimePeriod _period;
         private TimeSpan _interval = TimeSpan.FromMinutes(15);
         private bool _isChanged;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private bool _isSelected;
 
 
-				protected LayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator, bool isProjectionLayer)
+				protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IShift parent, IEventAggregator eventAggregator, bool isProjectionLayer)
 				{
 					_parentObservingCollection = observer;
 					_eventAggregator = eventAggregator;
@@ -114,7 +114,6 @@ namespace Teleopti.Ccc.WinCode.Common
         public ILayer Layer
         {
             get { return _layer; }
-            set { _layer = value; }
         }
 
         public DateTimePeriod Period
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get
             {
                 var vs = _layer as IVisualLayer;
-                return vs == null ? ((IPayload)_layer.Payload).ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
+                return vs == null ? _layer.Payload.ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
             }
         }
 
@@ -367,13 +366,14 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return _layer.Payload as IPayload;
+                return _layer.Payload;
             }
             set
             {
                 if (IsPayloadChangePermitted && value != _layer.Payload)
                 {
-                    _layer.Payload = value;
+									//just for now
+                    ((ILayer)_layer).Payload = value;
                     IsChanged = true;
                     SendPropertyChanged("Description");
                     SendPropertyChanged("Payload");

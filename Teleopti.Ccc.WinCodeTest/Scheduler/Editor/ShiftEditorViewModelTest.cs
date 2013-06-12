@@ -347,8 +347,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             listener.ListenTo(_target);
             IActivity activity = new Activity("test");
             DateTimePeriod period= new DateTimePeriod(2001,1,1,2001,1,2);
-            ILayer layer = new MainShiftActivityLayer(activity, period);
-            ILayerViewModel model = new MainShiftLayerViewModel(layer);
+            var layer = new MainShiftActivityLayer(activity, period);
+            ILayerViewModel model = new MainShiftLayerViewModel(null,layer,null,null);
             
             #endregion
 
@@ -432,8 +432,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         {
             IActivity activity = new Activity("test");
             DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-            ILayer layer = new MainShiftActivityLayer(activity, period);
-            return  new MainShiftLayerViewModel(layer);
+            var layer = new MainShiftActivityLayer(activity, period);
+            return  new MainShiftLayerViewModel(null,layer,null,null);
         }
 
         private static void VerifyApplicationCommandModel(CommandModel commandModel,string appFunction)
@@ -446,8 +446,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private void VerifyCanOnlyExecuteIfMeetingIsSelected(CommandModel model)
         {
             TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
-            ILayer layer = new MainShiftActivityLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
-            MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(layer);
+            var layer = new MainShiftActivityLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
+            MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null,layer,null,null);
             _target.SelectLayer(mainShiftLayerViewModel);
             Assert.IsFalse(testerForCommandModels.CanExecute(model), "Should not be able to execute if the selected layer isnt a meeting");
             CreateAndSelectAMeeting();

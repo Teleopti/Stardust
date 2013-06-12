@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 	    private readonly ILayer<IActivity> _layer;
 
-        protected MoveableLayerViewModel(ILayer layer)
+        protected MoveableLayerViewModel(ILayer<IPayload> layer)
 						: base(null, layer, null, null, true)
         {
         }

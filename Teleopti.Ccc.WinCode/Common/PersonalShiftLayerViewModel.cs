@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class PersonalShiftLayerViewModel : LayerViewModel
     {
-        public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
+        public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
             : base(observer,layer, parent,eventAggregator, false)
         {
         }

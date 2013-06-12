@@ -10,7 +10,7 @@
     /// Base class for all layers
     /// </summary>
     /// <typeparam name="T">The type of the "payload"</typeparam>
-    public interface ILayer<T> : ILayer, ICloneableEntity<ILayer<T>>
+    public interface ILayer<out T> : ILayer, ICloneableEntity<ILayer<T>>
     {
         /// <summary>
         /// Gets the name of the payload.
