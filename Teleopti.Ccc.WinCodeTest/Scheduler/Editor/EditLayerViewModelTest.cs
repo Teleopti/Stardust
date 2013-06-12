@@ -1,4 +1,5 @@
 ﻿using System.Windows.Data;
+using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(ILayer<IActivity> layer) : base(null, layer, null, null)
+            public ModelForTest(ILayer<IActivity> layer) : base(null, layer, null,new EventAggregator())
             {
                 MovePermitted = true;
             }
