@@ -29,12 +29,6 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        object ILayer.Payload
-        {
-            get { return Payload; }
-            set { _payload = (T)value; }
-        }
-
         public virtual T Payload
         {
             get { return _payload; }

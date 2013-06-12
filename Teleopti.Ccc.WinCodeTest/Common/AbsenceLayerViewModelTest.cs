@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			Mocks.ReplayAll();
 
-			_layerWithPayload.Period = _period;
 			_target = new AbsenceLayerViewModel(null,_layerWithPayload,null);
 
 			testRunner = new CrossThreadTestRunner();
@@ -182,24 +181,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(succeeded);
 		}
 
-		[Test]
-		public void VerifyCanSetPeriod()
-		{
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Mocks.ReplayAll();
-
-			_listener.ListenTo(_target);
-
-			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Assert.IsTrue(_listener.HasFired("Period"));
-		}
 
 		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Mocks.ReplayAll();
-
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();

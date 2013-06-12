@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_layerWithPayload.Period = _period;
 			_target = new OvertimeLayerViewModel(null, _layerWithPayload, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
@@ -140,23 +139,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void VerifyCanSetPeriod()
-		{
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			_mocks.ReplayAll();
-
-			_listener.ListenTo(_target);
-
-			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Assert.IsTrue(_listener.HasFired("Period"));
-		}
-
-		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			_mocks.ReplayAll();
-
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();

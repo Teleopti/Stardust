@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_layerWithPayload.Period = _period;
 			_target = new PersonalShiftLayerViewModel(null, _layerWithPayload, null, null);
 
 			_testRunner = new CrossThreadTestRunner();
@@ -126,26 +125,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void VerifyCanSetPeriod()
-		{
-			_mocks.BackToRecord(_layerWithPayload);
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			_mocks.ReplayAll();
-
-			_listener.ListenTo(_target);
-
-			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Assert.IsTrue(_listener.HasFired("Period"));
-		}
-
-		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			_mocks.BackToRecord(_layerWithPayload);
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			LastCall.Repeat.Twice();
-			_mocks.ReplayAll();
-
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();

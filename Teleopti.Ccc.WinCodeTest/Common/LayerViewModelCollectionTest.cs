@@ -167,7 +167,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (mocks.Record())
             {
                 Expect.Call(layer.Period).Return(period).Repeat.Any();
-                layer.Period = period.MovePeriod(toMove);
+							//TODO!
+                //layer.Period = period.MovePeriod(toMove);
 
             }
             using (mocks.Playback())

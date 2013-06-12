@@ -120,7 +120,8 @@ namespace Teleopti.Ccc.WinCode.Common
                 if (_period != value)
                 {
                     _period = value;
-                    Layer.Period = _period;
+									//TODO!
+                    //Layer.Period = _period;
                     SendPropertyChanged("Period");
                     SendPropertyChanged("ElapsedTime");
                 }
@@ -240,7 +241,8 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (IsChanged)
             {
-							Layer.Period = Period;
+							//TODO!
+							//Layer.Period = Period;
                 if (_part != null)
                 {
 									hackToUpdateUnderlyingPersonAssignment();

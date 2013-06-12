@@ -134,23 +134,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void VerifyCanSetPeriod()
-		{
-
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-
-			_listener.ListenTo(_target);
-
-			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			Assert.IsTrue(_listener.HasFired("Period"));
-		}
-
-		[Test]
 		public void VerifyUpdatePeriod()
 		{
-			_layerWithPayload.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
-			_mocks.ReplayAll();
-
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
