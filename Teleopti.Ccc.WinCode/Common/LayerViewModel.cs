@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </summary>
     public abstract class LayerViewModel : DataModel, ILayerViewModel
     {
-        private ILayer<IPayload> _layer;
-        private DateTimePeriod _period;
+	    private DateTimePeriod _period;
         private TimeSpan _interval = TimeSpan.FromMinutes(15);
         private bool _isChanged;
         private ILayerViewModelObserver _parentObservingCollection;
@@ -32,8 +31,8 @@ namespace Teleopti.Ccc.WinCode.Common
 				{
 					_parentObservingCollection = observer;
 					_eventAggregator = eventAggregator;
-					_layer = layer;
-					_period = _layer.Period;
+					Layer = layer;
+					_period = Layer.Period;
 					_parent = parent;
 					MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
 					MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
@@ -111,12 +110,9 @@ namespace Teleopti.Ccc.WinCode.Common
             set { _interval = value; }
         }
 
-        public ILayer Layer
-        {
-            get { return _layer; }
-        }
+	    public ILayer<IPayload> Layer { get; private set; }
 
-        public DateTimePeriod Period
+	    public DateTimePeriod Period
         {
             get { return _period; }
             set
@@ -124,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 if (_period != value)
                 {
                     _period = value;
-                    _layer.Period = _period;
+                    Layer.Period = _period;
                     SendPropertyChanged("Period");
                     SendPropertyChanged("ElapsedTime");
                 }
@@ -135,8 +131,11 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                var vs = _layer as IVisualLayer;
-				return vs == null ? ((IPayload)_layer.Payload).ConfidentialDisplayColor(SchedulePart.Person, SchedulePart.DateOnlyAsPeriod.DateOnly) : vs.DisplayColor();
+                var vs = Layer as IVisualLayer;
+	            return vs == null
+		                   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person,
+		                                                             SchedulePart.DateOnlyAsPeriod.DateOnly)
+		                   : vs.DisplayColor();
             }
         }
 
@@ -149,8 +148,8 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                var vs = _layer as IVisualLayer;
-                return vs == null ? _layer.Payload.ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
+                var vs = Layer as IVisualLayer;
+                return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
             }
         }
 
@@ -246,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (IsChanged)
             {
-							_layer.Period = Period;
+							Layer.Period = Period;
                 if (_part != null)
                 {
 									hackToUpdateUnderlyingPersonAssignment();
@@ -269,7 +268,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 	            if (this is MeetingLayerViewModel)
 		            return OrderIndexBase + 1;
-							return OrderIndexBase + _layer.OrderIndex;
+							return OrderIndexBase + Layer.OrderIndex;
             }
         }
 
@@ -346,7 +345,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    private void hackToUpdateUnderlyingPersonAssignment()
 	    {
-				var mainShiftLayer = _layer as IMainShiftActivityLayer;
+				var mainShiftLayer = Layer as IMainShiftActivityLayer;
 		    if (mainShiftLayer != null)
 		    {
 			    var ms = (IMainShift) mainShiftLayer.Parent;
@@ -359,21 +358,18 @@ namespace Teleopti.Ccc.WinCode.Common
 
         #endregion
 
-        #region ILayerViewModel Members
-
-
         public virtual IPayload Payload
         {
             get
             {
-                return _layer.Payload;
+                return Layer.Payload;
             }
             set
             {
-                if (IsPayloadChangePermitted && value != _layer.Payload)
+                if (IsPayloadChangePermitted && value != Layer.Payload)
                 {
 									//just for now
-                    ((ILayer)_layer).Payload = value;
+                    ((ILayer)Layer).Payload = value;
                     IsChanged = true;
                     SendPropertyChanged("Description");
                     SendPropertyChanged("Payload");
@@ -381,9 +377,5 @@ namespace Teleopti.Ccc.WinCode.Common
                 }
             }
         }
-
-        #endregion
-
-
     }
 }
