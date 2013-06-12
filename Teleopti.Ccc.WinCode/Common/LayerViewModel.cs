@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WinCode.Common
             set { _interval = value; }
         }
 
-	    public ILayer<IPayload> Layer { get; private set; }
+	    protected ILayer<IPayload> Layer { get; private set; }
 
 	    public DateTimePeriod Period
         {

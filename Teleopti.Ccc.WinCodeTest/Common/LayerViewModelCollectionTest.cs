@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                                                      {
                                                          ILayerViewModel layer = (ILayerViewModel)added;
                                                          Assert.IsTrue(layer.IsProjectionLayer, "Should only add from new projection");
-                                                         Assert.IsTrue(newProjection.Contains((IVisualLayer)layer.Layer),"Make sure its from the new projection");
+                                                         Assert.IsTrue(newProjection.Any(l=>l.Payload.Equals(layer.Payload)),"Make sure its from the new projection");
                                                      }
                                                  }
 
