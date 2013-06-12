@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class DenormalizeScheduleProjectionConsumerTest
 	{
-		private ScheduleProjectionHandler target;
+		private ScheduleProjectionReadOnlyUpdater target;
 		private MockRepository mocks;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			mocks = new MockRepository();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
-			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository, MockRepository.GenerateMock<IPublishEventsFromEventHandlers>());
+			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, MockRepository.GenerateMock<IPublishEventsFromEventHandlers>());
 		}
 
 		[Test]
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldSendUpdatedScheduleDay()
 		{
 			var _serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
-			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository, _serviceBus);
+			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, _serviceBus);
 			var guid = Guid.NewGuid();
 			var person = PersonFactory.CreatePerson();
 			person.SetId(guid);
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			target.Handle(message);
 
-			_serviceBus.AssertWasCalled(s => s.Publish(new UpdatedScheduleDay
+			_serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

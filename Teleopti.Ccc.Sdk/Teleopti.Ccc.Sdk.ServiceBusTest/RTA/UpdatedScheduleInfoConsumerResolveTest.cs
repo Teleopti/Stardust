@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<IHandleEvent<UpdatedScheduleDay>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ScheduleProjectionReadOnlyChanged>>().Should().Not.Be.Null();
 			}
 		}
 	}

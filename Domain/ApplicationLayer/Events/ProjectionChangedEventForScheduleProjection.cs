@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	/// <summary>
 	/// Denormalized schedule for use in initial load of schedule projection read model
