@@ -29,9 +29,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var person = _personRepository.Get(personId);
 			var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
-			
-			var absencePeriodStartTime = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
-			var absencePeriod = new DateTimePeriod(absencePeriodStartTime, absencePeriodStartTime.AddHours(24));
+			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), personId);
+			var start =  date;
+			if (personScheduleDayReadModel != null&& personScheduleDayReadModel.ShiftStart.HasValue)
+				start = personScheduleDayReadModel.ShiftStart.Value;
+			if (previousDayReadModel != null && previousDayReadModel.ShiftEnd.HasValue && previousDayReadModel.ShiftEnd.Value > start)
+				start = previousDayReadModel.ShiftEnd.Value;
+			var end = date.AddHours(24);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftEnd.HasValue)
+				end = personScheduleDayReadModel.ShiftEnd.Value;
+
+			var absencePeriodStartTime = TimeZoneInfo.ConvertTimeToUtc(start, person.PermissionInformation.DefaultTimeZone());
+			var absencePeriodEndTime = TimeZoneInfo.ConvertTimeToUtc(end, person.PermissionInformation.DefaultTimeZone());
+			var absencePeriod = new DateTimePeriod(absencePeriodStartTime, absencePeriodEndTime);
 
 			var data = new PersonScheduleData
 				{
