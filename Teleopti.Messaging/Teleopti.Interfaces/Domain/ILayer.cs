@@ -28,7 +28,7 @@
         /// Created by: rogerkr
         /// Created date: 2008-01-30
         /// </remarks>
-        bool AdjacentTo(ILayer<T> layer);
+				bool AdjacentTo(IPeriodized layer);
 	}
 
     /// <summary>

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Common
 			//return (Id.Value == other.Id.Value);
 		}
 
-        public virtual bool AdjacentTo(ILayer<T> layer)
+		public virtual bool AdjacentTo(IPeriodized layer)
         {
             InParameter.NotNull("layer", layer);
             return (Period.StartDateTime == layer.Period.EndDateTime || 
