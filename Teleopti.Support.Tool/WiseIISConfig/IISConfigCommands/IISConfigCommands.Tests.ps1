@@ -100,7 +100,7 @@ function Test-InstallationSQLLogin {
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
 			
-			[array]$ArgArray = @($MsiFile, "PesterTest-DbSQL")
+			[array]$ArgArray = @($MsiFile, "PesterTest-DbSQL", "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			$computerName=(get-childitem -path env:computername).Value
@@ -113,7 +113,7 @@ function Test-InstallationSQLLogin {
 			Check-ServiceIsRunning "TeleoptiETLService" | Should Be $False
 			Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $False
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "ttp://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
 		}
 	
 	}

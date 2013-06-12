@@ -239,8 +239,13 @@ function Install-TeleoptiCCCServer
     )
 	write-host $BatchFile
 	write-host $ArgArray
-	
+	$temp = (get-childitem -path env:temp).Value + "temp.bat"
+	write-host $temp
+	$ArgArray +=$temp
+	write-host $ArgArray
 	Start-Process -FilePath $BatchFile -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	Get-Content $temp
+	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 	$stdout=Get-Content stdout.log
 	$stderr=Get-Content stderr.log
 	write-host $stderr
