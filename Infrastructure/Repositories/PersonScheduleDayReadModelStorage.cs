@@ -30,6 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+							  .AddScalar("PersonId", NHibernateUtil.Guid)
+							  .AddScalar("TeamId", NHibernateUtil.Guid)
+							  .AddScalar("SiteId", NHibernateUtil.Guid)
+							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+							  .AddScalar("Date", NHibernateUtil.DateTime)
+							  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
+							  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
 			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetGuid("personid", personId)
 			                  .SetDateTime("startdate", startDate)
@@ -48,6 +55,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
+			                  .AddScalar("PersonId", NHibernateUtil.Guid)
+			                  .AddScalar("TeamId", NHibernateUtil.Guid)
+			                  .AddScalar("SiteId", NHibernateUtil.Guid)
+			                  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+			                  .AddScalar("Date", NHibernateUtil.DateTime)
+			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
+			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
 			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetGuid("TeamId", teamId)
 			                  .SetDateTime("DateStart", period.StartDateTime)

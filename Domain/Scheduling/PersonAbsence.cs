@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -49,13 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
+		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
 		{
-			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
-			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
-
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
 			AddEvent(new FullDayAbsenceAddedEvent
@@ -64,8 +62,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
 					AbsenceId = absence.Id.Value,
 					PersonId = person.Id.Value,
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
+					StartDateTime = startDateTimeInUtc,
+					EndDateTime = endDateTimeInUtc,
 					ScenarioId = _scenario.Id.Value
 				});
 		}
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				BusinessUnitId = BusinessUnit.Id.Value,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
-				StartDateTime = Period.StartDateTime,
+				StartDateTime = Period.StartDateTime.AddHours(-24),
 				EndDateTime = Period.EndDateTime
 			});
 		}

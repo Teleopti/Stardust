@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		public static void AssertInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, string value)
 		{
-			interactions.AssertJavascriptResultContains("$('" + selector + "').val();", value);
+			interactions.AssertJavascriptResultContains("return $('" + selector + "').val();", value);
 		}
 
 		public static void AssertVisibleUsingJQuery(this IBrowserInteractions interactions, string selector)
 		{
-			var js = string.Format("$('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selector.JSEncode());
+			var js = string.Format("return $('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selector.JSEncode());
 			interactions.AssertJavascriptResultContains(js, "visible");
 		}
 

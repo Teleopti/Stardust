@@ -8615,8 +8615,8 @@ Period: {3}</value>
     <value>Your absence request cannot be granted. Some dates are not open for requests at this time.</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>No Workflow Control Set defined!</value>
-    <comment>No Workflow control set defined.</comment>
+    <value>No workflow control set defined.</value>
+    <comment>No workflow control set defined.</comment>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Activity available for extended preference</value>
@@ -11334,10 +11334,10 @@ These options are activated:
     <comment>Not enough budget allowance.</comment>
   </data>
   <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
-    <value>Your Request has been denied. Date Period not open for sending requests.</value>
+    <value>Your absence request has been denied. You can not send request for the requested period this time.</value>
   </data>
   <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
-    <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
+    <value>Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>Critical Understaffing on : {0} at </value>
@@ -11463,5 +11463,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>
+    </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
+    <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
   </data>
 </root>

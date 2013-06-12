@@ -82,8 +82,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
             msg.Messages.Add("Friday 2012-01-05 08:00-16:00");
             msg.Messages.Add("Monday 2012-01-08 Not Working");
             
-            IList<string> messages = _target.GetSmsMessagesToSend(msg);
+            IList<string> messages = _target.GetSmsMessagesToSend(msg, false);
             Assert.That(messages.Count, Is.EqualTo(2));
+		}
+
+		[Test]
+		public void ShouldSplitMessageIfGreaterThanMaxSmsLengthForUnicode()
+		{
+			INotificationMessage msg = new NotificationMessage();
+			msg.Subject = "您的工作小时数已经改变：";
+			msg.Messages.Add("星期一 2012-01-01 08:00-17:00");
+			msg.Messages.Add("星期二 2012-01-02 08:00-16:00");
+			msg.Messages.Add("星期三 2012-01-03 08:00-16:00");
+			msg.Messages.Add("星期四 2012-01-04 08:00-16:00");
+			msg.Messages.Add("星期五 2012-01-05 08:00-16:00");
+			msg.Messages.Add("星期一 2012-01-08 不工作");
+
+			IList<string> messages = _target.GetSmsMessagesToSend(msg, true);
+			Assert.That(messages.Count, Is.EqualTo(3));
 		}
 
 		[Test]

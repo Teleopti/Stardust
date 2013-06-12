@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var message = new ScheduleChangedEvent
 					              	{
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
-					              		StartDateTime = startDateTime,
+										StartDateTime = startDateTime.AddHours(-24), //Bug fix for #23647
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};

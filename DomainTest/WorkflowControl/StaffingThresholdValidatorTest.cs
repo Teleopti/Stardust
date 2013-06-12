@@ -36,9 +36,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
             _schedulingResultStateHolder.Schedules = _dictionary;
-            _target.SchedulingResultStateHolder = _schedulingResultStateHolder;
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-            _target.ResourceOptimizationHelper = _resourceOptimizationHelper;
             _personRequestFactory = new PersonRequestFactory();
             _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _person = new Person();
@@ -64,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.SchedulingResultStateHolder = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null,null,_resourceOptimizationHelper,null,null));
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -73,14 +70,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.ResourceOptimizationHelper = null;
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod));
-        }
-
-        [Test]
-        public void VerifyPersonAccountBalanceCalculatorCanBeNull()
-        {
-            Assert.IsNull(_target.PersonAccountBalanceCalculator);
+            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,null,null,null));
         }
 
         [Test]
@@ -100,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "Not Valid";
@@ -114,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest);
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
                 Assert.IsFalse(result.IsValid);
             }
             _mocks.VerifyAll();
@@ -180,8 +170,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
            
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             _validatedRequest.IsValid = false;
             _validatedRequest.ValidationErrors = "Not Valid";
@@ -192,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest);
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
                 Assert.IsFalse(result.IsValid);
             }
             _mocks.VerifyAll();
@@ -234,15 +224,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             createSkill();
             createSkillDay(requestedDateTimePeriod);
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
                 GetValueWithAgentInDifferentTimeZone(date, absenceRequest, absence, requestedDateTimePeriod);
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
             Assert.IsFalse(result.IsValid);
             
         }
@@ -310,20 +300,20 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _skillDay.SetCalculatedStaffCollection(updatedValues);
             updatedValues.BatchCompleted();
 
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod,
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod,
                                                                                             _skill,
                                                                                             new List<ISkillDay>
                                                                                                 {
                                                                                                     _skillDay
                                                                                                 });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
                 getExpectationsIfNotUnderStaffed(date, absenceRequest, absence, requestedDateTimePeriod);
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
             Assert.IsTrue(result.IsValid);
         }
 
@@ -544,15 +534,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _skillDay.SetCalculatedStaffCollection(updatedValues);
             updatedValues.BatchCompleted();
 
-            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            stateHolder.Schedules = _dictionary;
 
             using (_mocks.Record())
             {
                 GetExpectationsIfNotUnderStaffing(date, absenceRequest, absence, requestedDateTimePeriod);
             }
 
-            var result = _target.Validate(absenceRequest);
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
             Assert.IsTrue(result.IsValid);
         }
 

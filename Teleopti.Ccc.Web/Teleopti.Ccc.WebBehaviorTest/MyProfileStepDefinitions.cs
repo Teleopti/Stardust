@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
-		private static readonly string newPassword = TestData.CommonPassword + "newP@ssw0rd";
-
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
@@ -36,8 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoPasswordPage();
 		}
 
-		[When(@"I change my password")]
-		public void WhenIChangeMyPassword()
+		[When(@"I change my password to '(.*)'")]
+		public void WhenIChangeMyPassword(string newPassword)
 		{
 			var page = Browser.Current.Page<PasswordPage>();
 			page.Password.Value = newPassword;
@@ -64,8 +62,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = newPassword;
-			page.PasswordValidation.Value = newPassword;
+			page.Password.Value = "newP@ssw0rd";
+			page.PasswordValidation.Value = "newP@ssw0rd";
 			page.OldPassword.Value = TestData.CommonPassword + "fel";
 			Browser.Current.Eval("$('input#password').keyup();");
 			page.ConfirmButton.EventualClick();
@@ -75,21 +73,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIAmChangingPasswordUsingIncorrectConfirmPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = newPassword;
-			page.PasswordValidation.Value = newPassword + "fel";
+			page.Password.Value = "newP@ssw0rd";
+			page.PasswordValidation.Value = "newP@ssw0rd" +"fel";
 			page.OldPassword.Value = TestData.CommonPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
 		}
-
-		[When(@"I sign in using my new password")]
-		public void WhenISignInUsingMyNewPassword()
-		{
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			var signInpage = Browser.Current.Page<SignInPage>();
-			signInpage.SelectApplicationTestDataSource();
-			signInpage.SignInApplication(userName, newPassword);
-		}
-
 
 		[Then(@"I should see my culture")]
 		public void ThenIShouldSeeMyCulture()

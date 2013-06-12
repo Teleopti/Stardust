@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISingleSkillDictionary _singleSkillDictionary;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
+		private DateTimePeriod _selectedPeriod;
 
 		#region enums
 		private enum ZoomLevel
@@ -3554,7 +3555,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void startBackgroundScheduleWork(BackgroundWorker backgroundWorker, object argument, bool showProgressBar)
 		{
 			if (_backgroundWorkerRunning) return;
-			int selectedScheduleCount = ((SchedulingAndOptimizeArgument)argument).ScheduleDays.Count;
+
+			var scheduleDays = ((SchedulingAndOptimizeArgument) argument).ScheduleDays;
+			int selectedScheduleCount = scheduleDays.Count;
+
+			var startDay = scheduleDays.FirstOrDefault();
+			var endDay = scheduleDays.LastOrDefault();
+
+			if (startDay != null && endDay != null && startDay.Period.StartDateTime <= endDay.Period.EndDateTime)
+			{
+				var startDate = startDay.Period.StartDateTime;
+				var endDate = endDay.Period.EndDateTime;
+				_selectedPeriod = new DateTimePeriod(startDate, endDate);
+			}
+			else
+			{
+				_selectedPeriod = new DateTimePeriod(DateTime.MinValue, DateTime.MaxValue);
+			}
+
 			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, selectedScheduleCount);
 			Cursor = Cursors.WaitCursor;
 			disableAllExceptCancelInRibbon();
@@ -3776,6 +3794,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				if (_totalScheduled <= toolStripProgressBar1.Maximum) toolStripProgressBar1.Value = _totalScheduled;
+				if (_totalScheduled > toolStripProgressBar1.Maximum) _totalScheduled = toolStripProgressBar1.Maximum;
 			}
 
 			string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, toolStripProgressBar1.Maximum);
@@ -4316,7 +4335,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (IsDisposed)
 					return;
 
-				_totalScheduled++;
+				
+				if(_selectedPeriod.Contains(e.ModifiedPeriod))
+					_totalScheduled++;
+
 				var localDate = new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo));
 
 				if (e.Modifier != ScheduleModifier.Scheduler)
@@ -6152,6 +6174,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonApproveRequestClick(object sender, EventArgs e)
 		{
 			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+			
 			changeRequestStatus(
 				new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter, _handleBusinessRuleResponse,
 												_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,

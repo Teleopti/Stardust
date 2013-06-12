@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
         public override IProcessAbsenceRequest CreateInstance()
         {
-            return new DenyAbsenceRequest {UndoRedoContainer = UndoRedoContainer, DenyReason = DenyReason};
+            return new DenyAbsenceRequest {DenyReason = DenyReason};
         }
 
-        public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, IPersonRequestCheckAuthorization authorization, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
+        public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
         {
-            UndoAll();
+            UndoAll(requiredForProcessingAbsenceRequest);
             var personRequest = (IPersonRequest)absenceRequest.Parent;
-            personRequest.Deny(processingPerson, DenyReason, authorization);
+            personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization);
         }
 
         public override bool Equals(object obj)
@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             unchecked
             {
-                int result = (RequestApprovalService != null ? RequestApprovalService.GetHashCode() : 0);
-                result = (result * 397) ^ (GetType().GetHashCode());
+                int result = (GetType().GetHashCode());
                 return result;
             }
         }

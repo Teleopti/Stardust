@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                     shiftTradeRequestDto.ShiftTradeSwapDetails.Add(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail));
                 }
                 personRequestDto.Request = shiftTradeRequestDto;
-                if (shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.OkByMe) //Maybe this should be moved to domain?
+                if (isNotWaitingForInitiator(shiftTradeRequestDto))
                 {
                     personRequestDto.CanDelete = false;
                 }
@@ -82,6 +82,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
             
             return personRequestDto;
+        }
+
+        private static bool isNotWaitingForInitiator(ShiftTradeRequestDto shiftTradeRequestDto)
+        {
+            return shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.OkByMe && 
+                   shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.Referred;
         }
 
         public override IPersonRequest DtoToDomainEntity(PersonRequestDto dto)

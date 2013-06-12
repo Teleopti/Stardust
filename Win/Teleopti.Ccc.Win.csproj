@@ -1106,20 +1106,7 @@
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\AbsenceMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractScheduleMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\BudgetGroupMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\OptionalColumnMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonRotationMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonAvailabilityMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\IPeopleAdminMessageBroker.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminConstants.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\IMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PartTimePercentageMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\PeopleAdminMessageBrokerFactory.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\RuleSetBagMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\TeamMessageBrokerHandler.cs" />
     <Compile Include="PeopleAdmin\Views\GeneralGridView.cs" />
     <Compile Include="PeopleAdmin\Views\PersonFinderView.cs">
       <SubType>Form</SubType>

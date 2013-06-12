@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoSiteHomePage()
 		{
-			GoToWaitForCompleted("", new ApplicationStartupTimeout());
+			GoToWaitForCompleted("", new ApplicationStartupTimeout(), new BustCache());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 

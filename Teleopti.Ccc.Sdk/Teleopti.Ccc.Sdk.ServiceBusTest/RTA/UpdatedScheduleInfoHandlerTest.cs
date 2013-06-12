@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
             var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var personInfoMessage = new PersonWithExternalLogOn
+            var personInfoMessage = new PersonActivityStarting
                 {
                     PersonId = person.Id.GetValueOrDefault(),
                     Timestamp = period.StartDateTime,
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
             bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new UpdatedScheduleDay
+            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
             {
                 ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
                 ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
             bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new UpdatedScheduleDay
+            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
             {
                 ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
                 ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
             bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new UpdatedScheduleDay
+            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
                 {
                     ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
                     ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
             bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new UpdatedScheduleDay
+            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
             {
                 ActivityStartDateTime = DateTime.UtcNow.AddDays(3),
                 ActivityEndDateTime = DateTime.UtcNow.AddDays(4),
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
             bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new UpdatedScheduleDay
+            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
             {
                 ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
                 ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -189,17 +190,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		public void Coverage()
 		{
 			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>(), MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>());
-			target.Handle(new PersonWithExternalLogOn());
+			target.Handle(new PersonActivityStarting());
 
 			var repo = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			repo.Stub(x => x.GetNextActivityStartTime(DateTime.MinValue, Guid.Empty)).IgnoreArguments().Return(DateTime.Now);
 			var service = MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
 			service.Stub(x => x.GetUpdatedScheduleChange(Guid.Empty, Guid.Empty, DateTime.MinValue)).IgnoreArguments().Throw(new Exception());
 			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), repo, service);
-			target.Handle(new PersonWithExternalLogOn());
+			target.Handle(new PersonActivityStarting());
 
 			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), repo, service);
-			target.Handle(new UpdatedScheduleDay
+			target.Handle(new ScheduleProjectionReadOnlyChanged
 				{
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(-1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(1)

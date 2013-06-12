@@ -258,3 +258,148 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+------------------
+-- Name: David
+-- Date: 2013-05-31
+-- Desc: #23740 - rename PKs to match table name
+-------------------------
+DECLARE @PKName nvarchar(1000)
+SELECT @PKName= '[Auditing].[Security].['+name+']' FROM sys.indexes
+WHERE OBJECT_NAME(object_id) = 'Security'
+AND index_id = 1
+AND is_primary_key = 1
+SELECT @PKName
+EXEC sp_rename @PKName, N'PK_Security', N'INDEX'
+GO
+DECLARE @PKName nvarchar(1000)
+SELECT @PKName= '[ReadModel].[ScheduleDay].['+name+']' FROM sys.indexes
+WHERE OBJECT_NAME(object_id) = 'ScheduleDay'
+AND is_primary_key = 1
+SELECT @PKName
+EXEC sp_rename @PKName, N'PK_ScheduleDay', N'INDEX'
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-04
+--Desc: Bug #23760 rearrange and add indexes for better performance
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[MeetingPerson]') AND name = N'CIX_MeetingPerson_Parent')
+BEGIN
+	SET NOCOUNT ON
+
+	CREATE TABLE [dbo].[MeetingPerson_new](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+		[Optional] [bit] NOT NULL,
+	 CONSTRAINT [PK_MeetingPerson_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_MeetingPerson_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Parent] ASC
+	)
+
+	INSERT INTO [dbo].[MeetingPerson_new] ([Id],[Person],[Parent],[Optional])
+	SELECT [Id],[Person],[Parent],[Optional]
+	FROM [dbo].[MeetingPerson]
+
+	DROP TABLE [dbo].[MeetingPerson]
+
+	CREATE NONCLUSTERED INDEX [IX_MeetingPerson_Person_Parent] ON [dbo].[MeetingPerson_new]
+	(
+		[Person] ASC
+	)
+	INCLUDE ([Parent])
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson_new]', @newname = N'MeetingPerson', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[MeetingPerson].[PK_MeetingPerson_new]', @newname = N'PK_MeetingPerson', @objtype =N'INDEX'
+
+	ALTER TABLE [dbo].[MeetingPerson]  WITH CHECK ADD  CONSTRAINT [FK_MeetingPerson_Meeting] FOREIGN KEY([Parent])
+	REFERENCES [dbo].[Meeting] ([Id])
+	ALTER TABLE [dbo].[MeetingPerson] CHECK CONSTRAINT [FK_MeetingPerson_Meeting]
+
+	ALTER TABLE [dbo].[MeetingPerson]  WITH CHECK ADD  CONSTRAINT [FK_MeetingPerson_Person] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[MeetingPerson] CHECK CONSTRAINT [FK_MeetingPerson_Person]
+
+	SET NOCOUNT OFF
+END
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-05
+--Desc: Bug #23770 - try to reduce some of the I/O
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonPeriod]') AND name = N'IX_PersonPeriod_StartDate')
+CREATE NONCLUSTERED INDEX [IX_PersonPeriod_StartDate] ON [dbo].[PersonPeriod]
+(
+	[StartDate] ASC
+)
+INCLUDE ([Parent],[Team])
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-12
+--Desc: Bug #23815 - remove duplicates from PersonAbsence
+---------------- 
+--first remove duplicates but keep the Absence with the biggest time span
+create table #PersonAbsenceRemove (Id uniqueidentifier)
+
+insert into #PersonAbsenceRemove (Id)
+select Id from PersonAbsence
+where id not in
+(
+	--keep longest Abscence with lowest Guid from the duplicates, count(*) > 1
+	select t1.Id
+	from PersonAbsence t1
+	inner join (
+		select cast(min(cast(id as varchar(36))) as uniqueidentifier) Id, person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
+		from PersonAbsence
+		group by person, Scenario, Minimum,PayLoad
+		having count(*) > 1
+	) t2
+	on t1.Person = t2.Person
+		and t1.Id = t2.Id --t2.Id is lowest one -> manipulated string/Id cast above
+		and t1.Minimum = t2.Minimum
+		and t1.PayLoad = t2.PayLoad
+		and t1.Maximum = t2.Maximum --t2.Maximum is the longest one
+		and t1.Scenario= t2.Scenario
+
+	union all
+	
+	--get all the correct ones, count(*) = 1
+	select t1.Id
+	from PersonAbsence t1
+	inner join (
+		select person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
+		from PersonAbsence
+		group by person, Scenario, Minimum,PayLoad
+		having count(*) = 1
+	) t2
+	on t1.Person = t2.Person
+		and t1.Minimum = t2.Minimum
+		and t1.PayLoad = t2.PayLoad
+		and t1.Maximum = t2.Maximum
+		and t1.Scenario= t2.Scenario
+)
+
+--delete PersonAbsence_AUD
+delete aud
+from Auditing.PersonAbsence_AUD aud
+inner join #PersonAbsenceRemove t
+on aud.Id = t.Id
+
+--delete PersonAbsence
+delete pa
+from dbo.PersonAbsence pa
+inner join #PersonAbsenceRemove t
+on pa.Id = t.Id
+GO

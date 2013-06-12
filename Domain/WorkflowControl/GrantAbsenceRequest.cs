@@ -18,16 +18,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return new GrantAbsenceRequest();
         }
 
-        public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, IPersonRequestCheckAuthorization authorization, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
+        public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest, RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
         {
-            InParameter.NotNull("RequestApprovalService", RequestApprovalService);
-            if (!CheckValidatorList(processingPerson, absenceRequest, authorization, absenceRequestValidatorList)) return;
+            InParameter.NotNull("RequestApprovalService", requiredForProcessingAbsenceRequest.RequestApprovalService);
+            if (!CheckValidatorList(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, absenceRequestValidatorList)) return;
             
-            UndoAll();
+            UndoAll(requiredForProcessingAbsenceRequest);
 
             IPersonRequest personRequest = (IPersonRequest)absenceRequest.Parent;
             personRequest.Pending();
-            var result = personRequest.Approve(RequestApprovalService,authorization);
+            var result = personRequest.Approve(requiredForProcessingAbsenceRequest.RequestApprovalService,requiredForProcessingAbsenceRequest.Authorization);
             foreach (IBusinessRuleResponse ruleResponse in result)
             {
                 Logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",ruleResponse.Message);
@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             unchecked
             {
-                int result = (RequestApprovalService != null ? RequestApprovalService.GetHashCode() : 0);
-                result = (result * 397) ^ (GetType().GetHashCode());
+                int result = (GetType().GetHashCode());
                 return result;
             }
         }
