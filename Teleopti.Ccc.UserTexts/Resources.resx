@@ -11472,4 +11472,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Overtime Availability</value>
     <comment>Caption for the dialog to add overtime availability</comment>
   </data>
+  <data name="FromShiftEndsAtColon" xml:space="preserve">
+    <value>Shift Ends At:</value>
+  </data>
+  <data name="ToShiftStartsAtColon" xml:space="preserve">
+    <value>Shift Starts At:</value>
+  </data>
 </root>

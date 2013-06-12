@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)).Return(true);
 				Expect.Call(_overtimeAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime)).Return(_overtimeAvailabilityDay);
 				Expect.Call(() => _scheduleDay.Add(_overtimeAvailabilityDay));
+			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				bool endTimeError;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)).Return(false);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_overtimeAvailabilityDay}));
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
 			}
 
 			using (_mock.Playback())

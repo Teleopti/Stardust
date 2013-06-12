@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(TimeSpan.FromHours(8),  TimeSpan.FromHours(20)));
+				Expect.Call(() => _view.Update(TimeSpan.FromHours(8),  TimeSpan.FromHours(20))).IgnoreArguments();
+			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(() => _addCommand.Execute());
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime));
+				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime)).IgnoreArguments();
+			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _removeCommand.Execute());
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(() => _view.Update(null, null));
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
@@ -104,7 +107,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(() => _editCommand.Execute());
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime));
+				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime)).IgnoreArguments();
+			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mock.Playback())
