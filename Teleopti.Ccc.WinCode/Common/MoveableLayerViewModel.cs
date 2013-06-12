@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Common
             if (ParentObservingCollection != null)
             {
                 ParentObservingCollection.LayerMovedVertically(this);
-                TriggerShiftEditorUpdate();
+                SynchronizeWithDomainRoger();
             }
         }
 

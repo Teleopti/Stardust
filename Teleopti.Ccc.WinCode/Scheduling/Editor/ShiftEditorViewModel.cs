@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
 			Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
             AllLayers = new ExpandedLayersViewModel(Layers) {Expanded = ExpandSize };
-            EditLayer = new EditLayerViewModel();
+			EditLayer = new EditLayerViewModel();
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
             Settings=new ShiftEditorSettings(this);
             SetUpCommandModels();

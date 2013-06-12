@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Common
             if (ParentObservingCollection != null)
             {
                 ParentObservingCollection.RemoveAbsence(this,Layer as ILayer<IAbsence>,SchedulePart);
-                TriggerShiftEditorUpdate();
+                SynchronizeWithDomainRoger();
             }
         }
     }

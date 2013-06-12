@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 {
 									hackToUpdateUnderlyingPersonAssignment();
                     //Trigger update ShiftEditor
-                    new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+	                SynchronizeWithDomainRoger();
                 }
                 IsChanged = false;
             }
@@ -335,11 +335,6 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        protected void TriggerShiftEditorUpdate()
-        {
-	        new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-        }
-
 	    private void hackToUpdateUnderlyingPersonAssignment()
 	    {
 				var mainShiftLayer = Layer as IMainShiftActivityLayer;
@@ -354,6 +349,12 @@ namespace Teleopti.Ccc.WinCode.Common
         public abstract bool CanMoveDown { get; }
 
         #endregion
+
+		public void SynchronizeWithDomainRoger()
+		{
+			//todo: Update the real model...........
+			new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+		}
 
         public virtual IPayload Payload
         {
