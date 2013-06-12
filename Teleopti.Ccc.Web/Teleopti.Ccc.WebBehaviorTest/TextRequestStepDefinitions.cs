@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		
 		private void EnableTimePickersByUncheckingFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
+			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked');").ToString() == "true")
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 

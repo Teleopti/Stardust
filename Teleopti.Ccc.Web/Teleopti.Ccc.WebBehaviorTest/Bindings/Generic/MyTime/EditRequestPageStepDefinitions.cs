@@ -43,18 +43,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
+			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("$('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "false")
+			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "false")
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
-
-
 
 		[Then(@"Subject should not be empty")]
 		public void SubjectShouldNotBeEmpty()
