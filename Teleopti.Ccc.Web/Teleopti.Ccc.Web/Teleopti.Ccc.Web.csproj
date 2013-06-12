@@ -721,7 +721,7 @@
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
-    <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
+    <Content Include="Areas\MyTime\Content\Scripts\AllTests.aspx" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\Start\Content\Images\ccc_icon.png" />
