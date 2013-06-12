@@ -7133,11 +7133,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
-			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
+			if (selectedDay.SignificantPart() == SchedulePartView.MainShift)
 			{
-				view.ShowDialog(this);
-				if (_scheduleView == null || view.ScheduleDay == null) return;
-				updateOvertimeAvailability(view.ScheduleDay);
+				using (var view = new AgentOvertimeAvailabilityForScheduledDayView(selectedDay))
+				{
+					view.ShowDialog(this);
+					updateOvertimeAvailability(view.ScheduleDay);
+				}
+			}
+			else
+			{
+				using (var view = new AgentOvertimeAvailabilityView(selectedDay))
+				{
+					view.ShowDialog(this);
+					updateOvertimeAvailability(view.ScheduleDay);
+				}
 			}
 		}
 
