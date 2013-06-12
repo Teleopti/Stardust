@@ -9,8 +9,8 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 #2 open all .ps1 file of interest *.ps1 + *Tests.ps1
 #3 set a break point ("F9") in *.Tests.ps1 file
 #4 from the "command line" in ISE:
-#    Import-Module "C:\data\main\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
-#    Invoke-Pester "C:\data\main\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
+#    Import-Module "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
+#    Invoke-Pester "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
 #5 step step ("F10")
 ##============
 
@@ -21,18 +21,19 @@ $Ntml = "Ntlm"
 $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
+$displayName = "Teleopti CCC Server, version 7"
 
 function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
 		
 		It "should uninstall product"{
-			[bool] $isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			[bool] $isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			if ($isInstalled) {
 				Uninstall-ByRegPath -path $path
 			}
 
-			$isInstalled = Test-RegistryKeyValue -Path $path -Name "DisplayName"
+			$isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			$isInstalled | Should Be $False
 		}
 
@@ -89,15 +90,42 @@ function Setup-PreReqs {
 function Test-InstallationSQLLogin {
 	Describe "Installation test - SQL DB Login"{  
 
-		It "Should install integrated security in SQL Server"{
+		It "should install latest MSI from Hebe"{
 			$zipFile = Copy-ZippedMsi
 			$zipFile = Get-Item $zipFile
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+
+			#add double quotes
+			$MsiFile = '"' + $MsiFile + '"'
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
+			
+			[array]$ArgArray = @($MsiFile, "PesterTest-DbSQL", "dummmyUser","dummmyPwd")
 		  
-			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbSQL" -WinUser "" -WinPassword ""
+			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+		}
 
+		It "should stop system" {
+			Stop-TeleoptiCCC
+			
+			Check-ServiceIsRunning "TeleoptiETLService" | Should Be $False
+			Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $False
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
+		}
+	
+	}
+}
+
+function Test-SitesAndServicesOk {
+	Describe "Run common test on services and web site config"{
+
+		It "should start system" {
+			Start-TeleoptiCCC
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
 		}
 		
 		It "SDK should be windows" {
@@ -118,26 +146,6 @@ function Test-InstallationSQLLogin {
 			$nhibFile | Should Contain "$connectionString"
 		}
 		
-		Add-CccLicenseToDemo
-		
-		It "should stop system" {
-			Stop-TeleoptiCCC
-			
-			Check-ServiceIsRunning "TeleoptiETLService" | Should Be $False
-			Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $False
-			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "ttp://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
-		}
-
-		It "should start system" {
-			Start-TeleoptiCCC
-		}
-	
-		It "should have a working SDK" {
-			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
-		}
-		
 		It "should have a ETL Service running" {
 		Check-ServiceIsRunning "TeleoptiETLService" | Should Be $True
 		}
@@ -148,44 +156,22 @@ function Test-InstallationSQLLogin {
 	}
 }
 
-function Test-InstallationWinAuth {
-
-	Describe "Installation test - Win Integrated Login"{ 
-
-		It "Should install integrated security in SQL Server"{
-			$zipFile = Copy-ZippedMsi
-			$zipFile = Get-Item $zipFile
-			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
-			
-			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
-		  
-			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -MsiFile "$MsiFile" -machineConfig "PesterTest-DbIntegrated" -WinUser "toptinet\tfsintegration" -WinPassword "m8kemew0rk"
-		}
-		
-		It "SDK should be windows" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
-			$enabled | Should Be "True"
-		}
-
-		It "SDK should not be anonymous" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
-			$enabled | Should Be "False"
-		}
-		
-		It "Nhib file should exist and contain Win Auth connection string" {
-			$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
-			$computerName=(get-childitem -path env:computername).Value
-			$connectionString="Data Source=$computerName;Integrated Security=SSPI;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
-			$nhibFile | Should Exist
-			$nhibFile | Should Contain "$connectionString"
-		}
-		
-		Add-CccLicenseToDemo
-	}
+function Add-CccLicenseToDemo
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "$dir\Add-CccLicenseToDemo.bat"
+    
+    [string]$ErrorMessage = "Add-CccLicenseToDemo failed!"
+    & "$BatchFile" | Out-Null
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
 }
 
-#Main	
+#Main
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin
+Add-CccLicenseToDemo
+Test-SitesAndServicesOk
 TearDown

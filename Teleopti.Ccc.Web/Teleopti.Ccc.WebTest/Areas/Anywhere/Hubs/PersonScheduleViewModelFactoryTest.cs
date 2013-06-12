@@ -76,21 +76,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldRetrievePersonScheduleDayReadModelToMapping()
-		{
-			var person = FakePerson();
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>());
-			var readModel = new PersonScheduleDayReadModel();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
-
-			target.CreateViewModel(person.Id.Value, DateTime.Today);
-
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonScheduleDayReadModel == readModel)));
-		}
-
-		[Test]
 		public void ShouldParsePersonScheduleDayReadModelShiftsToMapping()
 		{
 			var person = FakePerson();

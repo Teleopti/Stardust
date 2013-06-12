@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
 			var person = _personRepository.Get(personId);
-
+			var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
+			
 			var absencePeriodStartTime = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
 			var absencePeriod = new DateTimePeriod(absencePeriodStartTime, absencePeriodStartTime.AddHours(24));
 
@@ -36,13 +37,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				{
 					Person = person,
 					Date = date,
-					PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId),
 					Absences = _absenceRepository.LoadAllSortByName(),
 					PersonAbsences = _personAbsenceRepository.Find(new[] { person }, absencePeriod)
 				};
 
-			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
-				data.Shift = _deserializer.DeserializeObject(data.PersonScheduleDayReadModel.Shift);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
+				data.Shift = _deserializer.DeserializeObject(personScheduleDayReadModel.Shift);
 
 			return _personScheduleViewModelMapper.Map(data);
 		}

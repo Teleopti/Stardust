@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var message = new ScheduleChangedEvent
 					              	{
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
-					              		StartDateTime = startDateTime,
+										StartDateTime = startDateTime.AddHours(-24), //Bug fix for #23647
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};
