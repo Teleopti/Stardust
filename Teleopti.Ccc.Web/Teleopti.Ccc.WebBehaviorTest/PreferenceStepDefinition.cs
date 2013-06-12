@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		[When(@"I change standard preference")]
 		[When(@"I select a standard preference")]
+		[When(@"I try to select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
 			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
@@ -35,13 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			var selector = "a:contains('" + shiftCategory.Description.Name + "')";
 			Browser.Interactions.Click(selector);
-		}
-
-		[When(@"I try to select a standard preference")]
-		public void WhenITryToSelectStandardPreference()
-		{
-			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}
 
 		[When(@"I select an editable day without preference")]
