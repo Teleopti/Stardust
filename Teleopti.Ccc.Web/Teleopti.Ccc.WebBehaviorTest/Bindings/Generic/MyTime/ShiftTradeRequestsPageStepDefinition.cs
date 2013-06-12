@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
-			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Year.ToString());
-			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Month.ToString());
-			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Day.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Year.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Month.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
 		[When(@"I click on the next date")]
