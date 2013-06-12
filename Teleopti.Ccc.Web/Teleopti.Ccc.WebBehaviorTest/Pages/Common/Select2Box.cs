@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		public static void AssertSelectedOptionText(string select2Id, string optionText)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
 		}
 
 		public static void AssertSelectedOptionValue(string select2Id, string optionValue)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(string.Format("$('#Team-Picker option[value=\"{0}\"]:selected').length;", optionValue), "1");
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#Team-Picker option[value=\"{0}\"]:selected').length;", optionValue), "1");
 		}
 
 		public static void AssertOptionExist(string select2Id, string optionText)
@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static string FirstOptionText
 		{
-			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:first-child');"); }
+			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:first-child');"); }
 		}
 
 		public static string LastOptionText
 		{
-			get { return (string)Browser.Interactions.Javascript("$('.select2-result-selectable .select2-result-label:last-child');"); }
+			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:last-child');"); }
 		}
 
 		public static void AssertIsOpen(string select2Id)
