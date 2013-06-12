@@ -62,7 +62,7 @@ function Setup-PreReqs {
 			$zipFile = Get-Item $zipFile
 
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
-			UnZip-File –zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
+			UnZip-File -zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
 		}
 		
 		It "should create a local group in Windows"{
@@ -162,11 +162,7 @@ function Add-CccLicenseToDemo
     $dir = Split-Path $MyInvocation.ScriptName
     $batchFile = "$dir\Add-CccLicenseToDemo.bat"
     
-    [string]$ErrorMessage = "Add-CccLicenseToDemo failed!"
-    & "$BatchFile" | Out-Null
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
+    & "$BatchFile"
 }
 
 #Main
@@ -175,4 +171,3 @@ Setup-PreReqs
 Test-InstallationSQLLogin
 Add-CccLicenseToDemo
 Test-SitesAndServicesOk
-TearDown
