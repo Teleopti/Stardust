@@ -192,7 +192,7 @@ define([
                                         personScheduleDayFailed();
                                     },
                                     complete: function () {
-                                        i.removeCommandSentPromise.resolve();
+                                        matchedIterations[0].removeCommandSentPromise.resolve();
                                     }
                                 });
 
