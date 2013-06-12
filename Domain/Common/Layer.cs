@@ -59,18 +59,6 @@ namespace Teleopti.Ccc.Domain.Common
 			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
 
-		public virtual bool Equals(ILayer other)
-		{
-			if (other == null)
-				return false;
-			if (this == other)
-				return true;
-			return false;
-			//if (!other.Id.HasValue || !Id.HasValue)
-			//	return false;
-
-			//return (Id.Value == other.Id.Value);
-		}
 
 		public virtual bool AdjacentTo(IPeriodized layer)
         {

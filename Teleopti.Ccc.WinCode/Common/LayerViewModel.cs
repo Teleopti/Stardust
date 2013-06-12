@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 if (IsPayloadChangePermitted && value != Layer.Payload)
                 {
 									//just for now
-                    ((ILayer)Layer).Payload = value;
+                    //((ILayer)Layer).Payload = value;
                     IsChanged = true;
                     SendPropertyChanged("Description");
                     SendPropertyChanged("Payload");

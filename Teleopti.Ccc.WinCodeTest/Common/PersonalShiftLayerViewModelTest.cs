@@ -4,6 +4,7 @@ using System.Windows;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -36,13 +37,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_listener = new PropertyChangedListener();
 			_testerForCommandModels = new TesterForCommandModels();
 			_mocks = new MockRepository();
-			_layerWithPayload = _mocks.StrictMock<ILayer<IActivity>>();
 			_payload = ActivityFactory.CreateActivity("dfsdf");
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			Expect.Call(_layerWithPayload.Payload).Return(_payload).Repeat.Any();
-			Expect.Call(_layerWithPayload.Period).PropertyBehavior().Return(_period).IgnoreArguments().Repeat.Any();
+			_layerWithPayload = new PersonalShiftActivityLayer(_payload, _period);
 			Expect.Call(_scheduleDay.Person).Return(person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 

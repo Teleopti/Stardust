@@ -16,28 +16,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     public class MoveableLayerViewModelTest
     {
     	private readonly TesterForCommandModels _models = new TesterForCommandModels();
-        private readonly MockRepository _mocks = new MockRepository();
+        private MockRepository _mocks;
         private readonly IEventAggregator _eventAggregator=new EventAggregator();
-		private ILayer<IActivity> _layerWithPayload;
-		private IActivity _payload;
-		private IScheduleDay _scheduleDay;
-		private IPerson _person;
 		private DateTimePeriod _period;
 
 		[SetUp]
 		public void Setup()
 		{
-			_layerWithPayload = _mocks.StrictMock<ILayer<IActivity>>();
-			_payload = ActivityFactory.CreateActivity("dfsdf");
-			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			Expect.Call(_layerWithPayload.Payload).Return(_payload).Repeat.Any();
-			Expect.Call(_layerWithPayload.Period).PropertyBehavior().Return(_period).IgnoreArguments().Repeat.Any();
-			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
-
-			_mocks.ReplayAll();
+			_mocks=new MockRepository();
 		}
 
 		[Test]
