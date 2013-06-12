@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
-            Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
 
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                                    new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
 
-            ILayer castedLayer = actL;
+            var castedLayer = actL;
 
             IActivity act = new Activity("sdf");
             castedLayer.Payload = act;
