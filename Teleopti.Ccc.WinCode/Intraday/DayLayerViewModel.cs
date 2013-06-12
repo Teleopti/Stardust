@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _repositoryFactory = repositoryFactory;
             _dispatcherWrapper = dispatcherWrapper;
             _rtaStateHolder = rtaStateHolder;
-			_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
+			if (rtaStateHolder != null)
+				_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
 	        ModelEditable = CollectionViewSource.GetDefaultView(Models) as IEditableCollectionView;
         }
 
