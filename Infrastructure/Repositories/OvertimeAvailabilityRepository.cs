@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
@@ -12,12 +13,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public interface IOvertimeAvailabilityRepository : IRepository<IOvertimeAvailability>, ILoadAggregateById<IOvertimeAvailability >
-    {
-        IList<IOvertimeAvailability> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons);
-        IList<IOvertimeAvailability> Find(DateOnly dateOnly, IPerson person);
-    }
-
     public class OvertimeAvailabilityRepository : Repository<IOvertimeAvailability>, IOvertimeAvailabilityRepository
     {
         
