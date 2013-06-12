@@ -30,26 +30,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var person = _personRepository.Get(personId);
 			var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
 			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), personId);
-			var start =  date;
-			if (personScheduleDayReadModel != null&& personScheduleDayReadModel.ShiftStart.HasValue)
-				start = personScheduleDayReadModel.ShiftStart.Value;
-			if (previousDayReadModel != null && previousDayReadModel.ShiftEnd.HasValue && previousDayReadModel.ShiftEnd.Value > start)
-				start = previousDayReadModel.ShiftEnd.Value;
-			var end = date.AddHours(24);
-			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftEnd.HasValue)
-				end = personScheduleDayReadModel.ShiftEnd.Value;
-
+			var start = date;
 			var absencePeriodStartTime = TimeZoneInfo.ConvertTimeToUtc(start, person.PermissionInformation.DefaultTimeZone());
+			var end = date.AddHours(24);
 			var absencePeriodEndTime = TimeZoneInfo.ConvertTimeToUtc(end, person.PermissionInformation.DefaultTimeZone());
+
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftStart.HasValue)
+				absencePeriodStartTime = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftStart.Value, DateTimeKind.Utc);
+			if (previousDayReadModel != null && previousDayReadModel.ShiftEnd.HasValue && previousDayReadModel.ShiftEnd.Value > absencePeriodStartTime)
+				absencePeriodStartTime = DateTime.SpecifyKind(previousDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftEnd.HasValue)
+				absencePeriodEndTime = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
+
 			var absencePeriod = new DateTimePeriod(absencePeriodStartTime, absencePeriodEndTime);
 
 			var data = new PersonScheduleData
-				{
-					Person = person,
-					Date = date,
-					Absences = _absenceRepository.LoadAllSortByName(),
-					PersonAbsences = _personAbsenceRepository.Find(new[] { person }, absencePeriod)
-				};
+			{
+				Person = person,
+				Date = date,
+				Absences = _absenceRepository.LoadAllSortByName(),
+				PersonAbsences = _personAbsenceRepository.Find(new[] { person }, absencePeriod)
+			};
 
 			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
 				data.Shift = _deserializer.DeserializeObject(personScheduleDayReadModel.Shift);
