@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -76,6 +77,26 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			_target.SetActualAgentState(state2);
 			Assert.That(_target.ActualAgentStates.Count, Is.EqualTo(1));
 		}
+
+        [Test]
+        public void ShouldSetKeepNewerStateOnPerson()
+        {
+            var id = Guid.NewGuid();
+            var person = new Person();
+            person.SetId(id);
+            var persons = new List<IPerson> { person };
+            _target.SetFilteredPersons(persons);
+            Assert.AreEqual(0, _target.ActualAgentStates.Count);
+
+            var time = DateTime.UtcNow;
+            var state = new ActualAgentState { PersonId = id, ReceivedTime = time.AddSeconds(15)};
+            var state2 = new ActualAgentState { PersonId = id, ReceivedTime = time};
+
+            _target.SetActualAgentState(state);
+            Assert.That(_target.ActualAgentStates.Count, Is.EqualTo(1));
+            _target.SetActualAgentState(state2);
+            Assert.That(_target.ActualAgentStates.Values.First(), Is.EqualTo(state));
+        }
 
 		[Test, ExpectedException(typeof(DefaultStateGroupException))]
 		public void MustHaveDefaultStateGroup()
