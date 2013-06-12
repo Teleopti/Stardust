@@ -637,12 +637,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Time\Timeline\TimeControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\Time\Timeline\TimelineControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1214,9 +1208,6 @@
       <DependentUpon>AnalogPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OutlookTimePicker.cs" />
-    <Compile Include="Controls\Time\Timeline\TimeControl.xaml.cs">
-      <DependentUpon>TimeControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\ColorConverter.cs" />
     <Compile Include="Converters\DateFilterConverter.cs" />
     <Compile Include="Converters\DateTimePeriodExtender.cs" />
@@ -1226,7 +1217,6 @@
     <Compile Include="Converters\TimeToAngleConverter.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Converters\LayerTemplateSelector.cs" />
     <Compile Include="ProjectionLayerView.xaml.cs">
       <DependentUpon>ProjectionLayerView.xaml</DependentUpon>
     </Compile>

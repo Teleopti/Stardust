@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                                    new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
 
-            var castedLayer = actL;
+            ILayer castedLayer = actL;
 
             IActivity act = new Activity("sdf");
             castedLayer.Payload = act;
