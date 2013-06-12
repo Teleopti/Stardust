@@ -343,3 +343,12 @@ CREATE NONCLUSTERED INDEX [IX_PersonPeriod_StartDate] ON [dbo].[PersonPeriod]
 	[StartDate] ASC
 )
 INCLUDE ([Parent],[Team])
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-12
+--Desc: Bug #23815 - remove duplicates from PersonAbsence
+---------------- 
+delete from PersonAbsence
+where id not in 
+(select min(id) from PersonAbsence group by person, Minimum);

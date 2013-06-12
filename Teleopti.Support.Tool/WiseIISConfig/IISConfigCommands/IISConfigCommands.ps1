@@ -109,14 +109,13 @@ function Get-UninstallRegPath {
         $MsiKey
     )
 
+    $WmiQuery = Get-WmiObject -Class Win32_OperatingSystem | Select-Object OSArchitecture
     # paths: x86 and x64 registry keys are different
-    if ([IntPtr]::Size -eq 4) {
-        $paths = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
+    if ($WmiQuery.OSArchitecture -eq "64-bit") {
+        $paths = @('HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     else {
-        $paths = @(
-            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
-            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
+        $paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     
     #check if any of them is acutally a folder path
@@ -130,6 +129,20 @@ function Get-UninstallRegPath {
 	}
 }
 
+function Check-ProductIsInstalled
+{
+    param(
+        $DisplayName
+    )
+    $r = Get-WmiObject Win32_Product | Where {$_.Name -match "$DisplayName"}
+    if ($r -ne $null) {
+        return $True
+        }
+    else  {
+        return $False
+    }
+}
+
 Function Uninstall-ByRegPath(){
     [CmdletBinding()]
     Param (
@@ -141,7 +154,6 @@ Function Uninstall-ByRegPath(){
 
 			$appKey = Get-Item -Path $path
 
-			#Write-Host $appKey.gettype()
 			if ($appKey -is [Microsoft.Win32.RegistryKey]) # If it is a system.object or something else this will fail.
 			{
 				$UninstallString = $appKey.GetValue("UninstallString")
@@ -223,16 +235,19 @@ function Install-TeleoptiCCCServer
 {
     param (
     [string]$BatchFile,
-    [string]$MsiFile,
-    [string]$machineConfig,
-    [string]$WinUser,
-    [string]$WinPassword
+    [array]$ArgArray
     )
-    [string]$ErrorMessage = "Execution of command failed.`n$Command"
-    & "$BatchFile" "$MsiFile" "$machineConfig"
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
+
+	#add an extra argument, the final batch file
+	$temp = (get-childitem -path env:temp).Value + "\temp.bat"
+	$ArgArray +=$temp
+
+	#create the final batch file
+	Start-Process -FilePath $BatchFile -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	
+	#run the final batch file
+	Get-Content $temp
+	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 }
 
 function Copy-ZippedMsi{
@@ -287,18 +302,6 @@ function Create-LocalGroup
 		$objUser = $objOU.Create("Group", $groupName)
 		$objUser.SetInfo()
 	}
-}
-
-function Add-CccLicenseToDemo
-{
-    $dir = Split-Path $MyInvocation.ScriptName
-    $batchFile = "$dir\Add-CccLicenseToDemo.bat"
-    
-    [string]$ErrorMessage = "Add-CccLicenseToDemo failed!"
-    & "$BatchFile" | Out-Null
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
 }
 
 function Stop-TeleoptiCCC
