@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private MeetingLayerViewModel _target;
 		private MockRepository _mocks;
-		private ILayer _layerWithPayload;
+		private ILayer<IActivity> _layerWithPayload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner testRunner;
 		private PropertyChangedListener _listener;

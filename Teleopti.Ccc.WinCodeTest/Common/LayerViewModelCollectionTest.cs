@@ -486,13 +486,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
 
-        #region helpers
-        private static void CompareLayersForPeriodAndPayLoad(ILayer layerOne, ILayer layerTwo)
-        {
-            Assert.AreEqual(layerOne.Period, layerTwo.Period);
-            Assert.AreEqual(layerOne.Payload, layerTwo.Payload);
-        }
-
         private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {
             IScheduleDictionary dictionaryNotUsed = new ScheduleDictionaryForTest(ScenarioFactory.CreateScenarioAggregate(),
@@ -501,7 +494,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                                                                                       <IPerson, IScheduleRange>());
             return ExtractedSchedule.CreateScheduleDay(dictionaryNotUsed, person, dateOnly);
         }
-        #endregion //helpers
 
         [TearDown]
         public void Teardown()
