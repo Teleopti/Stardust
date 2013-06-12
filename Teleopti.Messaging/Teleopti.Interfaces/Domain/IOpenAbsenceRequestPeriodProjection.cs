@@ -15,13 +15,13 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Gets the projected periods.
         /// </summary>
-        /// <param name="limitToDateOnlyPeriod">The limit to date only period.</param>
+        /// <param name="limitToPeriod">The limit to date only period.</param>
         /// <param name="personCulture">Culture of the person sending the request.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: HenryG
         /// Created date: 2010-04-16
         /// </remarks>
-        IList<IAbsenceRequestOpenPeriod> GetProjectedPeriods(DateOnlyPeriod limitToDateOnlyPeriod, CultureInfo personCulture);
+        IList<IAbsenceRequestOpenPeriod> GetProjectedPeriods(DateOnlyPeriod limitToPeriod, CultureInfo personCulture);
     }
 }
