@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly IPersonMeeting _meeting;
 
         public MeetingLayerViewModel(ILayerViewModelObserver observer, IPersonMeeting meeting, IEventAggregator eventAggregator)
-            : base(observer, meeting.ToLayer(), null,eventAggregator, false)
+            : base(observer, meeting.ToLayer(), eventAggregator, false)
         {
             _meeting = meeting;
         }

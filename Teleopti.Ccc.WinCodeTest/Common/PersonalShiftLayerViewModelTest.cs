@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person, new DateOnly(2008, 12, 5)).Name, _target.Description);
 			Assert.AreEqual(_layerWithPayload.Period, _target.Period);
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
-			Assert.IsNull(_target.Parent);
 			Assert.IsFalse(_target.IsChanged);
 			Assert.AreSame(_scheduleDay, _target.SchedulePart);
 			Assert.IsFalse(_target.CanMoveAll);

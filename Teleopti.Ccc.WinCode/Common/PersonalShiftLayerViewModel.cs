@@ -7,13 +7,16 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class PersonalShiftLayerViewModel : LayerViewModel
     {
-        public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
-            : base(observer,layer, parent,eventAggregator, false)
+	    private readonly IPersonalShift _parent;
+
+	    public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IPersonalShift parent, IEventAggregator eventAggregator)
+            : base(observer,layer, eventAggregator, false)
         {
+	        _parent = parent;
         }
 
 
-        public override string LayerDescription
+	    public override string LayerDescription
         {
             get { return UserTexts.Resources.PersonalShifts; }
         }
@@ -22,10 +25,9 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                int idx = 0;
-                var parent = Parent as Domain.Scheduling.Assignment.PersonalShift;
-                if (parent != null)
-                    idx = parent.OrderIndex;
+                var idx = 0;
+                if (_parent != null)
+                    idx = _parent.OrderIndex;
                 return 200 + idx;
             }
         }

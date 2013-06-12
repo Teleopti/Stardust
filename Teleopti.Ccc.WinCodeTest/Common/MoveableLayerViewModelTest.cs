@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			MainShiftLayerViewModel modelWithoutParent = new MainShiftLayerViewModel(null,new MainShiftActivityLayer(ActivityFactory.CreateActivity("test"), _period),null,null);
 			TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
-			Assert.IsNull(modelWithoutParent.Parent);
 			Assert.IsFalse(testerForCommandModels.CanExecute(modelWithoutParent.MoveUpCommand));
 			Assert.IsFalse(testerForCommandModels.CanExecute(modelWithoutParent.MoveDownCommand));
 		}

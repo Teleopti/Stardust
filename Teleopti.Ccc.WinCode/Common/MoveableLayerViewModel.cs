@@ -9,23 +9,25 @@ namespace Teleopti.Ccc.WinCode.Common
     public abstract class MoveableLayerViewModel : LayerViewModel
     {
 	    private readonly ILayer<IActivity> _layer;
+	    private readonly IShift _parent;
 
-        protected MoveableLayerViewModel(ILayer<IPayload> layer)
-						: base(null, layer, null, null, true)
+	    protected MoveableLayerViewModel(ILayer<IPayload> layer)
+						: base(null, layer, null, true)
         {
         }
 
         protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent,IEventAggregator eventAggregator)
-            : base(observer, layer, parent,eventAggregator, false)
+            : base(observer, layer, eventAggregator, false)
         {
 	        _layer = layer;
+	        _parent = parent;
         }
 
-        public override bool CanMoveUp
+	    public override bool CanMoveUp
         {
             get
             {
-                return Parent != null && IsMovePermitted() && Parent.LayerCollection.CanMoveUpLayer(_layer);
+                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveUpLayer(_layer);
             }
         }
 
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return Parent != null && IsMovePermitted() && Parent.LayerCollection.CanMoveDownLayer(_layer);
+                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveDownLayer(_layer);
             }
         }
 
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveDown)
             {
-	            Parent.LayerCollection.MoveDownLayer(_layer);
+	            _parent.LayerCollection.MoveDownLayer(_layer);
                 LayerMoved();
             }
 
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveUp)
             {
-	            Parent.LayerCollection.MoveUpLayer(_layer);
+	            _parent.LayerCollection.MoveUpLayer(_layer);
 				LayerMoved();
             }
         }

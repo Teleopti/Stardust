@@ -21,19 +21,17 @@ namespace Teleopti.Ccc.WinCode.Common
         private bool _isChanged;
         private ILayerViewModelObserver _parentObservingCollection;
         private IScheduleDay _part;
-        private readonly IShift _parent;
         private bool _canMoveAll;
         private IEventAggregator _eventAggregator;
         private bool _isSelected;
 
 
-				protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IShift parent, IEventAggregator eventAggregator, bool isProjectionLayer)
+				protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer)
 				{
 					_parentObservingCollection = observer;
 					_eventAggregator = eventAggregator;
 					Layer = layer;
 					_period = Layer.Period;
-					_parent = parent;
 					MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
 					MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
 					DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
@@ -78,11 +76,6 @@ namespace Teleopti.Ccc.WinCode.Common
                 }
 
             }
-        }
-
-        public IShift Parent
-        {
-            get { return _parent; }
         }
 
         public bool IsChanged

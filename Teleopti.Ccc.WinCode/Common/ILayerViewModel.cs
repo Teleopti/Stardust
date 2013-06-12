@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 
         bool IsSelected { get; set; }
-        IShift Parent { get; }
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }
         TimeSpan Interval { get; set; }
