@@ -24,35 +24,59 @@ define([
             });
         });
 
-        this.RunButtonEnabled = ko.observable();
-        this.RunButtonText = ko.computed(function () {
+        this.Configuration.subscribe(function () {
             
             try {
                 var configuration = JSON.parse(self.Configuration());
             } catch (e) {
-                self.RunButtonEnabled(false);
-                return "Invalid configuration";
+                self.ConfigurationError("Invalid configuration");
+                return;
             }
-            
+
             var scenario = self.Scenario();
             try {
                 scenario.ConfigurationChanged(configuration);
             } catch (e) {
-                self.RunButtonEnabled(false);
-                return e;
+                self.ConfigurationError(e);
+                return;
             }
             
-            self.RunButtonEnabled(true);
-            return "Run " + scenario.IterationsExpected() + " scenarios";
+            self.ConfigurationError(null);
         });
+        
+        this.ConfigurationError = ko.observable();
+
 
         var currentTime = ko.observable();
-        var run = ko.observable();
+        var runResult = ko.observable();
+
+        this.IsRunning = ko.computed(function () {
+            var values = runResult();
+            if (!values)
+                return false;
+            return !values.RunDone();
+        });
+
+        this.RunButtonEnabled = ko.computed(function () {
+            if (self.ConfigurationError())
+                return false;
+            return !self.IsRunning();
+        });
+        
+        this.RunButtonText = ko.computed(function () {
+            var configurationError = self.ConfigurationError();
+            if (configurationError)
+                return configurationError;
+            var scenario = self.Scenario();
+            if (scenario && scenario.IterationsExpected())
+                return "Run " + scenario.IterationsExpected() + " scenarios";
+            return "Select scenario";
+        });
         
         this.Run = function () {
             var result = self.Scenario().Run();
             result.StartTime(moment());
-            run(result);
+            runResult(result);
         };
 
         var formatTimeDiff = function(first, second) {
@@ -61,24 +85,24 @@ define([
         };
 
         this.TotalRunTime = ko.computed(function() {
-            var runInfo = run();
-            if (!runInfo)
+            var values = runResult();
+            if (!values)
                 return null;
-            var startTime = runInfo.StartTime();
+            var startTime = values.StartTime();
             if (startTime) {
-                var endTime = runInfo.EndTime() || currentTime();
+                var endTime = values.EndTime() || currentTime();
                 return formatTimeDiff(startTime, endTime);
             }
             return null;
         });
         
         this.ScenariosPerSecond = ko.computed(function () {
-            var runInfo = run();
-            if (!runInfo)
+            var values = runResult();
+            if (!values)
                 return null;
-            var iterations = runInfo.IterationsDone();
-            var startTime = runInfo.StartTime();
-            var endTime = runInfo.EndTime() || currentTime();
+            var iterations = values.IterationsDone();
+            var startTime = values.StartTime();
+            var endTime = values.EndTime() || currentTime();
             if (iterations) {
                 var seconds = endTime.diff(startTime, 'seconds');
                 return (iterations / seconds).toFixed(2);
@@ -87,28 +111,21 @@ define([
         });
         
         this.TotalTimeToSendCommands = ko.computed(function () {
-            var runInfo = run();
-            if (!runInfo)
+            var values = runResult();
+            if (!values)
                 return null;
-            var startTime = runInfo.StartTime();
+            var startTime = values.StartTime();
             if (startTime) {
-                var endTime = runInfo.CommandEndTime() || currentTime();
+                var endTime = values.CommandEndTime() || currentTime();
                 return formatTimeDiff(startTime, endTime);
             }
             return null;
         });
 
-        this.IsRunning = ko.computed(function() {
-            var runInfo = run();
-            if (runInfo && !runInfo.RunDone())
-                return true;
-            return false;
-        });
-
         this.RunDone = ko.computed(function () {
-            var runInfo = run();
-            if (runInfo)
-                return runInfo.RunDone();
+            var values = runResult();
+            if (values)
+                return values.RunDone();
             return false;
         });
 

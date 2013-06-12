@@ -91,11 +91,11 @@
                         <fieldset>
                             <h2>Scenario</h2>
                             <label>Scenario</label>
-                            <select class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', value: Scenario"></select>
+                            <select disabled="disabled" class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', value: Scenario, enable: !IsRunning()"></select>
                             <label>Configuration</label>
-                            <textarea class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown'"></textarea>
+                            <textarea disabled="disabled" class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown', enable: !IsRunning()"></textarea>
                             <label></label>
-                            <button class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled && !IsRunning(), click: Run"></button>
+                            <button disabled="disabled" class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
                         </fieldset>
                     </form>
                 </div>
