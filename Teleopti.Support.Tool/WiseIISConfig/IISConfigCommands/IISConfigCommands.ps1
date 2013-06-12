@@ -237,25 +237,17 @@ function Install-TeleoptiCCCServer
     [string]$BatchFile,
     [array]$ArgArray
     )
-	write-host $BatchFile
-	write-host $ArgArray
-	$temp = (get-childitem -path env:temp).Value + "temp.bat"
-	write-host $temp
+
+	#add an extra argument, the final batch file
+	$temp = (get-childitem -path env:temp).Value + "\temp.bat"
 	$ArgArray +=$temp
-	write-host $ArgArray
+
+	#create the final batch file
 	Start-Process -FilePath $BatchFile -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	
+	#run the final batch file
 	Get-Content $temp
 	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
-	$stdout=Get-Content stdout.log
-	$stderr=Get-Content stderr.log
-	write-host $stderr
-	write-host $stdout
-	Remove-Item stdout.log
-	Remove-Item stderr.log
-	
-#LastExitCode does not work with Start-Process
-#skipping error handling at MSI-level
-
 }
 
 function Copy-ZippedMsi{
