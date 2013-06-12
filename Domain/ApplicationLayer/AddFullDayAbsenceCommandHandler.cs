@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.ApplicationLayer.FullDayAbsence;
 using System;
 using System.Collections.Generic;
 using System.Linq;

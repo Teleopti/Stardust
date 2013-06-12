@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.FullDayAbsence;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
