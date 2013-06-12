@@ -96,6 +96,10 @@ define([
                 progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
             
+
+
+
+
             var startPromise = messagebroker.start();
             var personScheduleDayReadModelSubscription;
             var personAbsenceSubscription;
@@ -106,7 +110,7 @@ define([
                 calculateRunDone();
             };
 
-            var personScheduleDayFailed = function () {
+            var personScheduleDayUpdateFailed = function () {
                 //progressItemPersonScheduleDayReadModel.Failure();
                 progressItemPersonScheduleDayReadModel.Success();
                 calculateRunDone();
@@ -126,6 +130,68 @@ define([
                     }
                 }
             };
+
+            var iterationForNotification = function (notification) {
+                
+                var startDate = helpers.Date.ToMoment(notification.StartDate);
+                var endDate = helpers.Date.ToMoment(notification.EndDate);
+                var personId = notification.DomainReferenceId;
+                
+                if (startDate.diff(endDate, 'days') != 0)
+                    return null;
+                
+                var matchedIterations = $.grep(iterations, function (item) {
+                    return item.date.diff(startDate) == 0 &&
+                        item.personId == personId;
+                });
+                
+                if (matchedIterations.length == 1)
+                    return matchedIterations[0];
+                if (matchedIterations.length > 1)
+                    throw "What?! Found more than one iteration for this notification! gah!";
+                
+                return null;
+            };
+
+            var sendAddCommand = function(iteration) {
+                $.ajax({
+                    url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    cache: false,
+                    data: JSON.stringify({
+                        StartDate: iteration.date,
+                        EndDate: iteration.date,
+                        AbsenceId: iteration.absenceId,
+                        PersonId: iteration.personId
+                    }),
+                    error: function() {
+                        personScheduleDayUpdateFailed();
+                        personScheduleDayUpdateFailed();
+                    },
+                    complete: function() {
+                        iteration.addCommandSentPromise.resolve();
+                    }
+                });
+            };
+
+            var sendDeleteCommand = function(iteration, personAbsenceId) {
+                $.ajax({
+                    url: 'Anywhere/PersonScheduleCommand/RemovePersonAbsence',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    cache: false,
+                    data: JSON.stringify({ PersonAbsenceId: personAbsenceId }),
+                    error: function () {
+                        personScheduleDayUpdateFailed();
+                    },
+                    complete: function () {
+                        iteration.removeCommandSentPromise.resolve();
+                    }
+                });
+            };
             
             this.Run = function () {
                 
@@ -143,90 +209,23 @@ define([
                     personScheduleDayReadModelSubscription = messagebroker.subscribe({
                         domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
-                            
-                            console.log(notification);
-                            
-                            var startDate = helpers.Date.ToMoment(notification.StartDate);
-                            var endDate = helpers.Date.ToMoment(notification.EndDate);
-                            var matchedIterations = $.grep(iterations, function(item) {
-                                return item.date.diff(startDate) == 0 && item.date.diff(endDate) == 0 && notification.DomainReferenceId == item.personId;
-                            });
-
-                            if (matchedIterations.length > 0) {
+                            if (iterationForNotification(notification))
                                 personScheduleDayUpdated();
-                            }
                         }
                     });
                     
                     personAbsenceSubscription = messagebroker.subscribe({
                         domainType: 'IPersonAbsence',
                         callback: function (notification) {
-                            
-                            console.log(notification);
-
-                            var startDate = helpers.Date.ToMoment(notification.StartDate);
-                            var endDate = helpers.Date.ToMoment(notification.EndDate);
                             var personAbsenceId = notification.DomainId;
-
-                            var matchedIterations = $.grep(iterations, function (item) {
-                                return notification.DomainReferenceId == item.personId;
-                                //return item.date.diff(startDate) == 0 && item.date.diff(endDate) == 0 && notification.DomainReferenceId == item.personId;
-                            });
-
-                            if (matchedIterations.length > 0) {
-
-                                $.ajax({
-                                    url: 'Anywhere/PersonScheduleCommand/RemovePersonAbsence',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    contentType: 'application/json',
-                                    cache: false,
-                                    data: JSON.stringify(
-                                        {
-                                            PersonAbsenceId: personAbsenceId
-                                        }),
-                                    success: function(data, textStatus, jqXHR) {
-
-                                    },
-                                    error: function() {
-                                        personScheduleDayFailed();
-                                    },
-                                    complete: function () {
-                                        matchedIterations[0].removeCommandSentPromise.resolve();
-                                    }
-                                });
-
-                            }
-
-
+                            var iteration = iterationForNotification(notification);
+                            if (iteration)
+                                sendDeleteCommand(iteration, personAbsenceId);
                         }
                     });
 
                     $.each(iterations, function (i, e) {
-                        
-                        $.ajax({
-                            url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
-                            type: 'POST',
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            cache: false,
-                            data: JSON.stringify({
-                                StartDate: e.date,
-                                EndDate: e.date,
-                                AbsenceId: e.absenceId,
-                                PersonId: e.personId
-                            }),
-                            success: function (data, textStatus, jqXHR) {
-
-                            },
-                            error: function () {
-                                personScheduleDayFailed();
-                                personScheduleDayFailed();
-                            },
-                            complete: function () {
-                                e.addCommandSentPromise.resolve();
-                            }
-                        });
+                        sendAddCommand(e);
                     });
 
                     var commandsSentPromises = $.map(iterations, function (e) {
