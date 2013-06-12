@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
     public class ShiftEditorEventArgs : CancelEventArgs
     {
         private readonly IScheduleDay _schedulePart;
-        private readonly ILayer _selectedLayer;
+				private readonly ILayer<IPayload> _selectedLayer;
 
         public DateTimePeriod? Period { get; set; }
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         /// Created by: henrika
         /// Created date: 2008-06-09
         /// </remarks>
-        public ILayer SelectedLayer
+				public ILayer<IPayload> SelectedLayer
         {
             get { return _selectedLayer; }
         }
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         ///  Created by: Ola
         ///  Created date: 2008-07-02    
         /// /// </remarks>
-        public ShiftEditorEventArgs(IScheduleDay schedulePart, ILayer selectedLayer)
+        public ShiftEditorEventArgs(IScheduleDay schedulePart, ILayer<IPayload> selectedLayer)
         {
             _schedulePart = schedulePart;
             _selectedLayer = selectedLayer;
