@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		private readonly IOpenAbsenceRequestPeriodExtractor _openAbsenceRequestPeriodExtractor;
 
-		// class level working variables
 		private IList<DateOnlyPeriodWithAbsenceRequestPeriod> _layerCollectionOriginal;
 		private CultureInfo _cultureInfo;
 
@@ -77,38 +76,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 
 			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo);
-			
-     
-			var wcsDatePeriod = _openAbsenceRequestPeriodExtractor.WorkflowControlSet;
-
-			foreach (var absenceRequestOpenPeriod in wcsDatePeriod.AbsenceRequestOpenPeriods)
+		
+			foreach (var absenceRequestOpenPeriod in _openAbsenceRequestPeriodExtractor.AllPeriods)
 			{
 				
-				// checking for open period
-
-				if (absenceRequestOpenPeriod.OpenForRequestsPeriod.EndDate < limitToPeriod.StartDate)
-                {
-                    denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriodBeforeSendRequest", _cultureInfo);
-                }
-
-				if (absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate > limitToPeriod.EndDate)
-                {
-                    denyReason = string.Format(_cultureInfo, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPeriodOpenAfterSendRequest", _cultureInfo), 
-                                                                                                absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_cultureInfo));
-                }
+				var result = checkingForOpenPeriod(absenceRequestOpenPeriod);
+				if (!string.IsNullOrEmpty(result))
+				{
+					denyReason = result;
+					continue;
+				}
 				
-				// checking for period 
-				DateOnlyPeriod period = absenceRequestOpenPeriod.GetPeriod(DateOnly.Today);
 
-				if (period.EndDate < limitToPeriod.StartDate)
-				{
-					denyReason = string.Format(_cultureInfo, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _cultureInfo), period.ToShortDateString(_cultureInfo));				
-				}
+				result = checkingForPeriod(limitToPeriod, absenceRequestOpenPeriod);
+				if (!string.IsNullOrEmpty(result))
+					denyReason = result;
 
-				if (period.StartDate > limitToPeriod.EndDate)
-				{
-					denyReason = string.Format(_cultureInfo, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _cultureInfo), period.ToShortDateString(_cultureInfo));				
-				}
 			}
 
 	        _layerCollectionOriginal.Insert(0,
@@ -133,6 +116,71 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		                                        });
 
         }
+
+		private string checkingForOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			string denyReason = null;
+
+			if (isPeriodOpensLater(absenceRequestOpenPeriod) && isNextOpenPeriod(absenceRequestOpenPeriod))
+			{
+				denyReason = string.Format(_cultureInfo,
+				                           UserTexts.Resources.ResourceManager.GetString(
+					                           "RequestDenyReasonPeriodOpenAfterSendRequest", _cultureInfo),
+				                           absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_cultureInfo));
+			}
+			return denyReason;
+		}
+
+		private DateTime earlierOpenDate = DateTime.MaxValue;
+		private bool isNextOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var dateToCheck = absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate;
+			if (dateToCheck < earlierOpenDate)
+			{
+				earlierOpenDate = dateToCheck;
+				return true;
+			}
+			return false;
+		}
+
+		private bool isPeriodOpensLater(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var start = absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate;
+			return start > _openAbsenceRequestPeriodExtractor.ViewpointDate;
+		}
+
+		private DateTime earlierDate = DateTime.MaxValue;
+		private bool isNextPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var dateToCheck = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate).StartDate;
+			if (dateToCheck < earlierDate)
+			{
+				earlierDate = dateToCheck;
+				return true;
+			}
+			return false;
+		}
+
+		private bool isPeriodOutside(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			DateOnlyPeriod period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
+			var isPeriodInsideOrEqual = (period.StartDate <= requestPeriod.StartDate && period.EndDate >= requestPeriod.EndDate);
+			return !isPeriodInsideOrEqual;
+		}
+
+		private string checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			string denyReason = null;
+			DateOnlyPeriod period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
+
+			if (isPeriodOutside(requestPeriod, absenceRequestOpenPeriod) && isNextPeriod(absenceRequestOpenPeriod))
+			{
+				denyReason = string.Format(_cultureInfo,
+				                           UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _cultureInfo),
+				                           period.ToShortDateString(_cultureInfo));
+			}
+			return denyReason;
+		}
 
 		private DateOnly findLayerEndTime(int currentLayerIndex,
 										  DateOnlyPeriodWithAbsenceRequestPeriod workingLayer,
