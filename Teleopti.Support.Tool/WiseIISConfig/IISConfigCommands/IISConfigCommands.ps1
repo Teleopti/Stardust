@@ -55,9 +55,12 @@ function Get-Authentication {
         $path, #TeleoptiCCC/SDK
 		$type #windowsAuthentication
     )
-	$pspath = "MACHINE/WEBROOT/APPHOST/Default Web Site/" + $path
 	
-	$temp = Get-WebConfigurationProperty  -pspath $pspath -filter /system.webServer/security/authentication/$type -name enabled
+	$iis = new-object Microsoft.Web.Administration.ServerManager 
+	
+	$App = $iis.Sites | foreach {$_.Applications | where { $_.Path -eq "$path"}}
+	$temp = $App.GetWebConfiguration().GetSection("system.webServer/security/authentication/$type").GetAttributeValue("enabled")
+	
 	return $temp.Value
 }
 

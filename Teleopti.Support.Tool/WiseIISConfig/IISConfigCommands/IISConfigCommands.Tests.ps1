@@ -129,12 +129,12 @@ function Test-SitesAndServicesOk {
 		}
 		
 		It "SDK should be windows" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "windowsAuthentication"
+			$enabled = Get-Authentication "/TeleoptiCCC/SDK" "windowsAuthentication"
 			$enabled | Should Be "True"
 		}
 
 		It "SDK should not be anonymous" {
-			$enabled = Get-Authentication "TeleoptiCCC/SDK" "anonymousAuthentication"
+			$enabled = Get-Authentication "/TeleoptiCCC/SDK" "anonymousAuthentication"
 			$enabled | Should Be "False"
 		}
 		
