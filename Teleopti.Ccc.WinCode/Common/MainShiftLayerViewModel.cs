@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
-        public MainShiftLayerViewModel(IVisualLayer layer)
+	    public MainShiftLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
 
-        public override string LayerDescription
+	    public override string LayerDescription
         {
             get { return UserTexts.Resources.Activity; }
         }
@@ -36,5 +36,14 @@ namespace Teleopti.Ccc.WinCode.Common
             }
             return true;
         }
+
+		protected override void DeleteLayer()
+		{
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.RemoveActivity(this);
+				TriggerShiftEditorUpdate();
+			}
+		}
     }
 }

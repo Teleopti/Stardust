@@ -66,13 +66,6 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        protected override void DeleteLayer()
-        {
-            if (ParentObservingCollection != null)
-            {
-                ParentObservingCollection.RemoveActivity(this);
-                TriggerShiftEditorUpdate();
-            }
-        }
+       
     }
 }

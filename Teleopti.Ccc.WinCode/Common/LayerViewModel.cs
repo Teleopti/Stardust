@@ -187,11 +187,6 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             //Handle where necessary.
             //This should probably be abstract
-            if (ParentObservingCollection != null)
-            {
-                ParentObservingCollection.RemoveActivity(this);
-                TriggerShiftEditorUpdate();
-            }
         }
 
         public bool CanExecuteMoveDown()
