@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class RemoveLayerFromScheduleServiceTest
     {
-        private IRemoveLayerFromScheduleService _target;
+        private IRemoveLayerFromSchedule _target;
         private IScheduleDay _schedulePart;
 
         [SetUp]
         public void Setup()
         {
-            _target = new RemoveLayerFromScheduleService();
+            _target = new RemoveLayerFromSchedule();
         }
 
         [Test]

@@ -752,7 +752,7 @@
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShift.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayer.cs" />
-    <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleService.cs" />
+    <Compile Include="Scheduling\Assignment\RemoveLayerFromSchedule.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartService.cs" />

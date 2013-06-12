@@ -6,7 +6,7 @@
     /// <remarks>
     /// Finds the Shift that contains the layer
     /// </remarks>
-    public interface IRemoveLayerFromScheduleService
+    public interface IRemoveLayerFromSchedule
     {
 
         /// <summary>

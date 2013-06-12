@@ -3,7 +3,7 @@
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     
-    public class RemoveLayerFromScheduleService : IRemoveLayerFromScheduleService
+    public class RemoveLayerFromSchedule : IRemoveLayerFromSchedule
     {
 
         public IScheduleDay Remove(IScheduleDay part,ILayer<IActivity> layer)

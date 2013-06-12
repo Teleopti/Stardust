@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
         private IScheduleDay _part;
-        private IRemoveLayerFromScheduleService _removeService = new RemoveLayerFromScheduleService();
+        private IRemoveLayerFromSchedule _removeService = new RemoveLayerFromSchedule();
         private IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public IRemoveLayerFromScheduleService RemoveService
+        public IRemoveLayerFromSchedule RemoveService
         {
             get { return _removeService; }
         }
