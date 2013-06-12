@@ -68,6 +68,7 @@
             </div>
         </div>
     </nav>
+
     <header>
         <br/>
         <div class="container">
@@ -77,11 +78,11 @@
             </div>
         </div>
     </header>
-    <section>
-        <div class="container">
-        </div>
+
+    <section data-bind="template: 'page'">
     </section>
-    <section>
+
+    <script type="text/html" id="page">
         <div class="container">
             <div class="row">
                 <br/>
@@ -121,7 +122,8 @@
                     <div class="alert alert-success result-success">Finished!</div>
                 </div>
             </div>
-        </div>
-    </section>
+        </div>    
+    </script>
+
 </body>
 </html>
