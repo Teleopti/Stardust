@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _team = _mocks.DynamicMock<ITeam>();
 
             _model = new DayLayerModel(_person, _period, _team,
-                                          new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),new RemoveLayerFromSchedule()), null);
+										  new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), null);
             _dayLayerViewAdapter = new DayLayerViewModel(_rtaStateHolder, null, null, null, new TestDispatcher());
             _dayLayerViewAdapter.Models.Add(_model);
 

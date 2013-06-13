@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyCannotMoveAbsenceLayerVertical()
         {
             #region setup
-            LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             collection.AddFromSchedulePart(part);
             #endregion

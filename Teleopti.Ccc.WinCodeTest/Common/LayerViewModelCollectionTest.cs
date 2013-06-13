@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _partFactory = new SchedulePartFactoryForDomain();
             period = new DateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-            target = new LayerViewModelCollection(null,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			target = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             mocks = new MockRepository();
         }
 
@@ -163,7 +162,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyMoveAllTriggersParentCollection()
         {
             TimeSpan toMove = TimeSpan.FromHours(2);
-            var layer = mocks.StrictMock<ILayer<IActivity>>();
+            var layer = mocks.Stub<ILayer<IActivity>>();
+	       
             IShift shift = mocks.StrictMock<IShift>();
             using (mocks.Record())
             {
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyViewsAndFilters()
         {
-            target = new LayerViewModelCollection(null,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			target = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             ILayerViewModel modelFromProjection = mocks.StrictMock<ILayerViewModel>();
             ILayerViewModel modelFromPart = mocks.StrictMock<ILayerViewModel>();
             target.Add(modelFromProjection);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             //Atleast on description Should be sorted ascending by VisualOrderIndex  
             //Verify schedule is sorted by VisualOrderIndex:
-            target = new LayerViewModelCollection(null,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			target = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             target.CreateViewModels(new SchedulePartFactoryForDomain().CreatePartWithMainShift());
             bool isSatisfied = false;
                 foreach (var sortDesc in  target.ScheduleLayers.SortDescriptions)
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			
 	        var removeService = MockRepository.GenerateStrictMock<IRemoveLayerFromSchedule>();
 
-	        target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), removeService);
+	        target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), removeService, null);
 			
 			IScheduleDay part = _partFactory
 			  .AddMainShiftLayer()
@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			var removeService = MockRepository.GenerateStrictMock<IRemoveLayerFromSchedule>();
 
-			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), removeService);
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), removeService, null);
 
 			IScheduleDay part = _partFactory
 			  .AddAbsence()
@@ -531,6 +531,68 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         }
 
+		[Test]
+		public void ReplaceScheduleLayer_WhenMainshiftLayerIsChanged_ShouldBeCalledWithThatLayer()
+		{
+			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), replaceService);
+
+			IScheduleDay part = _partFactory
+			  .AddMainShiftLayer()
+			  .CreatePart();
+			target.AddFromSchedulePart(part);
+
+#pragma warning disable 612,618
+			var theLayer = part.AssignmentHighZOrder().ToMainShift().LayerCollection.Single();
+#pragma warning restore 612,618
+
+			var theLayerViewModel = target.Single();
+
+			var newPayload = ActivityFactory.CreateActivity("new");
+			var newPeriod = period.MovePeriod(TimeSpan.FromMinutes(5));
+
+			theLayerViewModel.Payload = newPayload;
+			theLayerViewModel.Period = newPeriod;
+
+			replaceService.Expect(r => r.Replace(part, theLayer, newPayload, newPeriod));
+
+			target.ReplaceActivity(theLayerViewModel, theLayer, part);
+			
+			replaceService.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ReplaceScheduleLayer_WhenAbsenceLayerIsChanged_ShouldBeCalledWithThatLayer()
+		{
+			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), replaceService);
+
+			IScheduleDay part = _partFactory
+			  .AddAbsence()
+			  .CreatePart();
+			target.AddFromSchedulePart(part);
+
+#pragma warning disable 612,618
+			var theLayer = part.PersonAbsenceCollection().Single().Layer;
+#pragma warning restore 612,618
+
+			var theLayerViewModel = target.Single();
+
+			var newAbsence = AbsenceFactory.CreateAbsence("new");
+			var newPeriod = theLayerViewModel.Period.MovePeriod(TimeSpan.FromMinutes(15));
+
+			theLayerViewModel.Period = newPeriod;
+			theLayerViewModel.Payload = newAbsence;
+			theLayerViewModel.SynchronizeWithDomainRoger();
+
+			replaceService.Expect(r => r.Replace(part, theLayer, newAbsence, newPeriod));
+
+			target.ReplaceAbsence(theLayerViewModel, theLayer, part);
+
+			replaceService.VerifyAllExpectations();
+		}
 
         private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {

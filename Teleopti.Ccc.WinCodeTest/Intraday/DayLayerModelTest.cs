@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _person = PersonFactory.CreatePerson("Kalle", "Kula");
             _person.EmploymentNumber = "10";
             _team = _mocks.StrictMock<ITeam>();
-	        var layerCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			var layerCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             var commonAgentName = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
             _target = new DayLayerModel(_person, _period, _team, layerCollection, commonAgentName);
         }

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
     {
         public TimelineControlViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
         {
-            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule());
+            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule(), null);
             CurrentDispatcher = Dispatcher.CurrentDispatcher;
             TimeZoom = new TimeZoomViewModel(Period);
             TickMarks = new ObservableCollection<TickMarkViewModel>();
