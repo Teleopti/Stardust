@@ -231,7 +231,7 @@ define([
                     var commandsSentPromises = $.map(iterations, function (e) {
                         return e.commandsSentPromise;
                     });
-                    $.when(commandsSentPromises).then(function () {
+                    $.when.apply($, commandsSentPromises).then(function () {
                         result.CommandsDone(true);
                     });
 
