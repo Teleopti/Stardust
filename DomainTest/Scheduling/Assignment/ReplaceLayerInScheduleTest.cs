@@ -13,12 +13,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	public class ReplaceLayerInScheduleTest
 	{
 		[Test]
-		public void ShouldThrowIfLayerDoesntExist()
+		public void ShouldThrowIfActivityLayerDoesntExist()
 		{
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			Assert.Throws<ArgumentException>(() =>
 			       target.Replace(scheduleDay, new MainShiftActivityLayer(new Activity("d"), new DateTimePeriod()), new Activity("d"), new DateTimePeriod()));
+		}
+
+		[Test]
+		public void ShouldThrowIfAbsenceLayerDoesntExist()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain().AddAbsence().CreatePart();
+			Assert.Throws<ArgumentException>(() =>
+			                                 target.Replace(scheduleDay, new AbsenceLayer(new Absence(), new DateTimePeriod()), new Absence(), new DateTimePeriod()));
+		}
+
+		[Test]
+		public void ShouldReplaceAbsenceLayer()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain().AddAbsence().CreatePart();
+			var orgLayer = scheduleDay.PersonAbsenceCollection().Single().Layer;
+			var newPayload = new Absence();
+			var newPeriod = new DateTimePeriod(orgLayer.Period.StartDateTime, orgLayer.Period.EndDateTime.AddMinutes(-15));
+
+			target.Replace(scheduleDay, orgLayer, newPayload, newPeriod);
+
+			var newLayerCollection = scheduleDay.PersonAbsenceCollection().Single().Layer;
+			var newLayer = newLayerCollection;
+			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
+			newLayer.Period.Should().Be.EqualTo(newPeriod);
 		}
 
 		[Test]
