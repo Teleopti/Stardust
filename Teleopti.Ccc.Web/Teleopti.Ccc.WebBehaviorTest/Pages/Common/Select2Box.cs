@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public static void AssertOptionExist(string select2Id, string optionText)
 		{
 			AssertIsOpen(select2Id);
+			Browser.Interactions.Javascript("$('.select2-input').val('').trigger('change');");
+			Browser.Interactions.AssertExists(string.Format("#{0} option:contains('{1}')", select2Id, optionText));
 			Browser.Interactions.AssertExists(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
 		}
 
