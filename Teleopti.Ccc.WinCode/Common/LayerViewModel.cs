@@ -238,7 +238,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				Replace();
 				if (_part != null)
 				{
-					hackToUpdateUnderlyingPersonAssignment();
 					SynchronizeWithDomainRoger();
 				}
 				
@@ -330,16 +329,6 @@ namespace Teleopti.Ccc.WinCode.Common
 			if (ParentObservingCollection != null)
 			{
 				ParentObservingCollection.MoveAllLayers(this, span);
-			}
-		}
-
-		private void hackToUpdateUnderlyingPersonAssignment()
-		{
-			var mainShiftLayer = Layer as IMainShiftActivityLayer;
-			if (mainShiftLayer != null)
-			{
-				var ms = (IMainShift)mainShiftLayer.Parent;
-				((IPersonAssignment)ms.Parent).SetMainShift(ms);
 			}
 		}
 
