@@ -11468,6 +11468,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
     <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
   </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Max Parallel Tasks:</value>
+    <comment>used in Chat skills</comment>
+  </data>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>Chat</value>
   </data>

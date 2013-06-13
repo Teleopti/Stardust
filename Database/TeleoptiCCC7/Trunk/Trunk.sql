@@ -408,7 +408,6 @@ GO
 --Date: 2013-06-13
 --Desc: Adding the new skill type Retail to the database.
 ----------------  
-
 DECLARE @creator uniqueidentifier
 SELECT TOP 1 @creator=CreatedBy FROM SkillType
 IF @creator IS NULL
@@ -418,4 +417,15 @@ IF @creator IS NULL
 INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
 VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeChat',null,9,0)
 
+GO
+----------------  
+--Name: Ola Håkansson
+--Date: 2013-06-13
+--Desc: Adding MaxParallelTasks to Skill.
+---------------- 
+ALTER TABLE Skill
+ADD MaxParallelTasks int NULL
+
+UPDATE Skill SET MaxParallelTasks = 1
+ALTER TABLE Skill ALTER COLUMN MaxParallelTasks int not null
 GO

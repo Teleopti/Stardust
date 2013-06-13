@@ -12058,6 +12058,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Parallel Tasks:.
+        /// </summary>
+        public static string MaxParallelTasks {
+            get {
+                return ResourceManager.GetString("MaxParallelTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Seat Limit Broken.
         /// </summary>
         public static string MaxSeatLimitBroken {
