@@ -351,42 +351,55 @@ GO
 --Desc: Bug #23815 - remove duplicates from PersonAbsence
 ---------------- 
 --first remove duplicates but keep the Absence with the biggest time span
-delete from PersonAbsence
-where id not in 
+create table #PersonAbsenceRemove (Id uniqueidentifier)
 
+insert into #PersonAbsenceRemove (Id)
+select Id from PersonAbsence
+where id not in
 (
-	--get the single one that we want to keep from the duplicates, count(*) > 1
-	select id
+	--keep longest Abscence with lowest Guid from the duplicates, count(*) > 1
+	select t1.Id
 	from PersonAbsence t1
 	inner join (
-		select person, Minimum, PayLoad, max(Maximum) Maximum
+		select cast(min(cast(id as varchar(36))) as uniqueidentifier) Id, person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
 		from PersonAbsence
-		group by person, Minimum,PayLoad
+		group by person, Scenario, Minimum,PayLoad
 		having count(*) > 1
 	) t2
 	on t1.Person = t2.Person
+		and t1.Id = t2.Id --t2.Id is lowest one -> manipulated string/Id cast above
 		and t1.Minimum = t2.Minimum
 		and t1.PayLoad = t2.PayLoad
-		and t1.Maximum = t2.Maximum
+		and t1.Maximum = t2.Maximum --t2.Maximum is the longest one
+		and t1.Scenario= t2.Scenario
+
 	union all
 	
 	--get all the correct ones, count(*) = 1
-	select Id
+	select t1.Id
 	from PersonAbsence t1
 	inner join (
-		select person, Minimum, PayLoad, max(Maximum) Maximum
+		select person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
 		from PersonAbsence
-		group by person, Minimum,PayLoad
+		group by person, Scenario, Minimum,PayLoad
 		having count(*) = 1
 	) t2
 	on t1.Person = t2.Person
 		and t1.Minimum = t2.Minimum
 		and t1.PayLoad = t2.PayLoad
 		and t1.Maximum = t2.Maximum
+		and t1.Scenario= t2.Scenario
 )
 
---finally delete any duplicates left
-delete from PersonAbsence
-where id not in 
-(select min(id) from PersonAbsence group by person, PayLoad, Minimum, Maximum)
+--delete PersonAbsence_AUD
+delete aud
+from Auditing.PersonAbsence_AUD aud
+inner join #PersonAbsenceRemove t
+on aud.Id = t.Id
+
+--delete PersonAbsence
+delete pa
+from dbo.PersonAbsence pa
+inner join #PersonAbsenceRemove t
+on pa.Id = t.Id
 GO

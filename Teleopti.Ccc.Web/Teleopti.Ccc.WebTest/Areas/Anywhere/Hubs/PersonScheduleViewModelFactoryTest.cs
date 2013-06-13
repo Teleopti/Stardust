@@ -133,5 +133,67 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonAbsences.Equals(personAbsences))));	
 		}
+
+		[Test]
+		public void ShouldRetrievePersonAbsencesInShiftPeriod()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>());
+			var person = PersonFactory.CreatePersonWithGuid("", "");
+			var date = new DateTime(2013, 5, 7);
+			var shiftStart = new DateTime(2013, 5, 7, 19, 0, 0, 0);
+			var shiftEnd = new DateTime(2013, 5, 8, 5, 0, 0, 0);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(new DateOnly(date), person.Id.Value))
+			                                    .Return(new PersonScheduleDayReadModel
+				                                    {
+					                                    ShiftStart = shiftStart,
+					                                    ShiftEnd = shiftEnd
+				                                    });
+			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
+
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(shiftStart, person.PermissionInformation.DefaultTimeZone());
+			var endTime = TimeZoneInfo.ConvertTimeToUtc(shiftEnd, person.PermissionInformation.DefaultTimeZone());
+			var period = new DateTimePeriod(startTime, endTime);
+
+			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario(" ")) };
+			personAbsenceRepository.Stub(x => x.Find(new[] { person }, period)).Return(personAbsences);
+
+			target.CreateViewModel(person.Id.Value, date);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonAbsences.Equals(personAbsences))));
+		}
+
+		[Test]
+		public void ShouldRetrievePersonAbsencesExcludeNightShiftFromPreviousDay()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>());
+			var person = PersonFactory.CreatePersonWithGuid("", "");
+			var date = new DateTime(2013, 5, 7);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(new DateOnly(date).AddDays(-1), person.Id.Value))
+												.Return(new PersonScheduleDayReadModel
+												{
+													ShiftStart = new DateTime(2013, 5, 6, 19, 0, 0, 0),
+													ShiftEnd = new DateTime(2013, 5, 7, 5, 0, 0, 0)
+												});
+			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
+
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2013, 5, 7, 5, 0, 0, 0), person.PermissionInformation.DefaultTimeZone());
+			var endTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2013, 5, 8, 0, 0, 0, 0), person.PermissionInformation.DefaultTimeZone());
+			var period = new DateTimePeriod(startTime, endTime);
+
+			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario(" ")) };
+			personAbsenceRepository.Stub(x => x.Find(new[] { person }, period)).Return(personAbsences);
+
+			target.CreateViewModel(person.Id.Value, date);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonAbsences.Equals(personAbsences))));
+		}
 	}
 }

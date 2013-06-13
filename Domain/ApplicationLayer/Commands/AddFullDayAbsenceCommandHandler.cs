@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{

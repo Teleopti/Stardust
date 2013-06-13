@@ -168,6 +168,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetGuid(4)).Return(_guid);
 			_reader.Expect(r => r.GetOrdinal("PlatformTypeId")).Return(5);
 			_reader.Expect(r => r.GetGuid(5)).Return(_guid);
+			_reader.Expect(r => r.GetOrdinal("StateGroupName")).Return(6);
+			_reader.Expect(r => r.GetString(6)).Return("StateGroupName");
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
 

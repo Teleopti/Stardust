@@ -70,12 +70,29 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(1, _target.AvailablePeriods.Count());
         }
 
+		[Test]
+		public void VerifyAllPeriods()
+		{
+			IAbsenceRequestOpenPeriod absenceRequestOpenPeriodOne = new AbsenceRequestOpenDatePeriod();
+			absenceRequestOpenPeriodOne.Absence = _holidayAbsence;
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriodOne);
+			Assert.AreEqual(1, _target.AllPeriods.Count());
 
-        [Test]
-        public void VerifyThatWorkflowControlSetIsInTheConstructor()
-        {
-            Assert.IsNotNull(_target.WorkflowControlSet);
-        }
+			IAbsenceRequestOpenPeriod absenceRequestOpenPeriodTwo = new AbsenceRequestOpenDatePeriod();
+			absenceRequestOpenPeriodTwo.Absence = _holidayAbsence;
+
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriodTwo);
+
+			Assert.AreEqual(2, _target.AllPeriods.Count());
+
+			IAbsence otherAbsence = AbsenceFactory.CreateAbsence("Flyttdag");
+			IAbsenceRequestOpenPeriod absenceRequestOpenPeriodThree = new AbsenceRequestOpenDatePeriod();
+			absenceRequestOpenPeriodThree.Absence = otherAbsence;
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriodThree);
+
+			_target.ViewpointDate = new DateOnly(2010, 01, 15);
+			Assert.AreEqual(2, _target.AllPeriods.Count());
+		}
 
         [Test]
         public void VerifyCanGetProjection()

@@ -57,26 +57,24 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             TextRequestDto textRequestDto = new TextRequestDto();
             TextRequest textRequest = new TextRequest(new DateTimePeriod());
             PersonRequestDto personRequestDto = new PersonRequestDto
-            {
-                CreatedDate = _date.Date,
-                Message = "test",
-                Id = id,
-                Person = personDto,
-                Request = textRequestDto,
-                RequestedDate = _date.Date,
-                RequestedDateLocal = _date.Date,
-                RequestStatus = RequestStatusDto.Pending,
-                Subject = "subject",
-                UpdatedOn = _date.Date
-
-            };
+                {
+                    CreatedDate = _date.Date,
+                    Message = "test",
+                    Id = id,
+                    Person = personDto,
+                    Request = textRequestDto,
+                    RequestedDate = _date.Date,
+                    RequestedDateLocal = _date.Date,
+                    RequestStatus = RequestStatusDto.Pending,
+                    Subject = "subject",
+                    UpdatedOn = _date.Date
+                };
 
             IPersonRequest personRequest = new PersonRequest(_person, textRequest);
             personRequest.SetId(id);
 
             Expect.Call(_personRequestRepository.Load(id)).Return(personRequest);
-            Expect.Call(_textRequestAssembler.DtoToDomainEntity((TextRequestDto)personRequestDto.Request)).Return(
-                textRequest);
+            Expect.Call(_textRequestAssembler.DtoToDomainEntity((TextRequestDto)personRequestDto.Request)).Return(textRequest);
 
             _mocks.ReplayAll();
             personRequest = _target.DtoToDomainEntity(personRequestDto);
@@ -91,17 +89,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             TextRequestDto textRequestDto = new TextRequestDto();
             TextRequest textRequest = new TextRequest(new DateTimePeriod());
             PersonRequestDto personRequestDto = new PersonRequestDto
-            {
-                CreatedDate = _date.Date,
-                Message = "test",
-                Person = personDto,
-                Request = textRequestDto,
-                RequestedDate = _date.Date,
-                RequestedDateLocal = _date.Date,
-                RequestStatus = RequestStatusDto.Pending,
-                Subject = "subject",
-                UpdatedOn = _date.Date
-            };
+                {
+                    CreatedDate = _date.Date,
+                    Message = "test",
+                    Person = personDto,
+                    Request = textRequestDto,
+                    RequestedDate = _date.Date,
+                    RequestedDateLocal = _date.Date,
+                    RequestStatus = RequestStatusDto.Pending,
+                    Subject = "subject",
+                    UpdatedOn = _date.Date
+                };
 
             Expect.Call(_personAssembler.DtoToDomainEntity(personDto)).Return(_person);
             Expect.Call(_textRequestAssembler.DtoToDomainEntity((TextRequestDto)personRequestDto.Request)).Return(
@@ -340,7 +338,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
             Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
             Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
-            Assert.AreEqual(false, personRequestDtoInReturn.CanDelete);
+            Assert.IsFalse(personRequestDtoInReturn.CanDelete);
             _mocks.VerifyAll();
         }
 
@@ -368,7 +366,35 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
             Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
             Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
-            Assert.AreEqual(true, personRequestDtoInReturn.CanDelete);
+            Assert.IsTrue(personRequestDtoInReturn.CanDelete);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void VerifyDoToDtoShiftTradeRequestCanDeleteReferred()
+        {
+            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
+            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
+            shiftTradeRequestDto.ShiftTradeStatus = ShiftTradeStatusDto.Referred;
+            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _person, _date, _date);
+            ShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
+
+            Expect.Call(_shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest)).Return(
+                shiftTradeRequestDto);
+            Expect.Call(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail)).Return(
+                shiftTradeSwapDetailDto);
+            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
+            {
+                Id = _person.Id,
+                Name = _person.Name.ToString()
+            }).Repeat.AtLeastOnce();
+
+            _mocks.ReplayAll();
+            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
+            Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
+            Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
+            Assert.IsTrue(personRequestDtoInReturn.CanDelete);
             _mocks.VerifyAll();
         }
     }

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
     /// <summary>
     /// 
     /// </summary>
-    public class UpdatedScheduleDay : RaptorDomainEvent
+    public class ScheduleProjectionReadOnlyChanged : RaptorDomainEvent
     {
         private Guid _personId;
         private DateTime _activityStartDateTime;
