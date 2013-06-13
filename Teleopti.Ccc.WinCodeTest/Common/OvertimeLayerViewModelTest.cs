@@ -137,13 +137,31 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(succeeded);
 		}
 
+		
+
 		[Test]
-		public void VerifyUpdatePeriod()
+		public void UpdatePeriod_WhenCalled_ShouldSetIsChangedToFalse()
 		{
+
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
+
 			Assert.IsFalse(_target.IsChanged);
+		}
+
+		[Test]
+		public void UpdatePeriod_WhenCalled_ShouldCallReplaceActivityOnObserver()
+		{
+			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+
+			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, null);
+			layerObserver.Expect(l => l.ReplaceActivity(_target, _layerWithPayload, _target.SchedulePart));
+
+			_target.IsChanged = true;
+			_target.UpdatePeriod();
+
+			layerObserver.VerifyAllExpectations();
 		}
 
 		[Test]

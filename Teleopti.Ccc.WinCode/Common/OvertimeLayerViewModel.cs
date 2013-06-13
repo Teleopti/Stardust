@@ -51,5 +51,10 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             return sender != this && !IsProjectionLayer && ((sender.GetType() == typeof(MainShiftLayerViewModel)) || (sender.GetType() == typeof(OvertimeLayerViewModel)));
         }
+
+		protected override void Replace()
+		{
+			if(ParentObservingCollection!=null)ParentObservingCollection.ReplaceActivity(this,Layer as ILayer<IActivity>,SchedulePart);
+		}
     }
 }
