@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Browser.Interactions.Click(".shifttrade-request-add");
-			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
+			Browser.Interactions.AssertContains("#Request-add-loaded-date", "2"); //date 2xxx-xx-xx
+			//EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
