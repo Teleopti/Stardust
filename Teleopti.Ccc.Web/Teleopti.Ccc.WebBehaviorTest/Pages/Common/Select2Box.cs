@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		public static void AssertSelectedOptionText(string select2Id, string optionText)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#Team-Picker option:contains(\"{0}\"):selected').length;", optionText), "1");
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#{0} option:contains(\"{1}\"):selected').length;", select2Id, optionText), "1");
 		}
 
 		public static void AssertSelectedOptionValue(string select2Id, string optionValue)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#Team-Picker option[value=\"{0}\"]:selected').length;", optionValue), "1");
+			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#{0} option[value=\"{1}\"]:selected').length;", select2Id, optionValue), "1");
 		}
 
 		public static void AssertOptionExist(string select2Id, string optionText)
