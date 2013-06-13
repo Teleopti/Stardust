@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -531,6 +530,61 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
         }
 
+		[Test]
+		public void ReplaceScheduleLayer_WhenMainshiftLayerIsChanged_ShouldBeCalledWithThatLayer()
+		{
+			var removeService = MockRepository.GenerateStrictMock<IRemoveLayerFromSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), removeService);
+
+			IScheduleDay part = _partFactory
+			  .AddMainShiftLayer()
+			  .CreatePart();
+			target.AddFromSchedulePart(part);
+
+#pragma warning disable 612,618
+			var theLayer = part.AssignmentHighZOrder().ToMainShift().LayerCollection.Single();
+#pragma warning restore 612,618
+
+			var theLayerViewModel = target.Single();
+
+			removeService.Expect(r => r.Remove(part, theLayer));
+
+			target.RemoveActivity(theLayerViewModel, theLayer, part);
+			removeService.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ReplaceScheduleLayer_WhenAbsenceLayerIsChanged_ShouldBeCalledWithThatLayer()
+		{
+			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule());
+
+			IScheduleDay part = _partFactory
+			  .AddAbsence()
+			  .CreatePart();
+			target.AddFromSchedulePart(part);
+
+#pragma warning disable 612,618
+			var theLayer = part.PersonAbsenceCollection().Single().Layer;
+#pragma warning restore 612,618
+
+			var theLayerViewModel = target.Single();
+
+			var newAbsence = AbsenceFactory.CreateAbsence("new");
+			var newPeriod = theLayerViewModel.Period.MovePeriod(TimeSpan.FromMinutes(15));
+
+			theLayerViewModel.Period = newPeriod;
+			theLayerViewModel.Payload = newAbsence;
+			theLayerViewModel.SynchronizeWithDomainRoger();
+
+			replaceService.Expect(r => r.Replace(part, theLayer,newAbsence,newPeriod));
+
+			target.RemoveAbsence(theLayerViewModel, theLayer, part);
+			
+			replaceService.VerifyAllExpectations();
+		}
 
         private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {
