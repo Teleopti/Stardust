@@ -28,10 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 #pragma warning restore 612,618
             ILayer<IActivity> firstLayer = mainShift.LayerCollection.First();
             Assert.IsTrue(mainShift.LayerCollection.Contains(firstLayer),"Verify contains the layer");
-            IScheduleDay result = _target.Remove(_schedulePart, firstLayer);
-            Assert.AreEqual(0, result.PersonAssignmentCollection().Count);
-            //Assert.IsFalse(result.AssignmentHighZOrder().MainShift.LayerCollection.Contains(firstLayer), "The layer should have been removed");
-            
+            _target.Remove(_schedulePart, firstLayer);
+            Assert.AreEqual(0, _schedulePart.PersonAssignmentCollection().Count);
         }
 
         [Test]
@@ -43,9 +41,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.First();
 
             Assert.IsTrue(_schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.Contains(firstPersonalLayer), "Verify contains the layer");
-            IScheduleDay result = _target.Remove(_schedulePart, firstPersonalLayer);
-            //Assert.IsFalse(result.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.Contains(firstPersonalLayer), "The layer should have been removed");
-            Assert.AreEqual(0, result.AssignmentHighZOrder().PersonalShiftCollection.Count);
+            _target.Remove(_schedulePart, firstPersonalLayer);
+            Assert.AreEqual(0, _schedulePart.AssignmentHighZOrder().PersonalShiftCollection.Count);
         }
 
         [Test]
@@ -57,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             IAbsenceLayer firstAbsenceLayer = firstPersonAbsence.Layer;
 
             Assert.IsTrue(_schedulePart.PersonAbsenceCollection().Contains(firstPersonAbsence), "Verify contains the absence");
-            IScheduleDay result = _target.Remove(_schedulePart,firstAbsenceLayer);
-            Assert.IsFalse(result.PersonAbsenceCollection().Contains(firstPersonAbsence), "The PersonAbsence containing the layer should have been removed");
+            _target.Remove(_schedulePart,firstAbsenceLayer);
+            Assert.IsFalse(_schedulePart.PersonAbsenceCollection().Contains(firstPersonAbsence), "The PersonAbsence containing the layer should have been removed");
         }
 
         [Test]
@@ -71,9 +68,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var firstOverTimeLayer = firstOvertimeShift.LayerCollection.First();
 
             Assert.IsTrue(assignmnet.OvertimeShiftCollection.First().LayerCollection.Contains(firstOverTimeLayer), "Verify contains the overtime");
-            IScheduleDay result = _target.Remove(_schedulePart,firstOverTimeLayer);
-            //Assert.IsFalse(result.AssignmentHighZOrder().OvertimeShiftCollection.First().LayerCollection.Contains(firstOverTimeLayer), "The OvertimeLayer  should have been removed");
-            Assert.AreEqual(0,result.AssignmentHighZOrder().OvertimeShiftCollection.Count, "The OvertimeLayer  should have been removed");
+            _target.Remove(_schedulePart,firstOverTimeLayer);
+            Assert.AreEqual(0, _schedulePart.AssignmentHighZOrder().OvertimeShiftCollection.Count, "The OvertimeLayer  should have been removed");
         }
 
     }
