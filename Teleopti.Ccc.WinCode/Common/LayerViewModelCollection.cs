@@ -260,16 +260,18 @@ namespace Teleopti.Ccc.WinCode.Common
             return ((ILayerViewModel)layer).IsProjectionLayer;
         }
 
-	    public void ReplaceActivity(ILayerViewModel theLayerViewModel, ILayer<IActivity> theLayer, IScheduleDay part)
+	    public void ReplaceActivity(ILayerViewModel sender, ILayer<IActivity> theLayer, IScheduleDay part)
 	    {
 		    if (_replaceService != null)
-			    _replaceService.Replace(part, theLayer, theLayerViewModel.Payload as IActivity, theLayerViewModel.Period);
+				_replaceService.Replace(part, theLayer, sender.Payload as IActivity, sender.Period);
 	    }
 
-		public void ReplaceAbsence(ILayerViewModel theLayerViewModel, IAbsenceLayer theLayer, IScheduleDay part)
-		{
+	    public void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay)
+	    {
 			if (_replaceService != null)
-				_replaceService.Replace(part, theLayer, theLayerViewModel.Payload as IAbsence, theLayerViewModel.Period);
-		}
+				_replaceService.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
+	    }
+
+	   
     }
 }
