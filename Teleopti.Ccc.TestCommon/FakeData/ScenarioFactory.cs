@@ -53,5 +53,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             scenarioList.Add(CreateScenarioAggregate("Scenario 2", true));
             return scenarioList;
         }
+
+				public static IScenario ScenarioWithId()
+				{
+					var scenario = new Scenario("sdf");
+					scenario.SetId(Guid.NewGuid());
+					return scenario;
+				}
     }
 }

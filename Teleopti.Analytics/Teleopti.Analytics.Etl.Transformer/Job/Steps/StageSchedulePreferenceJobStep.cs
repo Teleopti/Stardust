@@ -6,13 +6,6 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
-	/// <summary>
-	/// Responsible for retriving the PersonRestrictions  and send it to the transformer
-	/// </summary>
-	/// <remarks>
-	/// Created by: henrika
-	/// Created date: 2009-07-02
-	/// </remarks>
 	public class StageSchedulePreferenceJobStep : JobStepBase
 	{
 		public StageSchedulePreferenceJobStep(IJobParameters jobParameters)

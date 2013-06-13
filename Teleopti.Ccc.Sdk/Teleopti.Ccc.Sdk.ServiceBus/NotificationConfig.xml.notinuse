@@ -15,6 +15,7 @@
 		<to>{2}</to>
 		<from>{3}</from>
 		<text>{4}</text>
+		<unicode>{5}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>

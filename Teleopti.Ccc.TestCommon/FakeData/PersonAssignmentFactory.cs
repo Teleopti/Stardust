@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -16,20 +15,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     /// </summary>
     public static class PersonAssignmentFactory
     {
-        /// <summary>
-        /// Creates the agent assignment aggregate.
-        /// </summary>
-        /// <param name="agent">The agent.</param>
-        /// <param name="mainShift">The main shift.</param>
-        /// <param name="personalShiftCollection">The personal shift collection.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
         public static IPersonAssignment CreatePersonAssignmentAggregate(IPerson agent,
                                                                      IMainShift mainShift,
                                                                      ICollection<IPersonalShift> personalShiftCollection,
-                                                                     IScenario scenario)
+                                                                     IScenario scenario, DateOnly dateOnly)
         {
-            IPersonAssignment ret = new PersonAssignment(agent, scenario);
+            IPersonAssignment ret = new PersonAssignment(agent, scenario, dateOnly);
             ret.SetMainShift(mainShift);
             //todo: rk - lägg till en AddRange istället!
             foreach (IPersonalShift personalShift in personalShiftCollection)
@@ -52,9 +43,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario)
         {
-            IPersonAssignment ret = new PersonAssignment(agent, scenario);
-            return ret;
+            return CreatePersonAssignment(agent, scenario, new DateOnly(2000,1,1));
         }
+
+			public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
+			{
+				return new PersonAssignment(agent, scenario, date);
+			}
 
         /// <summary>
         /// Creates an assignment with personal and main shift.
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                                     IShiftCategory category,
                                                                                     IScenario scenario)
         {
-            IPersonAssignment ass = new PersonAssignment(agent, scenario);
+            IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
             ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
             return ass;
@@ -92,8 +87,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                     IShiftCategory category,
                                                                     IScenario scenario)
         {
-            PersonAssignment ass = new PersonAssignment(agent, scenario);
-            ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
+            PersonAssignment ass = new PersonAssignment(agent, scenario, date);
+	        var mainshift = MainShiftFactory.CreateMainShift(activity, period, category);
+            ass.SetMainShift(mainshift);
             return ass;
         }
 
@@ -129,7 +126,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                         DateTimePeriod period,
                                                                         IScenario scenario)
         {
-            IPersonAssignment ass = new PersonAssignment(person, scenario);
+					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
             return ass;
         }
@@ -145,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario);
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
 			ass.AddOvertimeShift(OvertimeShiftFactory.CreateOvertimeShift(activity, period, multiplicatorDefinitionSet, ass));
@@ -160,7 +157,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPerson agent = PersonFactory.CreatePerson("grisisi");
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false);
-            IPersonAssignment ass = new PersonAssignment(agent, scenario);
+            IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(2000,1,1));
             return ass;
         }
 
@@ -209,7 +206,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IPerson agentAndreas = PersonFactory.CreatePerson("Andreas");
 
             // create AgentAssignment
-            IPersonAssignment as1 = new PersonAssignment(agentAndreas, scDefault);
+            IPersonAssignment as1 = new PersonAssignment(agentAndreas, scDefault, new DateOnly(2000,1,2));
             as1.SetMainShift(msh);
             as1.AddPersonalShift(psh);
 
@@ -248,10 +245,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             CreatePersonsAndAddToContainer(container);
 
             // assignments
-            IPersonAssignment assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault);
-            IPersonAssignment assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault);
-            IPersonAssignment assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault);
-            IPersonAssignment assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault);
+            IPersonAssignment assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault, new DateOnly(2008,1,2));
+						IPersonAssignment assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault, new DateOnly(2008, 1, 2));
+						IPersonAssignment assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault, new DateOnly(2008, 1, 2));
+						IPersonAssignment assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault, new DateOnly(2008, 1, 2));
 
             // periods
             DateTimePeriod prdPerson1Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc));

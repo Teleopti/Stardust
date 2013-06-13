@@ -19,19 +19,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			foreach (var shiftTradeSwapDetail in obj)
 			{
 				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.AssignmentHighZOrder();
-				if (personAssignmentFrom == null) continue;
-				var mainShiftFrom = personAssignmentFrom.MainShift;
+				if (personAssignmentFrom == null)
+					continue;
+				var mainShiftFrom = shiftTradeSwapDetail.SchedulePartFrom.GetEditorShift();
 				
 				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.AssignmentHighZOrder();
 				if (personAssignmentTo == null) continue;
-				var mainShiftTo = personAssignmentTo.MainShift;
+				var mainShiftTo = shiftTradeSwapDetail.SchedulePartTo.GetEditorShift();
 
 				if (mainShiftFrom != null)
 				{
 					var periodFrom = mainShiftFrom.LayerCollection.Period();
 					if (!periodFrom.HasValue) continue;
 
-					if (!CheckCover(personAssignmentTo, periodFrom.Value))
+					if (!checkCover(personAssignmentTo, periodFrom.Value))
 						return false;
 				}
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 					var periodTo = mainShiftTo.LayerCollection.Period();
 					if (!periodTo.HasValue) continue;
 
-					if (!CheckCover(personAssignmentFrom, periodTo.Value))
+					if (!checkCover(personAssignmentFrom, periodTo.Value))
 						return false;
 				}	
 			}
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 
-		private static bool CheckCover(IPersonAssignment personAssignment, DateTimePeriod period)
+		private static bool checkCover(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
 			foreach (var personalShift in personAssignment.PersonalShiftCollection)
 			{

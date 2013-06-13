@@ -1042,6 +1042,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Preference....
+        /// </summary>
+        public static string AddPreferenceThreeDots {
+            get {
+                return ResourceManager.GetString("AddPreferenceThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add reply option.
         /// </summary>
         public static string AddReplyOption {
@@ -1111,6 +1120,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddStudentAvailability {
             get {
                 return ResourceManager.GetString("AddStudentAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Hourly Availability....
+        /// </summary>
+        public static string AddStudentAvailabilityThreeDots {
+            get {
+                return ResourceManager.GetString("AddStudentAvailabilityThreeDots", resourceCulture);
             }
         }
         
@@ -3713,6 +3731,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chance of getting absence request granted: .
+        /// </summary>
+        public static string ChanceOfGettingAbsenceRequestGranted {
+            get {
+                return ResourceManager.GetString("ChanceOfGettingAbsenceRequestGranted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Date.
         /// </summary>
         public static string ChangeDate {
@@ -4212,6 +4239,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collecting data....
+        /// </summary>
+        public static string CollectingData {
+            get {
+                return ResourceManager.GetString("CollectingData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :  .
         /// </summary>
         public static string Colon {
@@ -4406,6 +4442,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConfirmPeopleRemove {
             get {
                 return ResourceManager.GetString("ConfirmPeopleRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm removal.
+        /// </summary>
+        public static string ConfirmRemoval {
+            get {
+                return ResourceManager.GetString("ConfirmRemoval", resourceCulture);
             }
         }
         
@@ -4987,7 +5032,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Student Availability.
+        ///   Looks up a localized string similar to Hourly Availability.
         /// </summary>
         public static string CreateStudentAvailability {
             get {
@@ -8059,6 +8104,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fair.
+        /// </summary>
+        public static string Fair {
+            get {
+                return ResourceManager.GetString("Fair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fairness.
         /// </summary>
         public static string Fairness {
@@ -9122,6 +9176,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Granted by supervisor.
         /// </summary>
         public static string GrantedBySupervisor {
@@ -9748,6 +9811,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Improve {
             get {
                 return ResourceManager.GetString("Improve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Improved.
+        /// </summary>
+        public static string Improved {
+            get {
+                return ResourceManager.GetString("Improved", resourceCulture);
             }
         }
         
@@ -11247,7 +11319,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lock Student Availability.
+        ///   Looks up a localized string similar to Lock Hourly Availability.
         /// </summary>
         public static string LockStudentAvailability {
             get {
@@ -13851,15 +13923,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Student Availability.
-        /// </summary>
-        public static string NewStudentAvailability {
-            get {
-                return ResourceManager.GetString("NewStudentAvailability", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Tag.
         /// </summary>
         public static string NewTag {
@@ -14473,7 +14536,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No shifts available for this student availability..
+        ///   Looks up a localized string similar to No shifts available for this availability..
         /// </summary>
         public static string NoShiftsAvailableForThisStudentAvailabilityDot {
             get {
@@ -14532,6 +14595,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSuggestions {
             get {
                 return ResourceManager.GetString("NoSuggestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not allowed to move a work shift to another day in shift editor, use cut and paste instead.
+        /// </summary>
+        public static string NotAllowedMoveOfAssignmentToOtherDate {
+            get {
+                return ResourceManager.GetString("NotAllowedMoveOfAssignmentToOtherDate", resourceCulture);
             }
         }
         
@@ -15139,7 +15211,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open student availability.
+        ///   Looks up a localized string similar to Open hourly availability.
         /// </summary>
         public static string OpenStudentAvailability {
             get {
@@ -16881,6 +16953,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string Poor {
+            get {
+                return ResourceManager.GetString("Poor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Positive effect:.
         /// </summary>
         public static string PositiveEffectColon {
@@ -17415,6 +17496,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent..
+        /// </summary>
+        public static string RecipientAnsweredToEarlierMessage {
+            get {
+                return ResourceManager.GetString("RecipientAnsweredToEarlierMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recruitment.
         /// </summary>
         public static string Recruitment {
@@ -17904,7 +17994,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not send request for the requested period this time..
         /// </summary>
         public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
             get {
@@ -17913,7 +18003,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Workflow Control Set defined!.
+        ///   Looks up a localized string similar to Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}..
+        /// </summary>
+        public static string RequestDenyReasonNoPeriod {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonNoPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No workflow control set defined..
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {
             get {
@@ -17931,7 +18030,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}..
         /// </summary>
         public static string RequestDenyReasonPeriodOpenAfterSendRequest {
             get {
@@ -18377,6 +18476,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportAgentStatistics {
             get {
                 return ResourceManager.GetString("ResReportAgentStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Availability Per Agent.
+        /// </summary>
+        public static string ResReportAvailabilityPerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAvailabilityPerAgent", resourceCulture);
             }
         }
         
@@ -22036,7 +22144,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Student availabilities.
+        ///   Looks up a localized string similar to Hourly availabilities.
         /// </summary>
         public static string StudentAvailabilities {
             get {
@@ -22045,7 +22153,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Student Availability.
+        ///   Looks up a localized string similar to Hourly Availability.
         /// </summary>
         public static string StudentAvailability {
             get {
@@ -22054,7 +22162,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Student Availability Fulfillment.
+        ///   Looks up a localized string similar to Hourly Availability Fulfillment.
         /// </summary>
         public static string StudentAvailabilityFulfillment {
             get {
@@ -22063,7 +22171,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Student availability period.
+        ///   Looks up a localized string similar to Availability period.
         /// </summary>
         public static string StudentAvailabilityPeriod {
             get {

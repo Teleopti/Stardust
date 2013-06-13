@@ -22,6 +22,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -240,6 +241,19 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
+				};
+
+			return 
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillDayOffDataMart(IBusinessUnit businessUnit)
 		{
             var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
@@ -276,6 +290,60 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_load", parameterList,
 											  _dataMartConnectionString);
 
+		}
+
+		public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+		{
+			//Convert time back to local time before sp call
+			var startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
+			var endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+
+			//Prepare sql parameters
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("start_date", startDate.Date),
+					new SqlParameter("end_date", endDate.Date),
+					new SqlParameter("business_unit_code", businessUnit.Id)
+				};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_hourly_availability_load]", parameterList,
+											  _dataMartConnectionString);
+
+		}
+
+		public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", businessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
+				};
+
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_hourly_availability_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
+		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
+				};
+
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
+		public int PersistAvailability(DataTable dataTable)
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_availability_delete", _dataMartConnectionString);
+			return HelperFunctions.BulkInsert(dataTable, "[stage].[stg_hourly_availability]", _dataMartConnectionString);
 		}
 
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
@@ -350,6 +418,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
+		public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
+		{
+			var parameterList = new List<SqlParameter> {new SqlParameter("business_unit_code", businessUnit.Id)};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_schedule_intraday_load]", parameterList,
 											  _dataMartConnectionString);
 		}
 
@@ -538,18 +615,23 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder)
 		{
-			IEnumerable<IPerson> persons = stateHolder.PersonCollection;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			var persons = stateHolder.PersonCollection;
+			return LoadSchedule(period, scenario, persons.ToList());
+		}
+
+		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load error
 				avoidLazyLoadForLoadSchedule(uow, persons);
 
 				var scheduleRepository = new ScheduleRepository(uow);
-				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons);
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons){DoLoadByPerson = true};
+				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true);
 
-				ScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
-				IScheduleDictionary schedulesDictionary =
+				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
+				var schedulesDictionary =
 					scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
 
 				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
@@ -567,7 +649,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				return schedulesDictionary;
 			}
 		}
-
 		private static void avoidLazyLoadForLoadSchedule(IUnitOfWork uow, IEnumerable<IPerson> persons)
 		{
 			//just dirty fix for now
@@ -648,7 +729,63 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+				return rep.LastChangedDate(currentBusinessUnit, stepName);
+			}
+		}
+
+		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+				return rep.ChangedDataOnStep(afterDate, currentBusinessUnit, stepName);
+			}	
+		}
+
+		public int PersistScheduleChanged(DataTable dataTable)
+		{
+			HelperFunctions.TruncateTable("stage.stg_schedule_changed_delete", _dataMartConnectionString);
+			int rowCount = HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[stage].[etl_stg_schedule_updated_special_load]", null, _dataMartConnectionString);
+			return rowCount;
+			
+		}
+
+		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
+				uow.PersistAll();
+			}
+		}
+
+		public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new PreferenceDayRepository(uow);
+				return rep.FindNewerThan(lastTime);
+			}
+		}
+		
+		public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime,
+																			IBusinessUnit currentBusinessUnit)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new StudentAvailabilityDayRepository(uow);
+				return rep.FindNewerThan(lastTime);
+			}
+		}
+
+		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
 			foreach (IPerson person in dictionary.Keys)
@@ -946,6 +1083,19 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
+		{
+			IList<IPersonRequest> personRequests;
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PersonRequestRepository(uow);
+				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+				uow.Reassociate(person);
+				personRequests = rep.FindPersonRequestUpdatedAfter(lastTime);
+			}
+			return personRequests;
+		}
+
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
 		{
 		    IList<IPersonRequest> personRequests;
@@ -958,10 +1108,28 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		    return personRequests;
 		}
 
+		public void TruncateRequest()
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_request_delete", _dataMartConnectionString);
+		}
+
 		public int PersistRequest(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_request_delete", _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_request", _dataMartConnectionString);
+		}
+
+		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
+		{
+			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
+
+			//Prepare sql parameters
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_intraday_load", parameterList,
+											  _dataMartConnectionString);
 		}
 
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
@@ -976,6 +1144,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
+		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
+		{
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
 
@@ -1236,35 +1414,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
+		public int FillPermissionDataMart(IBusinessUnit businessUnit)
 		{
 			int numberOfRows;
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
-			parameterList.Add(new SqlParameter("isFirstBusinessUnit", isFirstBusinessUnit));
-			parameterList.Add(new SqlParameter("isLastBusinessUnit", isLastBusinessUnit));
-
-			//truncate, if first BU
-			if (isFirstBusinessUnit)
-			{
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_truncate_nonactive", parameterList,
-											  _dataMartConnectionString);
-			}
+			var parameterList = new List<SqlParameter> {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			//fill data and return effected rows
 			numberOfRows =
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_load", parameterList,
 											  _dataMartConnectionString);
-
-			//swap tables, if last BU
-			if (isLastBusinessUnit)
-			{
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_switch_active", parameterList,
-											  _dataMartConnectionString);
-			}
-
 
 			return numberOfRows;
 		}

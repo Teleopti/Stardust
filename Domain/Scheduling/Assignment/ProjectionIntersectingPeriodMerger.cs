@@ -9,12 +9,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			for (var i = clonedUnmergedCollection.Count - 1; i > 0; i--)
 			{
+				var indexOfPrevious = i - 1;
 				var currLayer = clonedUnmergedCollection[i];
-				var prevLayer = clonedUnmergedCollection[i - 1];
+				var prevLayer = clonedUnmergedCollection[indexOfPrevious];
 				if (currLayer.AdjacentTo(prevLayer))
 				{
-					prevLayer.ChangeLayerPeriodEnd(currLayer.Period.ElapsedTime());
 					clonedUnmergedCollection.Remove(currLayer);
+					clonedUnmergedCollection.Remove(prevLayer);
+					var newLayerPeriod = new DateTimePeriod(prevLayer.Period.StartDateTime,
+																				prevLayer.Period.EndDateTime.Add(currLayer.Period.ElapsedTime()));
+					clonedUnmergedCollection.Insert(indexOfPrevious, prevLayer.CloneWithNewPeriod(newLayerPeriod));
 				}
 			}
 			return clonedUnmergedCollection;

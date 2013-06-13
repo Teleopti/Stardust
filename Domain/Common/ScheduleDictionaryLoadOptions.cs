@@ -6,11 +6,16 @@ namespace Teleopti.Ccc.Domain.Common
     {
         public bool LoadRestrictions { get; set; }
         public bool LoadNotes { get; set; }
+        public bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
 
-        public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes)
-        {
-            LoadRestrictions = loadRestrictions;
-            LoadNotes = loadNotes;
-        }   
+        public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes):this(loadRestrictions,loadNotes, false)
+        {}
+
+		public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes, bool loadOnlyPreferensesAndHourlyAvailabilit)
+		{
+			LoadRestrictions = loadRestrictions;
+			LoadNotes = loadNotes;
+			LoadOnlyPreferensesAndHourlyAvailability = loadOnlyPreferensesAndHourlyAvailabilit;
+		} 
     }
 }

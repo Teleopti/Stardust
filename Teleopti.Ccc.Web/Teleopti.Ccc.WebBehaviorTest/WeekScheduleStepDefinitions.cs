@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
@@ -24,12 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 
 		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-
-		[When(@"I click on any day of a week")]
-		public void WhenIClickOnAnyDayOfAWeek()
-		{
-			_page.ClickThirdDayOfOtherWeekInWeekPicker(UserFactory.User().Culture);
-		}
 
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
@@ -88,25 +77,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
 			EventualAssert.That(() => _page.DayComment(date).Exists, Is.True);
-		}
-
-
-		[Then(@"I should see the selected week")]
-		public void ThenIShouldSeeTheSelectedWeek()
-		{
-			AssertShowingWeekForDay(TestDataSetup.ThirdDayOfOtherThanCurrentWeekInCurrentMonth(UserFactory.User().Culture));
-		}
-
-		[Then(@"I should see monday as the first day of week")]
-		public void ThenIShouldSeeMondayAsTheFirstDayOfWeek()
-		{
-			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
-		}
-
-		[Then(@"I should see sunday as the first day of week")]
-		public void ThenIShouldSeeSundayAsTheFirstDayOfWeek()
-		{
-			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
 		}
 
 		[Then(@"I should see number '(.*)' with the request count for date '(.*)'")]
@@ -202,15 +172,33 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
 		}
 
-		[Then(@"I should see the text for today in '(.*)'")]
-		public void ThenIShouldSeeTheTextForTodayIn(string color)
+		[Then(@"I should not see any indication of how many agents can go on holiday")]
+		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
-			DivCollection layers = _page.DayLayers(DateTime.Today.Date);
-
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
+			{
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.False);
+			}
 		}
 
-
+		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
+		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
+		{
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
+			{
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.True);
+			}
+		}
+		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+		{
+			var layers = _page.DayLayers(date);
+			var background = _page.DayElementForDate(date).Divs.Filter(Find.ByClass("small-circle"))[0].Style.BackgroundColor;
+			
+			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
+		}
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);

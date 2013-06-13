@@ -20,13 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
-		[When(@"I click on a day")]
-		public void WhenIClickOnADay()
-		{
-			var date = new DateOnly(DateOnly.Today.Year, DateOnly.Today.Month, 1);
-			Pages.Pages.CurrentDateRangeSelector.DatePicker.ClickDay(date);
-		}
-
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
@@ -84,13 +77,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
-		[Then(@"I should see '(.*)' schedule")]
-		public void ThenIShouldSeeSchedule(string name)
-		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
-		}
-
 		[Then(@"I should see '(.*)' schedule in team schedule with")]
 		public void ThenIShouldSeeScheduleInTeamScheduleWith(string name, Table table)
 		{
@@ -129,13 +115,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertShowingDay(DateOnly.Today.AddDays(-1));
 		}
 
-		[Then(@"I should see the selected day")]
-		public void ThenIShouldSeeTheSelectedDay()
-		{
-			var date = new DateOnly(DateOnly.Today.Year, DateOnly.Today.Month, 1);
-			AssertShowingDay(date);
-		}
-
 		private void AssertShowingDay(DateOnly date)
 		{
 			Browser.Current.Url.EndsWith(string.Format("{0}/{1}/{2}", date.Year, date.Month, date.Day));
@@ -160,13 +139,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
 			EventualAssert.That(() => dayOff.Exists, Is.True);
-		}
-
-		[Then(@"I should not see my colleague's day off")]
-		public void ThenIShouldNotSeeMyColleagueSDayOff()
-		{
-			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
-			EventualAssert.That(() => dayOff.Exists, Is.False);
 		}
 
 		[Then(@"The time line should span from (.*) to (.*)")]
@@ -279,7 +251,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			IOpenTheTeamPicker();
 
 			var texts = Pages.Pages.TeamSchedulePage.TeamPicker.OptionsTexts;
-			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True, "options:" + string.Join(",", texts) + ";" + " should contain" + e));
+			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True, () => "options:" + string.Join(",", texts) + ";" + " should contain" + e));
 		}
 
 		[Then(@"the teams should be sorted alphabetically")]
@@ -387,20 +359,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
 
-			picker.Should().Not.Be.Null();
+			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.True);
 		}
 
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
 			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name);
-			EventualAssert.That(() => agent.Exists, Is.True, name + " not found");
+			EventualAssert.That(() => agent.Exists, Is.True, () => name + " not found");
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)
 		{
 			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name, false);
-			EventualAssert.That(() => agent.Exists, Is.False, name + " found");
+			EventualAssert.That(() => agent.Exists, Is.False, () => name + " found");
 		}
 
 	}

@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private readonly Func<IUnitOfWork> _makeUnitOfWork;
 
 		internal NHibernateUnitOfWorkFactoryFake(ISessionFactory sessFactory)
-			: base(sessFactory, null, new List<IMessageSender>()) { }
+			: base(sessFactory, null, null, new List<IMessageSender>()) { }
 
 		internal NHibernateUnitOfWorkFactoryFake(ISessionFactory sessFactory, 
 			Func<IUnitOfWork> makeUnitOfWork,
 			ISessionContextBinder sessionContextBinder
 			)
-			: base(sessFactory, null, new List<IMessageSender>())
+			: base(sessFactory, null, null, new List<IMessageSender>())
 		{
 			_makeUnitOfWork = makeUnitOfWork;
 			SessionContextBinder = sessionContextBinder;

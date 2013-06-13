@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			{
 				cellDetails.SetCellValue(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].HeaderText);
                 cellDetails.SetCellTipText(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].CellTipText);
+                SetMergedHeaderStyle();
 			}
 			T item;
             if (cellDetails.IsColumnParentHeader)
@@ -134,6 +135,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 	    private void gridControl_ClientSizeChanged(object sender, EventArgs e)
 	    {
 	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Rows(0,1));
+	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Cols(0,1));
 	    }
 
 	    private void ResetGridArea()

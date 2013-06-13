@@ -47,33 +47,47 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             : this()
         {
             _shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>(shiftTradeSwapDetails);
-            CalculateAndSetPeriod();
-            NotifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
+            calculateAndSetPeriod();
+            notifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
         }
 
-        private void NotifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
+        private void notifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
         {
-            if (!shiftTradeSwapDetails.IsEmpty())
-            {
-                var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-                if (isShiftTradeRequestForOneDayOnly())
-                {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern)), new List<IPerson> { PersonTo });
-                }
-                else
-                {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                                  Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern)), new List<IPerson> { PersonTo });
-                }
+	        if (shiftTradeSwapDetails.IsEmpty()) return;
 
-            }
+	        var culture = PersonTo.PermissionInformation.Culture();
+	        var language = PersonTo.PermissionInformation.UICulture();
+	        var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
+	        var datePattern = culture.DateTimeFormat.ShortDatePattern;
+
+	        if (isShiftTradeRequestForOneDayOnly())
+	        {
+		        var notificationTemplate =
+			        UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", language) ??
+			        UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
+
+		        SetNotification(string.Format(
+			        culture,
+			        notificationTemplate,
+			        Period.StartDateTimeLocal(timezone).ToString(datePattern)), 
+		            new List<IPerson> { PersonTo });
+	        }
+	        else
+	        {
+		        var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", language) ??
+			        UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
+
+		        SetNotification(string.Format(
+			        culture,
+			        notificationTemplate,
+			        Period.StartDateTimeLocal(timezone).ToString(datePattern),
+			        Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
+		            new List<IPerson> { PersonTo });
+	        }
         }
 
-        private void CalculateAndSetPeriod()
+        private void calculateAndSetPeriod()
         {
             if (_shiftTradeSwapDetails.Count>0)
             {
@@ -103,43 +117,56 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void AddShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             shiftTradeSwapDetail.SetParent(this);
             _shiftTradeSwapDetails.Add(shiftTradeSwapDetail);
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
 
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			var culture = PersonTo.PermissionInformation.Culture();
+			var language = PersonTo.PermissionInformation.UICulture();
+			var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
+			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern))
-                              , new List<IPerson> { shiftTradeSwapDetail.PersonTo });
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", language) ??
+					UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
+
+                SetNotification(string.Format(
+					culture,
+					notificationTemplate,
+                    Period.StartDateTimeLocal(timezone).ToString(datePattern)),
+                    new List<IPerson> { shiftTradeSwapDetail.PersonTo });
             }
             else
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern))
-                              , new List<IPerson> { shiftTradeSwapDetail.PersonTo });
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", language) ??
+					UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
+
+                SetNotification(string.Format(
+					culture,
+                    notificationTemplate,
+                    Period.StartDateTimeLocal(timezone).ToString(datePattern),
+                    Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)),
+                    new List<IPerson> { shiftTradeSwapDetail.PersonTo });
             }
         }
 
         public virtual void ClearShiftTradeSwapDetails()
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             _shiftTradeSwapDetails.Clear();
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
         }
 
-        private void VerifyEditingShiftTradeIsAllowed()
+        private void verifyEditingShiftTradeIsAllowed()
         {
             if (shiftTradeStatus!=ShiftTradeStatus.OkByMe &&
                 shiftTradeStatus!=ShiftTradeStatus.Referred)
             {
-                throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
+				throw new ShiftTradeRequestStatusException("Editing of shift trades is only allowed when in status modes OkByMe or Referred.");
             }
         }
 
@@ -159,7 +186,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </remarks>
         public virtual void SetShiftTradeStatus(ShiftTradeStatus shiftTradeStatusToSet, IPersonRequestCheckAuthorization authorization)
         {
-            VerifyShiftTradeStatusIsAllowed(shiftTradeStatusToSet);
+            verifyShiftTradeStatusIsAllowed(shiftTradeStatusToSet);
             shiftTradeStatus = shiftTradeStatusToSet;
             switch (shiftTradeStatus)
             {
@@ -172,7 +199,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        private void VerifyShiftTradeStatusIsAllowed(ShiftTradeStatus shiftTradeStatusToVerify)
+        private void verifyShiftTradeStatusIsAllowed(ShiftTradeStatus shiftTradeStatusToVerify)
         {
             if (shiftTradeStatus==ShiftTradeStatus.Referred && 
                 shiftTradeStatusToVerify==ShiftTradeStatus.OkByBothParts)
@@ -181,39 +208,50 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        /// <summary>
-        /// Denies this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-19
-        /// </remarks>
         public override void Deny(IPerson denyPerson)
         {
             var list = new List<IPerson>(InvolvedPeople());
             list.Remove(denyPerson);
 
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+	        var culture = PersonFrom.PermissionInformation.Culture();
+	        var language = PersonFrom.PermissionInformation.UICulture();
+			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+            var datePattern = culture.DateTimeFormat.ShortDatePattern;
+	        string notification;
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                              UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
-                                              Period.StartDateTimeLocal(
-                                                  PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(
-                                                      datePattern)), list);
+
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenDeniedDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot;
+
+	            notification = string.Format(
+						culture, 
+						notificationTemplate, 
+						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestHasBeenDeniedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern)), list);
-            }
+
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenDeniedDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestHasBeenDeniedDot;
+
+	            notification = string.Format(
+						culture, 
+						notificationTemplate, 
+						Period.StartDateTimeLocal(timezone).ToString(datePattern),
+						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
+
+             }
+
+			SetNotification(notification, list);
+
         }
 
         /// <summary>
-        /// Accepts this instance.
+        /// Accepts the shift trade request.
         /// </summary>
         /// <param name="acceptingPerson">The accepting person.</param>
         /// <param name="shiftTradeRequestSetChecksum">The shift trade request set checksum.</param>
@@ -224,25 +262,40 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </remarks>
         public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
         {
-            string notification = "";
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+
+			var culture = PersonFrom.PermissionInformation.Culture();
+			var language = PersonFrom.PermissionInformation.UICulture();
+			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+			var datePattern = culture.DateTimeFormat.ShortDatePattern;
+			string notification;
+
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                notification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenAcceptedDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot;
+
+				notification = string.Format(
+						culture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
-                notification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestHasBeenAcceptedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenAcceptedDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestHasBeenAcceptedDot;
+
+				notification = string.Format(
+						culture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern),
+						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
             }
 
             InParameter.NotNull("acceptingPerson",acceptingPerson);
-            ShiftTradeStatus okBothParts = ShiftTradeStatus.OkByBothParts;
+            var okBothParts = ShiftTradeStatus.OkByBothParts;
             if (Person.Equals(acceptingPerson))
             {
                 shiftTradeRequestSetChecksum.SetChecksum(this);
@@ -260,20 +313,35 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public override void Refer(IPersonRequestCheckAuthorization authorization)
         {
             SetShiftTradeStatus(ShiftTradeStatus.Referred, authorization);
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+
+			var culture = PersonFrom.PermissionInformation.Culture();
+			var language = PersonFrom.PermissionInformation.UICulture();
+			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
             if (!isShiftTradeRequestForOneDayOnly())
             {
-                TextForNotification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenReferredDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenReferredDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenReferredDot;
+
+
+				TextForNotification = string.Format(
+					culture,
+					notificationTemplate,
+					Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
-                TextForNotification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenReferredDot", language) ??
+					UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot;
+
+                TextForNotification = string.Format(
+					culture,
+					notificationTemplate,
+					Period.StartDateTimeLocal(timezone).ToString(datePattern),
+					Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
             }
         }
 
@@ -298,20 +366,38 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var approveResult = approvalService.ApproveShiftTrade(this);
             if (approveResult.IsEmpty())
             {
-                var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+
+				var culture = PersonFrom.PermissionInformation.Culture();
+				var language = PersonFrom.PermissionInformation.UICulture();
+				var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+				var datePattern = culture.DateTimeFormat.ShortDatePattern;
+
+
                 if (isShiftTradeRequestForOneDayOnly())
                 {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern))
-                                  , new List<IPerson>(InvolvedPeople()));
+					var notificationTemplate =
+						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenApprovedDot", language) ??
+						UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot;
+
+                    SetNotification(string.Format(
+						culture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern)),
+						new List<IPerson>(InvolvedPeople()));
                 }
                 else
                 {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ShiftTradeRequestHasBeenApprovedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                                  Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern)), new List<IPerson>(InvolvedPeople()));
+
+					var notificationTemplate =
+						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenApprovedDot", language) ??
+						UserTexts.Resources.ShiftTradeRequestHasBeenApprovedDot;
+
+                    SetNotification(string.Format(
+						culture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern),
+						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
+						new List<IPerson>(InvolvedPeople()));
                 }
             }
             return approveResult;
@@ -381,7 +467,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void NotifyToPersonAfterValidation()
         {
-            NotifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
+            notifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
         }
 
         private bool isShiftTradeRequestForOneDayOnly ()

@@ -202,15 +202,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
-						$('#Expend-Template').toggle(function () {
-							addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
-						}, function () {
+						$('#Expend-Template').click(function () {
 							addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
 						});
 						
-						$('#Template-save').toggle(function () {
-							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
-						}, function () {
+						$('#Template-save').click(function () {
 							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
 						});
 						
@@ -336,13 +332,71 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 	}
 
+	function _ajaxForDate(model, options) {
+	    var type = options.type || 'GET',
+		    date = options.date || null, // required
+		    data = options.data || {},
+		    statusCode400 = options.statusCode400,
+		    statusCode404 = options.statusCode404,
+		    url = options.url || "Preference/Preference",
+		    success = options.success || function () {
+		    },
+		    complete = options.complete || null;
+
+	    return ajax.Ajax({
+	        url: url,
+	        dataType: "json",
+	        contentType: "application/json; charset=utf-8",
+	        type: type,
+	        beforeSend: function (jqXHR) {
+	            model.AjaxError('');
+	            model.IsLoading(true);
+	        },
+	        complete: function (jqXHR, textStatus) {
+	            model.IsLoading(false);
+	            if (complete)
+	                complete(jqXHR, textStatus);
+	        },
+	        success: success,
+	        data: data,
+	        statusCode404: statusCode404,
+	        statusCode400: statusCode400,
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            var error = {
+	                ShortMessage: "Error!"
+	            };
+	            try {
+	                error = $.parseJSON(jqXHR.responseText);
+	            } catch (e) {
+	            }
+	            model.AjaxError(error.ShortMessage);
+	        }
+	    });
+	};
+
+	function _initMustHaves() {
+	    mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel();
+	    
+	    var mustHaveButton = $('#Preference-must-have-button');
+	    if (mustHaveButton.length > 0) {
+	        mustHaveButton.attr("data-bind", "class: MustHaveClass");
+	        ko.applyBindings(mustHaveCountViewModel, mustHaveButton[0]);
+	    }
+
+	    var mustHaveTextElement = $('#Preference-must-have-numbers');
+	    if (mustHaveTextElement.length > 0) {
+	        mustHaveTextElement.attr("data-bind", "text: MustHaveText");
+	        ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
+	    }
+    }
+
 	function _initViewModels(loader) {
 		var date = portal ? portal.CurrentFixedDate() : null;
 
 		var dayViewModels = {};
 		var dayViewModelsInPeriod = {};
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			if ($(element).hasClass("inperiod")) {
@@ -354,19 +408,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
-
+	    
+        if(mustHaveCountViewModel != null)
+		    mustHaveCountViewModel.SetData(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
+	    
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-
-		var mustHaveTextElement = $('#Preference-must-have-numbers');
-		if (mustHaveTextElement.length > 0) {
-			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
-			ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
-		}
-
+        
 		loader = loader || function (call) { call(); };
 		loader(function () {
 			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
@@ -432,6 +482,25 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('.preference .extended-indication')
 			.qtip('toggle', false);
 	}
+    
+	function _cleanBindings() {
+	    $('li[data-mytime-date]').each(function (index, element) {
+	        ko.cleanNode(element);
+	    });
+	    
+	    var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
+	    if (periodFeedbackElement)
+	        ko.cleanNode(periodFeedbackElement);
+
+	    if (periodFeedbackViewModel) {
+	    	periodFeedbackViewModel.DayViewModels = {};
+	    	periodFeedbackViewModel = null;
+	    }
+	    if (preferencesAndScheduleViewModel) {
+	    	preferencesAndScheduleViewModel.DayViewModels = {};
+	    	preferencesAndScheduleViewModel = null;
+	    }
+	}
 
 	return {
 		Init: function () {
@@ -443,6 +512,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initDeleteButton();
 			_initAddExtendedButton();
 			_initMustHaveButton();
+		    _initMustHaves();
 		},
 		InitViewModels: function () {
 			_initViewModels();
@@ -457,11 +527,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 			_initPeriodSelection();
 			_initExtendedPanels();
+			
 			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
 			ajax.AbortAll();
+		    _cleanBindings();
 		}
 	};
 

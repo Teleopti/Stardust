@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			return Current().DataSourceName;
 		}
+
 	}
 }

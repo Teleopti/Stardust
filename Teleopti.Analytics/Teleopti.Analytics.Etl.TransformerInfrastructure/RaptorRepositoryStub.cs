@@ -12,8 +12,9 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -112,7 +113,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new ScheduleDictionary(scenario, scheduleDateTimePeriod);
         }
 
-        public void TruncateSchedule()
+	    public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void TruncateSchedule()
         {
         }
 
@@ -128,7 +134,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillScheduleContractDataMart(DateTimePeriod period)
+	    public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillScheduleContractDataMart(DateTimePeriod period)
         {
             return 0;
         }
@@ -218,7 +229,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillDayOffDataMart(IBusinessUnit businessUnit)
+	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillDayOffDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -407,7 +423,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
         }
 
-		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
+		public int FillPermissionDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -640,10 +656,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return new List<IPersonRequest>();
     	}
 
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
+		{
+			return new List<IPersonRequest>();
+		}
+
 		public int PersistRequest(DataTable dataTable)
     	{
     		return 0;
     	}
+
+		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
+		{
+			return 0;
+		}
 
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
@@ -654,7 +680,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     	{
     		return 0;
     	}
-    	
+
+		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
+        {
+            return 0;
+        }
+
         public int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
@@ -676,9 +707,61 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public DateTime GetMaxDateInDimDate()
+	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    return new LastChangedReadModel();
+	    }
+
+	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int PersistScheduleChanged(DataTable dataTable)
+	    {
+			return 0;
+	    }
+
+	    public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
+	    {}
+
+	    public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+	    {
+		    return new List<IPreferenceDay>();
+	    }
+
+	    public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+	    {
+		    return new List<IStudentAvailabilityDay>();
+	    }
+
+	    public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+	    {
+			return 0;
+	    }
+
+	    public int PersistAvailability(DataTable dataTable)
+	    {
+		    return 0;
+	    }
+
+	    public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+	    {
+			return 0;
+	    }
+
+	    public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
+	    {
+			return 0;
+	    }
+
+	    public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);
         }
+
+		public void TruncateRequest()
+		{
+		}
     }
 }

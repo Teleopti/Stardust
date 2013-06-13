@@ -76,13 +76,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			const string disabledAttr = "disabled";
 			const string readonlyAttr = "readonly";
 			var detailForm = Pages.Pages.CurrentEditRequestPage;
-			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
-			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailFromTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailSubjectInput");
-			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
-			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
-			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
+			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "TextRequestDetailFromDateInput");
+			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailFromTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailSubjectInput");
+			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailToDateTextField");
+			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailToTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), () => "RequestDetailMessageTextField");
+			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "FulldayCheck");
 		}
 
 		[Then(@"I should see (.*) - (.*) as the default times")]
@@ -132,12 +132,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.Exists, Is.False);
 		}
 
-		[Then(@"I should not see the add text request tab")]
-		public void ThenIShouldNotSeeTheTextRequestTabInvisible()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.IsDisplayed(), Is.False);
-		}
-
 		[Then(@"I should see the add absence request form")]
 		public void ThenIShouldSeeTheAbsenceRequestTab()
 		{
@@ -150,12 +144,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
-		}
-
-		[Then(@"I should not see the add absence request tab")]
-		public void ThenIShouldNotSeeTheAbsenceRequestTabInvisible()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.IsDisplayed(), Is.False);
 		}
 
 		[Then(@"I should not see the deny reason")]

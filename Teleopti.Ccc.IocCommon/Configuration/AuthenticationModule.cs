@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
+			builder.RegisterType<LogonLogger>().As<ILogonLogger>().SingleInstance();
 		}
     }
 }

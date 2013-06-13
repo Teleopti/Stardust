@@ -478,7 +478,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
                     .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
                     .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-                    .SetFetchMode("PersonPeriodCollection.PersonSkillCollection", FetchMode.Join);
+                    .SetFetchMode("PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
+					.SetFetchMode("PersonPeriodCollection.ExternalLogOnCollection", FetchMode.Join);
 
             	DetachedCriteria schedulePeriod = DetachedCriteria.For<Person>("schedulePeriod")
             		.Add(Restrictions.InG("Id", currentBatchIds))
@@ -569,19 +570,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private static DetachedCriteria personPeriodTeamAndSites(DateOnlyPeriod period)
         {
-            return DetachedCriteria.For<Person>("per")
-                .Add(Restrictions.Or(
-                         Restrictions.IsNull("TerminalDate"),
-                         Restrictions.Ge("TerminalDate", period.StartDate)
-                         ))
-                .Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-                .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-                .AddOrder(Order.Asc("Name.LastName"))
-                .AddOrder(Order.Asc("Name.FirstName"));
+	        return DetachedCriteria.For<Person>("per")
+									.Add(Restrictions.Or(
+										Restrictions.IsNull("TerminalDate"),
+										Restrictions.Ge("TerminalDate", period.StartDate)
+											))
+									.Add(Subqueries.Exists(findPeriodMatch(period)))
+									.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
+									.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
+	        // don't order here because it will order in tempdb and take too much resources
+	        //.AddOrder(Order.Asc("Name.LastName"))
+	        //.AddOrder(Order.Asc("Name.FirstName"));
         }
 
         private static IEnumerable<DetachedCriteria> personPeriodContract(DateOnlyPeriod period)
@@ -675,14 +677,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return detachedCriteria;
         }
 
-        public IEnumerable<IPair<Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
+        public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             return Session.GetNamedQuery("AgentSkillMatrix")
                     .SetEntity("bu", identity.BusinessUnit)
                     .SetEntity("scenario", scenario)
                     .SetProperties(period)
-                    .List<IPair<Guid>>();
+										.List<Tuple<Guid, Guid>>();
         }
 
         public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)

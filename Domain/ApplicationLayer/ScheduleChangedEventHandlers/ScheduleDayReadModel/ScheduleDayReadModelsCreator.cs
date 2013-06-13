@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			ret.Label = schedule.Label;
 			ret.ColorCode = schedule.DisplayColor;
 			ret.Workday = schedule.IsWorkday;
+			ret.NotScheduled = schedule.NotScheduled;
 
 			return ret;
 		}

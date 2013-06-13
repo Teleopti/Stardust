@@ -1,16 +1,11 @@
 using System.Text;
 using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 {
 	public class JQueryExpression : IJQueryExpression
 	{
-		private readonly DomContainer _domContainer;
 		private readonly StringBuilder _expression = new StringBuilder();
-
-		public JQueryExpression() { _domContainer = Browser.Current; }
-		public JQueryExpression(DomContainer domContainer) { _domContainer = domContainer; }
 
 		private string MakeSelector(string selector)
 		{
@@ -41,13 +36,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 
 		public string Eval()
 		{
-			return EvalIn(_domContainer);
-		}
-
-		public string EvalIn(DomContainer domContainer)
-		{
 			_expression.Append(";");
-			return domContainer.Eval(_expression.ToString());
+			_expression.Insert(0, "return ");
+			return Core.Browser.Interactions.Javascript(_expression.ToString()) as string;
 		}
 
 		public IJQueryExpression AddClass(string cssClass)

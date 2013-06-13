@@ -26,6 +26,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		}
 	}
 
+	public class ExistingPendingTextRequest : IUserDataSetup
+	{
+		public PersonRequest PersonRequest;
+		public TextRequest TextRequest;
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+			TextRequest = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));
+			PersonRequest = new PersonRequest(user, TextRequest) { Subject = "I need some cake" };
+			PersonRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
+			PersonRequest.Pending();
+
+			var requestRepository = new PersonRequestRepository(uow);
+
+			requestRepository.Add(PersonRequest);
+		}
+	}
+
 	public class ExistingApprovedTextRequest : IUserDataSetup
 	{
 		public PersonRequest PersonRequest;

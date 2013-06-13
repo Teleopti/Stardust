@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,7 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -94,6 +94,16 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
+    <Compile Include="HourlyAvailabilityTransformer.cs" />
+    <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\FactAvailabilityJobStep.cs" />
+    <Compile Include="Job\Steps\IntradayStageAvailabilityJobStep.cs" />
+    <Compile Include="Job\Steps\StageAvailabilityJobStep.cs" />
+    <Compile Include="Job\Steps\IntradayStageRequestJobStep.cs" />
+    <Compile Include="Job\Steps\IntradayStageSchedulePreferenceJobStep.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleDayOffCountJobStep.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleJobStep.cs" />
     <Compile Include="Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Job\Steps\EtlDayOffSubStep.cs" />
     <Compile Include="Job\Steps\DimTimeZoneDeleteJobStep.cs" />

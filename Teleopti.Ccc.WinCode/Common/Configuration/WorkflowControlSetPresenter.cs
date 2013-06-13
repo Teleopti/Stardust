@@ -458,39 +458,47 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         public void PasteAbsenceRequestPeriod()
         {
-            if (!_view.HandlePasteWhenCellIsCopied())
+            // Handle paste of copied models
+            IList<AbsenceRequestPeriodModel> selectedPeriods = _view.AbsenceRequestPeriodSelected;
+            if (selectedPeriods == null || selectedPeriods.Count == 0)
+                return;
+
+            if (AbsenceRequestPeriodsCopied == null || AbsenceRequestPeriodsCopied.Count == 0)
+                return;
+
+            // Fix Issue 23573 - Workflow Control Set - Crash on Ctrl+C and Ctrl+V of check staffing rules
+            var firstModelSelectedIndex = 0;
+            if (selectedPeriods[0] != null)
             {
-                // Handle paste of copied models
-                IList<AbsenceRequestPeriodModel> selectedPeriods = _view.AbsenceRequestPeriodSelected;
-                if (selectedPeriods == null || selectedPeriods.Count == 0)
-                    return;
-
-                if (AbsenceRequestPeriodsCopied == null || AbsenceRequestPeriodsCopied.Count == 0)
-                    return;
-
-                int firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[0].DomainEntity);
-                int modelsToPasteCount = getNumberOfRowsToPaste(firstModelSelectedIndex, AbsenceRequestPeriodsCopied.Count, selectedPeriods.Count);
-                int pasteModelOffsetIndex = 0;
-                int clipIndex = 0;
-
-                for (int i = 1; i <= modelsToPasteCount; i++)
-                {
-                    int currentModelIndex = firstModelSelectedIndex + pasteModelOffsetIndex;
-                    AbsenceRequestPeriodModel viewModel = SelectedModel.AbsenceRequestPeriodModels[currentModelIndex];
-                    if (viewModel == null)
-                        break; // No model exist to paste onto
-
-                    // Do replace of selected model with new model
-                    replaceAbsenceRequestPeriod(viewModel, AbsenceRequestPeriodsCopied[clipIndex]);
-
-                    pasteModelOffsetIndex++;
-                    clipIndex++;
-
-                    if (clipIndex == AbsenceRequestPeriodsCopied.Count)
-                        clipIndex = 0; // Prepare to lay out copied models for a new round
-                }
+                firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[0].DomainEntity);
             }
+            else
+            {
+                if (selectedPeriods.Count > 1)
+                    firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[1].DomainEntity);
+            }
+            
+            int modelsToPasteCount = getNumberOfRowsToPaste(firstModelSelectedIndex, AbsenceRequestPeriodsCopied.Count, selectedPeriods.Count);
+            int pasteModelOffsetIndex = 0;
+            int clipIndex = 0;
 
+            for (int i = 1; i <= modelsToPasteCount; i++)
+            {
+                int currentModelIndex = firstModelSelectedIndex + pasteModelOffsetIndex;
+                AbsenceRequestPeriodModel viewModel = SelectedModel.AbsenceRequestPeriodModels[currentModelIndex];
+                if (viewModel == null)
+                    break; // No model exist to paste onto
+
+                // Do replace of selected model with new model
+                replaceAbsenceRequestPeriod(viewModel, AbsenceRequestPeriodsCopied[clipIndex]);
+
+                pasteModelOffsetIndex++;
+                clipIndex++;
+
+                if (clipIndex == AbsenceRequestPeriodsCopied.Count)
+                    clipIndex = 0; // Prepare to lay out copied models for a new round
+            }
+            
             SelectedModel.IsDirty = true;
             _view.SetOpenPeriodsGridRowCount(SelectedModel.AbsenceRequestPeriodModels.Count);
             _view.RefreshOpenPeriodsGrid();

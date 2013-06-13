@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups()
 		{
 			const string query =
-				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId , BusinessUnit BusinessUnitId  
+				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId, sg.Name StateGroupName, BusinessUnit BusinessUnitId  
 								FROM RtaStateGroup sg
 								INNER JOIN RtaState s ON s.Parent = sg.Id 
 								ORDER BY StateCode";
@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.Rta.Server
 				while (reader.Read())
 				{
 					var stateName = reader.GetString(reader.GetOrdinal("StateName"));
+					var stateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName"));
 					var stateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId"));
 					var stateId = reader.GetGuid(reader.GetOrdinal("StateId"));
 					var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
@@ -176,6 +177,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 					var rtaStateGroupLight = new RtaStateGroupLight
 					                         	{
+													StateGroupName = stateGroupName,
 					                         		BusinessUnitId = businessUnitId,
 					                         		PlatformTypeId = platformTypeId,
 					                         		StateCode = stateCode,
@@ -386,6 +388,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		public Guid StateId { get; set; }
 		public string StateName { get; set; }
+		public string StateGroupName { get; set; }
 		public Guid PlatformTypeId { get; set; }
 		public string StateCode { get; set; }
 		public Guid StateGroupId { get; set; }

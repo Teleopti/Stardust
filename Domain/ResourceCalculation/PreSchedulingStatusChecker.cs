@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             //1 assignment is ok if we have no mainshift and we have a personalshift
             IPersonAssignment personAssignment = personAssignmentCollection[0];
 
-            if (personAssignment.PersonalShiftCollection.Count > 0 && personAssignment.MainShift == null)
+						if (personAssignment.PersonalShiftCollection.Count > 0 && personAssignment.ShiftCategory == null)
                 return true;
 
             return false;

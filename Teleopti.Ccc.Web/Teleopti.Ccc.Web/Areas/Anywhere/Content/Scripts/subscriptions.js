@@ -2,12 +2,14 @@ define([
 		'jquery',
         'messagebroker',
         'signalrhubs',
-        'helpers'
+        'helpers',
+        'errorview'
 	], function (
 		$,
 	    messagebroker,
 	    signalRHubs,
-	    helpers
+	    helpers,
+	    errorview
 	) {
 		
 		var startPromise;
@@ -17,12 +19,13 @@ define([
 	        try {
 	            func();
 	        } catch (e) {
-	            console.log(e);
+	            errorview.display(e);
 	            throw e;
 	        }
 	    };
 	    
 		var teamScheduleHub = $.connection.teamScheduleHub;
+	    teamScheduleHub.client.exceptionHandler = errorview.display;
 	    var incomingTeamSchedule = null;
 	    teamScheduleHub.client.incomingTeamSchedule = function (data) {
 	        if (incomingTeamSchedule != null)
@@ -30,6 +33,7 @@ define([
 	    };
 	    
 	    var personScheduleHub = $.connection.personScheduleHub;
+	    personScheduleHub.client.exceptionHandler = errorview.display;
 	    var personScheduleSubscription = null;
 	    var incomingPersonSchedule = null;
 	    personScheduleHub.client.incomingPersonSchedule = function (data) {
@@ -42,6 +46,16 @@ define([
 			return startPromise;
 		};
 
+	    var unsubscribePersonSchedule = function() {
+	        if (!personScheduleSubscription)
+	            return;
+	        startPromise.done(function() {
+	            incomingPersonSchedule = null;
+	            messagebroker.unsubscribe(personScheduleSubscription);
+	            personScheduleSubscription = null;
+	        });
+	    };
+	    
 	    return {
 	        start: start,
 	        
@@ -53,9 +67,10 @@ define([
 	        },
 	        
 	        subscribePersonSchedule: function (personId, date, callback) {
+	            unsubscribePersonSchedule();
 	            incomingPersonSchedule = callback;
 	            startPromise.done(function () {
-	                
+
 	                personScheduleHub.server.personSchedule(personId, date);
 
 	                personScheduleSubscription = messagebroker.subscribe({
@@ -66,20 +81,16 @@ define([
 	                        var momentDate = moment(date);
 	                        var startDate = helpers.Date.ToMoment(notification.StartDate);
 	                        var endDate = helpers.Date.ToMoment(notification.EndDate);
-	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0)
+	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0) {
 	                            personScheduleHub.server.personSchedule(personId, date);
+                            }
 	                    }
 	                });
 	                
 	            });
 	        },
 	        
-	        unsubscribePersonSchedule: function () {
-	            startPromise.done(function() {
-	                incomingPersonSchedule = null;
-	                messagebroker.unsubscribe(personScheduleSubscription);
-	            });
-	        }
+	        unsubscribePersonSchedule: unsubscribePersonSchedule
 	    };
 
 	});

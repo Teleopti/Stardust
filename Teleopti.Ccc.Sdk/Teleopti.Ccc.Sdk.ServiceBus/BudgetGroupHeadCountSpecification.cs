@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,17 +19,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IBudgetDayRepository _budgetDayRepository;
+        private readonly ISkillDayRepository _skillDayRepository;
         private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
         public BudgetGroupHeadCountSpecification(ISchedulingResultStateHolder schedulingResultStateHolder,
                                                  IScenarioRepository scenarioRepository,
                                                  IBudgetDayRepository budgetDayRepository,
+                                                 ISkillDayRepository skillDayRepository,
                                                  IScheduleProjectionReadOnlyRepository
                                                      scheduleProjectionReadOnlyRepository)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _scenarioRepository = scenarioRepository;
             _budgetDayRepository = budgetDayRepository;
+            _skillDayRepository = skillDayRepository;
             _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
         }
 
@@ -64,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var currentDay = budgetDay.Day;
 
-                if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                if(budgetDay.IsClosed)
                     continue;
 
                 var allowance = budgetDay.Allowance;
@@ -72,15 +76,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                         budgetGroup.Id.GetValueOrDefault(), currentDay);
 
-                if (allowance <= alreadyUsedAllowance)
+                if (Math.Floor(allowance) <= alreadyUsedAllowance)
                     return false;
             }
             return true;
         }
 
-        protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
+        private bool isSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
         {
-            return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
+            var scenario = _scenarioRepository.LoadDefaultScenario();
+            var skillDays = _skillDayRepository.FindRange(new DateOnlyPeriod(date, date), skills.ToList(), scenario);
+
+            if (skillDays != null && skillDays.Count > 0)
+            {
+                return skillDays.Any(skillDay => skillDay.OpenForWork.IsOpen);
+            }
+            return false;
         }
     }
 }

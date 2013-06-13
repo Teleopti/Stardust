@@ -8,15 +8,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
-        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool useTeamBlockSameShift, DateOnlyPeriod selectedPeriod);
+        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod);
     }
 
     public  class TeamScheduling : ITeamScheduling
     {
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-	    //private bool _cancelMe;
 
         public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
@@ -26,6 +24,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod)
+		{
+			var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
+			if (!tempMatrixList.Any()) 
+				return;
+
+			var matrix = tempMatrixList.First();
+			var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
+			var scheduleDay = scheduleDayPro.DaySchedulePart();
+			if (!matrix.UnlockedDays.Contains(scheduleDayPro))
+				return;
+
+			if (scheduleDay.IsScheduled())
+				return;
+
+			var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
+			var modifyedDay = assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly);
+			OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+			_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+			                                            shiftProjectionCache.WorkShiftProjectionPeriod,
+														new List<IScheduleDay> { modifyedDay });
+		}
+
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
 		{
@@ -33,60 +54,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
-				//_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 			}
 		}
 
-        private IScheduleDay assignShiftProjection(DateOnly startDateOfBlock, IShiftProjectionCache shiftProjectionCache,
-                                                    List<IScheduleDay> listOfDestinationScheduleDays, IScheduleMatrixPro matrix, DateOnly day)
+        private IScheduleDay assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone,
+													IScheduleDay destinationScheduleDay, DateOnly day)
         {
-            var scheduleDayPro = matrix.GetScheduleDayByKey(day);
-            if (!matrix.UnlockedDays.Contains(scheduleDayPro)) return null;
-            //does that day count as is_scheduled??
-            IScheduleDay destinationScheduleDay ;
-            destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-            var destinationSignificanceType = destinationScheduleDay.SignificantPart();
-            if (destinationSignificanceType == SchedulePartView.DayOff ||
-                destinationSignificanceType == SchedulePartView.ContractDayOff ||
-                destinationSignificanceType == SchedulePartView.FullDayAbsence)
-                return destinationScheduleDay;
-            listOfDestinationScheduleDays.Add(destinationScheduleDay);
-            var sourceScheduleDay = matrix.GetScheduleDayByKey(startDateOfBlock).DaySchedulePart();
-            sourceScheduleDay.AddMainShift((IMainShift) shiftProjectionCache.TheMainShift.EntityClone());
-            destinationScheduleDay.Merge(sourceScheduleDay, false);
+			shiftProjectionCache.SetDate(day, agentTimeZone);
+			destinationScheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
 
             _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
-            return destinationScheduleDay;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "4#")]
-        public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset, DateOnlyPeriod selectedPeriod)
-        {
-            if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
-            if (shiftProjectionCache == null) throw new ArgumentNullException("shiftProjectionCache");
-            var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
-            
-            if (skipOffset)
-                startDateOfBlock = dateOnly;
-            var listOfDestinationScheduleDays = new List<IScheduleDay>();
-            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly ).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
-            if (tempMatrixList.Any())
-            {
-                IScheduleMatrixPro matrix = null;
-                foreach (var scheduleMatrixPro in tempMatrixList)
-                {
-                    if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
-                       matrix = scheduleMatrixPro;
-                }
-                if (matrix == null) return;
-                if (matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().IsScheduled()) return ;
-                IScheduleDay destinationScheduleDay = assignShiftProjection(startDateOfBlock, shiftProjectionCache, listOfDestinationScheduleDays, matrix, dateOnly);
-                OnDayScheduled(new SchedulingServiceBaseEventArgs(destinationScheduleDay));
-                if (destinationScheduleDay != null)
-                    _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
-                                                                    shiftProjectionCache.WorkShiftProjectionPeriod, listOfDestinationScheduleDays);
-            }
-            
+	        return destinationScheduleDay;
         }
     }
 }

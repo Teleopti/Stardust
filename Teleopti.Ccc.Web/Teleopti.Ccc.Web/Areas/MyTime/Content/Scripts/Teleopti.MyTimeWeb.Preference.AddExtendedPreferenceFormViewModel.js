@@ -63,11 +63,17 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.PreferenceString.dispose();
 	}
 
-	this.AvailableTemplates.subscribe(function (newValue) {
-		if (newValue.length == 0) {
-			self.IsTemplateDetailsVisible(true);
-		}
+	this.HasTemplates = ko.computed(function () {
+	    return self.AvailableTemplates().length > 0;
 	});
+
+	this.IsDetailsVisible = ko.computed(function() {
+	    return !self.HasTemplates() || self.IsTemplateDetailsVisible();
+	});
+
+    this.ToggleSign = ko.computed(function() {
+        return self.IsTemplateDetailsVisible() ? '-' : '+';
+    });
 
 	this.SelectedTemplate.subscribe(function (newValue) {
 		if (newValue) {

@@ -121,15 +121,20 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserInteractions\IBrowserInteractions.cs" />
-    <Compile Include="Core\BrowserInteractions\WatiNIE\IEWatiNBrowserInteractions.cs" />
-    <Compile Include="Core\BrowserInteractions\WatiNIE\Retrying.cs" />
+    <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserDriver\Retrying.cs" />
+    <Compile Include="Data\CryptoCreator.cs" />
+    <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs">
-      <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PreferenceTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
@@ -139,6 +144,8 @@
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
     <Compile Include="Data\FileConfigurator.cs" />
     <Compile Include="Data\Paths.cs" />
@@ -150,7 +157,6 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
@@ -169,7 +175,6 @@
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Pages\AnywherePage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -193,7 +198,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\BrowserInteractions\WatiNIE\ExceptionHandling.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEExceptionCatcher.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
@@ -262,6 +267,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
+    <Compile Include="WeekScheduleAvailableAsbence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WeekScheduleAvailableAsbence.feature</DependentUpon>
+    </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -289,11 +299,11 @@
     <Compile Include="Data\Setups\Generic\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonPeriodConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PreferenceConfigurable.cs" />
-    <Compile Include="Core\BrowserImpl\ProcessHelpers.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxHandler.cs" />
-    <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEHandler.cs" />
+    <Compile Include="Core\BrowserDriver\ProcessHelpers.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserFireFoxActivator.cs" />
+    <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserIEActivator.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNParallelBrowserIEActivator.cs" />
     <Compile Include="Data\GlobalDataContext.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
@@ -353,7 +363,6 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
@@ -379,7 +388,6 @@
     </Compile>
     <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
@@ -388,14 +396,13 @@
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\Administrator.cs" />
     <Compile Include="Data\Setups\Specific\Supervisor.cs" />
-    <Compile Include="MobileReports.feature.cs">
+    <Compile Include="MobileReports\MobileReports.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MobileReports.feature</DependentUpon>
     </Compile>
-    <Compile Include="MobileReportsStepDefinitions.cs" />
+    <Compile Include="MobileReports\MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditRequestPage.cs" />
-    <Compile Include="Pages\MobileReportsPage.cs" />
     <Compile Include="PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -468,7 +475,6 @@
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
-    <Compile Include="Bindings\Generic\LicenseStepDefinitions.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -647,6 +653,10 @@
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
+    <None Include="WeekScheduleAvailableAsbence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleAvailableAsbence.feature.cs</LastGenOutput>
+    </None>
     <None Include="WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
@@ -663,7 +673,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmWinterToSummer.feature.cs</LastGenOutput>
     </None>
-    <None Include="MobileReports.feature">
+    <None Include="MobileReports\MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
     </None>

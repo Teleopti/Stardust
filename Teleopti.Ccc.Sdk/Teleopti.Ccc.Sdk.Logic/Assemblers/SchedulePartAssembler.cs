@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             _personAssignmentAssembler.Person = part.Person;
             _personAssignmentAssembler.DefaultScenario = _scenarioRepository.Current();
+	        _personAssignmentAssembler.PartDate = part.DateOnlyAsPeriod.DateOnly;
             part.Clear<IPersonAssignment>();
             var filteredAssignmentDtos = filterEmptyAssignment(assignmentDtos);
             if (filteredAssignmentDtos != Enumerable.Empty<PersonAssignmentDto>())

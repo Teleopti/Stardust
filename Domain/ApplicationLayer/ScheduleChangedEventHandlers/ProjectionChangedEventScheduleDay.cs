@@ -55,5 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public ICollection<ProjectionChangedEventLayer> Layers { get; set; }
+
+		public bool NotScheduled { get; set; }
 	}
 }

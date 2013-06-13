@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			PersistAndRemoveFromUnitOfWork(_shiftCategory);
 			PersistAndRemoveFromUnitOfWork(_activity);
 
-			var personAssignment = new PersonAssignment(Person, Scenario);
+			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
 			var mainShift = new MainShift(_shiftCategory);
 			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
 			mainShift.LayerCollection.Add(layer);
@@ -57,11 +56,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-			var activity = personAssignment.MainShift.LayerCollection[0].Payload;
+#pragma warning disable 612,618
+			var ms = personAssignment.ToMainShift();
+#pragma warning restore 612,618
+			var activity = ms.LayerCollection[0].Payload;
 			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-			personAssignment.MainShift.LayerCollection.Add(layer);
-
-            ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			ms.LayerCollection.Add(layer);
+			personAssignment.SetMainShift(ms);
+		
+			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		protected override void TeardownForRepositoryTest()

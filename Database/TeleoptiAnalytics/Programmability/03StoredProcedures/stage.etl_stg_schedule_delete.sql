@@ -10,6 +10,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     TRUNCATE TABLE Stage.stg_schedule
+	TRUNCATE TABLE Stage.stg_schedule_changed
 END
 
 

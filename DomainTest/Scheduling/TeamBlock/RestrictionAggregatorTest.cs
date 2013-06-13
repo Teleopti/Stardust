@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IActivity activity = new Activity("bo");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, new ShiftCategory("cat"));
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 			
 		    var firstDay =
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    IActivity activity = new Activity("bo");
 		    var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 		                                    new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-		    IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, new ShiftCategory("cat"));
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 
 		    var firstDay =
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    IActivity activity = new Activity("bo");
 		    var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 		                                    new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
-		    IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, new ShiftCategory("cat"));
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, new ShiftCategory("cat"));
 
 		    var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
 		    var firstDay =

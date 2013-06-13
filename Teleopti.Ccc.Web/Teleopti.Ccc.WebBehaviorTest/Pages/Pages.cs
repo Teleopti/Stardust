@@ -7,17 +7,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public static class Pages
 	{
+		private static readonly ScenarioContextLazy<SignInPage> _signInPage =
+			new ScenarioContextLazy<SignInPage>(() => Browser.Current.Page<SignInPage>());
+		public static SignInPage SignInPage { get { return _signInPage.Value; } }
+
 		private static readonly ScenarioContextLazy<WeekSchedulePage> _weekSchedulePage =
 			new ScenarioContextLazy<WeekSchedulePage>(() => Browser.Current.Page<WeekSchedulePage>());
 		public static WeekSchedulePage WeekSchedulePage { get { return _weekSchedulePage.Value; } }
-
-		private static readonly ScenarioContextLazy<MobileReportsPage> _mobileReportsPage =
-		new ScenarioContextLazy<MobileReportsPage>(() => Browser.Current.Page<MobileReportsPage>());
-		public static MobileReportsPage MobileReportsPage { get { return _mobileReportsPage.Value; } }
-
-		private static readonly ScenarioContextLazy<AnywherePage> _anywherePage =
-		new ScenarioContextLazy<AnywherePage>(() => Browser.Current.Page<AnywherePage>());
-		public static AnywherePage AnywherePage { get { return _anywherePage.Value; } }
 
 		private static readonly ScenarioContextLazy<MobileGlobalMenuPage> _mobileGlobalMenuPage =
 		new ScenarioContextLazy<MobileGlobalMenuPage>(() => Browser.Current.Page<MobileGlobalMenuPage>());
@@ -51,8 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public static void NavigatingTo(WatiN.Core.Page page)
 		{
-			if (page is ISignInPage)
-				CurrentSignInPage = page as ISignInPage;
 			ScenarioContext.Current.Value(page);
 		}
 
@@ -62,8 +56,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public static ICancelButton CurrentCancelButton { get { return Current as ICancelButton; } }
 		public static IDateRangeSelector CurrentDateRangeSelector { get { return Current as IDateRangeSelector; } }
 		public static IEditRequestPage CurrentEditRequestPage { get { return Current as IEditRequestPage; } }
-
-		public static ISignInPage CurrentSignInPage { get { return ScenarioContext.Current.Value<ISignInPage>(); } set { ScenarioContext.Current.Value(value); } }
 
 	    public static IMessageReplyPage CurrentMessageReplyPage {get { return Current as IMessageReplyPage; }}
 	}

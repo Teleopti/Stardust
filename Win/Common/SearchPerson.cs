@@ -6,7 +6,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public partial class SearchPerson : BaseRibbonForm
+    public partial class SearchPerson : BaseDialogForm
     {
         private IPerson _selectedPerson;
 

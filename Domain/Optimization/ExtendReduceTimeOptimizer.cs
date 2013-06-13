@@ -192,9 +192,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), schedulingOptions);
 
-			IScheduleDay origScheduleDay = _originalStateContainerForTagChange.OldPeriodDaysState[day];
-			IPersonAssignment personAssignment = origScheduleDay.AssignmentHighZOrder();
-			IMainShift originalShift = personAssignment.MainShift;
+	        var originalShift = _originalStateContainerForTagChange.OldPeriodDaysState[day].GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
 			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService))

@@ -9,7 +9,7 @@ require.config({
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
 		signals: '../../../../Content/signals/signals',
-		signalr: '../../../../Content/signalr/jquery.signalR-1.0.1.min',
+		signalr: '../../../../Content/signalr/jquery.signalR-1.1.2.min',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
@@ -18,11 +18,13 @@ require.config({
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
 		
 		noext: '../../../../Content/require/noext',
-		
+		signalrrr: 'require/signalrrr',
+		resources: 'require/resources',
+
 		templates: '../templates',
 		
 		text: '../../../../Content/require/text'
-		
+
 	},
 
 	// dependencies that requires loading order
@@ -34,9 +36,6 @@ require.config({
 		'bootstrap': ['jquery'],
 
 		'signalr': ['jquery'],
-		// wtf!
-		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
-		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
 
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],

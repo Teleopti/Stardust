@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,7 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -94,8 +94,11 @@
     <Compile Include="Common\IRunController.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
+    <Compile Include="Transformer\IIntradayAvailabilityTransformer.cs" />
+    <Compile Include="Transformer\IIntradaySchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\DayOffEtlLoadSource.cs" />
     <Compile Include="Transformer\IEtlDayOffSubStep.cs" />
+    <Compile Include="Transformer\IRaptorRepository.cs" />
     <Compile Include="Transformer\IScheduleDayOffCountTransformer.cs" />
     <Compile Include="Transformer\IScheduleProjection.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
@@ -131,7 +134,6 @@
     <Compile Include="Transformer\ISchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\JobCategoryType.cs" />
     <Compile Include="Transformer\JobResultStatusType.cs" />
-    <Compile Include="Transformer\IRaptorRepository.cs" />
     <Compile Include="Transformer\CustomEventArgs.cs" />
     <Compile Include="Transformer\IJob.cs" />
     <Compile Include="Transformer\IJobResult.cs" />

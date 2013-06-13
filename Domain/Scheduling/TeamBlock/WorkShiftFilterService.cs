@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson.GroupMembers[0], false);
 			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList);
-
+			if (shiftList == null)
+				return null;
 		    return shiftList.Count == 0 ? null : shiftList;
 		}
 

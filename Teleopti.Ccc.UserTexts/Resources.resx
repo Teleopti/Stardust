@@ -5850,7 +5850,7 @@ These options are activated:
     <comment>weeks in recurrent meeting page</comment>
   </data>
   <data name="StudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
+    <value>Hourly Availability</value>
     <comment>Student Availability</comment>
   </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
@@ -5887,7 +5887,7 @@ Start Date</value>
     <comment>Panel</comment>
   </data>
   <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Student Availability</value>
+    <value>Hourly Availability</value>
     <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
@@ -6174,10 +6174,6 @@ Meeting</value>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Are you sure you want to delete '{0}' contract?</value>
     <comment>Are you sure you want to delete '{0}' contract?</comment>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>New Student Availability</value>
-    <comment>AP context menu item</comment>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolute Start</value>
@@ -8619,8 +8615,8 @@ Period: {3}</value>
     <value>Your absence request cannot be granted. Some dates are not open for requests at this time.</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>No Workflow Control Set defined!</value>
-    <comment>No Workflow control set defined.</comment>
+    <value>No workflow control set defined.</value>
+    <comment>No workflow control set defined.</comment>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Activity available for extended preference</value>
@@ -9680,11 +9676,11 @@ Period</comment>
     <comment>Next day:</comment>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>No shifts available for this student availability.</value>
+    <value>No shifts available for this availability.</value>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Student availability period</value>
+    <value>Availability period</value>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
@@ -9696,7 +9692,7 @@ Period</comment>
     <comment>Agent Queue Metrics</comment>
   </data>
   <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Open student availability</value>
+    <value>Open hourly availability</value>
     <comment>Open student availability</comment>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
@@ -9780,7 +9776,7 @@ Period</comment>
     <comment>Lock Restrictions</comment>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Lock Student Availability</value>
+    <value>Lock Hourly Availability</value>
     <comment>Lock Student Availability</comment>
   </data>
   <data name="LockRotations" xml:space="preserve">
@@ -10471,7 +10467,7 @@ These options are activated:
     <comment>Shifts for flexible work time</comment>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Student availabilities</value>
+    <value>Hourly availabilities</value>
     <comment>Student availabilities</comment>
   </data>
   <data name="Teams" xml:space="preserve">
@@ -10600,7 +10596,7 @@ These options are activated:
     <comment>Denied absence request for one day.</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Student Availability Fulfillment</value>
+    <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
@@ -11338,10 +11334,10 @@ These options are activated:
     <comment>Not enough budget allowance.</comment>
   </data>
   <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
-    <value>Your Request has been denied. Date Period not open for sending requests.</value>
+    <value>Your absence request has been denied. You can not send request for the requested period this time.</value>
   </data>
   <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
-    <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
+    <value>Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>Critical Understaffing on : {0} at </value>
@@ -11420,5 +11416,56 @@ Reduce the complexity to use these shifts.</value>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Confirm removal</value>
+    <comment>Confirm removal</comment>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
+    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Chance of getting absence request granted: </value>
+    <comment>Used in mytime web so agents can see what day is best for absence request</comment>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Add Preference...</value>
+    <comment>To be used in menus/ribbon when adding preference</comment>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Hourly Availability...</value>
+    <comment>To be used in menus/ribbon when adding student availability</comment>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Fair</value>
+    <comment>Chance of getting absencerequest granted: Fair</comment>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Good</value>
+    <comment>Chance of getting absencerequest granted: Good</comment>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Poor</value>
+    <comment>Chance of getting absencerequest granted: Poor</comment>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Collecting data...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Improved</value>
+    <comment>optimization result improved</comment>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent.</value>
+    <comment>Message for optimistic lock exception in messaging.</comment>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Availability Per Agent</value>
+    <comment> the report Availability Per Agent</comment>
+    </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
+    <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
   </data>
 </root>

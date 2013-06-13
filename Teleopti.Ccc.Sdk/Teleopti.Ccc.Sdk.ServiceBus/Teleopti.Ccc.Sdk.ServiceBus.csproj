@@ -126,9 +126,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.4, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.7, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.4\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.7\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -161,19 +161,24 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="LocalServiceBusPublisher.cs" />
+    <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
+    <Compile Include="Denormalizer\LegacyMessagesConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="LocalServiceBusPublisher.cs" />
-    <Compile Include="NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Notification\NotificationMessage.cs" />
+    <Compile Include="Notification\SignificantChangeChecker.cs" />
     <Compile Include="Notification\NotificationConfigReader.cs" />
+    <Compile Include="Notification\SmsLinkChecker.cs" />
+    <Compile Include="Notification\NotificationSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
@@ -205,11 +210,6 @@
     <Compile Include="IRequestFactory.cs" />
     <Compile Include="IScheduleIsInvalidSpecification.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
-    <Compile Include="Notification\NotificationMessage.cs" />
-    <Compile Include="Notification\NotificationSenderFactory.cs" />
-    <Compile Include="Notification\SignificantChangeChecker.cs" />
-    <Compile Include="Notification\SmsLinkChecker.cs" />
-    <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="PayrollContainerInstaller.cs" />
     <Compile Include="PayrollDllCopy.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
@@ -274,8 +274,11 @@
     </None>
     <None Include="NotificationConfig.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
     <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.xsd">
       <SubType>Designer</SubType>

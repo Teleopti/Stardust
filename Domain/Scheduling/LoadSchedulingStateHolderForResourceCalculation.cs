@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
-			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, true);
+			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod);
 			_workloadRepository.LoadAll();
@@ -75,7 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
 
 			if (skills != null)
-				skills.ForEach(_schedulingResultStateHolder.Skills.Add);
+			{
+			    skills.ForEach(_schedulingResultStateHolder.Skills.Add);
+			}
 
 		    _schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);

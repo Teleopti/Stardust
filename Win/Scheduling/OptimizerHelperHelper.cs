@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             matrixOvertimeLocker.Execute();
             IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
             noMainShiftLocker.Execute();
+			IMatrixShiftsNotAvailibleLocker matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
+			matrixShiftsNotAvailibleLocker.Execute(matrixList);
         }
 
 		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
@@ -190,48 +192,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return result;
             };
             return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
-        }
-
-		public static IList<IScheduleMatrixPro> CreateMatrixListAll(ISchedulerStateHolder schedulerState, IComponentContext container)
-		{
-			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
-
-			var allSchedules = new List<IScheduleDay>();
-			var period = schedulerState.RequestedPeriod.DateOnlyPeriod;
-			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
-			var persons = schedulerState.FilteredPersonDictionary;
-
-			foreach (var day in period.DayCollection())
-			{
-				foreach (var person in persons)
-				{
-					var theDay = schedulerState.Schedules[person.Value].ScheduledDay(day);
-					allSchedules.Add(theDay);
-				}
-			}
-
-			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container);
-		}
-
-		[Obsolete("Never used")]
-		public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
-        {
-            if (clipHandler == null) throw new ArgumentNullException("clipHandler");
-            IList<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
-            return CreateMatrixList(scheduleDays, resultStateHolder, container);
-        }
-
-        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
-        {
-            if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
-
-            IList<IScheduleMatrixPro> matrixes =
-                new ScheduleMatrixListCreator(resultStateHolder).CreateMatrixListFromScheduleParts(scheduleDays);
-
-            var matrixUserLockLocker = container.Resolve<IMatrixUserLockLocker>();
-            matrixUserLockLocker.Execute(scheduleDays, matrixes);
-
-            return matrixes;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

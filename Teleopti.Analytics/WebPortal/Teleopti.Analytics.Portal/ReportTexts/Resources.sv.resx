@@ -1200,4 +1200,37 @@
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Till datum (då skiften påbörjas):</value>
   </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Uppfyllda</value>
+    <comment>Uppfyllda</comment>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Uppfyllda (%)</value>
+    <comment>Uppfyllda (%)</comment>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Ouppfyllda</value>
+    <comment>Ouppfyllda</comment>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Maxtiden för kopplingen till databasen löpte ut, försök begränsa sökvillkoren.</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Veton</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Tillgänglighet per agent</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Tillgängliga dagar</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Tillgänglig tid</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Schemalagda dagar</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utnyttjat</value>
+  </data>
 </root>

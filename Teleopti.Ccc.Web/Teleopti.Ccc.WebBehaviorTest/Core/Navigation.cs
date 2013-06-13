@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoSiteHomePage()
 		{
-			GoToWaitForCompleted("", new ApplicationStartupTimeout());
+			GoToWaitForCompleted("", new ApplicationStartupTimeout(), new BustCache());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
@@ -88,13 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoMobileReportsPage()
 		{
 			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoMobileReportsSettings()
 		{
 			GoToWaitForCompleted("MobileReports#report-settings-view");
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
@@ -130,15 +128,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
-		public static void GotoStudentAvailability()
+		public static void GotoAvailability()
 		{
-			GoToWaitForCompleted("MyTime#StudentAvailability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+			GoToWaitForCompleted("MyTime#Availability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
-		public static void GotoStudentAvailability(DateTime date)
+		public static void GotoAvailability(DateTime date)
 		{
-			GoToWaitForCompleted(string.Format("MyTime#StudentAvailability/Index/{0}/{1}/{2}",
+			GoToWaitForCompleted(string.Format("MyTime#Availability/Index/{0}/{1}/{2}",
 			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				 new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
@@ -173,7 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoRequests()
 		{
-			GoToWaitForCompleted("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoToWaitForCompleted("MyTime#Requests/Index", new BustCache(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
@@ -221,7 +219,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnywhereTeamSchedule()
 		{
 			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywhereTeamSchedule(DateTime date)
@@ -232,7 +229,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
@@ -245,7 +241,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywherePersonSchedule(Guid personId, DateTime date)
@@ -258,7 +253,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid personId, DateTime date)
@@ -271,7 +265,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 	}
 
@@ -286,12 +279,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		void After(GotoArgs args);
 	}
 
-	public class ForceRefresh : IGoToInterceptor
+	public class BustCache : IGoToInterceptor
 	{
 		public void Before(GotoArgs args)
 		{
 			var url = args.Uri.ToString();
-			url = url.Replace("#", string.Format("?{0}#", Guid.NewGuid()));
+			if (url.Contains("?"))
+				url = url.Replace("?", string.Format("?{0}&", Guid.NewGuid()));
+			else if (url.Contains("#"))
+				url = url.Replace("#", string.Format("?{0}#", Guid.NewGuid()));
+			else
+				url = string.Concat(url, string.Format("?{0}", Guid.NewGuid()));
 			args.Uri = new Uri(url);
 		}
 

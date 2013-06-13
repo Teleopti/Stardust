@@ -39,9 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoRequests();
 		}
 
-		[Given(@"I navigate to messages")]
 		[When(@"I navigate to messages")]
-        [Then(@"I navigate to messages")]
 		public void WhenINavigateToMessages()
 		{
 			Navigation.GotoMessagePage();
@@ -91,12 +89,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
 
-		[Then(@"I should see my existing shift trade request with status OkByMe")]
-		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatus()
-		{
-			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
-		}
-
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
 		{
@@ -115,13 +107,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(absence));
-		}
-
-
-                [Then(@"I should not see my existing shift trade request")]
-		public void ThenIShouldNotSeeMyExistingShiftTradeRequest()
-		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(0));
 		}
 
 		[Then(@"I should be able to see requests link")]
@@ -222,18 +207,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
 
-		[Then(@"I should see '(.*)' as the date of the request target")]
-		public void ThenIShouldSeeAsTheDateOfTheRequestTarget(string date)
-		{
-			var dateOfTheTrade = DateTime.Parse(date);
-			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateFrom.Text), Is.EqualTo(dateOfTheTrade));
-		}
-
-		[Then(@"I should see '(.*)' as the date of the request source")]
-		public void ThenIShouldSeeAsTheDateOfTheRequestSource(string date)
-		{
-			var dateOfTheTrade = DateTime.Parse(date);
-			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
-		}
 	}
 }

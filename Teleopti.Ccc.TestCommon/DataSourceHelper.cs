@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Threading;
 using Newtonsoft.Json;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -15,10 +13,9 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public static IDataSource CreateDataSource()
+		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
 			if (IniFileInfo.Create)
 			{
@@ -30,6 +27,11 @@ namespace Teleopti.Ccc.TestCommon
 			}
 
 			return CreateDataSource(dataSourceFactory);
+		}
+
+		public static IDataSource CreateDataSource()
+		{
+			return CreateDataSource((IEnumerable<IMessageSender>) null);
 		}
 
 		private static void SetupCcc7(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7)
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon
 					if (!database.Exists())
 						return false;
 
-					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.SchemaTrunkHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
 					var fileName = backupName + ".backup";
 					if (!System.IO.File.Exists(fileName))
 						return false;
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.TestCommon
 			ExceptionToConsole(
 				() =>
 				{
-					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.SchemaTrunkHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
 					var backup = database.BackupByFileCopy(backupName);
 					var fileName = backupName + ".backup";
 					System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
@@ -123,9 +125,9 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static string BackupName(DatabaseType databaseType, int databaseVersion, int trunkHash, string databaseName)
+		private static string BackupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName)
 		{
-			return databaseType + "." + databaseName + "." + databaseVersion + "." + trunkHash;
+			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash;
 		}
 
 

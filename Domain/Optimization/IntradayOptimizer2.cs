@@ -86,10 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-        	var personAssignment = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder();
-			if (personAssignment == null) return false;
-
-        	var originalShift = personAssignment.MainShift;
+			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].GetEditorShift();
 			if (originalShift == null) return false;
 
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);

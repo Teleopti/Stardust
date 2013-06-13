@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, null, null, new List<IActivityRestriction>()));
 
 			preferenceCellData.HasShift = true;
-			preferenceCellData.DisplayName = scheduleDay.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Description.Name;
-			preferenceCellData.DisplayShortName = scheduleDay.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Description.ShortName;
-			preferenceCellData.DisplayColor = scheduleDay.PersonAssignmentCollection()[0].MainShift.ShiftCategory.DisplayColor;
+			preferenceCellData.DisplayName = scheduleDay.PersonAssignmentCollection()[0].ShiftCategory.Description.Name;
+			preferenceCellData.DisplayShortName = scheduleDay.PersonAssignmentCollection()[0].ShiftCategory.Description.ShortName;
+			preferenceCellData.DisplayColor = scheduleDay.PersonAssignmentCollection()[0].ShiftCategory.DisplayColor;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture);
 			var period = projection.Period();
 			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);

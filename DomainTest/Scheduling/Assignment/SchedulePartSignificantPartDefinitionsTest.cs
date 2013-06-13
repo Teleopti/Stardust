@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -190,9 +190,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasMainShiftDefinition()
         {
             //Definition: Assignment with "HighestZOrder" has Mainshift
-            IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario);
-            IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario);
-            personAssignmentWithMainShift.SetMainShift(new MainShift(new ShiftCategory("mainShiftcategory")));
+			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+	        IMainShift mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+	                                                      new ShiftCategory("hej"));
+			personAssignmentWithMainShift.SetMainShift(mainShift);
 
             using (_mocker.Record())
             {
@@ -214,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasAssignmentDefinition()
         {
             //Definition: PersonAssignmentCollection() > 0
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { new PersonAssignment(_person, _scenario) };
+					IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1)) };
 
             using (_mocker.Record())
             {
@@ -233,9 +235,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasPersonalShiftDefinition()
         {
             //Definition: Assignment with "HighestZOrder" has PersonalShift
-            IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario);
-            IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario);
-            personAssignmentWithPersonalShift.InsertPersonalShift(new PersonalShift(), personAssignmentWithPersonalShift.PersonalShiftCollection.Count);
+					IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+					IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+            personAssignmentWithPersonalShift.AddPersonalShift(new PersonalShift());
 
             using (_mocker.Record())
             {
@@ -256,8 +258,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasOvertimeDefinition()
         {
             //Definition: Assignment with HighesZorder has OvertimeShift
-            IPersonAssignment personAssignmentWithOvertimeShift = new PersonAssignment(_person, _scenario);
-            IPersonAssignment personAssignmentWithoutOvertimeShift = new PersonAssignment(_person, _scenario);
+					IPersonAssignment personAssignmentWithOvertimeShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+					IPersonAssignment personAssignmentWithoutOvertimeShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
             personAssignmentWithOvertimeShift.AddOvertimeShift(new OvertimeShift());
 
             using (_mocker.Record())
@@ -315,9 +317,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldNotCalculateAsContractDayOffWhenFullDayAbsenceAndMainShift()
 		{
-			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario);
-			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario);
-			personAssignmentWithMainShift.SetMainShift(new MainShift(new ShiftCategory("mainShiftcategory")));
+			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
+			var mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+			                                                 new ShiftCategory("mainShiftcategory"));
+			personAssignmentWithMainShift.SetMainShift(mainShift);
 			IProjectionService projectionService = _mocker.StrictMock<IProjectionService>();
 			IVisualLayerCollection visualLayerCollection = _mocker.StrictMock<IVisualLayerCollection>();
 			IVisualLayer visualLayer = _mocker.StrictMock<IVisualLayer>();

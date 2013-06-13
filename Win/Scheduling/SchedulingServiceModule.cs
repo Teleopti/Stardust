@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -90,7 +91,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
-            builder.RegisterType<KeepRestrictionCreator>().As<IKeepRestrictionCreator>().InstancePerLifetimeScope();
             builder.RegisterInstance(new ScheduleTagSetter(NullScheduleTag.Instance)).As<IScheduleTagSetter>().SingleInstance();
             builder.RegisterType<FixedStaffSchedulingService>().As<IFixedStaffSchedulingService>().InstancePerLifetimeScope();
 
@@ -198,6 +198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ShiftCategoryFairnessContractToleranceChecker>().As<IShiftCategoryFairnessContractToleranceChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationOverLimitByRestrictionDeciderCreator>().As<IOptimizationOverLimitByRestrictionDeciderCreator>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
+	        builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>();
 
 			//DaysOffSchedulingService
         	builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().
@@ -219,13 +220,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
 	        builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>();
 	        builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>();
-
+			//ITeamBlockScheduleCommand
 
 			registerWorkShiftFilters(builder);
 			registerWorkShiftSelector(builder);
 			registerTeamBlockCommon(builder);
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
+			registerTeamBlockSchedulingService(builder);
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)
@@ -240,18 +242,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
+			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
+			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
+		}
+
+		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
+		{
+			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
+		}
+
+		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
+		{
+			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
+			builder.RegisterType<StandardDeviationSumCalculator>().As<IStandardDeviationSumCalculator>();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
-		}
-	
-		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
-		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>();
-			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
 		}
 
 	    private static void registerWorkShiftSelector(ContainerBuilder builder)

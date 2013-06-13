@@ -77,7 +77,7 @@ GOTO :error
 CD "%ROOTDIR%"
 
 IF %ISCCC7% EQU 1 (
-ECHO Encrypting passwords ...
+ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=10
@@ -86,7 +86,7 @@ GOTO :error
 )
 
 IF %CROSSDB% EQU 1 (
-ECHO Fix Cross DB stuff
+ECHO Running: CrossDatabaseViewUpdate
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1

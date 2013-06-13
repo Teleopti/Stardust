@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 
 	public abstract class AggregateRoot : Entity,
-																  IAggregateRoot,
-																  IChangeInfo,
-																  IVersioned
+		IAggregateRoot,
+		IChangeInfo,
+		IVersioned
 	{
 
 #pragma warning disable 0649

@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -120,6 +121,49 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 				Expect.Call(jobHelper.Repository).Return(repository);
 				Expect.Call(repository.PersistPmUser(_target.BulkInsertDataTable1)).Return(1);
 			}
+		}
+
+		[Test]
+		public void ShouldCheckIfNeedRun()
+		{
+			_target = new PmPermissionJobStep(_jobParameters,true);
+			Expect.Call(_jobParameters.StateHolder).Return(_stateHolder);
+			Expect.Call(_stateHolder.PermissionsMustRun()).Return(false);
+			_mocks.ReplayAll();
+			_target.Run(new List<IJobStep>(), new BusinessUnit("bu"), new List<IJobResult>(), true);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCheckIfStageNeedRun()
+		{
+			var helper = _mocks.DynamicMock<IJobHelper>();
+			var rep = _mocks.DynamicMock<IRaptorRepository>();
+			_target = new PmPermissionJobStep(_jobParameters, true);
+			Expect.Call(_jobParameters.Helper).Return(helper).Repeat.AtLeastOnce();
+			Expect.Call(helper.Repository).Return(rep);
+			Expect.Call(rep.LastChangedDate(null, "Permissions")).IgnoreArguments().Return(new LastChangedReadModel());
+
+			Expect.Call(_jobParameters.StateHolder).Return(_stateHolder).Repeat.AtLeastOnce();
+			Expect.Call(() =>_stateHolder.SetThisTime(new LastChangedReadModel(), "Permissions")).IgnoreArguments();
+			Expect.Call(_stateHolder.PermissionsMustRun()).Return(false);
+			
+			_mocks.ReplayAll();
+			var target = new StagePermissionJobStep(_jobParameters, true);
+			target.Run(new List<IJobStep>(), new BusinessUnit("bu"), new List<IJobResult>(), true);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCheckIfReportStepNeedRun()
+		{
+			_target = new PmPermissionJobStep(_jobParameters, true);
+			Expect.Call(_jobParameters.StateHolder).Return(_stateHolder);
+			Expect.Call(_stateHolder.PermissionsMustRun()).Return(false);
+			_mocks.ReplayAll();
+			var target = new PermissionReportJobStep(_jobParameters, true);
+			target.Run(new List<IJobStep>(), new BusinessUnit("bu"), new List<IJobResult>(), true);
+			_mocks.VerifyAll();
 		}
 
 		private static ResultDto createResult(bool isSuccess)

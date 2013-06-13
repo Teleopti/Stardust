@@ -27,10 +27,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			Add(new StageScheduleJobStep(jobParameters));
+			Add(new IntradayStageScheduleJobStep(jobParameters));
 			//Add(new StageScheduleForecastSkillJobStep(jobParameters)); //removed 2010-02-24 to reduce duration/Load (scheduling resource calculation)
-			Add(new StageScheduleDayOffCountJobStep(jobParameters));
-			Add(new StageSchedulePreferenceJobStep(jobParameters));
+			Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
+			Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
+			Add(new IntradayStageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new StageForecastWorkloadJobStep(jobParameters));
@@ -38,11 +39,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StagePermissionJobStep(jobParameters));
+			Add(new StagePermissionJobStep(jobParameters,true));
 			Add(new StageUserJobStep(jobParameters));                   // BU independent
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
-			Add(new StageRequestJobStep(jobParameters));
+			Add(new IntradayStageRequestJobStep(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
@@ -70,9 +71,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
 			// FACT TABLES
-			Add(new FactScheduleJobStep(jobParameters));
-			Add(new FactScheduleDayCountJobStep(jobParameters));
-			Add(new FactSchedulePreferenceJobStep(jobParameters));
+			Add(new FactScheduleJobStep(jobParameters,true));
+			Add(new FactScheduleDayCountJobStep(jobParameters,true));
+			Add(new FactSchedulePreferenceJobStep(jobParameters, true));
+			Add(new FactAvailabilityJobStep(jobParameters, true));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
@@ -81,10 +83,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactForecastWorkloadJobStep(jobParameters));
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			Add(new FactRequestJobStep(jobParameters));
-			Add(new FactRequestedDaysJobStep(jobParameters));
-			Add(new PermissionReportJobStep(jobParameters));
-			
+			Add(new FactRequestJobStep(jobParameters,true));
+			Add(new FactRequestedDaysJobStep(jobParameters,true));
+			Add(new PermissionReportJobStep(jobParameters,true));
+
+			// If PM is installed then show ETL job step for synchronizing PM permissions
+			if (jobParameters.IsPmInstalled)
+				Add(new PmPermissionJobStep(jobParameters));
+
 			// WEB SERVICE TO ANALYZER
 			//Add(new PerformanceManagerPermissionJobStep(jobParameters));
 		}

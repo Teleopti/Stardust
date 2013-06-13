@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
 
 			builder.RegisterType<InterceptorPipelineModule>().As<IHubPipelineModule>();
+			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 
 			builder.RegisterType<PersonScheduleViewModelFactory>().As<IPersonScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();

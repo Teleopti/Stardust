@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("SitePath", IniFileInfo.SitePath);
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("MessageBroker", TestSiteConfigurationSetup.Url.ToString());
+            Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
 	}
 
 		public AllTags(IEnumerable<KeyValuePair<string, string>> additionalTags)

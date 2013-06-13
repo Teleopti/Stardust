@@ -325,7 +325,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		}
 
 		[Given(@"I have a workflow control set with open availability periods")]
-		[Given(@"I am in an open student availability period")]
 		public void GivenIHaveAWorkflowControlSetWithOpenAvailabilityPeriods()
 		{
 			UserFactory.User().Setup(new StudentAvailabilityOpenWorkflowControlSet());
@@ -406,7 +405,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		}
 
 		[Given(@"I have a full-day absence today with")]
-		[Given(@"I have a full-day absence with")]
 		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
 		{
 			var absence = table.CreateInstance<AbsenceToday>();
@@ -464,6 +462,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 
 		}
 
+		[Given(@"I have a pending text request")]
+		public void GivenIHaveAPendingTextRequest()
+		{
+			UserFactory.User().Setup(new ExistingPendingTextRequest());
+		}
+
 		[Given(@"I have an approved text request")]
 		public void GivenIHaveAnApprovedTextRequest()
 		{
@@ -498,20 +502,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveCreatedAShiftTradeRequest(Table table)
 		{
 			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
-			UserFactory.User().Setup(existingShiftTrade);
-		}
-
-		[Given(@"I have received a shift trade request from '(.*)'")]
-		public void GivenIHaveReceivedAShiftTradeRequestFrom(string name)
-		{
-			var existingShiftTrade = new ExistingShiftTradeRequest() {From = name};
-			UserFactory.User().Setup(existingShiftTrade);
-		}
-
-		[Given(@"I have created a shift trade request to '(.*)'")]
-		public void GivenIHaveCreatedAShiftTradeRequestTo(string name)
-		{
-			var existingShiftTrade = new ExistingShiftTradeRequest() { To = name };
 			UserFactory.User().Setup(existingShiftTrade);
 		}
 
@@ -585,35 +575,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod(team.TheTeam));
 			UserFactory.User().Setup(new ScheduleIsPublished());
-		}
-
-		[Given(@"I should work (.*) hours per day according to my contract")]
-		public void GivenIShouldWorkHoursPerDayAccordingToMyContract(int hoursPerDay)
-		{
-			var contractSchedule = new ContractScheduleFromTable
-			                       	{
-			                       		MondayWorkDay = true,
-			                       		TuesdayWorkDay = true,
-			                       		WednesdayWorkDay = true,
-			                       		ThursdayWorkDay = true,
-			                       		FridayWorkDay = true,
-			                       		SaturdayWorkDay = true,
-			                       		SundayWorkDay = true
-			                       	};
-			var contract = new ContractFromTable
-			               	{
-			               		AverageWorkTimePerDay = 8
-			               	};
-			UserFactory.User().Setup(contract);
-			UserFactory.User().Setup(contractSchedule);
-			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
-			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
-		}
-
-		private static IPerson CreatePerson(string name)
-		{
-			var names = name.Split(' ');
-			return names.Length > 1 ? PersonFactory.CreatePerson(names[0], names[1]) : PersonFactory.CreatePerson(name);
 		}
 
 	}

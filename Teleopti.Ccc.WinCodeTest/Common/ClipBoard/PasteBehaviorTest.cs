@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
@@ -170,6 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
             NormalPasteBehavior normalBehavior = new NormalPasteBehavior();
 
             IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
+	        var personAssignment = mockRep.StrictMock<IPersonAssignment>();
 
             using (GridControl gridControl = new GridControl())
             {
@@ -192,6 +195,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(null);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
+	                Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
+	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
                 }
 
                 using (mockRep.Playback())
@@ -272,23 +277,32 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         {
             DateTime baseDate = new DateTime(2001,1,1,0,0,0,DateTimeKind.Utc);
             IList<IPersonAbsence> retList = new List<IPersonAbsence>();
-            AbsenceLayer absLayer = new AbsenceLayer(new Absence(),new DateTimePeriod(baseDate,baseDate.AddDays(1)));
-            PersonAbsence pAbs = new PersonAbsence(mockRep.StrictMock<IPerson>(),mockRep.StrictMock<IScenario>(),absLayer);
+	        var absence = new Absence();
+	        var person = PersonFactory.CreatePerson();
+	        var scenario = new Scenario("hej");
+	        var period = new DateTimePeriod(baseDate, baseDate.AddDays(1));
+	        AbsenceLayer absLayer = new AbsenceLayer(absence, period);
+	        PersonAbsence pAbs = new PersonAbsence(person, scenario, absLayer);
             retList.Add(pAbs);
+	        var newPersonAbsence = new PersonAbsence(person, scenario,
+	                                                 new AbsenceLayer(absence, period.ChangeEndTime(TimeSpan.FromDays(2))));
+			var newList = new List<IPersonAbsence>{ newPersonAbsence };
             PasteMergeBehaviorForTest testBehavior = new PasteMergeBehaviorForTest();
             IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
          
            
             using (mockRep.Record())
             {
-                Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(retList)).Repeat.AtLeastOnce();
+                Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(retList)).Repeat.Twice();
+	            Expect.Call(()=> part.Remove(pAbs));
+	            Expect.Call(part.Scenario).Return(scenario);
+	            Expect.Call(()=> part.Add(newPersonAbsence)).IgnoreArguments();
+				Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(newList));
             }
             using (mockRep.Playback())
             {
                 IPersonAbsence result = testBehavior.ExtendAbsence(part, 2).PersonAbsenceCollection()[0];
                 Assert.AreEqual(baseDate.AddDays(3), result.Layer.Period.EndDateTime);
-                result = testBehavior.ExtendAbsence(part, 2).PersonAbsenceCollection()[0];
-                Assert.AreEqual(baseDate.AddDays(5), result.Layer.Period.EndDateTime);
             }
         }
     }

@@ -11,7 +11,13 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
 {
-    public class AgentScheduleStateHolder
+    public interface IAgentScheduleStateHolder
+    {
+        void UpdateOrAddPreference(IList<DateTime> dateCollection, IList<Preference> preferenceCollection);
+        void UpdateOrAddPreference(DateTime date, Preference preference);
+    }
+
+    public class AgentScheduleStateHolder : IAgentScheduleStateHolder
     {
         private static AgentScheduleStateHolder _instance;
 

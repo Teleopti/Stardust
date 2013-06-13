@@ -16,5 +16,9 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		{
 			get { return _messageId; }
 		}
+
+		public int StartDays { get; set; }
+
+		public int EndDays { get; set; }
 	}
 }

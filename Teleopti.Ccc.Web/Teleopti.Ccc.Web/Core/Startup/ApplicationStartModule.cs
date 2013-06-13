@@ -9,6 +9,7 @@ using Autofac.Integration.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 					var resolver = new Areas.Anywhere.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
 					GlobalHost.DependencyResolver = resolver;
-					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
+					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
 					SignalRConfiguration.Configure(new HubConfiguration {EnableCrossDomain = true});
 				}
 				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();

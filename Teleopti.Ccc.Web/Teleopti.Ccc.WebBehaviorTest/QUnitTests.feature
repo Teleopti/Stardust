@@ -5,5 +5,4 @@
 
 Scenario: All javascript unit tests
 	When I navigate to unit test url Areas/MyTime/Content/Scripts/AllTests.html
-	Then I should see the tests run
-	And I should see all tests pass
+	Then I should see all tests pass

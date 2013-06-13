@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, Guid.NewGuid(), new DateTime(2012, 8, 28));
+				createAndSaveReadModel(personId, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28));
 
 				Assert.That(_target.ForPerson(new DateOnly(2012, 8, 28), personId), Is.Not.Null);
 			}
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, teamId, new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29));
 
 				var ret = _target.ForPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
 
@@ -68,6 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			_target = new PersonScheduleDayReadModelStorage(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBroker>(), null);
 			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
 
@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Assert.That(_target.IsInitialized(), Is.False);
 
-				createAndSaveReadModel(personId, teamId, new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, businessUnitId, new DateTime(2012, 8, 29));
 
 				Assert.That(_target.IsInitialized(), Is.True);
 
-				_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2)), personId);
+				_target.UpdateReadModels(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2)), personId, businessUnitId, null, false);
 
 				Assert.That(_target.IsInitialized(), Is.False);
 			}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, teamId, new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29));
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -104,23 +104,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		private void createAndSaveReadModel(Guid personId, Guid teamId, DateTime date)
-			{
-				var model = new PersonScheduleDayReadModel
-				            	{
-				            		Date = date,
-				            		TeamId = teamId,
-				            		PersonId = personId,
-				            		ShiftStart = date.AddHours(10),
-									ShiftEnd = date.AddHours(18),
-				            		Shift = "",
-				            	};
+		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date)
+		{
+			var model = new PersonScheduleDayReadModel
+				{
+					Date = date,
+					TeamId = teamId,
+					BusinessUnitId = businessUnitId,
+					PersonId = personId,
+					ShiftStart = date.AddHours(10),
+					ShiftEnd = date.AddHours(18),
+					Shift = "{shift: blablabla}",
+				};
 
-				_target.SaveReadModel(model);
-			}
+			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] {model}, false);
+		}
 
 		[Test]
-		public void ShouldNotCrashIfShiftIsBiggerThanFourThousand()
+		public void ShouldNotCrashIfShiftIsBiggerThanFourThousandAsCompressed()
 		{
 			_target = new PersonScheduleDayReadModelStorage(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBroker>(), MockRepository.GenerateMock<ICurrentDataSource>());
 			var personId = Guid.NewGuid();
@@ -136,14 +137,16 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Date = new DateTime(2012, 8, 29),
 				TeamId = teamId,
 				PersonId = personId,
+				BusinessUnitId = Guid.NewGuid(),
 				ShiftStart = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 				ShiftEnd = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 				Shift = shift,
 			};
-			_target.SaveReadModel(model);
+
+			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId, model.BusinessUnitId, new[] { model }, false);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
 		public void ShouldSendToMessageBrokerOnCommit()
 		{
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
@@ -165,7 +168,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target.SaveReadModel(model);
+				_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, false);
 
 				messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 				
@@ -175,6 +178,37 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
+        [Test]
+        public void ShouldNotSendToMessageBrokerOnCommitWhenNoficationDisabled()
+        {
+            var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+            var currentDataSource = MockRepository.GenerateMock<ICurrentDataSource>();
+            currentDataSource.Stub(x => x.CurrentName()).Return("datasource");
+
+            _target = new PersonScheduleDayReadModelStorage(CurrentUnitOfWork.Make(), messageBroker, currentDataSource);
+
+            var model = new PersonScheduleDayReadModel
+            {
+                Date = new DateTime(2013, 4, 3),
+                TeamId = Guid.NewGuid(),
+                PersonId = Guid.NewGuid(),
+                BusinessUnitId = Guid.NewGuid(),
+                ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+                Shift = "",
+            };
+
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, true);
+
+                messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+
+                uow.PersistAll();
+            }
+
+            messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+        }
 	}
 
 }

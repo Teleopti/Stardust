@@ -586,5 +586,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(result, 3);
         }
         
+		[Test]
+		public void ShouldReturnUpdatedOnServerUtc()
+		{
+			_target.UpdatedOnServerUtc.Should().Be.EqualTo(new DateTime());
+		}
+
+		[Test]
+		public void ShouldCallDummyToRemoveUnusedMethod()
+		{
+			((PersonRequest)_target).DummyMethodToRemoveCompileErrorsWithUnusedVariable();
+		}
     }
 }

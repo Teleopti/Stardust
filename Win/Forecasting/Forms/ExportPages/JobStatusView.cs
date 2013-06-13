@@ -101,6 +101,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		private readonly JobStatusModel _model;
 		private IMessageBroker _messageBroker;
 		private readonly JobResultProgressDecoder _decoder = new JobResultProgressDecoder();
+	    private int _lastProgress;
 
 		public JobStatusPresenter(IJobStatusView view, JobStatusModel model, IMessageBroker messageBroker)
 		{
@@ -117,8 +118,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		private void handleIncomingJobStatus(object sender, EventMessageArgs e)
 		{
 			var item = _decoder.Decode(e.Message.DomainObject);
-			if (item!=null && item.JobResultId==_model.JobStatusId)
+			if (item!=null && item.JobResultId==_model.JobStatusId && _lastProgress<=item.Percentage)
 			{
+			    _lastProgress = item.Percentage;
 				_view.SetProgress(item.Percentage);
 				_view.SetMessage(item.Message);
                 if (item.TotalPercentage!=100)

@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
 	public class CalendarCellsPage : PortalPage
 	{
-		[FindBy(Id = "friendly-message")] public Div FriendlyMessage;
-
 		private Constraint CalendarCellConstraint = Find.By("data-mytime-date", v => v != null);
 		
 		private ListItemCollection CalendarCellsListItems { get { return Document.ListItems.Filter(CalendarCellConstraint); } }

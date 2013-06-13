@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public bool Workday { get; set; }
+		public bool NotScheduled { get; set; }
 		public string Label
 		{
 			get

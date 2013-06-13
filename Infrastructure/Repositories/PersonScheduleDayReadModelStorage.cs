@@ -4,7 +4,9 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -28,13 +30,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+							  .AddScalar("PersonId", NHibernateUtil.Guid)
+							  .AddScalar("TeamId", NHibernateUtil.Guid)
+							  .AddScalar("SiteId", NHibernateUtil.Guid)
+							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+							  .AddScalar("Date", NHibernateUtil.DateTime)
+							  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
+							  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
+			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetGuid("personid", personId)
 			                  .SetDateTime("startdate", startDate)
 			                  .SetDateTime("enddate", endDate)
 			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 			                  .SetReadOnly(true)
-			                  .List<PersonScheduleDayReadModel>()
-				;
+			                  .List<PersonScheduleDayReadModel>();
 		}
 
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
@@ -46,16 +55,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
-				.SetGuid("TeamId", teamId)
-				.SetDateTime("DateStart", period.StartDateTime)
-				.SetDateTime("DateEnd", period.EndDateTime)
-				 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
-				 .SetReadOnly(true)
-				 .List<PersonScheduleDayReadModel>();
+			                  .AddScalar("PersonId", NHibernateUtil.Guid)
+			                  .AddScalar("TeamId", NHibernateUtil.Guid)
+			                  .AddScalar("SiteId", NHibernateUtil.Guid)
+			                  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+			                  .AddScalar("Date", NHibernateUtil.DateTime)
+			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
+			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
+			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
+			                  .SetGuid("TeamId", teamId)
+			                  .SetDateTime("DateStart", period.StartDateTime)
+			                  .SetDateTime("DateEnd", period.EndDateTime)
+			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+			                  .SetReadOnly(true)
+			                  .List<PersonScheduleDayReadModel>();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
+		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
+		{
+			if (!initialLoad)
+				clearPeriodForPerson(period, personId);
+
+			if (readModels != null)
+				readModels.ForEach(saveReadModel);
+
+            if (!initialLoad)
+			    _unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+		}
+
+		private void clearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
 			_unitOfWork.Session().CreateSQLQuery(
 				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
@@ -65,23 +93,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.ExecuteUpdate();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SaveReadModel(PersonScheduleDayReadModel model)
+		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
 			_unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
-				.SetGuid("Id", Guid.NewGuid())
-				.SetGuid("PersonId", model.PersonId)
-				.SetGuid("TeamId", model.TeamId)
-				.SetGuid("SiteId", model.SiteId)
-				.SetGuid("BusinessUnitId", model.BusinessUnitId)
-				.SetParameter("ShiftStart", model.ShiftStart)
-				.SetParameter("ShiftEnd", model.ShiftEnd)
-				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
-				.ExecuteUpdate();
-
-			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+			           .SetGuid("Id", Guid.NewGuid())
+			           .SetGuid("PersonId", model.PersonId)
+			           .SetGuid("TeamId", model.TeamId)
+			           .SetGuid("SiteId", model.SiteId)
+			           .SetGuid("BusinessUnitId", model.BusinessUnitId)
+			           .SetParameter("ShiftStart", model.ShiftStart)
+			           .SetParameter("ShiftEnd", model.ShiftEnd)
+			           .SetDateTime("BelongsToDate", model.BelongsToDate)
+			           .SetParameter("Shift", model.Shift, NHibernateUtil.Custom(typeof (CompressedString)))
+			           .ExecuteUpdate();
 		}
 
 		public bool IsInitialized()
@@ -91,6 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List();
 			return result.Count > 0;
 		}
-	}
 
+	}
 }

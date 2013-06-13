@@ -5,6 +5,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.Win.Payroll.Overtime;
 using Teleopti.Ccc.Win.Scheduling;
@@ -65,42 +66,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return ready;
 		}
 
-		public void SaveChanges()
-		{
-			var invalidModules = new StringBuilder();
-			foreach (var page in AllSelectedPages)
-			{
-				try
-				{
-					page.SaveChanges();
-				}
-				catch (ValidationException ex)
-				{
-					invalidModules.Append(ex.Message + ", ");
-				}
-			}
-			if (invalidModules.Length > 0)
-			{
-				throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
-			}
+	    public void SaveChanges()
+	    {
+	        var invalidModules = new StringBuilder();
 
-			UnitOfWork.PersistAll();
+	        foreach (var page in AllSelectedPages)
+	        {
+	            try
+	            {
+	                page.SaveChanges();
+	            }
+	            catch (ValidationException ex)
+	            {
+	                invalidModules.Append(ex.Message + ", ");
+	            }
+	        }
+	        if (invalidModules.Length > 0)
+	        {
+	            throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
+	        }
 
-			/*** Commented this code away since it caused bug 21397 ***/
-			/*** This code was written to solve bug 17809. I will set ***/
-			/*** that bug for "ready for test" and that I cannot reproduce it. ***/
-			//foreach (var page in AllSelectedPages)
-			//{
-			//    try
-			//    {
-			//        page.LoadControl();
-			//    }
-			//    catch { }
-				
-			//}
-		}
+	        using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+	            UnitOfWork.PersistAll();
+	            runSql.PersistAll();
+	        }
+	    }
 
-		public void UnloadPages()
+	    public void UnloadPages()
 		{
 			foreach (var page in AllSelectedPages)
 			{

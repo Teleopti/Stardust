@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
                               act,
                               _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 1, 1, 0, 0)),
+                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2000, 12, 31, 21, 0, 0), new DateTime(2000, 12, 31, 22, 0, 0)),
                               ShiftCategoryFactory.CreateShiftCategory("Morgon"),
                               _scenario);
 
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                                    MultiplicatorType.Overtime);
             personPeriods[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
 
-            var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario);
+						var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario, new DateOnly(2008, 1, 1));
             IActivity activity = ActivityFactory.CreateActivity("Overtime activity");
             var overtimeShift = new OvertimeShift();
             IOvertimeShiftActivityLayer layer =
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         	act.InWorkTime = true;
             IPersonAssignment noRest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
                   act,
-                  _agent, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 7, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0)),
+                  _agent, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 4, 0, 0), new DateTime(2001, 1, 1, 21, 0, 0)),
                   ShiftCategoryFactory.CreateShiftCategory("Morgon"),
                   _scenario);
 
@@ -1190,13 +1190,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
     	private IPersonAssignment CreatePersonAssignment()
         {
-            IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario);
-            IMainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period));
-            personAssignment.SetMainShift(mainShift);
+            mainShift.LayerCollection.Add(new EditorActivityLayer(ActivityFactory.CreateActivity("activity"), period));
+            new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
             return personAssignment;
         }

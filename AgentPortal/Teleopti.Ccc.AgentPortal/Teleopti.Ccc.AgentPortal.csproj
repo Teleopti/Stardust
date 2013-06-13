@@ -55,7 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,7 +64,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,7 +75,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -86,7 +86,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.Compression.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
@@ -183,11 +183,11 @@
     <Compile Include="AgentStudentAvailabilityView\StudentAvailabilityCellPainters\StudentAvailabilityCellPainterBase.cs" />
     <Compile Include="AgentStudentAvailabilityView\RestrictionViewCellModel.cs" />
     <Compile Include="AgentStudentAvailabilityView\RestrictionWeekHeaderViewCellModel.cs" />
-    <Compile Include="AgentStudentAvailabilityView\StudentAvailabilityView.cs">
+    <Compile Include="AgentStudentAvailabilityView\AvailabilityView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AgentStudentAvailabilityView\StudentAvailabilityView.Designer.cs">
-      <DependentUpon>StudentAvailabilityView.cs</DependentUpon>
+    <Compile Include="AgentStudentAvailabilityView\AvailabilityView.Designer.cs">
+      <DependentUpon>AvailabilityView.cs</DependentUpon>
     </Compile>
     <Compile Include="AgentPreferenceView\EditExtendedPreferenceView.cs">
       <SubType>UserControl</SubType>
@@ -539,8 +539,8 @@
     <EmbeddedResource Include="AgentStudentAvailabilityView\EditStudentAvailabilityView.resx">
       <DependentUpon>EditStudentAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AgentStudentAvailabilityView\StudentAvailabilityView.resx">
-      <DependentUpon>StudentAvailabilityView.cs</DependentUpon>
+    <EmbeddedResource Include="AgentStudentAvailabilityView\AvailabilityView.resx">
+      <DependentUpon>AvailabilityView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AgentPreferenceView\EditExtendedPreferenceView.resx">

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -33,10 +34,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
             }
 
-            var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
+			var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
 
-			ruleRepsonses = new List<IBusinessRuleResponse>(ruleRepsonses)
-				.FindAll(new BusinessRuleResponseContainsDateSpecification(shiftTradeSwapDetails).IsSatisfiedBy);
+			//if rules on the day that are not overriden return them
+			var ruleRepsonsesOnDay = new List<IBusinessRuleResponse>(ruleRepsonses)
+				.FindAll(new BusinessRuleResponseContainsDateSpecification(shiftTradeSwapDetails).IsSatisfiedBy).Where(r => !r.Overridden).ToList();
+
+			if (ruleRepsonsesOnDay.Count > 0)
+				return ruleRepsonsesOnDay;
+
+			// if no response on day just override them and try again
+			ruleRepsonses.ToList().ForEach(newBusinessRuleCollection.Remove);
+
+			ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
 			
 			return ruleRepsonses.Where(r => !r.Overridden).ToList();
         }
@@ -49,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             InParameter.NotNull("person2", person2);
             InParameter.NotNull("dates", dates);
             InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-            InParameter.ListCannotBeEmpty("dates", (IList)dates);
+            InParameter.ListCannotBeEmpty("dates", dates);
             if (person1 == person2)
                 throw new ArgumentException("The Persons must be different");
 

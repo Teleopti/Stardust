@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyMultiplePersonAbsencesAndCorrectUnderlyingLayers()
 		{
 			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(2, 9));
-			ass1.MainShift.LayerCollection[0].Payload.Description = new Description("första");
+			ass1.MainShiftActivityLayers.First().Payload.Description = new Description("första");
 			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(11, 19));
-			ass2.MainShift.LayerCollection[0].Payload.Description = new Description("andra");
+			ass2.MainShiftActivityLayers.First().Payload.Description = new Description("andra");
 			IPersonAbsence abs1 = createPersonAbsence(70, createPeriod(-1, 2)); //no
 			IPersonAbsence abs2 = createPersonAbsence(60, createPeriod(-50, 3));
 			IPersonAbsence abs3 = createPersonAbsence(50, createPeriod(10, 12));
@@ -104,8 +104,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var resWrapper = new List<IVisualLayer>(target.CreateProjection());
 			Assert.AreEqual(5, resWrapper.Count);
 			VisualLayer layer = (VisualLayer)resWrapper[0];
-			ILayer<IActivity> actLayer1 = ass1.MainShift.LayerCollection[0];
-			ILayer<IActivity> actLayer2 = ass2.MainShift.LayerCollection[0];
+#pragma warning disable 612,618
+			ILayer<IActivity> actLayer1 = ass1.ToMainShift().LayerCollection[0];
+#pragma warning restore 612,618
+#pragma warning disable 612,618
+			ILayer<IActivity> actLayer2 = ass2.ToMainShift().LayerCollection[0];
+#pragma warning restore 612,618
 
 			Assert.AreEqual("60", layer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
 			Assert.AreEqual(createPeriod(2, 3), layer.Period);
@@ -152,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, resWrapper.Count);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), retLayer.Period);
 			Assert.AreEqual("100", retLayer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, retLayer.HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, retLayer.HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, retLayer.HighestPriorityAbsence);
 		}
 
@@ -209,10 +213,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 6, 1), resWrapper[0].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 1, 2001, 1, 1), resWrapper[1].Period);
 			Assert.AreEqual("100", resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreEqual(ass.MainShift.LayerCollection[0].Payload.Description, resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today));
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, ((VisualLayer)resWrapper[0]).HighestPriorityActivity);
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)resWrapper[0]).HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)resWrapper[0]).HighestPriorityAbsence);
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, ((VisualLayer)resWrapper[1]).HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)resWrapper[1]).HighestPriorityActivity);
 			Assert.IsNull(((VisualLayer)resWrapper[1]).HighestPriorityAbsence);
 		}
 
@@ -230,19 +234,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 6, 1), resWrapper[0].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 1, 2000, 6, 2), resWrapper[1].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 2, 2001, 1, 1), resWrapper[2].Period);
-			Assert.AreEqual(ass.MainShift.LayerCollection[0].Payload.Description, resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today));
 			Assert.AreEqual("100", resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreEqual(ass.MainShift.LayerCollection[0].Payload.Description, resWrapper[2].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[2].Payload.ConfidentialDescription(null, DateOnly.Today));
 
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, resWrapper[0].Payload);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, resWrapper[0].Payload);
 			Assert.AreSame(abs.Layer.Payload, resWrapper[1].Payload);
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, resWrapper[2].Payload);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, resWrapper[2].Payload);
 		}
 
 		[Test]
 		public void VerifyOverlappingTwoAssignmentsWithDifferentActivities()
 		{
-			PersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			PersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			MainShift shift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("sdf"));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
@@ -255,14 +259,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, res.Count);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2002, 1, 1), res[0].Period);
 			Assert.AreEqual(abs.Layer.Payload, res[0].Payload);
-			Assert.AreSame(ass.MainShift.LayerCollection[0].Payload, ((VisualLayer)res[0]).HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)res[0]).HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)res[0]).HighestPriorityAbsence);
 		}
 
 		[Test]
 		public void VerifyAssignmentAbsenceMeeting()
 		{
-			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			IMainShift shift = new MainShift(new ShiftCategory("sdf"));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("1"), createPeriod(0, 1)));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("2"), createPeriod(1, 10)));
@@ -308,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Absence sjuk = new Absence { InContractTime = true };
 
 
-			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			IMainShift shift = new MainShift(new ShiftCategory("sdf"));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(phone, new DateTimePeriod(2000, 1, 1, 2000, 1, 4)));
 			shift.LayerCollection.Add(new MainShiftActivityLayer(lunch, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
@@ -472,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
-			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
@@ -485,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
-			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
@@ -510,7 +514,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																 new ContractSchedule("d"));
 			personContract.Contract.AddMultiplicatorDefinitionSetCollection(set);
 			scheduleDay.Person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), personContract, new Team()));
-			var pa = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			var pa = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			var ot = new OvertimeShift();
 			pa.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), set));
@@ -528,7 +532,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
-			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			IOvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
@@ -545,7 +549,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ContractTimeShouldBeCalculatedCorrectOnEachLayerIfInContractTimeIsMixed()
 		{
-			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			var actCtr = new Activity("phone");
 			var actNoCtr = new Activity("lunch") { InContractTime = false };
 			var main = new MainShift(new ShiftCategory("d"));

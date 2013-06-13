@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Interfaces.Domain;
 
 
@@ -28,12 +29,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             InitializeComponent();
             SetTexts();
-            dateTimePickerAdv1.Calendar.Culture = TeleoptiPrincipal.Current.Regional.Culture;
-            dateTimePickerAdv1.Culture = TeleoptiPrincipal.Current.Regional.Culture;
+			dateTimePickerAdv1.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
             dateTimePickerAdv1.Value = DateTime.Now.AddMonths(-1);
             dateTimePickerAdv1.Calendar.TodayButton.Text = Resources.Today;
             listView1.ListViewItemSorter = new ListViewColumnSorter();
-            IPersonFinderReadOnlyRepository repository = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            IPersonFinderReadOnlyRepository repository = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             IPersonFinderSearchCriteria personFinderSearchCriteria = new PersonFinderSearchCriteria(PersonFinderField.All, string.Empty, (int)RowsPerPage.Ten , DateOnly.Today,2,0);
             IPersonFinderModel model = new PersonFinderModel(repository, personFinderSearchCriteria);
             _presenter = new PersonFinderPresenter(this, model);
@@ -172,7 +172,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         public void AttemptDatabaseConnectionFind(IExecutableCommand command)
         {
-            _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _presenter.Find(command));
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _presenter.Find(command));
+            }
         }
 
         private PersonFinderSettings attemptDatabaseConnectionLoadSettings()

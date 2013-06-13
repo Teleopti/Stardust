@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
@@ -19,24 +20,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			_notificationConfigReader = notificationConfigReader;
 		}
 
-		//
-		//create via reflection of the class from config file
-
 		public INotificationSender GetSender()
 		{
 			INotificationSender sender = null;
 			if (_notificationConfigReader.HasLoadedConfig)
 			{
-				//TODO Add error handling and logging of errors, or service bus do that?
 				var assembly = Assembly.Load(_notificationConfigReader.Assembly);
 				var type = assembly.GetType(_notificationConfigReader.ClassName);
 				if (type == null)
-					throw new TypeLoadException("Type " + _notificationConfigReader.ClassName + " can't be found");
-				sender = (INotificationSender) Activator.CreateInstance(type);
+				{
+                    throw new TypeLoadException(string.Format("The type {0} can't be found in assembly {1}.", _notificationConfigReader.ClassName, _notificationConfigReader.Assembly));
+				}
+			    sender = (INotificationSender)Activator.CreateInstance(type);
 			}
-			// default
-			if (sender != null)
-				sender.SetConfigReader(_notificationConfigReader);
+			
+            if (sender != null)
+			{
+			    sender.SetConfigReader(_notificationConfigReader);
+			}
 
 			return sender;
 		}

@@ -202,28 +202,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCanSetParticipants()
-        {
-            _view.SetParticipants("");
-            _meeting.ClearMeetingPersons();
-            _mocks.ReplayAll();
-            _target.ParseParticipants("required");
-            Assert.IsTrue(string.IsNullOrEmpty(_model.Participants));
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanSetParticipantsAndRemoveCorrectly()
-        {
-            _view.SetParticipants("");
-            _meeting.ClearMeetingPersons();
-            _mocks.ReplayAll();
-            _target.ParseParticipants("reqrequired");
-            Assert.IsTrue(string.IsNullOrEmpty(_model.Participants));
-            _mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyParticipantsCanBeRefreshed()
         {
             _model.AddParticipants(new List<ContactPersonViewModel> {new ContactPersonViewModel(_optionalPerson)},
@@ -348,6 +326,28 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			{
 				_target.OnOutlookTimePickerEndTimeKeyDown(Keys.A, "20:00");
 			}
+		}
+
+		[Test]
+		public void ShouldRemoveFromIndex()
+		{
+			Assert.AreEqual(1, _target.Model.RequiredParticipants.Count);
+			Assert.AreEqual(1, _target.Model.OptionalParticipants.Count);
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _view.SetParticipants(""));
+			}
+
+			using (_mocks.Playback())
+			{
+				var allSelectedIndex = new List<int> { 0, 1 };
+				_target.Remove(allSelectedIndex);
+
+				Assert.AreEqual(0, _target.Model.RequiredParticipants.Count);
+				Assert.AreEqual(0, _target.Model.OptionalParticipants.Count);	
+			}	
 		}
     }
 

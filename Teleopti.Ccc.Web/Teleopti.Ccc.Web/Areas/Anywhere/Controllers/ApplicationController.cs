@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -52,10 +53,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.AddFullDayAbsence,
 					UserTexts.Resources.Apply,
 					UserTexts.Resources.InvalidEndDate,
+					UserTexts.Resources.Remove,
+					UserTexts.Resources.ConfirmRemoval,
 
-					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
-					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),
-					ShortTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt", "a"),
+					FixedDateFormat = DateAndTimeFormatExtensions.FixedDateFormat,
+					FixedDateTimeFormat = DateAndTimeFormatExtensions.FixedDateTimeFormat,
+					FixedTimeFormat = DateAndTimeFormatExtensions.FixedTimeFormat,
+
+					FixedDateFormatForMoment = DateAndTimeFormatExtensions.FixedDateFormatForMoment,
+					FixedDateTimeFormatForMoment = DateAndTimeFormatExtensions.FixedDateTimeFormatForMoment,
+					FixedTimeFormatForMoment = DateAndTimeFormatExtensions.FixedTimeFormatForMoment,
+
+					DateFormat = DateAndTimeFormatExtensions.DateFormat(),
+					DateTimeFormat = DateAndTimeFormatExtensions.DateTimeFormat(),
+					TimeFormat = DateAndTimeFormatExtensions.TimeFormat(),
+
+					DateFormatForMoment = DateAndTimeFormatExtensions.DateFormatForMoment(),
+					DateTimeFormatForMoment = DateAndTimeFormatExtensions.DateTimeFormatForMoment(),
+					TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
+
 					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
 					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek
 				}, Formatting.Indented);

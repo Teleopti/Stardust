@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IScheduleMatrixPro _matrix;
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayDataMapper _scheduleDayDataMapper;
+		private IVirtualSchedulePeriod _schedulePeriod;
 
 		[SetUp]
 		public void Setup()
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_scheduleDayDataMapper = _mocks.StrictMock<IScheduleDayDataMapper>();
 			_target = new MatrixDataListCreator(_scheduleDayDataMapper);
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
-
+			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 		}
 
 		[Test]
@@ -41,6 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
 				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
 					new ScheduleDayData(DateOnly.MinValue));
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DaysOff()).Return(8);
 			}
 
 			using (_mocks.Playback())

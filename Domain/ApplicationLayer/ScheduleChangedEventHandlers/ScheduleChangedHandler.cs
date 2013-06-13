@@ -1,7 +1,9 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -10,9 +12,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
-		IHandleEvent<FullDayAbsenceAddedEvent>
+		IHandleEvent<FullDayAbsenceAddedEvent>,
+		IHandleEvent<PersonAbsenceRemovedEvent>,
+		IHandleEvent<PersonAbsenceAddedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduleChangedHandler));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -30,12 +35,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		    
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Handle(PersonAbsenceRemovedEvent @event)
+		{
+			_bus.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.BusinessUnitId,
+				Datasource = @event.Datasource,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+			});
+		}
+
+		public void Handle(PersonAbsenceAddedEvent @event)
+		{
+			_bus.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.BusinessUnitId,
+				Datasource = @event.Datasource,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+			});
+		}
+
 		public void Handle(FullDayAbsenceAddedEvent @event)
 		{
 			_bus.Publish(new ScheduleChangedEvent
 				{
-					SkipDelete = false,
 					Timestamp = @event.Timestamp,
 					BusinessUnitId = @event.BusinessUnitId,
 					Datasource = @event.Datasource,
@@ -77,13 +108,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)
 		{
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
+            if (scenario == null)
+            {
+                Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
+                return false;
+            }
 			if (!scenario.DefaultScenario) return false;
 
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
-			if (person == null) return false;
+		    if (person == null)
+		    {
+                Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
+		        return false;
+		    }
                     
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+		    var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 			var schedule =
 				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}) {DoLoadByPerson = true},
@@ -99,5 +139,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 			return true;
 		}
+
 	}
 }

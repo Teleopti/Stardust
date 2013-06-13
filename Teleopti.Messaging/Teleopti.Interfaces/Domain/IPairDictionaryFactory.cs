@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -55,6 +56,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-12-08
         /// </remarks>
-        void CreateDictionaries(IEnumerable<IPair<T>> pairList);
+        void CreateDictionaries(IEnumerable<Tuple<T, T>> pairList);
     }
 }

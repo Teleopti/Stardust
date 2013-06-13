@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IScheduleDayPro _scheduleDayPro2;
 		private ISchedulingOptions _schedulingOptions;
 		private IScheduleDayDataMapper _scheduleDayDataMapper;
+		private IVirtualSchedulePeriod _schedulePeriod;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_schedulingOptions = new SchedulingOptions();
 			_scheduleDayDataMapper = _mocks.StrictMock<IScheduleDayDataMapper>();
 			_target = new MatrixData(_scheduleDayDataMapper);
+			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 		}
 
 		[Test]
@@ -37,12 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			using (_mocks.Record())
 			{
-				IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
-				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
-					new ScheduleDayData(DateOnly.MinValue));
-				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(
-					new ScheduleDayData(DateOnly.MinValue.AddDays(1)));
+				commonMocks();
 			}
 
 			using (_mocks.Playback())
@@ -53,17 +49,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
+		private void commonMocks()
+		{
+			IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> {_scheduleDayPro1, _scheduleDayPro2};
+			Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+			Expect.Call(_schedulePeriod.DaysOff()).Return(8);
+			Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
+			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
+				new ScheduleDayData(DateOnly.MinValue));
+			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(
+				new ScheduleDayData(DateOnly.MinValue.AddDays(1)));
+		}
+
 		[Test]
 		public void ShouldExposeIndexKey()
 		{
 			using (_mocks.Record())
 			{
-				IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
-				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
-					new ScheduleDayData(DateOnly.MinValue));
-				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(
-					new ScheduleDayData(DateOnly.MinValue.AddDays(1)));
+				commonMocks();
 			}
 
 			using (_mocks.Playback())
@@ -79,12 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         {
             using (_mocks.Record())
             {
-                IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
-                Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
-                Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
-                    new ScheduleDayData(DateOnly.MinValue));
-                Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(
-                    new ScheduleDayData(DateOnly.MinValue.AddDays(1)));
+				commonMocks();
             }
 
             using (_mocks.Playback())
@@ -94,5 +92,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Assert.IsTrue(keyExists);
             }
         }
+
+		[Test]
+		public void ShouldExposeTargetDaysOff()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Store(_matrix, _schedulingOptions);
+				Assert.AreEqual(8, _target.TargetDaysOff);
+			}
+		}
 	}
 }

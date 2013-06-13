@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people)
         {
-            IEnumerable<IPair<Guid>> matrix = _personRepository.PeopleSkillMatrix(scenario, period);
+            var matrix = _personRepository.PeopleSkillMatrix(scenario, period);
             IList<Guid> peopleGuids = new List<Guid>();
             people.ForEach(person => peopleGuids.Add(person.Id.Value));
             MatrixService.CreateDependencies(matrix, peopleGuids);

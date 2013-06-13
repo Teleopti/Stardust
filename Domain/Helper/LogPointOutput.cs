@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using log4net;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -21,11 +22,12 @@ namespace Teleopti.Ccc.Domain.Helper
             if (_log == null)
             {
                 var identity = TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
+	            var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
                 if (identity != null)
                 {
                     GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
-                    GlobalContext.Properties["DataSource"] = identity.DataSource.Server;
-                    GlobalContext.Properties["InitialCatalog"] = identity.DataSource.InitialCatalog;
+                    GlobalContext.Properties["DataSource"] = appConnString.DataSource;
+										GlobalContext.Properties["InitialCatalog"] = appConnString.InitialCatalog;
                 }
                 _log = LogManager.GetLogger("Teleopti.LogPointOutput");
             }

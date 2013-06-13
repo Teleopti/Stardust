@@ -1221,4 +1221,40 @@ Schedule</value>
     <value>Connection to database timed out, try to limit your search conditions.</value>
     <comment>Connection to database timed out, try to limit your search conditions.</comment>
   </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Fulfilled</value>
+    <comment>Fulfilled</comment>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Fulfillment (%)</value>
+    <comment>Fulfillment (%)</comment>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Must Haves</value>
+    <comment>Must Haves</comment>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Unfulfilled</value>
+    <comment>Unfulfilled</comment>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Availability Per Agent</value>
+    <comment> the report Availability Per Agent</comment>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Available Days</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Available Time</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Scheduled Days</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilization</value>
+    <comment>Column caption</comment>
+  </data>
 </root>

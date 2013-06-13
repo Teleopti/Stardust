@@ -45,5 +45,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                        CreateActivity("Handling",Color.DeepSkyBlue),    
                                        };
         }
+
+				public static IActivity ActivityWithId()
+				{
+					var activity = new Activity("asdf");
+					activity.SetId(Guid.NewGuid());
+					return activity;
+				}
     }
 }

@@ -8,7 +8,7 @@ namespace Teleopti.Support.Security
 {
     internal class ForecasterDateAdjustment : ICommandLineCommand
     {
-        public void Execute(CommandLineArgument commandLineArgument)
+        public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
             using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
@@ -21,13 +21,13 @@ namespace Teleopti.Support.Security
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 //Check version
                 SqlCommand command;
@@ -39,7 +39,7 @@ namespace Teleopti.Support.Security
                     {
                         Console.WriteLine("The database is up to date.");
                         Thread.Sleep(TimeSpan.FromSeconds(2));
-                        return;
+                        return 1;
                     }
                 }
 
@@ -211,14 +211,14 @@ namespace Teleopti.Support.Security
                     if (transaction != null)
                         transaction.Rollback();
                     Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
+
+	                return 1;
                 }
-                finally
-                {
-                    // done with using
-                    //connection.Dispose();
-                }
+
                 Thread.Sleep(TimeSpan.FromSeconds(2));
             }
+
+	        return 0;
         }
     }
 }

@@ -11,6 +11,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
@@ -300,7 +302,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveStudentAvailabilityController()
 		{
-			var result = requestContainer.Resolve<StudentAvailabilityController>();
+			var result = requestContainer.Resolve<AvailabilityController>();
 			result.Should().Not.Be.Null();
 		}
 
@@ -531,6 +533,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
 			                .Should().Not.Be.Null();
+			requestContainer.Resolve<IHandleCommand<RemovePersonAbsenceCommand>>()
+							.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -551,7 +555,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			                .Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
 							.Should().Not.Be.Null();
-			requestContainer.Resolve<IEnumerable<IHandleEvent<UpdatedScheduleDay>>>()
+			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleProjectionReadOnlyChanged>>>()
 							.Should().Not.Be.Null();
 		}
 

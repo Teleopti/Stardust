@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Current.Eval(script);
-			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo(dateAsSwedishString));
+			Browser.Interactions.Javascript(script);
+			Browser.Interactions.AssertContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
 
 		private static void gotoAddRequestToday()
@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[Then(@"I should see details with subject '(.*)'")]
-		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
@@ -191,7 +190,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
 		}
 
-		[Then(@"I should see details with message that tells the user that the status of the shifttrade is approved")]
 		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]
 		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
 		{

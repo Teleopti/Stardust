@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<ScheduleDayReadModel>();
 		}
 
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
 			((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
-					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
+					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,NotScheduled) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:NotScheduled)")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
 					.SetDateTime("EndDateTime", model.EndDateTime)
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetString("Label", model.Label)
 					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
 					.SetDateTime("Date", model.BelongsToDate)
-					.SetDateTime("InsertedOn", DateTime.UtcNow)
+					.SetBoolean("NotScheduled", model.NotScheduled)
 					.ExecuteUpdate();
 		}
 
@@ -67,5 +67,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Count > 0;
 		}
 	}
-
 }

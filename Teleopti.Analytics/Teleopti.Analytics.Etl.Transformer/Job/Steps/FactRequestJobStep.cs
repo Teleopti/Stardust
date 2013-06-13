@@ -7,15 +7,22 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
 	public class FactRequestJobStep : JobStepBase
 	{
-		public FactRequestJobStep(IJobParameters jobParameters):base(jobParameters)
+		private readonly bool _isIntraday;
+
+	    public FactRequestJobStep(IJobParameters jobParameters, bool isIntraday = false)
+            : base(jobParameters)
 		{
+			_isIntraday = isIntraday; 
 			Name = "fact_request";
 			JobCategory = JobCategoryType.Schedule;
 		}
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			return _jobParameters.Helper.Repository.FillFactRequestMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
+			if (_isIntraday)
+				return _jobParameters.Helper.Repository.FillIntradayFactRequestMart(RaptorTransformerHelper.CurrentBusinessUnit);
+			
+				return _jobParameters.Helper.Repository.FillFactRequestMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (day.SignificantPart().Equals(SchedulePartView.MainShift))
 				{
 					var poss = new PossibleStartEndCategory();
-					var shift = day.AssignmentHighZOrder().MainShift;
+					var shift = day.GetEditorShift();
 					if(schedulingOptions.UseGroupSchedulingCommonStart	 || schedulingOptions.UseGroupSchedulingCommonEnd)
 					{
 						var period = shift.ProjectionService().CreateProjection().Period().Value;						
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                                 poss.EndTime = poss.EndTime.Add(TimeSpan.FromDays(1));
                         }
 					}
-                    ExtractCommonActivity(schedulingOptions, poss, shift);
+                    extractCommonActivity(schedulingOptions, poss, shift);
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
 
@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return _possible.Count < 2;
 		}
 
-	    private static void ExtractCommonActivity(ISchedulingOptions schedulingOptions, PossibleStartEndCategory poss,
-	                                              IMainShift shift)
+	    private static void extractCommonActivity(ISchedulingOptions schedulingOptions, PossibleStartEndCategory poss,
+	                                              IEditableShift shift)
 	    {
 	        if (schedulingOptions.UseCommonActivity)
 	            foreach (var activity in shift.ProjectionService().CreateProjection())
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (day.SignificantPart().Equals(SchedulePartView.MainShift))
 				{
 					var poss = new PossibleStartEndCategory();
-					var shift = day.AssignmentHighZOrder().MainShift;
+					var shift = day.GetEditorShift();
 					if (schedulingOptions.UseGroupSchedulingCommonStart || schedulingOptions.UseGroupSchedulingCommonEnd)
 					{
 						var period = shift.ProjectionService().CreateProjection().Period().Value;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     //        if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
                     //            poss.ActivityPeriods.Add( activity.Period);
                     //}
-                    ExtractCommonActivity(schedulingOptions, poss, shift);
+                    extractCommonActivity(schedulingOptions, poss, shift);
 					_possible.Add(poss);
 				}
 			}

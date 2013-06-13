@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Win.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _backgroundWorker = backgroundWorker;
 
-            IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedDays, schedulingResultStateHolder, _container);
+			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
             lockDaysForExtendReduceOptimization(matrixList);
 
             IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);
@@ -155,9 +156,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             
         }
 
-        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
+        private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
         {
-            IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
+	        IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
             IList<IScheduleMatrixOriginalStateContainer> result =
                 matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
                 .Cast<IScheduleMatrixOriginalStateContainer>().ToList();

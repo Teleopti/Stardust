@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             testScenario = ScenarioFactory.CreateScenarioAggregate();
             testAgent = PersonFactory.CreatePerson();
-            _testPersonAssignment = new PersonAssignment(testAgent, testScenario);
+            _testPersonAssignment = new PersonAssignment(testAgent, testScenario, new DateOnly(2007,8,10));
         }
 
         /// <summary>

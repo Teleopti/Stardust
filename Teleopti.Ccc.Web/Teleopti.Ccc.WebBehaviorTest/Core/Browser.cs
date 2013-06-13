@@ -1,6 +1,5 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
+﻿using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using log4net;
@@ -10,31 +9,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	public static class Browser
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
+		private static readonly IBrowserActivator<IE> BrowserActivator = new WatiNSingleBrowserIEActivator();
 
-		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNSingleBrowserIEHandler();
+		public static IE Current { get { return BrowserActivator.Internal; } }
 
-		private static IE GlobalBrowser { get; set; }
+		public static IBrowserInteractions Interactions { get { return BrowserActivator.GetInteractions(); } }
 
-		public static IE Current { get { return GlobalBrowser; } }
+		public static void Start()
+		{
+			BrowserActivator.Start();
+		}
 
-		public static IBrowserInteractions Interactions { get { return new IEWatiNBrowserInteractions(GlobalBrowser); } }
+		public static bool IsStarted()
+		{
+			return BrowserActivator.Internal != null;
+		}
 
-		public static void Start() { GlobalBrowser = BrowserHandler.Start(); }
+		public static void NotifyBeforeTestRun()
+		{
+			BrowserActivator.NotifyBeforeTestRun();
+		}
 
-		public static bool IsStarted() { return GlobalBrowser != null; }
-
-		public static void PrepareForTestRun() { BrowserHandler.PrepareForTestRun(); }
+		public static void NotifyBeforeScenario()
+		{
+			BrowserActivator.NotifyBeforeScenario();
+		}
 
 		public static void Close()
 		{
-			GlobalBrowser = null;
 			Log.Write("Closing the browser");
-			BrowserHandler.Close();
+			BrowserActivator.Close();
 		}
 
-		public static void Restart()
-		{
-			GlobalBrowser = BrowserHandler.Restart();
-		}
 	}
 }

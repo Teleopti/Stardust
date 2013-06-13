@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersistedActivityLayer : ActivityLayer, IPersistedActivityLayer
+	public class PersistedActivityLayer : ActivityLayer, IPersistedLayer<IActivity>
 	{
 		private Guid? _id;
 		private IEntity _parent;
@@ -15,18 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected PersistedActivityLayer(){}
 
 		 public virtual bool Equals(IEntity other)
-		 {
-			 if (other == null)
-				 return false;
-			 if (this == other)
-				 return true;
-			 if (!other.Id.HasValue || !Id.HasValue)
-				 return false;
-
-			 return (Id.Value == other.Id.Value);
-		 }
-
-		 public virtual bool Equals(PersistedActivityLayer other)
 		 {
 			 if (other == null)
 				 return false;
@@ -78,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			 while (root == null)
 			 {
-				 var internalParent = parent as IAggregateEntity;
+				 var internalParent = theParent as IAggregateEntity;
 				 if (internalParent == null)
 				 {
 					 throw new AggregateException("[" + ToString() + "]:s parent is null or not of type IAggregateEntity");

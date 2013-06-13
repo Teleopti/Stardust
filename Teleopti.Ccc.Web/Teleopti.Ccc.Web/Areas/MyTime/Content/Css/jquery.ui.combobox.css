@@ -17,6 +17,6 @@ input[type=TEXT].ui-combobox {
 
 ul.ui-menu
 {
-	z-index: 15004;
+	z-index: 16000;
 	position: absolute;
 }

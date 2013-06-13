@@ -28,9 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyParentWorksWhenLayerIsAdded()
         {
-            MainShift dummyShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            MainShiftActivityLayer actLay =
-                new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
+	        var dummyShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("hopp"),
+	                                                                  new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+            var actLay =
+                new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
                                                         new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
             dummyShift.LayerCollection.Add(actLay);
             Assert.AreSame(dummyShift, actLay.Parent);
@@ -46,32 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             target.Add(null);
         }
 
-        /// <summary>
-        /// Verifies move period works.
-        /// </summary>
-        [Test]
-        public void VerifyMovePeriod()
-        {
-            TimeSpan moveTime = new TimeSpan(1, 1, 0);
-            Activity act = ActivityFactory.CreateActivity("hejhej");
-            DateTimePeriod period1before = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                                                              new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Utc));
-            DateTimePeriod period2before = new DateTimePeriod(new DateTime(2000, 1, 1, 4, 0, 0, DateTimeKind.Utc),
-                                                              new DateTime(2001, 1, 4, 1, 1, 0, DateTimeKind.Utc));
-            DateTimePeriod period1after = period1before.MovePeriod(moveTime);
-            DateTimePeriod period2after = period2before.MovePeriod(moveTime);
-            ActivityLayer actLay1 = new ActivityLayer(act, period1before);
-            ActivityLayer actLay2 = new ActivityLayer(act, period2before);
-
-            target.Add(actLay1);
-            target.Add(actLay2);
-            target.MoveAllLayers(moveTime);
-
-            Assert.AreEqual(period1after, target[0].Period);
-            Assert.AreEqual(period2after, target[1].Period);
-        }
-
-        /// <summary>
+				/// <summary>
         /// Verifies that the earliest start time and the latest end time of the layers are returned.
         /// </summary>
         [Test]

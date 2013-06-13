@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -141,8 +146,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
             Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
                   .IgnoreArguments()
-                  .
-                   Return(usedAbsenceTime);
+                  .Return(usedAbsenceTime);
             Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
             Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
             Expect.Call(_scheduleDay.IsScheduled()).Return(true);
@@ -183,5 +187,151 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
         }
 
-    }
+	    [Test]
+	    public void CheckHeadCount_NoPersonPeriod()
+	    {
+			_person.SetId(Guid.NewGuid());
+			_person.RemoveAllPersonPeriods();
+
+		    _absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+		    _absenceRequest.Expect(a => a.Period).Return(longPeriod());
+			_mocks.ReplayAll();
+
+		    var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+		    result.Should().Contain(_person.Id.GetValueOrDefault().ToString());
+			_mocks.VerifyAll();
+	    }
+
+		[Test]
+		public void CheckHeadCount_NoBudgetGroup()
+		{
+			var personPeriod = MockRepository.GenerateMock<PersonPeriod>();
+			
+			_person.AddPersonPeriod(personPeriod);
+			_person.SetId(Guid.NewGuid());
+			
+			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+			_absenceRequest.Expect(a => a.Period).Return(longPeriod());
+			_mocks.ReplayAll();
+
+			var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+			result.Should().Contain(_person.Id.GetValueOrDefault().ToString());
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void CheckHeadCount_NoBudgetDays()
+		{
+			var scenario = new Scenario("Test");
+			var budgetGroup = new BudgetGroup();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(longPeriod().StartDateTime));
+			
+			personPeriod.BudgetGroup = budgetGroup;
+			_person.AddPersonPeriod(personPeriod);
+			
+			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+			_absenceRequest.Expect(a => a.Period).Return(longPeriod());
+			_scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(scenario);
+			_budgetDayRepository.Expect(
+				b => b.Find(scenario, budgetGroup, longPeriod().ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone))).Return(null);
+			_mocks.ReplayAll();
+
+			var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+			result.Should().Contain(longPeriod().ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone).ToString());
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void CheckHeadCount_BudgetDaysNotEqualToDayCollection()
+		{
+			var period = new DateTimePeriod(2013, 05, 21, 2013, 05, 21);
+			var scenario = new Scenario("Test");
+			var budgetGroup = new BudgetGroup();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(period.StartDateTime));
+			
+			personPeriod.BudgetGroup = budgetGroup;
+			_person.AddPersonPeriod(personPeriod);
+
+			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+			_absenceRequest.Expect(a => a.Period).Return(period);
+			_scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(scenario);
+			_budgetDayRepository.Expect(
+				b => b.Find(scenario, budgetGroup, period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone)))
+			                    .Return(new List<IBudgetDay>
+				                    {
+					                    new BudgetDay(budgetGroup, scenario, new DateOnly(2013, 05, 21)),
+										new BudgetDay(budgetGroup, scenario, new DateOnly(2013, 05, 22))
+				                    });
+			_mocks.ReplayAll();
+
+			var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+			result.Should().Contain(period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone).ToString());
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void CheckHeadCount_InvalidDays()
+		{
+			var period = new DateTimePeriod(2013, 05, 21, 2013, 05, 21);
+			var scenario = new Scenario("Test");
+			var budgetGroup = new BudgetGroup();
+			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(2013, 05, 21));
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(period.StartDateTime));
+			
+			personPeriod.BudgetGroup = budgetGroup;
+			budgetGroup.SetId(Guid.NewGuid());
+			budgetDay.Allowance = 1.5;
+			_person.AddPersonPeriod(personPeriod);
+
+			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+			_absenceRequest.Expect(a => a.Period).Return(period);
+			_scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(scenario);
+			_budgetDayRepository.Expect(
+				b => b.Find(scenario, budgetGroup, period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone)))
+			                    .Return(new List<IBudgetDay> {budgetDay});
+			_scheduleProjectionReadOnlyRepository.Expect(
+				s => s.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetDay.BudgetGroup.Id.GetValueOrDefault(), budgetDay.Day))
+												 .Return(1);
+			_mocks.ReplayAll();
+
+			var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+			result.Should().Contain(period.StartDateTime.Date.ToString("d" ,CultureInfo.CurrentCulture));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void CheckHeadCount_ForOneWeek()
+		{
+			var period = new DateTimePeriod(2013, 05, 21, 2013, 05, 27);
+			var dateOnly = new DateOnly(2013, 05, 22);
+			var scenario = new Scenario("Test");
+			var budgetGroup = new BudgetGroup();
+			var budgetDay = new BudgetDay(budgetGroup, scenario, dateOnly);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(period.StartDateTime));
+			var budgetDays = new List<IBudgetDay> { budgetDay };
+			
+			personPeriod.BudgetGroup = budgetGroup;
+			budgetGroup.SetId(Guid.NewGuid());
+			_person.AddPersonPeriod(personPeriod);
+			for (var i = 0; i < 5; i++)
+				budgetDays.Add(new BudgetDay(budgetGroup, scenario, dateOnly.AddDays(i)));
+
+			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
+			_absenceRequest.Expect(a => a.Period).Return(period);
+			_scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(scenario);
+			_budgetDayRepository.Expect(
+				b => b.Find(scenario, budgetGroup, new DateOnlyPeriod(2013, 05, 21, 2013, 05, 26)))
+			                    .Return(budgetDays);
+			budgetDays.ForEach(d =>
+				_scheduleProjectionReadOnlyRepository.Expect(
+					s => s.GetNumberOfAbsencesPerDayAndBudgetGroup(d.BudgetGroup.Id.GetValueOrDefault(), d.Day)).Return(1));
+
+			_mocks.ReplayAll();
+
+			var result = _target.CheckHeadCountInBudgetGroup(_absenceRequest);
+			budgetDays.Take(5).ForEach(
+				d => result.Should().Contain(d.Day.Date.ToString("d", CultureInfo.CurrentCulture)));
+			_mocks.VerifyAll();
+		}	
+	}
 }

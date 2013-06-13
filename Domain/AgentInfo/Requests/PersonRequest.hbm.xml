@@ -30,7 +30,13 @@
               type="UtcDateTime"
               not-null="true"/>
     <!--IEntity-->
-
+		<!--<property name="serializedValue" type="BinaryBlob" access="field">
+			<column name="SerializedValue"
+              sql-type="varbinary(max)"
+							  not-null="true"/>
+		</property>-->
+		<property name="UpdatedOnServerUtc" type="timestamp" generated="always"/>
+		
     <many-to-one name="Person"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true" foreign-key="FK_PersonRequest_Person3"/>

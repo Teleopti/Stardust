@@ -138,13 +138,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
             Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = date.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
         }
 
-
 		[When(@"I click the text request's delete button")]
-		public void WhenIClickTheRequestSDeleteButton()
-		{
-			var requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Id.Value;
-			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).EventualClick();
-		}
+ 		public void WhenIClickTheRequestSDeleteButton()
+ 		{
+			PersonRequest requestId = null;
+			if (UserFactory.User().HasSetup<ExistingTextRequest>())
+				requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest;
+			else if (UserFactory.User().HasSetup<ExistingPendingTextRequest>())
+				requestId = UserFactory.User().UserData<ExistingPendingTextRequest>().PersonRequest;
+			if (requestId == null)
+				ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId.Id.Value).Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).DisplayVisible(), Is.True);
+			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).EventualClick();
+ 		}
 
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()

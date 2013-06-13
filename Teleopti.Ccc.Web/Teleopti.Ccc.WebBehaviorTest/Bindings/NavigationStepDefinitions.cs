@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[When(@"I view my week schedule")]
 		[When(@"I am viewing week schedule")]
-		[Given(@"I view my week schedule")]
 		[Given(@"I am viewing week schedule")]
 		public void WhenIViewMyWeekSchedule()
 		{
@@ -47,12 +46,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
         public void WhenIViewMyWeekScheduleForDate(DateTime date)
         {
             TestControllerMethods.Logon();
-            Navigation.GotoWeekSchedulePage(date);
-        }
-
-        [When(@"I navigate to week schedule page for date '(.*)'")]
-        public void WhenINavigateToWeekSchedulePageForDate(DateTime date)
-        {
             Navigation.GotoWeekSchedulePage(date);
         }
 
@@ -77,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmViewingStudentAvailabilityForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoStudentAvailability(date);
+			Navigation.GotoAvailability(date);
 		}
 
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]

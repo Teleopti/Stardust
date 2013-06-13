@@ -11,4 +11,6 @@
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\GeneralQueue.config,..\ServiceBusHostGeneralQueue.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\RequestQueue.config,..\ServiceBusHostRequestQueue.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\DenormalizeQueue.config,..\ServiceBusHostDenormalizeQueue.config
+..\..\AgentPortal\Teleopti.Ccc.AgentPortal\app.config,..\AppMytime.config
+..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,..\BrokerBackplaneWeb.config
 FixMyConfig.nhib.xml,..\TeleoptiCCC7.nhib.xml

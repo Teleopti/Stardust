@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
@@ -16,24 +19,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private IList<IPersonalShift> _personalShiftCollection;
 		private IList<IOvertimeShift> _overtimeShiftCollection;
-		private IMainShift _mainShift;
+		private IList<IMainShiftActivityLayerNew> _mainShiftActivityLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
+		private IShiftCategory _shiftCategory;
 
 
-		public PersonAssignment(IPerson agent, IScenario scenario)
+		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
 		{
+			Date = date;
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
 			_personalShiftCollection = new List<IPersonalShift>();
 			_overtimeShiftCollection = new List<IOvertimeShift>();
+			_mainShiftActivityLayers = new List<IMainShiftActivityLayerNew>();
 		}
 
 		protected PersonAssignment()
 		{
 		}
+
+		public virtual DateOnly Date { get; protected set; }
 
 		public virtual DateTimePeriod Period
 		{
@@ -43,8 +51,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			DateTimePeriod? mergedPeriod = null;
-			if (MainShift != null)
-				mergedPeriod = DateTimePeriod.MaximumPeriod(MainShift.LayerCollection.Period(), mergedPeriod);
+			//fix later 
+			foreach (var mainShiftActivityLayer in MainShiftActivityLayers)
+			{
+				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
+			}
 			foreach (IPersonalShift personalShift in _personalShiftCollection)
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(personalShift.LayerCollection.Period(), mergedPeriod);
@@ -83,12 +94,72 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retObj;
 		}
 
-
-		public virtual IMainShift MainShift
+		/// TO BE CONTINUED....
+		
+		//remove me later
+		[Obsolete("Mainshift will not be supported in near future")]
+		public virtual IMainShift ToMainShift()
 		{
-			get { return _mainShift; }
+			if (!_mainShiftActivityLayers.Any())
+				return null;
+
+			var ret = new MainShift(ShiftCategory);
+			ret.SetParent(this);
+			_mainShiftActivityLayers.ForEach(layer =>
+				{
+					var mainShiftLayer = new MainShiftActivityLayer(layer);
+					ret.LayerCollection.Add(mainShiftLayer);
+				});
+			return ret;
 		}
 
+		public virtual IShiftCategory ShiftCategory
+		{
+			get
+			{
+				if (!_mainShiftActivityLayers.Any())
+					return null;
+
+				return _shiftCategory;
+			}
+			protected set { _shiftCategory = value; }
+		}
+
+		public virtual IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers
+		{
+			get { return _mainShiftActivityLayers; }
+		}
+
+		//remove me later!
+		public virtual void SetMainShift(IMainShift mainShift)
+		{
+			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
+			mainShift.SetParent(this);
+			//fix nicer later
+			ClearMainShiftLayers();
+			mainShift.LayerCollection.ForEach(layer =>
+				{
+					var newLayer = new MainShiftActivityLayerNew(layer.Payload, layer.Period);
+					newLayer.SetParent(this);
+					newLayer.SetId(((IMainShiftActivityLayer)layer).Id);
+					_mainShiftActivityLayers.Add(newLayer);
+				});
+			ShiftCategory = mainShift.ShiftCategory;
+		}
+
+		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory)
+		{
+			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
+			//clear or new list?
+			ClearMainShiftLayers();
+			activityLayers.ForEach(layer =>
+			{
+				layer.SetParent(this);
+				_mainShiftActivityLayers.Add(layer);
+			});
+			ShiftCategory = shiftCategory;
+		}
+	
 		public virtual ReadOnlyCollection<IPersonalShift> PersonalShiftCollection
 		{
 			get { return new ReadOnlyCollection<IPersonalShift>(_personalShiftCollection); }
@@ -126,17 +197,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_overtimeShiftCollection.Remove(overtimeShift);
 		}
 
+		public virtual void ScheduleChanged(string dataSource)
+		{
+			AddEvent(new ScheduleChangedEvent
+				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
+					ScenarioId = Scenario.Id.Value,
+					StartDateTime = Period.StartDateTime,
+					EndDateTime = Period.EndDateTime,
+					PersonId = Person.Id.Value,
+				});
+		}
 
 		#region Manipulate personalshifts
 
 		public virtual void AddPersonalShift(IPersonalShift personalShift)
 		{
 			InsertPersonalShiftInternal(personalShift, _personalShiftCollection.Count);
-		}
-
-		public virtual void InsertPersonalShift(IPersonalShift personalShift, int index)
-		{
-			InsertPersonalShiftInternal(personalShift, index);
 		}
 
 		private void InsertPersonalShiftInternal(IPersonalShift personalShift, int index)
@@ -166,18 +244,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Manipulate MainShift
 
-		public virtual void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository)
+		public virtual void ClearMainShiftLayers()
 		{
-			InParameter.NotNull("personAssignmentRepository", personAssignmentRepository);
-			personAssignmentRepository.RemoveMainShift(this);
-			_mainShift = null;
-		}
-
-		public virtual void SetMainShift(IMainShift mainShift)
-		{
-			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
-			_mainShift = mainShift;
-			((AggregateEntity)_mainShift).SetParent(this);
+			_mainShiftActivityLayers.Clear();
 		}
 
 		#endregion
@@ -204,13 +273,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasProjection)
 			{
 				var validPeriods = new List<DateTimePeriod>();
-				if (MainShift != null)
+#pragma warning disable 612,618
+				var mainShiftTemp = ToMainShift();
+				if (mainShiftTemp != null)
 				{
-					proj.Add(MainShift);
-					var mainShiftPeriod = MainShift.LayerCollection.Period();
+					proj.Add(mainShiftTemp);
+					var mainShiftPeriod = mainShiftTemp.LayerCollection.Period();
 					if (mainShiftPeriod.HasValue)
 						validPeriods.Add(mainShiftPeriod.Value);
 				}
+#pragma warning restore 612,618
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();
@@ -238,7 +310,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				return (MainShift != null && MainShift.HasProjection) || (_overtimeShiftCollection.Count > 0);
+				return MainShiftActivityLayers.Any() || _overtimeShiftCollection.Count > 0;
 			}
 		}
 		#endregion
@@ -252,42 +324,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
 		{
-			return startsWithinPeriod(dateAndPeriod.Period());
+			return dateAndPeriod.DateOnly == Date;
 		}
 
-        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
-        {
-            DateTimePeriod dateTimePeriod =
-               dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
-
-            return startsWithinPeriod(dateTimePeriod);
-        }
-
-		private bool startsWithinPeriod(DateTimePeriod period)
+		public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
 		{
-			DateTime? periodToCheck;
-			if (_mainShift != null)
-			{
-				periodToCheck = _mainShift.LayerCollection.FirstStart();
-				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
-					return true;
-			}
-
-			foreach (var shift in _personalShiftCollection)
-			{
-				periodToCheck = shift.LayerCollection.FirstStart();
-				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
-					return true;
-			}
-
-			foreach (var shift in _overtimeShiftCollection)
-			{
-				periodToCheck = shift.LayerCollection.FirstStart();
-				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
-					return true;
-			}			
-
-			return false;
+			return dateOnlyPeriod.Contains(Date);
 		}
 
 		public virtual IPersonAssignment NoneEntityClone()
@@ -296,8 +338,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj.SetId(null);
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			if (MainShift != null)
-				retobj.SetMainShift((MainShift)MainShift.NoneEntityClone());
+			//fix this!
+			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayerNew>();
+			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.NoneEntityClone()))
+			{
+				newLayer.SetParent(retobj);
+				retobj._mainShiftActivityLayers.Add(newLayer);
+			}
+			//
 			foreach (IPersonalShift shift in _personalShiftCollection)
 			{
 				retobj.AddPersonalShift((IPersonalShift)shift.NoneEntityClone());
@@ -315,8 +363,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			PersonAssignment retobj = (PersonAssignment)MemberwiseClone();
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			if (MainShift != null)
-				retobj.SetMainShift((MainShift)MainShift.EntityClone());
+			//fix this
+			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayerNew>();
+			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.EntityClone()))
+			{
+				newLayer.SetParent(retobj);
+				retobj._mainShiftActivityLayers.Add(newLayer);
+			}
+			//
 			foreach (IPersonalShift shift in _personalShiftCollection)
 			{
 				retobj.AddPersonalShift((PersonalShift)shift.EntityClone());

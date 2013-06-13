@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win
             if (grid == null) throw new ArgumentNullException("grid");
 
             _presenter = new DayPresenterNew(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder,
-                scheduleDayChangeCallback, new DayPresenterScaleCalculator(), defaultScheduleTag);
+                scheduleDayChangeCallback, new DayPresenterScaleCalculator(new EditableShiftMapper()), defaultScheduleTag);
             Presenter = _presenter;
             grid.Name = "DayView";
         }
@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Win
             }
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
+				drawHourMarkers(e);
                 var scheduleDay = e.Style.CellValue as IScheduleDay;
                 if (scheduleDay != null)
                 {
@@ -114,6 +115,7 @@ namespace Teleopti.Ccc.Win
                         drawDayOffFromSchedule(e, scheduleDay);
                     if (significantPart == SchedulePartView.ContractDayOff)
                         drawCoveredDayOffFromSchedule(e, scheduleDay);
+					
                     AddMarkersToCell(e, scheduleDay, significantPart);
                 }
             }
@@ -198,6 +200,26 @@ namespace Teleopti.Ccc.Win
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
         }
+
+		private void drawHourMarkers(GridDrawCellEventArgs e)
+		{
+			var pixelConverter = new LengthToTimeCalculator(_presenter.ScalePeriod, e.Bounds.Width);
+			IList<DateTimePeriod> hours = new List<DateTimePeriod>(_presenter.ScalePeriod.AffectedHourCollection());
+
+			for (int i = 1; i < hours.Count - 1; i++)
+			{
+				DateTimePeriod hour = hours[i];
+				int position =
+					(int) Math.Round(pixelConverter.PositionFromDateTime(hour.StartDateTime, IsRightToLeft)) +
+					e.Bounds.X;
+				var startUpper = new Point(position, e.Bounds.Y);
+				var startLower = new Point(position, e.Bounds.Bottom);
+	
+
+				e.Graphics.DrawLine(Pens.LightGray, startUpper, startLower);
+
+			}
+		}
 
         private void drawDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
         {

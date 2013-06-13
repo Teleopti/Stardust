@@ -274,8 +274,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             // 
             // wrappedTabPage
             // 
-            grid.Dock = DockStyle.Fill;
+            
             tableLayoutPanel1.Controls.Add(grid, 0, 1);
+			grid.Dock = DockStyle.Fill;
+			grid.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
             wrappedTabPageExternal.Controls.Add(tableLayoutPanel1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             wrappedTabPageExternal.ImageIndex = 0;

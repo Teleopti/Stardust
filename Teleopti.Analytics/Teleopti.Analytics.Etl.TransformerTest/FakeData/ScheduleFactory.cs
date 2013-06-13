@@ -53,10 +53,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
         private IList<IPersonAssignment> createPersonAssignmentlList()
         {
-            PersonAssignment personAssignment = new PersonAssignment(_personCollection[0], _scenarioCollection[0]);
-
-            MainShift mainShift = new MainShift(_shiftCategoryCollection[0]);
-            ((IEntity) mainShift).SetId(Guid.NewGuid());
+					PersonAssignment personAssignment = new PersonAssignment(_personCollection[0], _scenarioCollection[0], new DateOnly(2007, 1, 1));
 
             // CreateProjection activity periods
             DateTimePeriod phone1 = new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
@@ -75,24 +72,18 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                                                        new DateTime(2007, 1, 2, 1, 40, 0, DateTimeKind.Utc));
             //43 - SUM = 77
             // Add activity periods to a Layer
-            MainShiftActivityLayer activityLayer1 = new MainShiftActivityLayer(ActivityCollection[0], phone1);
-            MainShiftActivityLayer activityLayer2 = new MainShiftActivityLayer(ActivityCollection[2], shortBreak1);
-            MainShiftActivityLayer activityLayer3 = new MainShiftActivityLayer(ActivityCollection[0], phone2);
-            MainShiftActivityLayer activityLayer4 = new MainShiftActivityLayer(ActivityCollection[1], lunchBreak1);
-            MainShiftActivityLayer activityLayer5 = new MainShiftActivityLayer(ActivityCollection[0], phone3);
-            MainShiftActivityLayer activityLayer6 = new MainShiftActivityLayer(ActivityCollection[2], shortbreak2);
-            MainShiftActivityLayer activityLayer7 = new MainShiftActivityLayer(ActivityCollection[0], phone4);
+	        var layers = new[]
+		        {
+							new MainShiftActivityLayerNew(ActivityCollection[0], phone1),
+							new MainShiftActivityLayerNew(ActivityCollection[2], shortBreak1),
+							new MainShiftActivityLayerNew(ActivityCollection[0], phone2),
+							new MainShiftActivityLayerNew(ActivityCollection[1], lunchBreak1),
+							new MainShiftActivityLayerNew(ActivityCollection[0], phone3),
+							new MainShiftActivityLayerNew(ActivityCollection[2], shortbreak2),
+							new MainShiftActivityLayerNew(ActivityCollection[0], phone4)
+		        };
 
-            // Add layers to mainShift
-            mainShift.LayerCollection.Add(activityLayer1);
-            mainShift.LayerCollection.Add(activityLayer2);
-            mainShift.LayerCollection.Add(activityLayer3);
-            mainShift.LayerCollection.Add(activityLayer4);
-            mainShift.LayerCollection.Add(activityLayer5);
-            mainShift.LayerCollection.Add(activityLayer6);
-            mainShift.LayerCollection.Add(activityLayer7);
-
-            personAssignment.SetMainShift(mainShift);
+						personAssignment.SetMainShiftLayers(layers, _shiftCategoryCollection[0]);
             RaptorTransformerHelper.SetCreatedOn(personAssignment, DateTime.Now);
 
             return new List<IPersonAssignment> {personAssignment};

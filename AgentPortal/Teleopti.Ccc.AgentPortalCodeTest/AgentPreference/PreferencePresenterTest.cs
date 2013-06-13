@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         private ClipHandler<IPreferenceCellData> _clipHandler;
         private IToggleButtonState _toggleButtonState;
         private PreferencePresenter _target;
+        private IAgentScheduleStateHolder _scheduleStateHolder;
 
         [SetUp]
         public void Setup()
@@ -28,9 +29,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IPreferenceView>();
             _model = _mocks.StrictMock<IPreferenceModel>();
+            _scheduleStateHolder = _mocks.StrictMock<IAgentScheduleStateHolder>();
             _clipHandler = new ClipHandler<IPreferenceCellData>();
             _toggleButtonState = _mocks.StrictMock<IToggleButtonState>();
-            _target = new PreferencePresenter(_model,_view,_clipHandler,_toggleButtonState);
+            _target = new PreferencePresenter(_model,_view,_clipHandler,_toggleButtonState, _scheduleStateHolder);
         }
 
         [Test]
@@ -95,6 +97,57 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             {
                 _target.OnSetCellDataClip(1,1,1,1);
                 var newPreference = _target.CellDataClipHandler.ClipList[0].ClipValue.Preference;
+                Assert.AreNotSame(newPreference, preference);
+                Assert.AreEqual(newPreference.DayOff, preference.DayOff);
+                Assert.AreEqual(newPreference.ShiftCategory, preference.ShiftCategory);
+                Assert.AreEqual(newPreference.Absence, preference.Absence);
+                Assert.AreEqual(newPreference.TemplateName, preference.TemplateName);
+                Assert.AreEqual(newPreference.StartTimeLimitation.MinTime, preference.StartTimeLimitation.MinTime);
+                Assert.AreEqual(newPreference.EndTimeLimitation.MinTime, preference.EndTimeLimitation.MinTime);
+                Assert.AreEqual(newPreference.WorkTimeLimitation.MinTime, preference.WorkTimeLimitation.MinTime);
+                Assert.AreEqual(newPreference.Activity, preference.Activity);
+            }
+        }
+
+        [Test]
+        public void ShouldPastePreferenceData()
+        {
+            var cellData = new PreferenceCellData();
+            var timeLimitationValidator = _mocks.StrictMock<ITimeLimitationValidator>();
+            var start = new TimeLimitation(timeLimitationValidator);
+            var end = new TimeLimitation(timeLimitationValidator);
+            var work = new TimeLimitation(timeLimitationValidator);
+
+            start.MinTime = TimeSpan.FromHours(8);
+            end.MinTime = TimeSpan.FromHours(9);
+            work.MinTime = TimeSpan.FromHours(1);
+
+            var preference = new Preference
+            {
+                TemplateName = "templateName",
+                StartTimeLimitation = start,
+                EndTimeLimitation = end,
+                WorkTimeLimitation = work,
+                Activity = new Activity(Guid.NewGuid(), "name")
+            };
+
+            cellData.Preference = preference;
+            _target.CellDataClipHandler.AddClip(cellData,ScheduleAppointmentTypes.PreferenceRestriction, DateTime.Today);
+            var dic = new Dictionary<int, IPreferenceCellData> { { 0, cellData } };
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_model.CellDataCollection).Return(dic).Repeat.AtLeastOnce();
+                Expect.Call(()=> _scheduleStateHolder.UpdateOrAddPreference(new List<DateTime>{ DateTime.Today}, null)).IgnoreArguments();
+                Expect.Call(() => _toggleButtonState.ToggleButtonEnabled("toolStripButtonValidate", true));
+                Expect.Call(() => _view.CellDataLoaded());
+                Expect.Call(() => _view.SetValidationPicture(null)).IgnoreArguments();
+            }
+            using (_mocks.Playback())
+            {
+                _target.PasteClipsInCellData(new List<int>{0});
+                var newPreference = _target.CellDataClipHandler.ClipList[0].ClipValue.Preference;
+                Assert.AreNotSame(newPreference, preference);
                 Assert.AreEqual(newPreference.DayOff, preference.DayOff);
                 Assert.AreEqual(newPreference.ShiftCategory, preference.ShiftCategory);
                 Assert.AreEqual(newPreference.Absence, preference.Absence);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Win.Common;
@@ -92,22 +93,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
             var skillPersonData = new SkillPersonData(staffMin, staffMax);
 
-            //Percent shrinkage =
-            //    new Percent(Convert.ToDouble(integerTextBoxShrinkage.IntegerValue, CultureInfo.CurrentCulture)/100);
             var shrinkage = new Percent(shrinkagePercentTextBox.DoubleValue);
-
             var efficiency = new Percent(efficiencyPercentTextBox.DoubleValue);
 
             DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
             startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
 
-            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(
-                SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
+            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
             var timePeriod = new DateTimePeriod(startDateTime, endDateTime);
 
-            var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement,
-                                                                                          skillPersonData, timePeriod);
+            var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement, skillPersonData, timePeriod);
             templateSkillDataPeriod.Shrinkage = shrinkage;
             templateSkillDataPeriod.Efficiency = efficiency;
             var skillDataPeriods = new List<ITemplateSkillDataPeriod>();
@@ -126,6 +122,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                 skill.SetTemplateAt((int) dayOfWeek, skillDayTemplate);
             }
 
+            return validateValues(skill);
+        }
+
+        private static bool validateValues(ISkill skill)
+        {
+            try
+            {
+                skill.CheckRestrictions();
+            }
+            catch (ValidationException validationException)
+            {
+                string validationErrorMessage = string.Format(CultureInfo.CurrentCulture, validationException.Message);
+                ViewBase.ShowErrorMessage(validationErrorMessage, UserTexts.Resources.ValidationError);
+                return false;
+            }
             return true;
         }
 

@@ -101,11 +101,16 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=1.6.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.Envers.1.6.0\lib\Net35\NHibernate.Envers.dll</HintPath>
+    <Reference Include="NHibernate.Envers, Version=1.6.1.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.Envers.1.6.1\lib\Net35\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -113,6 +118,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Security" />
@@ -134,8 +140,11 @@
     <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
+    <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
+    <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
     <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
@@ -253,7 +262,9 @@
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
+    <Compile Include="Repositories\EtlReadModelRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
@@ -365,7 +376,14 @@
     <Compile Include="Repositories\QueueSourceRepository.cs" />
     <Compile Include="Repositories\WorkShiftRuleSetRepository.cs" />
     <Compile Include="Repositories\WriteProtectionRepository.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\AgentDayConverters.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZone.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\IPersonAssignmentConverter.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetter.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterBase.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisher.cs" />

@@ -15,6 +15,10 @@
 	border-bottom: 1px solid #dfdfdf;
 }
 
+.holiday-agents {
+
+}
+
 .body-weekview-inner ul.today, .body-weekview-inner ul.ui-selected, .calendarview-week li.today, .calendarview-week li.ui-selected{
 	 background-image: url(../Images/view_ul_states_sprite.png);
 	 background-color: #f8f8f8;

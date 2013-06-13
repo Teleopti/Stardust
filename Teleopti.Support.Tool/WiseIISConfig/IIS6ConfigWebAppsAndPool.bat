@@ -1,111 +1,201 @@
 @ECHO off
-::Example Call:
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 False Skip
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 True Skip
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
-
-::Get path to this batchfile
 SET ROOTDIR=%~dp0
-
-::Remove trailer slash
 SET ROOTDIR=%ROOTDIR:~0,-1%
+%ROOTDIR:~0,2%
+CD "%ROOTDIR%"
 
-SET PoolName=%~1
-SET SubSiteName=%~2
-SET NETVersion=%~3
-SET SSL=%~4
-SET SDKCREDPROT=%~5
-SET CustomIISUsr=%~6
-SET CustomIISPwd=%~7
+SET INSTALLDIR=%ROOTDIR:~0,-27%
 
-IF "%PoolName%"=="" GOTO NoInput
-IF "%SubSiteName%"=="" GOTO NoInput
-IF "%NETVersion%"=="" GOTO NoInput
+::Example Call:
+::note: parameter 3,4 are optional
+::IIS7ConfigWebAppsAndPool.bat [IS_SSL] [SDK_CREDPROT] [MYUSER] [MYPASSWORD]
+::IIS7ConfigWebAppsAndPool.bat True Ntlm MySpecialIISuser MySpecialPwd
+SET SSL=%~1
+SET SDKCREDPROT=%~2
+SET CustomIISUsr=%~3
+SET CustomIISPwd=%~4
+SET logfile=IIS6ConfigWebAppsAndPool.log
+SET SSLPORT=443
+
 IF "%SDKCREDPROT%"=="" GOTO NoInput
 
-SET MainSiteName=TeleoptiCCC
-SET SitePath=%MainSiteName%/%SubSiteName%
+::=============
+::Main
+::=============
+ECHO Settings up IIS web sites and applictions ...
+ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
-::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+SET DefaultSite=Default Web Site
+SET MainSiteName=TeleoptiCCC
+
+for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
+
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
+
+::just in case
+iisreset /restart
+ECHO.
+ECHO Done!
+GOTO Done
+
+::=============
+::Functions
+::=============
+:CreateAppPool
+SET PoolName=%~1
+SET NETVersion=%~2
 
 ::1 - Create app pool
 echo cscript "%ROOTDIR%\adsutil.vbs" ENUM "w3svc/AppPools/%PoolName%"
 cscript "%ROOTDIR%\adsutil.vbs" ENUM "w3svc/AppPools/%PoolName%"
 if %errorlevel% NEQ 0 (
-ECHO Creating Teleopti App pool ...
-echo cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
-cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
-ECHO Creating Teleopti App pool. Done!
+	ECHO Creating Teleopti App pool ...
+	echo cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
+	cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
+	ECHO Creating Teleopti App pool. Done!
 ) else (
-ECHO Teleopti app pool already exist: "%PoolName%"
+	ECHO Teleopti app pool already exist: "%PoolName%"
+)
+echo.
+Exit /B
+
+:ForEachApplication
+SET SubSiteName=%~1
+SET PoolName=%~2
+SET NETVersion=%~3
+SET SiteOrApp=%~4
+SET DefaultDocs=%~5
+SET aspnetisapi=%~6
+
+SET SitePath=%MainSiteName%/%SubSiteName%
+SET FolderPath=%MainSiteName%\%SubSiteName%
+
+::special case for TeleoptCCC root site, skip subsite
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
+
+::remove old stuff
+echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+
+::remove + re-add
+CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%" "%DefaultDocs%"
+
+if "%SiteOrApp%"=="app" (
+	echo Change app pool
+	echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	echo Set identity on App Pool
+	if "%CustomIISUsr%"=="" (
+		echo using Network Service as identity on AppPool
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 2
+	) else (
+		echo using %CustomIISUsr% as identity on AppPool
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "%CustomIISUsr%"
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "%CustomIISPwd%"
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 3
+	)
+	echo setting .Net version
+	echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
+	cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
+	echo.
 )
 echo.
 
-::2 - Change app pool
-echo Change app pool
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
-if %errorlevel% NEQ 0 GOTO :ErrorInfo
-
-::3 - Set AppPool credentials
-::Not sure how to handle the case when user first run installation with %CustomIISUsr% and later
-:: decides to revert to Network Service. Then the IWAM-user is = %CustomIISUsr% and password is still = %CustomIISPwd%
-::this applies possible(?) only to "Teleopti ASP.NET 3.5/4.0", in that case a no brainer.
-if "%CustomIISUsr%"=="" (
-echo using Network Service as identity on AppPool
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 2
-::cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "IWAM_%ComputerName%"
-::cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "fakePassword"
-) else (
-echo using %CustomIISUsr% as identity on AppPool
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "%CustomIISUsr%"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "%CustomIISPwd%"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 3
-)
-echo.
-
-::4 SSL seetings
+::SSL seetings
 echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
 echo.
 
-::5 .NET version
-echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
-cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
-echo.
+::Authentication for the virtual dir
+::AuthFlag is a bitmask: http://msdn.microsoft.com/en-us/library/ms524513(v=vs.90).aspx
+SET /A AuthFlag=0
 
-::6 - Specify the authentication for the virtual dir
-::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/e3a60d16-1f4d-44a4-9866-5aded450956f.mspx?mfr=true
+SET authentication=anonymousAuthentication
+for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPROT%\%authentication%.txt') do CALL:BitMaskGet "%%g" "%authentication%" "%%h" %AuthFlag% AuthFlag
+SET authentication=windowsAuthentication
+for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPROT%\%authentication%.txt') do CALL:BitMaskGet "%%g" "%authentication%" "%%h" %AuthFlag% AuthFlag
 
-::We have this config in two places. Trust BuildArtifacts to be correct and let WISE do the dynamic content stuff
-::anonymousAuthentication=always true
-::windowsAuthentication=true/false + Forms=true/false is depends "%SDKCREDPROT%"
-:: ...which in turn depends on "same" vs. "different domain" in Msi GUI.
-::So, At this point we bail out for most vdir. Go for what we specify in web.config created
-if not "%SubSiteName%"=="Web" GOTO Done
-
-::But for vdir="Web" we continue
-if "%SDKCREDPROT%"=="Ntlm" (
-echo implementing Ntlm Auth
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 4
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 4
-) else (
-echo implementing Anonymous Auth
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 1
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 1
-)
+CALL:IISSecuritySet "%SitePath%" "%AuthFlag%"
 
 ::application mapping. Needed for asp.net MVC on IIS6
-set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
-if "%PROCESSOR_ARCHITECTURE%"=="x86" set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
+::set x86 first as "default"
+set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
 
-::Remove existing MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
-::Add MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+::AMD64?
+if defined ProgramFiles(x86) set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
 
-GOTO Done
+if "%aspnetisapi%"=="aspnet_isapi" (
+	ECHO setting script maps aka isapi filter for: %SitePath% %aspnetisapi%
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+)
+
+::disable directoryBrowse
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/enabledirbrowsing "False"
+
+::use Ntlm only
+If "%SDKCREDPROT%"=="Ntlm" (
+	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/root/%SitePath%/NTAuthenticationProviders "NTLM"  
+)
+
+exit /B
+
+:BitMaskGet
+SETLOCAL
+SET /A AuthFlag=0
+if "%~2"=="anonymousAuthentication" (
+	if "%~3"=="True" set /A AuthFlag=1
+)
+if "%~2"=="windowsAuthentication" (
+	if "%~3"=="True" set /A AuthFlag=4
+)
+(
+ENDLOCAL
+set /a "%~5=%AuthFlag%+%5"
+)
+goto:eof
+
+:CreateApplication
+::delete VirDir
+echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
+
+::create VirDir and App
+echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
+
+if "%~4"=="app" (
+	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
+
+	echo cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
+)
+
+echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
+
+::link to disk
+echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
+
+::disbable default docs for all
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" ""
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" False
+
+::enable default docs for some
+if not "%~5"=="None" (
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+)
+goto:eof
+
+:IISSecuritySet
+::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/6cc53bc1-6487-412c-ae93-063cd86b4f6e.mspx?mfr=true
+echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
+cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
+exit /B
 
 :Done
 echo done

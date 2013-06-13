@@ -226,6 +226,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
+		public IList<IPersonRequest> FindPersonRequestUpdatedAfter(DateTime lastTime)
+		{
+			return Session.CreateCriteria<PersonRequest>()
+			              .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
+						  .Add(Restrictions.Ge("UpdatedOnServerUtc", lastTime))
+			              .SetFetchMode("requests", FetchMode.Join)
+			              .SetFetchMode("Person", FetchMode.Join)
+			              .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+						  .SetResultTransformer(Transformers.DistinctRootEntity)
+			              .List<IPersonRequest>();
+		}
+
+
 		public IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period)
 		{
 			IList<IPersonRequest> allRequestExceptShiftTrade = FindPersonRequestWithinPeriodExceptShiftTrade(period);

@@ -143,12 +143,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addPreferencesDays(retDic,
                                        _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(
                                            longDateOnlyPeriod, people));
-                    addStudentAvailabilityDays(retDic,
-                                               _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
-                                                   Find(longDateOnlyPeriod, people));
-
-                    addPersonAvailabilities(period, retDic, people);
-                    addPersonRotations(period, retDic, people);
+					addStudentAvailabilityDays(retDic,
+											   _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
+												   Find(longDateOnlyPeriod, people));
+					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+					{
+						addPersonAvailabilities(period, retDic, people);
+						addPersonRotations(period, retDic, people);
+					}
                 }
             }
             retDic.TakeSnapshot();
@@ -228,14 +230,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addAgentDayScheduleTags(scheduleDictionary, _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
                 }
 
-                //if (personsProvider.LoadRestrictions)
                 if(scheduleDictionaryLoadOptions.LoadRestrictions)
                 {
                     addPreferencesDays(scheduleDictionary, _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-                    addStudentAvailabilityDays(scheduleDictionary, _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-
-                    addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
-                    addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons); 
+					addStudentAvailabilityDays(scheduleDictionary,
+													_repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
+																	.Find(longDateOnlyPeriod, visiblePersons));
+	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+	                {
+		                addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
+		                addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons);
+	                }
                 }                              
             }
 

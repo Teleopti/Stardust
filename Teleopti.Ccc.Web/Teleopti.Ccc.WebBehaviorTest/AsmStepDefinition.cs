@@ -29,15 +29,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			EventualAssert.That(() => Browser.Current.Spans.Filter(QuicklyFind.ByClass("asm-layer")).Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExists("span.asm-layer");
 		}
 
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			EventualAssert.That(() =>
-				Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-current")).Text,
-				Is.StringContaining(TestData.ActivityPhone.Description.Name));
+			Browser.Interactions.AssertContains("div.asm-info-canvas-column-current", TestData.ActivityPhone.Description.Name);
 		}
 
 		[Then(@"I should not see a current activity")]
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() =>
 								Browser.Current.Title.Contains(Resources.AgentScheduleMessenger), 
 								Is.True,
-								string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
+								() => string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
 		}
 
 		[When(@"My schedule between '(.*)' to '(.*)' change")]
@@ -111,12 +109,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
 		{
 			EventualAssert.That(() => (Browser.Current.Span(Find.ById("message-count")).Text), Is.EqualTo(unreadMessagesCount.ToString()));
-		}
-
-		[Then(@"I shoud see an indication that I have an unread message")]
-		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
-		{
-			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages")).IsDisplayed(), Is.True);
 		}
 
 		[Then(@"I shoud not see an indication that I have an unread message")]

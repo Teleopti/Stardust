@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I am not signed in")]
 		public void GivenIAmNotSignedIn()
 		{
-			Browser.Current.ClearCookies();
+			// really make sure we'r not signed in by setting an incorrect cookie through the TestController. if required.
 		}
 
 		[Then(@"I should see an application page")]

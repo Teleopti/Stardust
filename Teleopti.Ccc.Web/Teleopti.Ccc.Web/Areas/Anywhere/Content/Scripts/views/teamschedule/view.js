@@ -10,7 +10,8 @@ define([
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
-        'resizeevent'
+        'resizeevent',
+        'ajax'
 	], function (
 		ko,
 		$,
@@ -22,7 +23,8 @@ define([
 		teamScheduleViewModel,
 		personViewModel,
 		view,
-	    resize
+	    resize,
+	    ajax
 	) {
 
 		var teamSchedule;
@@ -34,11 +36,11 @@ define([
 		}, null, "gotoperson");
 
 		var loadSchedules = function(options) {
-			subscriptions.subscribeTeamSchedule(
+		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function(schedules) {
-					var currentPersons = teamSchedule.Persons();
+				    var currentPersons = teamSchedule.Persons();
 
 					var dateClone = teamSchedule.SelectedDate().clone();
 					for (var i = 0; i < schedules.length; i++) {
@@ -67,12 +69,10 @@ define([
 		};
 
 		var loadPersons = function (options) {
-			$.ajax({
+		    ajax.ajax({
 				url: 'Person/PeopleInTeam',
-				cache: false,
-				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON(),
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 					teamId: teamSchedule.SelectedTeam()
 				},
 				success: function (people, textStatus, jqXHR) {
@@ -86,12 +86,10 @@ define([
 		};
 
 		var loadTeams = function (options) {
-			$.ajax({
+		    ajax.ajax({
 				url: 'Person/AvailableTeams',
-				cache: false,
-				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON()
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				},
 				success: function (data, textStatus, jqXHR) {
 					teamSchedule.SetTeams(data.Teams);
@@ -148,7 +146,7 @@ define([
 			
 			display: function (options) {
 
-				var currentTeamId = function () {
+			    var currentTeamId = function () {
 					if (options.id)
 						return options.id;
 					if (teamSchedule.Teams().length > 0)
@@ -172,7 +170,7 @@ define([
 				var deferred = $.Deferred();
 			    
 				var loadPersonsAndSchedules = function() {
-					teamSchedule.SelectedTeam(currentTeamId());
+				    teamSchedule.SelectedTeam(currentTeamId());
 					loadPersons({
 						success: function() {
 							loadSchedules({

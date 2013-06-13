@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyCreateDependencies()
         {
-            ICollection<IPair<int>> pairList = createPairList();
+            var pairList = createPairList();
 
 
             target.CreateDependencies(pairList, new List<int> {4});
@@ -49,16 +50,16 @@ namespace Teleopti.Ccc.DomainTest.Common
             CollectionAssert.IsEmpty(target.SecondDependencies);
         }
 
-        private static ICollection<IPair<int>> createPairList()
+        private static IEnumerable<Tuple<int, int>> createPairList()
         {
-            return new List<IPair<int>>()
+					return new List<Tuple<int, int>>()
                        {
-                           new Pair<int>(2,1),
-                           new Pair<int>(3,7),
-                           new Pair<int>(4,8),
-                           new Pair<int>(4,6),
-                           new Pair<int>(9,6),
-                           new Pair<int>(9,7)
+                           Tuple.Create(2,1),
+                           Tuple.Create(3,7),
+                           Tuple.Create(4,8),
+                           Tuple.Create(4,6),
+                           Tuple.Create(9,6),
+                           Tuple.Create(9,7)
                        };
         }
     }

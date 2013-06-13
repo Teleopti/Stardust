@@ -33,6 +33,14 @@
 		/// <summary>
 		/// ShiftFromShifts
 		/// </summary>
-		ShiftFromShifts
+		ShiftFromShifts,
+		/// <summary>
+		/// Preference
+		/// </summary>
+		Preference,
+		/// <summary>
+		/// StudentAvailability
+		/// </summary>
+		StudentAvailability
 	}
 }

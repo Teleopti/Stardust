@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyCollection).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(personAssignment.ShiftCategory).Return(null).Repeat.AtLeastOnce();
             }
 
             bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(null);
+                Expect.Call(personAssignment.ShiftCategory).Return(null);
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts);
             }
             
@@ -208,7 +208,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { personAssignment };
             var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
 
-            var mainShift = _mocks.StrictMock<IMainShift>();
             using (_mocks.Record())
             {
                 Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod);
@@ -220,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
 
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(mainShift);
+                Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("dummy"));
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts);
             }
 

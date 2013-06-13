@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -12,7 +13,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -461,6 +466,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                     activityRestriction.Activity.Name + mustHave, 2);
                    addTimeRestriction(activityRestriction, 3);
                }
+
+			   if (restriction.Absence != null)
+			   {
+				   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name + mustHave, 2);
+			   }
+
                 if (restriction.DayOffTemplate != null)
                     createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name + mustHave, 2);
             }

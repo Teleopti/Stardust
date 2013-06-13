@@ -103,11 +103,11 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -331,6 +331,8 @@
     <Compile Include="Budgeting\EditShrinkageForm.Designer.cs">
       <DependentUpon>EditShrinkageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
+    <Compile Include="Commands\MatrixListFactory.cs" />
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -338,6 +340,9 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
+    <Compile Include="Common\Controls\OutlookTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowMinMaxIssuesSummary.cs" />
@@ -1101,26 +1106,19 @@
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\AbsenceMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractScheduleMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\BudgetGroupMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\OptionalColumnMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonRotationMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PersonAvailabilityMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\IPeopleAdminMessageBroker.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminConstants.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\ContractMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\IMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\PartTimePercentageMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\PeopleAdminMessageBrokerFactory.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\RuleSetBagMessageBrokerHandler.cs" />
-    <Compile Include="PeopleAdmin\MessageBroker\MessageBrokerHandlers\TeamMessageBrokerHandler.cs" />
     <Compile Include="PeopleAdmin\Views\GeneralGridView.cs" />
     <Compile Include="PeopleAdmin\Views\PersonFinderView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.Designer.cs">
+      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
@@ -1225,6 +1223,12 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
+    <Compile Include="Scheduling\AgentPreferenceView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentPreferenceView.Designer.cs">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1245,6 +1249,12 @@
     <Compile Include="Scheduling\AgentSkillExplorer.Designer.cs">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
@@ -1262,8 +1272,11 @@
     <Compile Include="Scheduling\OverViewDrawDayOff.cs" />
     <Compile Include="Scheduling\OverViewDrawMainShift.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
+    <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
+    <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
+    <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2481,6 +2494,7 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2692,6 +2706,9 @@
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PeopleAdmin\Views\PersonTimeZoneView.resx">
+      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
@@ -2770,8 +2787,14 @@
       <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentPreferenceView.resx">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentSkillExplorer.resx">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentStudentAvailabilityView.resx">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

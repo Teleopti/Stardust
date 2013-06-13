@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (_totalTasks > 0d)
                 {
                     _averageTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Sum(t => t.AverageTaskTime.Ticks * t.Tasks / _tasks)));
+                            (_taskPeriodList.Sum(t => t.AverageTaskTime.Ticks * t.Tasks) / _tasks));
                     _averageAfterTaskTime = TimeSpan.FromTicks((long)
                         (_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks * t.Tasks) / _tasks));
                     _totalAverageTaskTime = TimeSpan.FromTicks((long)

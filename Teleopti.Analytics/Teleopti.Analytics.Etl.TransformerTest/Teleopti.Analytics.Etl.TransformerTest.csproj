@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,7 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -95,6 +95,15 @@
   <ItemGroup>
     <Compile Include="BaseConfigurationTest.cs" />
     <Compile Include="ConfigurationHandlerTest.cs" />
+    <Compile Include="IntradayAvailabilityTransformerTest.cs" />
+    <Compile Include="HourlyAvailabilityTransformerTest.cs" />
+    <Compile Include="IntradaySchedulePreferenceTransformerTest.cs" />
+    <Compile Include="Job\Steps\FactIntradayRequestJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageAvailabilityJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageRequestJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageSchedulePreferenceJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleDayOffCountJobStepTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleJobStepTest.cs" />
     <Compile Include="FakeData\SkillFactory.cs" />
     <Compile Include="FakeData\OvertimeFactory.cs" />
     <Compile Include="Job\Jobs\RequestJobTest.cs" />
@@ -108,6 +117,7 @@
     <Compile Include="OvertimeTransformerTest.cs" />
     <Compile Include="PmPermissionExtractorTest.cs" />
     <Compile Include="RequestTransformTest.cs" />
+    <Compile Include="ScheduleThreading\ContractDataRowFactoryTest.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowCollectionFactoryTest.cs" />
     <Compile Include="SkillTransformerTest.cs" />
     <Compile Include="FakeData\JobParametersFactory.cs" />

@@ -70,6 +70,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
+		public IList<IStudentAvailabilityDay> FindNewerThan(DateTime newerThan)
+		{
+			var crit = Session.CreateCriteria(typeof(StudentAvailabilityDay))
+				.Add(Restrictions.Gt("UpdatedOn", newerThan))
+				.SetFetchMode("RestrictionCollection", FetchMode.Join);
+			var retList = crit.List<IStudentAvailabilityDay>();
+
+			InitializeStudentDays(retList);
+			return retList;
+		}
+
         private ICriteria FilterByPeriod(DateOnlyPeriod period)
         {
             return Session.CreateCriteria(typeof(StudentAvailabilityDay))

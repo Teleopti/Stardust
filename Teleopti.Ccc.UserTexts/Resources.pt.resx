@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
     <value> </value>
@@ -2703,9 +2703,6 @@
   <data name="TargetSkillColon" xml:space="preserve">
     <value>Skill Alvo:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Nenhum turno disponível para esta disponibilidade de estudante.</value>
-  </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
     <value>O tamanho máximo de um apontamento é {0} horas. O tamanho do apontamento atual é de {1} horas.</value>
   </data>
@@ -4065,9 +4062,6 @@
   <data name="TimeTypeWeeksSingular" xml:space="preserve">
     <value>semana</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Disponibilidade de Estudante</value>
-  </data>
   <data name="DayOfWeekFriday" xml:space="preserve">
     <value>Sexta-Feira</value>
   </data>
@@ -5028,9 +5022,6 @@
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>A nova solicitação de troca de turnos {0} está aguardando aprovação na sua lista de solicitações.</value>
   </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Satisfação da Disponibilidade de Estudante</value>
-  </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>A solicitação de ausência {0} foi negada.</value>
   </data>
@@ -5147,9 +5138,6 @@
   </data>
   <data name="Teams" xml:space="preserve">
     <value>Times</value>
-  </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Disponibilidades de estudantes</value>
   </data>
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Turnos por tempo de trabalho flexível</value>
@@ -5805,9 +5793,6 @@ As seguintes opções estão ativas:
   <data name="LockRotations" xml:space="preserve">
     <value>Travar as Rotações</value>
   </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Travar as Disponibilidades dos Estudantes</value>
-  </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Travar as Restrições</value>
   </data>
@@ -5843,12 +5828,6 @@ As seguintes opções estão ativas:
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>O período selecionado não dever maior do que {0}.</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Abrir a disponibilidade de estudantes</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Período de disponibilidade de estudantes</value>
   </data>
   <data name="NextDayColon" xml:space="preserve">
     <value>Próximo dia:</value>
@@ -6239,9 +6218,6 @@ As seguintes opções estão ativas:
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Você tem certeza que deseja excluir o contrato '{0}'?</value>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Nova Disponibilidade de Estudante</value>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Início Absoluto</value>
@@ -8038,9 +8014,6 @@ Teleopti P&amp;D
   </data>
   <data name="StaffEmployed" xml:space="preserve">
     <value>Staff empregado</value>
-  </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Horas de estudante</value>
   </data>
   <data name="AddShrinkageRow" xml:space="preserve">
     <value>Adicionar indisponibilidade</value>

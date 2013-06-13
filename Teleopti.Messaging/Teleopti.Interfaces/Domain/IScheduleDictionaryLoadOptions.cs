@@ -13,5 +13,7 @@
         /// LoadNotes
         /// </summary>
         bool LoadNotes { get; set; }
+
+		bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
     }
 }

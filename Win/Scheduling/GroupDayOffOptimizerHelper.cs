@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
@@ -54,6 +55,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorker = backgroundWorker;
 
 			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
+			foreach (var selectedPerson in selectedPersons)
+			{
+				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerState.Schedules[selectedPerson]);
+			}
 			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
 				new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _container.Resolve<IScheduleDayEquator>());
 			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator(
@@ -73,16 +78,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
-            IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-            IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
+			IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 
 			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
 
-            var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-            var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
 			var openPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 
             IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
@@ -148,7 +153,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 				var coherentChecker = new TeamSteadyStateCoherentChecker();
 				var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
 				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
             	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
@@ -166,12 +171,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, 
 			SchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
 		{
-			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
-			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
-			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
 
+			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+			
 			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
-			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, optimizationPreferences, 
+			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedPeriod.DayCollection(), matrixListForFairness, optimizationPreferences, 
 				rollbackService, optimizationPreferences.Advanced.UseAverageShiftLengths);
 			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 			
@@ -217,7 +223,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var coherentChecker = new TeamSteadyStateCoherentChecker();
 			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
 			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
@@ -344,30 +350,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			service.Execute(allMatrix);
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
-        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
+
+        private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
-            IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
+	        IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
             IList<IScheduleMatrixOriginalStateContainer> result =
                 matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
                 .Cast<IScheduleMatrixOriginalStateContainer>().ToList();
             return result;
         }
-
-		//private void removeShiftCategoryBackToLegalState(
-		//    IList<IScheduleMatrixPro> matrixList,
-		//    BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
-		//{
-		//    using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
-		//    {
-		//        var backToLegalStateServicePro =
-		//            _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
-
-		//        if (backgroundWorker.CancellationPending)
-		//            return;
-
-		//        backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
-		//    }
-		//}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
@@ -462,7 +453,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
-			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);  //this one handles userlocks as well
+			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);  //this one handles userlocks as well
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
 
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
@@ -538,7 +529,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
         {
-            var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 		
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -569,7 +560,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
-					_container.Resolve<ITeamBlockClearer>()
+					_container.Resolve<ITeamBlockClearer>(),
+					_container.Resolve<IStandardDeviationSumCalculator>()
                     );
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
@@ -732,7 +724,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	var coherentChecker = new TeamSteadyStateCoherentChecker();
         	var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
         	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
 			
 
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);

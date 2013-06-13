@@ -174,12 +174,12 @@
 					var preferenceNavigation = navSection as PreferenceNavigationItem;
 
 					<div id="Preference-add-extended-form" class="displaynone"> 
-						<div class="ml5" data-bind="visible: AvailableTemplates().length>0">
-							<span>[</span><span id="Expend-Template" class="collapse-sign" data-bind="text: IsTemplateDetailsVisible()?'-':'+'"></span><span>]</span>
+						<div class="ml5" data-bind="visible: HasTemplates">
+							<span>[</span><span id="Expend-Template" class="collapse-sign" data-bind="text: ToggleSign"></span><span>]</span>
 							<select id="Preference-template" data-bind="options: AvailableTemplates, optionsText: 'Text', optionsValue:'Value', optionsCaption: '&nbsp;'" title="@Resources.ExtendedPreferencesTemplate" class="displayinline-block ml5">
 							</select>
 						</div>
-						<div data-bind="visible: IsTemplateDetailsVisible()">
+						<div data-bind="visible: IsDetailsVisible">
 							<hr data-bind="visible: AvailableTemplates().length>0"/>
 							<div class="ml10">
 								<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
@@ -321,7 +321,7 @@
 											@Resources.SaveAsTemplate
 										</label>
 									</div>
-									<div id="Template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
+									<div id="Template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate">
 										<input id="Template-name-input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
 										<button id="Preference-extended-save-template" class="ml5">@Resources.Save</button>
 									</div>

@@ -143,6 +143,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(foundRequests.Contains(requestAbsence));
         }
 
+		[Test]
+		public void ShouldFindShiftTradeRequestUpdateAfter()
+		{
+			var shiftTradeRequest = CreateShiftTradeRequest("Trade with me");
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest);
+			var foundRequest = new PersonRequestRepository(UnitOfWork).FindPersonRequestUpdatedAfter(DateTime.UtcNow.AddHours(-1));
+			foundRequest.Count().Should().Be.EqualTo(1);
+			foundRequest.First().Id.Value.Should().Be.EqualTo(shiftTradeRequest.Id.Value);
+		}
+
+		[Test]
+		public void ShouldNotFindShiftTradeRequestUpdateAfter()
+		{
+			var shiftTradeRequest = CreateShiftTradeRequest("Trade with me");
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest);
+			var foundRequest = new PersonRequestRepository(UnitOfWork).FindPersonRequestUpdatedAfter(DateTime.UtcNow.AddHours(1));
+			foundRequest.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldFindOtherRequestUpdatedAfter()
+		{
+			// ReSharper disable PossibleInvalidOperationException
+			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
+			var foundRequest = new PersonRequestRepository(UnitOfWork).FindPersonRequestUpdatedAfter(DateTime.UtcNow.AddHours(-1));
+			foundRequest.Count.Should().Be.EqualTo(1);
+			foundRequest.First().Id.Value.Should().Be.EqualTo(requestAbsence.Id.Value);
+			// ReSharper restore PossibleInvalidOperationException
+		}
+
+		[Test]
+		public void ShouldNotFindOtherRequestUpdatedAfter()
+		{
+			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
+			var foundRequest = new PersonRequestRepository(UnitOfWork).FindPersonRequestUpdatedAfter(DateTime.UtcNow.AddHours(1));
+			foundRequest.Should().Be.Empty();
+		}
+
         [Test]
         public void VerifyCanFindRequestWithCertainGuid()
         {

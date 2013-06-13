@@ -222,5 +222,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 												team);
 			person.AddPersonPeriod(per);
 		}
+
+		public static IPerson PersonWithId()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			return person;
+		}
+
     }
 }

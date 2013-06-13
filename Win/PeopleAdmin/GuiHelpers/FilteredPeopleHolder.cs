@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class FilteredPeopleHolder : IDisposable
     {
-        private readonly ITraceableRefreshService _refreshService;
+        private ITraceableRefreshService _refreshService;
         private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private readonly List<IPerson> _personCollection = new List<IPerson>();
         private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
@@ -44,11 +44,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private IList<PersonAvailabilityModelParent> _personAvailabilityParentAdapterCollection = new List<PersonAvailabilityModelParent>();
         private readonly IList<IPersonRotation> _parentPersonRotationCollection = new List<IPersonRotation>();
         private readonly IList<IPersonAvailability> _parentPersonAvailabilityCollection = new List<IPersonAvailability>();
-        private DateOnly _selectedDate;
         private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
         private TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
         private IList<IPersonAccountModel> _personAccountGridViewAdaptorCollection = new List<IPersonAccountModel>();
-        private IAbsence _selectedPersonAccountAbsenceType;
         private ReadOnlyCollection<IPersonPeriodModel> _selectedPeoplePeriodGridData;
         private IList<IOptionalColumn> _optionalColumnCollection = new List<IOptionalColumn>();
         private readonly TypedBindingCollection<IRuleSetBag> _ruleSetBagBindingCollection = new TypedBindingCollection<IRuleSetBag>();
@@ -71,6 +69,21 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _refreshService = cacheServiceForPersonAccount;
             _allAccounts = allAccounts;
+        }
+
+        public void SetState(IUnitOfWork unitOfWork,
+                             ITraceableRefreshService cacheServiceForPersonAccount,
+                             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+        {
+            clearCollections();
+
+            UnitOfWork = unitOfWork;
+            _refreshService = cacheServiceForPersonAccount;
+            _allAccounts.Clear();
+            foreach (var allAccount in allAccounts)
+            {
+                _allAccounts.Add(allAccount.Key,allAccount.Value);
+            }
         }
 
         public ReadOnlyCollection<PersonGeneralModel> SelectedPeopleGeneralGridData
@@ -155,23 +168,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return new Collection<IPersonAccountModel>(_personAccountGridViewAdaptorCollection); }
         }
 
-        public DateOnly SelectedDate
-        {
-            //get { return _selectedDate.AddDays(1); }
-            get { return _selectedDate; }
-            set { _selectedDate = value; }
-        }
+        public DateOnly SelectedDate { get; set; }
 
         public CommonNameDescriptionSetting CommonNameDescription
         {
             get { return _commonNameDescription; }
         }
-        
-        public IAbsence SelectedPersonAccountAbsenceType
-        {
-            get { return _selectedPersonAccountAbsenceType; }
-            set { _selectedPersonAccountAbsenceType = value; }
-        }
+
+        public IAbsence SelectedPersonAccountAbsenceType { get; set; }
 
         public ReadOnlyCollection<IPersonPeriodModel> SelectedPeoplePeriodGridCollection
         {
@@ -321,12 +325,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void RemoveAbsence(IAbsence absence)
         {
                 _filteredAbsenceCollection.Remove(absence);
-        }
-
-        public void LoadPeople(IEnumerable<IPerson> people)
-        {
-            _personCollection.Clear();
-            _personCollection.AddRange(people);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
@@ -514,7 +512,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _filteredPeopleGridData.Add(personGridData);       
         }
 
-        public void LoadTeams()
+        private void LoadTeams()
         {
             //_teamBindingCollection.Clear();
             _siteTeamBindingCollection.Clear();
@@ -690,7 +688,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 {
                 	IPerson person1 = person;
                 	var rotationCollection = _allPersonRotationCollection.Where(p => p.Person.Equals(person1)).OrderByDescending(n2 => n2.StartDate).ToList();
-                    fillRotationAdapterCollection(person, rotationCollection, _selectedDate);
+                    fillRotationAdapterCollection(person, rotationCollection, SelectedDate);
                 }
             }
         }
@@ -716,8 +714,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
             {
                 var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-                IAbsence absence = _selectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
-                IAccount account = absence.Tracker.CreatePersonAccount(_selectedDate);
+                IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
+                IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
                 accountForPersonCollection.Add(absence, account);
             }
         }
@@ -875,7 +873,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
             //Ask valonerna, denna kan returnera flera 
-            IAccount account = accounts.Find(_selectedDate).FirstOrDefault();
+            IAccount account = accounts.Find(SelectedDate).FirstOrDefault();
 
             if (account != null)
             {
@@ -903,7 +901,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _personAccountGridViewAdaptorCollection.RemoveAt(rowIndex);
 
             //Fel den returnerar fler fråga Flamländarna
-            IAccount account = accounts.Find(_selectedDate).FirstOrDefault(a=>a.Owner.Absence.Equals(SelectedPersonAccountAbsenceType)); 
+            IAccount account = accounts.Find(SelectedDate).FirstOrDefault(a=>a.Owner.Absence.Equals(SelectedPersonAccountAbsenceType)); 
             
             if (account != null)
             {
@@ -993,7 +991,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             var accounts = _personAccountGridViewAdaptorCollection[index].Parent;
 
             //fråga kineserna. fel här
-            IAccount account = accounts.Find(_selectedDate).LastOrDefault();
+            IAccount account = accounts.Find(SelectedDate).LastOrDefault();
 
             if (account != null)
             {
@@ -1114,7 +1112,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             MarkForRemove(person);
         }
 
-        public void LoadPersonSkills()
+        private void LoadPersonSkills()
         {
             _personSkillCollection.Clear();
             _personSkillAdapterCollection.Clear();
@@ -1132,7 +1130,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                      (EntityConverter.ConvertToOther<IPersonSkill, PersonSkillModel>)));
         }
 
-        public void LoadExternalLogOn()
+        private void LoadExternalLogOn()
         {
             _externalLogOnCollection.Clear();
 
@@ -1247,7 +1245,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         	}
         }
 
-        public void LoadAllOptionalColumns()
+        private void LoadAllOptionalColumns()
         {
             _optionalColumnCollection.Clear();
 
@@ -1271,7 +1269,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         }
 
 
-        public void LoadAllApplicationRoles()
+        private void LoadAllApplicationRoles()
         {
             _applicationRoleCollection.Clear();
 
@@ -1372,7 +1370,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void LoadSettings()
+        private void LoadSettings()
         {
 			//using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			//{
@@ -1451,9 +1449,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             var retList = new List<ISameUserCredentialOnOther>();
             if (_validateUserCredentialsCollection.Count > 0)
             {
-                var sameUserCredentialOnOtherChecker =
-                    new SameUserCredentialOnOtherChecker(new PersonRepository(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork()));
-                retList.AddRange(sameUserCredentialOnOtherChecker.CheckConflictsBeforeSave(_validateUserCredentialsCollection));
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    var rep = new PersonRepository(uow);
+                    var sameUserCredentialOnOtherChecker =
+                        new SameUserCredentialOnOtherChecker(rep);
+                    retList.AddRange(
+                        sameUserCredentialOnOtherChecker.CheckConflictsBeforeSave(_validateUserCredentialsCollection));
+                }
             }
             return retList;
         }
@@ -1501,7 +1504,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _newPersonAvailabilityCollection.Clear();
         }
 
-        public void LoadAllAbsence()
+        private void LoadAllAbsence()
         {
             _absenceCollection.Clear();
 
@@ -1509,7 +1512,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _absenceCollection.AddRange(absenceRepository.LoadAllSortByName());
         }
 
-        public void GetAbsenceForPersonAccounts()
+        private void GetAbsenceForPersonAccounts()
         {
             if ((_absenceCollection != null) && (_absenceCollection.Count > 0))
             {
@@ -1534,7 +1537,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         }
 
-        public void GetParentSchedulePeriods(IPerson person, DateOnly selectedDateTime)
+        private void GetParentSchedulePeriods(IPerson person, DateOnly selectedDateTime)
         {
             var schedulePeriodModel = new SchedulePeriodModel(selectedDateTime, person,_commonNameDescription);
             _schedulePeriodGridViewCollection.Add(schedulePeriodModel);
@@ -1548,7 +1551,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 //if the today is larger than the largest item in the collection 
                 //or smaller than the smallest item in the collection, there is no point in having the current item.
                 //therefore null is returned.
-                if (personRotationCollection[personRotationCollection.Count - 1].StartDate.Date > _selectedDate)
+                if (personRotationCollection[personRotationCollection.Count - 1].StartDate.Date > SelectedDate)
                 {
                     return null;
                 }
@@ -1557,7 +1560,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 //than today, should be the current person rotation.
                 foreach (IPersonRotation rotation in personRotationCollection)
                 {
-                    if (rotation.StartDate <= _selectedDate)
+                    if (rotation.StartDate <= SelectedDate)
                         return rotation;
                 }
                 return null;
@@ -1573,7 +1576,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 //if the today is larger than the largest item in the collection 
                 //or smaller than the smallest item in the collection, there is no point in having the current item.
                 //therefore null is returned.
-                if (personAvailabilityCollection[personAvailabilityCollection.Count - 1].StartDate.Date > _selectedDate)
+                if (personAvailabilityCollection[personAvailabilityCollection.Count - 1].StartDate.Date > SelectedDate)
                 {
                     return null;
                 }
@@ -1581,7 +1584,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 //than today, should be the current person rotation.
                 foreach (IPersonAvailability availability in personAvailabilityCollection)
                 {
-                    if (availability.StartDate.Date <= _selectedDate)
+                    if (availability.StartDate.Date <= SelectedDate)
                         return availability;
                 }
                 return null;
@@ -1636,7 +1639,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _validatePasswordPolicy;}
         }
 
-        public void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
+        private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
         {
             //fel här. kan vara flera. fråga estländarna.
             IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
@@ -1653,7 +1656,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         	foreach (IPerson person in _filteredPersonCollection)
         	{
 				//fel här. kan vara flera. fråga sydkoreanerna
-        		IAccount account = AllAccounts[person].Find(_selectedDate).FirstOrDefault();
+        		IAccount account = AllAccounts[person].Find(SelectedDate).FirstOrDefault();
         		// Gets the person account adoptor using the person data and the selcted date
         		IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account, _commonNameDescription);
         		_personAccountGridViewAdaptorCollection.Add(personAccountModel);
@@ -1753,7 +1756,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
         	foreach (IPerson person in _filteredPersonCollection)
         	{
-        		IAccount account = AllAccounts[person].Find(selectedType, _selectedDate);
+        		IAccount account = AllAccounts[person].Find(selectedType, SelectedDate);
         		if (account != null)
         		{
         			if ((account.Owner.Absence != null) && (account.Owner.Absence != selectedType))
@@ -1794,6 +1797,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void SetSortedSchedulePeriodFilteredList(IEnumerable<SchedulePeriodModel> result)
         {
             _schedulePeriodGridViewCollection = result.ToList();
+        }
+
+        public void PersistAll()
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                UnitOfWork.PersistAll();
+                uow.PersistAll();
+            }
         }
 
         #region IDisposable Members

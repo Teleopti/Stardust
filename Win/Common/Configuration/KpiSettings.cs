@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridControl1.Rows.HeaderCount = 0;
             // Grid must have a Header column
             gridColumns.Add(new SFGridRowHeaderColumn<IKpiTarget>(string.Empty));
-            gridColumns.Add(new SFGridDescriptionNameColumn<IKpiTarget>("Team.SiteAndTeam", UserTexts.Resources.Team));
+            gridColumns.Add(new SFGridReadOnlyTextColumn<IKpiTarget>("Team.SiteAndTeam", UserTexts.Resources.Team));
             gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("TargetValue", UserTexts.Resources.Target, null, "NumericCell",30));
             gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("LowerThanMinColor", UserTexts.Resources.Color, null));
             gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MinValue", "<", null, "NumericCell", 30));

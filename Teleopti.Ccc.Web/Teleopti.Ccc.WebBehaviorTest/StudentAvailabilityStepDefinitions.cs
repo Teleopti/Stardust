@@ -24,41 +24,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIViewStudentAvailability()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoStudentAvailability();
+			Navigation.GotoAvailability();
 			_page = Browser.Current.Page<StudentAvailabilityPage>();
-		}
-
-		[When(@"I select an editable day without student availability")]
-		public void WhenISelectAnEditableDayWithoutStudentAvailability()
-		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.SelectCalendarCellForDateByClick(date);
-		}
-
-		[When(@"I click the edit button")]
-		public void WhenIClickEditButton()
-		{
-			_page.EditButton.EventualClick();
 		}
 
 		[When(@"I navigate to the student availability page")]
 		public void WhenINavigateToTheStudentAvailabilityPage()
 		{
-			Navigation.GotoStudentAvailability();
-		}
-
-		[When(@"I select the day with student availability")]
-		public void WhenISelectTheDayWithStudentAvailability()
-		{
-			var date = UserFactory.User().UserData<StudentAvailability>().Date;
-			_page.SelectCalendarCellForDateByClick(date);
-		}
-
-		[When(@"I select a day with student availability")]
-		public void WhenISelectADayWithStudentAvailability()
-		{
-			var date = UserFactory.User().UserData<StudentAvailability>().Date;
-			_page.SelectCalendarCellForDateByClick(date);
+			Navigation.GotoAvailability();
 		}
 
 		[Then(@"I should see the student availability period information")]
@@ -70,34 +43,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
 			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
 			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
-		}
-
-		[Then(@"I should see the new student availability values in the calendar")]
-		public void ThenIShouldSeeTheNewStudentAvailabilityValuesInTheCalendar()
-		{
-			var date = UserFactory.User().UserData<StudentAvailability>().Date;
-			cellShouldContainInputValues(date);
-			Navigation.GotoStudentAvailability(date);
-			cellShouldContainInputValues(date);
-		}
-
-		[Then(@"I should see the student availability in the calendar")]
-		public void ThenIShouldSeeTheStudentAvailabilityInTheCalendar()
-		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			EventualAssert.That(() => _page.CalendarCellForDate(date).ClassName, Is.StringContaining("unvalidated"));
-			cellShouldContainInputValues(date);
-			Navigation.GotoStudentAvailability(date);
-			cellShouldContainInputValues(date);
-		}
-
-		[Then(@"the student availability values in the calendar should disappear")]
-		public void ThenTheStudentAvailabilityValuesInTheCalendarShouldDisappear()
-		{
-			var data = UserFactory.User().UserData<StudentAvailability>();
-
-			var cell = _page.CalendarCellForDate(data.Date);
-			Assert.That(() => cell.Child(QuicklyFind.ByClass("day-content")).Text, Is.Null.After(5000, 10));
 		}
 
 		[Then(@"the student availabilty calendar should be editable")]
@@ -119,12 +64,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 												_page.SelectCalendarCellByClick(cell);
 												cell.ClassName.Should().Not.Contain("ui-selected");
 			                            	});
-		}
-
-		[Then(@"the calendar is disabled")]
-		public void ThenTheCalendarIsDisabled()
-		{
-			Assert.That(() => Browser.Current.Div("modal-disable").Style.Display, Is.Not.EqualTo("none").After(5000, 10));
 		}
 
 		[Then(@"I should not be able to see student availability link")]
@@ -149,14 +88,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var studentAvailabilityPeriod = UserFactory.User().UserData<StudentAvailabilityOpenNextMonthWorkflowControlSet>().StudentAvailabilityPeriod;
 			var displayedPeriod = UserFactory.User().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(studentAvailabilityPeriod.StartDate);
 			calendarShouldDisplayPeriod(displayedPeriod);
-		}
-
-		[Then(@"I should see a message saying I have given an invalid time value")]
-		public void ThenIShouldSeeAMessageSayingIHaveGivenAnInvalidTimeValue()
-		{
-			EventualAssert.That(() => _page.ValidationError.Exists, Is.True);
-			EventualAssert.That(() => _page.ValidationError.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "not-a")));
-			EventualAssert.That(() => _page.ValidationError.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "-time")));
 		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)

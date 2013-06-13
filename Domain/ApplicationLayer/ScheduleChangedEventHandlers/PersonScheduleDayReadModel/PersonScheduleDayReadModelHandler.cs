@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
@@ -19,8 +19,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ProjectionChangedEvent @event)
+		{
+			createReadModel(@event);
+		}
+
+		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			createReadModel(@event);
 		}
@@ -33,22 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
 			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
-			if (!message.IsInitialLoad)
-			{
-				_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
-			}
-
 			var readModels = _scheduleDayReadModelsCreator.GetReadModels(message);
-			foreach (var readModel in readModels)
-			{
-				_scheduleDayReadModelRepository.SaveReadModel(readModel);
-			}
-		}
-
-		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
-		{
-			createReadModel(@event);
+			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.BusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
 		}
 	}
-
 }

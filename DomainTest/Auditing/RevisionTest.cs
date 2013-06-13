@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -20,11 +19,9 @@ namespace Teleopti.Ccc.DomainTest.Auditing
         public void ShouldSetRevisionData()
         {
             var person = PersonFactory.CreatePerson("person1");
-            var dateTime = DateTime.UtcNow;
-            _target.SetRevisionData(person, dateTime);
+            _target.SetRevisionData(person);
 
             Assert.That(person, Is.EqualTo(_target.ModifiedBy));
-            Assert.That(_target.ModifiedAt, Is.EqualTo(dateTime));
         }
 
         [Test]

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ContractSchedule { get; set; }
 		public string Team { get; set; }
 		public string RuleSetBag { get; set; }
+		public string BudgetGroup { get; set; }
+		public string WorkflowControlSet { get; set; }
 
 		public PersonPeriodConfigurable() {
 			Contract = GlobalDataContext.Data().Data<CommonContract>().Contract.Description.Name;
@@ -52,6 +55,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					.LoadAll()
 					.Single(x => x.Description.Name == RuleSetBag);
 				personPeriod.RuleSetBag = bag;
+			}
+
+			if (!string.IsNullOrEmpty(BudgetGroup))
+			{
+				var budgetGroupRepository = new BudgetGroupRepository(uow);
+				var budgetGroup = budgetGroupRepository.LoadAll().Single(b => b.Name == BudgetGroup);
+				personPeriod.BudgetGroup = budgetGroup;
+			}
+
+			if (!string.IsNullOrEmpty(WorkflowControlSet))
+			{
+				var workflowControlSetRepository = new WorkflowControlSetRepository(uow);
+				var workflowControlSet = workflowControlSetRepository.LoadAll().Single(b => b.Name == WorkflowControlSet);
+				user.WorkflowControlSet = workflowControlSet;
 			}
 
 			user.AddPersonPeriod(personPeriod);

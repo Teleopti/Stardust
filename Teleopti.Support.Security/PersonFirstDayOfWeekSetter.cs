@@ -10,7 +10,7 @@ namespace Teleopti.Support.Security
     public class PersonFirstDayOfWeekSetter : ICommandLineCommand
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Execute(CommandLineArgument commandLineArgument)
+        public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
             using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
@@ -23,13 +23,13 @@ namespace Teleopti.Support.Security
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 //Check version
                 SqlCommand command;
@@ -41,7 +41,7 @@ namespace Teleopti.Support.Security
                     {
                         Console.WriteLine("The Persons are up to date.");
                         Thread.Sleep(TimeSpan.FromSeconds(2));
-                        return;
+                        return 1;
                     }
                 }
 
@@ -116,14 +116,13 @@ namespace Teleopti.Support.Security
                     if (transaction != null)
                         transaction.Rollback();
                     Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
+	                return 1;
                 }
-                finally
-                {
-                    // done with using
-                    //connection.Dispose();
-                }
+
                 Thread.Sleep(TimeSpan.FromSeconds(2));
             }
+
+	        return 0;
         }
 
         private static int getFirstDayFromCulture(int culture)

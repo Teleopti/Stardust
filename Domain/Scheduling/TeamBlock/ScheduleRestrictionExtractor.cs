@@ -76,9 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{
-						var assignment = schedulePart.AssignmentHighZOrder();
-						if (assignment == null) continue;
-						var mainShift = assignment.MainShift;
+						var mainShift = schedulePart.GetEditorShift();
 						if (mainShift == null) continue;
 						if (restriction.CommonMainShift == null)
 						{
@@ -114,15 +112,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						var assignment = schedulePart.AssignmentHighZOrder();
 						if (assignment == null) continue;
-						var mainShift = assignment.MainShift;
-						if (mainShift == null) continue;
+						var shiftCategory = assignment.ShiftCategory;
+						if (shiftCategory == null)
+							continue;
 						if (restriction.ShiftCategory == null)
 						{
-							restriction.ShiftCategory = mainShift.ShiftCategory;
+							restriction.ShiftCategory = shiftCategory;
 						}
 						else
 						{
-							if (restriction.ShiftCategory != mainShift.ShiftCategory)
+							if (restriction.ShiftCategory != shiftCategory)
 								return null;
 						}
 					}

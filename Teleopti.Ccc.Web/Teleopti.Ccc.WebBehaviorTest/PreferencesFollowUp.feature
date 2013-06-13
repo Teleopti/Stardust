@@ -42,7 +42,6 @@ Scenario: See preference on scheduled day
 	| Preference | Late       |
 	And I have a shift with
 	| Field          | Value            |
-	| Date           | 2012-10-02       |
 	| Shift category | Late             |
 	| StartTime      | 2012-10-02 10:00 |
 	| EndTime        | 2012-10-02 20:00 |
@@ -60,7 +59,6 @@ Scenario: See extended indication on preference on scheduled day
 	| End time maximum | 20:30      |
 	And I have a shift with
 	| Field          | Value            |
-	| Date           | 2012-10-02       |
 	| Shift category | Late             |
 	| StartTime      | 2012-10-02 10:00 |
 	| EndTime        | 2012-10-02 20:00 |
@@ -79,7 +77,6 @@ Scenario: Display extended preference panel for preference on scheduled day
 	| End time maximum | 20:30      |
 	And I have a shift with
 	| Field          | Value            |
-	| Date           | 2012-10-02       |
 	| Shift category | Late             |
 	| StartTime      | 2012-10-02 10:00 |
 	| EndTime        | 2012-10-02 20:00 |
@@ -98,7 +95,6 @@ Scenario: Display must have for preference on scheduled day
 	| Must have  | true       |
 	And I have a shift with
 	| Field          | Value            |
-	| Date           | 2012-10-02       |
 	| Shift category | Late             |
 	| StartTime      | 2012-10-02 10:00 |
 	| EndTime        | 2012-10-02 20:00 |

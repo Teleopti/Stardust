@@ -23,8 +23,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
             //Get the first layer in the mainshift..
-            ILayer<IActivity> firstLayer = _schedulePart.AssignmentHighZOrder().MainShift.LayerCollection.First();
-            Assert.IsTrue(_schedulePart.AssignmentHighZOrder().MainShift.LayerCollection.Contains(firstLayer),"Verify contains the layer");
+#pragma warning disable 612,618
+	        var mainShift = _schedulePart.AssignmentHighZOrder().ToMainShift();
+#pragma warning restore 612,618
+            ILayer<IActivity> firstLayer = mainShift.LayerCollection.First();
+            Assert.IsTrue(mainShift.LayerCollection.Contains(firstLayer),"Verify contains the layer");
             IScheduleDay result = _target.Remove(_schedulePart, firstLayer);
             Assert.AreEqual(0, result.PersonAssignmentCollection().Count);
             //Assert.IsFalse(result.AssignmentHighZOrder().MainShift.LayerCollection.Contains(firstLayer), "The layer should have been removed");

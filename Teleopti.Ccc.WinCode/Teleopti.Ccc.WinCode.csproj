@@ -101,11 +101,11 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.3\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -454,6 +454,7 @@
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparer.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
+    <Compile Include="PeopleAdmin\IPersonTimeZoneView.cs" />
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
@@ -467,6 +468,7 @@
     <Compile Include="PeopleAdmin\Commands\PersonFinderPreviousCommand.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
+    <Compile Include="PeopleAdmin\PersonTimeZonePresenter.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataRangeLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommand.cs" />
@@ -548,6 +550,13 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AgentPreferenceAddCommand.cs" />
+    <Compile Include="Scheduling\AgentPreferenceCanCreateResult.cs" />
+    <Compile Include="Scheduling\AgentPreferenceData.cs" />
+    <Compile Include="Scheduling\AgentPreferenceDayCreator.cs" />
+    <Compile Include="Scheduling\AgentPreferenceEditCommand.cs" />
+    <Compile Include="Scheduling\AgentPreferencePresenter.cs" />
+    <Compile Include="Scheduling\AgentPreferenceRemoveCommand.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractor.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailPresenter.cs" />
@@ -560,6 +569,11 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailViewCellModel.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityDayCreator.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityRemoveCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
@@ -569,6 +583,9 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\IAgentPreferenceView.cs" />
+    <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
+    <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
@@ -1127,7 +1144,6 @@
     <Compile Include="PeopleAdmin\IPersonRoleView.cs" />
     <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
     <Compile Include="Presentation\AuthorizationEntityListBoxPresenter.cs" />
-    <Compile Include="Scheduling\AgentAssignmentLayer.cs" />
     <Compile Include="Scheduling\PersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />

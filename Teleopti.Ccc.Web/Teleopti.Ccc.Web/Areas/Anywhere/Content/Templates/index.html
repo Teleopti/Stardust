@@ -23,8 +23,15 @@
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/person-schedule.css" />
         
         <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+        
+	    <!-- 
+	        configures require.js cache busting.
+            increment when having cache problems...
+            make this use some sort of build number?
+        -->
+	    <script>var require = { urlArgs: 'bust=v3' };</script>
 
-		<script data-main="Areas/Anywhere/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
+        <script data-main="Areas/Anywhere/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
 		
 	</head>
 	<body>

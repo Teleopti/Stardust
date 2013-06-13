@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
 
+			target.Handle(new PersonAbsenceRemovedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new FullDayAbsenceAddedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleChangedEvent {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});

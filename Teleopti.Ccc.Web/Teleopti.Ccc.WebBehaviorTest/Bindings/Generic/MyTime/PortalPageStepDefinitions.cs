@@ -1,8 +1,5 @@
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
@@ -12,10 +9,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see licensed to information")]
 		public void ThenIShouldSeeLicensedToInformation()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-
-			EventualAssert.WhenElementExists(page.LicensedToLabel, c => c.Text, Contains.Substring(UserTexts.Resources.LicensedToColon));
-			EventualAssert.WhenElementExists(page.LicensedToText, c => c.Text, Contains.Substring("Teleopti RD NOT for production use!"));
+			Browser.Interactions.AssertContains("#licensed-to-label", UserTexts.Resources.LicensedToColon);
+			Browser.Interactions.AssertContains("#licensed-to-text", "Teleopti RD NOT for production use!");
 		}
 	}
 }

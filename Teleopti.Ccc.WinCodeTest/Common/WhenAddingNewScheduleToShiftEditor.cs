@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private ShiftEditorViewModel _shifteditorViewModel;
         private ICreateLayerViewModelService _service;
         private LayerViewModelCollection _collection;
+	    private IEditableShiftMapper _editableShiftMapper;
 
         [SetUp]
         public void Setup()
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _eventAggregator = new EventAggregator();
             _service = _mocker.StrictMock<ICreateLayerViewModelService>();
             _collection = new LayerViewModelCollection(_eventAggregator, _service);
-            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true);
+	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
+            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, _editableShiftMapper);
         }
 
         [Test,RequiresSTA]

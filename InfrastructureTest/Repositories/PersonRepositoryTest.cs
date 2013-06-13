@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -838,14 +838,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(nonValidPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson3);
 
-			IEnumerable<IPair<Guid>> res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			var res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			
 			//1 pers med ett skill
 			Assert.AreEqual(1, res.Count());
-			foreach (IPair<Guid> pair in res)
+			foreach (var pair in res)
 			{
-				Assert.AreEqual(pair.First, validPerson.Id.Value);
-				Assert.AreEqual(pair.Second, skillWithValidDays.Id.Value);
+				Assert.AreEqual(pair.Item1, validPerson.Id.Value);
+				Assert.AreEqual(pair.Item2, skillWithValidDays.Id.Value);
 			}
 		}
 
@@ -910,14 +910,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(validPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);
 
-			IList<IPair<Guid>> res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 5, 2001, 1, 7)).ToList();
+			var res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 5, 2001, 1, 7)).ToList();
 			
 			Assert.AreEqual(3, res.Count);
-			IPair<Guid> pair = new Pair<Guid>(validPerson1.Id.Value, skillWithValidDays1.Id.Value);
+			var pair = new Tuple<Guid, Guid>(validPerson1.Id.Value, skillWithValidDays1.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
-			pair = new Pair<Guid>(validPerson2.Id.Value, skillWithValidDays1.Id.Value);
+			pair = new Tuple<Guid, Guid>(validPerson2.Id.Value, skillWithValidDays1.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
-			pair = new Pair<Guid>(nonValidPerson1.Id.Value, skillWithValidDays2.Id.Value);
+			pair = new Tuple<Guid, Guid>(nonValidPerson1.Id.Value, skillWithValidDays2.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
 			
 		}
@@ -1651,6 +1651,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(UnitOfWork).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToAlterTimeZoneInDb()
+		{
+			//need to run stuff infrastructure\systemcheck\agentdayconverter instead! roger, micke & david knows more!
+
+			var pRep = new PersonRepository(UnitOfWork);
+			var snubbe = new Person();
+			snubbe.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(snubbe);
+
+			var loadedSnubbe = pRep.Get(snubbe.Id.Value);
+			loadedSnubbe.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+			PersistAndRemoveFromUnitOfWork(loadedSnubbe);
+
+			pRep.Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone()
+			    .Should().Be.EqualTo(TimeZoneInfo.Utc);
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -13,19 +14,23 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-02-25
     /// </remarks>
     public interface IPersonAssignment : IPersistableScheduleData, 
+											IAggregateRootWithEvents,
                                             IChangeInfo,
                                             IBelongsToBusinessUnit,
                                             IRestrictionChecker<IPersonAssignment>, 
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
-        /// <summary>
-        /// Gets the main shift.
-        /// </summary>
-        /// <value>The main shift.</value>
-        IMainShift MainShift { get; }
+			void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory);
 
-        /// <summary>
+	    /// <summary>
+	    /// Gets the main shift.
+	    /// </summary>
+	    /// <returns>The main shift.</returns>
+	    [Obsolete("Mainshift will not be supported in near future")]
+	    IMainShift ToMainShift();
+
+	    /// <summary>
         /// Gets the personal shift collection.
         /// </summary>
         /// <value>The personal shift collection.</value>
@@ -36,13 +41,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="personalShift">The personal shift.</param>
         void AddPersonalShift(IPersonalShift personalShift);
-
-        /// <summary>
-        /// Inserts  a personal shift.
-        /// </summary>
-        /// <param name="personalShift"></param>
-        /// <param name="index"></param>
-        void InsertPersonalShift(IPersonalShift personalShift, int index);
 
         /// <summary>
         /// Clears the personal shift.
@@ -62,16 +60,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        /// <param name="personAssignmentRepository">The uow.</param>
-        /// <remarks>
-        /// Repository must be injected to let nhibernate delete
-        /// unreferenced mainshift from db.
-        /// NHibernate doesn't support "all-delete-orphan" on
-        /// one-to-one references.
-        /// Remove this injection later when/if this is supported
-        /// out-of-the-box.
-        /// </remarks>
-        void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository);
+        void ClearMainShiftLayers();
 
         /// <summary>
         /// Sets the main shift.
@@ -94,7 +83,15 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ReadOnlyCollection<IOvertimeShift> OvertimeShiftCollection { get; }
 
-        /// <summary>
+			/// <summary>
+			/// The date
+			/// </summary>
+	    DateOnly Date { get; }
+
+	    IShiftCategory ShiftCategory { get; }
+	    IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers { get; }
+
+	    /// <summary>
         /// Adds the over time shift.
         /// </summary>
         /// <param name="overtimeShift">The over time shift.</param>
@@ -113,5 +110,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-05
         /// </remarks>
         void RemoveOvertimeShift(IOvertimeShift overtimeShift);
+
+		/// <summary>
+		/// Publish the ScheduleChangedEvent
+		/// </summary>
+		void ScheduleChanged(string dataSource);
     }
 }

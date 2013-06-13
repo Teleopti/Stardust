@@ -280,7 +280,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 view.Grid.CellDoubleClick += gridWorksheet_CellDoubleClick;
                 view.Grid.ClipboardCanCopy += gridWorksheet_ClipboardCanCopy;
                 view.Grid.ClipboardCanPaste += Grid_ClipboardCanPaste;
-                view.OnEventMessageHandlerChanged += view_OnEventMessageHandlerChanged;
             }
 
             splitContainerWorksheet.Panel1.Controls.Add(view.Grid);
@@ -330,18 +329,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             _filteredPeopleHolder.SelectedPersonAccountAbsenceType = currentType;
             return currentType;
-        }
-
-        private void view_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action<object, EventMessageArgs>(view_OnEventMessageHandlerChanged), sender, e);
-            }
-            else
-            {
-                RefreshAfterMessageBroker();
-            }
         }
 
         private void RefreshAfterMessageBroker()
@@ -552,13 +539,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _globalEventAggregator.GetEvent<PeopleSaved>().Publish("");
         }
 
-		private void notifyOnOtherThread()
-		{
-			var oThread = new Thread(notifySaveChanges);
-			// Start the thread
-			oThread.Start();
-		}
-
         private void notifyForceClose()
         {
             var handler = PeopleWorksheetForceClose;
@@ -570,12 +550,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         {
             try
             {
-                _filteredPeopleHolder.UnitOfWork.PersistAll();
+                _filteredPeopleHolder.PersistAll();
 
                 //Reset Add new records nold behaviour.
                 _filteredPeopleHolder.ResetBoldProperty();
 
-				notifyOnOtherThread();
+				notifySaveChanges();
             }
             catch (TooManyActiveAgentsException e)
             {
@@ -628,10 +608,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _filteredPeopleHolder.UnitOfWork = uow;
 
             _filteredPeopleHolder.UnitOfWork.Reassociate(_filteredPeopleHolder.RuleSetBagCollection);
-            _filteredPeopleHolder.LoadTeams();
-            _filteredPeopleHolder.LoadAllApplicationRoles();
-            _filteredPeopleHolder.LoadAllOptionalColumns();
-            _filteredPeopleHolder.LoadAllApplicationRoles();
+            _filteredPeopleHolder.LoadIt();
             //Copy filtered people collection.
             IList<IPerson> filteredPeopleCollection =
                 new List<IPerson>(_filteredPeopleHolder.FilteredPersonCollection);
@@ -1495,11 +1472,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void PeopleWorksheet_FormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach (KeyValuePair<ViewType, GridViewBase> view in _gridConstructor.ViewCache)
-            {
-                view.Value.UnregisterForMessageBrokerEvents();
-            }
-
             unregisterEventsForFormKill();
 
             DisposeAllChildGrids();
@@ -1708,7 +1680,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             Cursor = Cursors.Default;
         }
 
-        
+		private void toolStripButtonTimeZoneClick(object sender, EventArgs e)
+		{
+			if (_gridConstructor.View.Type == ViewType.GeneralView)
+			{
+				((GeneralGridView)_gridConstructor.View).OnToolStripTimeZoneButtonClick();
+			}
+		}   
     }
 
 }

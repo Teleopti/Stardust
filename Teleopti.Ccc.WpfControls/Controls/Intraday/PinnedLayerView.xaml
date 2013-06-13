@@ -2,11 +2,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:WpfConverters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
+	xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
     xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-           GuiHelpers:HelpProvider.HelpString="IntradayView+IntradayPinUpWindow"
+	xmlns:converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
+	GuiHelpers:HelpProvider.HelpString="IntradayView+IntradayPinUpWindow"
     Height="300" Width="300" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
@@ -18,8 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Converters -->
-            <Converters:PersonNameConverter x:Key="personNameConverter"/>
-            <Converters:TimeSpanRoundingConverter x:Key="timeSpanRoundingConverter"/>
+			<Converters:ElapsedTimeConverter x:Key="ElapsedTimeConverter"/>
             <Converters:SimpleConverter x:Key="simpleConverter"/>
 
             <Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaSpecialHeaderStyle">
@@ -54,7 +53,9 @@
                 <Controls:DataGrid.Columns>
                 <Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=UserTexts:Resources.Name}" 
-                                             Width="Auto"                                    
+                                             Width="Auto"
+											 CanUserSort="True"
+											 SortMemberPath="CommonNameDescription"
                                              Binding="{Binding Path=CommonNameDescription, Mode=OneWay}">
                    
                 </Controls:DataGridTextColumn>
@@ -62,16 +63,20 @@
                 <Controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}"
                                              Header="{x:Static Member=UserTexts:Resources.Time}" 
                                              Width="Auto"
-                                             SortMemberPath="SortTime"
-                                             Binding="{Binding Path=AlarmLayer.Period, Converter={StaticResource timeSpanRoundingConverter}, StringFormat=T,Mode=OneWay}"/>
+											 CanUserSort="True"
+                                             SortMemberPath="EnteredCurrentState"
+                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter},Mode=OneWay}"/>
 
                     <!--Pinned Column-->
-                    <Controls:DataGridTemplateColumn Width="*" SortMemberPath="IsPinned" CanUserSort="True" HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static Member=UserTexts:Resources.Pin}" >
-                       
-                        <Controls:DataGridTemplateColumn.CellTemplate>
+                    <Controls:DataGridTemplateColumn 
+						Width="*" 
+						SortMemberPath="IsPinned"
+						CanUserSort="True" 
+						HeaderStyle="{StaticResource HeaderStyle}" 
+						Header="{x:Static Member=UserTexts:Resources.Pin}" >
+                       <Controls:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                
-                                <!--<Grid Height="10" Width="10">-->
+                              <!--<Grid Height="10" Width="10">-->
                                 <!--<Border Width="10" Height="10" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{StaticResource Raptor_CheckIcon}" Visibility="{Binding Path=IsPinned,Converter={StaticResource visibilityConverter}}"/>-->
                                 <CheckBox IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource simpleConverter}}" Opacity="1" Cursor="Hand"/>
                                 <!--</Grid>-->

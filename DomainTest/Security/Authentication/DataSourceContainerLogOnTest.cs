@@ -44,21 +44,17 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             var unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             var unitOfWork = mocks.StrictMock<IUnitOfWork>();
             var person = mocks.StrictMock<IPerson>();
-	        var rep = mocks.DynamicMock<IPersonRepository>();
-            using(mocks.Record())
+	        using(mocks.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Twice();
-                Expect.Call(dataSource.Application).Return(unitOfWorkFactory).Repeat.Twice();
+                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
                 Expect.Call(checkLogOn.CheckLogOn(unitOfWork, "robink", "topsecret")).Return(new AuthenticationResult{Person = person});
-	            Expect.Call(person.Id).Return(Guid.NewGuid());
-	            Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(rep);
-	            Expect.Call(rep.SaveLoginAttempt(new LoginAttemptModel())).IgnoreArguments().Return(1);
-                Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.Twice();
-                Expect.Call(unitOfWork.Dispose).Repeat.Twice();
+	            Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
+                Expect.Call(unitOfWork.Dispose);
             }
             using (mocks.Playback())
             {
-                var authenticationResult = target.LogOn("robink","topsecret", "172.168.1.1");
+                var authenticationResult = target.LogOn("robink","topsecret");
                 Assert.AreEqual(person,target.User);
                 Assert.AreEqual(person, authenticationResult.Person);
             }

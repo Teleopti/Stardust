@@ -23,14 +23,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("endTimeMaximum", typeof(long));
             table.Columns.Add("WorkTimeMinimum", typeof(long));
             table.Columns.Add("WorkTimeMaximum", typeof(long));
-            table.Columns.Add("preference_accepted", typeof(int));
-            table.Columns.Add("preference_declined", typeof(int));
+            table.Columns.Add("preference_fulfilled", typeof(int));
+            table.Columns.Add("preference_unfulfilled", typeof(int));
             table.Columns.Add("business_unit_code", typeof(Guid));
             table.Columns.Add("datasource_id", typeof(int));
             table.Columns.Add("insert_date", typeof(DateTime));
             table.Columns.Add("update_date", typeof(DateTime));
             table.Columns.Add("datasource_update_date", typeof(DateTime));
         	table.Columns.Add("activity_code", typeof (Guid));
+            table.Columns.Add("absence_code", typeof(Guid));
+            table.Columns.Add("must_have", typeof (int));
         }
     }
 }

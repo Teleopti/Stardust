@@ -1,0 +1,10 @@
+Analytics;False
+Broker;True
+Broker.backplane;True
+PMService;True
+RTA;True
+SDK;False
+Web;False
+Client;False
+MyTime;False
+TeleoptiCCC;True

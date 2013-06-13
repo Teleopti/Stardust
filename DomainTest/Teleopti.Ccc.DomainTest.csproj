@@ -131,6 +131,7 @@
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
+    <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CoverageTests.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
     <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilderTest.cs" />
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
+    <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreatorTest.cs" />
@@ -321,7 +323,6 @@
     <Compile Include="Optimization\IntradayOptimizerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
-    <Compile Include="Optimization\KeepRestrictionCreatorTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
@@ -348,6 +349,12 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
+    <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
@@ -487,7 +494,6 @@
     <Compile Include="Common\OptionalColumnValueTest.cs" />
     <Compile Include="Common\PairDictionaryFactoryTest.cs" />
     <Compile Include="Common\PairMatrixServiceTest.cs" />
-    <Compile Include="Common\PairTest.cs" />
     <Compile Include="Common\RootPersonGroupTest.cs" />
     <Compile Include="Common\ContainerTestClass.cs" />
     <Compile Include="Common\EntityContainerTest.cs">
@@ -614,7 +620,6 @@
     <Compile Include="ResourceCalculation\SwapServiceTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
-    <Compile Include="Scheduling\AbsenceAssignmentSimulatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleExceptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartServiceTest.cs" />
@@ -672,12 +677,11 @@
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />
-    <Compile Include="Scheduling\Rules\GapsInAssignmentRuleTest.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDayTest.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculatorTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeklyRestRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollectionTest.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRuleTest.cs" />
-    <Compile Include="Scheduling\Rules\NewLayerOwnerNeedsAtLeastOneLayerRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewMaxOneDayOffRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRuleTest.cs" />
@@ -837,6 +841,7 @@
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
+    <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
@@ -946,7 +951,6 @@
     <Compile Include="Forecasting\SkillTypePhoneTest.cs" />
     <Compile Include="Forecasting\QueueSourceTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Common\LayerSorterTest.cs" />
     <Compile Include="Helper\DateHelperTest.cs" />
     <Compile Include="Helper\PerformanceOutputTest.cs" />
     <Compile Include="Helper\SkillDayStaffHelperTest.cs" />
@@ -1045,7 +1049,6 @@
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecificationTest.cs" />
     <Compile Include="Scheduling\PersonDayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
-    <Compile Include="Scheduling\Assignment\GapsInAssignmentTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
     <Compile Include="Scheduling\Assignment\ShiftTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />

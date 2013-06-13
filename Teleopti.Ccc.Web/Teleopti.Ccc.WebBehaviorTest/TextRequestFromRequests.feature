@@ -56,9 +56,16 @@ Scenario: Edit text request
 	And I click the OK button
 	Then I should see the new text request values in the list
 
-Scenario: Delete text request
+Scenario: Delete new text request
 	Given I am an agent
 	And I have an existing text request
+	And I am viewing requests
+	When I click the text request's delete button
+	Then I should not see the text request in the list
+
+Scenario: Delete pending text request
+	Given I am an agent
+	And I have a pending text request
 	And I am viewing requests
 	When I click the text request's delete button
 	Then I should not see the text request in the list

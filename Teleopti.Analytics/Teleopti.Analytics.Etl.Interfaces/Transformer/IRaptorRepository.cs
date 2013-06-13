@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 {
@@ -25,10 +25,12 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int PersistAcdLogOnPerson(DataTable dataTable);
         int FillPersonDataMart(IBusinessUnit currentBusinessUnit);
         IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder);
+	    IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons);
         void TruncateSchedule();
         int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable);
 
         int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
+	    int FillIntradayScheduleDataMart(IBusinessUnit businessUnit);
         int FillScheduleContractDataMart(DateTimePeriod period);
         int PersistDate(DataTable dataTable);
         int FillDateDataMart();
@@ -47,6 +49,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IBusinessUnit> LoadBusinessUnit();
         int PersistBusinessUnit(DataTable dataTable);
         int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
         int FillDayOffDataMart(IBusinessUnit businessUnit);
         int PersistScheduleDayOffCount(DataTable dataTable);
 
@@ -119,7 +122,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         //Permission
         int PersistPermissionReport(DataTable dataTable);
         void TruncatePermissionReportTable();
-		int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit);
+		int FillPermissionDataMart(IBusinessUnit businessUnit);
         IList<MatrixPermissionHolder> LoadReportPermissions();
 
         int FillBridgeAcdLogOnPerson(IBusinessUnit businessUnit);
@@ -204,12 +207,27 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
     	ITimeZoneDim DefaultTimeZone { get; }
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
+		IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime);
 		int PersistRequest(DataTable dataTable);
+		void TruncateRequest();
     	int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayFactRequestMart(IBusinessUnit businessUnit);
     	int PerformPurge();
         int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit);
         ILicenseStatusUpdater LicenseStatusUpdater { get; }
         int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
+
+		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName);
+		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
+		int PersistScheduleChanged(DataTable dataTable);
+		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
+	    IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
+		IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
+	    int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
+		int PersistAvailability(DataTable dataTable);
+	    int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
+	    int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario);
     }
 }

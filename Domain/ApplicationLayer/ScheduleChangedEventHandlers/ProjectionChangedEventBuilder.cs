@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ProjectionChangedEventBuilder : IProjectionChangedEventBuilder
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) where T : ProjectionChangedEventBase, new()
 		{
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					switch (significantPart)
 					{
 						case SchedulePartView.MainShift:
-							var cat = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
+							var cat = scheduleDay.AssignmentHighZOrder().ShiftCategory;
 							eventScheduleDay.Label = cat.Description.ShortName;
 							eventScheduleDay.DisplayColor = cat.DisplayColor.ToArgb();
 							break;
@@ -58,6 +57,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							break;
 						case SchedulePartView.DayOff:
 							eventScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+							break;
+						case SchedulePartView.None:
+							eventScheduleDay.Label = "";
+							eventScheduleDay.NotScheduled = true;
 							break;
 					}
 

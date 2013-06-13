@@ -51,6 +51,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
+		public void ShouldReturnMatrixDataIfNotEnoughDaysOffEvenWithFlexibilityOnDaysOff()
+		{
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrixData.Matrix).Return(_matrix);
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				int targetDaysOff;
+				//int dayOffsNow;
+				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay> { scheduleDay1, scheduleDay2 };
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(true).OutRef(3, dayOffsNow);
+			}
+			using (_mocks.Playback())
+			{
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				Assert.AreEqual(1, result.Count);
+			}
+		}
+
+		[Test]
 		public void ShouldNotReturnMatrixDataIfTooManyDaysOff()
 		{
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();

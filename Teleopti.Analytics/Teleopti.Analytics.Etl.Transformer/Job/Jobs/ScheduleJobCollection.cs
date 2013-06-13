@@ -20,6 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
 			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));
+			Add(new StageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
@@ -45,9 +46,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactScheduleJobStep(jobParameters));
 			Add(new FactScheduleDayCountJobStep(jobParameters));
 			Add(new FactSchedulePreferenceJobStep(jobParameters));
+			Add(new FactAvailabilityJobStep(jobParameters));
 			Add(new DimWorkloadJobStep(jobParameters));
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
-			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters));
             Add(new FactRequestedDaysJobStep(jobParameters));
 		}

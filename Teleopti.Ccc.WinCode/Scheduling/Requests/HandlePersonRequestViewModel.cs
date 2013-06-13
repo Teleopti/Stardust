@@ -31,14 +31,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private IEventAggregator _eventAggregator;
 		private readonly IPersonRequestCheckAuthorization _authorization;
-		private bool setFilters=true;
-	    private readonly TimeZoneInfo _timeZoneInfo;
+		private readonly TimeZoneInfo _timeZoneInfo;
+		private static readonly object FilterLock = new object();
 
-	    public ListCollectionView PersonRequestViewModels
-		{ 
-			get;
-			private set;
-		}
+	    public ListCollectionView PersonRequestViewModels { get; set; }
 
 		public IList<PersonRequestViewModel> SelectedModels
 		{
@@ -86,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void UpdatePersonRequestViewModels()
 		{
-			foreach (PersonRequestViewModel personRequestViewModel in RequestViewModels)
+			foreach (var personRequestViewModel in RequestViewModels)
 			{
 				personRequestViewModel.NotifyStatusChanged();
 			}
@@ -104,27 +100,33 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void CreatePersonRequestViewModels(IList<IPersonRequest> personRequests,IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
 		{
-			setFilters = false;
-			RequestViewModels.Clear();
-			_showOnlymodels = new List<PersonRequestViewModel>();
-			foreach (IPersonRequest request in personRequests)
+			lock (FilterLock)
 			{
-				InsertPersonRequestViewModel(request, statusChecker, authorization);
+				RequestViewModels.Clear();
+				_showOnlymodels = new List<PersonRequestViewModel>();
+				foreach (var request in personRequests)
+				{
+					InsertPersonRequestViewModel(request, statusChecker, authorization);
+				}	
 			}
-			setFilters = true;
 			filterItems();
+		}
+
+		public void SortSourceList(IList<SortDescription> sortDescriptions)
+		{
+			var customSorter = new HandlePersonRequestComparer {SortDescriptions = sortDescriptions};
+			PersonRequestViewModels.CustomSort = customSorter;
 		}
 
 		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
 		{
-			if(authorization.HasViewRequestPermission(request) && !request.IsNew)
-			{
-                PersonRequestViewModel model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _timeZoneInfo);
-				ShiftTradeRequestOkByMeSpecification specification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
+			if (!authorization.HasViewRequestPermission(request) || request.IsNew) return;
 
-				if (!specification.IsSatisfiedBy(request))
-					AddPersonRequestViewModel(model);
-			}
+			var model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _timeZoneInfo);
+			var specification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
+
+			if (!specification.IsSatisfiedBy(request))
+				AddPersonRequestViewModel(model);
 		}
 
 		public void AddPersonRequestViewModel(PersonRequestViewModel personRequestViewModel)
@@ -136,14 +138,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			filterItems();
 		}
 
-		
-
-
 		public void FilterOutOlderThan(TimeSpan timeSpan)
 		{
 			_filterTimeSpan = timeSpan;
-			filterItems();
-		   
+			filterItems();  
 		}
 
 		/// <summary>
@@ -163,11 +161,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		private void filterItems()
 		{
-			if (setFilters)
+			lock (FilterLock)
 			{
-				PersonRequestViewModelFilter updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
-				ShowOnlyPersonRequestViewModelSpecification showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
-				RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));				
+				var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
+				var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
+				RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
+				//PersonRequestViewModels = RequestViewModels.CreateFilteredView(updatedOnFilter.Or(showOnlyfilter));
 			}
 		}
 

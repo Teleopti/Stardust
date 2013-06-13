@@ -48,14 +48,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory));
 
 			// add lunch
 			if (_withLunch)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
-				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
+#pragma warning disable 612,618
+				assignment.ToMainShift().LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
+#pragma warning restore 612,618
 			}
 
 			assignmentRepository.Add(assignment);

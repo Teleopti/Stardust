@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.WorkloadPages
             IUnitOfWork uow = _mocks.DynamicMock<IUnitOfWork>();
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Twice();
                 propertyPage1.Depopulate(null);
                 LastCall.IgnoreArguments().Return(true).Repeat.Once();
 
                 uow.PersistAll();
-                LastCall.Repeat.Once().Return(new List<IRootChangeInfo>());
+                LastCall.Repeat.Twice().Return(new List<IRootChangeInfo>());
             }
             using(_mocks.Playback())
             {

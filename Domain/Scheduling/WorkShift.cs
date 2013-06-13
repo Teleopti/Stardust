@@ -45,45 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual void Transform(IShift sourceShift)
-		{
-			foreach (ActivityLayer layer in sourceShift.LayerCollection)
-			{
-				transformOrAdd(layer);
-			}
-
-			if (sourceShift.LayerCollection.Count >= LayerCollection.Count) return;
-			for (var i = LayerCollection.Count - 1; i >= 0; i--)
-			{
-				var layer = findLayerByOrderIndex(sourceShift.LayerCollection, LayerCollection[i].OrderIndex);
-
-				if (layer == null)
-				{
-					LayerCollection.Remove(LayerCollection[i]);
-				}
-			}
-		}
-
-		private static ActivityLayer findLayerByOrderIndex(IEnumerable<ILayer<IActivity>> layerCollection, int orderIndex)
-		{
-			return layerCollection.Cast<ActivityLayer>().FirstOrDefault(layer => layer.OrderIndex == orderIndex);
-		}
-
-		private void transformOrAdd(ILayer<IActivity> sourceLayer)
-		{
-			var destLayer = findLayerByOrderIndex(LayerCollection, sourceLayer.OrderIndex);
-
-			if (destLayer != null)
-			{
-				destLayer.Transform(sourceLayer);
-			}
-			else
-			{
-				LayerCollection.Add((ActivityLayer)sourceLayer.Clone());
-			}
-		}
-
 		public virtual object Clone()
 		{
 			var retObj = EntityClone();
@@ -151,30 +112,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection()); }
         }
 
-        public IMainShift ToMainShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+        public IEditableShift ToEditorShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
             var utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate, localTimeZoneInfo);
             var nextUtcDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.AddDays(1), localTimeZoneInfo);
             if (nextUtcDate.AddMinutes(-1).Subtract(utcDateBaseDate) != TimeSpan.FromHours(24).Add(TimeSpan.FromMinutes(-1)))
                 return toMainShiftOnDaylightSavingChange(localMainShiftBaseDate, localTimeZoneInfo);
 
-            var ret = new MainShift(ShiftCategory);
+            var ret = new EditableShift(ShiftCategory);
             foreach (var layer in LayerCollection)
             {
                 var start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
                 var end = start.Add(layer.Period.ElapsedTime());
                 var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+                var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 
             return ret;
         }
 
-        private IMainShift toMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+		private IEditableShift toMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
-            var ret = new MainShift(ShiftCategory);
+            var ret = new EditableShift(ShiftCategory);
             var hoursToChange = 0;
             foreach (var layer in LayerCollection)
             {
@@ -198,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
                 var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+				var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 

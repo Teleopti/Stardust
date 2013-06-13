@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using NHibernate.Engine;
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (var xmlReader = new XmlTextReader(xmlString, XmlNodeType.Document, null))
 			{
 				XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
-				IDataSource res = target.Create(nhibernateXmlConfiguration, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+				IDataSource res = target.Create(nhibernateXmlConfiguration);
 				Assert.AreEqual("test", res.Application.Name);
 				Assert.AreEqual("matrixName", res.Statistic.Name);
 				Assert.IsNull(res.OriginalFileName);
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
 
-			IDataSource res = target.Create(nhibernateXmlConfiguration, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			IDataSource res = target.Create(nhibernateXmlConfiguration);
 			var sessionFactory = (ISessionFactoryImplementor)((NHibernateUnitOfWorkFactory)res.Application).SessionFactory;
 			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
 		}

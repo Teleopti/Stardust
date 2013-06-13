@@ -81,56 +81,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
             ITraceableRefreshService service = new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(), new RepositoryFactory());
 
-            _filteredPeopleHolder = new FilteredPeopleHolder(service, accounts)
-                                        {
-                                            SelectedDate = _personSelectorPresenter.SelectedDate,
-                                            UnitOfWork = uow
-                                        };
-
-
-
+            _filteredPeopleHolder.SetState(uow, service, accounts);
             _filteredPeopleHolder.SelectedDate = _personSelectorPresenter.SelectedDate;
-            
-            
-            // kör denna istället        
+                 
             _filteredPeopleHolder.LoadIt();
-
-            ////Load all person skills 
-            //_filteredPeopleHolder.LoadPersonSkills();
-            
-            ////Load all person LoadExternalLogOn 
-            //_filteredPeopleHolder.LoadExternalLogOn();
-
-            //_filteredPeopleHolder.LoadAllApplicationRoles();
-
-            ////Load all optional columns.
-            //_filteredPeopleHolder.LoadAllOptionalColumns();
-
-            //// LoadAll teams.
-            //_filteredPeopleHolder.LoadTeams();
-
-            ////Load Common agent name
-            //_filteredPeopleHolder.LoadSettings();
-
-            //_filteredPeopleHolder.LoadAllAbsence();
-            //_filteredPeopleHolder.GetAbsenceForPersonAccounts();
-
-            //Set Rotations.
             _filteredPeopleHolder.SetRotationCollection(_worksheetStateHolder.AllRotations);
-
-            //Set Rotations.
             _filteredPeopleHolder.SetAvailabilityCollection(_worksheetStateHolder.AllAvailabilities);
 
-            //Set All people.
-           // _filteredPeopleHolder.LoadPeople(groupPagePanelPeopleFilter.GroupPageHelper.PersonCollection);
-
-            
-
-            //Set filtered people & corresponding periods.
-            //_filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(groupPagePanelPeopleFilter.SelectedPersonCollection.ToList());
             _filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(_personSelectorPresenter.SelectedPersonGuids);
-
-            
         }
 
         private void ButtonAdvOkClick(object sender, EventArgs e)

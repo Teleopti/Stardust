@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				if (projectionModelInitialized && scheduleDayModelInitialized && personScheduleDayModelInitialized) return;
 				if (!hasAssignments()) return;
 
-				loadPeopleAndScenario();
+				loadPeopleAndScenario(message.StartDays, message.EndDays);
 
 				if (!projectionModelInitialized && !scheduleDayModelInitialized && !personScheduleDayModelInitialized)
 				{
@@ -83,11 +82,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			messages.ForEach(m => _serviceBus.Send(m));
 		}
 
-		private void loadPeopleAndScenario()
+		private void loadPeopleAndScenario(int startDays, int endDays)
 		{
 			_people = _personRepository.LoadAll();
 			_defaultScenario = _scenarioRepository.Current();
-			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(-31), DateOnly.Today.AddDays(3652));
+			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(startDays), DateOnly.Today.AddDays(endDays));
 			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 

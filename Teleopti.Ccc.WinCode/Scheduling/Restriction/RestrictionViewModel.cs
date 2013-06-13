@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             if (ret != null) ret.PersistableScheduleData = scheduleDataRestriction;
             return ret;
         }
-        // Henke hur gör man här när det kan finnas flera
+
         public static IRestrictionViewModel CreateViewModel(IRestrictionAltered altered, IStudentAvailabilityDay scheduleDataRestriction)
         {
             IRestrictionViewModel ret = null;

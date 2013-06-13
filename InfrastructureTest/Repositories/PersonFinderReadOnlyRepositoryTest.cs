@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             SkipRollback();
             var crit = new PersonFinderSearchCriteriaForTest(PersonFinderField.All, "hejhej", 10,
                                                              new DateOnly(2012, 1, 1), 1, 1);
-            _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.Find(crit);
             Assert.That(crit.TotalRows, Is.EqualTo(0));
         }
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			UnitOfWork.PersistAll();
 			SkipRollback();
-			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.UpdateFindPerson(new Guid[ ] {Guid.NewGuid()});
 		}
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			UnitOfWork.PersistAll();
 			SkipRollback();
-			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.UpdateFindPersonData(new Guid[] { Guid.NewGuid() });
 		}
     }

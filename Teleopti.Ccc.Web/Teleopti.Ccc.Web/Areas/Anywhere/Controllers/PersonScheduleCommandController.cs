@@ -1,5 +1,6 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Filters;
 
@@ -16,9 +17,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPostOrPut]
 		[UnitOfWorkAction]
-		public void AddFullDayAbsence(AddFullDayAbsenceCommand command)
+		public JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);
+			return Json(new object(), JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpPostOrPut]
+		[UnitOfWorkAction]
+		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
+		{
+			_commandDispatcher.Execute(command);
+			return Json(new object(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

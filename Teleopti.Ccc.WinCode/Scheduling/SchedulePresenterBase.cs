@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -308,7 +309,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 return _isAscendingSort;
             }
-            protected set
+            set
             {
                 _isAscendingSort = value;
             }
@@ -317,6 +318,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public int CurrentSortColumn
         {
             get { return _currentSortColumn; }
+			set { _currentSortColumn = value; }
         }
 
         public IScheduleSortCommand SortCommand
@@ -324,6 +326,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _sortCommand; }
             set { _sortCommand = value; }
         }
+
+		public void ApplyGridSort()
+		{
+			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
+
+			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
+
+			if (IsAscendingSort)
+				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			else
+				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+
+
+			SchedulerState.FilteredPersonDictionary.Clear();
+			foreach (var keyValuePair in sortedFilteredPersonDictionary)
+			{
+				SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
+			}
+		}
 
         /// <summary>
         /// Sort the column ascending or desceding
@@ -906,7 +928,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void AddOvertime(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IList<IMultiplicatorDefinitionSet> definitionSets)
         {
-            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules);
+            var command = new AddOvertimeCommand(_schedulerState, _view, this, definitionSets, schedules, new EditableShiftMapper());
             if (defaultPeriod.HasValue)
             {
                 command.DefaultPeriod = defaultPeriod;

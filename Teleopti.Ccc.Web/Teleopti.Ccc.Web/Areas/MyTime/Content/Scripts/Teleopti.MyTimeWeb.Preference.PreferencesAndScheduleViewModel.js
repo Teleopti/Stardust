@@ -16,7 +16,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax, dayViewModels) {
-
+    var self = this;
+    
 	this.DayViewModels = dayViewModels;
 
 	this.LoadPreferencesAndSchedules = function (from, to) {
@@ -29,7 +30,7 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 				To: to
 			},
 			beforeSend: function (jqXHR) {
-				$.each(dayViewModels, function (index, day) {
+			    $.each(self.DayViewModels, function (index, day) {
 					day.IsLoading(true);
 				});
 			},
@@ -37,7 +38,7 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				$.each(data, function (index, element) {
-					var dayViewModel = dayViewModels[element.Date];
+					var dayViewModel = self.DayViewModels[element.Date];
 					if (element.Preference)
 						dayViewModel.ReadPreference(element.Preference);
 					if (element.DayOff)

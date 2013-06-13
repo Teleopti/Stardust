@@ -59,12 +59,13 @@ symbolmodule.xml
 *.ncov.bkp
 *.sln
 Database/Tools/Restore/output
-*log.*
 Packages.dgml
 RaptorHgOla.gpState
 CruiseControl.gpState
-Logs/WebApps.log.1
 *.feature.cs
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
 */Pester.*
 nunit*.xml
+*.log.?
+*.key
+*.log.??

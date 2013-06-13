@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				if (dateOnlyPeriodFromData(matrixData) != masterPeriod)
 					return false;
 
+				if (matrixData.TargetDaysOff != masterMatrix.TargetDaysOff)
+					return false;
+
 				foreach (var dateOnly in masterPeriod.DayCollection())
 				{
 					if (matrixData[dateOnly].IsDayOff)

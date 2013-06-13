@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -10,29 +11,29 @@ namespace Teleopti.Ccc.Domain.Common
 
         public IDictionary<T, ICollection<T>> SecondDictionary { get; private set; }
 
-        public void CreateDictionaries(IEnumerable<IPair<T>> pairList)
+        public void CreateDictionaries(IEnumerable<Tuple<T, T>> pairList)
         {
             FirstDictionary = new Dictionary<T, ICollection<T>>();
             SecondDictionary = new Dictionary<T, ICollection<T>>();
-            foreach (Pair<T> pair in pairList)
+            foreach (var pair in pairList)
             {
                 addFirstValue(pair);
                 AddSecondValue(pair);
             }
         }
 
-        private void addFirstValue(IPair<T> pair)
+				private void addFirstValue(Tuple<T, T> pair)
         {
-            if (!FirstDictionary.ContainsKey(pair.First))
-                FirstDictionary[pair.First] = new List<T>();
-            FirstDictionary[pair.First].Add(pair.Second);
+            if (!FirstDictionary.ContainsKey(pair.Item1))
+                FirstDictionary[pair.Item1] = new List<T>();
+            FirstDictionary[pair.Item1].Add(pair.Item2);
         }
 
-        private void AddSecondValue(IPair<T> pair)
+				private void AddSecondValue(Tuple<T, T> pair)
         {
-            if (!SecondDictionary.ContainsKey(pair.Second))
-                SecondDictionary[pair.Second] = new List<T>();
-            SecondDictionary[pair.Second].Add(pair.First);            
+            if (!SecondDictionary.ContainsKey(pair.Item2))
+                SecondDictionary[pair.Item2] = new List<T>();
+            SecondDictionary[pair.Item2].Add(pair.Item1);
         }
     }
 }

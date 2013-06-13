@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             target = new OvertimeShift();
             owner = new Person();
-            IPersonAssignment ass = new PersonAssignment(owner, new Scenario("ff"));
+            IPersonAssignment ass = new PersonAssignment(owner, new Scenario("ff"), new DateOnly(2002, 1, 1));
             ass.AddOvertimeShift(target);
         }
 

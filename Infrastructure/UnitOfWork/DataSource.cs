@@ -20,22 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Statistic = statistic;
 			AuthenticationSettings = authenticationSettings;
 		}
-
-		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IAuthenticationSettings authenticationSettings,
-			 SqlConnectionStringBuilder sqlConnectionStringBuilder)
-			: this(application, statistic, authenticationSettings)
-		{
-			if (sqlConnectionStringBuilder != null)
-			{
-				Server = sqlConnectionStringBuilder.DataSource;
-				InitialCatalog = sqlConnectionStringBuilder.InitialCatalog;
-			}
-
-		}
-
-		public string Server { get; private set; }
-
-		public string InitialCatalog { get; private set; }
 		
 		public string OriginalFileName { get; set; }
 

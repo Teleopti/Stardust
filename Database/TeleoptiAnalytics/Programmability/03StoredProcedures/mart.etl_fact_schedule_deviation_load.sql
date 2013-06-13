@@ -21,15 +21,7 @@ GO
 --				2012-10-08 #20924 Fix Contract Deviation
 --
 -- =============================================
-/*
-set statistics io on
-set statistics time on
-dbcc freeproccache
-dbcc dropcleanbuffers
-exec mart.etl_fact_schedule_deviation_load '2013-02-01 23:00:00','2013-03-01 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
-*/
 
---exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -86,6 +78,25 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 	[interval_id] ASC
 )
 
+CREATE TABLE #intervals
+(
+	interval_id smallint not null,
+	interval_start smalldatetime null,
+	interval_end smalldatetime null
+)
+
+INSERT #intervals(interval_id,interval_start,interval_end)
+SELECT interval_id= interval_id,
+	interval_start= interval_start,
+	interval_end = interval_end
+FROM mart.dim_interval
+ORDER BY interval_id
+
+--remove one minute from last interval to be able to join shifts ending at UTC midnight
+update #intervals 
+set interval_end=dateadd(minute,-1,interval_end) 
+where interval_end='1900-01-02 00:00:00'
+
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
 
@@ -136,6 +147,13 @@ GROUP BY
 	fs.interval_id,
 	fs.person_id,
 	fs.business_unit_id
+
+--remove one minute from shifts ending at UTC midnight(00:00)
+UPDATE #fact_schedule
+SET shift_endtime= DATEADD(MINUTE,-1,shift_endtime)
+WHERE DATEPART(HOUR,shift_endtime)=0 AND DATEPART(MINUTE,shift_endtime)=0 
+
+
 
 /* Prepare insert of new data in two steps, a) and b). */
 /* a) Gather agent ready time */
@@ -213,7 +231,7 @@ ON
 				OR (fs.schedule_date_id = p.valid_to_date_id AND fs.interval_id <= p.valid_to_interval_id)
 		)
 INNER JOIN 
-	mart.dim_interval di
+	#intervals di
 ON 
 	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
 	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
