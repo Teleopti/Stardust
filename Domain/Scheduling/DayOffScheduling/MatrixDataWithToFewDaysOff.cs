@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				}
 				else
 				{
-					if(dayOffDays.Count < targetDaysOff)
+					var contract = matrixData.Matrix.SchedulePeriod.Contract;
+					var employmentType = contract.EmploymentType;
+
+					if(dayOffDays.Count < targetDaysOff && employmentType != EmploymentType.FixedStaffDayWorkTime)
 						result.Add(matrixData);
 				}
 			}

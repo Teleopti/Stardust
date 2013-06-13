@@ -40,9 +40,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IOpenAbsenceRequestPeriodProjection Projection { get; }
 
-	    /// <summary>
-	    /// Gets all periods for the absence type, ignoring the viewpoint date.
-	    /// </summary>
+		/// <summary>
+		/// Gets all periods.		
+		/// </summary>
 	    IEnumerable<IAbsenceRequestOpenPeriod> AllPeriods { get; }
     }
 }
