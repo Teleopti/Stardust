@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -18,8 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						if (layer.Equals(layerToRemove))
 						{
+							var indexOfLayer = layer.OrderIndex;
 							ms.LayerCollection.Remove(layer);
-							ms.LayerCollection.Insert(layer.OrderIndex, new MainShiftActivityLayer(newActivity, newPeriod));
+							ms.LayerCollection.Insert(indexOfLayer, new MainShiftActivityLayer(newActivity, newPeriod));
 							return true;
 						}
 					}
