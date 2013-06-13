@@ -45,5 +45,10 @@ namespace Teleopti.Ccc.WinCode.Common
 				SynchronizeWithDomainRoger();
 			}
 		}
+
+		protected override void Replace()
+		{
+			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+		}
     }
 }
