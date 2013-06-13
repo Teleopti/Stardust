@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -108,8 +107,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<DateOnly> datesWithCategory;
             mockExpections();
 
-            Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
-                                                                     new DateOnlyPeriod(2010, 1, 1, 2010, 1, 1), _dic[_person], out datesWithCategory));
+	        using (_mocks.Playback())
+	        {
+		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
+		                                                                                        new DateOnlyPeriod(2010, 1, 1,
+		                                                                                                           2010, 1, 1),
+		                                                                                        _dic[_person],
+		                                                                                        out datesWithCategory));
+	        }
         }
 
         [Test]
@@ -119,21 +124,33 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<DateOnly> datesWithCategory;
             mockExpections();
 
-            Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
-                                                                     new DateOnlyPeriod(2010, 1, 1, 2010, 1, 1), _dic[_person],out datesWithCategory));
+	        using (_mocks.Playback())
+	        {
+		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
+		                                                                                        new DateOnlyPeriod(2010, 1, 1,
+		                                                                                                           2010, 1, 1),
+		                                                                                        _dic[_person],
+		                                                                                        out datesWithCategory));
+	        }
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyIsShiftCategoryOverOrAtWeekLimitThrow()
         {
-
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 1;
             IList<DateOnly> datesWithCategory;
             mockExpections();
 
-            Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
-                                                                      _dic[_person], new DateOnlyPeriod(new DateOnly(2009, 12, 28), new DateOnly(2010, 1, 3)), out datesWithCategory));
+	        using (_mocks.Playback())
+	        {
+		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
+		                                                                                      _dic[_person],
+		                                                                                      new DateOnlyPeriod(
+			                                                                                      new DateOnly(2009, 12, 28),
+			                                                                                      new DateOnly(2010, 1, 3)),
+		                                                                                      out datesWithCategory));
+	        }
         }
 
         [Test, SetCulture("en-GB")]
@@ -144,9 +161,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<DateOnly> datesWithCategory;
             mockExpections();
 
-            Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
-                                                                      _dic[_person], new DateOnlyPeriod(new DateOnly(2009,12,28),new DateOnly(2010,1,3)), out datesWithCategory));
-            Assert.AreNotEqual(0, datesWithCategory.Count);
+	        using (_mocks.Playback())
+	        {
+		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
+		                                                                                      _dic[_person],
+		                                                                                      new DateOnlyPeriod(2009, 12, 28,2010, 1, 3),
+		                                                                                      out datesWithCategory));
+		        Assert.AreNotEqual(0, datesWithCategory.Count);
+	        }
         }
 
         [Test]
@@ -161,9 +183,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             mockExpections();
 
-			_target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
+	        using (_mocks.Playback())
+	        {
+		        _target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
 
-            Assert.AreEqual(0, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+		        Assert.AreEqual(0, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+	        }
         }
 
         [Test]
@@ -178,9 +203,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             mockExpections();
 
-			_target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
+	        using (_mocks.Playback())
+	        {
+		        _target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
 
-            Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+		        Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+	        }
         }
 
         [Test]
@@ -201,7 +229,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
         	}
-            
         }
 
         private void mockExpections()
@@ -209,19 +236,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Any();
-                Expect.Call(_dic[_person]).Return(_range).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2009, 12, 28))).Return(_partWithoutShift).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2009, 12, 29))).Return(_partWithoutShift).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2009, 12, 30))).Return(_partWithoutShift).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2009, 12, 31))).Return(_partWithoutShift).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_part).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2))).Return(_partWithoutShift).Repeat.Any();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 3))).Return(_partWithoutShift).Repeat.Any();
+				Expect.Call(_dic[_person]).Return(_range).Repeat.Any();
+				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2009, 12, 28, 2010, 1, 3)))
+					  .Return(new[]
+		                  {
+			                  _partWithoutShift, _partWithoutShift, _partWithoutShift, _partWithoutShift, _part,
+			                  _partWithoutShift, _partWithoutShift
+		                  })
+					  .Repeat.Any();
+	            Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 1))).Return(new[] { _part }).Repeat.Any();
+	            Expect.Call(_part.DateOnlyAsPeriod)
+	                  .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1),
+	                                                       _person.PermissionInformation.DefaultTimeZone())).Repeat.Any();
+	            Expect.Call(_partWithoutShift.DateOnlyAsPeriod)
+	                  .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 12, 29),
+	                                                       _person.PermissionInformation.DefaultTimeZone())).Repeat.Any();
                 Expect.Call(_part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
                 Expect.Call(_part.Period).Return(_dateTimePeriod).Repeat.Any();
                 Expect.Call(_part.Person).Return(_person).Repeat.Any();
-
             }
         }
 

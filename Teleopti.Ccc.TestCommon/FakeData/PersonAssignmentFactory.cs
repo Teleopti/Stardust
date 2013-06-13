@@ -341,11 +341,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         private static void CreateActivitiesAndAddToContainer(PersonAssignmentListContainer container)
         {
             // CreateProjection activities
-            IActivity acPhone = ActivityFactory.CreateActivity("Phone");
-            IActivity acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow);
+			IActivity acPhone = ActivityFactory.CreateActivity("Phone", Color.DarkGreen);
+			IActivity acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow);
             IActivity acBreak = ActivityFactory.CreateActivity("Break", Color.Red);
             IActivity acLunch = ActivityFactory.CreateActivity("Lunch", Color.Red);
-            container.ContainedActivities.Add(acPhone.Description.Name, acPhone);
+			acPhone.SetId(Guid.NewGuid());
+			acOffice.SetId(Guid.NewGuid());
+			acBreak.SetId(Guid.NewGuid());
+			acLunch.SetId(Guid.NewGuid());
+			container.ContainedActivities.Add(acPhone.Description.Name, acPhone);
             container.ContainedActivities.Add(acOffice.Description.Name, acOffice);
             container.ContainedActivities.Add(acBreak.Description.Name, acBreak);
             container.ContainedActivities.Add(acLunch.Description.Name, acLunch);
@@ -373,18 +377,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ISkill skPhoneA = SkillFactory.CreateSkill("PhoneA");
             skPhoneA.Activity = container.ContainedActivities["Phone"];
             skPhoneA.TimeZone = timeZone;
+			skPhoneA.SetId(Guid.NewGuid());
             ISkill skPhoneB = SkillFactory.CreateSkill("PhoneB");
             skPhoneB.Activity = container.ContainedActivities["Phone"];
             skPhoneB.TimeZone = timeZone;
+			skPhoneB.SetId(Guid.NewGuid());
             ISkill skPhoneC = SkillFactory.CreateSkill("PhoneC");
             skPhoneC.Activity = container.ContainedActivities["Phone"];
             skPhoneC.TimeZone = timeZone;
+			skPhoneC.SetId(Guid.NewGuid());
             ISkill skOfficeA = SkillFactory.CreateSkill("OfficeA");
             skOfficeA.Activity = container.ContainedActivities["Office"];
             skOfficeA.TimeZone = timeZone;
+			skOfficeA.SetId(Guid.NewGuid());
             ISkill skOfficeB = SkillFactory.CreateSkill("OfficeB");
             skOfficeB.Activity = container.ContainedActivities["Office"];
             skOfficeB.TimeZone = timeZone;
+			skOfficeB.SetId(Guid.NewGuid());
             container.AllSkills.Add(skPhoneA);
             container.AllSkills.Add(skPhoneB);
             container.AllSkills.Add(skPhoneC);
