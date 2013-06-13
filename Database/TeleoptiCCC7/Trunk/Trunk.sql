@@ -425,7 +425,7 @@ GO
 ---------------- 
 ALTER TABLE Skill
 ADD MaxParallelTasks int NULL
-
+GO
 UPDATE Skill SET MaxParallelTasks = 1
 ALTER TABLE Skill ALTER COLUMN MaxParallelTasks int not null
 GO
