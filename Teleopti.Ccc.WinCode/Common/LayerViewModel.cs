@@ -11,337 +11,339 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-    /// <summary>
-    /// Holds bindable properties for Layers
-    /// </summary>
-    public abstract class LayerViewModel : DataModel, ILayerViewModel
-    {
-	    private DateTimePeriod _period;
-        private TimeSpan _interval = TimeSpan.FromMinutes(15);
-        private bool _isChanged;
-        private ILayerViewModelObserver _parentObservingCollection;
-        private IScheduleDay _part;
-        private bool _canMoveAll;
-        private IEventAggregator _eventAggregator;
-        private bool _isSelected;
+	/// <summary>
+	/// Holds bindable properties for Layers
+	/// </summary>
+	public abstract class LayerViewModel : DataModel, ILayerViewModel
+	{
+		private DateTimePeriod _period;
+		private TimeSpan _interval = TimeSpan.FromMinutes(15);
+		private bool _isChanged;
+		private ILayerViewModelObserver _parentObservingCollection;
+		private IScheduleDay _part;
+		private bool _canMoveAll;
+		private IEventAggregator _eventAggregator;
+		private bool _isSelected;
+		private IPayload _payload;
 
 
-				protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer)
+		protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer)
+		{
+			_payload = layer.Payload;
+			_parentObservingCollection = observer;
+			_eventAggregator = eventAggregator;
+			Layer = layer;
+			_period = Layer.Period;
+			MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
+			MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
+			DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
+			IsProjectionLayer = isProjectionLayer;
+		}
+
+
+		#region properties
+
+		protected ILayerViewModelObserver ParentObservingCollection
+		{
+			get { return _parentObservingCollection; }
+		}
+
+		protected IEventAggregator LocalEventAggregator
+		{
+			get { return _eventAggregator; }
+		}
+
+		public bool CanMoveAll
+		{
+			get { return _canMoveAll; }
+			set
+			{
+				if (_canMoveAll != value)
 				{
-					_parentObservingCollection = observer;
-					_eventAggregator = eventAggregator;
-					Layer = layer;
-					_period = Layer.Period;
-					MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
-					MoveDownCommand = CommandModelFactory.CreateCommandModel(MoveDown, CanExecuteMoveDown, UserTexts.Resources.MoveDown, ShiftEditorRoutedCommands.MoveDown);
-					DeleteCommand = CommandModelFactory.CreateCommandModel(DeleteLayer, CanDelete, UserTexts.Resources.Delete, ShiftEditorRoutedCommands.Delete);
-					IsProjectionLayer = isProjectionLayer;
+					_canMoveAll = value;
+					SendPropertyChanged("CanMoveAll");
+				}
+			}
+		}
+
+		public bool IsSelected
+		{
+			get { return _isSelected; }
+			set
+			{
+				if (value != _isSelected)
+				{
+					_isSelected = value;
+					SendPropertyChanged("IsSelected");
 				}
 
+			}
+		}
 
-        #region properties
+		public bool IsChanged
+		{
+			get { return _isChanged; }
+			set
+			{
+				if (_isChanged != value)
+				{
+					_isChanged = value;
+					SendPropertyChanged("IsChanged");
+				}
+			}
+		}
 
-        protected ILayerViewModelObserver ParentObservingCollection
-        {
-            get { return _parentObservingCollection; }
-        }
+		public IScheduleDay SchedulePart
+		{
+			get { return _part; }
+			set { _part = value; }
+		}
 
-        protected IEventAggregator LocalEventAggregator
-        {
-            get { return _eventAggregator; }
-        }
+		public TimeSpan Interval
+		{
+			get { return _interval; }
+			set { _interval = value; }
+		}
 
-        public bool CanMoveAll
-        {
-            get { return _canMoveAll; }
-            set
-            {
-                if (_canMoveAll != value)
-                {
-                    _canMoveAll = value;
-                    SendPropertyChanged("CanMoveAll");
-                }
-            }
-        }
+		protected ILayer<IPayload> Layer { get; private set; }
 
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set
-            {
-                if (value != _isSelected)
-                {
-                    _isSelected = value;
-                    SendPropertyChanged("IsSelected");
-                }
+		public DateTimePeriod Period
+		{
+			get { return _period; }
+			set
+			{
+				if (_period != value)
+				{
+					_period = value;
+					//TODO!
+					//Layer.Period = _period;
+					SendPropertyChanged("Period");
+					SendPropertyChanged("ElapsedTime");
+				}
+			}
+		}
 
-            }
-        }
-
-        public bool IsChanged
-        {
-            get { return _isChanged; }
-            set
-            {
-                if (_isChanged != value)
-                {
-                    _isChanged = value;
-                    SendPropertyChanged("IsChanged");
-                }
-            }
-        }
-
-        public IScheduleDay SchedulePart
-        {
-            get { return _part; }
-            set { _part = value; }
-        }
-
-        public TimeSpan Interval
-        {
-            get { return _interval; }
-            set { _interval = value; }
-        }
-
-	    protected ILayer<IPayload> Layer { get; private set; }
-
-	    public DateTimePeriod Period
-        {
-            get { return _period; }
-            set
-            {
-                if (_period != value)
-                {
-                    _period = value;
-									//TODO!
-                    //Layer.Period = _period;
-                    SendPropertyChanged("Period");
-                    SendPropertyChanged("ElapsedTime");
-                }
-            }
-        }
-
-        public Color DisplayColor
-        {
-            get
-            {
-                var vs = Layer as IVisualLayer;
-	            return vs == null
-		                   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person,
-		                                                             SchedulePart.DateOnlyAsPeriod.DateOnly)
-		                   : vs.DisplayColor();
-            }
-        }
+		public Color DisplayColor
+		{
+			get
+			{
+				var vs = Layer as IVisualLayer;
+				return vs == null
+						   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person,
+																	 SchedulePart.DateOnlyAsPeriod.DateOnly)
+						   : vs.DisplayColor();
+			}
+		}
 
 
-        public TimeSpan ElapsedTime
-        {
-            get { return Period.ElapsedTime(); }
-        }
-        public string Description
-        {
-            get
-            {
-                var vs = Layer as IVisualLayer;
-                return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person,SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
-            }
-        }
+		public TimeSpan ElapsedTime
+		{
+			get { return Period.ElapsedTime(); }
+		}
+		public string Description
+		{
+			get
+			{
+				var vs = Layer as IVisualLayer;
+				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person, SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
+			}
+		}
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is  created from projection.
-        /// </summary>
-        public bool IsProjectionLayer
-        {
-            get;
-            private set;
-        }
-
-
-        public virtual bool Opaque
-        {
-            get { return false; }
-        }
-
-        public CommandModel MoveUpCommand { get; protected set; }
-        public CommandModel MoveDownCommand { get; protected set; }
-        public CommandModel DeleteCommand { get; protected set; }
-
-        //Descriptive text of the LayerType
-        public abstract string LayerDescription { get; }
+		/// <summary>
+		/// Gets a value indicating whether this instance is  created from projection.
+		/// </summary>
+		public bool IsProjectionLayer
+		{
+			get;
+			private set;
+		}
 
 
-        #endregion
+		public virtual bool Opaque
+		{
+			get { return false; }
+		}
 
-        public bool CanDelete()
-        {
-            return IsMovePermitted();
-        }
+		public CommandModel MoveUpCommand { get; protected set; }
+		public CommandModel MoveDownCommand { get; protected set; }
+		public CommandModel DeleteCommand { get; protected set; }
 
-        protected virtual void DeleteLayer()
-        {
-            //Handle where necessary.
-            //This should probably be abstract
-        }
+		//Descriptive text of the LayerType
+		public abstract string LayerDescription { get; }
 
-        public bool CanExecuteMoveDown()
-        {
-            return CanMoveDown;
-        }
 
-        public bool CanExecuteMoveUp()
-        {
-            return CanMoveUp;
-        }
+		#endregion
 
-        public virtual void MoveDown()
-        {
-            //Override where necessary
-        }
+		public bool CanDelete()
+		{
+			return IsMovePermitted();
+		}
 
-        public virtual void MoveUp()
-        {
-            //Override where necessary
-        }
+		protected virtual void DeleteLayer()
+		{
+			//Handle where necessary.
+			//This should probably be abstract
+		}
 
-        public virtual bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
-        {
-            return sender != this && GetType() == sender.GetType() && !IsProjectionLayer;
-        }
+		public bool CanExecuteMoveDown()
+		{
+			return CanMoveDown;
+		}
 
-        public void TimeChanged(FrameworkElement parent, FrameworkElement panel, double horizontalChange)
-        {
-            if (IsMovePermitted())
-            {
-                var t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, panel, horizontalChange, _interval.TotalMinutes);
-                calculateMove(t);
-                MoveLayer(t);
-                IsChanged = true;
-            }
-        }
+		public bool CanExecuteMoveUp()
+		{
+			return CanMoveUp;
+		}
 
-        private void calculateMove(TimeSpan t)
-        {
-            var p = Period.MovePeriod(t);
-            var start = p.StartDateTime;
-            var end = p.EndDateTime;
-            if (start == end) end = end.Add(Interval);
-            if (TimeSpan.FromMinutes(start.Minute) == Interval) start.ToInterval((int) Interval.TotalMinutes);
-            if (TimeSpan.FromMinutes(end.Minute) == Interval) end.ToInterval((int) Interval.TotalMinutes);
-            Period = new DateTimePeriod(start, end);
-        }
-        
-        public virtual void UpdatePeriod()
-        {
-            if (IsChanged)
-            {
-							//TODO!
-							//Layer.Period = Period;
-                if (_part != null)
-                {
-									hackToUpdateUnderlyingPersonAssignment();
-                    //Trigger update ShiftEditor
-	                SynchronizeWithDomainRoger();
-                }
-                IsChanged = false;
-            }
-        }
+		public virtual void MoveDown()
+		{
+			//Override where necessary
+		}
 
-        #region vertical sorting
-        /// <summary>
-        /// Gets the order index base, decides where in the collection different types should appear
-        /// </summary>
-        protected abstract int OrderIndexBase { get; }
+		public virtual void MoveUp()
+		{
+			//Override where necessary
+		}
 
-        public virtual int VisualOrderIndex
-        {
-            get
-            {
-	            if (this is MeetingLayerViewModel)
-		            return OrderIndexBase + 1;
-							return OrderIndexBase + Layer.OrderIndex;
-            }
-        }
+		public virtual bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
+		{
+			return sender != this && GetType() == sender.GetType() && !IsProjectionLayer;
+		}
 
-        public void Delete()
-        {
-            if (CanDelete())
-            {
-                DeleteLayer();
-            }
-        }
+		public void TimeChanged(FrameworkElement parent, FrameworkElement panel, double horizontalChange)
+		{
+			if (IsMovePermitted())
+			{
+				var t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, panel, horizontalChange, _interval.TotalMinutes);
+				calculateMove(t);
+				MoveLayer(t);
+				IsChanged = true;
+			}
+		}
 
-        #endregion
+		private void calculateMove(TimeSpan t)
+		{
+			var p = Period.MovePeriod(t);
+			var start = p.StartDateTime;
+			var end = p.EndDateTime;
+			if (start == end) end = end.Add(Interval);
+			if (TimeSpan.FromMinutes(start.Minute) == Interval) start.ToInterval((int)Interval.TotalMinutes);
+			if (TimeSpan.FromMinutes(end.Minute) == Interval) end.ToInterval((int)Interval.TotalMinutes);
+			Period = new DateTimePeriod(start, end);
+		}
 
-        #region move
+		public virtual void UpdatePeriod()
+		{
+			if (IsChanged)
+			{
+				//TODO!
+				//Layer.Period = Period;
+				if (_part != null)
+				{
+					hackToUpdateUnderlyingPersonAssignment();
+					//Trigger update ShiftEditor
+					SynchronizeWithDomainRoger();
+				}
+				IsChanged = false;
+			}
+		}
 
-        public abstract bool IsMovePermitted();
+		#region vertical sorting
+		/// <summary>
+		/// Gets the order index base, decides where in the collection different types should appear
+		/// </summary>
+		protected abstract int OrderIndexBase { get; }
 
-        public virtual bool IsPayloadChangePermitted
-        {
-            get { return true; }
-        }
+		public virtual int VisualOrderIndex
+		{
+			get
+			{
+				if (this is MeetingLayerViewModel)
+					return OrderIndexBase + 1;
+				return OrderIndexBase + Layer.OrderIndex;
+			}
+		}
 
-        public void StartTimeChanged(FrameworkElement parent, double change)
-        {
-            if (IsMovePermitted())
-            {
-                TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
-                if (Period.StartDateTime.Add(t) <= Period.EndDateTime.Subtract(Interval))
-                {
-                    Period = new DateTimePeriod(Period.StartDateTime.Add(t).ToInterval(Interval),
-                                                Period.EndDateTime);
-                    IsChanged = true;
-                }
-            }
-        }
+		public void Delete()
+		{
+			if (CanDelete())
+			{
+				DeleteLayer();
+			}
+		}
 
-        public void TimeChanged(FrameworkElement parent, double change)
-        {
-            if (IsMovePermitted())
-            {
-                TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
-                calculateMove(t);
-                MoveLayer(t);
-                IsChanged = true;
-            }
+		#endregion
 
-        }
-        public void EndTimeChanged(FrameworkElement parent, double change)
-        {
-            if (IsMovePermitted())
-            {
+		#region move
 
-                TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
-                if (Period.EndDateTime.Add(t) >= Period.StartDateTime.Add(Interval))
-                {
-                    Period = new DateTimePeriod(Period.StartDateTime, Period.EndDateTime.Add(t).ToInterval(Interval));
-                    IsChanged = true;
-                }
-            }
-        }
+		public abstract bool IsMovePermitted();
 
-        public void MoveLayer(TimeSpan span)
-        {
-            if (ParentObservingCollection != null)
-            {
-                ParentObservingCollection.MoveAllLayers(this, span);
-            }
-        }
+		public virtual bool IsPayloadChangePermitted
+		{
+			get { return true; }
+		}
 
-	    private void hackToUpdateUnderlyingPersonAssignment()
-	    {
-				var mainShiftLayer = Layer as IMainShiftActivityLayer;
-		    if (mainShiftLayer != null)
-		    {
-			    var ms = (IMainShift) mainShiftLayer.Parent;
-			    ((IPersonAssignment) ms.Parent).SetMainShift(ms);
-		    }
-	    }
+		public void StartTimeChanged(FrameworkElement parent, double change)
+		{
+			if (IsMovePermitted())
+			{
+				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
+				if (Period.StartDateTime.Add(t) <= Period.EndDateTime.Subtract(Interval))
+				{
+					Period = new DateTimePeriod(Period.StartDateTime.Add(t).ToInterval(Interval),
+												Period.EndDateTime);
+					IsChanged = true;
+				}
+			}
+		}
 
-	    public abstract bool CanMoveUp { get; }
-        public abstract bool CanMoveDown { get; }
+		public void TimeChanged(FrameworkElement parent, double change)
+		{
+			if (IsMovePermitted())
+			{
+				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
+				calculateMove(t);
+				MoveLayer(t);
+				IsChanged = true;
+			}
 
-        #endregion
+		}
+		public void EndTimeChanged(FrameworkElement parent, double change)
+		{
+			if (IsMovePermitted())
+			{
+
+				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
+				if (Period.EndDateTime.Add(t) >= Period.StartDateTime.Add(Interval))
+				{
+					Period = new DateTimePeriod(Period.StartDateTime, Period.EndDateTime.Add(t).ToInterval(Interval));
+					IsChanged = true;
+				}
+			}
+		}
+
+		public void MoveLayer(TimeSpan span)
+		{
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.MoveAllLayers(this, span);
+			}
+		}
+
+		private void hackToUpdateUnderlyingPersonAssignment()
+		{
+			var mainShiftLayer = Layer as IMainShiftActivityLayer;
+			if (mainShiftLayer != null)
+			{
+				var ms = (IMainShift)mainShiftLayer.Parent;
+				((IPersonAssignment)ms.Parent).SetMainShift(ms);
+			}
+		}
+
+		public abstract bool CanMoveUp { get; }
+		public abstract bool CanMoveDown { get; }
+
+		#endregion
 
 		public void SynchronizeWithDomainRoger()
 		{
@@ -349,24 +351,23 @@ namespace Teleopti.Ccc.WinCode.Common
 			new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 		}
 
-        public virtual IPayload Payload
-        {
-            get
-            {
-                return Layer.Payload;
-            }
-            set
-            {
-                if (IsPayloadChangePermitted && value != Layer.Payload)
-                {
-									//just for now
-                    //((ILayer)Layer).Payload = value;
-                    IsChanged = true;
-                    SendPropertyChanged("Description");
-                    SendPropertyChanged("Payload");
-                    SendPropertyChanged("DisplayColor");
-                }
-            }
-        }
-    }
+		public virtual IPayload Payload
+		{
+			get
+			{
+				return _payload;
+			}
+			set
+			{
+				if (IsPayloadChangePermitted)
+				{
+					_payload = value;
+					IsChanged = true;
+					SendPropertyChanged("Description");
+					SendPropertyChanged("Payload");
+					SendPropertyChanged("DisplayColor");
+				}
+			}
+		}
+	}
 }

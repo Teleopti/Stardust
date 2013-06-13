@@ -15,5 +15,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void SelectLayer(ILayerViewModel model);
 
+	    void ReplaceActivity(ILayerViewModel theLayerViewModel, ILayer<IActivity> theLayer, IScheduleDay part);
+	    
+		void ReplaceAbsence(ILayerViewModel theLayerViewModel, IAbsenceLayer theLayer, IScheduleDay part);
     }
 }

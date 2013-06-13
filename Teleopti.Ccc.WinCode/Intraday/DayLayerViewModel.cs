@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 
-                var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+				var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
                 var model = new DayLayerModel(person, period.Period(), team, layerViewModelCollection, commonNameDescription);
 
                 rebuildLayerViewModelCollection(model);

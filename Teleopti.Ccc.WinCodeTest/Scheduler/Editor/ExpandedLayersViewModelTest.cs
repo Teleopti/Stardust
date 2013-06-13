@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _mocker = new MockRepository();
             _layer1 = _mocker.StrictMock<ILayerViewModel>();
             _layer2 = _mocker.StrictMock<ILayerViewModel>();
-            _layers = new LayerViewModelCollection(null,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
+			_layers = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             _layers.Add(_layer1);
             _layers.Add(_layer2);
             _target = new ExpandedLayersViewModel(_layers);

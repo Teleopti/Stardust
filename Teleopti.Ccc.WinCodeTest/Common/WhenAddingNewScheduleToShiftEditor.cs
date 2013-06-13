@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
             _eventAggregator = new EventAggregator();
             _service = _mocker.StrictMock<ICreateLayerViewModelService>();
-            _collection = new LayerViewModelCollection(_eventAggregator, _service,new RemoveLayerFromSchedule());
+			_collection = new LayerViewModelCollection(_eventAggregator, _service, new RemoveLayerFromSchedule(), null);
 	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
             _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, _editableShiftMapper);
         }

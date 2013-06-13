@@ -33,16 +33,18 @@ namespace Teleopti.Ccc.WinCode.Common
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
         private IScheduleDay _part;
         private IRemoveLayerFromSchedule _removeService;
-        private IEventAggregator _eventAggregator;
+	    private readonly IReplaceLayerInSchedule _replaceService;
+	    private IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
 
 
-		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService)
+		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
 			_removeService = removeService;
+			_replaceService = replaceService;
 			CreateGroups();
         }
 
@@ -257,5 +259,17 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             return ((ILayerViewModel)layer).IsProjectionLayer;
         }
+
+	    public void ReplaceActivity(ILayerViewModel theLayerViewModel, ILayer<IActivity> theLayer, IScheduleDay part)
+	    {
+		    if (_replaceService != null)
+			    _replaceService.Replace(part, theLayer, theLayerViewModel.Payload as IActivity, theLayerViewModel.Period);
+	    }
+
+		public void ReplaceAbsence(ILayerViewModel theLayerViewModel, IAbsenceLayer theLayer, IScheduleDay part)
+		{
+			if (_replaceService != null)
+				_replaceService.Replace(part, theLayer, theLayerViewModel.Payload as IAbsence, theLayerViewModel.Period);
+		}
     }
 }

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                     new Team(),
                     new LayerViewModelCollection(
                         new EventAggregator(),
-                        new CreateLayerViewModelService(),new RemoveLayerFromSchedule()),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
                     new CommonNameDescriptionSetting("test"));
 
             var collection = new Collection<DayLayerModel> { dayLayerModel };
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(),new RemoveLayerFromSchedule()),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
 					new CommonNameDescriptionSetting("test"))
 					{
 						CurrentStateDescription = null
