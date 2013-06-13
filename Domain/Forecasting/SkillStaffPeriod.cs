@@ -596,9 +596,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     isAvail = skillStaffPeriod.IsAvailable;
                 useShrinkage = skillStaffPeriod.Payload.UseShrinkage;
             }
-
+	        var skillDay = skillStaffPeriods[0].SkillDay;
             if (tasks == 0)
-                return new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues(), skillStaffPeriods[0].StaffingCalculatorService);
+            {
+	            var newPeriod = new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues(), skillStaffPeriods[0].StaffingCalculatorService);
+				newPeriod.SetSkillDay(skillDay);
+				return newPeriod;
+            }
 
             Task retTask = new Task(tasks,TimeSpan.FromSeconds(taskSeconds/tasks),TimeSpan.FromSeconds(afterTaskSeconds/tasks));
             ServiceLevel retLevel = new ServiceLevel(new Percent(servicePercent/tasks),serviceSeconds/tasks);
@@ -610,7 +614,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ret.IsAvailable = isAvail;
             ret.Payload.UseShrinkage = useShrinkage;
             ret.SetCalculatedResource65(resource);
-
+			ret.SetSkillDay(skillDay); 
             return ret;
         }
 

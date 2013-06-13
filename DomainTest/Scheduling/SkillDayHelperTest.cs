@@ -381,6 +381,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         private List<ISkillStaffPeriod> GetPeriodlist()
         {
+			var skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
+
             IStaffingCalculatorService svc = _mocks.StrictMock<IStaffingCalculatorService>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
@@ -413,6 +415,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _stPeriod7 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 7, 2000, 1, 8),
                                              _task,
                                              ServiceAgreement.DefaultValues(), svc);
+
+			_stPeriod1.SetSkillDay(skillDay);
+			_stPeriod2.SetSkillDay(skillDay);
+			_stPeriod3.SetSkillDay(skillDay);
+			_stPeriod4.SetSkillDay(skillDay);
+			_stPeriod5.SetSkillDay(skillDay);
+			_stPeriod6.SetSkillDay(skillDay);
+			_stPeriod7.SetSkillDay(skillDay);
 
             List<ISkillStaffPeriod> periodlist = new List<ISkillStaffPeriod>
                                                      {
