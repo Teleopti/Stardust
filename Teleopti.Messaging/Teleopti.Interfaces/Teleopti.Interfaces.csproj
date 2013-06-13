@@ -169,6 +169,7 @@
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
+    <Compile Include="Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRestrictionCombiner.cs" />
     <Compile Include="Domain\IRevision.cs" />
