@@ -9,7 +9,7 @@ SET DB_ANALYTICS=TeleoptiAnalytics_Demo
 SET DB_CCC7=TeleoptiCCC7_Demo
 SET DB_CCCAGG=TeleoptiCCC7Agg_Demo
 SET DB_WINGROUP=%COMPUTERNAME%\TeleoptiCCC_Users
-SET /A SSL=1
+SET /A SSL=0
 SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo
 
 SET DB_AdminAccess=WINAUTH

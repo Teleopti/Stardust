@@ -1,10 +1,11 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	[Serializable]
-	public class PersonAbsenceRemovedEvent : RaptorDomainEvent
+	public class PersonAbsenceAddedEvent : RaptorDomainEvent
 	{
+		public Guid AbsenceId { get; set; }
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }
 		public DateTime StartDateTime { get; set; }

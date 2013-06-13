@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
     /// <summary>
     /// 
     /// </summary>
-    public class PersonWithExternalLogOn: RaptorDomainEvent
+    public class PersonActivityStarting: RaptorDomainEvent
     {
 	    /// <summary>
 	    /// 

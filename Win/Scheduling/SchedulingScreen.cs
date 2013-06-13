@@ -6213,6 +6213,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonApproveRequestClick(object sender, EventArgs e)
 		{
 			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+			
 			changeRequestStatus(
 				new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter, _handleBusinessRuleResponse,
 												_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,

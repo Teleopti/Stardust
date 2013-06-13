@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
         private ShiftTradeModel createModelWherePersonCreatedRequest(ShiftTradeStatusDto statusDto,
                                                                      RequestStatusDto totalStatus)
         {
-            return createModel(statusDto, false, totalStatus);
+            return createModel(statusDto, true, totalStatus);
         }
 
         private ShiftTradeModel createModelWherePersonGotRequest(ShiftTradeStatusDto statusDto,
                                                                  RequestStatusDto totalStatus)
         {
-            return createModel(statusDto, true, totalStatus);
+            return createModel(statusDto, false, totalStatus);
         }
 
         private ShiftTradeModel createModel(ShiftTradeStatusDto statusDto, bool personRequested,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             PersonDto tradeFrom = createTradePersonDto("Sura Roger");
             PersonDto tradeWith = createTradePersonDto("Coola Peter");
             var dateTime = new DateTime(2009, 12, 27);
-            PersonRequestDto personRequestDto = createPersonRequestDto(tradeFrom, tradeWith, true,
+            PersonRequestDto personRequestDto = createPersonRequestDto(tradeFrom, tradeWith, personRequested,
                                                                        new List<DateTime> {dateTime}, totalStatus,
                                                                        statusDto);
             if (personRequested)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             shiftTradeRequestDto.ShiftTradeStatus = statusDto;
             personRequestDto.RequestStatus = totalStatus;
 
-            if ((statusDto == ShiftTradeStatusDto.OkByMe && !personRequested) &&
+            if (((statusDto == ShiftTradeStatusDto.OkByMe || statusDto == ShiftTradeStatusDto.Referred) && personRequested) &&
                 (totalStatus == RequestStatusDto.Pending || totalStatus == RequestStatusDto.New))
                 //This is done by the domain object on the serverside IRL.
                 personRequestDto.CanDelete = true;
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             {
                 _view.SetReasonMessageVisibility(false);
                 _view.SetAcceptButtonEnabled(false);
-                _view.SetDenyButtonEnabled(true);
+                _view.SetDenyButtonEnabled(false);
                 _view.SetDeleteButtonEnabled(false);
             }
 
@@ -184,9 +184,9 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             using (_mocks.Record())
             {
                 _view.SetReasonMessageVisibility(false);
-                _view.SetAcceptButtonEnabled(true);
-                _view.SetDenyButtonEnabled(true);
-                _view.SetDeleteButtonEnabled(false);
+                _view.SetAcceptButtonEnabled(false);
+                _view.SetDenyButtonEnabled(false);
+                _view.SetDeleteButtonEnabled(true);
             }
 
             using (_mocks.Playback())
@@ -205,9 +205,9 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             using (_mocks.Record())
             {
                 _view.SetReasonMessageVisibility(true);
-                _view.SetAcceptButtonEnabled(false);
+                _view.SetAcceptButtonEnabled(true);
                 _view.SetDenyButtonEnabled(false);
-                _view.SetDeleteButtonEnabled(false);
+                _view.SetDeleteButtonEnabled(true);
             }
 
             using (_mocks.Playback())
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             {
                 _view.SetReasonMessageVisibility(false);
                 _view.SetAcceptButtonEnabled(false);
-                _view.SetDenyButtonEnabled(false);
+                _view.SetDenyButtonEnabled(true);
                 _view.SetDeleteButtonEnabled(false);
             }
 
@@ -247,8 +247,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             using (_mocks.Record())
             {
                 _view.SetReasonMessageVisibility(false);
-                _view.SetAcceptButtonEnabled(false);
-                _view.SetDenyButtonEnabled(false);
+                _view.SetAcceptButtonEnabled(true);
+                _view.SetDenyButtonEnabled(true);
                 _view.SetDeleteButtonEnabled(false);
             }
 
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             using (_mocks.Record())
             {
                 _view.SetReasonMessageVisibility(true);
-                _view.SetAcceptButtonEnabled(true);
+                _view.SetAcceptButtonEnabled(false);
                 _view.SetDenyButtonEnabled(false);
                 _view.SetDeleteButtonEnabled(false);
             }

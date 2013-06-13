@@ -90,10 +90,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public string RequestedDate
         {
-            get
-            {
-                return ResolveRequestDate();
-            }
+            get { return ResolveRequestDate(); }
         }
 
         public DateTime FirstDateInRequest

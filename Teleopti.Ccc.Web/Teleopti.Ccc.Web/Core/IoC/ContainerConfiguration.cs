@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Dynamic;
+using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
-			builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
+			builder.RegisterType<NewtonsoftJsonDeserializer<ExpandoObject>>().As<IJsonDeserializer<ExpandoObject>>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 

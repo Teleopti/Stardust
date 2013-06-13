@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
 
             _schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
+            _schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
         }
     }
 }

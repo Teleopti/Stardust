@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddFullDayAbsenceCommand
 	{

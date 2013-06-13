@@ -114,9 +114,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void SortSourceList(IList<SortDescription> sortDescriptions)
 		{
-			PersonRequestViewModels.SortDescriptions.Clear();
-			sortDescriptions.ForEach(s => PersonRequestViewModels.SortDescriptions.Add(s));
-			PersonRequestViewModels.Refresh();
+			var customSorter = new HandlePersonRequestComparer {SortDescriptions = sortDescriptions};
+			PersonRequestViewModels.CustomSort = customSorter;
 		}
 
 		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)

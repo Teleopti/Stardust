@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -65,6 +66,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			using (_mocks.Playback())
 			{
 				_target.Execute(scenario, period, requestedPeople);
+
+			    _schedulingResultStateHolder.Schedules.Should().Not.Be.Null();
+			    _schedulingResultStateHolder.SkillDays.Should().Not.Be.Null();
 			}
 		}
 	}

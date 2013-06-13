@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionHandler : 
+	public class ScheduleProjectionReadOnlyUpdater : 
 		IHandleEvent<ProjectionChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IPublishEventsFromEventHandlers _serviceBus;
 
-		public ScheduleProjectionHandler(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IPublishEventsFromEventHandlers serviceBus)
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IPublishEventsFromEventHandlers serviceBus)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		    _serviceBus = serviceBus;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			if (!haveChanged(nearestLayerToNow))
 				layersHaveBeenRemoved(nearestLayerToNow);
 
-			_serviceBus.Publish(new UpdatedScheduleDay
+			_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					Datasource = @event.Datasource,
 					BusinessUnitId = @event.BusinessUnitId,

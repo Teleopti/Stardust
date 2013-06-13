@@ -1,7 +1,7 @@
 ﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	public interface IJsonDeserializer
+	public interface IJsonDeserializer<out T>
 	{
-		dynamic DeserializeObject(string value);
+		T DeserializeObject(string value);
 	}
 }
