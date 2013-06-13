@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			using (mocks.Record())
 			{
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(10d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(10d);
 				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
 				_target.Payload.ManualAgents = null;
 			}
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using(mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(10d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(10d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
             }
             using(mocks.Playback())
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(6d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(6d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
@@ -549,7 +549,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(5d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(5d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
@@ -583,7 +583,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(0d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
@@ -635,17 +635,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                 .Return(2d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -742,13 +742,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -819,13 +819,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                 .Return(2d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -923,13 +923,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -1020,13 +1020,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(1d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -1081,15 +1081,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(3d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(3d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(3d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(3d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(9); 
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
@@ -1194,12 +1194,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(2d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2,1)).IgnoreArguments().Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2,1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
@@ -1258,12 +1258,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(2d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
@@ -1336,12 +1336,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.
                     Any().Return(7);
@@ -1382,12 +1382,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(4d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
@@ -1745,13 +1745,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2.5d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
@@ -2019,19 +2019,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(0d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(7);
                 Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
