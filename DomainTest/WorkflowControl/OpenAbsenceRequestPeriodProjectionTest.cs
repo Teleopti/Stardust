@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
             Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
         }
 
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
 			}
 
-			DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 01, 01);
+			var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 01, 01);
 
-			IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+			IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 			Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
 		}
 
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
             Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
             Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess));
         }
@@ -113,15 +113,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
+            var requestPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(absenceRequestOpenPeriodTwo.Period, projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
 
-            dateOnlyPeriod = new DateOnlyPeriod(2010, 03, 01, 2010, 04, 05);
-            projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            requestPeriod = new DateOnlyPeriod(2010, 03, 01, 2010, 04, 05);
+            projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(2, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(2010, 1, 1, 2010, 3, 31), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -151,9 +151,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
+            var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod,_cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod,_cultureInfo);
 
             Assert.AreEqual(5, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(2010, 1, 1, 2010, 5, 31), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -187,9 +187,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(3, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(2010, 1, 1, 2010, 5, 31), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -218,9 +218,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(5, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 03, 28)), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -250,16 +250,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 08, 20, 2010, 08, 20);
+			var requestPeriod = new DateOnlyPeriod(2010, 08, 20, 2010, 08, 20);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(new DateOnly(2010, 8, 20), new DateOnly(2010, 08, 20)), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
         }
 
         [Test]
-        public void VerifyComplexCaseOutsidePeriods()
+        public void VerifyDenyReasonOutsidePeriods()
         {
             AbsenceRequestOpenDatePeriod absenceRequestOpenPeriodMidsummer = new AbsenceRequestOpenDatePeriod();
 
@@ -276,9 +276,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod requestedPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestedPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(3, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 6, 22)), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -311,9 +311,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(new DateOnly(2010, 05, 20)).Repeat.AtLeastOnce();
 			}
 
-			DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 06, 25, 2010, 06, 26);
+			var requestPeriod = new DateOnlyPeriod(2010, 06, 25, 2010, 06, 26);
 
-			IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+			IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
 			var expected =
 				string.Format(
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(new DateOnly(2010, 05, 20)).Repeat.AtLeastOnce();
 			}
 
-			DateOnlyPeriod requestPeriod = new DateOnlyPeriod(2010, 06, 25, 2010, 06, 26);
+			var requestPeriod = new DateOnlyPeriod(2010, 06, 25, 2010, 06, 26);
 
 			IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
@@ -398,9 +398,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
             }
 
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
+			var requestPeriod = new DateOnlyPeriod(2010, 01, 01, 2010, 12, 31);
 
-            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
+            IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo);
 
             Assert.AreEqual(5, projectedOpenAbsenceRequestPeriods.Count);
             Assert.AreEqual(new DateOnlyPeriod(2010, 1, 1, 2010, 5, 31), projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
@@ -409,26 +409,5 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(new DateOnlyPeriod(2010, 6, 28, 2010, 8, 31), projectedOpenAbsenceRequestPeriods[3].GetPeriod(DateOnly.Today));
             Assert.AreEqual(new DateOnlyPeriod(2010, 9, 1, 2010, 12, 31), projectedOpenAbsenceRequestPeriods[4].GetPeriod(DateOnly.Today));
         }
-
-        //[Test]
-        //public void IfNotLayerFound()
-        //{
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_openAbsenceRequestPeriodExtractor.AvailablePeriods).Return(_openAbsenceRequestPeriods);
-        //        Expect.Call(_openAbsenceRequestPeriodExtractor.WorkflowControlSet)
-        //              .Return(new WorkflowControlSet("test WCS"));
-        //        Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate)
-        //              .Return(DateOnly.Today)
-        //              .Repeat.AtLeastOnce();
-        //    }
-
-        //    DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010, 05, 01, 2010, 05, 31);
-
-        //    IList<IAbsenceRequestOpenPeriod> projectedOpenAbsenceRequestPeriods =
-        //        _target.GetProjectedPeriods(dateOnlyPeriod, _cultureInfo);
-        //    Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
-        //    Assert.IsTrue(typeof (DenyAbsenceRequest).IsInstanceOfType(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess));
-        //}
     }
 }
