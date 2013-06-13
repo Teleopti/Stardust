@@ -40,11 +40,12 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IOpenAbsenceRequestPeriodProjection Projection { get; }
 
-		///// <summary>
-		///// Get Workflow Control Set.
-		///// </summary>
-		//IWorkflowControlSet WorkflowControlSet { get; }
-
+		/// <summary>
+		/// Gets all periods.
+		/// </summary>
+		/// <value>
+		/// All periods.
+		/// </value>
 	    IEnumerable<IAbsenceRequestOpenPeriod> AllPeriods { get; }
     }
 }
