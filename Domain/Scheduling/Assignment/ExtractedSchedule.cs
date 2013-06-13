@@ -918,6 +918,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			IPersonalShift personalShift = new PersonalShift();
 			personalShift.LayerCollection.Add(layer);
 
+			var closest = PersonAssignmentCollection().FirstOrDefault();
+			var period = personalShift.LayerCollection.Period();
+
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
@@ -925,6 +928,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					personAssignment.AddPersonalShift(personalShift);
 					return;
 				}
+
+				if (period.HasValue && closest != null)
+				{
+					var diff = personAssignment.Period.StartDateTime.Subtract(period.Value.StartDateTime);
+					var closestDiff = closest.Period.StartDateTime.Subtract(period.Value.StartDateTime);
+
+					if (Math.Abs(diff.TotalSeconds) < Math.Abs(closestDiff.TotalSeconds))
+						closest = personAssignment;
+				}
+
+			}
+
+			if (closest != null)
+			{
+				closest.AddPersonalShift(personalShift);
+				return;
 			}
 
 			//TODO create inparameters to check on if to create new personassignment
