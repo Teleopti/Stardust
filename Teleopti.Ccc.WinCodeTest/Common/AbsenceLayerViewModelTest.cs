@@ -183,12 +183,28 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 
 		[Test]
-		public void VerifyUpdatePeriod()
+		public void UpdatePeriod_WhenCalled_ShouldSetIsChangedToFalse()
 		{
+
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
+
 			Assert.IsFalse(_target.IsChanged);
+		}
+
+		[Test]
+		public void UpdatePeriod_WhenCalled_ShouldCallReplaceAbsenceOnObserver()
+		{
+			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+
+			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator());
+			layerObserver.Expect(l => l.ReplaceAbsence(_target, _layerWithPayload, _target.SchedulePart));
+
+			_target.IsChanged = true;
+			_target.UpdatePeriod();
+
+			layerObserver.VerifyAllExpectations();
 		}
 
 		[Test]

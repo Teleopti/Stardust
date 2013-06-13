@@ -61,5 +61,10 @@ namespace Teleopti.Ccc.WinCode.Common
                 SynchronizeWithDomainRoger();
             }
         }
+
+		protected override void Replace()
+		{
+			if (ParentObservingCollection!=null) ParentObservingCollection.ReplaceAbsence(this, Layer as ILayer<IAbsence>, SchedulePart);
+		}
     }
 }

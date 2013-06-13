@@ -169,6 +169,31 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
+		public void UpdatePeriod_WhenCalled_ShouldSetIsChangedToFalse()
+		{
+
+			_target.IsChanged = true;
+			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
+			_target.UpdatePeriod();
+
+			Assert.IsFalse(_target.IsChanged);
+		}
+
+		[Test]
+		public void UpdatePeriod_WhenCalled_ShouldCallReplaceAbsenceOnObserver()
+		{
+			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+
+			_target = new MainShiftLayerViewModel(layerObserver, _layerWithPayload, null, null);
+			layerObserver.Expect(l => l.ReplaceActivity(_target, _layerWithPayload, _target.SchedulePart));
+
+			_target.IsChanged = true;
+			_target.UpdatePeriod();
+
+			layerObserver.VerifyAllExpectations();
+		}
+
+		[Test]
 		public void VerifyStartTimeChangedWithSchedulePart()
 		{
 			_testRunner.RunInSTA(

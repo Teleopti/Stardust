@@ -585,7 +585,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			theLayerViewModel.Period = newPeriod;
 			theLayerViewModel.Payload = newAbsence;
-			theLayerViewModel.SynchronizeWithDomainRoger();
 
 			replaceService.Expect(r => r.Replace(part, theLayer, newAbsence, newPeriod));
 

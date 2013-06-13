@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 			                	: Layer.Payload;
 
 		
-			Layer.SynchronizeWithDomainRoger();
+			Layer.UpdatePeriod();
 			
 			var handler = LayerUpdated;
 			if (handler != null)

@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.WinCode.Common
 		private DateTimePeriod _period;
 		private TimeSpan _interval = TimeSpan.FromMinutes(15);
 		private bool _isChanged;
-		private ILayerViewModelObserver _parentObservingCollection;
+		private readonly ILayerViewModelObserver _parentObservingCollection;
 		private IScheduleDay _part;
 		private bool _canMoveAll;
-		private IEventAggregator _eventAggregator;
+		private readonly IEventAggregator _eventAggregator;
 		private bool _isSelected;
 		private IPayload _payload;
 
@@ -115,8 +115,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_period != value)
 				{
 					_period = value;
-					//TODO!
-					//Layer.Period = _period;
 					SendPropertyChanged("Period");
 					SendPropertyChanged("ElapsedTime");
 				}
@@ -232,20 +230,25 @@ namespace Teleopti.Ccc.WinCode.Common
 			Period = new DateTimePeriod(start, end);
 		}
 
+		//and payload....
 		public virtual void UpdatePeriod()
 		{
 			if (IsChanged)
 			{
-				//TODO!
-				//Layer.Period = Period;
+				Replace();
 				if (_part != null)
 				{
 					hackToUpdateUnderlyingPersonAssignment();
-					//Trigger update ShiftEditor
 					SynchronizeWithDomainRoger();
 				}
+				
 				IsChanged = false;
 			}
+		}
+
+		protected virtual void Replace()
+		{
+			
 		}
 
 		#region vertical sorting
@@ -345,7 +348,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		#endregion
 
-		public void SynchronizeWithDomainRoger()
+		protected void SynchronizeWithDomainRoger()
 		{
 			//todo: Update the real model...........
 			new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
