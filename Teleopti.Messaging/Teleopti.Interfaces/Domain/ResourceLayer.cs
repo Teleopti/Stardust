@@ -1,23 +1,13 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System;
+
+namespace Teleopti.Interfaces.Domain
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class ResourceLayer
+	public struct ResourceLayer
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		public double Resource { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public DateTimePeriod Period { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public IPayload Activity { get; set; }
+		public Guid Activity { get; set; }
 	}
 }

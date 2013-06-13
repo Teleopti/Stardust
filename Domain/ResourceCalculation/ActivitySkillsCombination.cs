@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -5,10 +6,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ActivitySkillsCombination
 	{
-		private readonly IPayload _activity;
+		private readonly Guid _activity;
 		private readonly SkillCombination _skills;
 
-		public ActivitySkillsCombination(IPayload activity, SkillCombination skills)
+		public ActivitySkillsCombination(Guid activity, SkillCombination skills)
 		{
 			_activity = activity;
 			_skills = skills;
@@ -16,9 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public string GenerateKey()
 		{
-			return _activity == null
-				       ? string.Empty
-				       : _activity.Id.GetValueOrDefault() + "|" + _skills.Key;
+			return _activity + "|" + _skills.Key;
 		}
 	}
 }

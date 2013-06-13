@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _dictionary.Count > 0;
 		}
 
-		public void AddResources(DateTimePeriod period, IPayload activity, IPerson person, DateOnly personDate,
+		public void AddResources(DateTimePeriod period, Guid activity, IPerson person, DateOnly personDate,
 		                         double resource)
 		{
 			IDictionary<string, double> resources;

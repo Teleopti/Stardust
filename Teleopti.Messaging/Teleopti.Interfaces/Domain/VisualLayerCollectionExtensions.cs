@@ -37,7 +37,7 @@ namespace Teleopti.Interfaces.Domain
 						new ResourceLayer
 							{
 								Resource = 1d * (1 * ((minutesSplit - startDiff - endDiff) / minutesSplit)),
-								Activity = layer.Payload.UnderlyingPayload,
+								Activity = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								Period = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit))
 							};
 					if (startTime.AddMinutes(minutesSplit) >= layer.Period.EndDateTime)
@@ -65,7 +65,7 @@ namespace Teleopti.Interfaces.Domain
 		void Clear();
 		bool HasItems();
 
-		void AddResources(DateTimePeriod period, IPayload activity, IPerson person, DateOnly personDate,
+		void AddResources(DateTimePeriod period, Guid activity, IPerson person, DateOnly personDate,
 										  double resource);
 
 		double SkillResources(ISkill skill, DateTimePeriod period);
