@@ -150,6 +150,7 @@
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
