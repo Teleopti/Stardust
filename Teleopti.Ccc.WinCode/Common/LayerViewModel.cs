@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				Replace();
 				if (_part != null)
 				{
-					SynchronizeWithDomainRoger();
+					new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 				}
 				
 				IsChanged = false;
@@ -336,12 +336,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		public abstract bool CanMoveDown { get; }
 
 		#endregion
-
-		protected void SynchronizeWithDomainRoger()
-		{
-			//todo: Update the real model...........
-			new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-		}
 
 		public virtual IPayload Payload
 		{
