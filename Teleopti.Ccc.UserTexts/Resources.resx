@@ -11463,9 +11463,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>
-    </data>
+  </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
     <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chat</value>
   </data>
 </root>

@@ -403,3 +403,19 @@ from dbo.PersonAbsence pa
 inner join #PersonAbsenceRemove t
 on pa.Id = t.Id
 GO
+----------------  
+--Name: Ola Håkansson
+--Date: 2013-06-13
+--Desc: Adding the new skill type Retail to the database.
+----------------  
+
+DECLARE @creator uniqueidentifier
+SELECT TOP 1 @creator=CreatedBy FROM SkillType
+IF @creator IS NULL
+	BEGIN
+		SELECT TOP 1 @creator=Id FROM Person
+	END
+INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
+VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeChat',null,9,0)
+
+GO
