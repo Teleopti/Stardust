@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.ClickNext();
+			Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I click previous virtual schedule period button")]
