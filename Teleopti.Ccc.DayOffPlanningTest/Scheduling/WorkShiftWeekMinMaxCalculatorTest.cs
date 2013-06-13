@@ -72,9 +72,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
         [Test]
         public void VerifyIsInLegalState()
         {
-
+	        IPerson person = _mocks.StrictMock<IPerson>();
+	        IPersonPeriod personPeriod = _mocks.StrictMock<IPersonPeriod>();
             using (_mocks.Record())
             {
+	            Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.Twice();
+	            Expect.Call(_matrix.Person).Return(person).Repeat.Twice();
+	            Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
+	            Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.Times(3);
+	            Expect.Call(person.Period(_startDate)).Return(personPeriod);
                 commonMocks();
                 legalStateMocks();
             }
@@ -88,9 +94,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
         [Test]
         public void VerifyIsNotInLegalState()
         {
-
+			IPerson person = _mocks.StrictMock<IPerson>();
+			IPersonPeriod personPeriod = _mocks.StrictMock<IPersonPeriod>();
             using (_mocks.Record())
             {
+				Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.Twice();
+				Expect.Call(_matrix.Person).Return(person).Repeat.Twice();
+				Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.Times(3);
+				Expect.Call(person.Period(_startDate)).Return(personPeriod);
                 commonMocks();
                 ilegalStateMocks();
             }
