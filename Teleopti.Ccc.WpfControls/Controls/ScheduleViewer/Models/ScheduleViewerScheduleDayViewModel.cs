@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
 
         public ScheduleViewerScheduleDayViewModel(IScheduleDay part,IEventAggregator eventAggregator)
         {
-            Layers = new LayerViewModelCollection(eventAggregator,new CreateLayerViewModelService());
+            Layers = new LayerViewModelCollection(eventAggregator,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
             Layers.AddFromSchedulePart(part);
             _part = part;
             DisplayColor = Color.LightBlue;

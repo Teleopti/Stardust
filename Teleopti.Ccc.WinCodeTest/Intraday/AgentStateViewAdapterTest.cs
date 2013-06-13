@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                     new Team(),
                     new LayerViewModelCollection(
                         new EventAggregator(),
-                        new CreateLayerViewModelService()),
+                        new CreateLayerViewModelService(),new RemoveLayerFromSchedule()),
                     new CommonNameDescriptionSetting("test"));
 
             var collection = new Collection<DayLayerModel> { dayLayerModel };
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService()),
+						new CreateLayerViewModelService(),new RemoveLayerFromSchedule()),
 					new CommonNameDescriptionSetting("test"))
 					{
 						CurrentStateDescription = null

@@ -32,19 +32,18 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
         private IScheduleDay _part;
-        private IRemoveLayerFromSchedule _removeService = new RemoveLayerFromSchedule();
+        private IRemoveLayerFromSchedule _removeService;
         private IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
 
-        public LayerViewModelCollection()
-        {
-        }
-        public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService):this()
+
+		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
-            CreateGroups();
+			_removeService = removeService;
+			CreateGroups();
         }
 
         private void CreateGroups()
@@ -101,14 +100,10 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public IRemoveLayerFromSchedule RemoveService
-        {
-            get { return _removeService; }
-        }
 
 		public void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer, IScheduleDay scheduleDay)
 		{
-			RemoveService.Remove(scheduleDay, activityLayer);
+			_removeService.Remove(scheduleDay, activityLayer);
 			CreateProjectionViewModels(scheduleDay);
 
 			Remove(sender);
@@ -116,7 +111,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay)
 	    {
-			RemoveService.Remove(scheduleDay, absenceLayer);
+			_removeService.Remove(scheduleDay, absenceLayer);
 			CreateProjectionViewModels(scheduleDay);
 
 			Remove(sender);

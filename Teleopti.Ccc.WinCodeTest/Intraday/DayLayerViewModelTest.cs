@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var dictionary = new Dictionary<Guid, IActualAgentState> { { (Guid)person.Id, agentState } };
 
 			target.Models.Add(new DayLayerModel(person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date),
-			                                    new Team(), new LayerViewModelCollection(), new CommonNameDescriptionSetting()));
+			                                    new Team(), new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),new RemoveLayerFromSchedule()), new CommonNameDescriptionSetting()));
 			rtaStateHolder.Expect(r => r.ActualAgentStates).IgnoreArguments().Return(dictionary);
 			mocks.ReplayAll();
 
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             }
             using (mocks.Playback())
             {
-                target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService), null));
+                target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule()), null));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, null, period));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period));
             }
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             using (mocks.Playback())
             {
                 target = new DayLayerViewModel(null, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
-                target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(), null));
+                target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),new RemoveLayerFromSchedule()), null));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period));
             }
         }

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyCannotMoveAbsenceLayerVertical()
         {
             #region setup
-            LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator,new CreateLayerViewModelService());
+            LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator,new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             collection.AddFromSchedulePart(part);
             #endregion

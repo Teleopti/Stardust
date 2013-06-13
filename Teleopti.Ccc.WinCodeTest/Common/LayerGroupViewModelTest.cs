@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [SetUp]
         public void Setup()
         {
-            _sourceCollection = new LayerViewModelCollection(null, new CreateLayerViewModelService());
+            _sourceCollection = new LayerViewModelCollection(null, new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
             //load with some absence/mainshifts
             SchedulePartFactoryForDomain schedulePartFactoryForDomain = new SchedulePartFactoryForDomain();
             _sourceCollection.AddFromSchedulePart(schedulePartFactoryForDomain.CreateSchedulePartWithMainShiftAndAbsence());
