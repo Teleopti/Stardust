@@ -19,10 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemovePersonAbsenceFromRepository()
 		{
-			var absenceLayer = MockRepository.GenerateMock<IAbsenceLayer>();
-			var start = new DateTime(2013, 6, 12, 5, 0, 0, DateTimeKind.Utc);
-			absenceLayer.Stub(x => x.Period).Return(new DateTimePeriod(start, start.AddHours(2)));
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), absenceLayer);
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(new Guid());
 
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>() { personAbsence };
@@ -44,10 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var currentDataSource = new FakeCurrentDatasource("datasource");
 
-			var absenceLayer = MockRepository.GenerateMock<IAbsenceLayer>();
-			var start = new DateTime(2013, 6, 12, 5, 0, 0, DateTimeKind.Utc);
-			absenceLayer.Stub(x => x.Period).Return(new DateTimePeriod(start, start.AddHours(2)));
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), absenceLayer);
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(new Guid());
 
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>() { personAbsence };
@@ -65,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.BusinessUnitId.Should().Be(personAbsence.BusinessUnit.Id.Value);
 			@event.PersonId.Should().Be(personAbsence.Person.Id.Value);
 			@event.ScenarioId.Should().Be(personAbsence.Scenario.Id.Value);
-			@event.StartDateTime.Should().Be(personAbsence.Layer.Period.StartDateTime.AddHours(-24));
+			@event.StartDateTime.Should().Be(personAbsence.Layer.Period.StartDateTime);
 			@event.EndDateTime.Should().Be(personAbsence.Layer.Period.EndDateTime);
 			
 		}
