@@ -381,7 +381,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public virtual int MaxParallelTasks
 	    {
 		    get { return _maxParallelTasks; }
-		    set { _maxParallelTasks = value; }
+		    set
+		    {
+				if (value < 1 || value > 100)
+					throw new ArgumentOutOfRangeException("value", value, "Priority must be between 1 and 100.");
+				_maxParallelTasks = value;
+		    }
 	    }
 
 	    /// <summary>
