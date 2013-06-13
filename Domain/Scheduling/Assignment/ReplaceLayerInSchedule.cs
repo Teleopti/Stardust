@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							var indexOfLayer = layer.OrderIndex;
 							ms.LayerCollection.Remove(layer);
 							ms.LayerCollection.Insert(indexOfLayer, new MainShiftActivityLayer(newActivity, newPeriod));
+							ass.SetMainShift(ms);
 							return;
 						}
 					}
