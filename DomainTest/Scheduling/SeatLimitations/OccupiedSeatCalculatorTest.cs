@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,16 +13,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 	{
 		private MockRepository _mocks;
 		private IOccupiedSeatCalculator _target;
-		private ISkillVisualLayerCollectionDictionaryCreator _skillVisualLayerCollectionDictionaryCreator;
-		private ISeatImpactOnPeriodForProjection _seatImpactOnPeriodForProjection;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_skillVisualLayerCollectionDictionaryCreator = _mocks.StrictMock<ISkillVisualLayerCollectionDictionaryCreator>();
-			_seatImpactOnPeriodForProjection = _mocks.StrictMock<ISeatImpactOnPeriodForProjection>();
-			_target = new OccupiedSeatCalculator(_skillVisualLayerCollectionDictionaryCreator, _seatImpactOnPeriodForProjection);
+			_target = new OccupiedSeatCalculator();
 		}
 
 		[Test]
@@ -39,15 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(skill, skillStaffPeriodDictionary);
 			
-			SkillVisualLayerCollectionDictionary skillVisualLayerCollectionDictionary = new SkillVisualLayerCollectionDictionary();
-			skillVisualLayerCollectionDictionary.Add(skill, relevantProjections);
-
 			using(_mocks.Record())
 			{
-				Expect.Call(
-					_skillVisualLayerCollectionDictionaryCreator.CreateSiteVisualLayerCollectionDictionary(relevantProjections, day)).
-					Return(skillVisualLayerCollectionDictionary);
-				Expect.Call(_seatImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, relevantProjections)).Return(4.5d);
 			}
 
 			using(_mocks.Playback())
@@ -61,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		[Test]
 		public void ShouldReturnZeroSeatsUsedIfNoWorkShifts()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
+			IResourceCalculationDataContainer relevantProjections = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateSiteSkill("sitSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);
@@ -71,16 +59,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(skill, skillStaffPeriodDictionary);
 
-			SkillVisualLayerCollectionDictionary skillVisualLayerCollectionDictionary = new SkillVisualLayerCollectionDictionary();
-
 			skillStaffPeriod.Payload.CalculatedUsedSeats = 7;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(
-					_skillVisualLayerCollectionDictionaryCreator.CreateSiteVisualLayerCollectionDictionary(relevantProjections, day)).
-					Return(skillVisualLayerCollectionDictionary);
-				
 			}
 
 			using (_mocks.Playback())

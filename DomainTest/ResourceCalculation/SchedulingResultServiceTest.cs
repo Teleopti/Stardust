@@ -14,17 +14,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class SchedulingResultServiceTest
 	{
-		#region Variables
-
 		private SchedulingResultService _target;
 		private PersonAssignmentListContainer _personAssignmentListContainer;
 		private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
 		private DateTimePeriod _inPeriod;
 		private MockRepository _mocks;
-
-		#endregion
-
-		#region Setup
+		private PersonSkillProvider _personSkillProvider;
+		private IResourceCalculationDataContainer _resources;
 
 		[SetUp]
 		public void Setup()
@@ -33,17 +29,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_inPeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 15, 00, DateTimeKind.Utc));
 			_personAssignmentListContainer = PersonAssignmentFactory.CreatePersonAssignmentListForActivityDividerTest();
 			_skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
+			_personSkillProvider = new PersonSkillProvider();
+
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
+			foreach (var layer in layers)
+			{
+				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				{
+					_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, layer.Person, new DateOnly(2008,1,1), resourceLayer.Resource);
+				}
+			}
+
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
-				_personAssignmentListContainer.TestVisualLayerCollection(),
+				_resources,
 				new SingleSkillCalculator(),
 				false,
-				new SingleSkillDictionary());
+				_personSkillProvider);
 		}
-
-		#endregion
-
-		#region Constructor tests
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public static IDictionary<ISkill, IList<ISkillDay>> CreateSkillDaysFromSkillStaffPeriodDictionary(MockRepository mocks, ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary)
@@ -74,14 +78,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsNotNull(_target);
 		}
 
-		#endregion
-
 		[Test]
 		public void VerifySchedulingResultWithoutPeriod()
 		{
 			Assert.IsNotNull(_target);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
 			Assert.AreEqual(0.83,
 							outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
@@ -93,13 +95,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_target = new SchedulingResultService(_skillStaffPeriods,
 												  _personAssignmentListContainer.AllSkills,
-												  new List<IVisualLayerCollection>(),
+												  new ResourceCalculationDataContainer(_personSkillProvider), 
 												  new SingleSkillCalculator(),
 												  false,
-												  new SingleSkillDictionary());
+												  _personSkillProvider);
 			Assert.IsNotNull(_target);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
 			Assert.AreEqual(0.0 / _inPeriod.ElapsedTime().TotalMinutes,
 							outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
@@ -114,22 +116,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills, skillDayDate);
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
-				_personAssignmentListContainer.TestVisualLayerCollection(),
+				_resources,
 				new SingleSkillCalculator(),
 				false,
-				new SingleSkillDictionary());
+				_personSkillProvider);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
 			Assert.AreEqual(outDic, _skillStaffPeriods);
 		}
 
 		[Test]
 		public void ShouldNotUseSingleSkillCalculationOnNoInputDays()
 		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var toRemove = new List<IVisualLayerCollection>();
-			var toAdd = new List<IVisualLayerCollection>();
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _personAssignmentListContainer.TestVisualLayerCollection(), new SingleSkillCalculator(), false, singleSkillDictionary);
+			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
+			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
+			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
 
 			var res = _target.UseSingleSkillCalculations(toRemove, toAdd);
 			Assert.IsFalse(res);
@@ -138,11 +139,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldNotUseSingleSkillCalculationsWhenToRemoveIsNotSingleSkilled()
 		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _personAssignmentListContainer.TestVisualLayerCollection(), new SingleSkillCalculator(), false, singleSkillDictionary);
+			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
 			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-			var toRemove = new List<IVisualLayerCollection> { visualLayerCollection };
-			var toAdd = new List<IVisualLayerCollection>();
+			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
+			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
 			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
 
@@ -150,7 +150,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				Expect.Call(visualLayerCollection.Person).Return(person);
 				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod);
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly(2011, 1, 1))).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -163,11 +162,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "AddIs"), Test]
 		public void ShouldNotUseSingleSkillCalculationsWhenToAddIsNotSingleSkilled()
 		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _personAssignmentListContainer.TestVisualLayerCollection(), new SingleSkillCalculator(), false, singleSkillDictionary);
+			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
 			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-			var toAdd = new List<IVisualLayerCollection> { visualLayerCollection };
-			var toRemove = new List<IVisualLayerCollection>();
+			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
+			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
 			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
 
@@ -175,7 +173,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				Expect.Call(visualLayerCollection.Person).Return(person);
 				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod);
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly(2011, 1, 1))).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -188,12 +185,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldUseSingleSkillCalculationsWhenToAddAndToRemoveIsSingleSkilled()
 		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
 			var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
 			var visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _personAssignmentListContainer.TestVisualLayerCollection(), new SingleSkillCalculator(), false, singleSkillDictionary);
-			var toAdd = new List<IVisualLayerCollection> { visualLayerCollection1 };
-			var toRemove = new List<IVisualLayerCollection> { visualLayerCollection2 };
+			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
+			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
+			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
 			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
 
@@ -203,8 +199,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(visualLayerCollection1.Period()).Return(dateTimePeriod);
 				Expect.Call(visualLayerCollection2.Person).Return(person);
 				Expect.Call(visualLayerCollection2.Period()).Return(dateTimePeriod);
-
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly(2011, 1, 1))).Return(true).Repeat.Twice();
 			}
 
 			using (_mocks.Playback())

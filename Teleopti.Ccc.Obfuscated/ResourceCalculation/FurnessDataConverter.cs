@@ -113,11 +113,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 {
                     int productIndex = _skillIndexRegister[skillKey];
                     double weightedSkillValue;
-                    if (!_dividedActivityData.WeightedRelativePersonSkillResources[personKey].TryGetValue(skillKey, out weightedSkillValue))
+                    if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey].TryGetValue(skillKey, out weightedSkillValue))
                         weightedSkillValue = 0;
                     _furnessData.ResourceMatrix()[producerIndex, productIndex] = weightedSkillValue;
 
-                    double value = _dividedActivityData.PersonSkillEfficiencies[personKey].ContainsKey(skillKey) ? 1 : 0;
+                    double value = _dividedActivityData.KeyedSkillResourceEfficiencies[personKey].ContainsKey(skillKey) ? 1 : 0;
                     _furnessData.ProductivityMatrix()[producerIndex, productIndex] = value;
                 }
             }
@@ -134,8 +134,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 foreach (ISkill skillKey in _skillIndexRegister.Keys)
                 {
                     int productIndex = _skillIndexRegister[skillKey];
-                    if (_dividedActivityData.WeightedRelativePersonSkillResources[personKey].ContainsKey(skillKey))
-                        _dividedActivityData.WeightedRelativePersonSkillResources[personKey][skillKey] = _furnessData.ResourceMatrix()[producerIndex, productIndex];
+                    if (_dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey].ContainsKey(skillKey))
+                        _dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey][skillKey] = _furnessData.ResourceMatrix()[producerIndex, productIndex];
                 }
             }
         }

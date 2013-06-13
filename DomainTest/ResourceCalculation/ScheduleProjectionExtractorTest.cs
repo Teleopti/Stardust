@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,11 +16,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     {
 
         ScheduleProjectionExtractor _target;
+	    private MockRepository _mocks;
+	    private IPersonSkillProvider _personSkillProvider;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
-            _target = new ScheduleProjectionExtractor();
+	        _mocks = new MockRepository();
+		    _personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
+            _target = new ScheduleProjectionExtractor(_personSkillProvider, 15);
         }
 
         [Test]

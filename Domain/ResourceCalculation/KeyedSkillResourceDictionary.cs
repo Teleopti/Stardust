@@ -11,21 +11,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// of double as value with a key of Skill.
     /// </summary>
     [Serializable]
-	public class PersonSkillDictionary : Dictionary<string, Dictionary<ISkill, double>>
+	public class KeyedSkillResourceDictionary : Dictionary<string, Dictionary<ISkill, double>>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PersonSkillDictionary"/> class.
+        /// Initializes a new instance of the <see cref="KeyedSkillResourceDictionary"/> class.
         /// </summary>
-        public PersonSkillDictionary()
+        public KeyedSkillResourceDictionary()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PersonSkillDictionary"/> class.
+        /// Initializes a new instance of the <see cref="KeyedSkillResourceDictionary"/> class.
         /// </summary>
         /// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"/> object containing the information required to serialize the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>
         /// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> structure containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>
-        protected PersonSkillDictionary(SerializationInfo info, StreamingContext context)
+        protected KeyedSkillResourceDictionary(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

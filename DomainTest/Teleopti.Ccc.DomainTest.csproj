@@ -805,7 +805,6 @@
     <Compile Include="Scheduling\Tracking\TrackerTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractorTest.cs" />
-    <Compile Include="ResourceCalculation\PersonSkillDictionaryTestClass.cs" />
     <Compile Include="Scheduling\AbsenceSorterTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPersonTest.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeetingTest.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -13,8 +14,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class SingleSkillMaxSeatCalculatorTest
 	{
 		private SingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
-		private IList<IVisualLayerCollection> _toRemove;
-		private IList<IVisualLayerCollection> _toAdd;
+		private IList<IScheduleDay> _toRemove;
+		private IList<IScheduleDay> _toAdd;
 		private ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
 		private ISkillStaffPeriod _skillStaffPeriod;
 		private IVisualLayerCollection _visualLayerCollection;
@@ -23,13 +24,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private Activity _activity;
 		private IPerson _person;
 		private DateTime _dateTime;
+		private MockRepository _mocks;
+		private IPersonSkillProvider _personSkillProvider;
+		private IScheduleDay _scheduleDay;
 
 		[SetUp]
 		public void Setup()
 		{
-			_singleSkillMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-			_toAdd = new List<IVisualLayerCollection>();
-			_toRemove = new List<IVisualLayerCollection>();
+			_mocks = new MockRepository();
+			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
+			_singleSkillMaxSeatCalculator = new SingleSkillMaxSeatCalculator(_personSkillProvider);
+			_toAdd = new List<IScheduleDay>();
+			_toRemove = new List<IScheduleDay>();
 
 			_dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			_skill = SkillFactory.CreateSkill("skill");
@@ -44,18 +50,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skillMaxSeat);
 			skillStaffPeriodDictionary.Add(_skillStaffPeriod.Period, _skillStaffPeriod);
 			_relevantSkillStaffPeriods.Add(_skillMaxSeat, skillStaffPeriodDictionary);
+			_scheduleDay = _mocks.DynamicMock<IScheduleDay>();
 		}
 
 		[Test]
 		public void ShouldCalculateAddAndRemove()
 		{
-			_toAdd.Add(_visualLayerCollection);
+			_toAdd.Add(_scheduleDay);
 			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(1, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 
-			_toRemove.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, new List<IVisualLayerCollection>());
+			_toAdd.Clear();
+			_toRemove.Add(_scheduleDay);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}
@@ -64,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCalculateFractions()
 		{
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(-15)), _skill.Activity);
-			_toAdd.Add(_visualLayerCollection);
+			_toAdd.Add(_scheduleDay);
 			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);	
@@ -80,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_relevantSkillStaffPeriods.Clear();
 			_relevantSkillStaffPeriods.Add(_skillMaxSeat, skillStaffPeriodDictionary);
 
-			_toAdd.Add(_visualLayerCollection);
+			_toAdd.Add(_scheduleDay);
 			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);
@@ -96,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_relevantSkillStaffPeriods.Clear();
 			_relevantSkillStaffPeriods.Add(_skillMaxSeat, skillStaffPeriodDictionary);
 
-			_toAdd.Add(_visualLayerCollection);
+			_toAdd.Add(_scheduleDay);
 			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);
@@ -116,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skill });
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8), TimeSpan.FromHours(9), _skill.Activity);
 		
-			_toAdd.Add(_visualLayerCollection);
+			_toAdd.Add(_scheduleDay);
 			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, _skillStaffPeriod.Payload.CalculatedUsedSeats);		

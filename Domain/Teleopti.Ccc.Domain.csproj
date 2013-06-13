@@ -1233,7 +1233,7 @@
     <Compile Include="ResourceCalculation\ActivityDivider.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractor.cs" />
     <Compile Include="ResourceCalculation\DividedActivityData.cs" />
-    <Compile Include="ResourceCalculation\PersonSkillDictionary.cs" />
+    <Compile Include="ResourceCalculation\KeyedSkillResourceDictionary.cs" />
     <Compile Include="ResourceCalculation\SkillCollectionKey.cs" />
     <Compile Include="Scheduling\AbsenceSorter.cs" />
     <Compile Include="Scheduling\Assignment\IScheduleEventListener.cs" />

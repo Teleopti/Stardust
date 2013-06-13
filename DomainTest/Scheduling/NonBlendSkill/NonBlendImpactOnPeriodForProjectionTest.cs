@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,10 +27,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private IActivity _lunch;
 		private IAbsence _absence;
 		private IVisualLayerFactory _visualLayerFactory;
-		private IList<IVisualLayerCollection> _shiftList;
+		private ResourceCalculationDataContainer _resources;
 		private DateTimePeriod _shiftPeriod;
 		private ISkill _skillCarnaby;
 		private ISkill _skillPhone;
+		private IPersonSkillProvider _personSkillProvider;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -52,7 +54,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod, _person1);
 			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 
-			_shiftList = new List<IVisualLayerCollection> { _layerCollection1, _layerCollection2, };
+			_personSkillProvider = new PersonSkillProvider();
+
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			foreach (var layer in new []{_layerCollection1,_layerCollection2})
+			{
+				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				{
+					_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, layer.Person, new DateOnly(2008, 1, 1), resourceLayer.Resource);
+				}
+			}
 
 			_skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skillCarnaby,
 																			   new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc), 60,
@@ -67,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		public void ShouldCalculateIfActivityIntersectsPeriod()
 		{
 
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillCarnaby);
+            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0.5, result);
 		}
 
@@ -81,22 +92,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		[Test]
 		public void ShouldNotCalculateIfPayloadNotActivity()
 		{
-		    var period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-															 new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
+			var period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
+			                                new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
 
 			IVisualLayer baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, period, _person2);
 			IVisualLayer absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period);
-			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> { absenceLayer, _visualLayer1 }, new ProjectionPayloadMerger());
-			_shiftList = new List<IVisualLayerCollection> {_layerCollection3 };
+			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> {absenceLayer, _visualLayer1},
+			                                              new ProjectionPayloadMerger());
 
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillCarnaby);
+			_resources.Clear();
+
+			foreach (var resourceLayer in _layerCollection3.ToResourceLayers(15))
+			{
+				_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, _person2, new DateOnly(2008, 1, 1),
+				                        resourceLayer.Resource);
+			}
+
+			double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0.5, result);
 		}
 
 		[Test]
 		public void ShouldCalculateOnlyIfPersonSkillExist()
 		{
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillCarnaby);
+            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0.5, result);
 
 			IPersonPeriod personPeriod = _person1.Period(new DateOnly(2010, 1, 1));
@@ -104,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			Assert.AreEqual(_skillCarnaby, personSkill.Skill);
             personPeriod.PersonNonBlendSkillCollection.Remove(personSkill);
 
-            result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillCarnaby);
+            result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0, result);
 		}
 
@@ -113,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		{
 			_person2.RemoveAllPersonPeriods();
 			_person1.RemoveAllPersonPeriods();
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillCarnaby);
+            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0, result);
 		}
 
@@ -127,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
 			_skillStaffPeriod.SetSkillDay(skillDay);
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillPhone);
+            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillPhone);
 			Assert.AreEqual(0, result);
 		}
 

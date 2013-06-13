@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -58,6 +59,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			//update resources set resource = resource - resource where combination_id = x and startdatetime = period.startdatetime and enddatetime = period.enddatetime
 		}
 	}
+
+	//Other cases to handle:
+	//- Person terminated
+	//- Person deleted
+	//- Person period date changes
+	//- Person period skill changes
 
 	public static class ProjectionChangedEventLayerExtensions
 	{

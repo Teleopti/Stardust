@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -27,8 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		[Test]
 		public void ShouldAddResourceAndLoggedOntoSkillStaffPeriod()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
-			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
+			var relevantProjections = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateNonBlendSkill("nonBlendSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);
@@ -54,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		[Test]
 		public void ShouldNotAddResourceIfNotNonBlendSkill()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
-			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
+			var relevantProjections = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateSkill("nonBlendSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);

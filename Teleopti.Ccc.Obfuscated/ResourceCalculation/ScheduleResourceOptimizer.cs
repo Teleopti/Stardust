@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 {
                     //Do nothing here until occupancy works
                     //var occCalculator =
-                    //    new OccupancyCalculator(relevantSkillStaffPeriods, dividedActivityData.RelativePersonSkillResources);
+                    //    new OccupancyCalculator(relevantSkillStaffPeriods, dividedActivityData.RelativeKeyedSkillResourceResources);
                     //occCalculator.AdjustOccupancy();
                 }
 

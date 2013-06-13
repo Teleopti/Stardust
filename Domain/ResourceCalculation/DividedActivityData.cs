@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the person - skill efficiency matrix.
         /// </summary>
         /// <value>The skill efficiency matrix.</value>
-        PersonSkillDictionary PersonSkillEfficiencies { get; }
+        KeyedSkillResourceDictionary KeyedSkillResourceEfficiencies { get; }
 
         /// <summary>
         /// Gets the weighted relative person - skill resource matrix.
         /// </summary>
         /// <value>The weighted relative person - skill resource matrix.</value>
-        PersonSkillDictionary WeightedRelativePersonSkillResources { get; }
+        KeyedSkillResourceDictionary WeightedRelativeKeyedSkillResourceResources { get; }
 
         /// <summary>
         /// Gets the target demands.
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the relative person resources, also called TRAFF, spent on each skill in the activity.
         /// </summary>
         /// <value>The relative person - skill resource matrix.</value>
-        PersonSkillDictionary RelativePersonSkillResources { get; }
+        KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources { get; }
 
         /// <summary>
         /// Gets the relative person - skill resources (also called traff) sum for each skill in the activity.
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         #region Variables
         
-        private readonly PersonSkillDictionary _personSkillEfficiencies;
-        private readonly PersonSkillDictionary _weightedRelativePersonSkillResources;
-        private readonly PersonSkillDictionary _relativePersonSkillResources;
+        private readonly KeyedSkillResourceDictionary _keyedSkillResourceEfficiencies;
+        private readonly KeyedSkillResourceDictionary _weightedRelativeKeyedSkillResourceResources;
+        private readonly KeyedSkillResourceDictionary _relativeKeyedSkillResourceResources;
         private readonly Dictionary<ISkill, double> _targetDemands;
 		private readonly Dictionary<string, double> _personResources;
 		private readonly Dictionary<string, double> _relativePersonResources;
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         public DividedActivityData()
         {
-            _personSkillEfficiencies = new PersonSkillDictionary();
-            _weightedRelativePersonSkillResources = new PersonSkillDictionary();
-            _relativePersonSkillResources = new PersonSkillDictionary();
+            _keyedSkillResourceEfficiencies = new KeyedSkillResourceDictionary();
+            _weightedRelativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
+            _relativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
             _targetDemands = new Dictionary<ISkill, double>();
             _personResources = new Dictionary<string, double>();
             _relativePersonResources = new Dictionary<string, double>();
@@ -109,18 +109,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the person - skill efficiency matrix.
         /// </summary>
         /// <value>The skill efficiency matrix.</value>
-        public PersonSkillDictionary PersonSkillEfficiencies
+        public KeyedSkillResourceDictionary KeyedSkillResourceEfficiencies
         {
-            get { return _personSkillEfficiencies; }
+            get { return _keyedSkillResourceEfficiencies; }
         }
 
         /// <summary>
         /// Gets the weighted relative person - skill resource matrix.
         /// </summary>
         /// <value>The weighted relative person - skill resource matrix.</value>
-        public PersonSkillDictionary WeightedRelativePersonSkillResources
+        public KeyedSkillResourceDictionary WeightedRelativeKeyedSkillResourceResources
         {
-            get { return _weightedRelativePersonSkillResources; }
+            get { return _weightedRelativeKeyedSkillResourceResources; }
         }
 
         /// <summary>
@@ -145,9 +145,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the relative person resources, also called TRAFF, spent on each skill in the activity.
         /// </summary>
         /// <value>The relative person - skill resource matrix.</value>
-        public PersonSkillDictionary RelativePersonSkillResources
+        public KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources
         {
-            get { return _relativePersonSkillResources; }
+            get { return _relativeKeyedSkillResourceResources; }
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (var personKey in PersonResources.Keys)
             {
                 Dictionary<ISkill, double> skillValues;
-                if (!WeightedRelativePersonSkillResources.TryGetValue(personKey, out skillValues)) continue;
+                if (!WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey, out skillValues)) continue;
                 foreach (ISkill skillKey in TargetDemands.Keys)
                 {
                     double skillPersonValue;
@@ -195,11 +195,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     double oldValue;
                     if (WeightedRelativePersonSkillResourcesSum.TryGetValue(skillKey, out oldValue))
                     {
-                        WeightedRelativePersonSkillResourcesSum[skillKey] = oldValue + PersonSkillEfficiencies[personKey][skillKey] * skillPersonValue;
+                        WeightedRelativePersonSkillResourcesSum[skillKey] = oldValue + KeyedSkillResourceEfficiencies[personKey][skillKey] * skillPersonValue;
                     }
                     else
                     {
-                        WeightedRelativePersonSkillResourcesSum.Add(skillKey, PersonSkillEfficiencies[personKey][skillKey] * skillPersonValue);
+                        WeightedRelativePersonSkillResourcesSum.Add(skillKey, KeyedSkillResourceEfficiencies[personKey][skillKey] * skillPersonValue);
                     }
                 }
             }
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (var personKey in PersonResources.Keys)
             {
                 Dictionary<ISkill, double> skillValues;
-                if (!WeightedRelativePersonSkillResources.TryGetValue(personKey, out skillValues)) continue;
+                if (!WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey, out skillValues)) continue;
                 foreach (ISkill skillKey in TargetDemands.Keys)
                 {
                     double skillPersonValue;
