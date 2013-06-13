@@ -11475,4 +11475,43 @@ Reduce the complexity to use these shifts.</value>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>Chat</value>
   </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Abandoned chats</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Answered chats</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Average chats</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Calculated chats</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Campaign chats %</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Deviation chats:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Forecasted chats</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index chats</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Offered chats</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Original offered chats</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Total chats</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Validated chats</value>
+  </data>
 </root>

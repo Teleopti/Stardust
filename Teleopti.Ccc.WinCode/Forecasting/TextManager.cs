@@ -43,6 +43,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 				case ForecastSource.Retail:
 					RetailSetUp();
 					break;
+				case ForecastSource.Chat:
+					chatSetUp();
+					break;
 				default:
 					PhoneSetUp();
 					break;
@@ -234,5 +237,34 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
         }
+
+		private void chatSetUp()
+		{
+			_wordDictionary.Add("Tasks", UserTexts.Resources.Chat);
+			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalChats);
+			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
+			_wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
+			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTalkTimePercentSign);
+			_wordDictionary.Add("CampaignAfterTaskTime", UserTexts.Resources.CampaignACWPercentSign);
+			_wordDictionary.Add("CampaignTasks", UserTexts.Resources.CampaignChatsPercentSign);
+			_wordDictionary.Add("TotalStatisticCalculatedTasks", UserTexts.Resources.CalculatedChats);
+			_wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedChats);
+			_wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredChats);
+			_wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ACW);
+			_wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexChats);
+			_wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexHandlingTime);
+			_wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexACW);
+			_wordDictionary.Add("OriginalTasks", UserTexts.Resources.OriginalOfferedChats);
+			_wordDictionary.Add("AverageTasks", UserTexts.Resources.AverageChats);
+			_wordDictionary.Add("OriginalAverageAfterTaskTime", UserTexts.Resources.OriginalACW);
+			_wordDictionary.Add("AverageAfterWorkTime", UserTexts.Resources.AverageACW);
+			_wordDictionary.Add("ValidatedAverageAfterTaskTime", UserTexts.Resources.ValidatedACW);
+			_wordDictionary.Add("ValidatedTasks", UserTexts.Resources.ValidatedChats);
+			_wordDictionary.Add("ForecastedTasks", UserTexts.Resources.ForecastedChats);
+			_wordDictionary.Add("OfferedTasks", UserTexts.Resources.OfferedChats);
+			_wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationChatsColon);
+			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
+			_wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
+		}
     }
 }
