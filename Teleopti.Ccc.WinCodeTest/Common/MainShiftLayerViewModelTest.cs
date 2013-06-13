@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void UpdatePeriod_WhenCalled_ShouldCallReplaceAbsenceOnObserver()
+		public void UpdatePeriod_WhenCalled_ShouldCallReplaceActivityOnObserver()
 		{
 			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
 
