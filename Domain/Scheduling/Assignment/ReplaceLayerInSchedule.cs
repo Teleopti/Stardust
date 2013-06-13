@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ReplaceLayerInSchedule : IReplaceLayerInSchedule
 	{
-		public bool Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
+		private const string exMessageLayerNotFound = "Layer {0} not found!";
+
+		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
 			foreach (var ass in scheduleDay.PersonAssignmentCollection())
 			{
@@ -18,17 +21,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						if (layer.Equals(layerToRemove))
 						{
+							var indexOfLayer = layer.OrderIndex;
 							ms.LayerCollection.Remove(layer);
-							ms.LayerCollection.Insert(layer.OrderIndex, new MainShiftActivityLayer(newActivity, newPeriod));
-							return true;
+							ms.LayerCollection.Insert(indexOfLayer, new MainShiftActivityLayer(newActivity, newPeriod));
+							return;
 						}
 					}
 				}
 			}
-			return false;
+			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
 		}
 
-		public bool Replace(IScheduleDay scheduleDay, ILayer<IAbsence> layerToRemove, IAbsence newAbsence, DateTimePeriod newPeriod)
+		public void Replace(IScheduleDay scheduleDay, ILayer<IAbsence> layerToRemove, IAbsence newAbsence, DateTimePeriod newPeriod)
 		{
 			throw new System.NotImplementedException();
 		}
