@@ -158,6 +158,7 @@
     <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetPersonOptionalValuesForPersonCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\SetSchedulePeriodWorktimeOverrideCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\WorkloadOnSkillSelectionDto.cs" />
     <Compile Include="DataTransferObject\Commands\SaveAgentPortalSettingsCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\EmployPersonCommandDto.cs" />

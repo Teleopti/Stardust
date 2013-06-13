@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using GridTest;
 using SdkTestClientWin.Domain;
@@ -150,7 +151,7 @@ namespace SdkTestWinGui
                 _writeProtctectionView.RedrawListView(e.Node);
                 return;
             }
-            
+			
         }
 
         private void loadScenarios()
@@ -656,5 +657,18 @@ namespace SdkTestWinGui
         {
             loadSchedules(treeView1.SelectedNode);
         }
+
+		private void toolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			var node = treeView1.SelectedNode;
+			IList<Agent> selectedAgents = _organization.SelectedAgents(node);
+			if (selectedAgents != null && selectedAgents.Count == 1)
+			{
+				using (var setWorkTime = new SetWorkTimeOnPeriod(selectedAgents.First(),this))
+				{
+					setWorkTime.ShowDialog();
+				}
+			}
+		}
     }
 }

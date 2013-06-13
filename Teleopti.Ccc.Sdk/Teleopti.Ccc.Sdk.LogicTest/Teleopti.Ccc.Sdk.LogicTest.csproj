@@ -185,6 +185,7 @@
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandlerTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OldTests\AbsenceDtoTest.cs" />
     <Compile Include="OldTests\AbsenceLayerDtoTest.cs" />

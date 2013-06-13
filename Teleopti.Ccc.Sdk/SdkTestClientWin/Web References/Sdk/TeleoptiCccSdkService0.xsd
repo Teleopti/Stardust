@@ -7,13 +7,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AuthenticationTypeOptionDto" nillable="true" type="tns:AuthenticationTypeOptionDto" />
-  <xs:simpleType name="MultiplicatorTypeDto">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="OBTime" />
-      <xs:enumeration value="Overtime" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="MultiplicatorTypeDto" nillable="true" type="tns:MultiplicatorTypeDto" />
   <xs:simpleType name="RequestStatusDto">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Pending" />
@@ -32,6 +25,13 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ShiftTradeStatusDto" nillable="true" type="tns:ShiftTradeStatusDto" />
+  <xs:simpleType name="MultiplicatorTypeDto">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OBTime" />
+      <xs:enumeration value="Overtime" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MultiplicatorTypeDto" nillable="true" type="tns:MultiplicatorTypeDto" />
   <xs:simpleType name="ImportForecastsOptionsDto">
     <xs:restriction base="xs:string">
       <xs:enumeration value="ImportWorkload" />
