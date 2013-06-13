@@ -1,6 +1,8 @@
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.WinCode.Common
             if (ParentObservingCollection != null)
             {
                 ParentObservingCollection.RemoveAbsence(this,Layer as ILayer<IAbsence>,SchedulePart);
-                SynchronizeWithDomainRoger();
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
             }
         }
 
