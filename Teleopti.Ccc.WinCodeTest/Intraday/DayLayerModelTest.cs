@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _person = PersonFactory.CreatePerson("Kalle", "Kula");
             _person.EmploymentNumber = "10";
             _team = _mocks.StrictMock<ITeam>();
-            var layerCollection = new LayerViewModelCollection();
+	        var layerCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),new RemoveLayerFromSchedule());
             var commonAgentName = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
             _target = new DayLayerModel(_person, _period, _team, layerCollection, commonAgentName);
         }
