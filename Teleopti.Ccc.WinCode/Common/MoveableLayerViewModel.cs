@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WinCode.Common
             if (CanMoveDown)
             {
 	            _parent.LayerCollection.MoveDownLayer(_layer);
+	            hackToUpdateAssignmentJustForNow();
                 LayerMoved();
             }
 
@@ -57,9 +58,21 @@ namespace Teleopti.Ccc.WinCode.Common
             if (CanMoveUp)
             {
 	            _parent.LayerCollection.MoveUpLayer(_layer);
-				LayerMoved();
+							hackToUpdateAssignmentJustForNow();
+							LayerMoved();
             }
         }
+
+			private void hackToUpdateAssignmentJustForNow()
+			{
+				//this will go away when mainshift is gone
+				var ms = _parent as IMainShift;
+				if (ms != null)
+				{
+					var ass = (IPersonAssignment)ms.Root();
+					ass.SetMainShift(ms);
+				}
+			}
 
         private void LayerMoved()
         {
