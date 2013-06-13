@@ -167,11 +167,10 @@ define([
                         PersonId: iteration.personId
                     }),
                     error: function() {
-                        personScheduleDayUpdateFailed();
-                        personScheduleDayUpdateFailed();
+                        iteration.notifyAddCommandFailure();
                     },
                     complete: function() {
-                        iteration.addCommandSentPromise.resolve();
+                        iteration.notifyAddCommandComplete();
                     }
                 });
             };
@@ -185,10 +184,10 @@ define([
                     cache: false,
                     data: JSON.stringify({ PersonAbsenceId: personAbsenceId }),
                     error: function () {
-                        personScheduleDayUpdateFailed();
+                        iteration.notifyDeleteCommandFailure();
                     },
                     complete: function () {
-                        iteration.removeCommandSentPromise.resolve();
+                        iteration.notifyDeleteCommandComplete();
                     }
                 });
             };
@@ -202,6 +201,38 @@ define([
                     e.addCommandSentPromise = $.Deferred();
                     e.removeCommandSentPromise = $.Deferred();
                     e.commandsSentPromise = $.when(e.addCommandSentPromise, e.removeCommandSentPromise);
+                    e.personAbsenceDeleteCommandSent = false;
+
+                    e.notifyPersonScheduleDayReadModelChanged = function() {
+                        personScheduleDayUpdated();
+                    };
+
+                    e.notifyAddCommandFailure = function() {
+                        personScheduleDayUpdateFailed();
+                        personScheduleDayUpdateFailed();
+                        e.removeCommandSentPromise.resolve();
+                        e.personAbsenceDeleteCommandSent = true;
+                    };
+
+                    e.notifyAddCommandComplete = function() {
+                        e.addCommandSentPromise.resolve();
+                    };
+                    
+                    e.notifyPersonAbsenceChanged = function (personAbsenceId) {
+                        if (!e.personAbsenceDeleteCommandSent) {
+                            e.personAbsenceDeleteCommandSent = true;
+                            sendDeleteCommand(e, personAbsenceId);
+                        }
+                    };
+
+                    e.notifyDeleteCommandFailure = function() {
+                        personScheduleDayUpdateFailed();
+                    };
+
+                    e.notifyDeleteCommandComplete = function() {
+                        e.removeCommandSentPromise.resolve();
+                    };
+
                 });
 
                 startPromise.done(function () {
@@ -209,8 +240,9 @@ define([
                     personScheduleDayReadModelSubscription = messagebroker.subscribe({
                         domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
-                            if (iterationForNotification(notification))
-                                personScheduleDayUpdated();
+                            var iteration = iterationForNotification(notification);
+                            if (iteration)
+                                iteration.notifyPersonScheduleDayReadModelChanged();
                         }
                     });
                     
@@ -220,7 +252,7 @@ define([
                             var personAbsenceId = notification.DomainId;
                             var iteration = iterationForNotification(notification);
                             if (iteration)
-                                sendDeleteCommand(iteration, personAbsenceId);
+                                iteration.notifyPersonAbsenceChanged(personAbsenceId);
                         }
                     });
 
