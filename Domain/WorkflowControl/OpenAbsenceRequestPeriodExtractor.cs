@@ -42,11 +42,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             get { return new OpenAbsenceRequestPeriodProjection(this); }
         }
 
-        public IWorkflowControlSet WorkflowControlSet
-        {
-            get { return _workflowControlSet; }
-        }
-
         public OpenAbsenceRequestPeriodExtractor(IWorkflowControlSet workflowControlSet, IAbsence absence)
         {
             ViewpointDate = DateOnly.Today;

@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				BusinessUnitId = BusinessUnit.Id.Value,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
-				StartDateTime = Period.StartDateTime.AddHours(-24),
+				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime
 			});
 		}
