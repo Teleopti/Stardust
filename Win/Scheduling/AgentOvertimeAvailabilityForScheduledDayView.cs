@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SetTexts();
 			_dayCreator = new OvertimeAvailabilityCreator();
 			_presenter = new AgentOvertimeAvailabilityPresenter(this, scheduleDay);
+			_presenter.Initialize();
 
 			var shiftTimePeriod = scheduleDay.ProjectionService().CreateProjection().Period().GetValueOrDefault();
 			_shiftTimePeriod = shiftTimePeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Add)
 			{
 				var addCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
+				addCommand.Initialize();
 				_presenter.Add(addCommand);
 				_isDirty = true;
 				Hide();
@@ -97,6 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Edit)
 			{
 				var editCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
+				editCommand.Initialize();
 				_presenter.Edit(editCommand);
 				_isDirty = true;
 				Hide();

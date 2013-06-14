@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void Edit(IAgentOvertimeAvailabilityEditCommand editCommand);
 		void Remove(IAgentOvertimeAvailabilityRemoveCommand removeCommand);
 		void UpdateView();
+		void Initialize();
 		IScheduleDay ScheduleDay { get; }
 		AgentOvertimeAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator);
 	}
@@ -34,8 +35,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
-			
-			var shiftTimePeriod = scheduleDay.ProjectionService().CreateProjection().Period();
+		}
+
+		public void Initialize()
+		{
+			var shiftTimePeriod = _scheduleDay.ProjectionService().CreateProjection().Period();
 			if (shiftTimePeriod != null)
 				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}

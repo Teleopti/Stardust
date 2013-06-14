@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IAgentOvertimeAvailabilityAddCommand : IExecutableCommand, ICanExecute
 	{
+		void Initialize();
 	}
 
 	public class AgentOvertimeAvailabilityAddCommand : IAgentOvertimeAvailabilityAddCommand
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly TimeSpan? _startTime;
 		private readonly TimeSpan? _endTime;
 		private readonly IOvertimeAvailabilityCreator _overtimeAvailabilityDayCreator;
-		private readonly TimePeriod? _existingShiftTimePeriod;
+		private TimePeriod? _existingShiftTimePeriod;
 
 		public AgentOvertimeAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator overtimeAvailabilityDayCreator)
 		{
@@ -24,8 +25,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_startTime = startTime;
 			_endTime = endTime;
 			_overtimeAvailabilityDayCreator = overtimeAvailabilityDayCreator;
+		}
 
-			var shiftTimePeriod = scheduleDay.ProjectionService().CreateProjection().Period();
+		public void Initialize()
+		{
+			var shiftTimePeriod = _scheduleDay.ProjectionService().CreateProjection().Period();
 			if (shiftTimePeriod != null)
 				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
