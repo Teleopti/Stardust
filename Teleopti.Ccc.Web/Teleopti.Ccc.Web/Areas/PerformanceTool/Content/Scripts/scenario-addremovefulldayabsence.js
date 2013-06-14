@@ -2,16 +2,19 @@
 define([
         'knockout',
         'progressitem-count',
+        'scenario-addremovefulldayabsence-iteration',
         'result',
         'messagebroker',
         'helpers'
     ], function(
         ko,
         ProgressItemCountViewModel,
+        Iteration,
         ResultViewModel,
         messagebroker,
         helpers
     ) {
+        
 
         return function() {
 
@@ -77,11 +80,19 @@ define([
                     for (var j = 0; j < numberOfDays; j++) {
                         date.add('days', 1);
 
-                        iterations.push({
-                            absenceId: configuration.AbsenceId,
-                            personId: personId,
-                            date: date.clone()
-                        });
+                        iterations.push(new Iteration({
+                            AbsenceId: configuration.AbsenceId,
+                            PersonId: personId,
+                            Date: date.clone(),
+                            PersonScheduleDayReadModelUpdated: function () {
+                                progressItemPersonScheduleDayReadModel.Success();
+                                calculateRunDone();
+                            },
+                            PersonScheduleDayReadModelUpdateFailed: function () {
+                                progressItemPersonScheduleDayReadModel.Failure();
+                                calculateRunDone();
+                            }
+                        }));
 
                         if (iterations.length > 2000) {
                             self.IterationsExpected(undefined);
@@ -95,25 +106,11 @@ define([
                 self.IterationsExpected(iterations.length);
                 progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
-            
-
-
-
 
             var startPromise = messagebroker.start();
             var personScheduleDayReadModelSubscription;
             var personAbsenceSubscription;
             var result;
-
-            var personScheduleDayUpdated = function () {
-                progressItemPersonScheduleDayReadModel.Success();
-                calculateRunDone();
-            };
-
-            var personScheduleDayUpdateFailed = function () {
-                progressItemPersonScheduleDayReadModel.Failure();
-                calculateRunDone();
-            };
 
             var calculateRunDone = function () {
                 var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
@@ -131,17 +128,16 @@ define([
             };
 
             var iterationForNotification = function (notification) {
-                
                 var startDate = helpers.Date.ToMoment(notification.StartDate);
                 var endDate = helpers.Date.ToMoment(notification.EndDate);
                 var personId = notification.DomainReferenceId;
                 
                 if (startDate.diff(endDate, 'days') != 0)
                     return null;
-                
-                var matchedIterations = $.grep(iterations, function (item) {
-                    return item.date.diff(startDate) == 0 &&
-                        item.personId == personId;
+
+                var matchedIterations = $.grep(iterations, function (iteration) {
+                    return iteration.Date.diff(startDate) == 0 &&
+                        iteration.PersonId == personId;
                 });
                 
                 if (matchedIterations.length == 1)
@@ -152,87 +148,10 @@ define([
                 return null;
             };
 
-            var sendAddCommand = function(iteration) {
-                $.ajax({
-                    url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    cache: false,
-                    data: JSON.stringify({
-                        StartDate: iteration.date,
-                        EndDate: iteration.date,
-                        AbsenceId: iteration.absenceId,
-                        PersonId: iteration.personId
-                    }),
-                    error: function() {
-                        iteration.notifyAddCommandFailure();
-                    },
-                    complete: function() {
-                        iteration.notifyAddCommandComplete();
-                    }
-                });
-            };
-
-            var sendDeleteCommand = function(iteration, personAbsenceId) {
-                $.ajax({
-                    url: 'Anywhere/PersonScheduleCommand/RemovePersonAbsence',
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    cache: false,
-                    data: JSON.stringify({ PersonAbsenceId: personAbsenceId }),
-                    error: function () {
-                        iteration.notifyDeleteCommandFailure();
-                    },
-                    complete: function () {
-                        iteration.notifyDeleteCommandComplete();
-                    }
-                });
-            };
-            
             this.Run = function () {
                 
                 progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
-
-                $.each(iterations, function (i, e) {
-                    e.addCommandSentPromise = $.Deferred();
-                    e.removeCommandSentPromise = $.Deferred();
-                    e.commandsSentPromise = $.when(e.addCommandSentPromise, e.removeCommandSentPromise);
-                    e.personAbsenceDeleteCommandSent = false;
-
-                    e.notifyPersonScheduleDayReadModelChanged = function() {
-                        personScheduleDayUpdated();
-                    };
-
-                    e.notifyAddCommandFailure = function() {
-                        personScheduleDayUpdateFailed();
-                        personScheduleDayUpdateFailed();
-                        e.removeCommandSentPromise.resolve();
-                        e.personAbsenceDeleteCommandSent = true;
-                    };
-
-                    e.notifyAddCommandComplete = function() {
-                        e.addCommandSentPromise.resolve();
-                    };
-                    
-                    e.notifyPersonAbsenceChanged = function (personAbsenceId) {
-                        if (!e.personAbsenceDeleteCommandSent) {
-                            e.personAbsenceDeleteCommandSent = true;
-                            sendDeleteCommand(e, personAbsenceId);
-                        }
-                    };
-
-                    e.notifyDeleteCommandFailure = function() {
-                        personScheduleDayUpdateFailed();
-                    };
-
-                    e.notifyDeleteCommandComplete = function() {
-                        e.removeCommandSentPromise.resolve();
-                    };
-
-                });
 
                 startPromise.done(function () {
                     
@@ -241,7 +160,7 @@ define([
                         callback: function (notification) {
                             var iteration = iterationForNotification(notification);
                             if (iteration) {
-                                iteration.notifyPersonScheduleDayReadModelChanged();
+                                iteration.NotifyPersonScheduleDayReadModelChanged();
                             }
                         }
                     });
@@ -252,31 +171,31 @@ define([
                             var personAbsenceId = notification.DomainId;
                             var iteration = iterationForNotification(notification);
                             if (iteration)
-                                iteration.notifyPersonAbsenceChanged(personAbsenceId);
+                                iteration.NotifyPersonAbsenceChanged(personAbsenceId);
                         }
                     });
 
-                    $.when(personScheduleDayReadModelSubscription.promise, personAbsenceSubscription.promise)
-                        .done(
-                            function() {
-                                $.each(iterations, function(i, e) {
-                                    sendAddCommand(e);
-                                });
-                            });
+                    $.when(
+                        personScheduleDayReadModelSubscription.promise,
+                        personAbsenceSubscription.promise
+                    ).done(function() {
 
-                    var commandsSentPromises = $.map(iterations, function (e) {
-                        return e.commandsSentPromise;
-                    });
-                    $.when.apply($, commandsSentPromises).then(function () {
-                        result.CommandsDone(true);
+                        $.each(iterations, function(i, e) {
+                            e.Start();
+                        });
+
+                        var commandsSentPromises = $.map(iterations, function(e) {
+                            return e.AllCommandsCompletedPromise;
+                        });
+                        $.when.apply($, commandsSentPromises).then(function() {
+                            result.CommandsDone(true);
+                        });
+
                     });
 
                 });
 
                 return result;
             };
-
-
         };
-
     });
