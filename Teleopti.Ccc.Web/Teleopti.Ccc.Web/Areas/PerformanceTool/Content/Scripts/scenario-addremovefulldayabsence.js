@@ -184,10 +184,10 @@ define([
                             e.Start();
                         });
 
-                        var commandsSentPromises = $.map(iterations, function(e) {
+                        var commandsSentPromises = $.map(iterations, function (e) {
                             return e.AllCommandsCompletedPromise;
                         });
-                        $.when.apply($, commandsSentPromises).then(function() {
+                        $.when.apply($, commandsSentPromises).then(function () {
                             result.CommandsDone(true);
                         });
 

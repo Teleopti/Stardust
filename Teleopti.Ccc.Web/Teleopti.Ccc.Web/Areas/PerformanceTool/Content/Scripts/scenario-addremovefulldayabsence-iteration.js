@@ -14,9 +14,11 @@ define([
             this.Start = function () {
                 self.AddCommandCompletedPromise = $.Deferred();
                 self.RemoveCommandCompletedPromise = $.Deferred();
+                self.AllCommandsCompletedPromise = $.when(self.AddCommandCompletedPromise, self.RemoveCommandCompletedPromise);
                 self.RemoveCommandSent = false;
                 self.SendAddCommand();
             };
+            
             this.SendAddCommand = function() {
                 $.ajax({
                     url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
@@ -69,8 +71,6 @@ define([
             this.NotifyPersonScheduleDayReadModelChanged = function() {
                 data.PersonScheduleDayReadModelUpdated();
             };
-
-            this.AllCommandsCompletedPromise = $.when(this.AddCommandCompletedPromise, this.RemoveCommandCompletedPromise);
 
         };
 
