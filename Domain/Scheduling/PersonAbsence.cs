@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             if (personAbsence.Layer.Payload.Equals(Layer.Payload))
             {
-                if (personAbsence.Period.Intersect(Period) || personAbsence.Period.Adjacent(Period))
+                if (personAbsence.Period.Intersect(Period) || personAbsence.Period.AdjacentTo(Period))
                 {
 	                var newLayer = new AbsenceLayer(Layer.Payload, Period.MaximumPeriod(personAbsence.Period));
                     mergedPersonAbsence = new PersonAbsence(Person, Scenario, newLayer);

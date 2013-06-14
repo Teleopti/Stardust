@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// <summary>
 	/// Payload layer class containing Activity
 	/// </summary>
-	public class ActivityLayer : Layer<IActivity>, IActivityLayer, IActivityRestrictableVisualLayer
+	public class ActivityLayer : Layer<IActivity>, IActivityRestrictableVisualLayer
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActivityLayer"/> class.
@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				InParameter.EnsureNoSecondsInPeriod(value);
 				base.Period = value;
 			}
-		}
-
-		public virtual IMultiplicatorDefinitionSet DefinitionSet
-		{
-			get { return null; }
 		}
 
 		public virtual Guid ActivityId

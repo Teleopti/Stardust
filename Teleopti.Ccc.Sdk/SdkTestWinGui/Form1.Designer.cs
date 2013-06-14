@@ -30,7 +30,6 @@ namespace SdkTestWinGui
         /// </summary>
         private void InitializeComponent()
         {
-			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("All");
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -40,6 +39,7 @@ namespace SdkTestWinGui
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.backgroundWorkerLogon = new System.ComponentModel.BackgroundWorker();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -80,6 +80,8 @@ namespace SdkTestWinGui
 			this.button6 = new System.Windows.Forms.Button();
 			this.labelScenario = new System.Windows.Forms.Label();
 			this.comboBoxScenarios = new System.Windows.Forms.ComboBox();
+			this.comboScheduleTag = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.tabPageSkillData = new System.Windows.Forms.TabPage();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -113,6 +115,8 @@ namespace SdkTestWinGui
 			this.backgroundWorkerLoadPersonPeriods = new System.ComponentModel.BackgroundWorker();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.labelScenario = new System.Windows.Forms.Label();
+            this.comboBoxScenarios = new System.Windows.Forms.ComboBox();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
@@ -382,13 +386,16 @@ namespace SdkTestWinGui
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.labelScenario, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.comboBoxScenarios, 1, 0);
+			this.tableLayoutPanel2.Controls.Add(this.comboScheduleTag, 1, 3);
+			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 3);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowCount = 4;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(814, 571);
 			this.tableLayoutPanel2.TabIndex = 5;
 			// 
@@ -428,7 +435,7 @@ namespace SdkTestWinGui
 			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-			this.dataGridView1.Size = new System.Drawing.Size(808, 448);
+			this.dataGridView1.Size = new System.Drawing.Size(808, 428);
 			this.dataGridView1.TabIndex = 5;
 			// 
 			// Column1
@@ -450,7 +457,7 @@ namespace SdkTestWinGui
 			this.tableLayoutPanel3.Controls.Add(this.button1, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.button6, 1, 2);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 484);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 464);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 3;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
@@ -538,11 +545,28 @@ namespace SdkTestWinGui
 			// comboBoxScenarios
 			// 
 			this.comboBoxScenarios.FormattingEnabled = true;
-			this.comboBoxScenarios.Location = new System.Drawing.Point(68, 3);
+			this.comboBoxScenarios.Location = new System.Drawing.Point(177, 3);
 			this.comboBoxScenarios.Name = "comboBoxScenarios";
 			this.comboBoxScenarios.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxScenarios.TabIndex = 9;
 			this.comboBoxScenarios.SelectedIndexChanged += new System.EventHandler(this.comboBoxScenarios_SelectedIndexChanged);
+			// 
+			// comboScheduleTag
+			// 
+			this.comboScheduleTag.FormattingEnabled = true;
+			this.comboScheduleTag.Location = new System.Drawing.Point(177, 554);
+			this.comboScheduleTag.Name = "comboScheduleTag";
+			this.comboScheduleTag.Size = new System.Drawing.Size(121, 21);
+			this.comboScheduleTag.TabIndex = 10;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 551);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(95, 13);
+			this.label1.TabIndex = 11;
+			this.label1.Text = "Tag changes with:";
 			// 
 			// tabPageSkillData
 			// 
@@ -859,20 +883,20 @@ namespace SdkTestWinGui
 			this.dataGridViewTextBoxColumn2.HeaderText = "re";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			// 
-			// contextMenuStrip1
-			// 
-			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(198, 48);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
-			this.toolStripMenuItem1.Text = "Set worktime on period";
-			this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-			// 
+            // labelScenario
+            // 
+            this.labelScenario.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelScenario.AutoSize = true;
+            this.labelScenario.Location = new System.Drawing.Point(3, 7);
+            this.labelScenario.Name = "labelScenario";
+            // 
+            // comboBoxScenarios
+            // 
+            this.comboBoxScenarios.FormattingEnabled = true;
+            this.comboBoxScenarios.Location = new System.Drawing.Point(68, 3);
+            this.comboBoxScenarios.Name = "comboBoxScenarios";
+            this.comboBoxScenarios.Size = new System.Drawing.Size(121, 21);
+            // 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -990,5 +1014,7 @@ namespace SdkTestWinGui
         private System.Windows.Forms.ComboBox comboBoxScenarios;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+		private System.Windows.Forms.ComboBox comboScheduleTag;
+		private System.Windows.Forms.Label label1;
     }
 }

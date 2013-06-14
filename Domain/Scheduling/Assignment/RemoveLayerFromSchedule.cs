@@ -3,10 +3,10 @@
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     
-    public class RemoveLayerFromScheduleService : IRemoveLayerFromScheduleService
+    public class RemoveLayerFromSchedule : IRemoveLayerFromSchedule
     {
 
-        public IScheduleDay Remove(IScheduleDay part,ILayer<IActivity> layer)
+        public void Remove(IScheduleDay part,ILayer<IActivity> layer)
         {
             if (part != null)
             {
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                             part.DeleteMainShift(part);
 						else
 							assignment.SetMainShift(mainShift);
-                        return part;
+                        return;
                     }
                 }
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                             {
                                 assignment.RemovePersonalShift(shift);
                             }
-                            return part;
+                            return;
                         }
                     }
                 }
@@ -59,15 +59,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                             {
                                 assignment.RemoveOvertimeShift(shift);
                             }
-                            return part;
+                            return;
                         }
                     }
                 }
             }
-            return part;
         }
 
-        public IScheduleDay Remove(IScheduleDay part,ILayer<IAbsence> layer)
+        public void Remove(IScheduleDay part,ILayer<IAbsence> layer)
         {
             if (part != null)
             {
@@ -76,12 +75,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (personAbsence.Layer == layer)
                     {
                         part.Remove(personAbsence);
-                        return part;
+                        return;
                     }
                 }
             }
-            return part;
         }
-
     }
 }

@@ -199,6 +199,7 @@
     <Compile Include="DataTransferObject\PersonPeriodLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\PersonSkillPeriodDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetAllScheduleTagsDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetOvertimeDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="DataTransferObject\QueryDtos\KnownTypesHelper.cs" />
     <Compile Include="DataTransferObject\QueryDtos\QueryDto.cs" />
     <Compile Include="DataTransferObject\ScheduleLoadOptionDto.cs" />
+    <Compile Include="DataTransferObject\ScheduleTagDto.cs" />
     <Compile Include="DataTransferObject\StudentAvailabilityDayDto.cs" />
     <Compile Include="DataTransferObject\StudentAvailabilityRestrictionDto.cs" />
     <Compile Include="DataTransferObject\BusinessUnitDto.cs" />

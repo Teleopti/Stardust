@@ -81,9 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 					PersistAndRemoveFromUnitOfWork(act);
 
             var schedDataModified = schedData.EntityClone();
-	        var newMainShift = new MainShift(cat);
-					newMainShift.LayerCollection.Add(new MainShiftActivityLayer(act, schedData.Period));
-            schedDataModified.SetMainShift(newMainShift);
+						schedDataModified.SetMainShiftLayers(new[] { new MainShiftActivityLayerNew(act, schedData.Period) }, cat);
             
             diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(schedData, schedDataModified));
 

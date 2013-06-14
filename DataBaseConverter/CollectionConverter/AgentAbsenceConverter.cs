@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DatabaseConverter.CollectionConverter
                     if (originalPersonAbsence.Layer.Payload.Equals(mergedAbsence.Layer.Payload))
                     {
                         //check if periods intersect or is adjacent
-                        if (originalPersonAbsence.Period.Intersect(mergedAbsence.Period) || originalPersonAbsence.Period.Adjacent(mergedAbsence.Period))
+                        if (originalPersonAbsence.Period.Intersect(mergedAbsence.Period) || originalPersonAbsence.Period.AdjacentTo(mergedAbsence.Period))
                         {
                             //set merged to be deleted
                             upForDelete.Add(mergedAbsence);

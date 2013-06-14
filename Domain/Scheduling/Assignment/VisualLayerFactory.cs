@@ -12,13 +12,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new VisualLayer(activity, period, activity, person);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual IVisualLayer CreateShiftSetupLayer(IActivityLayer layer, IPerson person)
+		public virtual IVisualLayer CreateShiftSetupLayer(ILayer<IActivity> layer, IPerson person)
 		{
-			return new VisualLayer(layer.Payload, layer.Period, layer.Payload, person)
-			                          	{
-			                          		DefinitionSet = layer.DefinitionSet
-			                          	};
+			var ret = new VisualLayer(layer.Payload, layer.Period, layer.Payload, person);
+			var overtimeLayer = layer as IOvertimeShiftActivityLayer;
+			if (overtimeLayer != null)
+			{
+				ret.DefinitionSet = overtimeLayer.DefinitionSet;
+			}
+			return ret;
 		}
 
 

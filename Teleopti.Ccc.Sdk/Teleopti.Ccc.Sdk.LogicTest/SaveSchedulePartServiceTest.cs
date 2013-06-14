@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			}
 			using (mocks.Playback())
 			{
-				target.Save(scheduleDay,null);
+				target.Save(scheduleDay,null, new ScheduleTag());
 			}
 		}
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(()=>target.Save(scheduleDay,null));
+				Assert.Throws<FaultException>(()=>target.Save(scheduleDay,null, new ScheduleTag()));
 			}
 		}
 	}

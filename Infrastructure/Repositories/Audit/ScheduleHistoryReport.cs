@@ -78,24 +78,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift};
 			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
 
-			if (auditedAssignment.Entity.ShiftCategory == null)
-			{
-					ret.Detail = string.Empty;
-			}
-			else
-			{
-				ret.Detail = auditedAssignment.Entity.ShiftCategory.Description.Name;
-			}
+			ret.Detail = auditedAssignment.Entity.ShiftCategory == null ? 
+							string.Empty : 
+							auditedAssignment.Entity.ShiftCategory.Description.Name;
 
-			if (auditedAssignment.Entity.DatabasePeriod.Equals(PersonAssignment.UndefinedPeriod))
+			var period = auditedAssignment.Entity.Period;
+
+			if (period.Equals(PersonAssignment.UndefinedPeriod))
 			{
 				ret.ScheduleStart = DateTime.MinValue;
 				ret.ScheduleEnd = DateTime.MinValue;
 			}
 			else
 			{
-				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.StartDateTime, _regional.TimeZone);
-				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.EndDateTime, _regional.TimeZone);
+				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
+				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);
 			}
 
 			return ret;

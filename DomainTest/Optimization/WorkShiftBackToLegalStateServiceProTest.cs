@@ -1,6 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -38,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
+				commonMocks();
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
@@ -62,6 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
+				commonMocks();
                 Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(true);
                 Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
@@ -75,11 +83,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
+		private void commonMocks()
+		{
+			IScheduleDayPro scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			IList<IScheduleDayPro> fullWekPeriodDays = new List<IScheduleDayPro>{scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro};
+			IVirtualSchedulePeriod schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			var contract = new Contract("hej");
+			var person = _mocks.StrictMock<IPerson>();
+			var personPeriod = _mocks.StrictMock<IPersonPeriod>();
+			var personContract = _mocks.StrictMock<IPersonContract>();
+
+			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWekPeriodDays));
+			Expect.Call(scheduleDayPro.Day).Return(DateOnly.MinValue);
+			Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
+			Expect.Call(schedulePeriod.Contract).Return(contract);
+			Expect.Call(_matrix.Person).Return(person).Repeat.Times(4);
+			Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
+			Expect.Call(schedulePeriod.DateOnlyPeriod)
+			      .Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(6))).Repeat.AtLeastOnce();
+			Expect.Call(person.Period(DateOnly.MinValue)).Return(personPeriod);
+			//Expect.Call(schedulePeriod.DateOnlyPeriod)
+			//	  .Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(6)));
+			Expect.Call(person.PreviousPeriod(personPeriod)).Return(personPeriod);
+			Expect.Call(personPeriod.PersonContract).Return(personContract);
+			Expect.Call(personContract.Contract).Return(contract);
+			Expect.Call(person.VirtualSchedulePeriod(DateOnly.MinValue)).Return(schedulePeriod).IgnoreArguments();
+			Expect.Call(schedulePeriod.IsValid).Return(true);
+		}
+
         [Test]
         public void VerifyExecutePeriodNotWeekInLegalState()
         {
             using (_mocks.Record())
             {
+				commonMocks();
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
@@ -111,6 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
+				commonMocks();
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);

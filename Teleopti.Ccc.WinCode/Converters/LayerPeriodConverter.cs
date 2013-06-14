@@ -11,15 +11,13 @@ namespace Teleopti.Ccc.WinCode.Converters
     /// </summary>
     public class LayerPeriodConverter : IValueConverter
     {
-        #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
             {
                 return null;
             }
-            ILayer layer = value as ILayer;
+            var layer = (ILayer<IPayload>)value;
             return layer.Period.LocalStartDateTime;
         }
 
@@ -27,7 +25,5 @@ namespace Teleopti.Ccc.WinCode.Converters
         {
             return DependencyProperty.UnsetValue;
         }
-
-        #endregion
     }
 }

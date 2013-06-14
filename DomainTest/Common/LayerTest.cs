@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
-            Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
 
@@ -71,22 +70,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyProtectedConstructorWorks()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(ActivityLayer)));
-        }
-
-
-        [Test]
-        public void VerifyPayloadSetter()
-        {
-            DateTimePeriod per =
-                new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-            FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
-
-            ILayer castedLayer = actL;
-
-            IActivity act = new Activity("sdf");
-            castedLayer.Payload = act;
-            Assert.AreSame(act, castedLayer.Payload);
         }
 
 

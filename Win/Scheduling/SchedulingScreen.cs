@@ -734,9 +734,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				save();
 			}
-			//numpad+ and alt and shift and ctrl
-			if (e.KeyValue == 107 && e.Alt && e.Shift && e.Control)
-				nonBlendSkills();
 
 			if(e.KeyCode == Keys.Q && e.Control && e.Shift)
 			{
@@ -4159,42 +4156,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var createPersonalSkillsFromMaxSeatSites = new CreatePersonalSkillsFromMaxSeatSites();
 			var maxSeatSkillCreator = new MaxSeatSkillCreator(maxSeatSitesExtractor, createSkillsFromMaxSeatSites, createPersonalSkillsFromMaxSeatSites, schedulerSkillDayHelper, SchedulerState.SchedulingResultState.PersonsInOrganization);
 			maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void nonBlendSkills()
-		{
-			if (_scheduleView == null) return;
-			var selectedDates = _scheduleView.AllSelectedDates();
-			if (selectedDates.Count == 0) return;
-			IActivity selectedActivity;
-			int demand;
-			using (var options = new TempNonBlendSchedulingPreferences(_optimizerOriginalPreferences.SchedulingOptions, _groupPagesProvider, SchedulerState.CommonStateHolder.Activities))
-			{
-				options.ShowDialog();
-				selectedActivity = options.SelectedActivity();
-				demand = options.Demand();
-			}
-			ISkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWorkFactory.Current);
-			var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8), SchedulerState.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8));
-			var schedulerSkillDayHelper = new SchedulerSkillDayHelper(SchedulerState.SchedulingResultState, extendedPeriod, skillDayRepository, SchedulerState.RequestedScenario);
-			var schedulerHelper = new SchedulerSkillHelper(schedulerSkillDayHelper);
-			var nonBlendPersonSkillFromGroupingCreator = new NonBlendPersonSkillFromGroupingCreator();
-			var nonBlendSkillFromGroupingCreator = new NonBlendSkillFromGroupingCreator(SchedulerState.SchedulingResultState, nonBlendPersonSkillFromGroupingCreator, selectedActivity);
-			IGroupPageDataProvider groupPageDataProvider = new GroupScheduleGroupPageDataProvider(_schedulerState, new RepositoryFactory(), UnitOfWorkFactory.Current);
-			schedulerHelper.CreateNonBlendSkillsFromGrouping(groupPageDataProvider, _optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPage, selectedDates.First(), nonBlendSkillFromGroupingCreator, demand);
-
-			foreach (ISkill skill in _schedulerState.SchedulingResultState.VisibleSkills.OrderBy(s => s.Name))
-			{
-				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-					continue;
-
-				TabPageAdv tab = ColorHelper.CreateTabPage(skill.Name, skill.Description);
-				tab.Tag = skill;
-				tab.ImageIndex = GuiHelper.ImageIndexSkillType(skill.SkillType.ForecastSource);
-
-				_tabSkillData.TabPages.Add(tab);
-			}
 		}
 
 		private IBusinessRuleResponse validatePersonAccounts(IPerson person)
