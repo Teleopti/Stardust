@@ -702,6 +702,12 @@
   <wsdl:message name="TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonOptionalValuesByQueryResponse" />
   </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSchedulePeriodWorktimeOverride" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSchedulePeriodWorktimeOverrideResponse" />
+  </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetPayrollFormats_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPayrollFormats" />
   </wsdl:message>
@@ -1212,6 +1218,10 @@
     <wsdl:operation name="GetPersonOptionalValuesByQuery">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonOptionalValuesByQuery" message="tns:TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonOptionalValuesByQueryResponse" message="tns:TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSchedulePeriodWorktimeOverride">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverride" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverrideResponse" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiCccSdkInternal">

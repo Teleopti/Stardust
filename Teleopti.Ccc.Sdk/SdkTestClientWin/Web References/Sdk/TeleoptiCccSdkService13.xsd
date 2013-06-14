@@ -44,14 +44,26 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="OptionalValueDto" nillable="true" type="tns:OptionalValueDto" />
-  <xs:complexType name="SendPushMessageToPeopleCommandDto">
+  <xs:complexType name="SetSchedulePeriodWorktimeOverrideCommandDto">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q4:CommandDto">
         <xs:sequence>
+          <xs:element xmlns:q5="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Date" nillable="true" type="q5:DateOnlyDto" />
+          <xs:element minOccurs="0" name="PeriodTimeInMinutes" type="xs:double" />
+          <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SetSchedulePeriodWorktimeOverrideCommandDto" nillable="true" type="tns:SetSchedulePeriodWorktimeOverrideCommandDto" />
+  <xs:complexType name="SendPushMessageToPeopleCommandDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q6:CommandDto">
+        <xs:sequence>
           <xs:element minOccurs="0" name="AllowReply" type="xs:boolean" />
           <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
-          <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Recipients" nillable="true" type="q5:ArrayOfguid" />
-          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReplyOptions" nillable="true" type="q6:ArrayOfstring" />
+          <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Recipients" nillable="true" type="q7:ArrayOfguid" />
+          <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReplyOptions" nillable="true" type="q8:ArrayOfstring" />
           <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
@@ -60,7 +72,7 @@
   <xs:element name="SendPushMessageToPeopleCommandDto" nillable="true" type="tns:SendPushMessageToPeopleCommandDto" />
   <xs:complexType name="SetPersonOptionalValuesForPersonCommandDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q7="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q7:CommandDto">
+      <xs:extension xmlns:q9="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q9:CommandDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="OptionalValueCollection" nillable="true" type="tns:ArrayOfOptionalValueDto" />
           <xs:element minOccurs="0" name="PersonId" type="ser:guid" />

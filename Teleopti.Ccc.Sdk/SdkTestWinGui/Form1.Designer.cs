@@ -30,6 +30,7 @@ namespace SdkTestWinGui
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("All");
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -40,13 +41,14 @@ namespace SdkTestWinGui
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.backgroundWorkerLogon = new System.ComponentModel.BackgroundWorker();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.treeView1 = new System.Windows.Forms.TreeView();
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPageAgentInfo = new System.Windows.Forms.TabPage();
@@ -115,16 +117,13 @@ namespace SdkTestWinGui
 			this.backgroundWorkerLoadPersonPeriods = new System.ComponentModel.BackgroundWorker();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelScenario = new System.Windows.Forms.Label();
-            this.comboBoxScenarios = new System.Windows.Forms.ComboBox();
-			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.contextMenuStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPageAgentInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -142,7 +141,6 @@ namespace SdkTestWinGui
 			this.tabPageWriteProtect.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// backgroundWorkerLogon
@@ -214,6 +212,20 @@ namespace SdkTestWinGui
 			this.treeView1.Size = new System.Drawing.Size(230, 426);
 			this.treeView1.TabIndex = 1;
 			this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(181, 26);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Text = "Set Period worktime";
+			this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
 			// 
 			// monthCalendar1
 			// 
@@ -545,7 +557,7 @@ namespace SdkTestWinGui
 			// comboBoxScenarios
 			// 
 			this.comboBoxScenarios.FormattingEnabled = true;
-			this.comboBoxScenarios.Location = new System.Drawing.Point(177, 3);
+			this.comboBoxScenarios.Location = new System.Drawing.Point(68, 3);
 			this.comboBoxScenarios.Name = "comboBoxScenarios";
 			this.comboBoxScenarios.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxScenarios.TabIndex = 9;
@@ -554,7 +566,7 @@ namespace SdkTestWinGui
 			// comboScheduleTag
 			// 
 			this.comboScheduleTag.FormattingEnabled = true;
-			this.comboScheduleTag.Location = new System.Drawing.Point(177, 554);
+			this.comboScheduleTag.Location = new System.Drawing.Point(68, 554);
 			this.comboScheduleTag.Name = "comboScheduleTag";
 			this.comboScheduleTag.Size = new System.Drawing.Size(121, 21);
 			this.comboScheduleTag.TabIndex = 10;
@@ -564,7 +576,7 @@ namespace SdkTestWinGui
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(3, 551);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95, 13);
+			this.label1.Size = new System.Drawing.Size(51, 20);
 			this.label1.TabIndex = 11;
 			this.label1.Text = "Tag changes with:";
 			// 
@@ -883,20 +895,6 @@ namespace SdkTestWinGui
 			this.dataGridViewTextBoxColumn2.HeaderText = "re";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			// 
-            // labelScenario
-            // 
-            this.labelScenario.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelScenario.AutoSize = true;
-            this.labelScenario.Location = new System.Drawing.Point(3, 7);
-            this.labelScenario.Name = "labelScenario";
-            // 
-            // comboBoxScenarios
-            // 
-            this.comboBoxScenarios.FormattingEnabled = true;
-            this.comboBoxScenarios.Location = new System.Drawing.Point(68, 3);
-            this.comboBoxScenarios.Name = "comboBoxScenarios";
-            this.comboBoxScenarios.Size = new System.Drawing.Size(121, 21);
-            // 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -914,6 +912,7 @@ namespace SdkTestWinGui
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPageAgentInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
@@ -932,7 +931,6 @@ namespace SdkTestWinGui
 			this.tabPageWriteProtect.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1012,9 +1010,9 @@ namespace SdkTestWinGui
         private System.Windows.Forms.DateTimePicker dateTimePickerSetProtectDate;
         private System.Windows.Forms.Label labelScenario;
         private System.Windows.Forms.ComboBox comboBoxScenarios;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ComboBox comboScheduleTag;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }

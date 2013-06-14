@@ -151,7 +151,7 @@ namespace SdkTestWinGui
                 _writeProtctectionView.RedrawListView(e.Node);
                 return;
             }
-			
+            
         }
 
         private void loadScenarios()
@@ -680,7 +680,7 @@ namespace SdkTestWinGui
 			comboScheduleTag.DisplayMember = "Description";
 		}
 
-		private void toolStripMenuItem1_Click(object sender, EventArgs e)
+		private void toolStripMenuItem2_Click(object sender, EventArgs e)
 		{
 			var node = treeView1.SelectedNode;
 			IList<Agent> selectedAgents = _organization.SelectedAgents(node);
