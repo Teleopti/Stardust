@@ -99,6 +99,18 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				last.CanMoveUp.Should().Be.True();
 			}
 
+			[Test]
+			public void VerifyCanMoveDown()
+			{
+				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
+
+				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null);
+				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null);
+
+				first.CanMoveDown.Should().Be.True();
+				last.CanMoveDown.Should().Be.False();
+			}
+
 		[Test]
 		public void VerifyProperties()
 		{

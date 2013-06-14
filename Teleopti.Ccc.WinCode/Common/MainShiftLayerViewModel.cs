@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : LayerViewModel
     {
+	    private readonly IMainShiftActivityLayerNew _layer;
 	    private readonly IPersonAssignment _parent;
 
 	    public MainShiftLayerViewModel(IVisualLayer layer)
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment parent, IEventAggregator eventAggregator)
             : base(observer,layer, eventAggregator, false)
         {
+	        _layer = layer;
 	        _parent = parent;
         }
 
@@ -44,12 +47,12 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-		    get { throw new System.NotImplementedException(); }
+		    get { return _layer.OrderIndex > 0; }
 	    }
 
 	    public override bool CanMoveDown
 	    {
-		    get { throw new System.NotImplementedException(); }
+				get { return !_parent.MainShiftActivityLayers.Last().Equals(_layer); }
 	    }
 
 	    protected override void DeleteLayer()
