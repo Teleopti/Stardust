@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
 			//fix this!
 			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayerNew>();
-			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.NoneEntityClone()))
+			foreach (IMainShiftActivityLayerNew newLayer in _mainShiftActivityLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._mainShiftActivityLayers.Add(newLayer);
@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
 			//fix this
 			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayerNew>();
-			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.EntityClone()))
+			foreach (IMainShiftActivityLayerNew newLayer in _mainShiftActivityLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._mainShiftActivityLayers.Add(newLayer);

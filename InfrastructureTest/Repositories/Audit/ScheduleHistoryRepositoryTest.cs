@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				var layers = new List<IMainShiftActivityLayerNew>(PersonAssignment.MainShiftActivityLayers);
-				layers.Add(layers[0].NoneEntityClone());
+				layers.Add((IMainShiftActivityLayerNew) layers[0].NoneEntityClone());
 				PersonAssignment.SetMainShiftLayers(layers, PersonAssignment.ShiftCategory);
 				uow.PersistAll();
 			}

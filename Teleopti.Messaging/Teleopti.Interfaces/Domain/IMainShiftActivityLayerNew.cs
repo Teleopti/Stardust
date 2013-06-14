@@ -1,9 +1,6 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public interface IMainShiftActivityLayerNew : IAggregateEntity, ICloneableEntity<IMainShiftActivityLayerNew>
+	public interface IMainShiftActivityLayerNew : IAggregateEntity, ILayer<IActivity>
 	{
-		IActivity Payload { get; }
-		DateTimePeriod Period { get; }
-		int OrderIndex { get; }
 	}
 }

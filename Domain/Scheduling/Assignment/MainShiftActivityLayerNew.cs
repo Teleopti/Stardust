@@ -35,14 +35,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return NoneEntityClone();
 		}
 
-		public virtual IMainShiftActivityLayerNew NoneEntityClone()
+		public virtual ILayer<IActivity> NoneEntityClone()
 		{
 			var retObj = (MainShiftActivityLayerNew)MemberwiseClone();
 			retObj.SetId(null);
 			return retObj;
 		}
 
-		public virtual IMainShiftActivityLayerNew EntityClone()
+		public virtual ILayer<IActivity> EntityClone()
 		{
 			return (MainShiftActivityLayerNew)MemberwiseClone();
 		}
