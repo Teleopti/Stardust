@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			gotoAddRequestToday();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.Javascript(script);
+			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
+			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
 			Browser.Interactions.AssertContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
 
@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Browser.Interactions.Click(".shifttrade-request-add");
-			Browser.Interactions.AssertContains("#Request-add-loaded-date", "2"); //date 2xxx-xx-xx
-			//EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
+			Browser.Interactions.AssertContains("#Request-add-loaded-date", "20"); //date 20xx-xx-xx
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]

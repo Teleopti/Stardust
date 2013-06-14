@@ -235,6 +235,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function setShiftTradeRequestDate(date) {
 		vm.loadedDateSwedishFormat(null); //make sure scenarios wait until requested date is bound
 		vm.requestedDate(moment(date));
+	    return vm.requestedDate().format('YYYY-MM-DD');
 	}
 
 	function _positionTimeLineHourTexts() {
@@ -268,7 +269,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    _init();
 		},
 		SetShiftTradeRequestDate: function (date) {
-			setShiftTradeRequestDate(date);
+			return setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function () {
 			vm.loadPeriod();
