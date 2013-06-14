@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 				{
 					if ((j + 1) < periodList.Count)
 					{
-						if (periodList[j + 1].AdjacentTo(periodList[j]))
+						if (periodList[j + 1].Period.Adjacent(periodList[j].Period))
 						{
 							periodListWithAdjacentLayers.Add(periodList[j + 1]);
 						}

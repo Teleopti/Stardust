@@ -84,33 +84,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         /// <summary>
-        /// Verifies the adjacent method.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-30
-        /// </remarks>
-        [Test]
-        public void VerifyAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            ILayer<IActivity> layer2001 = new ActivityLayer(fakeActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1));
-            ILayer<IActivity> layer2002 = new ActivityLayer(fakeActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-
-            Assert.IsTrue(layer2000.AdjacentTo(layer2001));
-            Assert.IsTrue(layer2002.AdjacentTo(layer2001));
-            Assert.IsFalse(layer2002.AdjacentTo(layer2000));
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyNotNullToAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            layer2000.AdjacentTo(null);
-        }
-
-        /// <summary>
         /// Verifies the clone works as expected.
         /// </summary>
         [Test]

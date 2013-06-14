@@ -637,10 +637,10 @@ namespace Teleopti.Interfaces.Domain
 
             DateTime intersectStart = intersectPeriod.StartDateTime;
             DateTime intersectEnd = intersectPeriod.EndDateTime;
-            DateTime start = this.period.Minimum;
+            DateTime start = period.Minimum;
             if (intersectStart > start)
                 start = intersectStart;
-            DateTime end = this.period.Maximum;
+            DateTime end = period.Maximum;
             if (intersectEnd < end)
                 end = intersectEnd;
             return new DateTimePeriod(start, end, false);

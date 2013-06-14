@@ -58,14 +58,6 @@ namespace Teleopti.Ccc.Domain.Common
 			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
 
-
-		public virtual bool AdjacentTo(IPeriodized layer)
-        {
-            InParameter.NotNull("layer", layer);
-            return (Period.StartDateTime == layer.Period.EndDateTime || 
-                        Period.EndDateTime == layer.Period.StartDateTime);
-        }
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "persistedactivity")]
 		public virtual void SetParent(IEntity parent)
 		{
