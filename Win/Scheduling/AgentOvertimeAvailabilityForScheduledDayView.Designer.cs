@@ -42,6 +42,8 @@
 			this.labelTo = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.outlookTimePickerTo = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.labelPreviousSavedOvertimeAvailabilityColon = new System.Windows.Forms.Label();
+			this.labelPreviousSavedOvertimeAvailability = new System.Windows.Forms.Label();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
@@ -74,6 +76,8 @@
 			this.tableLayoutPanel1.Controls.Add(this.labelTo, 3, 2);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerTo, 4, 2);
+			this.tableLayoutPanel1.Controls.Add(this.labelPreviousSavedOvertimeAvailabilityColon, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.labelPreviousSavedOvertimeAvailability, 1, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 34);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -81,19 +85,20 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(561, 145);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// outlookTimePickerFromShiftEnds
 			// 
+			this.outlookTimePickerFromShiftEnds.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.outlookTimePickerFromShiftEnds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerFromShiftEnds.DefaultResolution = 0;
 			this.outlookTimePickerFromShiftEnds.Enabled = false;
 			this.outlookTimePickerFromShiftEnds.EnableNull = true;
 			this.outlookTimePickerFromShiftEnds.FormatFromCulture = true;
-			this.outlookTimePickerFromShiftEnds.Location = new System.Drawing.Point(152, 53);
+			this.outlookTimePickerFromShiftEnds.Location = new System.Drawing.Point(152, 57);
 			this.outlookTimePickerFromShiftEnds.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerFromShiftEnds.Name = "outlookTimePickerFromShiftEnds";
 			this.outlookTimePickerFromShiftEnds.Size = new System.Drawing.Size(74, 21);
@@ -104,11 +109,12 @@
 			// 
 			// outlookTimePickerFrom
 			// 
+			this.outlookTimePickerFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.outlookTimePickerFrom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerFrom.DefaultResolution = 0;
 			this.outlookTimePickerFrom.EnableNull = true;
 			this.outlookTimePickerFrom.FormatFromCulture = true;
-			this.outlookTimePickerFrom.Location = new System.Drawing.Point(152, 18);
+			this.outlookTimePickerFrom.Location = new System.Drawing.Point(152, 22);
 			this.outlookTimePickerFrom.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerFrom.Name = "outlookTimePickerFrom";
 			this.outlookTimePickerFrom.Size = new System.Drawing.Size(74, 21);
@@ -129,12 +135,13 @@
 			// 
 			// outlookTimePickerToShiftStarts
 			// 
+			this.outlookTimePickerToShiftStarts.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.outlookTimePickerToShiftStarts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerToShiftStarts.DefaultResolution = 0;
 			this.outlookTimePickerToShiftStarts.Enabled = false;
 			this.outlookTimePickerToShiftStarts.EnableNull = true;
 			this.outlookTimePickerToShiftStarts.FormatFromCulture = true;
-			this.outlookTimePickerToShiftStarts.Location = new System.Drawing.Point(362, 18);
+			this.outlookTimePickerToShiftStarts.Location = new System.Drawing.Point(362, 22);
 			this.outlookTimePickerToShiftStarts.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerToShiftStarts.Name = "outlookTimePickerToShiftStarts";
 			this.outlookTimePickerToShiftStarts.Size = new System.Drawing.Size(74, 21);
@@ -154,7 +161,8 @@
 			// 
 			// checkBoxAdvNextDay
 			// 
-			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(462, 53);
+			this.checkBoxAdvNextDay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(462, 57);
 			this.checkBoxAdvNextDay.Name = "checkBoxAdvNextDay";
 			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(82, 21);
 			this.checkBoxAdvNextDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Office2007;
@@ -166,7 +174,7 @@
 			// buttonAdvCancel
 			// 
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(462, 102);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(462, 113);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonAdvCancel.TabIndex = 5;
@@ -177,7 +185,7 @@
 			// buttonAdvOk
 			// 
 			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvOk.Location = new System.Drawing.Point(362, 102);
+			this.buttonAdvOk.Location = new System.Drawing.Point(362, 113);
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
 			this.buttonAdvOk.TabIndex = 4;
@@ -207,17 +215,39 @@
 			// 
 			// outlookTimePickerTo
 			// 
+			this.outlookTimePickerTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.outlookTimePickerTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerTo.DefaultResolution = 0;
 			this.outlookTimePickerTo.EnableNull = true;
 			this.outlookTimePickerTo.FormatFromCulture = true;
-			this.outlookTimePickerTo.Location = new System.Drawing.Point(362, 53);
+			this.outlookTimePickerTo.Location = new System.Drawing.Point(362, 57);
 			this.outlookTimePickerTo.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerTo.Name = "outlookTimePickerTo";
 			this.outlookTimePickerTo.Size = new System.Drawing.Size(74, 21);
 			this.outlookTimePickerTo.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerTo.TabIndex = 9;
 			this.outlookTimePickerTo.Text = "00:00";
+			// 
+			// labelPreviousSavedOvertimeAvailabilityColon
+			// 
+			this.labelPreviousSavedOvertimeAvailabilityColon.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelPreviousSavedOvertimeAvailabilityColon.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.labelPreviousSavedOvertimeAvailabilityColon, 3);
+			this.labelPreviousSavedOvertimeAvailabilityColon.Location = new System.Drawing.Point(18, 91);
+			this.labelPreviousSavedOvertimeAvailabilityColon.Name = "labelPreviousSavedOvertimeAvailabilityColon";
+			this.labelPreviousSavedOvertimeAvailabilityColon.Size = new System.Drawing.Size(207, 13);
+			this.labelPreviousSavedOvertimeAvailabilityColon.TabIndex = 10;
+			this.labelPreviousSavedOvertimeAvailabilityColon.Visible = false;
+			this.labelPreviousSavedOvertimeAvailabilityColon.Text = "xxPreviousSavedOvertimeAvailabilityColon";
+			// 
+			// labelPreviousSavedOvertimeAvailability
+			// 
+			this.labelPreviousSavedOvertimeAvailability.AutoSize = true;
+			this.labelPreviousSavedOvertimeAvailability.Location = new System.Drawing.Point(18, 110);
+			this.labelPreviousSavedOvertimeAvailability.Name = "labelPreviousSavedOvertimeAvailability";
+			this.labelPreviousSavedOvertimeAvailability.Size = new System.Drawing.Size(30, 13);
+			this.labelPreviousSavedOvertimeAvailability.TabIndex = 11;
+			this.labelPreviousSavedOvertimeAvailability.Text = "";
 			// 
 			// ribbonControlAdv1
 			// 
@@ -292,5 +322,7 @@
 		private Common.Controls.OutlookTimePicker outlookTimePickerToShiftStarts;
 		private System.Windows.Forms.Label label2;
 		private Common.Controls.OutlookTimePicker outlookTimePickerTo;
+		private System.Windows.Forms.Label labelPreviousSavedOvertimeAvailabilityColon;
+		private System.Windows.Forms.Label labelPreviousSavedOvertimeAvailability;
 	}
 }

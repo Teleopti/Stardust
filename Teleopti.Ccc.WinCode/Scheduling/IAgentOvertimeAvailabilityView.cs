@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		void Update(TimeSpan? startTime, TimeSpan? endTime);
 		IScheduleDay ScheduleDay { get; }
+		void ShowPreviousSavedOvertimeAvailability(string timePeriod);
 	}
 }
