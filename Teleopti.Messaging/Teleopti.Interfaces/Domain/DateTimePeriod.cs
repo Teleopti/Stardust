@@ -542,7 +542,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="adjacentPeriod">The period.</param>
         /// <returns></returns>
-        public bool Adjacent(DateTimePeriod adjacentPeriod)
+        public bool AdjacentTo(DateTimePeriod adjacentPeriod)
         {
             return (StartDateTime == adjacentPeriod.EndDateTime || EndDateTime == adjacentPeriod.StartDateTime);
         }

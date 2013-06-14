@@ -683,32 +683,32 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime start1 = new DateTime(2007, 6, 1, 22, 0, 0, DateTimeKind.Utc);
             DateTime end1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
             DateTimePeriod per1 = new DateTimePeriod(start1, end1);
-            Assert.IsTrue(_period.Adjacent(per1));
+            Assert.IsTrue(_period.AdjacentTo(per1));
 
             //outside
             start1 = new DateTime(2007, 5, 1, 0, 0, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 5, 1, 1, 0, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
-            Assert.IsFalse(per1.Adjacent(_period));
+            Assert.IsFalse(_period.AdjacentTo(per1));
+            Assert.IsFalse(per1.AdjacentTo(_period));
 
             //intersect
             start1 = new DateTime(2007, 6, 1, 22, 30, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
 
             //equals
             start1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
 
             //inside
             start1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
         }
 
         [Test]

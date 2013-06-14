@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var persShiftPeriod = personalShift.LayerCollection.Period();
 					if (persShiftPeriod.HasValue)
 					{
-						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.Adjacent(persShiftPeriod.Value)))
+						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.AdjacentTo(persShiftPeriod.Value)))
 						{
 							proj.Add(personalShift);
 						}
