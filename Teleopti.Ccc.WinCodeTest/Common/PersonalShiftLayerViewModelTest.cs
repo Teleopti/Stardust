@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
 
-			var model = new PersonalShiftLayerViewModel(layer, personalShift2, null);
+			var model = new PersonalShiftLayerViewModel(null, layer, personalShift2, null);
 			model.MoveUp();
 			
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 1);
