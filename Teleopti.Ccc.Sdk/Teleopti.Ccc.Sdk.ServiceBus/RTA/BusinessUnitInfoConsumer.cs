@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
             {
                 try
                 {
-                    _serviceBus.Send(new PersonWithExternalLogOn
+                    _serviceBus.Send(new PersonActivityStarting
                         {
                             Datasource = message.Datasource,
                             BusinessUnitId = message.BusinessUnitId,
@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                             Timestamp = DateTime.UtcNow
                         });
                     
-                    Logger.DebugFormat("Sending PersonWithExternalLogOn Message to Service Bus for Person={0} and Bussiness Unit Id={1}", person, message.BusinessUnitId);
+                    Logger.DebugFormat("Sending PersonActivityStarting Message to Service Bus for Person={0} and Bussiness Unit Id={1}", person, message.BusinessUnitId);
                 }
                 catch (Exception exception)
                 {
-                    Logger.Error("Exception occured while sending PersonWithExternalLogOn message to Service Bus" , exception);
+                    Logger.Error("Exception occured while sending PersonActivityStarting message to Service Bus" , exception);
                     return;
                 }
                 

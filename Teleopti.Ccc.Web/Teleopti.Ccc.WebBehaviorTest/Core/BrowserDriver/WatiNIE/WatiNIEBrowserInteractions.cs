@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public object Javascript(string javascript)
 		{
-			return browserOperation(() => _browser.Eval(javascript), "Failed to execute javascript " + javascript);
+			return browserOperation(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), "Failed to execute javascript " + javascript);
 		}
 
 		public void GoToWaitForCompleted(string uri)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			browserAssert(() => _browser.Eval(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			browserAssert(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
 		public void AssertExists(string selector)
@@ -87,6 +87,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			writer(succeedOrIgnore(() => Browser.Current.Html));
 			//writer(" Text: ");
 			//writer(tryOperation(() => Browser.Current.Text));
+		}
+
+		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
+		{
+			_browser.RunScript("document.driverScriptResult = String( function(){" + javascript + "}() );");
+			return _browser.NativeDocument.GetPropertyValue("driverScriptResult");
 		}
 
 		private static string succeedOrIgnore(Func<string> operation)

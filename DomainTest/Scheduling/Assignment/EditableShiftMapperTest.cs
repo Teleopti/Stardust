@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldMapShiftCategory()
 		{
-			var mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			_personAssignment.SetMainShift(mainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			_target.SetMainShiftLayers(_personAssignment, mainShift);
 			var editorShift = _target.CreateEditorShift(_personAssignment);
 			Assert.AreSame(_personAssignment.ShiftCategory, editorShift.ShiftCategory);
 		}
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldMapLayers()
 		{
-			var mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			_personAssignment.SetMainShift(mainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			_target.SetMainShiftLayers(_personAssignment, mainShift);
 			var editorShift = _target.CreateEditorShift(_personAssignment);
 			Assert.AreEqual(3, editorShift.LayerCollection.Count);
 			var assignedLayers = _personAssignment.MainShiftActivityLayers.ToList();

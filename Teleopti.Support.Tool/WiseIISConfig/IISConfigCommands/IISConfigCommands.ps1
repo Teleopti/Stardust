@@ -1,5 +1,7 @@
-function IISAdmin {
-	$ModuleName = "WebAdministration"
+function Load-SnapIn {
+    param(
+        $ModuleName
+    )
 	$ModuleLoaded = $false
 	$LoadAsSnapin = $false
 
@@ -53,9 +55,12 @@ function Get-Authentication {
         $path, #TeleoptiCCC/SDK
 		$type #windowsAuthentication
     )
-	$pspath = "MACHINE/WEBROOT/APPHOST/Default Web Site/" + $path
 	
-	$temp = Get-WebConfigurationProperty  -pspath $pspath -filter /system.webServer/security/authentication/$type -name enabled
+	$iis = new-object Microsoft.Web.Administration.ServerManager 
+	
+	$App = $iis.Sites | foreach {$_.Applications | where { $_.Path -eq "$path"}}
+	$temp = $App.GetWebConfiguration().GetSection("system.webServer/security/authentication/$type").GetAttributeValue("enabled")
+	
 	return $temp.Value
 }
 
@@ -107,14 +112,13 @@ function Get-UninstallRegPath {
         $MsiKey
     )
 
+    $WmiQuery = Get-WmiObject -Class Win32_OperatingSystem | Select-Object OSArchitecture
     # paths: x86 and x64 registry keys are different
-    if ([IntPtr]::Size -eq 4) {
-        $paths = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
+    if ($WmiQuery.OSArchitecture -eq "64-bit") {
+        $paths = @('HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     else {
-        $paths = @(
-            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey
-            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
+        $paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $MsiKey)
     }
     
     #check if any of them is acutally a folder path
@@ -128,6 +132,20 @@ function Get-UninstallRegPath {
 	}
 }
 
+function Check-ProductIsInstalled
+{
+    param(
+        $DisplayName
+    )
+    $r = Get-WmiObject Win32_Product | Where {$_.Name -match "$DisplayName"}
+    if ($r -ne $null) {
+        return $True
+        }
+    else  {
+        return $False
+    }
+}
+
 Function Uninstall-ByRegPath(){
     [CmdletBinding()]
     Param (
@@ -139,7 +157,6 @@ Function Uninstall-ByRegPath(){
 
 			$appKey = Get-Item -Path $path
 
-			#Write-Host $appKey.gettype()
 			if ($appKey -is [Microsoft.Win32.RegistryKey]) # If it is a system.object or something else this will fail.
 			{
 				$UninstallString = $appKey.GetValue("UninstallString")
@@ -221,14 +238,109 @@ function Install-TeleoptiCCCServer
 {
     param (
     [string]$BatchFile,
-    [string]$MsiFile,
-    [string]$machineConfig,
-    [string]@WinUser,
-    [string]@WinPassword
+    [array]$ArgArray
     )
-    [string]$ErrorMessage = "Execution of command failed.`n$Command"
-    & "$BatchFile" "$MsiFile" "$machineConfig"
+
+	#add an extra argument, the final batch file
+	$temp = (get-childitem -path env:temp).Value + "\temp.bat"
+	$ArgArray +=$temp
+
+	#create the final batch file
+	Start-Process -FilePath $BatchFile -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	
+	#run the final batch file
+	Get-Content $temp
+	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+}
+
+function Copy-ZippedMsi{
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
+    $destFolder='c:\temp'
+
+    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
+    
+    if (!(Test-Path "$destFolder\$zipFileName")) {
+        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
+    }
+    return @("$destFolder\$zipFileName")
+}
+
+function Add-UserToLocalGroup{
+     Param(
+        $groupName,
+        $computer=$env:computername,
+        $userdomain,
+        $username
+    )
+		if(![ADSI]::Exists("WinNT://$computer/$groupName")) { 
+			Write-Host "No group with that name: '$groupName'"
+			return
+		}
+		
+	$Group= [ADSI]"WinNT://$computer/$groupName,group"
+    $members= $Group.psbase.invoke("Members") | %{$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+    $userFound = $members -contains $username
+    
+	if ($userFound)
+		{"The user '$username' already exists in group '$groupName'."}
+	else {
+			([ADSI]"WinNT://$computer/$groupName,group").psbase.Invoke("Add",([ADSI]"WinNT://$userdomain/$username").path)
+		}
+}
+
+function Create-LocalGroup
+{
+	Param(
+		$groupName,
+		$computer=$env:computername
+	)
+	if(!$groupName)
+	{
+		$(Throw 'A value for $groupName is required!')
+	}
+
+	if(![ADSI]::Exists("WinNT://$computer/$groupName")) { 
+		$computer=$env:computername
+		$objOu = [ADSI]"WinNT://$computer"
+		$objUser = $objOU.Create("Group", $groupName)
+		$objUser.SetInfo()
+	}
+}
+
+function Stop-TeleoptiCCC
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StopSystem.bat"
+    
+    [string]$ErrorMessage = "Stop system failed!"
+    & "$BatchFile" | Out-Null
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
+    }
+}
+
+function Start-TeleoptiCCC
+{
+    $dir = Split-Path $MyInvocation.ScriptName
+    $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StartSystem.bat"
+    
+    [string]$ErrorMessage = "Start system failed!"
+    & "$BatchFile" | Out-Null
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}
+
+
+function Check-ServiceIsRunning{
+	param(
+		$ServiceName
+		)
+    $arrService = Get-Service -Name $ServiceName
+    if ($arrService.Status -eq "Running") {
+    	return $True
+    }
+    else {
+	return $False
     }
 }

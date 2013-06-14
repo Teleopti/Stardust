@@ -153,17 +153,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			target.LayerCollection.Add(new ActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
 		}
-		
-		[Test]
-		public void ShouldNotEqualAnAssignmentWithSameId()
-		{
-			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000,1,1));
-			var ms = new MainShift(shiftCat);
-			var id = Guid.NewGuid();
-			ass.SetId(id);
-			ms.SetId(id);
-			ms.Should().Not.Be.EqualTo(ass);
-			ass.Should().Not.Be.EqualTo(ms);
-		}
 	}
 }

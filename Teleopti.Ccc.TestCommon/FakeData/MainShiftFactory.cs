@@ -47,14 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return shift;
         }
 
-		public static MainShift CreateMainShift(TimeSpan start, TimeSpan end, IActivity activity, IShiftCategory category)
-		{
-			var shift = new MainShift(category);
-			var layer1 = new MainShiftActivityLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start),
-									  WorkShift.BaseDate.Add(end)));
-			shift.LayerCollection.Add(layer1);
-			return shift;
-		}
 
         /// <summary>
         /// Creates mainshift with three activity layers.

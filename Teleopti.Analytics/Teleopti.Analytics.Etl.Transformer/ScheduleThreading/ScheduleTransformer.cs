@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 
     public class ScheduleTransformer : IScheduleTransformer
     {
-        public static IPersonAssignment GetPersonAssignmentForLayer(ISchedulePart schedule, ILayer layer)
+        public static IPersonAssignment GetPersonAssignmentForLayer(ISchedulePart schedule, ILayer<IPayload> layer)
         {
         	IList<IPersonAssignment> pAssignCollection = schedule.PersonAssignmentCollection();
 

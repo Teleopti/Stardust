@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Messages.Denormalize;
 using log4net;

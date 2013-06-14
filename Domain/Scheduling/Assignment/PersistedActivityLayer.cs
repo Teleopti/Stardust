@@ -14,7 +14,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		protected PersistedActivityLayer(){}
 
-		 public virtual bool Equals(IEntity other)
+		public override bool Equals(object other)
+		{
+			var that = other as PersistedActivityLayer;
+			return that != null && Equals((IEntity)other);
+		}
+
+		public override int GetHashCode()
+		{
+			return _id.HasValue ? _id.GetHashCode() : base.GetHashCode();
+		}
+
+		public virtual bool Equals(IEntity other)
 		 {
 			 if (other == null)
 				 return false;

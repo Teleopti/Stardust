@@ -227,9 +227,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (personAssignments.IsEmpty() )
                 return resultSoFar;
 
-#pragma warning disable 612,618
-            if(personAssignments[0].ToMainShift() == null)
-#pragma warning restore 612,618
+            if(personAssignments[0].ShiftCategory == null)
                 return resultSoFar;
 
             IShiftCategory cat = personAssignments[0].ShiftCategory;

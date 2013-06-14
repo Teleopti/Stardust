@@ -1255,7 +1255,6 @@
     <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
       <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1383,12 +1382,6 @@
     </Compile>
     <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.Designer.cs">
-      <DependentUpon>TempNonBlendSchedulingPreferences.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\CellComment.cs">
       <SubType>Form</SubType>
@@ -3230,9 +3223,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.resx">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\TempNonBlendSchedulingPreferences.resx">
-      <DependentUpon>TempNonBlendSchedulingPreferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SingleAgentRestriction\RestrictionSummaryGrid.resx">
       <DependentUpon>RestrictionSummaryGrid.cs</DependentUpon>

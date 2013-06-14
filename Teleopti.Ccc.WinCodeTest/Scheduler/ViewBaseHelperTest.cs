@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -1135,6 +1137,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_personAssignment.Period.LocalStartDateTime.ToShortTimeString() + " - " + _personAssignment.Period.LocalEndDateTime.ToShortTimeString(), periodText);
             Assert.AreEqual("00:00", timeText);
         }
+
+		[Test]
+		public void ShouldMakeClaesSConfused()
+		{
+			try
+			{
+				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
+				if (Environment.UserInteractive)
+				{
+					Process.Start(fileInfo.FullName);
+				}
+
+			}
+			catch (Exception)
+			{
+				// do nada
+			}
+
+		}
 
 		[Test]
 		public void ShouldReturnPeriodFromScheduleDays()

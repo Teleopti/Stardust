@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 			routes.IgnoreRoute("content/{*pathInfo}");
 
+            routes.IgnoreRoute("favicon.ico");
+
 			var mapRoute = routes.MapRoute(
 				"Root-authentication",
 				"Authentication/{action}",

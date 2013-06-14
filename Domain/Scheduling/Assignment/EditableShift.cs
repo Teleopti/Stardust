@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public EditableShift(IShiftCategory shiftCategory)
 		{
 			ShiftCategory = shiftCategory;
-
 		}
 
 		public virtual ILayerCollection<IActivity> LayerCollection

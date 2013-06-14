@@ -1,12 +1,13 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class UpdatedScheduleInfoHandler : 
-		IHandleEvent<PersonWithExternalLogOn>,
-		IHandleEvent<UpdatedScheduleDay>
+		IHandleEvent<PersonActivityStarting>,
+		IHandleEvent<ScheduleProjectionReadOnlyChanged>
 	{
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "exception"),
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Handle(PersonWithExternalLogOn message)
+		public void Handle(PersonActivityStarting message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
+			_serviceBus.DelaySend(((DateTime)startTime), new PersonActivityStarting
 				{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -59,9 +60,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Handle(UpdatedScheduleDay message)
+		public void Handle(ScheduleProjectionReadOnlyChanged message)
 		{
-            Logger.Info("Start consuming UpdatedScheduleDay message.");
+            Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
 
 		    if (message.ActivityStartDateTime > DateTime.UtcNow.AddDays(1) || message.ActivityEndDateTime < DateTime.UtcNow)
 		    {
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
+			_serviceBus.DelaySend(((DateTime)startTime), new PersonActivityStarting
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

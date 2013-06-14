@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -32,19 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				_thisShouldGoAway = thisShouldGoAway;
 				SetId(thisShouldGoAway.Id);
 			}
-			public override bool Equals(object other)
-			{
-				if (_thisShouldGoAway != null)
-				{
-					var that = other as MainShiftActivityLayer;
-					if (that == null)
-						return false;
-					return _thisShouldGoAway.Equals(that._thisShouldGoAway);					
-				}
-				return Equals((ILayer)other);
-			}
-			/// 
-
 
 				protected override int findOrderIndex()
 				{
@@ -54,6 +40,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public override bool Equals(IEntity other)
 		{
+			if (_thisShouldGoAway != null)
+			{
+				var that = other as MainShiftActivityLayer;
+				if (that == null)
+					return false;
+				return _thisShouldGoAway.Equals(that._thisShouldGoAway);
+			}
 			if (other == null)
 				return false;
 			if (this == other)

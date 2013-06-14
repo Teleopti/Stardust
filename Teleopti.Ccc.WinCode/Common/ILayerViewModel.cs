@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using DateTimePeriod=Teleopti.Interfaces.Domain.DateTimePeriod;
@@ -11,13 +10,10 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public interface ILayerViewModel : INotifyPropertyChanged
     {
-
         bool IsSelected { get; set; }
-        IShift Parent { get; }
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }
         TimeSpan Interval { get; set; }
-        ILayer Layer { get; set; }
         DateTimePeriod Period { get; set; }
         Color DisplayColor { get; }
         string Description { get; }

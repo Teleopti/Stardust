@@ -1,5 +1,6 @@
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -9,22 +10,26 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </summary>
     public abstract class MoveableLayerViewModel : LayerViewModel
     {
-        protected MoveableLayerViewModel(ILayer layer, IShift parent,IEventAggregator eventAggregator)
-            : base(layer, parent, eventAggregator)
+	    private readonly ILayer<IActivity> _layer;
+	    private readonly IShift _parent;
+
+	    protected MoveableLayerViewModel(ILayer<IPayload> layer)
+						: base(null, layer, null, true)
         {
         }
 
-        protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent,IEventAggregator eventAggregator)
-            : base(observer, layer, parent,eventAggregator)
+        protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent,IEventAggregator eventAggregator)
+            : base(observer, layer, eventAggregator, false)
         {
+	        _layer = layer;
+	        _parent = parent;
         }
 
-        public override bool CanMoveUp
+	    public override bool CanMoveUp
         {
             get
             {
-                return Parent != null && IsMovePermitted() ?
-                Parent.LayerCollection.CanMoveUpLayer(Layer as ILayer<IActivity>) : false;
+                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveUpLayer(_layer);
             }
         }
 
@@ -32,8 +37,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return Parent != null && IsMovePermitted() ?
-                Parent.LayerCollection.CanMoveDownLayer(Layer as ILayer<IActivity>) : false;
+                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveDownLayer(_layer);
             }
         }
 
@@ -42,8 +46,8 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveDown)
             {
-				var layer = Layer as ILayer<IActivity>;
-				Parent.LayerCollection.MoveDownLayer(layer);
+	            _parent.LayerCollection.MoveDownLayer(_layer);
+	            hackToUpdateAssignmentJustForNow();
                 LayerMoved();
             }
 
@@ -53,28 +57,32 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveUp)
             {
-				var layer = Layer as ILayer<IActivity>;
-				Parent.LayerCollection.MoveUpLayer(layer);
-				LayerMoved();
+	            _parent.LayerCollection.MoveUpLayer(_layer);
+							hackToUpdateAssignmentJustForNow();
+							LayerMoved();
             }
         }
+
+			private void hackToUpdateAssignmentJustForNow()
+			{
+				//this will go away when mainshift is gone
+				var ms = _parent as IMainShift;
+				if (ms != null)
+				{
+					var ass = (IPersonAssignment)ms.Root();
+					ass.SetMainShift(ms);
+				}
+			}
 
         private void LayerMoved()
         {
             if (ParentObservingCollection != null)
             {
                 ParentObservingCollection.LayerMovedVertically(this);
-                TriggerShiftEditorUpdate();
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
             }
         }
 
-        protected override void DeleteLayer()
-        {
-            if (ParentObservingCollection != null)
-            {
-                ParentObservingCollection.RemoveActivity(this);
-                TriggerShiftEditorUpdate();
-            }
-        }
+       
     }
 }

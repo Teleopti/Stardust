@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private ShiftEditorEventArgs _target;
         private IScheduleDay _part;
         private MockRepository _mocker;
-        private ILayer _layer;
+        private ILayer<IActivity> _layer;
         private DateTimePeriod _period;
 
         [SetUp]
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         {
             _mocker = new MockRepository();
             _part = _mocker.StrictMock<IScheduleDay>();
-            _layer = _mocker.StrictMock<ILayer>();
+            _layer = _mocker.StrictMock<ILayer<IActivity>>();
             _period = new DateTimePeriod(2001,1,1,2001,1,2);
         }
 

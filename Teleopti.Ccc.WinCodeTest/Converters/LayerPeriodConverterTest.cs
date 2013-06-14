@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
         [Test]
         public void VerifyConvert()
         {
-            ILayer layer = _mocks.StrictMock<ILayer>();
+            var layer = _mocks.StrictMock<ILayer<IActivity>>();
             DateTimePeriod period = new DateTimePeriod();
             Expect.Call(layer.Period).Return(period);
             _mocks.ReplayAll();

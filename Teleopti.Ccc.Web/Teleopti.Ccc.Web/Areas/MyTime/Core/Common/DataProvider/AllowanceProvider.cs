@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_now = now;
 		}
 
-		public IEnumerable<Tuple<DateOnly, TimeSpan, bool>> GetAllowanceForPeriod(DateOnlyPeriod period)
+		public IEnumerable<Tuple<DateOnly, TimeSpan, TimeSpan, bool>> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
 
 			var allowanceList =
 				from d in period.DayCollection()
-				select new { Date = d, Time = TimeSpan.Zero, Availability = false };
+				select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Availability = false };
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  				{
 					allowanceList =
 						from d in period.DayCollection()
-						select new { Date = d, Time = TimeSpan.Zero, Availability = true };
+						select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Availability = true };
 
  					foreach (var openPeriod in validOpenPeriods)
  					{
@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  									{
  										Date = budgetDay.Day,
  										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
+										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
  										Availability = true
  									};
  						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
@@ -74,8 +75,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				from p in allowanceList
 				group p by p.Date into g
 				orderby g.Key
-				select new Tuple<DateOnly, TimeSpan, bool>
-					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), g.First(o => o.Date == g.Key).Availability);
+				select new Tuple<DateOnly, TimeSpan, TimeSpan, bool>
+					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.First(o => o.Date == g.Key).Availability);
 		}
 	}
 }
