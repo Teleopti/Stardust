@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.SelectOptionByTextUsingJQuery(".scenario-selector", scenario);
 		}
 
-		[When(@"I input a configuration in json format")]
-		public void WhenIInputAConfigurationInJsonFormat()
+		[When(@"I input a configuration with (.*) scenarios in json format")]
+		public void WhenIInputAConfigurationInJsonFormat(int scenarios)
 		{
 			var configuration = new
 				{
@@ -31,25 +31,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 						{
 							UserFactory.User().Person.Id.Value.ToString()
 						},
-					AbsenceId = new[]
-						{
-							UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString()
-						},
+					AbsenceId =UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString(),
 					DateRange = new
 						{
 							From = DateTime.Now.Date.ToShortDateString(),
-							To = DateTime.Now.Date.AddDays(1).ToShortDateString()
+							To = DateTime.Now.Date.AddDays(scenarios - 1).ToShortDateString()
 						}
 				};
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
-		[Then(@"I should see a count of messages received for each applicable model updated")]
-		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated()
+		[Then(@"I should see a count of (.*) messages received for '(.*)'")]
+		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated(int messages, string model)
 		{
-			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel') .message-target:contains('4')");
-			Browser.Interactions.AssertExists(".message-count:contains('PersonScheduleDayReadModel') .message-successes:contains('4')");
+			Browser.Interactions.AssertExists(".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
+			Browser.Interactions.AssertExists(".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
 		}
 
 		[Then(@"I should see that the test run has finished")]
