@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -41,21 +43,111 @@ namespace Teleopti.Ccc.WinCode.Common
             return true;
         }
 
-        //TODO: Make sure how the vertical movement of personalshift should work
         public override bool CanMoveUp
         {
-            get { return false;}
+            get
+            {
+	            var personalShift = getPersonalShift();
+	            var personAssignment = getPersonAssignment(personalShift);
+				if (personAssignment != null)
+				{
+					var index = personAssignment.PersonalShiftCollection.IndexOf(personalShift);
+					return personAssignment.PersonalShiftCollection.IndexOf(personalShift) > 0;
+				}
+
+	            return false;
+            }
         }
 
-        //TODO: Make sure how the vertical movement of personalshift should work
         public override bool CanMoveDown
         {
-            get { return false;}
+			get
+			{
+				var personalShift = getPersonalShift();
+				var personAssignment = getPersonAssignment(personalShift);
+				if (personAssignment != null)
+				{
+					return personAssignment.PersonalShiftCollection.Contains(personalShift) && personAssignment.PersonalShiftCollection.Last() != personalShift;
+				}
+
+				return false;
+			}
         }
+
+		public override void MoveDown()
+		{
+			if (CanMoveDown)
+			{
+				movePersonalShift(false);
+			}
+
+		}
+
+		public override void MoveUp()
+		{
+			if (CanMoveUp)
+			{
+				movePersonalShift(true);
+			}
+		}
 
         public override bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
         {
             return false;
         }
+
+		private void movePersonalShift(bool moveUp)
+		{
+			var personalShift = getPersonalShift();
+			var personAssignment = getPersonAssignment(personalShift);
+			if (personAssignment != null)
+			{
+				var index = personAssignment.PersonalShiftCollection.IndexOf(personalShift);
+				personAssignment.RemovePersonalShift(personalShift);
+				IList<IPersonalShift> personalShiftsList = personAssignment.PersonalShiftCollection.ToList();
+
+				if (moveUp) index--;
+				else index++;
+
+				if (index == personalShiftsList.Count)
+					personalShiftsList.Add(personalShift);
+				else
+					personalShiftsList.Insert(index, personalShift);
+
+				personAssignment.ClearPersonalShift();
+				foreach (var ps in personalShiftsList)
+				{
+					personAssignment.AddPersonalShift(ps);
+				}
+
+			}
+
+			LayerMoved();	
+		}
+
+		private void LayerMoved()
+		{
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.LayerMovedVertically(this);
+				TriggerShiftEditorUpdate();
+			}
+		}
+
+		private IPersonalShift getPersonalShift()
+		{
+			return Parent as Domain.Scheduling.Assignment.PersonalShift;
+		}
+
+		private IPersonAssignment getPersonAssignment(IPersonalShift personalShift)
+		{
+			if (personalShift != null)
+			{
+				var personAssignment = personalShift.Parent as Domain.Scheduling.Assignment.PersonAssignment;
+				return personAssignment;
+			}
+
+			return null;
+		}
     }
 }

@@ -2095,6 +2095,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(scheduleTag, scheduleDay.ScheduleTag());
         }
 
-       
+		[Test]
+		public void ShouldAddPersonalActivityToExistingPersonalAssignment()
+		{
+			IActivity activity = ActivityFactory.CreateActivity("activity");
+			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod1 = new DateTimePeriod(start, end);
+			var dateTimePeriod2 = new DateTimePeriod(end.AddHours(1), end.AddHours(2));
+			var layer1 = new PersonalShiftActivityLayer(activity, dateTimePeriod1);
+			var layer2 = new PersonalShiftActivityLayer(activity, dateTimePeriod2);
+
+			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
+			_target.CreateAndAddPersonalActivity(layer1);
+			_target.CreateAndAddPersonalActivity(layer2);
+
+			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(2, _target.PersonAssignmentCollection()[0].PersonalShiftCollection.Count);
+			Assert.AreEqual(dateTimePeriod1, _target.PersonAssignmentCollection()[0].PersonalShiftCollection[0].LayerCollection[0].Period);
+			Assert.AreEqual(dateTimePeriod2, _target.PersonAssignmentCollection()[0].PersonalShiftCollection[1].LayerCollection[0].Period);
+		}
 	}
 }
