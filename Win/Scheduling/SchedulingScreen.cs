@@ -6960,21 +6960,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemFindMatching_Click(object sender, EventArgs e)
 		{
 			IScheduleDay selected = _scheduleView.SelectedSchedules()[0];
-			using (var form = new FindMatching(selected.Person, selected.DateOnlyAsPeriod.DateOnly, _schedulerState.SchedulingResultState, _schedulerState.FilteredPersonDictionary.Values))
-			{
-				form.ShowDialog(this);
-				if (form.DialogResult == DialogResult.OK)
-				{
-					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { selected });
-					_scheduleView.GridClipboardCopy(false);
-					if (form.Selected() == null)
-						return;
-					IScheduleDay target = _schedulerState.Schedules[form.Selected()].ScheduledDay(selected.DateOnlyAsPeriod.DateOnly);
-					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { target });
-					paste();
-					updateShiftEditor();
-				}
-			}
+			findMatching(selected);
 		}
 
 		private void toolStripMenuItemFindMatching2_Click(object sender, EventArgs e)
@@ -7000,17 +6986,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (dateOnlyPeriod.DayCount() > 1) return;
 			DateOnly dateOnly = dateOnlyPeriod.StartDate;
 			IScheduleDay selected = _schedulerState.Schedules[person].ScheduledDay(dateOnly);
-			using (var form = new FindMatching(selected.Person, selected.DateOnlyAsPeriod.DateOnly, _schedulerState.SchedulingResultState, _schedulerState.FilteredPersonDictionary.Values))
+			findMatching(selected);
+		}
+
+		private void findMatching(IScheduleDay selected)
+		{
+			using (
+				var form = new FindMatchingNew(selected.Person, selected.DateOnlyAsPeriod.DateOnly,
+				                               _schedulerState.SchedulingResultState, _schedulerState.FilteredPersonDictionary.Values)
+				)
 			{
 				form.ShowDialog(this);
 				if (form.DialogResult == DialogResult.OK)
 				{
-					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { selected });
+					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> {selected});
 					_scheduleView.GridClipboardCopy(false);
 					if (form.Selected() == null)
 						return;
 					IScheduleDay target = _schedulerState.Schedules[form.Selected()].ScheduledDay(selected.DateOnlyAsPeriod.DateOnly);
-					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { target });
+					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> {target});
 					paste();
 					updateShiftEditor();
 				}

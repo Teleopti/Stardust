@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
-                // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                // do not lock days
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
-                // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                //do not lock days
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -214,7 +214,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleSecondDate(false);
                 resourceCalculation();
                 // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
@@ -236,7 +235,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 // lock days
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
@@ -256,7 +254,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 resourceCalculation();
                 // lock days
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
