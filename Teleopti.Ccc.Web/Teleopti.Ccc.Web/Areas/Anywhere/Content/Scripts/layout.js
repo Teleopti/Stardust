@@ -112,6 +112,11 @@ define([
                     _displayView({ view: view, id: id, action: action });
                 });
             crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
+                function(view, id, date, secondaryId) {
+                    _displayView({ view: view, id: id, date: date, secondaryId: secondaryId });
+                });
+            crossroads.addRoute(
                 new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
                 function(view, id, date) {
                     _displayView({ view: view, id: id, date: date });

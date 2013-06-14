@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -61,14 +62,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-																					new OccupiedSeatCalculator(
-																						new SkillVisualLayerCollectionDictionaryCreator
-																							(),
-																						new SeatImpactOnPeriodForProjection()),
-																					new NonBlendSkillCalculator(
-																						new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary(),
-																							new SingleSkillMaxSeatCalculator());
+					                                                                new OccupiedSeatCalculator(
+						                                                                new SkillVisualLayerCollectionDictionaryCreator(),
+						                                                                new SeatImpactOnPeriodForProjection()),
+					                                                                new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),
+					                                                                new SingleSkillDictionary(),
+					                                                                new SingleSkillMaxSeatCalculator(),
+					                                                                new CurrentTeleoptiPrincipal());
 					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
 					{
 						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);

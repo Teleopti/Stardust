@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAvailability(date);
 		}
 
+		[Given(@"I view schedules for '(.*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{

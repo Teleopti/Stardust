@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.AddFullDayAbsence,
 					UserTexts.Resources.Apply,
 					UserTexts.Resources.InvalidEndDate,
+					UserTexts.Resources.Forecasted,
+					UserTexts.Resources.Scheduled,
+					UserTexts.Resources.Difference,
+					UserTexts.Resources.ESL,
+					UserTexts.Resources.HourShort,
 					UserTexts.Resources.Remove,
 					UserTexts.Resources.ConfirmRemoval,
 

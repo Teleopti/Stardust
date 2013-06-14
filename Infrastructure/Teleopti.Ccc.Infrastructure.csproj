@@ -296,6 +296,7 @@
     <Compile Include="Repositories\MasterActivityRepository.cs" />
     <Compile Include="Repositories\ExtendedPreferenceTemplateRepository.cs" />
     <Compile Include="Repositories\ScheduleTagRepository.cs" />
+    <Compile Include="Repositories\SkillLoaderDecider.cs" />
     <Compile Include="Repositories\UserDetailRepository.cs" />
     <Compile Include="Repositories\NoteRepository.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepository.cs" />

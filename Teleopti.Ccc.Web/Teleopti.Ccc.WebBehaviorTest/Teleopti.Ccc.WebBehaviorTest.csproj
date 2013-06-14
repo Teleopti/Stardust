@@ -92,6 +92,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewStaffingMetrics.feature.cs">
+      <DependentUpon>ViewStaffingMetrics.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\RemoveAbsence.feature.cs">
       <DependentUpon>RemoveAbsence.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -120,8 +125,11 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
+    <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
@@ -157,6 +165,7 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\SkillConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
@@ -575,6 +584,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewStaffingMetrics.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewStaffingMetrics.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RemoveAbsence.feature.cs</LastGenOutput>
