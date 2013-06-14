@@ -241,8 +241,9 @@ define([
                         domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
                             var iteration = iterationForNotification(notification);
-                            if (iteration)
+                            if (iteration) {
                                 iteration.notifyPersonScheduleDayReadModelChanged();
+                            }
                         }
                     });
                     
@@ -256,9 +257,13 @@ define([
                         }
                     });
 
-                    $.each(iterations, function (i, e) {
-                        sendAddCommand(e);
-                    });
+                    $.when(personScheduleDayReadModelSubscription.promise, personAbsenceSubscription.promise)
+                        .done(
+                            function() {
+                                $.each(iterations, function(i, e) {
+                                    sendAddCommand(e);
+                                });
+                            });
 
                     var commandsSentPromises = $.map(iterations, function (e) {
                         return e.commandsSentPromise;
