@@ -222,35 +222,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Determines whether the specified period contains part.
-        /// </summary>
-        /// <param name="containsPeriod">The period.</param>
-        /// <param name="includeStartAndEnd">if set to <c>true</c> [include start and end].</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified period contains part; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-12
-        /// </remarks>
-        public bool ContainsPart(DateTimePeriod containsPeriod, bool includeStartAndEnd)
-        {
-            if (!includeStartAndEnd)
-            {
-                if (containsPeriod.StartDateTime == containsPeriod.EndDateTime ||
-                    containsPeriod.ElapsedTime().TotalMinutes <= 1d)
-                {
-                    return Contains(containsPeriod);
-                }
-
-                containsPeriod = containsPeriod.ChangeStartTime(new TimeSpan(1L));
-                containsPeriod = containsPeriod.ChangeEndTime(new TimeSpan(-1L));
-            }
-
-            return ContainsPart(containsPeriod);
-        }
-
-        /// <summary>
         /// Returns if any part of the param DateTime is contained
         /// </summary>
         /// <param name="theDateTime"></param>

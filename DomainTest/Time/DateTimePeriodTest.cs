@@ -290,24 +290,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(t2.Intersect(t3));
         }
 
-        [Test]
-        public void VerifyIntersectsCanBeReplacedByContainsPart()
-        {
-            _period = new DateTimePeriod(new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod t2 = new DateTimePeriod(new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 14, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod t3 = new DateTimePeriod(new DateTime(2007, 1, 1, 14, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-            Assert.IsTrue(_period.Intersect(t2) == _period.ContainsPart(t2, false));
-            Assert.IsTrue(t3.Intersect(t2) == t3.ContainsPart(t2, false));
-            Assert.IsTrue(t2.Intersect(_period) == t2.ContainsPart(_period, false));
-            Assert.IsTrue(t2.Intersect(t3) == t2.ContainsPart(t3, false));
-
-            _period = new DateTimePeriod(new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 13, 0, 1, DateTimeKind.Utc));
-            t2 = new DateTimePeriod(new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 14, 0, 1, DateTimeKind.Utc));
-            Assert.IsTrue(_period.Intersect(t2) == _period.ContainsPart(t2, false));
-            Assert.IsTrue(t3.Intersect(t2) == t3.ContainsPart(t2, false));
-            Assert.IsTrue(t2.Intersect(_period) == t2.ContainsPart(_period, false));
-            Assert.IsTrue(t2.Intersect(t3) == t2.ContainsPart(t3, false));
-        }
 
         [Test]
         public void VerifyContainsPart()
@@ -343,42 +325,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(_period.ContainsPart(startAtStartFinishLaterPeriod));
             Assert.IsFalse(_period.ContainsPart(startEarlierFinishEarlierPeriod));
             Assert.IsFalse(_period.ContainsPart(startLaterFinishLaterPeriod));
-        }
-
-        [Test]
-        public void VerifyContainsPartWithSettingForInclusion()
-        {
-            DateTime beforeStartEarlierDate = new DateTime(2006, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime beforeStartLaterDate = new DateTime(2006, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime inPeriodEarlierDate = new DateTime(2007, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime inPeriodLaterDate = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime afterEndEarlierDate = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime afterEndLaterDate = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            DateTimePeriod containsPeriod = new DateTimePeriod(inPeriodEarlierDate, inPeriodLaterDate);
-            DateTimePeriod startEarlierFinishInPeriod = new DateTimePeriod(beforeStartEarlierDate, inPeriodLaterDate);
-            DateTimePeriod startInFinishLaterPeriod = new DateTimePeriod(inPeriodEarlierDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishLaterPeriod = new DateTimePeriod(beforeStartLaterDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishAtStartPeriod = new DateTimePeriod(beforeStartLaterDate, _start);
-            DateTimePeriod startAtEndFinishLaterPeriod = new DateTimePeriod(_end, afterEndEarlierDate);
-            DateTimePeriod startEarlierFinishAtEndPeriod = new DateTimePeriod(beforeStartLaterDate, _end);
-            DateTimePeriod startAtStartFinishLaterPeriod = new DateTimePeriod(_start, afterEndLaterDate);
-            DateTimePeriod startLaterFinishLaterPeriod = new DateTimePeriod(afterEndEarlierDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishEarlierPeriod =
-                new DateTimePeriod(beforeStartEarlierDate, beforeStartLaterDate);
-            DateTimePeriod equalsPeriod = new DateTimePeriod(_start, _end);
-
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishInPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startInFinishLaterPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(containsPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(equalsPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishLaterPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startEarlierFinishAtStartPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startAtEndFinishLaterPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishAtEndPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startAtStartFinishLaterPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startEarlierFinishEarlierPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startLaterFinishLaterPeriod, false));
         }
 
         /// <summary>
@@ -851,51 +797,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(new TimeSpan(0, 1, 0, 0), per1.Intersection(_period).Value.ElapsedTime());
         }
 
-        [Test]
-        public void VerifyDifferenceBetweenIntersectionAndSharedPeriod()
-        {
-            DateTime start = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(start, end);
-
-            // WORKS SAME
-
-            //intersect
-            DateTime start1 = new DateTime(2007, 6, 1, 22, 30, 0, DateTimeKind.Utc);
-            DateTime end1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-            //equals
-            start1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-            //inside
-            start1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-
-            // DIFFERENCE
-
-            //adjacent
-            start1 = new DateTime(2007, 6, 1, 22, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-
-            Assert.IsNull(_period.Intersection(period1));
-            Assert.IsNull(period1.Intersection(_period));
-
-            Assert.IsTrue(_period.SharedPeriod(period1).StartDateTime == _period.SharedPeriod(period1).EndDateTime);
-            Assert.IsTrue(period1.SharedPeriod(_period).StartDateTime == period1.SharedPeriod(_period).EndDateTime);
-
-        }
 
         [Test]
         public void VerifyAffectedHours()
