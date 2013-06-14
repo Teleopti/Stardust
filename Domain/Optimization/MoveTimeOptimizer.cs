@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-    	public MoveTimeOptimizer(
+	    public MoveTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor,
             IMoveTimeDecisionMaker decisionMaker,
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return true;
 			}
 
-            lockDays(firstDayDate, secondDayDate);
+            //lockDays(firstDayDate, secondDayDate);
 
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
@@ -139,18 +139,21 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (isPeriodWorse)
             {
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
+				lockDays(firstDayDate, secondDayDate);
                 return true;
             }
 
             if (daysOverMax())
             {
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
+				lockDays(firstDayDate, secondDayDate);
                 return false;
             }
 
             if (restrictionsOverMax().Count > 0)
             {
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
+				lockDays(firstDayDate, secondDayDate);
                 return true;
             }
             
@@ -172,11 +175,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                        new List<IScheduleDay> {currentScheduleDay});
         }
 
-        private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)
-        {
-            lockDay(firstDayDate);
-            lockDay(secondDayDate);
-        }
+		private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)
+		{
+			lockDay(firstDayDate);
+			lockDay(secondDayDate);
+		}
 
         private IList<DateOnly> restrictionsOverMax()
         {
@@ -193,7 +196,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _matrixConverter.SourceMatrix.Person; }
         }
 
-        private double calculatePeriodValue()
+	    public IScheduleMatrixPro Matrix
+	    {
+			get
+			{
+				return _matrixConverter.SourceMatrix;
+			}
+	    }
+
+	    private double calculatePeriodValue()
         {
             return _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
         }
@@ -228,6 +239,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!success)
 			{
                 _rollbackService.Rollback();
+				lockDay(day);
                 return false;
             }
 

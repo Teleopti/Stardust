@@ -1265,6 +1265,12 @@
     <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
+    <Compile Include="Scheduling\FindMatchingNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\FindMatchingNew.Designer.cs">
+      <DependentUpon>FindMatchingNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\LockExecuter.cs" />
     <Compile Include="Scheduling\OverViewDrawAbsence.cs" />
     <Compile Include="Scheduling\OverViewDrawAbsenceDayOff.cs" />
@@ -1314,12 +1320,6 @@
     </Compile>
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
-    <Compile Include="Scheduling\FindMatching.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FindMatching.Designer.cs">
-      <DependentUpon>FindMatching.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\GroupDayOffOptimizerHelper.cs" />
     <Compile Include="Scheduling\OptimizationProgress.cs">
       <SubType>Form</SubType>
@@ -2792,6 +2792,9 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\FindMatchingNew.resx">
+      <DependentUpon>FindMatchingNew.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2801,9 +2804,6 @@
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FindMatching.resx">
-      <DependentUpon>FindMatching.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestAllowanceView.resx">
       <DependentUpon>RequestAllowanceView.cs</DependentUpon>
@@ -3747,6 +3747,7 @@
     <None Include="Resources\ccc_Notes.png" />
     <None Include="Resources\ccc_NewRole_16x16.png" />
     <None Include="Resources\ccc_NewRole_32x32.png" />
+    <None Include="Resources\ccc_not_ok_red _16x16.png" />
     <Content Include="Resources\ccc_Open.png" />
     <None Include="Resources\ccc_Page_SetUp_32x32.png" />
     <None Include="Resources\ccc_Options_32x32.png" />

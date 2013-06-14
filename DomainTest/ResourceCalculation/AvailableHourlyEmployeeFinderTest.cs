@@ -78,6 +78,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(extraPerson, result[0].Person);
+			Assert.IsNotNull(result[0].WorkTimesTomorrow);
+			Assert.IsNotNull(result[0].WorkTimesYesterday);
+			Assert.IsNotNull(result[0].Availability);
             _mocks.VerifyAll();
 		}
 
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(extraPerson2, result[0].Person);
 			Assert.That(result[0].Matching, Is.Not.Null);
-			Assert.That(result[0].StudentAvailabilityDay, Is.Not.Null);
+			Assert.That(result[0].NightRestOk, Is.True);
             _mocks.VerifyAll();
 		}
 
@@ -126,12 +129,33 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
-			Assert.AreEqual(2, result.Count);
-			//Assert.AreEqual(extraPerson3, result[0].Person);
-			//Assert.AreEqual(extraPerson2, result[1].Person);
-			//Assert.IsTrue(result[0].Matching);
-			//Assert.IsFalse(result[1].Matching);
+			Assert.AreEqual(3, result.Count);
+
             _mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCheckNightRest()
+		{
+			schedulePerson(_sourcePerson);
+			IPerson extraPerson = createExtraPerson(null);
+			scheduleExtraPerson(extraPerson);
+			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson };
+
+			_target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
+				Assert.IsTrue(result[0].NightRestOk);
+			}
+      
+      
 		}
 
 		private void schedulePerson(IPerson person)
@@ -144,6 +168,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IScheduleDay scheduleDay = _dic[person].ScheduledDay(_date);
 			scheduleDay.AddMainShift(mainShift);
             _dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+		}
+
+		private void scheduleExtraPerson(IPerson person)
+		{
+			DateTime start = DateTime.SpecifyKind(_date.Date.AddDays(-1).AddHours(8), DateTimeKind.Utc);
+			DateTime end = DateTime.SpecifyKind(_date.Date.AddDays(-1).AddHours(16), DateTimeKind.Utc);
+			DateTimePeriod shiftPeriod = new DateTimePeriod(start, end);
+			IMainShift mainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("act"), shiftPeriod,
+																	ShiftCategoryFactory.CreateShiftCategory("bla"));
+			IScheduleDay scheduleDay = _dic[person].ScheduledDay(_date.AddDays(-1));
+			scheduleDay.AddMainShift(mainShift);
+			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+
+			start = DateTime.SpecifyKind(_date.Date.AddDays(1).AddHours(8), DateTimeKind.Utc);
+			end = DateTime.SpecifyKind(_date.Date.AddDays(1).AddHours(16), DateTimeKind.Utc);
+			shiftPeriod = new DateTimePeriod(start, end);
+			mainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("act"), shiftPeriod,
+																	ShiftCategoryFactory.CreateShiftCategory("bla"));
+			scheduleDay = _dic[person].ScheduledDay(_date.AddDays(1));
+			scheduleDay.AddMainShift(mainShift);
+			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		private IPerson createFixedPerson()
@@ -184,19 +229,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			return extraPerson;
 		}
 
-		//private IPerson createExtraPersonThatIsNotAvail()
-		//{
-		//    IPerson extraPerson = PersonFactory.CreatePersonWithGuid("extraPerson", "extraPerson");
-		//    IContract fixedContract = ContractFactory.CreateContract("hupp");
-		//    fixedContract.EmploymentType = EmploymentType.HourlyStaff;
-		//    IPersonContract fixedPersonContract = PersonContractFactory.CreatePersonContract(fixedContract,
-		//                                                                                     _percentage, _contractSchedule);
-		//    extraPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(_dateOnly, fixedPersonContract, _team));
-		//    IScheduleParameters scheduleParameters = new ScheduleParameters(_scenario, extraPerson, _dtp);
-		//    IScheduleRange range = new ScheduleRange(_dic, scheduleParameters);
-		//    _dic.AddTestItem(extraPerson, range);
-
-		//    return extraPerson;
-		//}
 	}
 }
