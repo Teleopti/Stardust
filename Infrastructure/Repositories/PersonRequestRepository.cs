@@ -127,6 +127,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonTo));
 
+			var shiftTradeRequestsForAgentPersonFrom = DetachedCriteria.For<ShiftTradeRequest>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonFrom));
+
 			var personRequests = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
@@ -135,7 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var requestsForAgent = Restrictions.Or(Restrictions.Or(
 				Restrictions.And(Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonTo),
 								 Restrictions.Not(Restrictions.Eq("requestStatus", 4))) // hide auto denied shift trade requests for receiptors
-				, Subqueries.PropertyIn("requests", shiftTradeDetailsForAgentPersonFrom)),
+				, Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonFrom)),
 												   Restrictions.Eq("Person", person));
 
 			personRequests.Add(requestsForAgent);
