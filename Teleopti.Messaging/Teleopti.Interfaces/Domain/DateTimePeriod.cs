@@ -322,50 +322,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// The local days affected.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> LocalDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.LocalStartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.LocalStartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.LocalEndDateTime.AddTicks(-1L).Date))
-                    collectionToReturn.Add(wholeDay.LocalEndDateTime.AddTicks(-1L).Date);
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
-        /// The days affected in UTC.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> UtcDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.StartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.StartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.EndDateTime.Date))
-                    collectionToReturn.Add(wholeDay.EndDateTime.Date);
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
         /// Gets a list of TimeSpans, one for each interval in the DateTimePeriod.
         /// Will take summer time and winter time changes into consideration.
         /// When moving from winter to summer time, the TimeSpan 02:00- will not exists
@@ -685,26 +641,6 @@ namespace Teleopti.Interfaces.Domain
         	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
         }
 
-    	/// <summary>
-        /// Gets a new period starting the first day of the week
-        /// ending the last day of week
-        /// (in sweden: startdate will back to nearest monday, enddate will be forward to closest sunday)
-        /// </summary>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-14
-        /// </remarks>
-        /// <param name="timeZoneInfo"></param>
-        public DateTimePeriod WholeWeek(CultureInfo culture, TimeZoneInfo timeZoneInfo)
-        {
-            DateTime startdate = DateHelper.GetFirstDateInWeek(StartDateTimeLocal(timeZoneInfo), culture);
-            DateTime endDate = DateHelper.GetLastDateInWeek(EndDateTimeLocal(timeZoneInfo), culture).AddDays(1);
-            return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(startdate),
-                                      timeZoneInfo.SafeConvertTimeToUtc(endDate), false);
-        }
-
         /// <summary>
         /// Get the maximum period.
         /// A new DateTimePeriod is returned with the lowest
@@ -856,21 +792,6 @@ namespace Teleopti.Interfaces.Domain
                 timePeriods.Add(rightTimePeriod);
             }
             return timePeriods;
-        }
-
-        /// <summary>
-        /// Returns the elapsed time TotalDays rounded to an integer.
-        /// </summary>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-02-17    
-        /// /// </remarks>
-        public double RoundedDaysCount()
-        {
-            TimeSpan elapsedTime = period.Maximum - period.Minimum;
-            return Math.Round(elapsedTime.TotalDays);
         }
     }
 }

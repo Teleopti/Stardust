@@ -650,49 +650,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyDateTimePeriodCanReturnLocalDaysAffected()
-        {
-            DateTime startDate1 = new DateTime(2007, 8, 10, 22, 00, 0, DateTimeKind.Utc);
-            DateTime endDate1 = new DateTime(2007, 8, 13, 21, 30, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(startDate1, endDate1);
-
-            IList<DateTime> daysAffected = _period.LocalDaysAffected();
-
-            Assert.AreEqual(3, daysAffected.Count);
-            Assert.AreEqual(new DateTime(2007, 8, 11), daysAffected[0]);
-            Assert.AreEqual(new DateTime(2007, 8, 13), daysAffected[2]);
-        }
-
-
-        [Test]
-        public void VerifyDateTimePeriodCanReturnUtcDaysAffected()
-        {
-            DateTime startDate1 = new DateTime(2007, 8, 10, 22, 00, 0, DateTimeKind.Utc);
-            DateTime endDate1 = new DateTime(2007, 8, 13, 21, 30, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(startDate1, endDate1);
-
-            IList<DateTime> daysAffected = _period.UtcDaysAffected();
-
-            Assert.AreEqual(4, daysAffected.Count);
-            Assert.AreEqual(new DateTime(2007, 8, 10), daysAffected[0]);
-            Assert.AreEqual(new DateTime(2007, 8, 13), daysAffected[3]);
-        }
-
-        #region WholeWeeks
-        
-        [Test, Explicit("Micke - vad gör vi med denna?")]
-        public void VerifyToWholeWeeks()
-        {
-            _period = new DateTimePeriod(2008,5,4,2008,5,5);
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 28, 2008, 5, 12), _period.WholeWeek(CultureInfo.GetCultureInfo("sv-SE"), (TimeZoneInfo.Utc)));
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 27, 2008, 5, 11), _period.WholeWeek(CultureInfo.GetCultureInfo("en-US"), (TimeZoneInfo.Utc)));
-        }
-
-
-        #endregion
-
-
-        [Test]
         public void VerifyDateTimePeriodIsGreaterThan()
         {
             DateTime startDate1 = new DateTime(2007, 8, 10, 12, 00, 0, DateTimeKind.Utc);
@@ -837,17 +794,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             Assert.AreEqual(_period.LocalStartDateTime.ToShortDateString() + " - " + _period.LocalEndDateTime.AddDays(-1).ToShortDateString(), _period.LocalDateString);
         }
-
-        [Test]
-        public void VerifyLocalDaysAffectedShorterThanOneDay()
-        {
-            _period = new DateTimePeriod(new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 23, 0, 0, DateTimeKind.Utc).AddMinutes(-1));
-            DateTimePeriod notWorking = new DateTimePeriod(new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 23, 0, 0, DateTimeKind.Utc).AddTicks(-1));
-
-            Assert.AreEqual(1, _period.LocalDaysAffected().Count);
-            Assert.AreEqual(1, notWorking.LocalDaysAffected().Count);
-        }
-
 
         [Test]
         public void VerifyCanGetListOfPeriodsDependingOnTimeSpan()
@@ -995,26 +941,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
             Assert.AreEqual(1, ret.Count);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret[0]);
-        }
-
-        [Test]
-        public void VerifyRoundedCountOfDays()
-        {
-            DateTime date1 = new DateTime(2000,1,1,23,0,0,DateTimeKind.Utc);
-            DateTime date2 = new DateTime(2000, 1, 5, 22, 0, 0, DateTimeKind.Utc);
-            
-            _period = new DateTimePeriod(date1, date2);
-
-            TimeSpan elapsedTime = date2 - date1;
-            double result = _period.RoundedDaysCount();
-            Assert.AreEqual(Math.Round(elapsedTime.TotalDays),result);
-
-            date2 = new DateTime(2000, 1, 6, 3, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(date1, date2);
-
-            elapsedTime = date2 - date1;
-            result = _period.RoundedDaysCount();
-            Assert.AreEqual(Math.Round(elapsedTime.TotalDays), result);
         }
 
         [Test]
