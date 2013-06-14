@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
@@ -25,6 +26,9 @@ namespace Teleopti.Ccc.Win.Main
             setColors();
             labelActiveAgentsInUse.Text = getNumberOfActiveAgents();
             textBoxAbout.Text = getLicenseText();
+			var authorization = PrincipalAuthorization.Instance();
+			buttonAdvViewActive.Enabled =
+				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewActiveAgents);
         }
 
         private static string getNumberOfActiveAgents()
@@ -56,6 +60,7 @@ namespace Teleopti.Ccc.Win.Main
 				max = license.MaxSeats;
 				labelActiveAgentsInUse.Text = "";
 				labelActiveAgentsOrSeats.Text = "";
+				buttonAdvViewActive.Visible = false;
 			}
 
             string licenseText = String.Format(CultureInfo.CurrentCulture,
@@ -123,7 +128,27 @@ namespace Teleopti.Ccc.Win.Main
             var legalNotice = new Legal();
             legalNotice.ShowDialog(this);
 			legalNotice.Dispose();
-        }
+		}
+
+		private void buttonAdvViewActive_Click(object sender, EventArgs e)
+		{
+			var rep = new LicenseRepository(UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory());
+			var arr = rep.GetActiveAgents();
+			
+			var strings = new string[arr.Count];
+			strings[0] = string.Join(",", Resources.BusinessUnit, Resources.FirstName, Resources.LastName, Resources.Email,
+									Resources.EmployeeNumber, Resources.Start, Resources.TerminalDate);
+			for (var i = 0; i < arr.Count-1; i++)
+			{
+				var a = arr[i];
+				strings[i+1] = string.Join(",", a.BusinessUnit, a.FirstName, a.LastName, a.Email, a.EmploymentNumber, a.StartDate,
+										a.LeavingDate);
+			}
+			using (var agent = new ActiveAgents(strings))
+			{
+				agent.ShowDialog(this);
+			}
+		}
 
     }
 }
