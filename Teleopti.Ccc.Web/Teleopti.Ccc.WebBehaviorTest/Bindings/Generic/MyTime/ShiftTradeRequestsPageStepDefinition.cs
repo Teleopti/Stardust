@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
+			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
 			Browser.Interactions.AssertContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
 

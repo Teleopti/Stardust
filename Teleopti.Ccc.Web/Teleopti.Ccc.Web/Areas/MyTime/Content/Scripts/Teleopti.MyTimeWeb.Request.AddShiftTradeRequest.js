@@ -30,6 +30,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.isSendEnabled = ko.observable(true);
 		self.IsLoading = ko.observable(false);
 		self.errorMessage = ko.observable();
+		self.isReadyLoaded = ko.observable(false);
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -120,7 +121,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
 					} else {
-						self.setScheduleLoadedReady();
+					    self.setScheduleLoadedReady();
+					    self.isReadyLoaded(true);
 					}
 				}
 			});
@@ -141,6 +143,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
 					self.setScheduleLoadedReady();
+					self.isReadyLoaded(true);
 				},
 				complete: function() {
 					self.IsLoading(false);
@@ -233,6 +236,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function setShiftTradeRequestDate(date) {
+	    vm.isReadyLoaded(false);
 		vm.loadedDateSwedishFormat(null); //make sure scenarios wait until requested date is bound
 		vm.requestedDate(moment(date));
 	    return vm.requestedDate().format('YYYY-MM-DD');
