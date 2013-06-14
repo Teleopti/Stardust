@@ -1335,7 +1335,6 @@
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSetting.cs" />
     <Compile Include="Time\AnchorTimePeriod.cs" />
-    <Compile Include="Time\DateTimePeriodMerger.cs" />
     <Compile Include="Time\IntervalRounding.cs" />
     <Compile Include="Time\PeriodScaleUnit.cs" />
     <Compile Include="Time\DateTimeExtensions.cs" />

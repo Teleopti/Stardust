@@ -793,65 +793,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyUnion()
-        {
-            DateTime start = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(start,end);
-
-            //outside
-            DateTime start1 = new DateTime(2007, 5, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime end1 = new DateTime(2007, 5, 1, 1, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Union(per1).HasValue);
-            Assert.IsFalse(per1.Union(_period).HasValue);
-
-            //adjacent
-            start1 = new DateTime(2007, 6, 1, 22, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            per1 = new DateTimePeriod(start1, end1);
-            DateTime expStart = start1;
-            DateTime expEnd = end;
-            DateTimePeriod expPeriod = new DateTimePeriod(expStart, expEnd);
-            DateTimePeriod? result = _period.Union(per1);
-            Assert.IsTrue(result.HasValue);
-            Assert.AreEqual(expPeriod, result);
-
-            //intersect
-            start1 = new DateTime(2007, 6, 1, 22, 30, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            per1 = new DateTimePeriod(start1, end1);
-            expStart = start1;
-            expEnd = end;
-            expPeriod = new DateTimePeriod(expStart, expEnd);
-            result = _period.Union(per1);
-            Assert.IsTrue(result.HasValue);
-            Assert.AreEqual(expPeriod, result);
-
-            //equals
-            start1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            per1 = new DateTimePeriod(start1, end1);
-            expStart = start1;
-            expEnd = end1;
-            expPeriod = new DateTimePeriod(expStart, expEnd);
-            result = _period.Union(per1);
-            Assert.IsTrue(result.HasValue);
-            Assert.AreEqual(expPeriod, result);
-
-            //inside
-            start1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
-            per1 = new DateTimePeriod(start1, end1);
-            expStart = start;
-            expEnd = end;
-            expPeriod = new DateTimePeriod(expStart, expEnd);
-            result = _period.Union(per1);
-            Assert.IsTrue(result.HasValue);
-            Assert.AreEqual(expPeriod, result);
-        }
-
-        [Test]
         public void VerifyAdjacent()
         {
             DateTime start = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
@@ -888,29 +829,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
             Assert.IsFalse(_period.Adjacent(per1));
-        }
-
-        [Test]
-        public void VerifyAdjacentWithOffset()
-        {
-            DateTime start = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(start, end);
-
-            //adjacent with offset
-            DateTime start1 = new DateTime(2007, 6, 1, 20, 0, 0, DateTimeKind.Utc);
-            DateTime end1 = new DateTime(2007, 6, 1, 22, 59, 0, DateTimeKind.Utc);
-            DateTimePeriod per1 = new DateTimePeriod(start1, end1);
-            Assert.IsTrue(_period.Adjacent(per1, new TimeSpan(0, 1, 0)));
-            Assert.IsFalse(_period.Adjacent(per1, new TimeSpan(0, 0, 30)));
-
-            start1 = new DateTime(2007, 6, 1, 20, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 1, 23, 05, 0, DateTimeKind.Utc);
-            per1 = new DateTimePeriod(start1, end1);
-            Assert.IsTrue(_period.Adjacent(per1, new TimeSpan(0, 6, 0)));
-            Assert.IsTrue(_period.Adjacent(per1, new TimeSpan(0, 5, 0)));
-            Assert.IsFalse(_period.Adjacent(per1, new TimeSpan(0, 4, 0)));
-
         }
 
         [Test]
