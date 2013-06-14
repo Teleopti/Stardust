@@ -7,16 +7,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-    public class MainShiftLayerViewModel : MoveableLayerViewModel
+    public class MainShiftLayerViewModel : LayerViewModel
     {
+	    private readonly IPersonAssignment _parent;
+
 	    public MainShiftLayerViewModel(IVisualLayer layer)
-            : base(layer)
+            : base(null, layer, null, true)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
-            : base(observer,layer, parent, eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment parent, IEventAggregator eventAggregator)
+            : base(observer,layer, eventAggregator, false)
         {
+	        _parent = parent;
         }
 
 
@@ -39,7 +42,17 @@ namespace Teleopti.Ccc.WinCode.Common
             return true;
         }
 
-		protected override void DeleteLayer()
+	    public override bool CanMoveUp
+	    {
+		    get { throw new System.NotImplementedException(); }
+	    }
+
+	    public override bool CanMoveDown
+	    {
+		    get { throw new System.NotImplementedException(); }
+	    }
+
+	    protected override void DeleteLayer()
 		{
 			if (ParentObservingCollection != null)
 			{

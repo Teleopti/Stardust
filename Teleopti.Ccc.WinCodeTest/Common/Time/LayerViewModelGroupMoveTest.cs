@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         private IAbsence _abs;
         private DateTimePeriod _period;
         private IEventAggregator _eventAggregator;
-        private ActivityLayer _actLayer;
+        private IMainShiftActivityLayerNew _actLayer;
         private ILayerViewModel _absenceLayerViewModel;
         private ILayerViewModel _overtimeLayerViewModel;
     
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _eventAggregator = new EventAggregator();
             _abs = AbsenceFactory.CreateAbsence("for test");
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-            _actLayer = new ActivityLayer(ActivityFactory.CreateActivity("test"), _period);
+            _actLayer = new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("test"), _period);
 
             _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null);
             _absenceLayerViewModel = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period),null);

@@ -162,20 +162,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyMoveAllTriggersParentCollection()
         {
             TimeSpan toMove = TimeSpan.FromHours(2);
-            var layer = mocks.Stub<ILayer<IActivity>>();
+            var layer = mocks.Stub<IMainShiftActivityLayerNew>();
 	       
-            IShift shift = mocks.StrictMock<IShift>();
             using (mocks.Record())
             {
                 Expect.Call(layer.Period).Return(period).Repeat.Any();
-							//TODO!
-                //layer.Period = period.MovePeriod(toMove);
-
             }
             using (mocks.Playback())
             {
-                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, shift,null);
-                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, shift,null);
+                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null);
+                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null);
                 model1.CanMoveAll = true;
                 model2.CanMoveAll = true;
                 target.Add(model1);
@@ -275,9 +271,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
-            var layer = new ActivityLayer(new Activity("for test"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-            ILayerViewModel model1 = new MainShiftLayerViewModel(null,layer,null,null) { Interval = TimeSpan.FromMinutes(12) };
-            ILayerViewModel model2 = new MainShiftLayerViewModel(null, layer, null,null) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(null,null,null,null) { Interval = TimeSpan.FromMinutes(12) };
+            ILayerViewModel model2 = new MainShiftLayerViewModel(null, null, null,null) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
@@ -351,21 +346,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             //Create a model of each type, check that the VisualOrderIndex are based on that type
             //This is how we want the NOT PROJECTED layers to appear in the gui
             #region setup
-            MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            var firstLayer =
-                (from l in shift.LayerCollection
-                 orderby l.OrderIndex
-                 select l);
+            var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
 	        var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
 			var overtime = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period, multi);
 	        var personal = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period);
-            ActivityLayer fakeActivityLayer = new ActivityLayer(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, firstLayer.First(), shift, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, firstLayer.Last(), shift, null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.First(), assignment, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.Last(), assignment, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);

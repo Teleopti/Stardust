@@ -62,16 +62,10 @@ namespace Teleopti.Ccc.WinCode.Common
             IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
             if (assignment != null)
             {
-#pragma warning disable 612,618
-	            var ms = assignment.ToMainShift();
-#pragma warning restore 612,618
-                if (ms != null)
-                {
-                    foreach (ILayer<IActivity> layer in ms.LayerCollection)
-                    {
-                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, ms, eventAggregator));
-                    }
-                }
+	            foreach (var layer in assignment.MainShiftActivityLayers)
+	            {
+		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator));
+	            }
 
                 foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
                 {

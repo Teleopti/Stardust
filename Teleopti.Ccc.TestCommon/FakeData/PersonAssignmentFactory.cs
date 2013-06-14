@@ -324,6 +324,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             container.ContainedSkills.Add(skOfficeB.Name, skOfficeB);
         }
 
+	    public static IPersonAssignment CreateAssignmentWithThreeMainshiftLayers()
+	    {
+		    var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+		    var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+		    ret.SetMainShiftLayers(
+			    new[]
+				    {
+					    new MainShiftActivityLayerNew(new Activity("1"), new DateTimePeriod(start, start.AddHours(1))),
+					    new MainShiftActivityLayerNew(new Activity("2"), new DateTimePeriod(start, start.AddHours(2))),
+					    new MainShiftActivityLayerNew(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)))
+				    },
+			    new ShiftCategory("test"));
+		    return ret;
+	    }
     }
 
     /// <summary>
