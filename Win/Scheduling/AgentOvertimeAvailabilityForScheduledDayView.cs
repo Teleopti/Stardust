@@ -32,6 +32,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get{return _isDirty ? _presenter.ScheduleDay : null;}
 		}
 
+		public void ShowPreviousSavedOvertimeAvailability(string timePeriod)
+		{
+			labelPreviousSavedOvertimeAvailabilityColon.Visible = true;
+			labelPreviousSavedOvertimeAvailability.Text = timePeriod;
+			buttonAdvOk.Text = Resources.OverWrite;
+		}
+
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			outlookTimePickerFrom.SetTimeValue(startTime);
@@ -80,10 +87,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Add)
 			{
-				var addBeforeShiftStartsCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, startTime, _shiftTimePeriod.StartTime, _dayCreator);
-				var addAfterShiftEndsCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, _shiftTimePeriod.EndTime, endTime, _dayCreator);
-				_presenter.Add(addBeforeShiftStartsCommand);
-				_presenter.Add(addAfterShiftEndsCommand);
+				var addCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
+				_presenter.Add(addCommand);
 				_isDirty = true;
 				Hide();
 				return;
@@ -91,10 +96,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Edit)
 			{
-				var editBeforeShiftStartsCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, startTime, _shiftTimePeriod.StartTime, _dayCreator);
-				var editAfterShiftEndsCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, _shiftTimePeriod.EndTime, endTime, _dayCreator);
-				_presenter.Edit(editBeforeShiftStartsCommand);
-				_presenter.Edit(editAfterShiftEndsCommand);
+				var editCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
+				_presenter.Edit(editCommand);
 				_isDirty = true;
 				Hide();
 				return;
@@ -118,22 +121,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			bool startTimeError;
 			bool endTimeError;
-			bool shiftStartsTimeError;
-			bool shiftEndsTimeError;
-			var result = _dayCreator.CanCreate(startTime, _shiftTimePeriod.StartTime, out startTimeError, out shiftStartsTimeError);
+			var result = _dayCreator.CanCreate(startTime, endTime, _shiftTimePeriod.StartTime,_shiftTimePeriod.EndTime, out startTimeError, out endTimeError);
 
 			if (!result)
 			{
-				setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
+				if(startTimeError) setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
+				if(endTimeError) setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
 			}
 
-			result = _dayCreator.CanCreate(_shiftTimePeriod.EndTime, endTime, out shiftEndsTimeError, out endTimeError);
-
-			if (!result)
-			{
-				setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
-			}
-			
 			return result;
 		}
 

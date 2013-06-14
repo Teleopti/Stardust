@@ -27,6 +27,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get{return _isDirty ? _presenter.ScheduleDay : null;}
 		}
 
+		public void ShowPreviousSavedOvertimeAvailability(string timePeriod)
+		{
+		}
+
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			outlookTimePickerFrom.SetTimeValue(startTime);

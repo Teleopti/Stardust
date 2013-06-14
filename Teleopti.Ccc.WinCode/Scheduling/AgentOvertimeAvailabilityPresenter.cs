@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
@@ -27,11 +28,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly IAgentOvertimeAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
-		
+		private TimePeriod? _existingShiftTimePeriod;
+
 		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, IScheduleDay scheduleDay)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
+			
+			var shiftTimePeriod = scheduleDay.ProjectionService().CreateProjection().Period();
+			if (shiftTimePeriod != null)
+				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 
 		public IAgentOvertimeAvailabilityView View
@@ -70,18 +76,46 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			UpdateView();
 		}
 
+		private static string timeOfDayFromTimeSpan(TimeSpan? timeSpan)
+		{
+			if (timeSpan != null)
+			{
+				int days = timeSpan.Value.Days;
+				string nextDay = "";
+				if (days > 0)
+					nextDay = " +" + days;
+
+				DateTime d = DateTime.MinValue.Add(timeSpan.Value);
+				string ret = d.ToString("t", TeleoptiPrincipal.Current.Regional.Culture);
+				ret += nextDay;
+				return ret;
+			}
+			return string.Empty;
+		}
+
 		public void UpdateView()
 		{
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
-			if (_scheduleDay.SignificantPart() == SchedulePartView.MainShift)
+			if (_existingShiftTimePeriod != null)
 			{
-				var overtimeAvailabilities =
-					_scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().ToList();
+				var overtimeAvailabilities = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().ToList();
 				if (overtimeAvailabilities.Count == 2)
 				{
 					startTime = overtimeAvailabilities[0].StartTime;
 					endTime = overtimeAvailabilities[1].EndTime;
+				}
+				else
+				{
+					startTime = _existingShiftTimePeriod.Value.StartTime;
+					endTime = _existingShiftTimePeriod.Value.EndTime;
+
+					if (overtimeAvailabilities.Count == 1)
+					{
+						var overtimeAvailability = overtimeAvailabilities.First();
+						_view.ShowPreviousSavedOvertimeAvailability(timeOfDayFromTimeSpan(overtimeAvailability.StartTime) + " - " +
+						                                            timeOfDayFromTimeSpan(overtimeAvailability.EndTime));
+					}
 				}
 			}
 			else
