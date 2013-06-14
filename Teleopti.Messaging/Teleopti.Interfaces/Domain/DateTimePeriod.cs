@@ -204,33 +204,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Returns the common period shared by this and param DateTimePeriod.
-        /// </summary>
-        /// <param name="periodToValidate">The period.</param>
-        /// <returns>
-        /// </returns>
-        public DateTimePeriod SharedPeriod(DateTimePeriod periodToValidate)
-        {
-
-            if (!ContainsPart(periodToValidate))
-                throw new ArgumentOutOfRangeException("periodToValidate", "This operation can not be performed on the supplied DateTimePeriod.");
-
-            DateTime start, end;
-
-            if (periodToValidate.StartDateTime >= StartDateTime)
-                start = periodToValidate.StartDateTime;
-            else
-                start = StartDateTime;
-
-            if (periodToValidate.EndDateTime <= EndDateTime)
-                end = periodToValidate.EndDateTime;
-            else
-                end = EndDateTime;
-
-            return new DateTimePeriod(start, end, false);
-        }
-
-        /// <summary>
         /// Returns if any part of the param DateTimePeriod is contained. 
         /// </summary>
         /// <param name="containsPeriod">The period.</param>
@@ -246,35 +219,6 @@ namespace Teleopti.Interfaces.Domain
                 return true;
 
             return false;
-        }
-
-        /// <summary>
-        /// Determines whether the specified period contains part.
-        /// </summary>
-        /// <param name="containsPeriod">The period.</param>
-        /// <param name="includeStartAndEnd">if set to <c>true</c> [include start and end].</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified period contains part; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-12
-        /// </remarks>
-        public bool ContainsPart(DateTimePeriod containsPeriod, bool includeStartAndEnd)
-        {
-            if (!includeStartAndEnd)
-            {
-                if (containsPeriod.StartDateTime == containsPeriod.EndDateTime ||
-                    containsPeriod.ElapsedTime().TotalMinutes <= 1d)
-                {
-                    return Contains(containsPeriod);
-                }
-
-                containsPeriod = containsPeriod.ChangeStartTime(new TimeSpan(1L));
-                containsPeriod = containsPeriod.ChangeEndTime(new TimeSpan(-1L));
-            }
-
-            return ContainsPart(containsPeriod);
         }
 
         /// <summary>
@@ -373,50 +317,6 @@ namespace Teleopti.Interfaces.Domain
                 collectionToReturn.Add(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDateTime,
                                                                                             currentEndDateTime));
                 currentDateTime = currentEndDateTime;
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
-        /// The local days affected.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> LocalDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.LocalStartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.LocalStartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.LocalEndDateTime.AddTicks(-1L).Date))
-                    collectionToReturn.Add(wholeDay.LocalEndDateTime.AddTicks(-1L).Date);
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
-        /// The days affected in UTC.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> UtcDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.StartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.StartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.EndDateTime.Date))
-                    collectionToReturn.Add(wholeDay.EndDateTime.Date);
             }
             return collectionToReturn;
         }
@@ -621,15 +521,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="intersectPeriod">The period.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 4.12.2007
-        /// The method is very similar to the SharedPeriod method. The differences are the following:
-        /// - If the two period does not have common part, the Intersection method will return a null value, while SharedPeriod will
-        /// throw an exception.
-        /// - If one period end time equals the other period start time, then the Intersect will return a null value, while SharedPeriod
-        /// will return a DateTimePeriod where the start and the end time are equal. 
-        /// </remarks>
         public DateTimePeriod? Intersection(DateTimePeriod intersectPeriod)
         {
             if (!Intersect(intersectPeriod))
@@ -651,7 +542,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="adjacentPeriod">The period.</param>
         /// <returns></returns>
-        public bool Adjacent(DateTimePeriod adjacentPeriod)
+        public bool AdjacentTo(DateTimePeriod adjacentPeriod)
         {
             return (StartDateTime == adjacentPeriod.EndDateTime || EndDateTime == adjacentPeriod.StartDateTime);
         }
@@ -748,26 +639,6 @@ namespace Teleopti.Interfaces.Domain
         	                          	: TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).TimeOfDay;
 
         	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
-        }
-
-    	/// <summary>
-        /// Gets a new period starting the first day of the week
-        /// ending the last day of week
-        /// (in sweden: startdate will back to nearest monday, enddate will be forward to closest sunday)
-        /// </summary>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-14
-        /// </remarks>
-        /// <param name="timeZoneInfo"></param>
-        public DateTimePeriod WholeWeek(CultureInfo culture, TimeZoneInfo timeZoneInfo)
-        {
-            DateTime startdate = DateHelper.GetFirstDateInWeek(StartDateTimeLocal(timeZoneInfo), culture);
-            DateTime endDate = DateHelper.GetLastDateInWeek(EndDateTimeLocal(timeZoneInfo), culture).AddDays(1);
-            return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(startdate),
-                                      timeZoneInfo.SafeConvertTimeToUtc(endDate), false);
         }
 
         /// <summary>
@@ -921,21 +792,6 @@ namespace Teleopti.Interfaces.Domain
                 timePeriods.Add(rightTimePeriod);
             }
             return timePeriods;
-        }
-
-        /// <summary>
-        /// Returns the elapsed time TotalDays rounded to an integer.
-        /// </summary>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-02-17    
-        /// /// </remarks>
-        public double RoundedDaysCount()
-        {
-            TimeSpan elapsedTime = period.Maximum - period.Minimum;
-            return Math.Round(elapsedTime.TotalDays);
         }
     }
 }

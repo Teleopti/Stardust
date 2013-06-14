@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var shiftsToMove = new List<IPersonalShift>();
                 foreach (var shift in assignment.PersonalShiftCollection)
                 {
-					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.Adjacent(shift.LayerCollection.Period().Value))
+					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.AdjacentTo(shift.LayerCollection.Period().Value))
                         shiftsToMove.Add(shift);
                 }
                 foreach (var shift in shiftsToMove)
@@ -840,7 +840,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static bool overtimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
         {
-            return personAssignment.Period.Adjacent(overtimeShiftActivityLayer.Period) ||
+            return personAssignment.Period.AdjacentTo(overtimeShiftActivityLayer.Period) ||
                    personAssignment.Period.Intersect(overtimeShiftActivityLayer.Period);
         }
 
@@ -885,7 +885,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
+				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
 				{
 					if (personAssignment.ShiftCategory == null)
 					{
@@ -920,7 +920,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
+				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
 				{
 					personAssignment.AddPersonalShift(personalShift);
 					return;

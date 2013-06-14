@@ -227,35 +227,12 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsFalse(_period.Contains(new DateTime(2007, 1, 1, 0, 0, 1, DateTimeKind.Utc)));
         }
 
-        [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
-        public void VerifyNotOverlapWorksWithSharedPeriod()
-        {
-            DateTimePeriod period1 = new DateTimePeriod(2006, 1, 1, 2006, 12, 31);
-            DateTimePeriod period2 = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
-            _period = period1.SharedPeriod(period2);
-        }
 
         [Test]
         public void VerifyPeriodTimeSpanWorks()
         {
             _period = new DateTimePeriod(2006, 1, 1, 2006, 1, 10);
             Assert.AreEqual(TimeSpan.FromDays(9), _period.ElapsedTime());
-        }
-
-        [Test]
-        public void VerifySharedPeriodWorks()
-        {
-            _period = new DateTimePeriod(2006, 1, 1, 2006, 12, 31);
-            DateTimePeriod period2 = new DateTimePeriod(2005, 1, 1, 2008, 1, 1);
-            DateTimePeriod period3 = new DateTimePeriod(2006, 6, 1, 2006, 7, 1);
-            DateTimePeriod period4 = new DateTimePeriod(2005, 1, 1, 2006, 7, 1);
-            DateTimePeriod period5 = new DateTimePeriod(2006, 7, 1, 2008, 1, 1);
-            Assert.AreEqual(_period, period2.SharedPeriod(_period));
-            Assert.AreEqual(period3, period3.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 1, 1, 2006, 7, 1), period4.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 7, 1, 2006, 12, 31), period5.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 7, 1, 2006, 12, 31), _period.SharedPeriod(period5));
         }
 
         [Test]
@@ -313,24 +290,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(t2.Intersect(t3));
         }
 
-        [Test]
-        public void VerifyIntersectsCanBeReplacedByContainsPart()
-        {
-            _period = new DateTimePeriod(new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod t2 = new DateTimePeriod(new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 14, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod t3 = new DateTimePeriod(new DateTime(2007, 1, 1, 14, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-            Assert.IsTrue(_period.Intersect(t2) == _period.ContainsPart(t2, false));
-            Assert.IsTrue(t3.Intersect(t2) == t3.ContainsPart(t2, false));
-            Assert.IsTrue(t2.Intersect(_period) == t2.ContainsPart(_period, false));
-            Assert.IsTrue(t2.Intersect(t3) == t2.ContainsPart(t3, false));
-
-            _period = new DateTimePeriod(new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 13, 0, 1, DateTimeKind.Utc));
-            t2 = new DateTimePeriod(new DateTime(2007, 1, 1, 13, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 14, 0, 1, DateTimeKind.Utc));
-            Assert.IsTrue(_period.Intersect(t2) == _period.ContainsPart(t2, false));
-            Assert.IsTrue(t3.Intersect(t2) == t3.ContainsPart(t2, false));
-            Assert.IsTrue(t2.Intersect(_period) == t2.ContainsPart(_period, false));
-            Assert.IsTrue(t2.Intersect(t3) == t2.ContainsPart(t3, false));
-        }
 
         [Test]
         public void VerifyContainsPart()
@@ -366,42 +325,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(_period.ContainsPart(startAtStartFinishLaterPeriod));
             Assert.IsFalse(_period.ContainsPart(startEarlierFinishEarlierPeriod));
             Assert.IsFalse(_period.ContainsPart(startLaterFinishLaterPeriod));
-        }
-
-        [Test]
-        public void VerifyContainsPartWithSettingForInclusion()
-        {
-            DateTime beforeStartEarlierDate = new DateTime(2006, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime beforeStartLaterDate = new DateTime(2006, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime inPeriodEarlierDate = new DateTime(2007, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime inPeriodLaterDate = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime afterEndEarlierDate = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime afterEndLaterDate = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            DateTimePeriod containsPeriod = new DateTimePeriod(inPeriodEarlierDate, inPeriodLaterDate);
-            DateTimePeriod startEarlierFinishInPeriod = new DateTimePeriod(beforeStartEarlierDate, inPeriodLaterDate);
-            DateTimePeriod startInFinishLaterPeriod = new DateTimePeriod(inPeriodEarlierDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishLaterPeriod = new DateTimePeriod(beforeStartLaterDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishAtStartPeriod = new DateTimePeriod(beforeStartLaterDate, _start);
-            DateTimePeriod startAtEndFinishLaterPeriod = new DateTimePeriod(_end, afterEndEarlierDate);
-            DateTimePeriod startEarlierFinishAtEndPeriod = new DateTimePeriod(beforeStartLaterDate, _end);
-            DateTimePeriod startAtStartFinishLaterPeriod = new DateTimePeriod(_start, afterEndLaterDate);
-            DateTimePeriod startLaterFinishLaterPeriod = new DateTimePeriod(afterEndEarlierDate, afterEndLaterDate);
-            DateTimePeriod startEarlierFinishEarlierPeriod =
-                new DateTimePeriod(beforeStartEarlierDate, beforeStartLaterDate);
-            DateTimePeriod equalsPeriod = new DateTimePeriod(_start, _end);
-
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishInPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startInFinishLaterPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(containsPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(equalsPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishLaterPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startEarlierFinishAtStartPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startAtEndFinishLaterPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startEarlierFinishAtEndPeriod, false));
-            Assert.IsTrue(_period.ContainsPart(startAtStartFinishLaterPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startEarlierFinishEarlierPeriod, false));
-            Assert.IsFalse(_period.ContainsPart(startLaterFinishLaterPeriod, false));
         }
 
         /// <summary>
@@ -727,49 +650,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyDateTimePeriodCanReturnLocalDaysAffected()
-        {
-            DateTime startDate1 = new DateTime(2007, 8, 10, 22, 00, 0, DateTimeKind.Utc);
-            DateTime endDate1 = new DateTime(2007, 8, 13, 21, 30, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(startDate1, endDate1);
-
-            IList<DateTime> daysAffected = _period.LocalDaysAffected();
-
-            Assert.AreEqual(3, daysAffected.Count);
-            Assert.AreEqual(new DateTime(2007, 8, 11), daysAffected[0]);
-            Assert.AreEqual(new DateTime(2007, 8, 13), daysAffected[2]);
-        }
-
-
-        [Test]
-        public void VerifyDateTimePeriodCanReturnUtcDaysAffected()
-        {
-            DateTime startDate1 = new DateTime(2007, 8, 10, 22, 00, 0, DateTimeKind.Utc);
-            DateTime endDate1 = new DateTime(2007, 8, 13, 21, 30, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(startDate1, endDate1);
-
-            IList<DateTime> daysAffected = _period.UtcDaysAffected();
-
-            Assert.AreEqual(4, daysAffected.Count);
-            Assert.AreEqual(new DateTime(2007, 8, 10), daysAffected[0]);
-            Assert.AreEqual(new DateTime(2007, 8, 13), daysAffected[3]);
-        }
-
-        #region WholeWeeks
-        
-        [Test, Explicit("Micke - vad gör vi med denna?")]
-        public void VerifyToWholeWeeks()
-        {
-            _period = new DateTimePeriod(2008,5,4,2008,5,5);
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 28, 2008, 5, 12), _period.WholeWeek(CultureInfo.GetCultureInfo("sv-SE"), (TimeZoneInfo.Utc)));
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 27, 2008, 5, 11), _period.WholeWeek(CultureInfo.GetCultureInfo("en-US"), (TimeZoneInfo.Utc)));
-        }
-
-
-        #endregion
-
-
-        [Test]
         public void VerifyDateTimePeriodIsGreaterThan()
         {
             DateTime startDate1 = new DateTime(2007, 8, 10, 12, 00, 0, DateTimeKind.Utc);
@@ -803,32 +683,32 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime start1 = new DateTime(2007, 6, 1, 22, 0, 0, DateTimeKind.Utc);
             DateTime end1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
             DateTimePeriod per1 = new DateTimePeriod(start1, end1);
-            Assert.IsTrue(_period.Adjacent(per1));
+            Assert.IsTrue(_period.AdjacentTo(per1));
 
             //outside
             start1 = new DateTime(2007, 5, 1, 0, 0, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 5, 1, 1, 0, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
-            Assert.IsFalse(per1.Adjacent(_period));
+            Assert.IsFalse(_period.AdjacentTo(per1));
+            Assert.IsFalse(per1.AdjacentTo(_period));
 
             //intersect
             start1 = new DateTime(2007, 6, 1, 22, 30, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
 
             //equals
             start1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
 
             //inside
             start1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
             end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
             per1 = new DateTimePeriod(start1, end1);
-            Assert.IsFalse(_period.Adjacent(per1));
+            Assert.IsFalse(_period.AdjacentTo(per1));
         }
 
         [Test]
@@ -874,51 +754,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(new TimeSpan(0, 1, 0, 0), per1.Intersection(_period).Value.ElapsedTime());
         }
 
-        [Test]
-        public void VerifyDifferenceBetweenIntersectionAndSharedPeriod()
-        {
-            DateTime start = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(start, end);
-
-            // WORKS SAME
-
-            //intersect
-            DateTime start1 = new DateTime(2007, 6, 1, 22, 30, 0, DateTimeKind.Utc);
-            DateTime end1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-            //equals
-            start1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 1, 0, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-            //inside
-            start1 = new DateTime(2007, 6, 1, 23, 30, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 2, 0, 30, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-            Assert.AreEqual(_period.SharedPeriod(period1).ElapsedTime(), _period.Intersection(period1).Value.ElapsedTime());
-            Assert.AreEqual(period1.SharedPeriod(_period).ElapsedTime(), period1.Intersection(_period).Value.ElapsedTime());
-
-
-            // DIFFERENCE
-
-            //adjacent
-            start1 = new DateTime(2007, 6, 1, 22, 0, 0, DateTimeKind.Utc);
-            end1 = new DateTime(2007, 6, 1, 23, 0, 0, DateTimeKind.Utc);
-            period1 = new DateTimePeriod(start1, end1);
-
-            Assert.IsNull(_period.Intersection(period1));
-            Assert.IsNull(period1.Intersection(_period));
-
-            Assert.IsTrue(_period.SharedPeriod(period1).StartDateTime == _period.SharedPeriod(period1).EndDateTime);
-            Assert.IsTrue(period1.SharedPeriod(_period).StartDateTime == period1.SharedPeriod(_period).EndDateTime);
-
-        }
 
         [Test]
         public void VerifyAffectedHours()
@@ -959,17 +794,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             Assert.AreEqual(_period.LocalStartDateTime.ToShortDateString() + " - " + _period.LocalEndDateTime.AddDays(-1).ToShortDateString(), _period.LocalDateString);
         }
-
-        [Test]
-        public void VerifyLocalDaysAffectedShorterThanOneDay()
-        {
-            _period = new DateTimePeriod(new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 23, 0, 0, DateTimeKind.Utc).AddMinutes(-1));
-            DateTimePeriod notWorking = new DateTimePeriod(new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 23, 0, 0, DateTimeKind.Utc).AddTicks(-1));
-
-            Assert.AreEqual(1, _period.LocalDaysAffected().Count);
-            Assert.AreEqual(1, notWorking.LocalDaysAffected().Count);
-        }
-
 
         [Test]
         public void VerifyCanGetListOfPeriodsDependingOnTimeSpan()
@@ -1117,26 +941,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
             Assert.AreEqual(1, ret.Count);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret[0]);
-        }
-
-        [Test]
-        public void VerifyRoundedCountOfDays()
-        {
-            DateTime date1 = new DateTime(2000,1,1,23,0,0,DateTimeKind.Utc);
-            DateTime date2 = new DateTime(2000, 1, 5, 22, 0, 0, DateTimeKind.Utc);
-            
-            _period = new DateTimePeriod(date1, date2);
-
-            TimeSpan elapsedTime = date2 - date1;
-            double result = _period.RoundedDaysCount();
-            Assert.AreEqual(Math.Round(elapsedTime.TotalDays),result);
-
-            date2 = new DateTime(2000, 1, 6, 3, 0, 0, DateTimeKind.Utc);
-            _period = new DateTimePeriod(date1, date2);
-
-            elapsedTime = date2 - date1;
-            result = _period.RoundedDaysCount();
-            Assert.AreEqual(Math.Round(elapsedTime.TotalDays), result);
         }
 
         [Test]
