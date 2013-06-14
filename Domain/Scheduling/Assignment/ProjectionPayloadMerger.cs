@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var currLayer = clonedUnmergedCollection[i];
 				var prevLayer = clonedUnmergedCollection[indexOfPrevious];
 				if (currLayer.Payload.OptimizedEquals(prevLayer.Payload)
-						&& currLayer.Period.Adjacent(prevLayer.Period)
+						&& currLayer.Period.AdjacentTo(prevLayer.Period)
 						&& currLayer.DefinitionSet == prevLayer.DefinitionSet)
 				{
 					clonedUnmergedCollection.Remove(currLayer);
