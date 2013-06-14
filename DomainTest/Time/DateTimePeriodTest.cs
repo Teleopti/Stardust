@@ -227,35 +227,12 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsFalse(_period.Contains(new DateTime(2007, 1, 1, 0, 0, 1, DateTimeKind.Utc)));
         }
 
-        [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
-        public void VerifyNotOverlapWorksWithSharedPeriod()
-        {
-            DateTimePeriod period1 = new DateTimePeriod(2006, 1, 1, 2006, 12, 31);
-            DateTimePeriod period2 = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
-            _period = period1.SharedPeriod(period2);
-        }
 
         [Test]
         public void VerifyPeriodTimeSpanWorks()
         {
             _period = new DateTimePeriod(2006, 1, 1, 2006, 1, 10);
             Assert.AreEqual(TimeSpan.FromDays(9), _period.ElapsedTime());
-        }
-
-        [Test]
-        public void VerifySharedPeriodWorks()
-        {
-            _period = new DateTimePeriod(2006, 1, 1, 2006, 12, 31);
-            DateTimePeriod period2 = new DateTimePeriod(2005, 1, 1, 2008, 1, 1);
-            DateTimePeriod period3 = new DateTimePeriod(2006, 6, 1, 2006, 7, 1);
-            DateTimePeriod period4 = new DateTimePeriod(2005, 1, 1, 2006, 7, 1);
-            DateTimePeriod period5 = new DateTimePeriod(2006, 7, 1, 2008, 1, 1);
-            Assert.AreEqual(_period, period2.SharedPeriod(_period));
-            Assert.AreEqual(period3, period3.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 1, 1, 2006, 7, 1), period4.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 7, 1, 2006, 12, 31), period5.SharedPeriod(_period));
-            Assert.AreEqual(new DateTimePeriod(2006, 7, 1, 2006, 12, 31), _period.SharedPeriod(period5));
         }
 
         [Test]

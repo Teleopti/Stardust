@@ -204,33 +204,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Returns the common period shared by this and param DateTimePeriod.
-        /// </summary>
-        /// <param name="periodToValidate">The period.</param>
-        /// <returns>
-        /// </returns>
-        public DateTimePeriod SharedPeriod(DateTimePeriod periodToValidate)
-        {
-
-            if (!ContainsPart(periodToValidate))
-                throw new ArgumentOutOfRangeException("periodToValidate", "This operation can not be performed on the supplied DateTimePeriod.");
-
-            DateTime start, end;
-
-            if (periodToValidate.StartDateTime >= StartDateTime)
-                start = periodToValidate.StartDateTime;
-            else
-                start = StartDateTime;
-
-            if (periodToValidate.EndDateTime <= EndDateTime)
-                end = periodToValidate.EndDateTime;
-            else
-                end = EndDateTime;
-
-            return new DateTimePeriod(start, end, false);
-        }
-
-        /// <summary>
         /// Returns if any part of the param DateTimePeriod is contained. 
         /// </summary>
         /// <param name="containsPeriod">The period.</param>
@@ -621,15 +594,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="intersectPeriod">The period.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 4.12.2007
-        /// The method is very similar to the SharedPeriod method. The differences are the following:
-        /// - If the two period does not have common part, the Intersection method will return a null value, while SharedPeriod will
-        /// throw an exception.
-        /// - If one period end time equals the other period start time, then the Intersect will return a null value, while SharedPeriod
-        /// will return a DateTimePeriod where the start and the end time are equal. 
-        /// </remarks>
         public DateTimePeriod? Intersection(DateTimePeriod intersectPeriod)
         {
             if (!Intersect(intersectPeriod))
