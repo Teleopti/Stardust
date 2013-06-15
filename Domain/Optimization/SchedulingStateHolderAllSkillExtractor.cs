@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IEnumerable<ISkill> ExtractSkills()
         {
-			IList<ISkill> ret = new List<ISkill>();
-
+            IList<ISkill> ret = new List<ISkill>();
 	        foreach (var visibleSkill in _stateHolder.VisibleSkills)
 	        {
 		        if (visibleSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-		        {
-			        ret.Add(visibleSkill);
-		        }
+					ret.Add(visibleSkill);
+	        }
+
+	        return ret;
 	        }
 
 			return ret;
