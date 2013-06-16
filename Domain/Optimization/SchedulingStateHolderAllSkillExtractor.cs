@@ -25,9 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        }
 
 	        return ret;
-	        }
-
-			return ret;
         }
     }
 }
