@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
-                calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
-                calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction, secondDayContractTime))
             {
-                calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
-                calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -163,16 +163,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate, IScheduleDay originalFirstScheduleDay, IScheduleDay originalSecondScheduleDay,IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_rollbackService.Rollback();
-            calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
-            calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
+            safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+            safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
 		}
 
-        private void calculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
+        private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
         {
-            var currentScheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dayDate).DaySchedulePart();
-            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period(),
-                                                       new List<IScheduleDay> {originalScheduleDay},
-                                                       new List<IScheduleDay> {currentScheduleDay});
+            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period());
         }
 
 		private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)

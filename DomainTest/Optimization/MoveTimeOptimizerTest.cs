@@ -102,6 +102,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		);
         }
 
+		[Test]
+		public void ShouldExposeOwnerAndMatrix()
+		{
+			var person = PersonFactory.CreatePerson();
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Twice();
+				Expect.Call(_scheduleMatrix.Person).Return(person);
+			}
+			using (_mockRepository.Playback())
+			{
+				Assert.AreSame(person, _target.ContainerOwner);
+				Assert.AreSame(_scheduleMatrix, _target.Matrix);
+			}
+		}
+
         [Test]
         public void VerifyExecuteWithBetterPeriodValue()
         {
