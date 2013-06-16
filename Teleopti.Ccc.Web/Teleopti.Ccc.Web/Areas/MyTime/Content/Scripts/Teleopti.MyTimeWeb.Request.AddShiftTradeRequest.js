@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
 		self.selectedDate = ko.observable(moment().startOf('day'));
-		self.missingWorkflowControlSet = ko.observable(false);
+		self.missingWorkflowControlSet = ko.observable(true);
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
@@ -91,23 +91,35 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
 				return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
 			});
+		    
+			self.hours([]);
 			self.hours(arrayMap);
 			_positionTimeLineHourTexts();
 		};
 
 		self.requestedDate.subscribe(function (newValue) {
-			self.chooseAgent(null);
-			if (newValue.diff(self.openPeriodStartDate()) < 0) {
-				if (self.selectedDate().diff(self.openPeriodStartDate()) == 0) return;
-				self.selectedDate(self.openPeriodStartDate());
-			} else if (self.openPeriodEndDate().diff(newValue) < 0) {
-				if (self.selectedDate().diff(self.openPeriodEndDate()) == 0) return;
-				self.selectedDate(self.openPeriodEndDate());
-			} else {
-				self.selectedDate(newValue);
-			}
+		    if (self.selectedDate().diff(newValue) == 0) return;
+		    self.chooseAgent(null);
+            if (newValue.diff(self.openPeriodStartDate()) < 0) {
+                if (self.selectedDate().diff(self.openPeriodStartDate()) == 0) return;
+                self.selectedDate(self.openPeriodStartDate());
+            } else if (self.openPeriodEndDate().diff(newValue) < 0) {
+                if (self.selectedDate().diff(self.openPeriodEndDate()) == 0) return;
+                self.selectedDate(self.openPeriodEndDate());
+            } else {
+                self.selectedDate(newValue);
+            }
 			self.loadSchedule();
 		});
+
+	    self.isRequestedDateValid = function(date) {
+	        if (date.diff(self.openPeriodStartDate()) < 0) {
+	            return false;
+	        } else if (self.openPeriodEndDate().diff(date) < 0) {
+	            return false;
+	        }
+	        return true;
+	    };
 
 		self.loadPeriod = function () {
 			ajax.Ajax({
@@ -115,7 +127,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				dataType: "json",
 				type: 'GET',
 				success: function (data, textStatus, jqXHR) {
-					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 					if (data.HasWorkflowControlSet) {
 					    self.now = moment(new Date(data.NowYear, data.NowMonth-1, data.NowDay));
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
@@ -124,6 +135,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					    self.setScheduleLoadedReady();
 					    self.isReadyLoaded(true);
 					}
+					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 				}
 			});
 		};
@@ -142,6 +154,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
+					//self._createTimeLine([{ "HourText": "98", "LengthInMinutesToDisplay": 15 }, { "HourText": "99", "LengthInMinutesToDisplay": 15 }]);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
@@ -151,12 +164,18 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
+	    self.changeRequestedDate = function(movement) {
+	        var date = moment(self.selectedDate()).add('days', movement);
+	        if (self.isRequestedDateValid(date))
+	            self.requestedDate(date);
+	    };
+
 		self.nextDate = function () {
-			self.requestedDate(moment(self.selectedDate()).add('days', 1));
+		    self.changeRequestedDate(1);
 		};
 
 		self.previousDate = function () {
-			self.requestedDate(moment(self.selectedDate()).add('days', -1));
+		    self.changeRequestedDate(-1);
 		};
 
 		self.loadedDateSwedishFormat = ko.observable();
@@ -167,6 +186,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _init() {
+	    _unbind();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		if (_hasPermission(elementToBind)) {
 			vm = new shiftTradeViewModel();
@@ -227,7 +247,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _openAddShiftTradeWindow() {
-		//Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
+	    Teleopti.MyTimeWeb.Request.RequestDetail.HideNewTextOrAbsenceRequestView();
 		$('#Request-add-shift-trade').show();
 	}
 
@@ -267,20 +287,29 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			})
 		;
 	}
+    
+	function _unbind() {
+	    vm = null;
+        var element = $('#Request-add-shift-trade')[0];
+        if (element) ko.cleanNode(element);
+    }
 
 	return {
 		Init: function () {
-		    _init();
 		},
 		SetShiftTradeRequestDate: function (date) {
 			return setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function () {
-			vm.loadPeriod();
+		    _init();
+		    vm.loadPeriod();
 			_openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
 			_hideShiftTradeWindow();
+		},
+		Dispose: function() {
+		    _unbind();
 		}
 	};
 

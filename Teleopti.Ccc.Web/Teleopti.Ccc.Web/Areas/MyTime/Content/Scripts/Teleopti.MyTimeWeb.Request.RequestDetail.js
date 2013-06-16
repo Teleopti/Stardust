@@ -34,10 +34,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _initControls(requestDetailViewModel) {
-		requestViewModel = requestDetailViewModel;
-		if ($('#Request-add-section').length == 0)
-			return;
-		ko.applyBindings(requestViewModel, $('#Request-add-section')[0]);
+	    requestViewModel = requestDetailViewModel;
+	    var element = $('#Request-add-section')[0];
+	    if (element) {
+	        ko.cleanNode(element);
+	        ko.applyBindings(requestViewModel, element);
+	    }
+		
 	}
 
 	function _addRequest(model, successCallback) {
@@ -149,6 +152,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		AddAbsenceRequestClick: function () {
 			_addAbsenceRequestClick();
+		},
+		HideNewTextOrAbsenceRequestView: function() {
+		    requestViewModel.IsNewInProgress(false);
 		}
 	};
 })(jQuery);

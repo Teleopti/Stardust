@@ -29,7 +29,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 	return {
 		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
+		    Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index',
+		        Teleopti.MyTimeWeb.Request.RequestPartialInit,
+		        Teleopti.MyTimeWeb.Request.RequestPartialDispose);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 		    readyForInteraction = readyForInteractionCallback;
@@ -47,7 +49,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		    _activatePlaceHolderText();
-		}
+		},
+	    RequestPartialDispose: function() {
+	        Teleopti.MyTimeWeb.Request.List.Dispose();
+	    }
 	};
 
 })(jQuery);

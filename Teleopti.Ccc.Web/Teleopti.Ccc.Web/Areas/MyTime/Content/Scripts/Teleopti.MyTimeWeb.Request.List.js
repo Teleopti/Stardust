@@ -245,6 +245,16 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         var aboveViewContentHeight = jqWindow.scrollTop();
         return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 0;
     }
+    
+    function _unbind() {
+        var element = $('#Requests-data-binding-area')[0];
+        if (element) ko.cleanNode(element);
+
+        element = $('#Request-add-section')[0];
+        if (element) ko.cleanNode(element);
+
+        Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();
+    }
 
     return {
         Init: function (readyForInteractionCallback, completelyLoadedCallback) {
@@ -252,11 +262,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
             _initScrollPaging();
             var element = $('#Requests-data-binding-area')[0];
-
             if (element) ko.applyBindings(pageViewModel, element);
         },
         AddItemAtTop: function (request,isProcessing) {
         	pageViewModel.AddRequest(request, isProcessing);
+        },
+        Dispose: function() {
+            _unbind();
         }
     };
 
