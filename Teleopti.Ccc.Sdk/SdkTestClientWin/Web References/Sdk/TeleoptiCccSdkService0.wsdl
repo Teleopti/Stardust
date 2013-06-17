@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2010/04/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://tempuri.org/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TeleoptiCccSdkService" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2010/04/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://tempuri.org/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TeleoptiCccSdkService" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:import namespace="http://tempuri.org/" location="http://localhost:1335/TeleoptiCccSdkService.svc?wsdl=wsdl0" />
   <wsdl:types>
     <xsd:schema targetNamespace="http://schemas.ccc.teleopti.com/sdk/2010/04/Imports">
@@ -11,14 +11,17 @@
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" namespace="http://schemas.ccc.teleopti.com/sdk/2010/08/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="TeleoptiCccSdkService_ConvertToUtc_InputMessage">
@@ -156,72 +159,6 @@
   <wsdl:message name="TeleoptiForecastingService_GetSkills_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSkillsResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriodByQuery" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriodByQueryResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPerson" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersonResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersons" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersonsResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_CreateServerScheduleDistribution_InputMessage">
-    <wsdl:part name="parameters" element="tns:CreateServerScheduleDistribution" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_CreateServerScheduleDistribution_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CreateServerScheduleDistributionResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPublicNotes" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPublicNotesResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q2:FaultException" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePublicNote" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePublicNoteResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q3:FaultException" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_DeletePublicNote_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeletePublicNote" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_DeletePublicNote_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeletePublicNoteResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPlanningTimeBank_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPlanningTimeBank" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetPlanningTimeBank_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPlanningTimeBankResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePlanningTimeBank_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePlanningTimeBank" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePlanningTimeBank_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePlanningTimeBankResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSchedulesByQuery" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSchedulesByQueryResponse" />
-  </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetActivities_InputMessage">
     <wsdl:part name="parameters" element="tns:GetActivities" />
   </wsdl:message>
@@ -259,7 +196,7 @@
     <wsdl:part name="parameters" element="tns:GetSchedulesResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetSchedules_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q4:FaultException" />
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q2:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SaveSchedulePart_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveSchedulePart" />
@@ -286,7 +223,7 @@
     <wsdl:part name="parameters" element="tns:SavePersonRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SavePersonRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q5:FaultException" />
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q3:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SavePersonAbsenceRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SavePersonAbsenceRequest" />
@@ -295,7 +232,7 @@
     <wsdl:part name="parameters" element="tns:SavePersonAbsenceRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SavePersonAbsenceRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q6:FaultException" />
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q4:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetAllPersonRequests_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllPersonRequests" />
@@ -322,7 +259,7 @@
     <wsdl:part name="parameters" element="tns:CreateShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_CreateShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q7:FaultException" />
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q5:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SetShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SetShiftTradeRequest" />
@@ -331,7 +268,7 @@
     <wsdl:part name="parameters" element="tns:SetShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SetShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q8:FaultException" />
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q6:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_UpdatePersonRequestMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdatePersonRequestMessage" />
@@ -340,7 +277,7 @@
     <wsdl:part name="parameters" element="tns:UpdatePersonRequestMessageResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_UpdatePersonRequestMessage_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q9:FaultException" />
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q7:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_AcceptShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:AcceptShiftTradeRequest" />
@@ -349,7 +286,7 @@
     <wsdl:part name="parameters" element="tns:AcceptShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_AcceptShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q10:FaultException" />
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q8:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DenyShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:DenyShiftTradeRequest" />
@@ -418,7 +355,7 @@
     <wsdl:part name="parameters" element="tns:SaveExtendedPreferenceTemplateResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SaveExtendedPreferenceTemplate_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q11:FaultException" />
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q9:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeleteExtendedPreferenceTemplate_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteExtendedPreferenceTemplate" />
@@ -427,7 +364,7 @@
     <wsdl:part name="parameters" element="tns:DeleteExtendedPreferenceTemplateResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeleteExtendedPreferenceTemplate_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q12:FaultException" />
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q10:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetExtendedPreferenceTemplates_InputMessage">
     <wsdl:part name="parameters" element="tns:GetExtendedPreferenceTemplates" />
@@ -436,7 +373,7 @@
     <wsdl:part name="parameters" element="tns:GetExtendedPreferenceTemplatesResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetExtendedPreferenceTemplates_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q13:FaultException" />
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q11:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriod_InputMessage">
     <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriod" />
@@ -444,35 +381,89 @@
   <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriod_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriodResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetPayrollResultStatusByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPayrollResultStatusByQuery" />
+  <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriodByQuery" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetPayrollResultStatusByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPayrollResultStatusByQueryResponse" />
+  <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriodByQueryResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GroupPagesByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GroupPagesByQuery" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPerson" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GroupPagesByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GroupPagesByQueryResponse" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersonResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GroupPageGroupsByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GroupPageGroupsByQuery" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersons" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GroupPageGroupsByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GroupPageGroupsByQueryResponse" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMultiplicatorDataForPersonsResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetBusinessUnitsByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetBusinessUnitsByQuery" />
+  <wsdl:message name="TeleoptiSchedulingService_CreateServerScheduleDistribution_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateServerScheduleDistribution" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetBusinessUnitsByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetBusinessUnitsByQueryResponse" />
+  <wsdl:message name="TeleoptiSchedulingService_CreateServerScheduleDistribution_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateServerScheduleDistributionResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetScenariosByQuery_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetScenariosByQuery" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublicNotes" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiOrganizationService_GetScenariosByQuery_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetScenariosByQueryResponse" />
+  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublicNotesResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_FaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q12:FaultException" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePublicNote" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePublicNoteResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_FaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q13:FaultException" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_DeletePublicNote_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePublicNote" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_DeletePublicNote_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePublicNoteResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetPlanningTimeBank_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlanningTimeBank" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetPlanningTimeBank_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlanningTimeBankResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePlanningTimeBank_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePlanningTimeBank" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePlanningTimeBank_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePlanningTimeBankResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSchedulesByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSchedulesByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetMultiplicatorsByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMultiplicatorsByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetMultiplicatorsByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMultiplicatorsByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetMultiplicatorDefinitionSetByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMultiplicatorDefinitionSetByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetMultiplicatorDefinitionSetByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMultiplicatorDefinitionSetByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetScheduleTagByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetScheduleTagByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetScheduleTagByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetScheduleTagByQueryResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_GetSites_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSites" />
@@ -675,6 +666,48 @@
   <wsdl:message name="TeleoptiOrganizationService_GetPayrollExportByQuery_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPayrollExportByQueryResponse" />
   </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetPayrollResultStatusByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPayrollResultStatusByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetPayrollResultStatusByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPayrollResultStatusByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GroupPagesByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GroupPagesByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GroupPagesByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GroupPagesByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GroupPageGroupsByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GroupPageGroupsByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GroupPageGroupsByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GroupPageGroupsByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetBusinessUnitsByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessUnitsByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetBusinessUnitsByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessUnitsByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetScenariosByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetScenariosByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetScenariosByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetScenariosByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonOptionalValuesByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonOptionalValuesByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSchedulePeriodWorktimeOverride" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSchedulePeriodWorktimeOverrideResponse" />
+  </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetPayrollFormats_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPayrollFormats" />
   </wsdl:message>
@@ -837,48 +870,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiSchedulingService">
-    <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriodByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodByQuery" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodByQueryResponse" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonMultiplicatorDataForPerson">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPerson" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersonResponse" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonMultiplicatorDataForPersons">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersons" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersonsResponse" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CreateServerScheduleDistribution">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateServerScheduleDistribution" message="tns:TeleoptiSchedulingService_CreateServerScheduleDistribution_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateServerScheduleDistributionResponse" message="tns:TeleoptiSchedulingService_CreateServerScheduleDistribution_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPublicNotes">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotes" message="tns:TeleoptiSchedulingService_GetPublicNotes_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotesResponse" message="tns:TeleoptiSchedulingService_GetPublicNotes_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotesFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_GetPublicNotes_FaultExceptionFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SavePublicNote">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNote" message="tns:TeleoptiSchedulingService_SavePublicNote_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNoteResponse" message="tns:TeleoptiSchedulingService_SavePublicNote_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNoteFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_SavePublicNote_FaultExceptionFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeletePublicNote">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePublicNote" message="tns:TeleoptiSchedulingService_DeletePublicNote_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePublicNoteResponse" message="tns:TeleoptiSchedulingService_DeletePublicNote_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPlanningTimeBank">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPlanningTimeBank" message="tns:TeleoptiSchedulingService_GetPlanningTimeBank_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPlanningTimeBankResponse" message="tns:TeleoptiSchedulingService_GetPlanningTimeBank_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SavePlanningTimeBank">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePlanningTimeBank" message="tns:TeleoptiSchedulingService_SavePlanningTimeBank_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePlanningTimeBankResponse" message="tns:TeleoptiSchedulingService_SavePlanningTimeBank_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSchedulesByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByQuery" message="tns:TeleoptiSchedulingService_GetSchedulesByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByQueryResponse" message="tns:TeleoptiSchedulingService_GetSchedulesByQuery_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetActivities">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetActivities" message="tns:TeleoptiSchedulingService_GetActivities_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetActivitiesResponse" message="tns:TeleoptiSchedulingService_GetActivities_OutputMessage" />
@@ -1017,28 +1008,62 @@
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriod" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriod_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodResponse" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriod_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriodByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodByQuery" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodByQueryResponse" message="tns:TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriodByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMultiplicatorDataForPerson">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPerson" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersonResponse" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMultiplicatorDataForPersons">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersons" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersonsResponse" message="tns:TeleoptiSchedulingService_GetPersonMultiplicatorDataForPersons_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateServerScheduleDistribution">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateServerScheduleDistribution" message="tns:TeleoptiSchedulingService_CreateServerScheduleDistribution_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateServerScheduleDistributionResponse" message="tns:TeleoptiSchedulingService_CreateServerScheduleDistribution_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPublicNotes">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotes" message="tns:TeleoptiSchedulingService_GetPublicNotes_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotesResponse" message="tns:TeleoptiSchedulingService_GetPublicNotes_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPublicNotesFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_GetPublicNotes_FaultExceptionFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePublicNote">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNote" message="tns:TeleoptiSchedulingService_SavePublicNote_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNoteResponse" message="tns:TeleoptiSchedulingService_SavePublicNote_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePublicNoteFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_SavePublicNote_FaultExceptionFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePublicNote">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePublicNote" message="tns:TeleoptiSchedulingService_DeletePublicNote_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePublicNoteResponse" message="tns:TeleoptiSchedulingService_DeletePublicNote_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlanningTimeBank">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPlanningTimeBank" message="tns:TeleoptiSchedulingService_GetPlanningTimeBank_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPlanningTimeBankResponse" message="tns:TeleoptiSchedulingService_GetPlanningTimeBank_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePlanningTimeBank">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePlanningTimeBank" message="tns:TeleoptiSchedulingService_SavePlanningTimeBank_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePlanningTimeBankResponse" message="tns:TeleoptiSchedulingService_SavePlanningTimeBank_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedulesByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByQuery" message="tns:TeleoptiSchedulingService_GetSchedulesByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByQueryResponse" message="tns:TeleoptiSchedulingService_GetSchedulesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultiplicatorsByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorsByQuery" message="tns:TeleoptiSchedulingService_GetMultiplicatorsByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorsByQueryResponse" message="tns:TeleoptiSchedulingService_GetMultiplicatorsByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultiplicatorDefinitionSetByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorDefinitionSetByQuery" message="tns:TeleoptiSchedulingService_GetMultiplicatorDefinitionSetByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorDefinitionSetByQueryResponse" message="tns:TeleoptiSchedulingService_GetMultiplicatorDefinitionSetByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetScheduleTagByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleTagByQuery" message="tns:TeleoptiSchedulingService_GetScheduleTagByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleTagByQueryResponse" message="tns:TeleoptiSchedulingService_GetScheduleTagByQuery_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiOrganizationService">
-    <wsdl:operation name="GetPayrollResultStatusByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollResultStatusByQuery" message="tns:TeleoptiOrganizationService_GetPayrollResultStatusByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollResultStatusByQueryResponse" message="tns:TeleoptiOrganizationService_GetPayrollResultStatusByQuery_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GroupPagesByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPagesByQuery" message="tns:TeleoptiOrganizationService_GroupPagesByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPagesByQueryResponse" message="tns:TeleoptiOrganizationService_GroupPagesByQuery_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GroupPageGroupsByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPageGroupsByQuery" message="tns:TeleoptiOrganizationService_GroupPageGroupsByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPageGroupsByQueryResponse" message="tns:TeleoptiOrganizationService_GroupPageGroupsByQuery_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetBusinessUnitsByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetBusinessUnitsByQuery" message="tns:TeleoptiOrganizationService_GetBusinessUnitsByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetBusinessUnitsByQueryResponse" message="tns:TeleoptiOrganizationService_GetBusinessUnitsByQuery_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetScenariosByQuery">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetScenariosByQuery" message="tns:TeleoptiOrganizationService_GetScenariosByQuery_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetScenariosByQueryResponse" message="tns:TeleoptiOrganizationService_GetScenariosByQuery_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetSites">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetSites" message="tns:TeleoptiOrganizationService_GetSites_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetSitesResponse" message="tns:TeleoptiOrganizationService_GetSites_OutputMessage" />
@@ -1169,6 +1194,34 @@
     <wsdl:operation name="GetPayrollExportByQuery">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollExportByQuery" message="tns:TeleoptiOrganizationService_GetPayrollExportByQuery_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollExportByQueryResponse" message="tns:TeleoptiOrganizationService_GetPayrollExportByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayrollResultStatusByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollResultStatusByQuery" message="tns:TeleoptiOrganizationService_GetPayrollResultStatusByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollResultStatusByQueryResponse" message="tns:TeleoptiOrganizationService_GetPayrollResultStatusByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GroupPagesByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPagesByQuery" message="tns:TeleoptiOrganizationService_GroupPagesByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPagesByQueryResponse" message="tns:TeleoptiOrganizationService_GroupPagesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GroupPageGroupsByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPageGroupsByQuery" message="tns:TeleoptiOrganizationService_GroupPageGroupsByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GroupPageGroupsByQueryResponse" message="tns:TeleoptiOrganizationService_GroupPageGroupsByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBusinessUnitsByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetBusinessUnitsByQuery" message="tns:TeleoptiOrganizationService_GetBusinessUnitsByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetBusinessUnitsByQueryResponse" message="tns:TeleoptiOrganizationService_GetBusinessUnitsByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetScenariosByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetScenariosByQuery" message="tns:TeleoptiOrganizationService_GetScenariosByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetScenariosByQueryResponse" message="tns:TeleoptiOrganizationService_GetScenariosByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonOptionalValuesByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonOptionalValuesByQuery" message="tns:TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonOptionalValuesByQueryResponse" message="tns:TeleoptiOrganizationService_GetPersonOptionalValuesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSchedulePeriodWorktimeOverride">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverride" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverrideResponse" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiCccSdkInternal">

@@ -59,9 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(person, defSet);
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			IActivity act = ActivityFactory.CreateActivity("the one");
-			MainShift main = new MainShift(ShiftCategoryFactory.CreateShiftCategory("cat"));
-			main.LayerCollection.Add(new MainShiftActivityLayer(act, createPeriod(10, 19)));
-			ass.SetMainShift(main);
+			ass.SetMainShiftLayers(new[]{new MainShiftActivityLayerNew(act, createPeriod(10,19))}, new ShiftCategory("cat"));
 			OvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act, createPeriod(16, 17), defSet));
@@ -444,13 +442,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 2, 00, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			MainShiftActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			MainShiftActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
 			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(act3, period3);
 
-			MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("test"));
-			mainShift.LayerCollection.Add(layer1);
-			mainShift.LayerCollection.Add(layer2);
 
 			PersonalShift personShift = new PersonalShift();
 			personShift.LayerCollection.Add(layer3);
@@ -458,7 +451,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
 			personAss.AddPersonalShift(personShift);
-			personAss.SetMainShift(mainShift);
+			personAss.SetMainShiftLayers(new[]
+				{
+					new MainShiftActivityLayerNew(act1, period1), 
+					new MainShiftActivityLayerNew(act2, period2)
+				}, new ShiftCategory("test"));
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
 			var day =

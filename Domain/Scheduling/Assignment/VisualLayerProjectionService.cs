@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             InParameter.NotNull("shift", shift);
             IVisualLayerFactory factory = shift.CreateVisualLayerFactory();
-            foreach (IActivityLayer layer in shift.LayerCollection)
+            foreach (var layer in shift.LayerCollection)
             {
                 _layerCollectionOriginal.Add(factory.CreateShiftSetupLayer(layer,_person));
             }

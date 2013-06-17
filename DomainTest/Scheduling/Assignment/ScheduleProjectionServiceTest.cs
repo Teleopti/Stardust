@@ -104,12 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var resWrapper = new List<IVisualLayer>(target.CreateProjection());
 			Assert.AreEqual(5, resWrapper.Count);
 			VisualLayer layer = (VisualLayer)resWrapper[0];
-#pragma warning disable 612,618
-			ILayer<IActivity> actLayer1 = ass1.ToMainShift().LayerCollection[0];
-#pragma warning restore 612,618
-#pragma warning disable 612,618
-			ILayer<IActivity> actLayer2 = ass2.ToMainShift().LayerCollection[0];
-#pragma warning restore 612,618
+			var actLayer1 = ass1.MainShiftActivityLayers.First();
+			var actLayer2 = ass2.MainShiftActivityLayers.First();
 
 			Assert.AreEqual("60", layer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
 			Assert.AreEqual(createPeriod(2, 3), layer.Period);
@@ -246,11 +242,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyOverlappingTwoAssignmentsWithDifferentActivities()
 		{
-			PersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			MainShift shift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("sdf"));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
-			ass.SetMainShift(shift);
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetMainShiftLayers(
+				new[]
+					{
+						new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1)),
+						new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1))
+					},
+				ShiftCategoryFactory.CreateShiftCategory("sdf"));
 
 			IPersonAbsence abs = createPersonAbsence(100, new DateTimePeriod(1900, 6, 1, 2100, 6, 2));
 			scheduleDay.Add(ass);
@@ -267,10 +266,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyAssignmentAbsenceMeeting()
 		{
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			IMainShift shift = new MainShift(new ShiftCategory("sdf"));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("1"), createPeriod(0, 1)));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("2"), createPeriod(1, 10)));
-			ass.SetMainShift(shift);
+			ass.SetMainShiftLayers(
+				new[]
+					{
+						new MainShiftActivityLayerNew(new Activity("1"), createPeriod(0, 1)),
+						new MainShiftActivityLayerNew(new Activity("2"), createPeriod(1, 20))
+					}, new ShiftCategory("sdf"));
 
 			IPersonMeeting meeting = CreatePersonMeeting(createPeriod(2, 6));
 			IPersonAbsence abs = createPersonAbsence(100, createPeriod(8, 20));
@@ -313,10 +314,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			IMainShift shift = new MainShift(new ShiftCategory("sdf"));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(phone, new DateTimePeriod(2000, 1, 1, 2000, 1, 4)));
-			shift.LayerCollection.Add(new MainShiftActivityLayer(lunch, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
-			ass.SetMainShift(shift);
+			ass.SetMainShiftLayers(new[]
+					{
+						new MainShiftActivityLayerNew(phone, new DateTimePeriod(2000, 1, 1, 2000, 1, 4)),
+						new MainShiftActivityLayerNew(lunch, new DateTimePeriod(2000, 1, 2, 2000, 1, 3))
+					}, new ShiftCategory("sdf"));
 			IPersonAbsence abs = new PersonAbsence(ass.Person, ass.Scenario,
 													new AbsenceLayer(sjuk, new DateTimePeriod(2000, 1, 1, 2003, 1, 1)));
 			scheduleDay.Add(ass);
@@ -552,10 +554,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			var actCtr = new Activity("phone");
 			var actNoCtr = new Activity("lunch") { InContractTime = false };
-			var main = new MainShift(new ShiftCategory("d"));
-			main.LayerCollection.Add(new MainShiftActivityLayer(actCtr, createPeriod(8, 17)));
-			main.LayerCollection.Add(new MainShiftActivityLayer(actNoCtr, createPeriod(11, 12)));
-			ass.SetMainShift(main);
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftActivityLayerNew(actCtr, createPeriod(8, 17)),
+					new MainShiftActivityLayerNew(actNoCtr, createPeriod(11, 12))
+				}, new ShiftCategory("d"));
 			var absLayer = new AbsenceLayer(new Absence { InContractTime = true }, createPeriod(10, 20));
 			var personAbs = new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, absLayer);
 			scheduleDay.Add(ass);

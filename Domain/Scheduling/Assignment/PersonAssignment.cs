@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _mainShiftActivityLayers; }
 		}
 
-		//remove me later!
+		[Obsolete("Mainshift will not be supported in near future")]
 		public virtual void SetMainShift(IMainShift mainShift)
 		{
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
@@ -149,6 +149,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory)
 		{
+			//todo: make sure not reusing layer from another assignment...
+			//* either do a check here or 
+			//* don't expose and accept IMainShiftACtivityLayerNew but another type
+
 			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
 			//clear or new list?
 			ClearMainShiftLayers();
@@ -295,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var persShiftPeriod = personalShift.LayerCollection.Period();
 					if (persShiftPeriod.HasValue)
 					{
-						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.Adjacent(persShiftPeriod.Value)))
+						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.AdjacentTo(persShiftPeriod.Value)))
 						{
 							proj.Add(personalShift);
 						}
@@ -389,21 +393,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IAggregateRoot MainRoot
 		{
 			get { return Person; }
-		}
-
-		/// <summary>
-		/// The period stored in the database. Must not be set explicitly.
-		/// Note - this value will not ever change in ram, not even when
-		/// object is persisted. It will only be set when fetched from database
-		/// </summary>
-		public virtual DateTimePeriod DatabasePeriod { get; protected set; }
-
-		public override bool Equals(IEntity other)
-		{
-			//to prevent equal with Mainshift (has same Id)
-			if (!(other is IPersonAssignment))
-				return false;
-			return base.Equals(other);
 		}
 	}
 }

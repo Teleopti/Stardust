@@ -1,26 +1,23 @@
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
     public class AbsenceLayerViewModel : LayerViewModel
     {
-        public AbsenceLayerViewModel(ILayer layer,IEventAggregator eventAggregator)
-            : this(layer,null,eventAggregator)
-        {
-        }
+	    public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
+				: base(observer, layer, eventAggregator, false)
+			{
+			}
 
-        public AbsenceLayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : base(layer, parent,eventAggregator)
-        {
-        }
-
-        public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
-            : base(observer,layer, null,eventAggregator)
-        {
-        }
+			public AbsenceLayerViewModel(IVisualLayer layer)
+				: base(null, layer, null, true)
+			{
+			}
 
         public override string LayerDescription
         {
@@ -62,9 +59,14 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (ParentObservingCollection != null)
             {
-                ParentObservingCollection.RemoveAbsence(this);
-                TriggerShiftEditorUpdate();
+                ParentObservingCollection.RemoveAbsence(this,Layer as ILayer<IAbsence>,SchedulePart);
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
             }
         }
+
+		protected override void Replace()
+		{
+			if (ParentObservingCollection!=null) ParentObservingCollection.ReplaceAbsence(this, Layer as ILayer<IAbsence>, SchedulePart);
+		}
     }
 }

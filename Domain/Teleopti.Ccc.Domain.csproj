@@ -492,6 +492,7 @@
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
+    <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -756,7 +757,7 @@
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShift.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayer.cs" />
-    <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleService.cs" />
+    <Compile Include="Scheduling\Assignment\RemoveLayerFromSchedule.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartService.cs" />
@@ -1334,7 +1335,6 @@
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSetting.cs" />
     <Compile Include="Time\AnchorTimePeriod.cs" />
-    <Compile Include="Time\DateTimePeriodMerger.cs" />
     <Compile Include="Time\IntervalRounding.cs" />
     <Compile Include="Time\PeriodScaleUnit.cs" />
     <Compile Include="Time\DateTimeExtensions.cs" />

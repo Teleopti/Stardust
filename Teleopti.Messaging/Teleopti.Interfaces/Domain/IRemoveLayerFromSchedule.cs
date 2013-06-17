@@ -6,7 +6,7 @@
     /// <remarks>
     /// Finds the Shift that contains the layer
     /// </remarks>
-    public interface IRemoveLayerFromScheduleService
+    public interface IRemoveLayerFromSchedule
     {
 
         /// <summary>
@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="part">The part.</param>
         /// <param name="layer">The layer.</param>
-        IScheduleDay Remove(IScheduleDay part, ILayer<IActivity> layer);
+        void Remove(IScheduleDay part, ILayer<IActivity> layer);
 
         /// <summary>
         /// Removes the specified layer if it exists.
@@ -22,7 +22,7 @@
         /// <param name="part">The part.</param>
         /// <param name="layer">The layer.</param>
         /// <returns>The schedulepart</returns>
-        IScheduleDay Remove(IScheduleDay part, ILayer<IAbsence> layer);
+        void Remove(IScheduleDay part, ILayer<IAbsence> layer);
 
     }
 }

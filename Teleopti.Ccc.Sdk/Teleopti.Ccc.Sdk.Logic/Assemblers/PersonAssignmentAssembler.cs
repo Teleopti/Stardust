@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if(dto.MainShift!=null)
             {
                 IShiftCategory shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
-                IMainShift mainShift = new MainShift(shiftCategory);
+                var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, dto.MainShift.LayerCollection);
                 assignment.SetMainShift(mainShift);
             }

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -6,25 +5,10 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class MeetingLayerViewModel : LayerViewModel
     {
-        private IPersonMeeting _meeting;
-
-        public MeetingLayerViewModel(ILayer layer, IEventAggregator eventAggregator)
-            : this(layer, null, eventAggregator)
-        {
-        }
-
-        public MeetingLayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : base(layer, parent,eventAggregator)
-        {
-        }
-
-        public MeetingLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
-            : base(observer,layer, null,eventAggregator)
-        {
-        }
+        private readonly IPersonMeeting _meeting;
 
         public MeetingLayerViewModel(ILayerViewModelObserver observer, IPersonMeeting meeting, IEventAggregator eventAggregator)
-            : base(observer, meeting.ToLayer(), null,eventAggregator)
+            : base(observer, meeting.ToLayer(), eventAggregator, false)
         {
             _meeting = meeting;
         }

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -23,8 +21,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
-
-		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, ICurrentScenario scenarioRepository)
+		
+	    public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService,
+			  ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, 
+			  SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
+			  ICurrentScenario scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
@@ -131,9 +132,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             using (new MessageBrokerSendEnabler())
             {
-                using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+                using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
                 {
-                    IScheduleDay schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
+                    var schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
                     _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum());
 
                     uow.PersistAll();

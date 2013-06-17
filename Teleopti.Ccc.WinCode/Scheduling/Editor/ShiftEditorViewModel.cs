@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
 			Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
             AllLayers = new ExpandedLayersViewModel(Layers) {Expanded = ExpandSize };
-            EditLayer = new EditLayerViewModel();
+			EditLayer = new EditLayerViewModel();
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
             Settings=new ShiftEditorSettings(this);
             SetUpCommandModels();
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
 
 		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
-            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
+			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
         {
 
         }

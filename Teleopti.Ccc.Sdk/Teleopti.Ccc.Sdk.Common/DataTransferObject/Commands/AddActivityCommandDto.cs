@@ -43,5 +43,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// </summary>
 		[DataMember(Order = 1, IsRequired = false)]
     	public Guid? ScenarioId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the schedule tag DTO. If omitted then Null schedule tag will be used.
+        /// </summary>
+        [DataMember(Order = 2, IsRequired = false)]
+        public ScheduleTagDto ScheduleTag { get; set; }
     }
 }

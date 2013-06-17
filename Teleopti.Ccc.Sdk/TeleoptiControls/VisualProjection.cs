@@ -12,11 +12,13 @@ namespace GridTest
         private readonly bool _isDayOff;
         private readonly string _dayOffName = string.Empty;
         private readonly string _publicNote;
+	    private readonly string _scheduleTag;
 
-        public VisualProjection(string agentName, IList<VisualLayer> layerCollection, bool isDayOff, string dayOffName, string publicNote)
+	    public VisualProjection(string agentName, IList<VisualLayer> layerCollection, bool isDayOff, string dayOffName, string publicNote, string scheduleTag)
         {
             _publicNote = publicNote;
-            _agentName = agentName;
+	        _scheduleTag = scheduleTag;
+	        _agentName = agentName;
             _layerCollection = layerCollection;
             _isDayOff = isDayOff;
             _dayOffName = dayOffName;
@@ -65,5 +67,10 @@ namespace GridTest
         {
             get { return _publicNote; }
         }
+
+		public string ScheduleTag
+		{
+			get { return _scheduleTag; }
+		}
     }
 }

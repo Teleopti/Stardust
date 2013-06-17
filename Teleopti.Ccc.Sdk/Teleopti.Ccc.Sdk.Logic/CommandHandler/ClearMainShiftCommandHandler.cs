@@ -1,6 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
                 scheduleDay.DeleteMainShift(scheduleDay);
-                _saveSchedulePartService.Save(scheduleDay,rules);
+                _saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

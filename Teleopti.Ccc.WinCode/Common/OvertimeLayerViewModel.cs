@@ -7,21 +7,17 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
-        public OvertimeLayerViewModel(ILayer layer,IEventAggregator eventAggregator)
-            : this(layer,null,eventAggregator)
-        {
-            
-        }
-
-        public OvertimeLayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : base(layer, parent, eventAggregator)
+	    private readonly IOvertimeShiftActivityLayer _layer;
+        public OvertimeLayerViewModel(IVisualLayer layer)
+            : base(layer)
         {
         }
 
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IEventAggregator eventAggregator)
+     
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IEventAggregator eventAggregator)
             : base(observer, layer, null, eventAggregator)
         {
-           
+	        _layer = layer;
         }
 
         public override bool Opaque
@@ -31,12 +27,9 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public override string LayerDescription
         {
-            get {
-                IOvertimeShiftActivityLayer overtimeShiftActivityLayer = Layer as IOvertimeShiftActivityLayer;
-                if (overtimeShiftActivityLayer != null)
-                    return overtimeShiftActivityLayer.DefinitionSet.Name;
-                
-                return UserTexts.Resources.Overtime; 
+            get
+            {
+	            return _layer != null ? _layer.DefinitionSet.Name : UserTexts.Resources.Overtime;
             }
         }
 
@@ -58,5 +51,10 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             return sender != this && !IsProjectionLayer && ((sender.GetType() == typeof(MainShiftLayerViewModel)) || (sender.GetType() == typeof(OvertimeLayerViewModel)));
         }
+
+		protected override void Replace()
+		{
+			if(ParentObservingCollection!=null)ParentObservingCollection.ReplaceActivity(this,Layer as ILayer<IActivity>,SchedulePart);
+		}
     }
 }

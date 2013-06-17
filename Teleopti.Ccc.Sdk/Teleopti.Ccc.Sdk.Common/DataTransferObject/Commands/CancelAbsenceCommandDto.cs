@@ -28,5 +28,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// </summary>
 		[DataMember(Order = 1, IsRequired = false)]
 		public Guid? ScenarioId { get; set; }
+
     }
 }

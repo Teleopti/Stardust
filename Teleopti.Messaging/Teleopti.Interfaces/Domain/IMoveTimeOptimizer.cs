@@ -16,5 +16,13 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The container owner.</value>
         IPerson ContainerOwner { get; }
+
+		/// <summary>
+		/// Returns the matrix we are working with
+		/// </summary>
+		IScheduleMatrixPro Matrix
+		{
+			get;
+		}
     }
 }

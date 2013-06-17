@@ -57,7 +57,10 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             //Listen for changes in editor
             _triggerShiftEditoEvent = eventAggregator.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>();
             _subscriptionToken = _triggerShiftEditoEvent.Subscribe(TriggerUpdate);
+		
         }
+
+	
 
         private void TriggerUpdate(EventParameters<TriggerShiftEditorUpdate> obj)
         {

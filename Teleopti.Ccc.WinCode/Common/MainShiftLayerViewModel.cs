@@ -1,29 +1,26 @@
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
-        public MainShiftLayerViewModel(ILayer layer, IEventAggregator eventAggregator)
-            : this(layer,null,eventAggregator)
+	    public MainShiftLayerViewModel(IVisualLayer layer)
+            : base(layer)
         {
         }
 
-        public MainShiftLayerViewModel(ILayer layer, IShift parent, IEventAggregator eventAggregator)
-            : base(layer, parent,eventAggregator)
-        {
-        }
-
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer layer, IShift parent, IEventAggregator eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
             : base(observer,layer, parent, eventAggregator)
         {
         }
 
 
-        public override string LayerDescription
+	    public override string LayerDescription
         {
             get { return UserTexts.Resources.Activity; }
         }
@@ -41,5 +38,19 @@ namespace Teleopti.Ccc.WinCode.Common
             }
             return true;
         }
+
+		protected override void DeleteLayer()
+		{
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.RemoveActivity(this,Layer as ILayer<IActivity>,SchedulePart);
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+			}
+		}
+
+		protected override void Replace()
+		{
+			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+		}
     }
 }
