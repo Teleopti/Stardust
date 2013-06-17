@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    {
 		    foreach (var dayLayerModel in Models)
 		    {
-
 			    var agentState = getActualAgentState(dayLayerModel);
 			    if (agentState == null) continue;
 			    dayLayerModel.EnteredCurrentState = agentState.StateStart;

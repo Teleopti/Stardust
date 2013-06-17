@@ -4,13 +4,11 @@ using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -39,6 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private IRepositoryFactory repositoryFactory;
         private IDispatcherWrapper testDispatcher;
         private DateOnlyPeriod dateOnlyPeriod;
+		private DayLayerModel daylayerModel;
+		private Guid guid;
 
         [SetUp]
         public void Setup()
@@ -52,14 +52,19 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             team = TeamFactory.CreateSimpleTeam();
             period = new DateTimePeriod(2012, 10, 25, 2012, 10, 25);
             dateOnlyPeriod = new DateOnlyPeriod(2012, 10, 25, 2012, 10, 25);
+			guid = Guid.NewGuid();
             person = PersonFactory.CreatePerson();
-            person.SetId(Guid.NewGuid());
+            person.SetId(guid);
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(), team));
             person.PermissionInformation.SetDefaultTimeZone(
                 (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
             repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
+	        daylayerModel = new DayLayerModel(person, new DateTimePeriod(2013, 01, 01, 2059, 01, 01), team,
+	                                          new LayerViewModelCollection(eventAggregator,
+	                                                                       new CreateLayerViewModelService()),
+	                                          new CommonNameDescriptionSetting());
 
             target = new DayLayerViewModel(rtaStateHolder, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
         }
@@ -196,6 +201,45 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period));
             }
         }
+
+		[Test]
+		public void ShouldUpdateAgentState()
+		{
+			var actualAgentState = new ActualAgentState
+				{
+					PersonId = guid,
+					ScheduledNext = "New Next Activity",
+					AlarmStart = DateTime.UtcNow.AddMinutes(-10),
+					AlarmName = "New Alarm Name"
+				};
+			var customEventArgs = new CustomEventArgs<IActualAgentState>(actualAgentState);
+			person.SetId(guid);
+
+			daylayerModel.NextActivityDescription = "Old Next Activity";
+			daylayerModel.AlarmDescription = "Old Alarm Name";
+			target.Models.Add(daylayerModel);
+			rtaStateHolder.Raise(r => r.AgentstateUpdated += null, this, customEventArgs);
+
+			var result = target.Models.FirstOrDefault(d => d.Person.Id == guid);
+			result.NextActivityDescription.Should().Be.EqualTo(actualAgentState.ScheduledNext);
+			result.AlarmDescription.Should().Be.EqualTo(actualAgentState.AlarmName);
+		}
+
+		[Test]
+		public void ShouldUpdateAgentState_EmptyUpdate()
+		{
+			rtaStateHolder.Raise(r => r.AgentstateUpdated += null, this,
+			                     new CustomEventArgs<IActualAgentState>(new ActualAgentState()));
+		}
+
+		[Test]
+		public void ShouldInitializeRows()
+		{
+			target.Models.Add(daylayerModel);
+			IActualAgentState actualAgentState;
+			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out actualAgentState)).Return(false);
+			target.InitializeRows();
+		}
     }
 
     public class TestDispatcher : IDispatcherWrapper
