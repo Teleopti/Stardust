@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set
             {
                 _blockFinderTypeForAdvanceScheduling = value;
-                if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
-                    ShiftCategory = null;
+                //if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+                //    ShiftCategory = null;
             }
         }
 
