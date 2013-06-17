@@ -74,8 +74,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set
             {
                 _blockFinderTypeForAdvanceScheduling = value;
-                //if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
-                //    ShiftCategory = null;
             }
         }
 
@@ -98,16 +96,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(), new List<IGroupPageLight>(), new List<IActivity>());
 		}
 
-        //public BlockFinderType UseBlockScheduling
-        //{
-        //    get { return _blockFinderType; }
-        //    set
-        //    {
-        //        _blockFinderType = value;
-        //        if(_blockFinderType != BlockFinderType.None)
-        //            ShiftCategory = null;
-        //    }
-        //}
 
         public bool UsePreferences
         {
