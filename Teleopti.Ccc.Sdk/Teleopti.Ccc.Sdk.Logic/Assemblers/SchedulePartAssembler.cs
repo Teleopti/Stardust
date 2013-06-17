@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private readonly IProjectedLayerAssembler _projectedLayerAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
     	private readonly ISdkProjectionServiceFactory _sdkProjectionServiceFactory;
-    	public IPersonRepository PersonRepository { get; set; }
+	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
+	    public IPersonRepository PersonRepository { get; set; }
         public IScheduleRepository ScheduleRepository { get; set; }
 
     	public string SpecialProjection { get; set; }
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                     IScheduleDataAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studRestrictionAssembler,
 												IProjectedLayerAssembler projectedLayerAssembler,
 												IAssembler<DateTimePeriod,DateTimePeriodDto> dateTimePeriodAssembler,
-												ISdkProjectionServiceFactory sdkProjectionServiceFactory)
+												ISdkProjectionServiceFactory sdkProjectionServiceFactory,
+									IScheduleTagAssembler scheduleTagAssembler)
         {
             _scenarioRepository = scenarioRepository;
             _personDayOffAssembler = personDayOffAssembler;
@@ -48,7 +50,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             _projectedLayerAssembler = projectedLayerAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
     		_sdkProjectionServiceFactory = sdkProjectionServiceFactory;
-    		SpecialProjection = string.Empty;
+			_scheduleTagAssembler = scheduleTagAssembler;
+			SpecialProjection = string.Empty;
         }
 
         public override SchedulePartDto DomainEntityToDto(IScheduleDay entity)
@@ -63,6 +66,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 fillPersonMeeting(part, entity.PersonMeetingCollection());
                 FillPreference(part, entity.PersistableScheduleDataCollection().OfType<IPreferenceDay>());
                 FillStudentAvailability(part, entity.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>());
+	            addScheduleTag(part, entity.ScheduleTag());
             }
             return part;
         }
@@ -288,5 +292,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 part.Add(_studRestrictionAssembler.DtoToDomainEntity(studentAvailabilityDay));
             }
         }
+
+		private void addScheduleTag(SchedulePartDto part, IScheduleTag scheduleTag)
+		{
+			part.ScheduleTag = _scheduleTagAssembler.DomainEntityToDto(scheduleTag);
+		}
     }
 }

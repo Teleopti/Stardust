@@ -406,5 +406,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
 		ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Gets the Schedule Tags for the given query.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		[OperationContract]
+		ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto);
     }
 }
