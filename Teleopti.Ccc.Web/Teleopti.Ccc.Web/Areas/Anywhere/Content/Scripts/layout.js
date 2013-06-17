@@ -167,7 +167,7 @@ define([
 
         function _bindMenu() {
             ajax.ajax({
-                url: "Application/NavigationContent",
+                url: "Anywhere/Application/NavigationContent",
                 success: function(responseData, textStatus, jqXHR) {
                     menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
                     menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
