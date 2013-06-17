@@ -403,10 +403,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-#pragma warning disable 612,618
-			var theLayer = part.AssignmentHighZOrder().ToMainShift().LayerCollection.Single();
-#pragma warning restore 612,618
-
+			var theLayer = part.AssignmentHighZOrder().MainShiftActivityLayers.Single();
 			var theLayerViewModel = target.Single();
 
 	        removeService.Expect(r => r.Remove(part, theLayer));
@@ -533,10 +530,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-#pragma warning disable 612,618
-			var theLayer = part.AssignmentHighZOrder().ToMainShift().LayerCollection.Single();
-#pragma warning restore 612,618
-
+			var theLayer = part.AssignmentHighZOrder().MainShiftActivityLayers.Single();
 			var theLayerViewModel = target.Single();
 
 			var newPayload = ActivityFactory.CreateActivity("new");
