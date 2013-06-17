@@ -20,6 +20,10 @@
         /// <summary>
         /// New
         /// </summary>
-        New
+        New,
+		/// <summary>
+        /// Autodenied
+        /// </summary>
+        Autodenied
     }
 }
