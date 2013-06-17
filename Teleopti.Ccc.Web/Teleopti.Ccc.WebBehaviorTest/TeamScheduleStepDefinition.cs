@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
+			Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
