@@ -11478,4 +11478,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="ToShiftStartsAtColon" xml:space="preserve">
     <value>Shift Starts At:</value>
   </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Previous saved overtime availability:</value>
+  </data>
 </root>

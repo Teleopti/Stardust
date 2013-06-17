@@ -17144,6 +17144,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous saved overtime availability:.
+        /// </summary>
+        public static string PreviousSavedOvertimeAvailabilityColon {
+            get {
+                return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
