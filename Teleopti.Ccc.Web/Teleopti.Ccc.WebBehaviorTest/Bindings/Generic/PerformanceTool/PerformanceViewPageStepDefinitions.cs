@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 						{
 							UserFactory.User().Person.Id.Value.ToString()
 						},
-					AbsenceId =UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString(),
+					AbsenceId = UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString(),
 					DateRange = new
 						{
 							From = DateTime.Now.Date.ToShortDateString(),

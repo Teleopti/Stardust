@@ -17,10 +17,31 @@ define([
         this.Scenarios = [new AddRemoveFullDayAbsenceScenarioViewModel()];
         this.Scenario = ko.observable();
         this.Configuration = ko.observable();
+        this.ConfigurationLoading = ko.observable(false);
+
+        var currentTime = ko.observable();
+        var runResult = ko.observable();
+
+        this.Running = ko.computed(function () {
+            var values = runResult();
+            if (!values)
+                return false;
+            return !values.RunDone();
+        });
+
+        this.EnableForm = ko.computed(function () {
+            if (self.Running())
+                return false;
+            if (self.ConfigurationLoading())
+                return false;
+            return true;
+        });
         
         this.Scenario.subscribe(function () {
+            self.ConfigurationLoading(true);
             self.Scenario().LoadDefaultConfiguration(function (data) {
                 self.Configuration(JSON.stringify(data, null, 4));
+                self.ConfigurationLoading(false);
             });
         });
 
@@ -47,20 +68,10 @@ define([
         this.ConfigurationError = ko.observable();
 
 
-        var currentTime = ko.observable();
-        var runResult = ko.observable();
-
-        this.IsRunning = ko.computed(function () {
-            var values = runResult();
-            if (!values)
-                return false;
-            return !values.RunDone();
-        });
-
         this.RunButtonEnabled = ko.computed(function () {
             if (self.ConfigurationError())
                 return false;
-            return !self.IsRunning();
+            return self.EnableForm();
         });
         
         this.RunButtonText = ko.computed(function () {
@@ -70,7 +81,7 @@ define([
             var scenario = self.Scenario();
             if (scenario && scenario.IterationsExpected())
                 return "Run " + scenario.IterationsExpected() + " scenarios";
-            return "Select scenario";
+            return "Dont click me yet please";
         });
         
         this.Run = function () {
