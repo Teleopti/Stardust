@@ -73,6 +73,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
 			if (!grid.CellModels.ContainsKey("DatePickerCell")) grid.CellModels.Add("DatePickerCell", cellModel);
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell)) 
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
 		}
 
 		public override void Sort(bool isAscending)
