@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			_mock = new MockRepository();
 			_view = _mock.StrictMock<IAgentOvertimeAvailabilityView>();
-			_person = new Person();
+			_person = PersonFactory.CreatePerson("bill");
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_dateOnly = new DateOnly(2013, 1, 1);
 			_overtimeAvailabilityDay = new OvertimeAvailability(_person, _dateOnly, TimeSpan.FromHours(8), TimeSpan.FromHours(18));
@@ -72,14 +73,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldAddOvertimeAvailabilityDay()
 		{
+			addPeriodAndContractToPerson();
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.Period()).Return(null);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(() => _addCommand.Execute());
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime)).IgnoreArguments();
 			}
 
 			using (_mock.Playback())
@@ -93,15 +95,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldAddOvertimeAvailabilityDayForExistingShift()
 		{
+			addPeriodAndContractToPerson();
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(() => _addCommand.Execute());
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime)).IgnoreArguments();
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod());
-				Expect.Call(() => _view.ShowPreviousSavedOvertimeAvailability(string.Empty)).IgnoreArguments();
 			}
 
 			using (_mock.Playback())
@@ -117,8 +119,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				Expect.Call(() => _removeCommand.Execute());
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(() => _view.Update(null, null));
 			}
 
 			using (_mock.Playback())
@@ -133,8 +133,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				Expect.Call(() => _editCommand.Execute());
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
-				Expect.Call(() => _view.Update(_overtimeAvailabilityDay.StartTime, _overtimeAvailabilityDay.EndTime)).IgnoreArguments();
 			}
 
 			using (_mock.Playback())
@@ -247,6 +245,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 				Assert.AreEqual(AgentOvertimeAvailabilityExecuteCommand.None, toExecute);
 			}	
+		}
+
+		private void addPeriodAndContractToPerson()
+		{
+			var schedWeek = new ContractScheduleWeek();
+			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
+			_person.AddPersonPeriod(period);
+			period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
+			schedWeek.Add(DayOfWeek.Monday, true);
+			schedWeek.Add(DayOfWeek.Tuesday, true);
+			schedWeek.Add(DayOfWeek.Wednesday, true);
+			schedWeek.Add(DayOfWeek.Thursday, true);
+			schedWeek.Add(DayOfWeek.Friday, true);
+			schedWeek.Add(DayOfWeek.Saturday, true);
+			schedWeek.Add(DayOfWeek.Sunday, true);
 		}
 	}
 }

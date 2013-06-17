@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IAgentOvertimeAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
 		private TimePeriod? _existingShiftTimePeriod;
+		private TimeSpan _startTime = new TimeSpan(8, 0, 0);
+		private TimeSpan _endTime = new TimeSpan(17, 0, 0);
 
 		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, IScheduleDay scheduleDay)
 		{
@@ -42,6 +44,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var shiftTimePeriod = _scheduleDay.ProjectionService().CreateProjection().Period();
 			if (shiftTimePeriod != null)
 				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+
+			var scheduleDate = _scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var person = _scheduleDay.Person;
+			var personPeriod = person.Period(scheduleDate);
+			var periodStartDate = person.SchedulePeriodStartDate(scheduleDate);
+			long workLengthTicks = 0;
+			if (personPeriod != null && periodStartDate.HasValue)
+			{
+				if (personPeriod.PersonContract.Contract.WorkTimeSource == WorkTimeSource.FromContract)
+					workLengthTicks = (long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
+				else
+					workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
+			}
+			_endTime = _startTime.Add(TimeSpan.FromTicks(workLengthTicks));
 		}
 
 		public IAgentOvertimeAvailabilityView View
@@ -59,7 +75,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if(addCommand == null) throw new ArgumentNullException("addCommand");
 
 			addCommand.Execute();
-			UpdateView();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
@@ -68,7 +83,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if(removeCommand == null) throw new ArgumentNullException("removeCommand");
 
 			removeCommand.Execute();
-			UpdateView();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
@@ -77,7 +91,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if(editCommand == null) throw new ArgumentNullException("editCommand");
 
 			editCommand.Execute();
-			UpdateView();
 		}
 
 		private static string timeOfDayFromTimeSpan(TimeSpan? timeSpan)
@@ -99,20 +112,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void UpdateView()
 		{
-			TimeSpan? startTime = null;
-			TimeSpan? endTime = null;
 			if (_existingShiftTimePeriod != null)
 			{
 				var overtimeAvailabilities = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().ToList();
 				if (overtimeAvailabilities.Count == 2)
 				{
-					startTime = overtimeAvailabilities[0].StartTime;
-					endTime = overtimeAvailabilities[1].EndTime;
+					_startTime = overtimeAvailabilities[0].StartTime.GetValueOrDefault();
+					_endTime = overtimeAvailabilities[1].EndTime.GetValueOrDefault();
 				}
 				else
 				{
-					startTime = _existingShiftTimePeriod.Value.StartTime;
-					endTime = _existingShiftTimePeriod.Value.EndTime;
+					_startTime = _existingShiftTimePeriod.Value.StartTime;
+					_endTime = _existingShiftTimePeriod.Value.EndTime;
 
 					if (overtimeAvailabilities.Count == 1)
 					{
@@ -128,12 +139,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
 				if (overtimeAvailability != null)
 				{
-					startTime = overtimeAvailability.StartTime;
-					endTime = overtimeAvailability.EndTime;
+					_startTime = overtimeAvailability.StartTime.GetValueOrDefault();
+					_endTime = overtimeAvailability.EndTime.GetValueOrDefault();
 				}
 			}
 
-			_view.Update(startTime, endTime);
+			_view.Update(_startTime, _endTime);
 		}
 
 
