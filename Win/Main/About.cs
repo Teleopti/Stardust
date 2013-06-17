@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Main
             labelActiveAgentsInUse.Text = getNumberOfActiveAgents();
             textBoxAbout.Text = getLicenseText();
 			var authorization = PrincipalAuthorization.Instance();
-			buttonAdvViewActive.Enabled =
+			buttonAdvViewActive.Visible =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewActiveAgents);
         }
 
