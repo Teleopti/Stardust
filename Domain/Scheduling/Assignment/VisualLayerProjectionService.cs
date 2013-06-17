@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void Add(ILayer<IPayload> layer)
+        public void Add(IVisualLayer layer)
         {
             _layerCollectionOriginal.Add(layer);
         }
