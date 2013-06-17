@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideTodayButton();
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
-				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
 		}
 
 		public override void Sort(bool isAscending)
