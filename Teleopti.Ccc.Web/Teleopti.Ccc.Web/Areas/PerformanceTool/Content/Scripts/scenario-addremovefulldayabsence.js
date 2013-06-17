@@ -129,10 +129,12 @@ define([
 
             var iterationForNotification = function (notification) {
                 var startDate = helpers.Date.ToMoment(notification.StartDate);
+                startDate.startOf('day');
                 var endDate = helpers.Date.ToMoment(notification.EndDate);
+                endDate.startOf('day');
                 var personId = notification.DomainReferenceId;
                 
-                if (startDate.diff(endDate, 'days') != 0)
+                if (startDate.diff(endDate) != 0)
                     return null;
 
                 var matchedIterations = $.grep(iterations, function (iteration) {
