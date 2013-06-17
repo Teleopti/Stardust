@@ -5,7 +5,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	public class WatiNParallelBrowserIEActivator : IBrowserActivator<IE>
+	public class WatiNParallelBrowserIEActivator : IBrowserActivator
 	{
 		private const string ProcessName = "iexplore";
 
@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Internal.ClearCache();
 			Internal.ClearCookies();
 			Internal.BringToFront();
+		}
+
+		public bool IsRunning()
+		{
+			return Internal != null;
 		}
 
 		public void Close()
