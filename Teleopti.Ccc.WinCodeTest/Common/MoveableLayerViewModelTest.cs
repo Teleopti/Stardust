@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				(from l in shift.LayerCollection
 				 orderby l.OrderIndex
 				 select l).First();
-			MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, null, null, _eventAggregator);
+			MainShiftLayerViewModel model = new MainShiftLayerViewModel(observer, null, null, _eventAggregator, null);
 			#endregion
 
 			#region expectations
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				orderby l.OrderIndex
 				select l;
 
-			MainShiftLayerViewModel highest = new MainShiftLayerViewModel(null, null, null, _eventAggregator);
-			MainShiftLayerViewModel lowest = new MainShiftLayerViewModel(null, null, null, _eventAggregator);
+			MainShiftLayerViewModel highest = new MainShiftLayerViewModel(null, null, null, _eventAggregator, null);
+			MainShiftLayerViewModel lowest = new MainShiftLayerViewModel(null, null, null, _eventAggregator, null);
 			#endregion
 
 			Assert.IsTrue(_models.CanExecute(highest.MoveDownCommand), "Can move down because there are other layers below");
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void VerifyCannotMoveUpOrDownIfNoShift()
 		{
 			//fix later
-			MainShiftLayerViewModel modelWithoutParent = new MainShiftLayerViewModel(null, new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("test"), _period),null,null);
+			MainShiftLayerViewModel modelWithoutParent = new MainShiftLayerViewModel(null, new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("test"), _period), null, null, null);
 			TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
 			Assert.IsFalse(testerForCommandModels.CanExecute(modelWithoutParent.MoveUpCommand));
 			Assert.IsFalse(testerForCommandModels.CanExecute(modelWithoutParent.MoveDownCommand));

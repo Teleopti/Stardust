@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (mocks.Playback())
             {
-                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null);
-                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null);
+                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null, null);
+                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null, null);
                 model1.CanMoveAll = true;
                 model2.CanMoveAll = true;
                 target.Add(model1);
@@ -271,8 +271,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
-            ILayerViewModel model1 = new MainShiftLayerViewModel(null,null,null,null) { Interval = TimeSpan.FromMinutes(12) };
-            ILayerViewModel model2 = new MainShiftLayerViewModel(null, null, null,null) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(null,null,null,null, null) { Interval = TimeSpan.FromMinutes(12) };
+            ILayerViewModel model2 = new MainShiftLayerViewModel(null, null, null,null, null) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
@@ -354,8 +354,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.First(), assignment, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.Last(), assignment, null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.First(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.Last(), assignment, null, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);

@@ -12,17 +12,19 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 	    private readonly IMainShiftActivityLayerNew _layer;
 	    private readonly IPersonAssignment _parent;
+	    private readonly IMoveLayerVertical _moveLayer;
 
 	    public MainShiftLayerViewModel(IVisualLayer layer)
             : base(null, layer, null, true)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment parent, IEventAggregator eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
             : base(observer,layer, eventAggregator, false)
         {
 	        _layer = layer;
 	        _parent = parent;
+	        _moveLayer = moveLayer;
         }
 
 
@@ -47,12 +49,12 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-		    get { return _layer.OrderIndex > 0; }
+				get { return _moveLayer!=null && _layer.OrderIndex > 0; }
 	    }
 
 	    public override bool CanMoveDown
 	    {
-				get { return !_parent.MainShiftActivityLayers.Last().Equals(_layer); }
+				get { return _moveLayer!=null && !_parent.MainShiftActivityLayers.Last().Equals(_layer); }
 	    }
 
 	    protected override void DeleteLayer()
@@ -68,5 +70,34 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
 		}
+
+		public override void MoveDown()
+		{
+			if (CanMoveDown)
+			{
+				_moveLayer.MoveDown(_parent, _layer);
+				LayerMoved();
+			}
+
+		}
+
+		public override void MoveUp()
+		{
+			if (CanMoveUp)
+			{
+				_moveLayer.MoveUp(_parent, _layer);
+				LayerMoved();
+			}
+		}
+
+		private void LayerMoved()
+		{
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.LayerMovedVertically(this);
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+			}
+		}
+
     }
 }

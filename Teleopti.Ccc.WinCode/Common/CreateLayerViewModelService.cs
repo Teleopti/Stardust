@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 	            foreach (var layer in assignment.MainShiftActivityLayers)
 	            {
-		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator));
+		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, new MoveLayerVertical()));
 	            }
 
                 foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)

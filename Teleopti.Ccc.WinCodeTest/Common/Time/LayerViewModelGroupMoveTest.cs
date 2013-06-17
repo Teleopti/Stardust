@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             _actLayer = new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("test"), _period);
 
-            _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null);
+            _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null, null);
             _absenceLayerViewModel = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period),null);
 	        _overtimeLayerViewModel = new OvertimeLayerViewModel(null,
 	                                                             new OvertimeShiftActivityLayer(
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyMainShiftLayerViewModelGroupMove()
         {
-            MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null,null);
+					MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null, null);
 
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move when an absecnelayerviewmodel is moved");
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "Should not move when its the SAME layer");
