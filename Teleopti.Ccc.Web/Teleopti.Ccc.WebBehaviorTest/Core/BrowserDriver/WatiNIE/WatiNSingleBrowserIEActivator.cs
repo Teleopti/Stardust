@@ -3,7 +3,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	public class WatiNSingleBrowserIEActivator : IBrowserActivator<IE>
+	public class WatiNSingleBrowserIEActivator : IBrowserActivator
 	{
 		private const string ProcessName = "iexplore";
 
@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
 			StartBrowser();
+		}
+
+		public bool IsRunning()
+		{
+			return Internal != null;
 		}
 
 		private void StartBrowser()

@@ -6,7 +6,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	public class WatiNSingleBrowserFireFoxActivator : IBrowserActivator<FireFox>
+	public class WatiNSingleBrowserFireFoxActivator : IBrowserActivator
 	{
 		private const string ProcessName = "firefox";
 
@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.HighLightElement = true;
 			Internal = new FireFox();
 			Internal.BringToFront();
+		}
+
+		public bool IsRunning()
+		{
+			return Internal != null;
 		}
 
 		public void Close()

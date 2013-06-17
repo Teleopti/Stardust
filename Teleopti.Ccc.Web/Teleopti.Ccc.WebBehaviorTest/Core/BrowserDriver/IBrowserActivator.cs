@@ -1,9 +1,9 @@
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
-	public interface IBrowserActivator<T>
+	public interface IBrowserActivator
 	{
-		T Internal { get; }
 		void Start();
+		bool IsRunning();
 		void Close();
 		void NotifyBeforeTestRun();
 		void NotifyBeforeScenario();
