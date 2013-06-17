@@ -271,8 +271,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
-            ILayerViewModel model1 = new MainShiftLayerViewModel(null,null,null,null, null) { Interval = TimeSpan.FromMinutes(12) };
-            ILayerViewModel model2 = new MainShiftLayerViewModel(null, null, null,null, null) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"),new DateTimePeriod(), new Activity("sdf"), null  )) { Interval = TimeSpan.FromMinutes(12) };
+						ILayerViewModel model2 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"), new DateTimePeriod(), new Activity("sdf"), null)) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
