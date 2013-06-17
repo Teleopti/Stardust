@@ -89,6 +89,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			//writer(tryOperation(() => Browser.Current.Text));
 		}
 
+		public void DumpUrl(Action<string> writer)
+		{
+			writer(succeedOrIgnore(() => Browser.Current.Url));
+		}
+
 		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
 		{
 			_browser.RunScript("document.driverScriptResult = String( function(){" + javascript + "}() );");
