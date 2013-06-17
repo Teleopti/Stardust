@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
@@ -281,16 +282,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasProjection)
 			{
 				var validPeriods = new List<DateTimePeriod>();
-#pragma warning disable 612,618
-				var mainShiftTemp = ToMainShift();
-				if (mainShiftTemp != null)
+				proj.Add(MainShiftActivityLayers, new VisualLayerFactory());
+				var mainshiftLayerPeriod = MainShiftActivityLayers.Period();
+				if (mainshiftLayerPeriod.HasValue)
 				{
-					proj.Add(MainShiftActivityLayers, new VisualLayerFactory());
-					var mainShiftPeriod = mainShiftTemp.LayerCollection.Period();
-					if (mainShiftPeriod.HasValue)
-						validPeriods.Add(mainShiftPeriod.Value);
+					validPeriods.Add(mainshiftLayerPeriod.Value);				
 				}
-#pragma warning restore 612,618
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();
