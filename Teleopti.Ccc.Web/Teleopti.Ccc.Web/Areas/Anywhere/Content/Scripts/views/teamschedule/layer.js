@@ -15,7 +15,11 @@ define([
 			this.Color = data.Color;
 
 			this.StartMinutes = function () {
-				return self.InternalStartMinutes < 0 ? 0 : self.InternalStartMinutes;
+				if (self.InternalStartMinutes < 0) {
+					self.LengthMinutes = data.Minutes + self.InternalStartMinutes;
+					return 0;
+				}
+				return self.InternalStartMinutes;
 			};
 
 			this.EndMinutes = ko.computed(function () {
