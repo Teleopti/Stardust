@@ -69,6 +69,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_presenter.UpdateView();
 			}
 		}
+	
+		[Test]
+		public void ShouldShowPreviouslySavedOvertimeAvailabilityForExistingShift()
+		{
+			var overtimeAvailabilityDay = new OvertimeAvailability(_person, _dateOnly, TimeSpan.FromHours(8), TimeSpan.FromHours(20));
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod());
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { overtimeAvailabilityDay }));
+				Expect.Call(()=>_view.ShowPreviousSavedOvertimeAvailability(string.Empty)).IgnoreArguments();
+				Expect.Call(() => _view.Update(TimeSpan.FromHours(8), TimeSpan.FromHours(20))).IgnoreArguments();
+			}
+
+			using (_mock.Playback())
+			{
+				_presenter.Initialize();
+				_presenter.UpdateView();
+			}
+		}
 
 		[Test]
 		public void ShouldAddOvertimeAvailabilityDay()
@@ -90,7 +113,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_presenter.Add(_addCommand);	
 			}
 		}
+	
+		[Test]
+		public void ShouldAddOvertimeAvailabilityDayWorkTimeFromSchedulePeriod()
+		{
+			addPeriodAndContractToPersonWorkTimeFromSchedulePeriod();
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(null);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(() => _addCommand.Execute());
+			}
 
+			using (_mock.Playback())
+			{
+				_presenter.Initialize();
+				_presenter.Add(_addCommand);	
+			}
+		}
 
 		[Test]
 		public void ShouldAddOvertimeAvailabilityDayForExistingShift()
@@ -253,6 +296,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
 			_person.AddPersonPeriod(period);
 			period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
+			schedWeek.Add(DayOfWeek.Monday, true);
+			schedWeek.Add(DayOfWeek.Tuesday, true);
+			schedWeek.Add(DayOfWeek.Wednesday, true);
+			schedWeek.Add(DayOfWeek.Thursday, true);
+			schedWeek.Add(DayOfWeek.Friday, true);
+			schedWeek.Add(DayOfWeek.Saturday, true);
+			schedWeek.Add(DayOfWeek.Sunday, true);
+		}
+	
+		private void addPeriodAndContractToPersonWorkTimeFromSchedulePeriod()
+		{
+			var schedWeek = new ContractScheduleWeek();
+			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
+			_person.AddPersonPeriod(period);
+			period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
+			period.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
 			schedWeek.Add(DayOfWeek.Monday, true);
 			schedWeek.Add(DayOfWeek.Tuesday, true);
 			schedWeek.Add(DayOfWeek.Wednesday, true);
