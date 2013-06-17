@@ -6,9 +6,9 @@ using Coypu.Drivers.Selenium;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 {
-	public class CoypuIEBrowserActivator : IBrowserActivator<BrowserSession>
+	public class CoypuIEBrowserActivator : IBrowserActivator
 	{
-		public BrowserSession Internal { get; private set; }
+		private BrowserSession _browser;
 
 		public void Start()
 		{
@@ -20,16 +20,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 					Driver = typeof(SeleniumWebDriver),
 					Browser = Coypu.Drivers.Browser.InternetExplorer
 				};
-			Internal = new BrowserSession(sessionConfiguration);
+			_browser = new BrowserSession(sessionConfiguration);
+		}
+
+		public bool IsRunning()
+		{
+			return _browser != null;
 		}
 
 		public void Close()
 		{
-			if (Internal != null)
-			{
-				Internal.Dispose();
-				Internal = null;
-			}
+			if (_browser == null) return;
+			_browser.Dispose();
+			_browser = null;
 		}
 
 		public void NotifyBeforeTestRun()
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 
 		public IBrowserInteractions GetInteractions()
 		{
-			return new CoypuBrowserInteractions(Internal);
+			return new CoypuBrowserInteractions(_browser);
 		}
 	}
 }
