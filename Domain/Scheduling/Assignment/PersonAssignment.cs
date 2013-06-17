@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 		}
 
-		public bool RemoveLayer(IMainShiftActivityLayerNew layer)
+		public virtual bool RemoveLayer(IMainShiftActivityLayerNew layer)
 		{
 			return _mainShiftActivityLayers.Remove(layer);
 		}
