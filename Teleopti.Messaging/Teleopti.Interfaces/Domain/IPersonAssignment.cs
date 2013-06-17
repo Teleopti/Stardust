@@ -115,5 +115,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
 		void ScheduleChanged(string dataSource);
+
+	    bool RemoveLayer(IMainShiftActivityLayerNew layer);
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -212,6 +211,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					EndDateTime = Period.EndDateTime,
 					PersonId = Person.Id.Value,
 				});
+		}
+
+		public bool RemoveLayer(IMainShiftActivityLayerNew layer)
+		{
+			return _mainShiftActivityLayers.Remove(layer);
 		}
 
 		#region Manipulate personalshifts
