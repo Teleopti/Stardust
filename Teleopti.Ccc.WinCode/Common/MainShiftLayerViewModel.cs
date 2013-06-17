@@ -8,22 +8,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-    public class MainShiftLayerViewModel : LayerViewModel
+    public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
 	    private readonly IMainShiftActivityLayerNew _layer;
-	    private readonly IPersonAssignment _parent;
+	    private readonly IPersonAssignment _assignment;
 	    private readonly IMoveLayerVertical _moveLayer;
 
 	    public MainShiftLayerViewModel(IVisualLayer layer)
-            : base(null, layer, null, true)
+            : base(layer)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
-            : base(observer,layer, eventAggregator, false)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
+				: base(observer, layer, assignment, eventAggregator, moveLayer)
         {
 	        _layer = layer;
-	        _parent = parent;
+	        _assignment = assignment;
 	        _moveLayer = moveLayer;
         }
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveDown
 	    {
-				get { return _moveLayer!=null && !_parent.MainShiftActivityLayers.Last().Equals(_layer); }
+				get { return _moveLayer!=null && !_assignment.MainShiftActivityLayers.Last().Equals(_layer); }
 	    }
 
 	    protected override void DeleteLayer()
@@ -69,34 +69,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		protected override void Replace()
 		{
 			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
-		}
-
-		public override void MoveDown()
-		{
-			if (CanMoveDown)
-			{
-				_moveLayer.MoveDown(_parent, _layer);
-				LayerMoved();
-			}
-
-		}
-
-		public override void MoveUp()
-		{
-			if (CanMoveUp)
-			{
-				_moveLayer.MoveUp(_parent, _layer);
-				LayerMoved();
-			}
-		}
-
-		private void LayerMoved()
-		{
-			if (ParentObservingCollection != null)
-			{
-				ParentObservingCollection.LayerMovedVertically(this);
-				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-			}
 		}
 
     }

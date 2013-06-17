@@ -94,8 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			{
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
-				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, null);
-				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, null);
+				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, new MoveLayerVertical());
+				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, new MoveLayerVertical());
 
 				first.CanMoveUp.Should().Be.False();
 				last.CanMoveUp.Should().Be.True();
@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			{
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
-				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, null);
-				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, null);
+				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, new MoveLayerVertical());
+				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, new MoveLayerVertical());
 
 				first.CanMoveDown.Should().Be.True();
 				last.CanMoveDown.Should().Be.False();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				observer.AssertWasCalled(x => x.LayerMovedVertically(target));
 			}
 
-			private IEventAggregator stubbedEventAggregator()
+			private static IEventAggregator stubbedEventAggregator()
 			{
 				var eventAgg = MockRepository.GenerateMock<IEventAggregator>();
 				eventAgg.Expect(x => x.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>()).Return(MockRepository.GenerateMock<GenericEvent<TriggerShiftEditorUpdate>>());

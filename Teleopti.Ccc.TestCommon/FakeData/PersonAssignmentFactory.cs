@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -338,6 +340,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			    new ShiftCategory("test"));
 		    return ret;
 	    }
+
+			public static IPersonAssignment CreateAssignmentWithThreeOvertimeLayers()
+			{
+				var p = new Person();
+				var contract = new Contract("sdf");
+				var multi = new MultiplicatorDefinitionSet("sdfsdf", MultiplicatorType.Overtime);
+				contract.AddMultiplicatorDefinitionSetCollection(multi);
+				p.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
+				                                   new PersonContract(contract, new PartTimePercentage("d"),
+				                                                      new ContractSchedule("d")), new Team()));
+				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+				var ret = new PersonAssignment(p, new Scenario("d"), new DateOnly(2000, 1, 1));
+				var act = new Activity("overtime");
+				var overtimeShift = new OvertimeShift();
+				ret.AddOvertimeShift(overtimeShift);
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi));
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi));
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi));
+				return ret;
+			}
     }
 
     /// <summary>

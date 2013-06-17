@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
 	                                                             new OvertimeShiftActivityLayer(
 		                                                             ActivityFactory.CreateActivity("d"), _period,
 		                                                             new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)),
-	                                                             null);
+	                                                             null,
+																															 null,
+																															 null);
         }
 
         [Test]
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyOvertimeLayerViewModelGroupMove()
         {
-            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(null, new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2), new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)), null);
+            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(null, new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2), new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)), null, null,null);
 
             Assert.IsFalse(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel), "not moved when absencelayerviewmodel layer is moved");
             Assert.IsTrue(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(anotherOvertimeLayerViewModel), "should be moved when another overtime layer is moved");

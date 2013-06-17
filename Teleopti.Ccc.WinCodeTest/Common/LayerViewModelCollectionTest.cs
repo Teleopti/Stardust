@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.First(), assignment, null, null);
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainShiftActivityLayers.Last(), assignment, null, null);
-			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null, null, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
