@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.Win.Main
 
             SetTexts();
             setColors();
-            labelActiveAgentsInUse.Text = getNumberOfActiveAgents();
-            textBoxAbout.Text = getLicenseText();
 			var authorization = PrincipalAuthorization.Instance();
 			buttonAdvViewActive.Visible =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewActiveAgents);
+            labelActiveAgentsInUse.Text = getNumberOfActiveAgents();
+            textBoxAbout.Text = getLicenseText();
         }
 
         private static string getNumberOfActiveAgents()
