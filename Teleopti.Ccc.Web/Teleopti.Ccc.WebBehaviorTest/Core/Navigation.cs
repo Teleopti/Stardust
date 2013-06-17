@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 			interceptors.ToList().ForEach(i => i.Before(args));
 
-			Log.Info("Am at: " + Browser.Current.Url);
+			Browser.Interactions.DumpUrl(s => Log.Info("Am at: " + s));
 			Log.Info("Browsing to: " + args.Uri);
 
 			gotoAction.Invoke(args.Uri.ToString());
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(args));
 
-			Log.Info("Ended up in: " + Browser.Current.Url);
+			Browser.Interactions.DumpUrl(s => Log.Info("Ended up in: " + s));
 		}
 
 		public static void GotoAsm()
