@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					command.Result = new CommandResultDto();
 					return;
 				}
+				checkIfAuthorized(person);
 				var period = person.SchedulePeriod(new DateOnly(command.Date.DateTime));
 				if (period == null)
 				{
@@ -38,6 +42,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				period.PeriodTime = TimeSpan.FromMinutes(command.PeriodTimeInMinutes);
 				var result = uow.PersistAll();
 				command.Result = new CommandResultDto { AffectedItems = result.Count(), AffectedId = period.Id };
+			}
+		}
+
+		private static void checkIfAuthorized(IPerson person)
+		{
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, person))
+			{
+				throw new FaultException("You're not allowed to modify person details.");
 			}
 		}
 	}
