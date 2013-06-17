@@ -2,7 +2,7 @@ using System;
 using Coypu;
 using NUnit.Framework;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{

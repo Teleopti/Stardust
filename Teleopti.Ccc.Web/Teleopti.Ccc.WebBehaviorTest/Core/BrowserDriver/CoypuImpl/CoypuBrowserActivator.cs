@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Coypu;
+﻿using Coypu;
 using Coypu.Drivers.Selenium;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
 	public class CoypuBrowserActivator : IBrowserActivator
 	{
