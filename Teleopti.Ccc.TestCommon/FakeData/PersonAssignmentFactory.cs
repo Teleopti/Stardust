@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
-            ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+	        ass.SetMainShiftLayers(new [] {new MainShiftActivityLayerNew(activity, period)}, category);
             return ass;
         }
 
