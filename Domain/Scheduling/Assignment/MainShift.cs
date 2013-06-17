@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(null);
-			proj.Add(this);
+			proj.Add(LayerCollection, new VisualLayerFactory());
 			return proj;
 		}
 
@@ -72,11 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				retObj._layerCollection.Add(newLayer);
 			}
 			return retObj;
-		}
-
-		public virtual IVisualLayerFactory CreateVisualLayerFactory()
-		{
-			return new VisualLayerFactory();
 		}
 		public virtual IShiftCategory ShiftCategory
 		{

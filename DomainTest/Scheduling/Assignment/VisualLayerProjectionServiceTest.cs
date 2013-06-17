@@ -26,14 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CannotAddIfNull()
-		{
-			var proj = new VisualLayerProjectionService(person);
-			proj.Add((MainShift)null);
-		}
-
-		[Test]
 		public void VerifyCombineReturnTwoWhenNotIntersecting()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");

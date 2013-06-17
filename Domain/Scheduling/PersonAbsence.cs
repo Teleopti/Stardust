@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
@@ -302,10 +298,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         #endregion
 
-        public virtual IVisualLayerFactory CreateVisualLayerFactory()
-        {
-            return new VisualLayerFactory(); //maybe another object not allowing setuplayers?
-        }
 
         public virtual IAggregateRoot MainRoot
         {

@@ -586,7 +586,6 @@
     <Compile Include="Domain\IUndoRedoContainer.cs" />
     <Compile Include="Domain\IVersioned.cs" />
     <Compile Include="Domain\IAggregateSkill.cs" />
-    <Compile Include="Domain\IVisualLayerFactoryFactory.cs" />
     <Compile Include="Domain\IVisualLayerFactory.cs" />
     <Compile Include="Domain\IWorkloadDay.cs" />
     <Compile Include="Domain\IWorkloadDayBase.cs" />

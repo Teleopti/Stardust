@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var mainShiftTemp = ToMainShift();
 				if (mainShiftTemp != null)
 				{
-					proj.Add(mainShiftTemp);
+					proj.Add(MainShiftActivityLayers, new VisualLayerFactory());
 					var mainShiftPeriod = mainShiftTemp.LayerCollection.Period();
 					if (mainShiftPeriod.HasValue)
 						validPeriods.Add(mainShiftPeriod.Value);
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();
-					proj.Add(overtimeShift);
+					proj.Add(overtimeShift.LayerCollection, new VisualLayerOvertimeFactory());
 					if (overTimePeriod.HasValue)
 						validPeriods.Add(overTimePeriod.Value);
 				}
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.AdjacentTo(persShiftPeriod.Value)))
 						{
-							proj.Add(personalShift);
+							proj.Add(personalShift.LayerCollection, new VisualLayerFactory());
 						}
 					}
 				}
