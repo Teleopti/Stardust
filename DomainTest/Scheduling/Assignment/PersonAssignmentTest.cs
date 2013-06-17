@@ -202,19 +202,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddPersonalShift(null);
 		}
 
-		/// <summary>
-		/// BaseShift can be set on an assignement.
-		/// </summary>
-		[Test]
-		public void CanSetBaseShift()
-		{
-			var category = new ShiftCategory("Morning");
-			MainShift baseShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, category);
-			target.SetMainShift(baseShift);
-			Assert.AreEqual(target.MainShiftActivityLayers.Count(), baseShift.LayerCollection.Count);
-			Assert.AreSame(target.ShiftCategory, baseShift.ShiftCategory);
-		}
-
 
 		/// <summary>
 		/// Verifies default constructor is not public.
@@ -236,16 +223,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNotNull(target);
 		}
 
-		/// <summary>
-		/// Verifies the set main shift does not accept null.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void VerifySetMainShiftDoesNotAcceptNull()
-		{
-			target = new testAssignment();
-			target.SetMainShift(null);
-		}
 
 		/// <summary>
 		/// Verifies the period property.
