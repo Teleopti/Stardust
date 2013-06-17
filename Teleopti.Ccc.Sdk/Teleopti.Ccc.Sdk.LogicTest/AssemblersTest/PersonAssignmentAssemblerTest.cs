@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private IContract contract;
         private DateTimePeriodAssembler dateTimePeriodAssembler;
         private ActivityAssembler activityAssembler;
-        private IActivityLayerAssembler<IMainShiftActivityLayer> mainShiftLayerAssembler;
+        private IActivityLayerAssembler<IMainShiftActivityLayerNew> mainShiftLayerAssembler;
         private IActivityLayerAssembler<IPersonalShiftActivityLayer> personalShiftLayerAssembler;
         private IOvertimeLayerAssembler overtimeShiftLayerAssembler;
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             activityAssembler = new ActivityAssembler(actRep);
             dateTimePeriodAssembler = new DateTimePeriodAssembler();
             mainShiftLayerAssembler =
-                new ActivityLayerAssembler<IMainShiftActivityLayer>(new MainShiftLayerConstructor(),
+                new ActivityLayerAssembler<IMainShiftActivityLayerNew>(new MainShiftLayerConstructor(),
                                                                     dateTimePeriodAssembler,activityAssembler);
             personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftActivityLayer>(new PersonalShiftLayerConstructor(),
                                                                                                   dateTimePeriodAssembler, activityAssembler);
