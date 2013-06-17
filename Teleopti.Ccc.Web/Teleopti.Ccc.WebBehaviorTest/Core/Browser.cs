@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	public static class Browser
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
-		private static readonly IBrowserActivator BrowserActivator = new CoypuIEBrowserActivator();
+		private static readonly IBrowserActivator BrowserActivator = new CoypuBrowserActivator();
 
 		public static IE Current
 		{

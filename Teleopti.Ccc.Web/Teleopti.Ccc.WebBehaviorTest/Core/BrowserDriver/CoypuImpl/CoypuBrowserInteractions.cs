@@ -30,28 +30,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 
 		public void Click(string selector)
 		{
-			_browser.FindCss(selector).Click();
+			var sele = System.Web.HttpUtility.JavaScriptStringEncode(selector);
+			_browser.ExecuteScript(string.Format("$(\"{0}\").click()", sele));
+			//_browser.FindCss(selector).Click();
 		}
 
 		public void AssertExists(string selector)
 		{
-			_browser.HasCss(selector);
-}
+			Assert.That(_browser.HasCss(selector));
+		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
-			_browser.HasNoCss(existsSelector);
-			_browser.HasNoCss(notExistsSelector);
+			Assert.That(_browser.HasCss(existsSelector));
+			Assert.That(_browser.HasNoCss(notExistsSelector));
 		}
 
 		public void AssertContains(string selector, string text)
 		{
-			_browser.FindCss(selector).HasContent(text);
+			Assert.That(_browser.FindCss(selector).HasContent(text));
 		}
 
 		public void AssertNotContains(string selector, string text)
 		{
-			_browser.FindCss(selector).HasNoContent(text);
+			Assert.That(_browser.FindCss(selector).HasNoContent(text));
 		}
 
 		public void AssertUrlContains(string url)
@@ -78,6 +80,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 			writer(_browser.Location.ToString());
 			writer(" Html: ");
 			writer(_browser.FindCss("body").Text);
+		}
+
+		public void DumpUrl(Action<string> writer)
+		{
+			writer(_browser.Location.ToString());
 		}
 	}
 }

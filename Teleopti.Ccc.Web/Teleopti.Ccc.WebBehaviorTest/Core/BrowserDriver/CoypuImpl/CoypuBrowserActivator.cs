@@ -6,7 +6,7 @@ using Coypu.Drivers.Selenium;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 {
-	public class CoypuIEBrowserActivator : IBrowserActivator
+	public class CoypuBrowserActivator : IBrowserActivator
 	{
 		private BrowserSession _browser;
 
@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuIE
 					Port = 80,
 					SSL = false,
 					Driver = typeof(SeleniumWebDriver),
-					Browser = Coypu.Drivers.Browser.InternetExplorer
+					//Browser = Coypu.Drivers.Browser.InternetExplorer,
+					Browser = Coypu.Drivers.Browser.Firefox,
 				};
 			_browser = new BrowserSession(sessionConfiguration);
 		}

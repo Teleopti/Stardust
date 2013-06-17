@@ -130,9 +130,9 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuIE\CoypuBrowserInteractions.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuIE\CoypuExceptionCatcher.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuIE\CoypuIEBrowserActivator.cs" />
+    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuExceptionCatcher.cs" />
+    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
