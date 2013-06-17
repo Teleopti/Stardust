@@ -2,6 +2,7 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -172,6 +173,24 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			_target.ShowNextActivity = false;
 			Assert.IsFalse(_target.ShowNextActivity);
-		}	
+		}
+
+		[Test]
+		public void IsInEditMode_SameValue()
+		{
+			_target.IsInEditMode = true;
+			_target.IsInEditMode = true;
+			_target.IsInEditMode.Should().Be.True();
+		}
+
+		[Test]
+		public void CancelEditMode_VerifyTransactionCopy()
+		{
+			_target.NextActivityDescription = "OldValue";
+			_target.BeginEdit();
+			_target.NextActivityDescription = "NewValue";
+			_target.CancelEdit();
+			_target.NextActivityDescription.Should().Be.EqualTo("OldValue");
+		}
 	}
 }
