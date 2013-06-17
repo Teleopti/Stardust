@@ -20,7 +20,7 @@ define(function () {
 	            return name;
 	        
 		    // adds timestamp to avoid client cache. bleh, but without it test runs may fail..
-	        return 'Application/Resources?_=' + timestamp;
+	        return 'Anywhere/Application/Resources?_=' + timestamp;
 		}
 
 	};
