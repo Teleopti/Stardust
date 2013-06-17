@@ -571,6 +571,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             return true;
         }
 
+        public bool ValidateBlockOption()
+        {
+            if (checkBoxTeamBlockPerBlockScheduling.Checked)
+            {
+                if (!(checkBoxTeamBlockSameShiftCategory .Checked || checkBoxTeamBlockSameStartTime .Checked || checkBoxLevellingSameShift .Checked ))
+                    return false;
+            }
+            return true;
+        }
+
         public void HideTeamAndBlockSchedulingOptions()
         {
             var row = tableLayoutPanel2.GetRow(pnlBlockTeamScheduling);

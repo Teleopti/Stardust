@@ -11410,7 +11410,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Single Agent Team</value>
   </data>
   <data name="SameShift" xml:space="preserve">
-    <value>Same Shift</value>
+    <value>Same shift</value>
     <comment>Use the same shift for levelling options</comment>
   </data>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
@@ -11463,5 +11463,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="TeamBlockNotInLegalState" xml:space="preserve">
     <value>The team block period is not in legal state.</value>
     <comment>When the period is not in legal state (you can see that in agent info)</comment>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "Same Shift" in  Block scheduling.</value>
   </data>
 </root>
