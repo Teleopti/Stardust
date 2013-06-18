@@ -89,6 +89,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
 
+		[Then(@"I should not see any request")]
+		public void ThenIShouldNotSeeAnyRequest()
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(0));
+		}
+
+
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
 		{
