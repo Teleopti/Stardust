@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					AppHost = "about:blank",
 					Port = 80,
 					SSL = false,
+					ConsiderInvisibleElements = true,
+					WaitBeforeClick = TimeSpan.Zero,
 					Driver = typeof(ChromeWebDriverWithProfile),
 					//Driver = typeof(SeleniumWebDriver),
 					//Browser = Coypu.Drivers.Browser.InternetExplorer,
