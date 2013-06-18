@@ -981,7 +981,6 @@
     <Compile Include="ResourceCalculation\SkillCollectionKeyTest.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionServiceTest.cs" />
     <Compile Include="Scheduling\AgentDateTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParametersTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePeriodTest.cs" />
@@ -1062,7 +1061,6 @@
     <Compile Include="Security\AuthorizationEntities\AuthorizationSettingsTest.cs" />
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftTest.cs" />
     <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfoTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />

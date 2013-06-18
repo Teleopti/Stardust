@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [ExpectedException(typeof(ArgumentException))]
         public void CannotAddNothingButWorkShiftActivityLayer()
         {
-            target.LayerCollection.Add(new MainShiftActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
+					target.LayerCollection.Add(new WorkShiftActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
         }
 
 

@@ -1246,7 +1246,6 @@
     </Compile>
     <Compile Include="Scheduling\AgentDate.cs" />
     <Compile Include="Scheduling\Rules\OverlappingAssignmentRule.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParameter.cs" />
@@ -1321,7 +1320,6 @@
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
-    <Compile Include="Scheduling\Assignment\MainShift.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShift.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

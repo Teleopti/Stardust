@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			Assert.Throws<ArgumentException>(() =>
-			       target.Replace(scheduleDay, new MainShiftActivityLayer(new Activity("d"), new DateTimePeriod()), new Activity("d"), new DateTimePeriod()));
+			       target.Replace(scheduleDay, new MainShiftActivityLayerNew(new Activity("d"), new DateTimePeriod()), new Activity("d"), new DateTimePeriod()));
 		}
 
 		[Test]

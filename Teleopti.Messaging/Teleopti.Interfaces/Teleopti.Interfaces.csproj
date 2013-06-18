@@ -467,7 +467,6 @@
     <Compile Include="Domain\ISystemSetting.cs" />
     <Compile Include="Domain\ITemplateReference.cs" />
     <Compile Include="Domain\IPersonalShiftActivityLayer.cs" />
-    <Compile Include="Domain\IMainShiftActivityLayer.cs" />
     <Compile Include="Domain\DateHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -648,7 +647,6 @@
     </Compile>
     <Compile Include="Domain\ILayerSorter.cs" />
     <Compile Include="Domain\ILoadAggregateById.cs" />
-    <Compile Include="Domain\IMainShift.cs" />
     <Compile Include="Domain\IMeetingPerson.cs" />
     <Compile Include="Domain\InParameter.cs">
       <SubType>Code</SubType>

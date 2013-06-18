@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
+﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -19,7 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     {
         FilteredCollection<ILayer<IActivity>> _collection;
         FakeLayer _fakeLayer;
-        MainShiftActivityLayer _mainShiftActivityLayer;
+        MainShiftActivityLayerNew _mainShiftActivityLayer;
         Activity _fakeActivity;
         DateTimePeriod _fakePeriod;
 
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         { 
              _fakePeriod = new DateTimePeriod(2008,01,01,2008,01,03);
             _fakeActivity = ActivityFactory.CreateActivity("dummy", Color.DeepPink);
-            _mainShiftActivityLayer = new MainShiftActivityLayer(_fakeActivity, _fakePeriod);
+            _mainShiftActivityLayer = new MainShiftActivityLayerNew(_fakeActivity, _fakePeriod);
 
             _fakeLayer = new FakeLayer(_fakeActivity, _fakePeriod);
             _collection = new FilteredCollection<ILayer<IActivity>>();
@@ -45,15 +42,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void CannotAddSameFilterTwice()
         {
-            _collection.AddFilter(typeof(MainShiftActivityLayer));
-            _collection.AddFilter(typeof(MainShiftActivityLayer));
+            _collection.AddFilter(typeof(MainShiftActivityLayerNew));
+            _collection.AddFilter(typeof(MainShiftActivityLayerNew));
             Assert.AreEqual(1,_collection.Filters.Count);
         }
 
         [Test]
         public void VerifySetFilterClearsTheOldFilters()
         {
-            _collection.AddFilter(typeof(MainShiftActivityLayer));
+            _collection.AddFilter(typeof(MainShiftActivityLayerNew));
             _collection.AddFilter(typeof(PersonalShiftActivityLayer));
             _collection.SetFilter(typeof (AbsenceLayer));
             Assert.AreEqual(1,_collection.Filters.Count);
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _collection.Add(_mainShiftActivityLayer);
             Assert.AreEqual(1,CollectionViewSource.GetDefaultView(_collection).OfType<FakeLayer>().Count());
             _collection.AddFilter(_fakeLayer.GetType());
-            Assert.AreEqual(1, CollectionViewSource.GetDefaultView(_collection).OfType<MainShiftActivityLayer>().Count());
+            Assert.AreEqual(1, CollectionViewSource.GetDefaultView(_collection).OfType<MainShiftActivityLayerNew>().Count());
             Assert.AreEqual(0, CollectionViewSource.GetDefaultView(_collection).OfType<FakeLayer>().Count());
             _collection.RemoveFilter(_fakeLayer.GetType());
             Assert.AreEqual(1, CollectionViewSource.GetDefaultView(_collection).OfType<FakeLayer>().Count());
@@ -81,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _collection.AddFilter(_fakeLayer.GetType());
             _collection.AddFilter(_mainShiftActivityLayer.GetType());
             Assert.AreEqual(0, CollectionViewSource.GetDefaultView(_collection).OfType<FakeLayer>().Count());
-            Assert.AreEqual(0, CollectionViewSource.GetDefaultView(_collection).OfType<MainShiftActivityLayer>().Count());
+            Assert.AreEqual(0, CollectionViewSource.GetDefaultView(_collection).OfType<MainShiftActivityLayerNew>().Count());
             Assert.AreEqual(2, _collection.Count);
         }
 
