@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
                    default-access="field.camelcase-underscore">
 
-  <class name="MainShiftActivityLayerNew" table="MainShiftActivityLayer"> 
+  <class name="MainShiftLayer" table="MainShiftActivityLayer"> 
     <id name="Id"
             type="guid"
 		  access="nosetter.camelcase-underscore"

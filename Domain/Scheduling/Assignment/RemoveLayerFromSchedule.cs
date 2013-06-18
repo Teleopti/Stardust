@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (part != null)
             {
 							//no need to cast here when agentday exist and we have one list of layers...
-	            var msActivityLayer = layer as IMainShiftActivityLayerNew;
+	            var msActivityLayer = layer as IMainShiftLayer;
 							if (msActivityLayer != null)
 							{
 								//Check for the layers in mainshift...

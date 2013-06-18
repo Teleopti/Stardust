@@ -354,7 +354,7 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVerticalTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />

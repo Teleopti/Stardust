@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
-			var activityLayer = new MainShiftActivityLayerNew(activity, period);
+			var activityLayer = new MainShiftLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			_target.CreateAndAddActivity(activityLayer, shiftCategory);
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2000, 1, 2, 2, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
-			var activityLayer = new MainShiftActivityLayerNew(activity, period);
+			var activityLayer = new MainShiftLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
-			var activityLayer = new MainShiftActivityLayerNew(activity, period);
+			var activityLayer = new MainShiftLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
-			var activityLayer = new MainShiftActivityLayerNew(activity, period);
+			var activityLayer = new MainShiftLayer(activity, period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
@@ -738,7 +738,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			SetupForMergeTests();
 			destination.Add(personDayOffDest);
-			var activityLayer = new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("activity"), destination.Period);
+			var activityLayer = new MainShiftLayer(ActivityFactory.CreateActivity("activity"), destination.Period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 		    var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
@@ -763,7 +763,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			SetupForMergeTests();
 			destination.Add(personAbsenceDest);
 
-			var activityLayer = new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("activity"), destination.Period);
+			var activityLayer = new MainShiftLayer(ActivityFactory.CreateActivity("activity"), destination.Period);
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			destination.CreateAndAddActivity(activityLayer, shiftCategory);

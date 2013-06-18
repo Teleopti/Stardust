@@ -21,7 +21,7 @@ namespace Teleopti.Interfaces.Domain
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
-			void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory);
+			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
 
 	    /// <summary>
         /// Gets the personal shift collection.
@@ -76,7 +76,7 @@ namespace Teleopti.Interfaces.Domain
 	    DateOnly Date { get; }
 
 	    IShiftCategory ShiftCategory { get; }
-	    IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers { get; }
+	    IEnumerable<IMainShiftLayer> MainShiftActivityLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.
@@ -103,6 +103,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		void ScheduleChanged(string dataSource);
 
-	    bool RemoveLayer(IMainShiftActivityLayerNew layer);
+	    bool RemoveLayer(IMainShiftLayer layer);
     }
 }

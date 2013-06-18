@@ -871,7 +871,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void CreateAndAddActivity(IMainShiftActivityLayerNew layer, IShiftCategory shiftCategory)
+        public void CreateAndAddActivity(IMainShiftLayer layer, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))

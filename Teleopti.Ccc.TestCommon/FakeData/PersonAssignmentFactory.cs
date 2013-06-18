@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
-	        ass.SetMainShiftLayers(new [] {new MainShiftActivityLayerNew(activity, period)}, category);
+	        ass.SetMainShiftLayers(new [] {new MainShiftLayer(activity, period)}, category);
             return ass;
         }
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
 	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
             var ass = new PersonAssignment(agent, scenario, date);
-					ass.SetMainShiftLayers(new[]{new MainShiftActivityLayerNew(activity, period)}, category);
+					ass.SetMainShiftLayers(new[]{new MainShiftLayer(activity, period)}, category);
             return ass;
         }
 
@@ -195,13 +195,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
 
             // activity layers
-            var alPerson1Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson1Phone);
-						var alPerson1Break = new MainShiftActivityLayerNew(container.ContainedActivities["Break"], prdPerson1Break);
-						var alPerson1Office = new MainShiftActivityLayerNew(container.ContainedActivities["Office"], prdPerson1Office);
-						var alPerson2Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson2Phone);
-						var alPerson3Lunch = new MainShiftActivityLayerNew(container.ContainedActivities["Lunch"], prdPerson3Lunch);
-						var alPerson4Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson4Phone);
-						var alPerson4Office = new MainShiftActivityLayerNew(container.ContainedActivities["Office"], prdPerson4Office);
+            var alPerson1Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson1Phone);
+						var alPerson1Break = new MainShiftLayer(container.ContainedActivities["Break"], prdPerson1Break);
+						var alPerson1Office = new MainShiftLayer(container.ContainedActivities["Office"], prdPerson1Office);
+						var alPerson2Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson2Phone);
+						var alPerson3Lunch = new MainShiftLayer(container.ContainedActivities["Lunch"], prdPerson3Lunch);
+						var alPerson4Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson4Phone);
+						var alPerson4Office = new MainShiftLayer(container.ContainedActivities["Office"], prdPerson4Office);
 
             // main shifts
 					assignment1.SetMainShiftLayers(new[]
@@ -333,9 +333,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		    ret.SetMainShiftLayers(
 			    new[]
 				    {
-					    new MainShiftActivityLayerNew(new Activity("1"), new DateTimePeriod(start, start.AddHours(1))),
-					    new MainShiftActivityLayerNew(new Activity("2"), new DateTimePeriod(start, start.AddHours(2))),
-					    new MainShiftActivityLayerNew(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)))
+					    new MainShiftLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1))),
+					    new MainShiftLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2))),
+					    new MainShiftLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)))
 				    },
 			    new ShiftCategory("test"));
 		    return ret;

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldReturnValueIfOnlyOne()
 		{
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 3);
-			new [] {new MainShiftActivityLayerNew(new Activity("sdf"), period)}
+			new [] {new MainShiftLayer(new Activity("sdf"), period)}
 				.Period().Value.Should().Be.EqualTo(period);
 		}
 
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			new[]
 				{
-					new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2000, 11, 11)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2000, 11, 11)),
 					null,
-					new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2001, 1, 1)),
-					new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2001, 1, 1)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))
 				}
 				.Period().Value.Should().Be.EqualTo(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 		}

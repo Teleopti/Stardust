@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
 						_visualLayerCollection = new[]
 		        {
-			        new MainShiftActivityLayerNew(activity1, period1),
-			        new MainShiftActivityLayerNew(activity2, period2),
-			        new MainShiftActivityLayerNew(activity3, period3),
-			        new MainShiftActivityLayerNew(activity3, period4),
-			        new MainShiftActivityLayerNew(activity3, period5)
+			        new MainShiftLayer(activity1, period1),
+			        new MainShiftLayer(activity2, period2),
+			        new MainShiftLayer(activity3, period3),
+			        new MainShiftLayer(activity3, period4),
+			        new MainShiftLayer(activity3, period5)
 		        }.CreateProjection();
         }
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             //If there are remaining shift they should be valid
             Assert.IsTrue(_startTimeLimiter.IsValidAtEnd(_visualLayerCollection));
             //If no shifts, return false
-            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(Enumerable.Empty<IMainShiftActivityLayerNew>().CreateProjection()));
+            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(Enumerable.Empty<IMainShiftLayer>().CreateProjection()));
         }
 
     }

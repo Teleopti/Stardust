@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (layer.Equals(layerToRemove))
 					{
 						var indexOfLayer = layer.OrderIndex;
-						var newLayers = new List<IMainShiftActivityLayerNew>(ass.MainShiftActivityLayers);
+						var newLayers = new List<IMainShiftLayer>(ass.MainShiftActivityLayers);
 						newLayers.Remove(layer);
-						newLayers.Insert(indexOfLayer, new MainShiftActivityLayerNew(newActivity, newPeriod));
+						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
 						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
 						return;
 					}

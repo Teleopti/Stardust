@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 _baseDateTime.AddHours(7));
             var part = partFactory.CreatePart();
             part.CreateAndAddActivity(
-                new MainShiftActivityLayerNew(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9))),
+                new MainShiftLayer(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9))),
                 ShiftCategoryFactory.CreateShiftCategory("test"));
             part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(_activity, basePeriod,
                                                                      _definitionSet));

@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyMoveAllTriggersParentCollection()
         {
             TimeSpan toMove = TimeSpan.FromHours(2);
-            var layer = mocks.Stub<IMainShiftActivityLayerNew>();
+            var layer = mocks.Stub<IMainShiftLayer>();
 	       
             using (mocks.Record())
             {

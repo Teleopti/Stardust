@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.SetMainShiftLayers(
-		        new[] {new MainShiftActivityLayerNew(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
+		        new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalShift(new PersonalShift());
 					ass.AddPersonalShift(new PersonalShift());
 

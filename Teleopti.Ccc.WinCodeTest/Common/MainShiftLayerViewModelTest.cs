@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private MainShiftLayerViewModel _target;
 		private MockRepository _mocks;
-		private IMainShiftActivityLayerNew _layerWithPayload;
+		private IMainShiftLayer _layerWithPayload;
 		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			_layerWithPayload = new MainShiftActivityLayerNew(_payload, _period);
+			_layerWithPayload = new MainShiftLayer(_payload, _period);
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnProjectionForOneLayer()
 		{
-			var proj = new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2)).CreateProjection();
+			var proj = new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2)).CreateProjection();
 			proj.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 		}
 
@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var start = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			var proj = new[]
 				{
-					new MainShiftActivityLayerNew(new Activity("1"), new DateTimePeriod(start, start.AddHours(8))),
-					new MainShiftActivityLayerNew(new Activity("2"), new DateTimePeriod(start.AddHours(4), start.AddHours(5)))
+					new MainShiftLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(8))),
+					new MainShiftLayer(new Activity("2"), new DateTimePeriod(start.AddHours(4), start.AddHours(5)))
 				}.CreateProjection();
 			proj.Count().Should().Be.EqualTo(3);
 		}
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnEmptyProjectionForZeroLayers()
 		{
-			new IMainShiftActivityLayerNew[0].CreateProjection().Should().Be.Empty();
+			new IMainShiftLayer[0].CreateProjection().Should().Be.Empty();
 		}
 	}
 }

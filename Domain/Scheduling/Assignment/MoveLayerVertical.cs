@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void MoveUp(IPersonAssignment personAssignment, ILayer<IActivity> layer)
 		{
 			//no need to cast later when agentday is done
-			var msLayer = layer as IMainShiftActivityLayerNew;
+			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftActivityLayerNew>(personAssignment.MainShiftActivityLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftActivityLayers);
 				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void MoveDown(IPersonAssignment personAssignment, ILayer<IActivity> layer)
 		{
 			//no need to cast later when agentday is done
-			var msLayer = layer as IMainShiftActivityLayerNew;
+			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftActivityLayerNew>(personAssignment.MainShiftActivityLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftActivityLayers);
 				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);

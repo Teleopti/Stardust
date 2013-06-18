@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.Common
 			return ret;
 		}
 
-		public static IVisualLayerCollection CreateProjection(this IEnumerable<IMainShiftActivityLayerNew> layers)
+		public static IVisualLayerCollection CreateProjection(this IEnumerable<IMainShiftLayer> layers)
 		{
 			var projSvc = new VisualLayerProjectionService(null);
 			projSvc.Add(layers, new VisualLayerFactory());
 			return projSvc.CreateProjection();
 		}
 
-		public static IVisualLayerCollection CreateProjection(this IMainShiftActivityLayerNew layer)
+		public static IVisualLayerCollection CreateProjection(this IMainShiftLayer layer)
 		{
 			return CreateProjection(new[] {layer});
 		}

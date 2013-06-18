@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     throw new FaultException("A main shift should exist first before you add a new activity.");
 
                 var activity = _activityRepository.Load(command.ActivityId);
-                var activityLayer = new MainShiftActivityLayerNew(activity,
+                var activityLayer = new MainShiftLayer(activity,
                                                       _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 
                 scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);

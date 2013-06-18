@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var ass = new PersonAssignment(schedDay.Person, schedDay.Scenario, new DateOnly(2000,1,1));
 			ass.SetMainShiftLayers(new[]
 				{
-					new MainShiftActivityLayerNew(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)))
+					new MainShiftLayer(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)))
 				}, new ShiftCategory("asd"));
 			schedDay.Add(ass);
 			using (mocks.Record())
@@ -500,7 +500,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             var assignment = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000,1,1));
 					assignment.SetMainShiftLayers(new[]
 						{
-							new MainShiftActivityLayerNew(activity, period)
+							new MainShiftLayer(activity, period)
 						}, new ShiftCategory("sdf"));
             scheduleDay.Add(assignment);
 

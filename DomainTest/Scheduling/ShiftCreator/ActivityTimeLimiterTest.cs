@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
 	        _visualLayerCollection = new[]
 		        {
-			        new MainShiftActivityLayerNew(_activity1, period1),
-			        new MainShiftActivityLayerNew(_activity2, period2),
-			        new MainShiftActivityLayerNew(_activity3, period3),
-			        new MainShiftActivityLayerNew(_activity3, period4),
-			        new MainShiftActivityLayerNew(_activity3, period5)
+			        new MainShiftLayer(_activity1, period1),
+			        new MainShiftLayer(_activity2, period2),
+			        new MainShiftLayer(_activity3, period3),
+			        new MainShiftLayer(_activity3, period4),
+			        new MainShiftLayer(_activity3, period5)
 		        }.CreateProjection();
         }
 

@@ -492,7 +492,7 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVertical.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />

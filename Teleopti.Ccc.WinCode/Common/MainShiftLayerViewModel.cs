@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IMainShiftActivityLayerNew _layer;
+	    private readonly IMainShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 	    private readonly IMoveLayerVertical _moveLayer;
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftActivityLayerNew layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
 				: base(observer, layer, assignment, eventAggregator, moveLayer)
         {
 	        _layer = layer;

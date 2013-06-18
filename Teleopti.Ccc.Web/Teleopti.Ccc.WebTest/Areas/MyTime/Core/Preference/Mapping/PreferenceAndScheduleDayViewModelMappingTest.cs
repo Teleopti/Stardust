@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
 			personAssignment.SetMainShiftLayers(
-				new[] {new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))},
+				new[] {new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))},
 				new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 

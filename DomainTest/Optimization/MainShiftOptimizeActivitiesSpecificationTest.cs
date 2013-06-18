@@ -139,10 +139,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 					return new[]
 						{
-							new MainShiftActivityLayerNew(_shbrAct, period1),
-							new MainShiftActivityLayerNew(_lunchAct, period2),
-							new MainShiftActivityLayerNew(_baseAct, period3),
-							new MainShiftActivityLayerNew(_baseAct, period4),
+							new MainShiftLayer(_shbrAct, period1),
+							new MainShiftLayer(_lunchAct, period2),
+							new MainShiftLayer(_baseAct, period3),
+							new MainShiftLayer(_baseAct, period4),
 						}.CreateProjection();
 				}
     }

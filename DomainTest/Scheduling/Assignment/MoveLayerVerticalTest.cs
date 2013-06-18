@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftActivityLayerNew>(ass.MainShiftActivityLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainShiftActivityLayers);
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftActivityLayerNew>(ass.MainShiftActivityLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainShiftActivityLayers);
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];

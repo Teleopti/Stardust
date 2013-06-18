@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleClosedDay()
 		{
 			IActivity activity = new Activity("bo");
-			var visualLayerCollection = new MainShiftActivityLayerNew(activity, _period1).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
 
 			double? result =_target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
 										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingAndEndingInsideInterval()
 		{
 			DateTimePeriod period2 =new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
-			var visualLayerCollection = new MainShiftActivityLayerNew(_phoneActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingAndEndingOnExactInterval()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start, _end);
-			var visualLayerCollection = new MainShiftActivityLayerNew(_phoneActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingOutsideOpenHoursAndEndingInsideInterval()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-5), _end);
-			var visualLayerCollection = new MainShiftActivityLayerNew(_phoneActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{}
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingInsideIntervalAndEndingOutsideOpenHours()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(5));
-			var visualLayerCollection = new MainShiftActivityLayerNew(_phoneActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 
 			var visualLayerCollection = new[]
 				{
-					new MainShiftActivityLayerNew(_phoneActivity, period1), 
-					new MainShiftActivityLayerNew(_phoneActivity, period2)
+					new MainShiftLayer(_phoneActivity, period1), 
+					new MainShiftLayer(_phoneActivity, period2)
 				}.CreateProjection();
 
 			using (_mocks.Record())
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_dic.Add(period1.StartDateTime.TimeOfDay, data2);
 
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(15), _end.AddMinutes(20));
-			var visualLayerCollection = new MainShiftActivityLayerNew(_phoneActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -207,8 +207,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			
 			var visualLayerCollection = new[]
 				{
-					new MainShiftActivityLayerNew(otherActivity, period2), 
-					new MainShiftActivityLayerNew(_phoneActivity, period1)
+					new MainShiftLayer(otherActivity, period2), 
+					new MainShiftLayer(_phoneActivity, period1)
 				}.CreateProjection();
 
 
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
-			var visualLayerCollection = new MainShiftActivityLayerNew(otherActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-5), _end.AddMinutes(-5));
-			var visualLayerCollection = new MainShiftActivityLayerNew(otherActivity, period2).CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -287,8 +287,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 
 			var visualLayerCollection = new[]
 				{
-					new MainShiftActivityLayerNew(_phoneActivity, period1), 
-					new MainShiftActivityLayerNew(_phoneActivity, period2)
+					new MainShiftLayer(_phoneActivity, period1), 
+					new MainShiftLayer(_phoneActivity, period2)
 				}.CreateProjection();
 
 			var data1 = new SkillIntervalData(toBasePeriod(period1), 5, -5, 0, null, null);

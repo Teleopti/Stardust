@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var orgLayers = new List<IMainShiftActivityLayerNew>(PersonAssignment.MainShiftActivityLayers);
-				orgLayers.Add(new MainShiftActivityLayerNew(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
+				var orgLayers = new List<IMainShiftLayer>(PersonAssignment.MainShiftActivityLayers);
+				orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
 				PersonAssignment.SetMainShiftLayers(orgLayers, PersonAssignment.ShiftCategory);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();

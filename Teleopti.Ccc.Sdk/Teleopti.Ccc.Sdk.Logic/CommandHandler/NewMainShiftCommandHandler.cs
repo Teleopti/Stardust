@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
-        private readonly IActivityLayerAssembler<IMainShiftActivityLayerNew> _mainActivityLayerAssembler;
+        private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRepository _personRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayerNew> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;
