@@ -476,6 +476,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			requestWithinOutsidePeriod.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
         }
 
+		[Test]
+		[Ignore]
+		public void VerifyFindAllRequestModifiedWithinPeriodOrPendingShouldNotListAutoDeniedForPersonTo()
+		{
+
+			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+                    {
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+                                                 new DateOnly(2008, 7, 16))
+                    });
+
+			IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
+			   new List<IShiftTradeSwapDetail>
+                    {
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+                                                 new DateOnly(2008, 7, 16))
+                    });
+
+			IPersonRequest deniedShiftTradePersonRequest = new PersonRequest(personFrom);
+			deniedShiftTradePersonRequest.Request = shiftTradeRequest2;
+			deniedShiftTradePersonRequest.Pending();
+			deniedShiftTradePersonRequest.Deny(personFrom, null, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsFalse(deniedShiftTradePersonRequest.IsAutoDenied);
+			Assert.IsTrue(deniedShiftTradePersonRequest.IsDenied);
+
+			IPersonRequest autoDeniedShiftTradePersonRequest = new PersonRequest(personFrom);
+			autoDeniedShiftTradePersonRequest.Request = shiftTradeRequest;
+			autoDeniedShiftTradePersonRequest.Deny(personFrom, null, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsTrue(autoDeniedShiftTradePersonRequest.IsAutoDenied);
+			Assert.IsTrue(autoDeniedShiftTradePersonRequest.IsDenied);
+
+			PersistAndRemoveFromUnitOfWork(autoDeniedShiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(deniedShiftTradePersonRequest);
+
+			DateTime updatedOn = autoDeniedShiftTradePersonRequest.UpdatedOn.GetValueOrDefault();
+			DateTimePeriod insidePeriod = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
+
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person, insidePeriod);
+
+			int actualValue = foundRequests.Count;
+			Assert.AreEqual(2, actualValue);
+			Assert.AreEqual(2, foundRequests.Count(r => r.IsDenied));
+			Assert.AreEqual(1, foundRequests.Count(r => r.IsAutoDenied));
+
+			foundRequests.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
+		}
+
         [Test]
         public void VerifyPersonRequestForDateTimePeriod()
         {
