@@ -1,6 +1,7 @@
 using System;
 using Coypu;
 using NUnit.Framework;
+using OpenQA.Selenium.Firefox;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -30,9 +31,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			var sele = System.Web.HttpUtility.JavaScriptStringEncode(selector);
-			_browser.ExecuteScript(string.Format("$(\"{0}\").click()", sele));
-			//_browser.FindCss(selector).Click();
+			selector = System.Web.HttpUtility.JavaScriptStringEncode(selector);
+			var javascript = string.Format("var selection = $(\"{0}\");", selector) +
+			                 "if (selection.length > 0) {" +
+			                 "selection.click();" +
+			                 "} else {" +
+			                 "throw 'Cant find it!';" +
+			                 "}"
+				;
+			Retrying.Action(() => _browser.ExecuteScript(javascript), new SeleniumExceptionCatcher());
 		}
 
 		public void AssertExists(string selector)
