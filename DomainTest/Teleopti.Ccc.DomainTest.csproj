@@ -1054,7 +1054,6 @@
     <Compile Include="Scheduling\PersonDayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
-    <Compile Include="Scheduling\Assignment\ShiftTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />
     <Compile Include="Scheduling\ShiftCategoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfoTest.cs" />
