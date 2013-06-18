@@ -370,49 +370,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-
-        /// <summary>
-        /// Verifies the cascade delete works so removed shift reference deletes layers from database.
-        /// </summary>
-        [Test]
-        public void VerifyCascadeDeleteWorksSoRemovedShiftReferenceDeletesLayersFromDatabase()
-        {
-            //Setup
-            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                _dummyCategory,
-                _dummyScenario);
-            PersistAndRemoveFromUnitOfWork(ass);
-
-            //Load
-            IPersonAssignment loaded = _rep.Load(ass.Id.Value);
-            bool mainShiftExists = (loaded.ShiftCategory != null);
-            Assert.IsTrue(mainShiftExists); //ensures factory method creates mainshift
-            int noOfPersonalShift = loaded.PersonalShiftCollection.Count;
-            Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts
-
-            //Remove shifts
-            loaded.ClearMainShiftLayers();
-            PersistAndRemoveFromUnitOfWork(loaded);
-
-            foreach (int items in Session.CreateCriteria(typeof(MainShift))
-                                        .SetProjection(Projections.RowCount())
-                                        .List<int>())
-            {
-                //no mainshifts 
-                Assert.AreEqual(0, items);
-            }
-            foreach (int items in Session.CreateCriteria(typeof(ActivityLayer))
-                            .SetProjection(Projections.RowCount())
-                            .List<int>())
-            {
-                //no layers
-                Assert.AreEqual(0, items);
-            }
-        }
-
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {
