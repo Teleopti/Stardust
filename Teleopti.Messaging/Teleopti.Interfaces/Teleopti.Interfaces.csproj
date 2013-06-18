@@ -346,7 +346,6 @@
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
-    <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
     <Compile Include="Domain\DayOff.cs">
       <SubType>Code</SubType>
