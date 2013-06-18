@@ -121,8 +121,10 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsExtensions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
+    <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
