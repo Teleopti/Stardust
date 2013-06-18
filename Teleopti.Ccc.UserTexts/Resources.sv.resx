@@ -11004,4 +11004,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Tillgänglighet per agent</value>
   </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Nekad</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
 </root>

@@ -195,10 +195,10 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
         public string DisplayText { get; set; }
         public RequestStatusDto RequestStatus { get; set; }
 
-        public StatusDisplay(string displayText, RequestStatusDto staus)
+        public StatusDisplay(string displayText, RequestStatusDto status)
         {
             DisplayText = displayText;
-            RequestStatus = staus;
+            RequestStatus = status;
         }
         public override string ToString()
         {
