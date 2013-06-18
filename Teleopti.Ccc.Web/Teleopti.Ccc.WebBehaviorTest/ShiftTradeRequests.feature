@@ -252,7 +252,7 @@ Scenario: Show message when no agents are available for shift trade
 	| StartTime             | 2030-01-02 06:00 |
 	| EndTime               | 2030-01-02 16:00 |
 	| Shift category		| Day	           |
-	And Current time is '2030-01-01'
+	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-02'
 	Then I should see a message text saying that no possible shift trades could be found
 
@@ -267,7 +267,7 @@ Scenario: Show my full day absence
 	| Name      | Vacation         |
 	| StartTime | 2030-01-02 00:00 |
 	| EndTime   | 2030-01-02 23:59 |
-	And Current time is '2030-01-01'
+	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-02'
 	Then I should see my schedule with
 	| Field			| Value |
