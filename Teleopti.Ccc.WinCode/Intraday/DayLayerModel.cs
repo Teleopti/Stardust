@@ -193,9 +193,22 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _period; }
         }
 
-        public static readonly DependencyProperty ShowNextActivityProperty =
+	    public bool EditLayer
+	    {
+		    get { return _editLayer; }
+		    set
+		    {
+			    if (_editLayer == value) return;
+			    _editLayer = value;
+				notifyPropertyChanged("EditLayer");
+		    }
+	    }
+
+	    public static readonly DependencyProperty ShowNextActivityProperty =
             DependencyProperty.Register("ShowNextActivity", typeof(bool), typeof(DayLayerModel),
                                         new UIPropertyMetadata(false));
+
+	    private bool _editLayer;
 
 	    public int HookedEvents()
         {

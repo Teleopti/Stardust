@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
     /// <remarks>
     /// Henrik 2009-07-20: Move as much logic to the viewmodel as possible
     /// </remarks>
-    public partial class RealTimeScheduleView : UserControl
+    public partial class RealTimeScheduleView
     {
         public RealTimeScheduleView()
         {

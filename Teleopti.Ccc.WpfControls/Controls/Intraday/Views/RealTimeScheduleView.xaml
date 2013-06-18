@@ -62,7 +62,7 @@
 
         <controls:DataGrid Grid.ColumnSpan="4"
         HorizontalScrollBarVisibility="Visible" 
-                       FrozenColumnCount="9" 
+                       FrozenColumnCount="10" 
                        BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
                        Background="{StaticResource RaptorStandardLightGradientBrush}"  
                        HorizontalAlignment="Stretch"  
@@ -167,15 +167,37 @@
                                              Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}"/>
 
                 <!--Pinned Column-->
-                <controls:DataGridTemplateColumn CanUserReorder="False" SortMemberPath="IsPinned" CanUserSort="True" HeaderStyle="{StaticResource HeaderWithHand}" Header="{x:Static Member=userTexts:Resources.Pin}" >
+                <controls:DataGridTemplateColumn 
+					CanUserReorder="False"
+					SortMemberPath="IsPinned" 
+					CanUserSort="True" 
+					HeaderStyle="{StaticResource HeaderWithHand}" 
+					Header="{x:Static Member=userTexts:Resources.Pin}" >
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False}" Opacity="1" Cursor="Hand"/>
+                            <CheckBox 
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center" 
+								IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False}" 
+								Opacity="1" 
+								Cursor="Hand"/>
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellTemplate>
                 </controls:DataGridTemplateColumn>
 
-
+				<!--Edit layer Column Binding="{Binding Path=EditLayer}, Mode=TwoWay" -->
+				<controls:DataGridTemplateColumn HeaderStyle="{StaticResource HeaderWithHand}"
+												 Header="{x:Static Member=userTexts:Resources.Edit}"
+												 Width="Auto"
+												 CanUserSort="False"
+												 SortMemberPath="Edit">
+					<controls:DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button HorizontalAlignment="Center" VerticalAlignment="Center" Width="35" Height="Auto"/>
+						</DataTemplate>
+					</controls:DataGridTemplateColumn.CellTemplate>
+					
+				</controls:DataGridTemplateColumn>
                 <!-- ScheduleColumn -->
                 <!-- Note: In codebehind, we get the schedulecolumn by getting the last column!!!! Dont move this column without refactoring the codebehind! -->
                 <controls:DataGridTemplateColumn CanUserReorder="False" 
