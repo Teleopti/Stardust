@@ -30,19 +30,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public EditLayerViewModel EditLayer { get; private set; }
         public IScheduleDay SchedulePart { get; private set; }
         public ShiftEditorSettings Settings { get; private set; }
-        public ILayerViewModel SelectedLayer
+	    public bool ReadonlyMode
+	    {
+		    get { return _readonlyMode; }
+		    set 
+			{
+				_readonlyMode = value;
+				NotifyPropertyChanged("ReadonlyMode");
+			}
+	    }
+
+	    public ILayerViewModel SelectedLayer
         {
             get { return _selectedLayer; }
             set
             {
-                if (_selectedLayer != value)
-                {
-                    _selectedLayer = value;
-
-					NotifyPropertyChanged("SelectedLayer");
-                }
+	            if (_selectedLayer == value) return;
+	            _selectedLayer = value;
+	            NotifyPropertyChanged("SelectedLayer");
             }
         }
+
         public TimeSpan Interval
         {
             get { return Settings.Interval; }
@@ -85,11 +93,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private IEventAggregator _eventAggregator;
 
-        #region ctor
-		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
+	    #region ctor
+		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode)
         {
             _eventAggregator = eventAggregator;
-            SurroundingTime = TimeSpan.FromHours(4);
+			_readonlyMode = readonlyMode;
+			SurroundingTime = TimeSpan.FromHours(4);
             Layers = layerCollection;
 			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
 			Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
@@ -101,8 +110,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         }
 
 
-		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
-            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu)
+		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode)
+            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode)
         {
 
         }
@@ -366,8 +375,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         }
 
         private bool _enabled;
+	    private bool _readonlyMode;
 
-        public bool Enabled
+	    public bool Enabled
         {
             get {
                 return _enabled;

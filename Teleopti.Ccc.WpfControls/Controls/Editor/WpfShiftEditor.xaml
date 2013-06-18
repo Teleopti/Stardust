@@ -6,7 +6,8 @@
     xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
     xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-    GuiHelpers:HelpProvider.HelpString="SchedulingScreen+shiftEditor"
+             xmlns:converter="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
+             GuiHelpers:HelpProvider.HelpString="SchedulingScreen+shiftEditor"
 	HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 	WpfControls:LayerView.LayerChanged="LayerChanged"
     WpfControls:LayerView.PreviewLayerSelected="PreviewLayerSelected"
@@ -18,15 +19,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\..\Resources\MVVM.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <DataTemplate  DataType="{x:Type Editor:ShiftEditorViewModel}" x:Key="categoryView">
                 <Views:ShiftCategoryView DataContext="{Binding}"/>
             </DataTemplate>
-
+	        <converter:InverseBoolConverter x:Key="InverseBoolConverter" />
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Grid>
+    <Grid IsEnabled="{Binding Path=ReadonlyMode, Converter={StaticResource InverseBoolConverter}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>

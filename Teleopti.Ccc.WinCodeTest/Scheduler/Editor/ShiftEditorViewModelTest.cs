@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _mocker = new MockRepository();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();
             _eventAggregator = new Microsoft.Practices.Composite.Events.EventAggregator();
-            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true);
+            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, true);
             _partForTest = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
         }
 

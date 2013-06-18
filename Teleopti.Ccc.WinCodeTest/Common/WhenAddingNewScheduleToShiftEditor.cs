@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _eventAggregator = new EventAggregator();
             _service = _mocker.StrictMock<ICreateLayerViewModelService>();
             _collection = new LayerViewModelCollection(_eventAggregator, _service);
-            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true);
+            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, true);
         }
 
         [Test,RequiresSTA]
