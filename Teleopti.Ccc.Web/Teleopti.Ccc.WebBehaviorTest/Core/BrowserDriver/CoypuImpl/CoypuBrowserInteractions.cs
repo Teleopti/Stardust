@@ -1,10 +1,11 @@
 using System;
 using Coypu;
 using NUnit.Framework;
-using OpenQA.Selenium.Firefox;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
+
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{
 		private readonly BrowserSession _browser;
@@ -31,15 +32,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			selector = System.Web.HttpUtility.JavaScriptStringEncode(selector);
-			var javascript = string.Format("var selection = $(\"{0}\");", selector) +
-			                 "if (selection.length > 0) {" +
-			                 "selection.click();" +
-			                 "} else {" +
-			                 "throw 'Cant find it!';" +
-			                 "}"
+			var javascript = string.Format("var selection = $(\"{0}\");", selector.JSEncode()) +
+							 "if (selection.length > 0) {" +
+							 "selection.click();" +
+							 "} else {" +
+							 "throw 'Cant find it!';" +
+							 "}"
 				;
-			Retrying.Action(() => _browser.ExecuteScript(javascript), new SeleniumExceptionCatcher());
+			_browser.RetryUntilTimeout(() => _browser.ExecuteScript(javascript), 
+				new Options
+					{
+						RetryInterval = Timeouts.Poll,
+						Timeout = Timeouts.Timeout
+					});
 		}
 
 		public void AssertExists(string selector)
