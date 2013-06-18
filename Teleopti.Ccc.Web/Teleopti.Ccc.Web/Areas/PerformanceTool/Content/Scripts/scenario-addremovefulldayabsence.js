@@ -4,15 +4,13 @@ define([
         'progressitem-count',
         'scenario-addremovefulldayabsence-iteration',
         'result',
-        'messagebroker',
-        'helpers'
+        'messagebroker'
     ], function(
         ko,
         ProgressItemCountViewModel,
         Iteration,
         ResultViewModel,
-        messagebroker,
-        helpers
+        messagebroker
     ) {
         
 
@@ -127,29 +125,6 @@ define([
                 }
             };
 
-            var iterationForNotification = function (notification) {
-                var startDate = helpers.Date.ToMoment(notification.StartDate);
-                startDate.startOf('day');
-                var endDate = helpers.Date.ToMoment(notification.EndDate);
-                endDate.startOf('day');
-                var personId = notification.DomainReferenceId;
-                
-                if (startDate.diff(endDate) != 0)
-                    return null;
-
-                var matchedIterations = $.grep(iterations, function (iteration) {
-                    return iteration.Date.diff(startDate) == 0 &&
-                        iteration.PersonId == personId;
-                });
-                
-                if (matchedIterations.length == 1)
-                    return matchedIterations[0];
-                if (matchedIterations.length > 1)
-                    throw "What?! Found more than one iteration for this notification! gah!";
-                
-                return null;
-            };
-
             this.Run = function () {
                 
                 progressItemPersonScheduleDayReadModel.Reset();
@@ -160,20 +135,20 @@ define([
                     personScheduleDayReadModelSubscription = messagebroker.subscribe({
                         domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
-                            var iteration = iterationForNotification(notification);
-                            if (iteration) {
-                                iteration.NotifyPersonScheduleDayReadModelChanged();
-                            }
+                            $.each(iterations, function (i, e) {
+                                if (e.NotifyPersonScheduleDayReadModelChanged(notification))
+                                    return false;
+                            });
                         }
                     });
                     
                     personAbsenceSubscription = messagebroker.subscribe({
                         domainType: 'IPersonAbsence',
-                        callback: function (notification) {
-                            var personAbsenceId = notification.DomainId;
-                            var iteration = iterationForNotification(notification);
-                            if (iteration)
-                                iteration.NotifyPersonAbsenceChanged(personAbsenceId);
+                        callback: function(notification) {
+                            $.each(iterations, function(i, e) {
+                                if (e.NotifyPersonAbsenceChanged(notification))
+                                    return false;
+                            });
                         }
                     });
 

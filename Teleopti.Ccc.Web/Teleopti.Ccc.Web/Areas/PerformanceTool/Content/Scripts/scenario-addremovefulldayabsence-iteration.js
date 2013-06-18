@@ -1,6 +1,6 @@
 
 define([
-    ], function(
+], function (
     ) {
 
         return function(data) {
@@ -16,6 +16,7 @@ define([
                 self.RemoveCommandCompletedPromise = $.Deferred();
                 self.AllCommandsCompletedPromise = $.when(self.AddCommandCompletedPromise, self.RemoveCommandCompletedPromise);
                 self.RemoveCommandSent = false;
+                self.PersonScheduleDayReadModelUpdatedCount = 0;
                 self.SendAddCommand();
             };
             
@@ -60,16 +61,34 @@ define([
                     }
                 });
             };
-
-            this.NotifyPersonAbsenceChanged = function(personAbsenceId) {
-                if (!self.RemoveCommandSent) {
-                    self.RemoveCommandSent = true;
-                    self.SendRemoveCommand(personAbsenceId);
-                }
+            
+            var applicableAddNotification = function (notification) {
+                if (notification.DomainUpdateType != 0) //Not insert
+                    return false;
+                if (self.RemoveCommandSent)
+                    return false;
+                if (self.PersonId != notification.DomainReferenceId)
+                    return false;
+                return true;
             };
 
-            this.NotifyPersonScheduleDayReadModelChanged = function() {
-                data.PersonScheduleDayReadModelUpdated();
+            this.NotifyPersonAbsenceChanged = function (notification) {
+                if (applicableAddNotification(notification)){
+                    var personAbsenceId = notification.DomainId;
+                    self.RemoveCommandSent = true;
+                    self.SendRemoveCommand(personAbsenceId);
+                    return true;
+                }
+                return false;
+            };
+
+            this.NotifyPersonScheduleDayReadModelChanged = function (notification) {
+                if (self.PersonScheduleDayReadModelUpdatedCount < 2 && self.PersonId == notification.DomainReferenceId) {
+                    self.PersonScheduleDayReadModelUpdatedCount++;
+                    data.PersonScheduleDayReadModelUpdated();
+                    return true;
+                }
+                return false;
             };
 
         };
