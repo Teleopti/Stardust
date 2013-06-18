@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void BaseSetUp()
         {
-            _wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("ForecastedIncomingDemand", UserTexts.Resources.HoursInc);
             _wordDictionary.Add("ForecastedDistributedDemand", UserTexts.Resources.Hours);
@@ -83,6 +82,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void EmailSetUp()
         {
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Emails);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalEmails);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalAEW);
@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void BackofficeSetUp()
         {
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Tasks);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalTasks);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalATW);
@@ -141,6 +142,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
 		private void RetailSetUp()
 		{
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
 			_wordDictionary.Add("Tasks", UserTexts.Resources.Customers);
 			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalCustomers);
 			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
@@ -182,6 +184,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void FacsimileSetUp()
         {
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Facsimiles);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalFacsimiles);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalAFW);
@@ -211,6 +214,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void PhoneSetUp()
         {
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalTalkTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Calls);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalCalls);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
@@ -240,11 +244,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
 		private void chatSetUp()
 		{
-			_wordDictionary.Add("Tasks", UserTexts.Resources.Chat);
+			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalChatTime);
+			_wordDictionary.Add("Tasks", UserTexts.Resources.Chats);
 			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalChats);
 			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
 			_wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
-			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTalkTimePercentSign);
+			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignChatTimePercentSign);
 			_wordDictionary.Add("CampaignAfterTaskTime", UserTexts.Resources.CampaignACWPercentSign);
 			_wordDictionary.Add("CampaignTasks", UserTexts.Resources.CampaignChatsPercentSign);
 			_wordDictionary.Add("TotalStatisticCalculatedTasks", UserTexts.Resources.CalculatedChats);

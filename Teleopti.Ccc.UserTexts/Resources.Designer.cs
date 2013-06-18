@@ -3495,6 +3495,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign chat time %.
+        /// </summary>
+        public static string CampaignChatTimePercentSign {
+            get {
+                return ResourceManager.GetString("CampaignChatTimePercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign customers %.
         /// </summary>
         public static string CampaignCustomersPercent {
@@ -4008,6 +4017,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Chat {
             get {
                 return ResourceManager.GetString("Chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chats.
+        /// </summary>
+        public static string Chats {
+            get {
+                return ResourceManager.GetString("Chats", resourceCulture);
             }
         }
         
@@ -23681,6 +23699,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TotalChats {
             get {
                 return ResourceManager.GetString("TotalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total chat time.
+        /// </summary>
+        public static string TotalChatTime {
+            get {
+                return ResourceManager.GetString("TotalChatTime", resourceCulture);
             }
         }
         

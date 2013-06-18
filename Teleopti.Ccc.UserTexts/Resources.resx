@@ -11514,4 +11514,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="ValidatedChats" xml:space="preserve">
     <value>Validated chats</value>
   </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Campaign chat time %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Total chat time</value>
+  </data>
 </root>
