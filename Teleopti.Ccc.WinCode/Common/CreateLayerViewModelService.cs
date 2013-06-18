@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Common
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-	            foreach (var layer in assignment.MainShiftActivityLayers)
+	            foreach (var layer in assignment.MainShiftLayers)
 	            {
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }

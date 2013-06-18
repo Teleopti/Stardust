@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftActivityLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftLayers);
 				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftActivityLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftLayers);
 				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);

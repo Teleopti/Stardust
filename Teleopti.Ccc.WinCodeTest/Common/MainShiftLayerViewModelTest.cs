@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = _mocks.StrictMock<ILayerViewModelObserver>();
 		    var commandTester = new TesterForCommandModels();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var firstLayer = ass.MainShiftActivityLayers.First();
+			var firstLayer = ass.MainShiftLayers.First();
 			var model = new MainShiftLayerViewModel(observer, firstLayer, ass, new EventAggregator(), null);
 
 
@@ -94,8 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			{
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
-				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, new MoveLayerVertical());
-				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, new MoveLayerVertical());
+				var first = new MainShiftLayerViewModel(null, ass.MainShiftLayers.First(), ass, null, new MoveLayerVertical());
+				var last = new MainShiftLayerViewModel(null, ass.MainShiftLayers.Last(), ass, null, new MoveLayerVertical());
 
 				first.CanMoveUp.Should().Be.False();
 				last.CanMoveUp.Should().Be.True();
@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			{
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
-				var first = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.First(), ass, null, new MoveLayerVertical());
-				var last = new MainShiftLayerViewModel(null, ass.MainShiftActivityLayers.Last(), ass, null, new MoveLayerVertical());
+				var first = new MainShiftLayerViewModel(null, ass.MainShiftLayers.First(), ass, null, new MoveLayerVertical());
+				var last = new MainShiftLayerViewModel(null, ass.MainShiftLayers.Last(), ass, null, new MoveLayerVertical());
 
 				first.CanMoveDown.Should().Be.True();
 				last.CanMoveDown.Should().Be.False();
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 				var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-				var lastLayer = ass.MainShiftActivityLayers.Last();
+				var lastLayer = ass.MainShiftLayers.Last();
 				var target = new MainShiftLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), moveupdown);
 				target.MoveUp();
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 				var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-				var firstLayer = ass.MainShiftActivityLayers.First();
+				var firstLayer = ass.MainShiftLayers.First();
 				var target = new MainShiftLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), moveupdown);
 				target.MoveDown();
 

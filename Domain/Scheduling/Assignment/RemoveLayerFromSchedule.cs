@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 								{
 									if (assignment.RemoveLayer(msActivityLayer))
 									{
-										if (!assignment.MainShiftActivityLayers.Any())
+										if (!assignment.MainShiftLayers.Any())
 										{
 											//rk - why is this here!?
 											part.DeleteMainShift(part);

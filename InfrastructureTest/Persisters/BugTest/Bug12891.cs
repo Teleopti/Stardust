@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-			var orgLayers = new List<IMainShiftLayer>(personAssignment.MainShiftActivityLayers);
+			var orgLayers = new List<IMainShiftLayer>(personAssignment.MainShiftLayers);
 			orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, FirstDayDateTimePeriod));
 			personAssignment.SetMainShiftLayers(orgLayers, personAssignment.ShiftCategory);
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));

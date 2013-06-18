@@ -894,7 +894,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						//introduce AddLayer on PersonAssignment instead?
 						//rk: Micke and I have talked about this... 
 						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
-						var oldLayers = personAssignment.MainShiftActivityLayers.ToList();
+						var oldLayers = personAssignment.MainShiftLayers.ToList();
 						oldLayers.Add(layer);
 						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}

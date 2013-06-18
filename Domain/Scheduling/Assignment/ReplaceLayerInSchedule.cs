@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			foreach (var ass in scheduleDay.PersonAssignmentCollection())
 			{
-				foreach (var layer in ass.MainShiftActivityLayers)
+				foreach (var layer in ass.MainShiftLayers)
 				{
 					if (layer.Equals(layerToRemove))
 					{
 						var indexOfLayer = layer.OrderIndex;
-						var newLayers = new List<IMainShiftLayer>(ass.MainShiftActivityLayers);
+						var newLayers = new List<IMainShiftLayer>(ass.MainShiftLayers);
 						newLayers.Remove(layer);
 						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
 						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);

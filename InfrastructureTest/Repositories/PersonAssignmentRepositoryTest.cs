@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftActivityLayers));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
