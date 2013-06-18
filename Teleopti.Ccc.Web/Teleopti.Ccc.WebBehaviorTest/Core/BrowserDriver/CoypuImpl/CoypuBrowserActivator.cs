@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					SSL = false,
 					Driver = typeof(SeleniumWebDriver),
 					//Browser = Coypu.Drivers.Browser.InternetExplorer,
-					Browser = Coypu.Drivers.Browser.Firefox,
+					//Browser = Coypu.Drivers.Browser.Firefox,
+					Browser = Coypu.Drivers.Browser.Chrome
 				};
 			_browser = new BrowserSession(sessionConfiguration);
 		}
