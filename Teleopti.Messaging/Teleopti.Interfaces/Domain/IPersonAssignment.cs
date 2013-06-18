@@ -24,13 +24,6 @@ namespace Teleopti.Interfaces.Domain
 			void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory);
 
 	    /// <summary>
-	    /// Gets the main shift.
-	    /// </summary>
-	    /// <returns>The main shift.</returns>
-	    [Obsolete("Mainshift will not be supported in near future")]
-	    IMainShift ToMainShift();
-
-	    /// <summary>
         /// Gets the personal shift collection.
         /// </summary>
         /// <value>The personal shift collection.</value>
@@ -61,12 +54,6 @@ namespace Teleopti.Interfaces.Domain
         /// Clears the main shift.
         /// </summary>
         void ClearMainShiftLayers();
-
-        /// <summary>
-        /// Sets the main shift.
-        /// </summary>
-        /// <param name="mainShift">The main shift.</param>
-        void SetMainShift(IMainShift mainShift);
 
         /// <summary>
         /// Gets or sets the ZOrder for PersonAssignment, used in gui.

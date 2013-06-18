@@ -94,25 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retObj;
 		}
 
-		/// TO BE CONTINUED....
-		
-		//remove me later
-		[Obsolete("Mainshift will not be supported in near future")]
-		public virtual IMainShift ToMainShift()
-		{
-			if (!_mainShiftActivityLayers.Any())
-				return null;
-
-			var ret = new MainShift(ShiftCategory);
-			ret.SetParent(this);
-			_mainShiftActivityLayers.ForEach(layer =>
-				{
-					var mainShiftLayer = new MainShiftActivityLayer(layer);
-					ret.LayerCollection.Add(mainShiftLayer);
-				});
-			return ret;
-		}
-
 		public virtual IShiftCategory ShiftCategory
 		{
 			get
@@ -128,23 +109,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers
 		{
 			get { return _mainShiftActivityLayers; }
-		}
-
-		[Obsolete("Mainshift will not be supported in near future")]
-		public virtual void SetMainShift(IMainShift mainShift)
-		{
-			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
-			mainShift.SetParent(this);
-			//fix nicer later
-			ClearMainShiftLayers();
-			mainShift.LayerCollection.ForEach(layer =>
-				{
-					var newLayer = new MainShiftActivityLayerNew(layer.Payload, layer.Period);
-					newLayer.SetParent(this);
-					newLayer.SetId(((IMainShiftActivityLayer)layer).Id);
-					_mainShiftActivityLayers.Add(newLayer);
-				});
-			ShiftCategory = mainShift.ShiftCategory;
 		}
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory)
