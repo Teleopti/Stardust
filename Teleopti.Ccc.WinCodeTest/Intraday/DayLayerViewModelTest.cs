@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
             repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 	        daylayerModel = new DayLayerModel(person, new DateTimePeriod(2013, 01, 01, 2059, 01, 01), team,
-	                                          new LayerViewModelCollection(eventAggregator,
-	                                                                       new CreateLayerViewModelService()),
-	                                          new CommonNameDescriptionSetting());
+	                                          new LayerViewModelCollection(new EventAggregator(),
+	                                                                       new CreateLayerViewModelService(),
+	                                                                       new RemoveLayerFromSchedule(), null), null);
 
             target = new DayLayerViewModel(rtaStateHolder, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
         }
