@@ -71,5 +71,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		{
 			return System.Web.HttpUtility.JavaScriptStringEncode(value);
 		}
+
+		public static void AssertElementsAreVisible(this IBrowserInteractions interactions, string selectSelector)
+		{
+			var js = string.Format("return $('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selectSelector);
+			interactions.AssertJavascriptResultContains(js, "visible");
+		}
 	}
 }

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -28,15 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
         public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
-            var time = date.AddHours(12);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-            Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", name);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(UserFactory.User().Culture));	
         }
 
 		[Then(@"I should see the text request in the list")]
@@ -52,5 +48,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
 		}
 
+		[When(@"I click the send button")]
+		public void WhenIClickTheSendButton()
+		{
+			Browser.Interactions.Click("#Request-add-section .request-new-send");
+		}
+
+		[When(@"I click the update button on the request at position '(.*)' in the list")]
+		public void WhenIClickTheUpdateButtonOnTheRequestAtPositionInTheList(int position)
+		{
+			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-edit-update", position));
+		}
 	}
 }

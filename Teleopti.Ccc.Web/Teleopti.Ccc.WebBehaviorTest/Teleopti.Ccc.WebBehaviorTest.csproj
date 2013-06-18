@@ -488,7 +488,6 @@
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
-    <Compile Include="Pages\Common\IDeleteButton.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
     <Compile Include="Core\Extensions\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />

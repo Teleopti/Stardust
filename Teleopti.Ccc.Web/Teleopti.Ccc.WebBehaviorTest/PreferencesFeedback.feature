@@ -124,5 +124,5 @@ Scenario: Feedback from a deleted preference
 	And I have existing standard preference
 	And I am viewing preferences
 	When I select an editable day with standard preference
-	And I click the delete button
+	And I click the delete preference button
 	Then I should see the preference feedback

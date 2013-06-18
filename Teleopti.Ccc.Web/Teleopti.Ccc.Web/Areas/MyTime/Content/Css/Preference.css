@@ -101,26 +101,10 @@
 	height: 14px;
 }
 
- #Preference-period-feedback-view 
-{
-	color: gray;
-	margin-bottom: 0.6em;
-	padding-bottom: 0.6em;
-	border-bottom: 1px solid #dfdfdf;
-}
-.rgba #Preference-period-feedback-view 
-{
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
 .feedback-detail 
 {
 	color: black;
 	font-size: 1.15em;
-}
-#Preference-period 
-{
-	line-height: 1em;
-	font-size: 0.8em;
 }
 .preference-next-day-checkbox {
     width: 17px;
@@ -159,6 +143,19 @@
 	text-align: center;
 	cursor: pointer;
 }
+
+.musthave-current {
+    
+}
+
+.musthave-max {
+    
+}
+
+.add-musthave {
+	
+}
+
 #Template-name-section {
 	padding-bottom: 0;
 }
