@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -51,22 +49,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IPersonRequest CreateAggregateWithCorrectBusinessUnit()
         {
-            IPersonRequest request = new PersonRequest(_person);
-            IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
-                                                               new DateTimePeriod(
-                                                                   new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
-                                                                   new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
-
-            request.Request = absenceRequest;
-            request.Pending();
-
-            return request;
+	        return createAbsenceRequestAndBusinessUnit();
         }
 
+	    private IPersonRequest createAbsenceRequestAndBusinessUnit()
+	    {
+		    IPersonRequest request = new PersonRequest(_person);
+		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
+		                                                        new DateTimePeriod(
+			                                                        new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
+			                                                        new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
 
-       
-        
-        /// <summary>
+		    request.Request = absenceRequest;
+		    request.Pending();
+
+		    return request;
+	    }
+
+
+	    /// <summary>
         /// Creates an aggregate using the Bu of logged in user.
         /// Should be a "full detailed" aggregate
         /// </summary>
@@ -294,6 +295,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             int actualValue = foundRequests.Count();
             Assert.AreEqual(2, actualValue);
         }
+
+		[Test]
+		public void VerifyFindAllRequestsForAgentShouldExcludeAutoDeniedForRecipient()
+		{
+			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
+
+			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
+			personFrom.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+                    {
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+                                                 new DateOnly(2008, 7, 16)),
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
+                                                 new DateOnly(2008, 7, 17)),
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
+                                                 new DateOnly(2008, 7, 18)),
+                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
+                                                 new DateOnly(2008, 7, 19))
+                    });
+
+			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
+			personRequestWithShiftTrade.Deny(personFrom, string.Empty, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsTrue(personRequestWithShiftTrade.IsAutoDenied); //!!!
+
+			personRequestWithShiftTrade.Request = shiftTradeRequest;
+
+			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest);
+			PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
+
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 10 });
+
+			int actualValue = foundRequests.Count();
+			Assert.AreEqual(1, actualValue);
+		}
 
 		[Test]
 		public void ShouldFindAllRequestsForAgentWithPagingSinglePage()

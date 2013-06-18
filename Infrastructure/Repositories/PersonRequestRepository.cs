@@ -108,11 +108,53 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person) { return FindAllRequestsForAgent(person, null, null); }
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging) { return FindAllRequestsForAgent(person, null, paging); }
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period) { return FindAllRequestsForAgent(person, period, null); }
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person) { return findAllRequestsForAgent(person, null); }
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
+		{
+			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(
+					Restrictions.Eq("PersonTo", person)
+				);
 
-		private IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod? period, Paging paging)
+			var shiftTradeDetailsForAgentPersonFrom = DetachedCriteria.For<ShiftTradeSwapDetail>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(
+					Restrictions.Eq("PersonFrom", person)
+				);
+
+			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonTo));
+
+			var shiftTradeRequestsForAgentPersonFrom = DetachedCriteria.For<ShiftTradeRequest>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonFrom));
+
+			var personRequests = Session.CreateCriteria<PersonRequest>()
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.AddOrder(Order.Desc("UpdatedOn"));
+
+			var requestsForAgent = Restrictions.Or(Restrictions.Or(
+				Restrictions.And(Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonTo),
+								 Restrictions.Not(Restrictions.Eq("requestStatus", 4))) // hide auto denied shift trade requests for receiptors
+				, Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonFrom)),
+												   Restrictions.Eq("Person", person));
+
+			personRequests.Add(requestsForAgent);
+
+			if (paging != null)
+			{
+				personRequests.SetMaxResults(paging.Take);
+				personRequests.SetFirstResult(paging.Skip);
+			}
+
+			return personRequests.List<IPersonRequest>();
+		}
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period) { return findAllRequestsForAgent(person, period); }
+
+		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
 			var shiftTradeDetailsForAgent = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
@@ -144,12 +186,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime))
 					;
 				personRequests.Add(Subqueries.PropertyIn("requests", requestsForPeriod));
-			}
-
-			if (paging != null)
-			{
-				personRequests.SetMaxResults(paging.Take);
-				personRequests.SetFirstResult(paging.Skip);
 			}
 
 			return personRequests.List<IPersonRequest>();
