@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
 
-        public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
+	    public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
         {
             _eventAggregator = eventAggregator;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -71,34 +71,30 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void OnScheduleModified(object sender, ModifyEventArgs e)
         {
             var model = Models.FirstOrDefault(m => m.Person.Equals(e.ModifiedPerson));
-            if (model != null)
-            {
-                rebuildLayerViewModelCollection(model);
-            }
+	        if (model != null)
+		        rebuildLayerViewModelCollection(model);
         }
 
-        private CommonNameDescriptionSetting getCommonNameDescriptionSetting()
-        {
-            if (_commonNameDescriptionSetting == null)
-            {
-                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                {
-                    _commonNameDescriptionSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-                }
-            }
-            return _commonNameDescriptionSetting;
-        }
+	    private CommonNameDescriptionSetting getCommonNameDescriptionSetting()
+	    {
+		    if (_commonNameDescriptionSetting == null)
+			    using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+				    _commonNameDescriptionSetting =
+					    _repositoryFactory.CreateGlobalSettingDataRepository(uow)
+					                      .FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
-        public event PropertyChangedEventHandler PropertyChanged;
+		    return _commonNameDescriptionSetting;
+	    }
+
+	    public event PropertyChangedEventHandler PropertyChanged;
 
         public int HookedEvents()
         {
             var handler = PropertyChanged;
-            if (handler == null)
-            {
-                return 0;
-            }
-            int i = handler.GetInvocationList().Count();
+	        if (handler == null)
+		        return 0;
+	        
+			var i = handler.GetInvocationList().Count();
             return i;
         }
 
@@ -175,23 +171,20 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void rebuildLayerViewModelCollection(DayLayerModel model)
         {
-            if (_dispatcherWrapper == null ||
-                _rtaStateHolder == null ||
-                model.Layers == null)
-            {
-                return;
-            }
-            _dispatcherWrapper.BeginInvoke((Action)(() => rebuildSchedule(model)));
+	        if (_dispatcherWrapper == null ||
+	            _rtaStateHolder == null ||
+	            model.Layers == null)
+		        return;
+	        _dispatcherWrapper.BeginInvoke((Action)(() => rebuildSchedule(model)));
         }
 
         private void rebuildSchedule(DayLayerModel model)
         {
-            if (_rtaStateHolder == null ||
-                model.Layers == null)
-            {
-                return;
-            }
-            IScheduleRange scheduleRange =
+	        if (_rtaStateHolder == null ||
+	            model.Layers == null)
+		        return;
+	        
+			var scheduleRange =
                 _rtaStateHolder.SchedulingResultStateHolder.
                     Schedules[model.Person];
             model.Layers.AddFromProjection(scheduleRange, model.Period);
