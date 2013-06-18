@@ -523,7 +523,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}	
     	}
 
-    	public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
+		public ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto)
+	    {
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<ScheduleTagDto>>>();
+				return invoker.Invoke(queryDto);
+			}
+	    }
+
+	    public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
 			CreateScheduleDistributionAsyncResult asyncResult = new CreateScheduleDistributionAsyncResult(callback, asyncState);
 			asyncResult.PersonList = personList;
@@ -1525,7 +1534,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
     	}
 
-		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto SetSchedulePeriodWorktimeOverride(
+		    SetSchedulePeriodWorktimeOverrideCommandDto setSchedulePeriodWorktimeOverrideCommandDto)
+	    {
+			return ExecuteCommand(setSchedulePeriodWorktimeOverrideCommandDto);
+	    }
+
+	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
     	public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();

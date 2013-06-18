@@ -459,21 +459,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(TimeSpan.Zero, projection.ReadyTime());
 		}
 
-		[Test]
-		public void VerifyContractTimeIsZeroOnEmptyDayWithEmptyContract()
-		{
-			addPeriodAndContractToPerson(false);
-			scheduleDay.Person.Period(new DateOnly(2000, 1, 1)).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.Zero);
+	    [Test]
+	    public void VerifyContractTimeIsZeroOnEmptyDayWithEmptyContract()
+	    {
+	        addPeriodAndContractToPerson(false);
+	        scheduleDay.Person.Period(new DateOnly(2000, 1, 1)).PersonContract.Contract.WorkTime =
+	            new WorkTime(TimeSpan.Zero);
 
-			scheduleDay.Add(createPersonAbsence(100, createPeriod(-10, 20)));
+	        scheduleDay.Add(createPersonAbsence(100, createPeriod(-10, 20)));
 
-			var projection = target.CreateProjection();
-			Assert.AreEqual(1, projection.Count());
-			Assert.AreEqual(TimeSpan.Zero, projection.ContractTime());
-			Assert.AreEqual(TimeSpan.Zero, projection.ReadyTime());
-		}
+	        var projection = target.CreateProjection();
+	        Assert.AreEqual(0, projection.Count());
+	    }
 
-		[Test]
+	    [Test]
 		public void VerifyContractTimeIsZeroIfOvertime()
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);

@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
     public class SiteAssemblerTest
-    {
-        private SiteAssembler _target;
-        private ISite _siteDomain;
-        private SiteDto _siteDto;
-        private MockRepository _mocks;
-        private ISiteRepository _siteRep;
+        {
+            private SiteAssembler _target;
+            private ISite _siteDomain;
+            private SiteDto _siteDto;
+            private MockRepository _mocks;
+            private ISiteRepository _siteRep;
 
         [SetUp]
         public void Setup()

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -13,8 +11,19 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// Created by: Klas
     /// Created date: 2008-12-03
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface ILicenseRepository : IRepository<ILicense> 
+    public interface ILicenseRepository : IRepository<ILicense>
     {
+	    IList<ActiveAgent> GetActiveAgents();
     }
+
+	public class ActiveAgent
+	{
+		public string BusinessUnit { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string Email { get; set; }
+		public string EmploymentNumber { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime? LeavingDate { get; set; }
+	}
 }

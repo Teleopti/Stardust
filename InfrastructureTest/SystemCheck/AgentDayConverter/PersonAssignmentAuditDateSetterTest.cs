@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDayWhenTimeZoneIsCrazy()
 		{
-			var start = new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc);
+			var start = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				createAndStoreAssignment(uow, start);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			Session.Auditer()
 			       .Find<PersonAssignment>(pa.Id.Value, revisions.Last())
-			       .Date.Should().Be.EqualTo(new DateOnly(2000, 1, 2));
+			       .Date.Should().Be.EqualTo(new DateOnly(2000, 1, 1));
 		}
 
 		[Test]
