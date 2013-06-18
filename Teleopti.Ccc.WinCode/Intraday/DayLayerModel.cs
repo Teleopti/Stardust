@@ -42,17 +42,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _period = period;
         }
 
-        public ITeam Team
-        {
-            get { return _team; }
-        }
+	    public ITeam Team
+	    {
+		    get { return _team; }
+	    }
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+	    public IPerson Person
+	    {
+		    get { return _person; }
+	    }
 
-        public string CommonNameDescription
+	    public string CommonNameDescription
         {
             get { return _commonNameDescriptionSetting.BuildCommonNameDescription(_person); }
         }
@@ -62,11 +62,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _isPinned; }
             set
             {
-                if (_isPinned != value)
-                {
-                    _isPinned = value;
-                    notifyPropertyChanged("IsPinned");
-                }
+	            if (_isPinned == value) return;
+	            _isPinned = value;
+	            notifyPropertyChanged("IsPinned");
             }
         }
 

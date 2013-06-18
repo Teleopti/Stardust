@@ -95,14 +95,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _realTimeAdherenceEnabled; }
         }
 
-        /// <summary>
-        /// Gets the chart intraday description.
-        /// </summary>
-        /// <value>The chart intraday description.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-10-21
-        /// </remarks>
         public string ChartIntradayDescription
         {
             get { return _chartIntradayDescription; }
@@ -164,53 +156,21 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// Gets the period.
-        /// </summary>
-        /// <value>The period.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-10-20
-        /// </remarks>
         public ISchedulerStateHolder SchedulerStateHolder
         {
             get { return _schedulingResultLoader.SchedulerState; }
         }
 
-        /// <summary>
-        /// Gets the multiplicator definition sets.
-        /// </summary>
-        /// <value>The multiplicator definition sets.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-02-13
-        /// </remarks>
         public IEnumerable<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets
         {
             get { return _schedulingResultLoader.MultiplicatorDefinitionSets; }
         }
 
-        /// <summary>
-        /// Gets the rta state holder.
-        /// </summary>
-        /// <value>The rta state holder.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-19
-        /// </remarks>
         public IRtaStateHolder RtaStateHolder
         {
             get { return _rtaStateHolder; }
         }
 
-        /// <summary>
-        /// Gets or sets the intraday date.
-        /// </summary>
-        /// <value>The intraday date.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-10-21
-        /// </remarks>
         public DateOnly IntradayDate
         {
             get { return _intradayDate; }
@@ -343,29 +303,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder.VerifyDefaultStateGroupExists();
         }
 
-        /// <summary>
-        /// Prepares the chart description.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="descriptions">The descriptions.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-24
-        /// </remarks>
         public static string PrepareChartDescription(string format, params string[] descriptions)
         {
             return string.Format(CultureInfo.CurrentCulture, format, descriptions);
         }
 
-        /// <summary>
-        /// Prepares the skill intraday collection.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-10-22
-        /// </remarks>
         public IList<ISkillStaffPeriod> PrepareSkillIntradayCollection()
         {
             ISkill skill = _view.SelectedSkill;
@@ -445,9 +387,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (SchedulerStateHolder.Schedules != null &&
                 !SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty())
             {
-                DialogResult res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
+                var res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
                                                            UserTexts.Resources.Save);
-
                 switch (res)
                 {
                     case DialogResult.Cancel:
@@ -524,13 +465,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Virtual dispose method
-        /// </summary>
-        /// <param name="disposing">
-        /// If set to <c>true</c>, explicitly called.
-        /// If set to <c>false</c>, implicitly called from finalizer.
-        /// </param>
         private void Dispose(bool disposing)
         {
             if (disposing)
@@ -540,16 +474,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             ReleaseUnmanagedResources();
         }
 
-        /// <summary>
-        /// Releases the unmanaged resources.
-        /// </summary>
         protected virtual void ReleaseUnmanagedResources()
         {
         }
 
-        /// <summary>
-        /// Releases the managed resources.
-        /// </summary>
         protected virtual void ReleaseManagedResources()
         {
             UnregisterMessageBrokerEvents();

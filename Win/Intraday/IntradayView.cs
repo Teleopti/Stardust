@@ -250,8 +250,7 @@ namespace Teleopti.Ccc.Win.Intraday
         }
 
     	private void teleoptiToolStripGalleryViews_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
-        {
-			
+        {	
             if (!((IntradaySetting)_previousClickedGalleryItem.Tag).Name.Equals(_settingManager.DefaultSetting().Name)) 
                 _settingManager.UpdatePreviousDockingState();
 
@@ -323,7 +322,6 @@ namespace Teleopti.Ccc.Win.Intraday
                 var newSetting = _settingManager.DefaultSetting();
                 newSetting.Name = e.Value.Text;
                 _settingManager.Persist(newSetting.Name);
-                //_intradayViewContent.Settings.SaveIntradaySetting(intradaySetting);
             }
             catch (DataSourceException dataSourceException)
             {

@@ -9,19 +9,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 {
-    /// <summary>
-    /// ViewModel for agent-grid
-    /// </summary>
-    /// <remarks>
-    /// Created by: henrika
-    /// Created date: 2009-06-02
-    /// </remarks>
     public class RealTimeScheduleViewModel:DependencyObject, INotifyPropertyChanged
     {
-        #region properties
-
+		private readonly IEventAggregator _eventAggregator;
         private IDayLayerViewModel _dayLayerViewModel;
-        public IDayLayerViewModel DayLayerViewModel
+     
+        public TimelineControlViewModel TimelineModel { get; private set; }
+
+		public IDayLayerViewModel DayLayerViewModel
         {
             get { return _dayLayerViewModel; }
             private set
@@ -34,9 +29,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
                 }
             }
         }
-
-        public TimelineControlViewModel TimelineModel { get; private set; }
-
+		
         public DateTimePeriod Period
         {
             get { return (DateTimePeriod)GetValue(PeriodProperty); }
@@ -63,38 +56,35 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 
 
         public static readonly DependencyProperty NowPeriodProperty =
-            DependencyProperty.Register("NowPeriod", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),NowPeriodChanged));
+            DependencyProperty.Register("NowPeriod", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),nowPeriodChanged));
 
 
         public static readonly DependencyProperty PeriodProperty =
-            DependencyProperty.Register("Period", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),PeriodChanged));
-
-        private IEventAggregator _eventAggregator;
-
-        #endregion
-
+            DependencyProperty.Register("Period", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),periodChanged));
+		
         public RealTimeScheduleViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService,IDayLayerViewModel dayLayerViewModel)
         {
             _eventAggregator = eventAggregator;
             DayLayerViewModel = dayLayerViewModel;
-            TimelineModel = new TimelineControlViewModel(_eventAggregator,createLayerViewModelService);
-            TimelineModel.ShowHoverTime = false;
-            TimelineModel.ShowDate = true;
-            TimelineModel.ShowNowPeriod = true;
-
+            TimelineModel = new TimelineControlViewModel(_eventAggregator,createLayerViewModelService)
+	            {
+		            ShowHoverTime = false,
+		            ShowDate = true,
+		            ShowNowPeriod = true
+	            };
         }
 
-        private static void NowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void nowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var model = (RealTimeScheduleViewModel)d;
             model.TimelineModel.HoverTime = ((DateTimePeriod)e.NewValue).StartDateTime;
 			model.DayLayerViewModel.RefreshElapsedTime(model.NowPeriod.StartDateTime);
         }
 
-        private static void PeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void periodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            RealTimeScheduleViewModel model = (RealTimeScheduleViewModel) d;
-            DateTimePeriod period = (DateTimePeriod) e.NewValue;
+            var model = (RealTimeScheduleViewModel) d;
+            var period = (DateTimePeriod) e.NewValue;
             model.TimelineModel.Period = period;
             model.ZoomWidth = (period.ElapsedTime().TotalHours*75);
         }
