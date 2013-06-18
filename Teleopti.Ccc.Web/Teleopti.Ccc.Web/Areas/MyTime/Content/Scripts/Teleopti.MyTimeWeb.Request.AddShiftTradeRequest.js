@@ -11,7 +11,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
-	function shiftTradeViewModel() {
+	function shiftTradeViewModel(sendRequestCallback) {
 		var self = this;
 		var layerCanvasPixelWidth = 700;
 
@@ -42,8 +42,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
-
-		self._createMySchedule = function (myScheduleObject) {
+        
+	    self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
@@ -78,6 +78,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.clearInputForm(); 
 		};
 
+		self.sendRequest = function () {
+		    self.isSendEnabled(false);
+		    sendRequestCallback(self);
+		};
+
+		self.cancelRequest = function () {
+		    self.chooseAgent(null);
+		};
+
 		self.clearInputForm = function () {
 			self.subject(undefined);
 			self.message(undefined);
@@ -93,7 +102,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		    
 			self.hours([]);
-			self.hours(arrayMap);
+			self.hours.push.apply(self.hours, arrayMap);
 			_positionTimeLineHourTexts();
 		};
 
@@ -186,54 +195,42 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _init() {
-	    _unbind();
-		var elementToBind = $('#Request-add-shift-trade').get(0);
+		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (_hasPermission(elementToBind)) {
-			vm = new shiftTradeViewModel();
-			ko.applyBindings(vm, elementToBind);
-			_initButtons();
+		    if ((vm || '') == '') {
+		        vm = new shiftTradeViewModel(_saveNewShiftTrade);
+		        ko.applyBindings(vm, elementToBind);
+		    }
 		}
 	}
 
 	function _hasPermission(element) {
 		return element!==undefined;
 	}
-	
-	function _initButtons() {
-		$('#Request-add-shift-trade-detail-section .send-button')
-			.click(function () {
-				vm.isSendEnabled(false);
-				_saveNewShiftTrade();
-			});
-		$('#Request-add-shift-trade-detail-section .cancel-button')
-			.click(function () {
-				vm.chooseAgent(null);
-			});
-	}
 
-	function _saveNewShiftTrade() {
+	function _saveNewShiftTrade(viewModel) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-				Date: vm.selectedDate().toDate().toJSON(),
-				Subject: vm.subject(),
-				Message: vm.message(),
-				PersonToId: vm.agentChoosed().personId
+			    Date: viewModel.selectedDate().toDate().toJSON(),
+			    Subject: viewModel.subject(),
+			    Message: viewModel.message(),
+			    PersonToId: viewModel.agentChoosed().personId
 			}),
 			success: function (data) {
-				vm.agentChoosed(null);
-				vm.isSendEnabled(true);
+			    viewModel.agentChoosed(null);
+			    viewModel.isSendEnabled(true);
 				_hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
-					vm.errorMessage(data.Errors.join('</br>'));
-					vm.isSendEnabled(true);
+					viewModel.errorMessage(data.Errors.join('</br>'));
+					viewModel.isSendEnabled(true);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -288,12 +285,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		;
 	}
     
-	function _unbind() {
-	    vm = null;
-        var element = $('#Request-add-shift-trade')[0];
-        if (element) ko.cleanNode(element);
-    }
-
 	return {
 		Init: function () {
 		},
@@ -309,7 +300,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			_hideShiftTradeWindow();
 		},
 		Dispose: function() {
-		    _unbind();
 		}
 	};
 
