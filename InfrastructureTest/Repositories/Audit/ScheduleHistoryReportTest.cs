@@ -59,12 +59,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				//fix later when mainshift is removed -> add mainshiftlayer directly
-				uow.Reassociate(PersonAssignment);
-				var ms = PersonAssignment.ToMainShift();
-				var sameAct = ms.LayerCollection[0].Payload;
-				ms.LayerCollection.Add(new MainShiftActivityLayer(sameAct, new DateTimePeriod(Today, Today.AddDays(1))));
-				PersonAssignment.SetMainShift(ms);
+				var orgLayers = new List<IMainShiftActivityLayerNew>(PersonAssignment.MainShiftActivityLayers);
+				orgLayers.Add(new MainShiftActivityLayerNew(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
+				PersonAssignment.SetMainShiftLayers(orgLayers, PersonAssignment.ShiftCategory);
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
@@ -225,8 +223,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				var pShift = new PersonalShift();
-				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.ToMainShift().LayerCollection[0].Payload,
-																							 PersonAssignment.ToMainShift().LayerCollection[0].Period));
+				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShiftActivityLayers.First().Payload,
+																							 PersonAssignment.MainShiftActivityLayers.First().Period));
 				PersonAssignment.ClearMainShiftLayers();
 				PersonAssignment.AddPersonalShift(pShift);
 				uow.PersistAll();

@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -29,20 +28,9 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        object ILayer.Payload
-        {
-            get { return Payload; }
-            set { Payload = (T)value; }
-        }
-
         public virtual T Payload
         {
             get { return _payload; }
-            set 
-            {
-                InParameter.NotNull("value", value);
-                _payload = value; 
-            }
         }
 
         public virtual int OrderIndex
@@ -70,41 +58,8 @@ namespace Teleopti.Ccc.Domain.Common
 			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
 
-		public virtual bool Equals(ILayer other)
-		{
-			if (other == null)
-				return false;
-			if (this == other)
-				return true;
-			return false;
-			//if (!other.Id.HasValue || !Id.HasValue)
-			//	return false;
 
-			//return (Id.Value == other.Id.Value);
-		}
-
-        public virtual void ChangeLayerPeriodEnd(TimeSpan timeSpan)
-        {
-            _period = _period.ChangeEndTime(timeSpan);
-        }
-
-        public virtual void ChangeLayerPeriodStart(TimeSpan timeSpan)
-        {
-            _period = _period.ChangeStartTime(timeSpan);
-        }
-
-        public virtual void MoveLayer(TimeSpan timeSpan)
-        {
-            _period = _period.MovePeriod(timeSpan);
-        }
-
-        public virtual void Transform(ILayer<T> layer)
-        {
-            _period = layer.Period;
-            _payload = layer.Payload;
-        }
-
-        public virtual bool AdjacentTo(ILayer<T> layer)
+		public virtual bool AdjacentTo(IPeriodized layer)
         {
             InParameter.NotNull("layer", layer);
             return (Period.StartDateTime == layer.Period.EndDateTime || 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -240,12 +242,12 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2009-09-01    
         /// </remarks>
-        public static void ListCannotBeEmpty(string parameterName, IList value)
+        public static void ListCannotBeEmpty<T>(string parameterName, IEnumerable<T> value)
         {
-            string errMess = string.Format(CultureInfo.CurrentCulture,
+            var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must not be an empty list.",
                                                parameterName);
-            if (value.Count == 0)
+            if (!value.Any())
                 throw new ArgumentOutOfRangeException(errMess, parameterName);
         }
 
@@ -258,18 +260,6 @@ namespace Teleopti.Interfaces.Domain
             if (period.StartDateTime.Second != 0 || period.EndDateTime.Second != 0)
             {
                 throw new ArgumentException(@"The seconds part is not allowed for this period.", "period");
-            }
-        }
-
-        /// <summary>
-        /// Ensure that there are no seconds specified in the given time span.
-        /// </summary>
-        /// <param name="timeSpan">The time span to check.</param>
-        public static void EnsureNoSecondsInTimeSpan(TimeSpan timeSpan)
-        {
-            if (timeSpan.Seconds != 0)
-            {
-                throw new ArgumentException(@"The given time span contains a seconds part which is not allowed in this context.", "timeSpan");
             }
         }
     }

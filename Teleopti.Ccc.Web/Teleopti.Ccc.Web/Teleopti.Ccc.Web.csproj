@@ -90,9 +90,9 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
-    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.1.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
+    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.3.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.1\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.3\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.Core">
       <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
@@ -113,29 +113,25 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.3\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.1.1.1\lib\net40\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.3\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.1.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.1.2\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Owin.1.1.1\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Owin.1.1.2\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.1.1\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.1.2\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -161,9 +157,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.6, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.7, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.6\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.7\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -211,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProvider.cs" />
@@ -268,6 +265,9 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationController.cs" />
+    <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Core\IOpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Controllers\OpenIdController.cs" />
     <Compile Include="Areas\SSO\Core\OpenIdProviderWapper.cs" />
@@ -652,6 +652,18 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\scenario-addremovefulldayabsence-iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\helpers.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\messagebroker.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\scenario-addremovefulldayabsence.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\signalrhubs.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\vm.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\view.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
+    <Content Include="Areas\PerformanceTool\Content\Templates\index.html" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
@@ -851,7 +863,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
-    <Content Include="Content\favicon.ico" />
+    <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\Mobile\images\icons-18-black.png" />
@@ -930,6 +942,7 @@
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
+    <Content Include="Content\select2\select2-spinner.gif" />
     <Content Include="Content\select2\select2.css" />
     <Content Include="Content\select2\select2.png" />
     <Content Include="Content\select2\select2x2.png" />
@@ -953,9 +966,10 @@
     <Content Include="Content\moment-datepicker\moment-datepicker.min.js" />
     <Content Include="Content\moment\moment.js" />
     <Content Include="Content\moment\moment.min.js" />
-    <Content Include="Content\select2\spinner.gif" />
     <Content Include="Content\select2\select2.js" />
     <Content Include="Content\select2\select2.min.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.1.2.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.1.2.min.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
@@ -978,8 +992,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Scripts\jquery-1.9.1.min.map" />
-    <Content Include="Content\signalr\jquery.signalR-1.1.1.js" />
-    <Content Include="Content\signalr\jquery.signalR-1.1.1.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1011,10 +1023,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.WinCodeTest\Teleopti.Ccc.WinCodeTest.csproj">
-      <Project>{0D4BFD2E-D020-44F7-AF6A-AC88E1EABD11}</Project>
-      <Name>Teleopti.Ccc.WinCodeTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
@@ -1075,7 +1083,6 @@
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\Anywhere\Views\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />

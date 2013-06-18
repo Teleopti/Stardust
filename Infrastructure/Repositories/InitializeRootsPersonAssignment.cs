@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -20,11 +19,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void Initialize()
         {
             //todo: rk - ta bort denna och ladda i de use case där de behövs istället!
-            var assWithMainShifts = (from a in _personAssignments
-                                     where a.ToMainShift() != null
+            var assWithShiftCategories = (from a in _personAssignments
+                                     where a.ShiftCategory != null
                                      select a);
-            var mainShiftActivities = (from a in assWithMainShifts
-                                       from al in a.ToMainShift().LayerCollection
+            var mainShiftActivities = (from a in assWithShiftCategories
+                                       from al in a.MainShiftActivityLayers
                                        select al.Payload).Distinct();
             var persShiftActivities = (from a in _personAssignments
                                        from p in a.PersonalShiftCollection
@@ -34,23 +33,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                       from o in a.OvertimeShiftCollection
                                       from al in o.LayerCollection
                                       select al.Payload).Distinct();
-            var mainShifts = (from s in assWithMainShifts
-                              select s.ToMainShift()).Distinct();
-            mainShiftActivities.ForEach(a =>
-            {
-                if (!LazyLoadingManager.IsInitialized(a))
-                    LazyLoadingManager.Initialize(a);
-            });
-            persShiftActivities.ForEach(a =>
-            {
-                if (!LazyLoadingManager.IsInitialized(a))
-                    LazyLoadingManager.Initialize(a);
-            });
-            overTimeActivities.ForEach(a =>
-            {
-                if (!LazyLoadingManager.IsInitialized(a))
-                    LazyLoadingManager.Initialize(a);
-            });
+            mainShiftActivities.ForEach(LazyLoadingManager.Initialize);
+            persShiftActivities.ForEach(LazyLoadingManager.Initialize);
+            overTimeActivities.ForEach(LazyLoadingManager.Initialize);
 
 
             foreach (var personAss in _personAssignments)
@@ -59,26 +44,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 {
                     foreach (IOvertimeShiftActivityLayer layer in overtime.LayerCollection)
                     {
-                        if (!LazyLoadingManager.IsInitialized(layer.DefinitionSet))
-                            LazyLoadingManager.Initialize(layer.DefinitionSet);   
+                          LazyLoadingManager.Initialize(layer.DefinitionSet);   
                     }
                 }
             }
 
-            foreach (IMainShift shift in mainShifts)
-            {
-                if (!LazyLoadingManager.IsInitialized(shift.ShiftCategory))
-                    LazyLoadingManager.Initialize(shift.ShiftCategory);
-                if (shift.ShiftCategory != null
-                    && shift.ShiftCategory.DayOfWeekJusticeValues != null)
-                {
-                    foreach (KeyValuePair<DayOfWeek, int> pair in shift.ShiftCategory.DayOfWeekJusticeValues)
-                    {
-                        if (!LazyLoadingManager.IsInitialized(pair))
-                            LazyLoadingManager.Initialize(pair);
-                    }
-                }
-            }
+	        foreach (var assignment in assWithShiftCategories)
+	        {
+		        if (assignment.ShiftCategory.DayOfWeekJusticeValues != null)
+		        {
+			        foreach (var pair in assignment.ShiftCategory.DayOfWeekJusticeValues)
+			        {
+								LazyLoadingManager.Initialize(pair);
+			        }
+		        }
+	        }
         }
     }
 }

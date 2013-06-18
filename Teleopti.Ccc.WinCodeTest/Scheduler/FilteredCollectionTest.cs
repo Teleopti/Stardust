@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     [TestFixture]
     public class FilteredCollectionTest
     {
-        FilteredCollection<ILayer> _collection;
+        FilteredCollection<ILayer<IActivity>> _collection;
         FakeLayer _fakeLayer;
         MainShiftActivityLayer _mainShiftActivityLayer;
         Activity _fakeActivity;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mainShiftActivityLayer = new MainShiftActivityLayer(_fakeActivity, _fakePeriod);
 
             _fakeLayer = new FakeLayer(_fakeActivity, _fakePeriod);
-            _collection = new FilteredCollection<ILayer>();
+            _collection = new FilteredCollection<ILayer<IActivity>>();
         }
 
         [Test]

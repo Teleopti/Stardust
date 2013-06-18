@@ -120,20 +120,24 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 
-            foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
+            if (SchedulerStateHolder.FilteredPersonDictionary.Count>100)
             {
-                _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-                                                        person.Id.GetValueOrDefault(),
-                                                        typeof(IActualAgentState),
-                                                        DateTime.UtcNow,
-                                                        DateTime.UtcNow.AddDays(1));
+                    _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+                                                            typeof(IActualAgentState),
+                                                            DateTime.UtcNow,
+                                                            DateTime.UtcNow.AddDays(1));
             }
-
-			_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-													 Guid.Empty,
-													 typeof(IActualAgentState),
-													 DateTime.UtcNow,
-													 DateTime.UtcNow.AddDays(1));
+            else
+            {
+                foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
+                {
+                    _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+                                                            person.Id.GetValueOrDefault(),
+                                                            typeof(IActualAgentState),
+                                                            DateTime.UtcNow,
+                                                            DateTime.UtcNow.AddDays(1));
+                }
+            }
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]

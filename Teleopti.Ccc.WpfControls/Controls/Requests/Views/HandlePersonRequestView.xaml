@@ -33,7 +33,10 @@
 					<Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="FontWeight" Value="Bold"/>
                     </Trigger>
-                <!--    <MultiDataTrigger>
+					<Trigger Property="IsSelected" Value="True">
+						<Setter Property="Background" Value="{StaticResource RaptorDarkGridSelectionGradientBrush}"/>
+					</Trigger>
+					<!--    <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="true" />
                         </MultiDataTrigger.Conditions>
@@ -79,7 +82,7 @@
 		<Controls:DataGrid.Columns>
 			<Controls:DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Width="27"
-                                             CanUserReorder="False"
+                                             SortMemberPath="Headers"
                                              x:Name="Headers">
 				<Controls:DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>

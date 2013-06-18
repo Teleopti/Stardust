@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewConfidential, "xxViewConfidential", DefinedRaptorApplicationFunctionForeignIds.ViewConfidential, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, "xxViewRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ViewRestrictedScenario, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario, "xxModifyRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ModifyRestrictedScenario, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewActiveAgents, "xxViewActiveAgents", DefinedRaptorApplicationFunctionForeignIds.ViewActiveAgents, null);
 			
 			// PersonAdmin
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, "xxModifyPersonNameAndPassword", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonNameAndPassword, null);
@@ -143,6 +144,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			// Intraday
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence, "xxRealTimeAdherence", DefinedRaptorApplicationFunctionForeignIds.IntradayRealTimeAdherence, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning, "xxEarlyWarning", DefinedRaptorApplicationFunctionForeignIds.IntradayEarlyWarning, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayReForecasting, "xxReforecast", DefinedRaptorApplicationFunctionForeignIds.IntradayReForecasting, null);
 
 			// Performance Manager
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport, "xxCreatePerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.CreatePerformanceManagerReport, null);

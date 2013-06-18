@@ -179,6 +179,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.allowance = ko.observable(day.Allowance);
 		self.absenceAgents = ko.observable(day.AbsenceAgents);
+		self.fullTimeEquivalent = ko.observable(day.FulltimeEquivalent);
 
 		self.basedOnAllowanceChance = function (options) {
 			var percent;
@@ -188,9 +189,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				percent = 0;
 			}
 			
-			var index = 2;
-			if (percent < 30) index = 0;
-			else if (percent < 80) index = 1;
+			var index = 0;
+			if (percent > 0 && (self.allowance() - self.absenceAgents()) >= self.fullTimeEquivalent()) {
+			    index = percent > 30 && (self.allowance() - self.absenceAgents()) >= 2 * self.fullTimeEquivalent() ? 2 : 1;
+			}		
 			return options[index];
 		};
 
@@ -235,8 +237,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return new LayerViewModel(item, parent);
 		});
 		
-	    self.absenceRequestPermission = ko.computed(function() {
-	        return parent.absenceRequestPermission();
+		self.availability = ko.observable(day.Availability);
+	    
+		self.absenceRequestPermission = ko.computed(function () {
+		    if (!parent.absenceRequestPermission() || !self.availability())
+		        return false;
+		    else {
+		        return true;
+		    }	
 	    });
 
 	
@@ -406,12 +414,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
     
-    function _cleanBindings() {
-        ko.cleanNode($('#ScheduleWeek-body')[0]);
-        vm.days([]);
-        vm.timeLines([]);
-        vm = null;
-    }
+	function _cleanBindings() {
+		ko.cleanNode($('#ScheduleWeek-body')[0]);
+		if (vm) {
+			vm.days([]);
+			vm.timeLines([]);
+			vm = null;
+		}
+	}
 
 	return {
 		Init: function () {

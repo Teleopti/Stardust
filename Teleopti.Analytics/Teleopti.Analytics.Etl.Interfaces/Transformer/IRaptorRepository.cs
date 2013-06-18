@@ -224,6 +224,10 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		int PersistScheduleChanged(DataTable dataTable);
 		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
 	    IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
+		IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
 	    int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
+		int PersistAvailability(DataTable dataTable);
+	    int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
+	    int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario);
     }
 }

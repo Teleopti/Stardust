@@ -126,5 +126,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         [DataMember]
         public bool IsFullDayAbsence { get; set; }
+
+		/// <summary>
+		/// Gets or sets the schedule tag.
+		/// </summary>
+		[DataMember]
+		public ScheduleTagDto ScheduleTag { get; set; }
+
     }
 }

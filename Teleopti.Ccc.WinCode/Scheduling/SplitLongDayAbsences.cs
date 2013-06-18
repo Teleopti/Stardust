@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				if (personAbsencePeriodStart < dayToSplitPeriodStart || personAbsencePeriodEnd > dayToSplitPeriodEnd)
 				{
-					IPersonAbsence splitDayAbsence = personAbsence.NoneEntityClone();
 					DateTime start;
 					DateTime end;
 					if (personAbsencePeriodStart < dayToSplitPeriodStart)
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 					if (end > start)
 					{
-						splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
-						dayAbsences.Add(splitDayAbsence);
+						var period = new DateTimePeriod(start, end);
+						dayAbsences.Add(new PersonAbsence(personAbsence.Person, personAbsence.Scenario, new AbsenceLayer(personAbsence.Layer.Payload, period)));
 					}
 				}
 			}

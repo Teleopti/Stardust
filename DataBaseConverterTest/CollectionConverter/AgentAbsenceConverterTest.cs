@@ -55,10 +55,8 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             IAbsence abs = AbsenceFactory.CreateAbsence("abs");
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 
-            IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-            IPersonAbsence personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2001, 1, 1, 2001, 1, 3));
-            personAbsence.Layer.Payload = abs;
-            personAbsence2.Layer.Payload = abs;
+            IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), abs);
+            IPersonAbsence personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2001, 1, 1, 2001, 1, 3), abs);
 
             global::Domain.AgentDay agDay1 = _factory.AgentDay();
             agDay1.AgentDayAssignment.SetAssigned(_factory.WorkShift(), _factory.ScheduleType);

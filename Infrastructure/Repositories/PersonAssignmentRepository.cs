@@ -117,20 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Removes the main shift from the data source.
-        /// </summary>
-        /// <param name="personAssignment">The person assignment.</param>
-        /// <remarks>
-        /// Tested from Domain test.
-        /// </remarks>
-        void IPersonAssignmentRepository.RemoveMainShift(IPersonAssignment personAssignment)
-        {
-			  if(!Session.Contains(personAssignment))
-				  Session.Lock(personAssignment, LockMode.None);
-            Session.Delete(personAssignment.ToMainShift());
-        }
-
-        /// <summary>
         /// Loads the aggregate.
         /// </summary>
         /// <param name="id">The id.</param>

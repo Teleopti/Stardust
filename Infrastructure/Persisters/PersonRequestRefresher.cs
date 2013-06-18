@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters
@@ -21,14 +22,17 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
             _personRequestFromMessagesUpdater = personRequestFromMessagesUpdater;
         }
 
-        public void Refresh(IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> meetingMessages)
+        public void Refresh(IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> requestMessages)
         {
-            foreach (var meetingMessage in meetingMessages)
-            {
-                _personRequestFromMessagesUpdater.UpdatePersonRequest(meetingMessage);
-                messageQueue.Remove(meetingMessage);
-            }
+	        var alreadyRefreshedRequestIds = new HashSet<Guid>();
+	        foreach (var requestMessage in requestMessages)
+	        {
+		        if (alreadyRefreshedRequestIds.Add(requestMessage.DomainObjectId))
+		        {
+			        _personRequestFromMessagesUpdater.UpdatePersonRequest(requestMessage);
+		        }
+		        messageQueue.Remove(requestMessage);
+	        }
         }
-
     }
 }

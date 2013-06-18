@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 													IScheduleDay destinationScheduleDay, DateOnly day)
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
-			destinationScheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.NoneEntityClone());
+			destinationScheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
 
             _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
 	        return destinationScheduleDay;

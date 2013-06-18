@@ -46,10 +46,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             var person = schedulePart.Person;
             IShiftCategory shiftCategory = new ShiftCategory("TopCat");
             shiftCategory.SetId(Guid.NewGuid());
-            IMainShift mainShift = new MainShift(shiftCategory);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(activity, schedulePart.Period));
             IPersonAssignment assignment = new PersonAssignment(person, schedulePart.Scenario, schedulePart.DateOnlyAsPeriod.DateOnly);
-            assignment.SetMainShift(mainShift);
+			assignment.SetMainShiftLayers(new[]{new MainShiftActivityLayerNew(activity, schedulePart.Period)}, shiftCategory);
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("WrongDayOff"));
             dayOffTemplate.SetId(Guid.NewGuid());
             

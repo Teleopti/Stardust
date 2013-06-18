@@ -95,28 +95,26 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _view.SetRequiredParticipants(_model.RequiredParticipants);
         }
 
-        public void ParseRequiredParticipants(string participantText)
-        {
-            var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                 StringSplitOptions.RemoveEmptyEntries);
+		public void RemoveIndexesRequired(IList<int> removedIndexes)
+		{
+			foreach (var removedIndex in removedIndexes.Reverse())
+			{
+				if(_model.RequiredParticipantList.Count > removedIndex)
+					_model.RequiredParticipantList.RemoveAt(removedIndex);
+			}
 
-            _model.RequiredParticipantList.Clear();
-			foreach (var foundName in participantsFromText.Select(s => _originalPersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
-                _model.RequiredParticipantList.Add(foundName);
+			_view.SetRequiredParticipants(_model.RequiredParticipants);
+		}
 
-            _view.SetRequiredParticipants(_model.RequiredParticipants);
-        }
+		public void RemoveIndexesOptional(IList<int> removedIndexes)
+		{
+			foreach (var removedIndex in removedIndexes.Reverse())
+			{
+				if(_model.OptionalParticipantList.Count > removedIndex)
+					_model.OptionalParticipantList.RemoveAt(removedIndex);
+			}
 
-        public void ParseOptionalParticipants(string participantText)
-        {
-            var participantsFromText = participantText.Split(new[] { MeetingViewModel.ParticipantSeparator },
-                                                 StringSplitOptions.RemoveEmptyEntries);
-
-            _model.OptionalParticipantList.Clear();
-			foreach (var foundName in participantsFromText.Select(s => _originalPersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
-                _model.OptionalParticipantList.Add(foundName);
-
-            _view.SetOptionalParticipants(_model.OptionalParticipants);
-        }
+			_view.SetOptionalParticipants(_model.OptionalParticipants);
+		}
     }
 }

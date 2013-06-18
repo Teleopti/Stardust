@@ -28,10 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			PersistAndRemoveFromUnitOfWork(_activity);
 
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			var mainShift = new MainShift(_shiftCategory);
-			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
-			mainShift.LayerCollection.Add(layer);
-			personAssignment.SetMainShift(mainShift);
+			personAssignment.SetMainShiftLayers(new[] {new MainShiftActivityLayerNew(_activity, FirstDayDateTimePeriod)}, _shiftCategory);
 			return personAssignment;
 		}
 
@@ -44,23 +41,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			DeleteScheduleDataAsAnotherUser();
 
 			ScheduleDictionary.TakeSnapshot();
-			ModifyScheduleData();
+			modifyScheduleData();
 
 			var result = TryPersistScheduleScreen();
 			Assert.That(result.Saved, Is.False);
 			Assert.That(result.ScheduleDictionaryConflicts.Count(), Is.EqualTo(1));
 		}
 
-		private void ModifyScheduleData()
+		private void modifyScheduleData()
 		{
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-			var ms = personAssignment.ToMainShift();
-			var activity = ms.LayerCollection[0].Payload;
-			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-			ms.LayerCollection.Add(layer);
-			personAssignment.SetMainShift(ms);
+			var msLayers = new List<IMainShiftActivityLayerNew>(personAssignment.MainShiftActivityLayers);
+			msLayers.Add(new MainShiftActivityLayerNew(msLayers.First().Payload, FirstDayDateTimePeriod));
+			personAssignment.SetMainShiftLayers(msLayers, personAssignment.ShiftCategory);
 		
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}

@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-
     public class LayerCollection<T> : ReadOnlyCollection<ILayer<T>>, ILayerCollection<T>
     {
         private readonly ILayerCollectionOwner<T> _owner;
@@ -20,11 +19,6 @@ namespace Teleopti.Ccc.Domain.Collection
         {
         }
 
-        public void Sort(ILayerSorter<T> sorter)
-        {
-            ((List<ILayer<T>>) Items).Sort(sorter);
-        }
-
         public virtual bool Remove(ILayer<T> item)
         {
             return Items.Remove(item);
@@ -36,23 +30,11 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-			var owner = _owner as IEntity;
-					//hack for now - will be removed
-			if(owner != null && !(owner is IMainShift))
-				item.SetParent(owner);
-        }
-
-        public bool LayerIsOverlapping(ILayer<T> layer)
-        {
-	        return Items.Any(presentLayer => layer.Period.Intersect(presentLayer.Period));
-        }
-
-	    public void MoveAllLayers(TimeSpan time)
-        {
-            foreach (var layer in Items)
-            {
-                layer.MoveLayer(time);
-            }
+	        var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);						
+					}
         }
 
         public DateTimePeriod? Period()
@@ -101,7 +83,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void Insert(int index, ILayer<T> item)
         {
-            Items.Insert(index, item);
+					var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);
+					}
+           Items.Insert(index, item);
         }
 
         public void MoveUpLayer(ILayer<T> layer)

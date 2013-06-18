@@ -261,6 +261,198 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.First().Item2.Should().Be.EqualTo(allowance);
 		}
 
+		[Test]
+		public void GetAllowanceForPeriod_WhenAutoDeny_ShouldSetAllowanceToZero()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = _alwaysOpenPeriod
+			});
+
+			workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new DenyAbsenceRequest();
+
+			_user.WorkflowControlSet = workflowControlSet;
+
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
+
+			var budgetDays = new List<IBudgetDay>();
+			var allowance = TimeSpan.FromHours(40);
+
+			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
+			budgetDays.Add(budgetDay);
+
+			_user.AddPersonPeriod(personPeriod1);
+			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
+			var result = target.GetAllowanceForPeriod(period);
+			verifyThatAllDaysHasZeroAllowance(result);
+		}
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenBudgetgroupStaffingCheck_ShouldSetAvailabilityToTrue()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = _alwaysOpenPeriod
+			});
+
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+
+			_user.WorkflowControlSet = workflowControlSet;
+
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
+
+			var budgetDays = new List<IBudgetDay>();
+			var allowance = TimeSpan.FromHours(40);
+
+			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
+			budgetDays.Add(budgetDay);
+
+			_user.AddPersonPeriod(personPeriod1);
+			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(result.First().Item4, Is.EqualTo(true));
+		}
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenIntradayStaffingCheck_ShouldSetAvailabilityToFalse()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = _alwaysOpenPeriod
+			});
+
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new StaffingThresholdValidator();
+
+			_user.WorkflowControlSet = workflowControlSet;
+
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
+
+			var budgetDays = new List<IBudgetDay>();
+			var allowance = TimeSpan.FromHours(40);
+
+			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
+			budgetDays.Add(budgetDay);
+
+			_user.AddPersonPeriod(personPeriod1);
+			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(result.First().Item3, Is.EqualTo(TimeSpan.Zero));
+			Assert.That(result.First().Item4, Is.EqualTo(false));
+		}
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenHeadCountStaffingCheck_ShouldSetAvailabilityToFalse()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = _alwaysOpenPeriod
+			});
+
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+
+			_user.WorkflowControlSet = workflowControlSet;
+
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
+
+			var budgetDays = new List<IBudgetDay>();
+			var allowance = TimeSpan.FromHours(40);
+
+			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
+			budgetDays.Add(budgetDay);
+
+			_user.AddPersonPeriod(personPeriod1);
+			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(result.First().Item4, Is.EqualTo(false));
+		}
+
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenNoStaffingCheck_ShouldSetAvailabilityToFalse()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = _alwaysOpenPeriod
+			});
+
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+
+			_user.WorkflowControlSet = workflowControlSet;
+
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
+
+			var budgetDays = new List<IBudgetDay>();
+			var allowance = TimeSpan.FromHours(40);
+
+			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
+			budgetDays.Add(budgetDay);
+
+			_user.AddPersonPeriod(personPeriod1);
+			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(result.First().Item4, Is.EqualTo(false));
+		}
+
 		#region helpers
 		private BudgetDay createBudgetDayWithAllowance(IBudgetGroup budgetGroup,DateOnly date, double hoursOfAllowance)
 		{
@@ -277,10 +469,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = preferencePeriod
 			});
 
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+
 			_user.WorkflowControlSet = workflowControlSet;
 		}
 
-		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan>> allowanceDays)
+		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan, TimeSpan, bool>> allowanceDays)
 		{
 			Assert.That(allowanceDays.Sum(a => a.Item2.TotalMinutes), Is.EqualTo(0));
 		}

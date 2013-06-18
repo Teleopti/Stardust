@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	    private DateOnly _dateOnly;
 	    private IWorkShift _workShift1;
 	    private IWorkShift _workShift2;
-	    private IMainShift _mainshift1;
-	    private IMainShift _mainshift2;
+	    private IEditableShift _mainshift1;
+		private IEditableShift _mainshift2;
 	    private IProjectionService _ps1;
 	    private IProjectionService _ps2;
 	    private IVisualLayerCollection _lc1;
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             _dateOnly = new DateOnly(2013, 3, 1);
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
-            _mainshift1 = _mocks.StrictMock<IMainShift>();
-            _mainshift2 = _mocks.StrictMock<IMainShift>();
+			_mainshift1 = _mocks.StrictMock<IEditableShift>();
+			_mainshift2 = _mocks.StrictMock<IEditableShift>();
             _ps1 = _mocks.StrictMock<IProjectionService>();
             _ps2 = _mocks.StrictMock<IProjectionService>();
             _lc1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 	    private void commonExpectCalls()
 	    {
-	        Expect.Call(_workShift1.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
-	        Expect.Call(_workShift2.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
+	        Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
+	        Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
 	        Expect.Call(_workShift1.ProjectionService()).Return(_ps1);
 	        Expect.Call(_workShift2.ProjectionService()).Return(_ps2);
 	        Expect.Call(_ps1.CreateProjection()).Return(_lc1);
@@ -182,8 +182,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShift1.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
-				Expect.Call(_workShift2.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
+				Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
+				Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
 
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache()).Repeat.AtLeastOnce();
                 Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix1, _scheduleOptions))

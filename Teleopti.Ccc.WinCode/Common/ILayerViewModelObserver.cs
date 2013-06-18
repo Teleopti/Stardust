@@ -9,13 +9,14 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void LayerMovedVertically(ILayerViewModel sender);
 
-        IRemoveLayerFromScheduleService RemoveService { get; }
+        void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer,IScheduleDay scheduleDay);
 
-        void RemoveActivity(ILayerViewModel sender);
-
-        void RemoveAbsence(ILayerViewModel sender);
+		void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay);
 
         void SelectLayer(ILayerViewModel model);
 
+		void ReplaceActivity(ILayerViewModel sender, ILayer<IActivity> layer, IScheduleDay scheduleDay);
+
+		void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay);
     }
 }

@@ -88,18 +88,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             	{
 					if (!scheduledFirstDate && keyValuePair.Key.Equals(DayReadyToMove.FirstDay))
 					{
-						var firstDate = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
 						scheduledFirstDate = true;
-						teamSteadyStateSuccess = ReScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, firstDate, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, scheduleDictionary);
+						teamSteadyStateSuccess = reScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, scheduleDictionary);
 						if (!teamSteadyStateSuccess) 
 							break;
 					}	
 						
 					if (!scheduledSecondDate && keyValuePair.Key.Equals(DayReadyToMove.SecondDay))
 					{
-						var secondDate = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
 						scheduledSecondDate = true;
-						teamSteadyStateSuccess = ReScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, secondDate, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, scheduleDictionary);
+						teamSteadyStateSuccess = reScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, scheduleDictionary);
 						if (!teamSteadyStateSuccess) 
 							break;
 					}
@@ -133,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-		private bool ReScheduleTeamSteadyState(IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, DateOnly dateOnly, KeyValuePair<DayReadyToMove, IScheduleDay> keyValuePair, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary)
+		private bool reScheduleTeamSteadyState(IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, KeyValuePair<DayReadyToMove, IScheduleDay> keyValuePair, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary)
 		{
 			if (keyValuePair.Key.Equals(DayReadyToMove.FirstDay))
 				SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
@@ -141,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (keyValuePair.Key.Equals(DayReadyToMove.SecondDay))
 				SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
 
-			dateOnly = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
+			var dateOnly = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
 			var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(keyValuePair.Value.Person, dateOnly);
 
 			if(teamSteadyStateHolder.IsSteadyState(groupPerson))
@@ -198,7 +196,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var shiftDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
             _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences,
-                                                                           scheduleDay.AssignmentHighZOrder().ToMainShift(),
+                                                                           scheduleDay.GetEditorShift(),
                                                                            shiftDate);
 
             if (!_groupMatrixHelper.ScheduleSinglePerson(shiftDate, scheduleDay.Person,

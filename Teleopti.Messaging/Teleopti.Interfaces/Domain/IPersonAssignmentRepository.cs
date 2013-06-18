@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -34,11 +33,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2007-11-12
         /// </remarks>
         ICollection<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario);
-
-        /// <summary>
-        /// Removes the main shift from the data source.
-        /// </summary>
-        /// <param name="personAssignment">The agent assignment.</param>
-        void RemoveMainShift(IPersonAssignment personAssignment);
     }
 }

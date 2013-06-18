@@ -17496,6 +17496,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The recipient has answered to your earlier message. Refresh the window to see the reply. Your message will not be sent..
+        /// </summary>
+        public static string RecipientAnsweredToEarlierMessage {
+            get {
+                return ResourceManager.GetString("RecipientAnsweredToEarlierMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recruitment.
         /// </summary>
         public static string Recruitment {
@@ -17985,7 +17994,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not send request for the requested period this time..
         /// </summary>
         public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
             get {
@@ -17994,7 +18003,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Workflow Control Set defined!.
+        ///   Looks up a localized string similar to Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}..
+        /// </summary>
+        public static string RequestDenyReasonNoPeriod {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonNoPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No workflow control set defined..
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {
             get {
@@ -18012,7 +18030,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}..
         /// </summary>
         public static string RequestDenyReasonPeriodOpenAfterSendRequest {
             get {
@@ -18458,6 +18476,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportAgentStatistics {
             get {
                 return ResourceManager.GetString("ResReportAgentStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Availability Per Agent.
+        /// </summary>
+        public static string ResReportAvailabilityPerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAvailabilityPerAgent", resourceCulture);
             }
         }
         
@@ -24635,6 +24662,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View active agents.
+        /// </summary>
+        public static string ViewActiveAgents {
+            get {
+                return ResourceManager.GetString("ViewActiveAgents", resourceCulture);
             }
         }
         

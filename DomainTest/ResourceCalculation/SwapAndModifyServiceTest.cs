@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dates = new List<DateOnly>();
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             Expect.Call(_dictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
+	        Expect.Call(_dictionary.PermissionsEnabled).Return(true).Repeat.AtLeastOnce();
             _mocks.Replay(_dictionary);
             _range1 = _mocks.StrictMock<IScheduleRange>();
             _range2 = _mocks.StrictMock<IScheduleRange>();
@@ -60,14 +61,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IActivity activity = ActivityFactory.CreateActivity("hej");
 
             _p1D1 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2008,2,1));
-            _p1D1.AddMainShift(MainShiftFactory.CreateMainShift(activity, _d1, category));
+            _p1D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
             _p2D1 = ExtractedSchedule.CreateScheduleDay(_dictionary,  _person2, new DateOnly(2008,2,1));
-            _p2D1.AddMainShift(MainShiftFactory.CreateMainShift(activity, _d1, category));
+			_p2D1.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d1, category));
 
             _p1D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2008,2,2));
-            _p1D2.AddMainShift(MainShiftFactory.CreateMainShift(activity, _d2, category));
+			_p1D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
             _p2D2 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2008, 2, 2));
-            _p2D2.AddMainShift(MainShiftFactory.CreateMainShift(activity, _d2, category));
+			_p2D2.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d2, category));
             _mocks.BackToRecord(_dictionary);
         }
 

@@ -113,13 +113,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net35-client\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.3\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.3\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -129,9 +129,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.6, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.7, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.6\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.7\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

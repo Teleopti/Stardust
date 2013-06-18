@@ -39,9 +39,6 @@ BEGIN
 	RETURN 0
 END
 
---fill "temporary" tables used for later Intraday loads
-exec [stage].[etl_stg_schedule_updated_special_load]
-
 DELETE fs
 FROM Stage.stg_schedule_changed stg
 INNER JOIN Stage.stg_schedule_updated_personLocal dp
@@ -60,7 +57,7 @@ INNER JOIN mart.fact_schedule fs
 	ON dp.person_id = fs.person_id
  	AND ds.scenario_id = fs.scenario_id
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-	ON dd.shift_startdate_id = fs.shift_startdate_id AND dd.interval_id = fs.interval_id
+	ON dd.shift_startdate_id = fs.shift_startdate_id 
 WHERE stg.business_unit_code = @business_unit_code
 
 --insert new and updated

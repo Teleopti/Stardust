@@ -44,6 +44,7 @@
         public const string ModifySchedule = "Raptor/Global/ModifySchedule";
 		public const string ViewRestrictedScenario = "Raptor/Global/ViewRestrictedScenario";
 		public const string ModifyRestrictedScenario = "Raptor/Global/ModifyRestrictedScenario";
+		public const string ViewActiveAgents = "Raptor/Global/ViewActiveAgents";
 
         // PersonAdmin
         public const string ModifyPersonNameAndPassword = "Raptor/PersonAdmin/ModifyPersonNameAndPassword";
@@ -89,6 +90,7 @@
         // Intraday
         public const string IntradayRealTimeAdherence = "Raptor/Intraday/RTA";
         public const string IntradayEarlyWarning = "Raptor/Intraday/EW";
+		public const string IntradayReForecasting = "Raptor/Intraday/ReForecasting";
 
         // Performance Manager
         public const string CreatePerformanceManagerReport = "Raptor/PerformanceManager/CreatePerformanceManagerReport";

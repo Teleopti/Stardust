@@ -45,6 +45,7 @@
         public const string ModifySchedule = "0057";
     	public const string ViewRestrictedScenario = "0061";
     	public const string ModifyRestrictedScenario = "0062";
+    	public const string ViewActiveAgents = "0086";
         
         // PersonAdmin
         public const string ModifyPersonNameAndPassword = "0007";
@@ -90,6 +91,7 @@
         // Intraday
         public const string IntradayRealTimeAdherence = "0034";
         public const string IntradayEarlyWarning = "0035";
+		public const string IntradayReForecasting = "0085";
 
         // Performance Manager
         public const string CreatePerformanceManagerReport = "0041";

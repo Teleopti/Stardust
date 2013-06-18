@@ -10,12 +10,13 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IActualAgentHandler : IRtaDataHandlerCache
 	{
-		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId);
+		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, RtaStateGroupLight state);
 		IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
 		                           DateTime timestamp,
 		                           TimeSpan timeInState);
 
 		IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp);
+		RtaStateGroupLight ResolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId);
 	}
 
 	public class ActualAgentHandler : IActualAgentHandler
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (readModelLayers.Any())
 				LoggingSvc.InfoFormat("Found {0} layers", readModelLayers.Count);
 			else
-				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (readModelLayers.Any())
 				LoggingSvc.InfoFormat("Found {0} layers", readModelLayers.Count);
 			else
-				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
@@ -88,11 +89,11 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState CreateAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
 			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId)
 		{
+			RtaAlarmLight foundAlarm = null;
 			var scheduleLayer = scheduleLayers.FirstOrDefault();
 			var nextLayer = scheduleLayers.LastOrDefault();
-
-			var foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId);
-
+			var state = ResolveStateGroupId(platformTypeId, stateCode, businessUnitId);
+			
 			LoggingSvc.InfoFormat("Starting to build ActualAgentState for personId: {0}", personId);
 
 			var newState = new ActualAgentState
@@ -103,6 +104,12 @@ namespace Teleopti.Ccc.Rta.Server
 				PlatformTypeId = platformTypeId,
 				ReceivedTime = timestamp
 			};
+
+			if (state != null)
+			{
+				newState.State = state.StateGroupName;
+				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId, state);
+			}
 
 			if (foundAlarm != null)
 			{
@@ -118,12 +125,14 @@ namespace Teleopti.Ccc.Rta.Server
 				if (previousState != null && previousState.AlarmId == newState.AlarmId)
 					newState.StateStart = previousState.StateStart;
 			}
+
 			if (scheduleLayer != null)
 			{
 				newState.Scheduled = scheduleLayer.Name;
 				newState.ScheduledId = scheduleLayer.PayloadId;
 				newState.NextStart = scheduleLayer.EndDateTime;
 			}
+
 			if (nextLayer != null)
 			{
 				newState.ScheduledNext = nextLayer.Name;
@@ -140,7 +149,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 
 			LoggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", newState);
-			BatchedAgents.AddOrUpdate(personId, newState, (guid, state) => newState);
+			BatchedAgents.AddOrUpdate(personId, newState, (guid, oldState) => newState);
 
 			var utcNow = DateTime.UtcNow;
 			if (utcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
@@ -170,10 +179,9 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
+		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, RtaStateGroupLight state)
 		{
 			LoggingSvc.InfoFormat("Getting alarm for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
-			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
 			LoggingSvc.Info("Loading activity alarms.");
 		    var activityAlarms = ActualAgentDataHandler.ActivityAlarms();
 		    var localPayloadId = payloadId(layer);
@@ -181,7 +189,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (activityAlarms.TryGetValue(localPayloadId, out list))
 			{
-				var alarm = list.SingleOrDefault(s => s.StateGroupId == state);
+				var alarm = list.SingleOrDefault(s => s.StateGroupId == state.StateGroupId);
 				if (alarm != null)
 					LoggingSvc.InfoFormat("Found alarm: {1}, alarmId: {0}", alarm.AlarmTypeId, alarm.Name);
 				else
@@ -198,7 +206,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return scheduleLayer == null ? Guid.Empty : scheduleLayer.PayloadId;
 		}
 
-		private Guid resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
+		public RtaStateGroupLight ResolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
 		{
 			LoggingSvc.Info("Loading stategroups");
 			List<RtaStateGroupLight> outState;
@@ -207,11 +215,11 @@ namespace Teleopti.Ccc.Rta.Server
 				var foundstate =
 					outState.FirstOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
 				if (foundstate != null)
-					return foundstate.StateGroupId;
+					return foundstate;
 			}
 
 			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
-			return Guid.Empty;
+			return null;
 		}
 
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)

@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 			return row;
 		}
 
-		public static IPersonAbsence GetPersonAbsenceForLayer(IScheduleDay schedule, ILayer layer)
+		public static IPersonAbsence GetPersonAbsenceForLayer(IScheduleDay schedule, ILayer<IPayload> layer)
 		{
 			IList<IPersonAbsence> pAbsenceCollection = schedule.PersonAbsenceCollection();
 			return pAbsenceCollection.FirstOrDefault(personAbsence => personAbsence.Period.Contains(layer.Period));

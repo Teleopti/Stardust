@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		public void ShouldSetCorrectDayWhenTimeZoneIsCrazy()
 		{
 			var paRep = new PersonAssignmentRepository(UnitOfWork);
-			var start = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 
 			var pa = createAndStoreAssignment(start);
 			Session.ResetDateForAllAssignmentsAndAudits();
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(1999, 12, 31));
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(2000, 1, 2));
 		}
 
 		[Test]
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			                                                               SetupFixtureForAssembly.loggedOnPerson,
 			                                                               new DateTimePeriod(start, start.AddHours(8)),
 			                                                               new ShiftCategory("d"), new Scenario("d"));
-			PersistAndRemoveFromUnitOfWork(pa.ToMainShift().LayerCollection[0].Payload);
+			PersistAndRemoveFromUnitOfWork(pa.MainShiftActivityLayers.First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
 			PersistAndRemoveFromUnitOfWork(pa);

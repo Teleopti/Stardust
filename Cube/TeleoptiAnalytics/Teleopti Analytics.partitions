@@ -541,5 +541,25 @@
         </Partition>
       </Partitions>
     </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Hourly Availability</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="83cebe12-6656-454b-b88e-b4ba39963ea5">
+          <ID>Fact Hourly Availability</ID>
+          <Name>Fact Hourly Availability</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="1e360125-b9a4-4421-902c-b5053cdf3882">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>mart_fact_hourly_availability</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
   </MeasureGroups>
 </Cube>

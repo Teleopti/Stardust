@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-				IList<IScheduleDay> y = new List<IScheduleDay>();
+				IList<IScheduleDay> y;
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-				IList<IScheduleDay> y = new List<IScheduleDay>();
+				IList<IScheduleDay> y;
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-				IList<IScheduleDay> y = new List<IScheduleDay>();
+				IList<IScheduleDay> y;
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>());
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
@@ -329,12 +329,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_scheduleDayPro).Repeat.Any();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay)
                 .Repeat.Any();
-            Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment)
-                .Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToShorten.Value))
                 .Return(_scheduleDayPro).Repeat.Any();
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).IgnoreArguments()
                 .Return(_effectiveRestriction).Repeat.Any();
+	        Expect.Call(_scheduleDay.GetEditorShift()).Return(null).Repeat.Any();
         	Expect.Call(
         		() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).
         		IgnoreArguments().Repeat.Any();
@@ -346,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
-                      .Return(new List<DateOnly>() {new DateOnly(), new DateOnly()});
+                      .Return(new List<DateOnly> {new DateOnly(), new DateOnly()});
             }
             Assert.IsFalse(_target.Execute());
         }

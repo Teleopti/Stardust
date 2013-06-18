@@ -3,6 +3,9 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -75,7 +78,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             _scheduleRange = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
             _activityLayerDtoCollection = new Collection<ActivityLayerDto>();
+	        var activityLayerDto = new ActivityLayerDto();
+	        var period = new DateTimePeriodDto();
+	        var dtp = new DateTimePeriod(2013, 1, 1, 2013, 1, 1);
+	        period.LocalStartDateTime = dtp.LocalStartDateTime;
+	        period.LocalEndDateTime = dtp.LocalEndDateTime;
+			activityLayerDto.Period = period;
+			_activityLayerDtoCollection.Add(new ActivityLayerDto());
             _mainShiftActivityLayerCollection = new Collection<IMainShiftActivityLayer>();
+			_mainShiftActivityLayerCollection.Add(new MainShiftActivityLayer(new Activity("hej"), dtp));
         }
 
         [Test]
@@ -86,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -118,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);

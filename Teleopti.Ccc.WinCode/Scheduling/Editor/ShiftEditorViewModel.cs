@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Commands;
@@ -92,26 +93,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         #endregion
 
         private IEventAggregator _eventAggregator;
+	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    #region ctor
-		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode)
+		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode, IEditableShiftMapper editableShiftMapper)
         {
             _eventAggregator = eventAggregator;
 			_readonlyMode = readonlyMode;
+			_editableShiftMapper = editableShiftMapper;
 			SurroundingTime = TimeSpan.FromHours(4);
             Layers = layerCollection;
 			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
 			Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
             AllLayers = new ExpandedLayersViewModel(Layers) {Expanded = ExpandSize };
-            EditLayer = new EditLayerViewModel();
+			EditLayer = new EditLayerViewModel();
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
             Settings=new ShiftEditorSettings(this);
             SetUpCommandModels();
         }
 
 
-		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode)
-            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode)
+		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode, IEditableShiftMapper editableShiftMapper)
+            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode, editableShiftMapper)
         {
 
         }
@@ -360,9 +363,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 if (SchedulePart != null)
                 {
                     var assignement = SchedulePart.AssignmentHighZOrder();
-                    if (assignement != null)
-                    {
-                        assignement.ToMainShift().ShiftCategory = _category;
+					if (assignement != null)
+					{
+						var editorShift = _editableShiftMapper.CreateEditorShift(assignement);
+                        editorShift.ShiftCategory = _category;
+						_editableShiftMapper.SetMainShiftLayers(assignement, editorShift);
                         new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
                     }
                 }

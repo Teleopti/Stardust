@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -127,7 +128,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-                Assert.IsNull(entity.ToMainShift().Id);
                 Assert.AreEqual(1, entity.MainShiftActivityLayers.Count());
                 Assert.AreEqual(1, entity.PersonalShiftCollection.Count);
                 Assert.AreEqual(dto.PersonalShiftCollection.First().Id, entity.PersonalShiftCollection[0].Id);
@@ -174,9 +174,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             definitionSet.SetId(Guid.NewGuid());
             IShiftCategory sCat = ShiftCategoryFactory.CreateShiftCategory("d1");
             sCat.SetId(Guid.NewGuid());
-            IMainShift mainShift = MainShiftFactory.CreateMainShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
-            mainShift.SetId(Guid.NewGuid());
-            ((IMainShiftActivityLayer) mainShift.LayerCollection[0]).SetId(Guid.NewGuid());
+            var mainShift = EditableShiftFactory.CreateEditorShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
             IPersonalShift pShift = PersonalShiftFactory.CreatePersonalShift(act,new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
             pShift.SetId(Guid.NewGuid());
             ((IPersonalShiftActivityLayer)pShift.LayerCollection[0]).SetId(Guid.NewGuid());
@@ -185,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IOvertimeShift oShift = OvertimeShiftFactory.CreateOvertimeShift(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet,ass);
             oShift.SetId(Guid.NewGuid());
             ((IOvertimeShiftActivityLayer)oShift.LayerCollection[0]).SetId(Guid.NewGuid());
-            ass.SetMainShift(mainShift);
+            new EditableShiftMapper().SetMainShiftLayers(ass, mainShift);
             ass.AddPersonalShift(pShift);
             ass.AddOvertimeShift(oShift);
 
@@ -194,12 +192,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Assert.AreEqual(0, dto.Version);
             Assert.AreEqual(ass.Id, dto.Id);
-            Assert.AreEqual(ass.ToMainShift().Id, dto.MainShift.Id);
             Assert.AreEqual(ass.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
-            Assert.AreEqual(ass.ToMainShift().LayerCollection.Count, dto.MainShift.LayerCollection.Count);
-            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Id, firstMainShiftLayer.Activity.Id);
-            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Period,
-                            new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
+            Assert.AreEqual(ass.MainShiftActivityLayers.Count(), dto.MainShift.LayerCollection.Count);
+            Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Id, firstMainShiftLayer.Activity.Id);
+            Assert.AreEqual(ass.MainShiftActivityLayers.First().Period,	new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
             Assert.AreEqual(ass.PersonalShiftCollection[0].Id, dto.PersonalShiftCollection.First().Id);
             Assert.AreEqual(ass.PersonalShiftCollection.Count, dto.PersonalShiftCollection.Count);
             Assert.AreEqual(ass.OvertimeShiftCollection[0].Id, dto.OvertimeShiftCollection.First().Id);

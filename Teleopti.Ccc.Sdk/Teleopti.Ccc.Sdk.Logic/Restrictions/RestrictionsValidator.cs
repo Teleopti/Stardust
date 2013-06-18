@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (personAssignments.IsEmpty() )
                 return resultSoFar;
 
-            if(personAssignments[0].ToMainShift() == null)
+            if(personAssignments[0].ShiftCategory == null)
                 return resultSoFar;
 
             IShiftCategory cat = personAssignments[0].ShiftCategory;

@@ -78,10 +78,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             AbsenceLayer layer = new AbsenceLayer(AbsenceFactory.CreateAbsence("Sjuk"), dtp);
             target = new PersonAbsence(person, scenario, layer);
             PersonAbsence theClone = (PersonAbsence) target.Clone();
-            theClone.Layer.MoveLayer(new TimeSpan(3,0,0,0));
 
             Assert.AreEqual(dtp,target.Layer.Period);
-            Assert.AreNotEqual(dtp, theClone.Layer.Period);
+            Assert.AreEqual(dtp, theClone.Layer.Period);
             Assert.IsNull(theClone.Id);
             Assert.AreEqual(target.Person, theClone.Person);
         }

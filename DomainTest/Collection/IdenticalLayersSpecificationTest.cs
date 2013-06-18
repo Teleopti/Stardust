@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
     public class IdenticalLayersSpecificationTest
     {
         private IdenticalLayersSpecification _target;
-        private IMainShift _mainShift;
+        private IEditableShift _mainShift;
         private IActivity _baseAct;
         private IActivity _lunchAct;
         private IActivity _shbrAct;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             _baseAct = ActivityFactory.CreateActivity("Tel");
             _lunchAct = ActivityFactory.CreateActivity("Lunch");
             _shbrAct = ActivityFactory.CreateActivity("ShBr");
-            _mainShift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            _mainShift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             IVisualLayerCollection originalLayer = _mainShift.ProjectionService().CreateProjection();
             _target = new IdenticalLayersSpecification(originalLayer);
         }
@@ -29,10 +30,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyIsSatisfiedByPeriod()
         {
-            IMainShift shiftToCheck = (IMainShift)_mainShift.Clone();
+            var shiftToCheck = (IEditableShift)_mainShift.Clone();
             Assert.IsTrue(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
 
-            shiftToCheck.LayerCollection[1].MoveLayer(TimeSpan.FromMinutes(1));
+	        var oldLayer = shiftToCheck.LayerCollection[3];
+	        var newLayer = new EditorActivityLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
+	        shiftToCheck.LayerCollection.Remove(oldLayer);
+			shiftToCheck.LayerCollection.Add(newLayer);
             Assert.IsFalse(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
 
         }
@@ -47,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                    new DateTime(2007, 1, 1, 16, 5, 0, DateTimeKind.Utc));
             IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("hupp");
 
-            _mainShift = MainShiftFactory.CreateMainShift(act1, period, category);
-            IMainShift shiftToCheck = MainShiftFactory.CreateMainShift(act2, period, category);
+            _mainShift = EditableShiftFactory.CreateEditorShift(act1, period, category);
+			var shiftToCheck = EditableShiftFactory.CreateEditorShift(act2, period, category);
 
             _target = new IdenticalLayersSpecification(_mainShift.ProjectionService().CreateProjection());
 

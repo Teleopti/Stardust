@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -25,10 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			PersistAndRemoveFromUnitOfWork(_activity);
 
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			var mainShift = new MainShift(_shiftCategory);
-			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
-			mainShift.LayerCollection.Add(layer);
-			personAssignment.SetMainShift(mainShift);
+			personAssignment.SetMainShiftLayers(new[]{new MainShiftActivityLayerNew(_activity, FirstDayDateTimePeriod)}, _shiftCategory);
 			return personAssignment;
 		}
 
@@ -43,21 +41,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			//user 2
 			ScheduleDictionary.TakeSnapshot();
 			ModifyPersonAbsenceAccount();
-			AddMainShiftActivityLayer();
+			addMainShiftActivityLayer();
 		
 			var result = TryPersistScheduleScreen();
 			Assert.IsTrue(result.Saved);
 		}
 
-		private void AddMainShiftActivityLayer()
+		private void addMainShiftActivityLayer()
 		{
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-			var activity = personAssignment.ToMainShift().LayerCollection[0].Payload;
-			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-			personAssignment.ToMainShift().LayerCollection.Add(layer);
-
+			var orgLayers = new List<IMainShiftActivityLayerNew>(personAssignment.MainShiftActivityLayers);
+			orgLayers.Add(new MainShiftActivityLayerNew(orgLayers.First().Payload, FirstDayDateTimePeriod));
+			personAssignment.SetMainShiftLayers(orgLayers, personAssignment.ShiftCategory);
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 

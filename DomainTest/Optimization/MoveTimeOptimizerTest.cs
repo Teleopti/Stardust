@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IProjectionService _projectionService;
     	private IVisualLayerCollection _visualLayerCollection;
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-		private IPersonAssignment _personAssignment;
-		private IMainShift _mainShift;
+		private IEditableShift _mainShift;
 		private IDictionary<DateOnly, IScheduleDay> _originalDays;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
@@ -80,8 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter =
 		    _mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 		    _projectionService = _mockRepository.StrictMock<IProjectionService>();
-		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-		    _mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+		    _mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 		    _originalDays = new Dictionary<DateOnly, IScheduleDay>{{_mostOverStaffDate, _mostOverStaffSchedulePart},{_mostUnderStaffDate, _mostUnderStaffSchedulePart}};
 
         	_target = new MoveTimeOptimizer(
@@ -102,6 +100,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		);
         }
 
+		[Test]
+		public void ShouldExposeOwnerAndMatrix()
+		{
+			var person = PersonFactory.CreatePerson();
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Twice();
+				Expect.Call(_scheduleMatrix.Person).Return(person);
+			}
+			using (_mockRepository.Playback())
+			{
+				Assert.AreSame(person, _target.ContainerOwner);
+				Assert.AreSame(_scheduleMatrix, _target.Matrix);
+			}
+		}
+
         [Test]
         public void VerifyExecuteWithBetterPeriodValue()
         {
@@ -111,9 +125,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
-                // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                // do not lock days
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -191,9 +205,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
-                // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                //do not lock days
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -214,7 +228,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleSecondDate(false);
                 resourceCalculation();
                 // lock days
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
@@ -236,7 +249,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 // lock days
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
@@ -256,7 +268,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 resourceCalculation();
                 // lock days
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
@@ -320,8 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
-			Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-			Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+			Expect.Call(_mostOverStaffSchedulePart.GetEditorShift()).Return(_mainShift);
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).
 				IgnoreArguments();
@@ -353,8 +363,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
-			Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
-			Expect.Call(_personAssignment.ToMainShift()).Return(_mainShift);
+			Expect.Call(_mostUnderStaffSchedulePart.GetEditorShift()).Return(_mainShift);
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).IgnoreArguments();
 			Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()

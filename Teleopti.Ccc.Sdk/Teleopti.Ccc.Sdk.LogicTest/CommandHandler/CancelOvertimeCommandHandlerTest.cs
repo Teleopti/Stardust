@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);

@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private IShiftEditorObserver _observer2;
         private DateTimePeriod _selectedPeriod;
         Microsoft.Practices.Composite.Events.IEventAggregator _eventAggregator;
+		private IEditableShiftMapper _editableShiftMapper;
 
         [SetUp]
         public void Setup()
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _mocker = new MockRepository();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();
             _eventAggregator = new Microsoft.Practices.Composite.Events.EventAggregator();
-            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, true);
+	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
+            _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, true, _editableShiftMapper);
             _partForTest = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
         }
 
@@ -345,8 +347,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             listener.ListenTo(_target);
             IActivity activity = new Activity("test");
             DateTimePeriod period= new DateTimePeriod(2001,1,1,2001,1,2);
-            ILayer layer = new MainShiftActivityLayer(activity, period);
-            ILayerViewModel model = new MainShiftLayerViewModel(layer, null);
+            var layer = new MainShiftActivityLayer(activity, period);
+            ILayerViewModel model = new MainShiftLayerViewModel(null,layer,null,null);
             
             #endregion
 
@@ -430,8 +432,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         {
             IActivity activity = new Activity("test");
             DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-            ILayer layer = new MainShiftActivityLayer(activity, period);
-            return  new MainShiftLayerViewModel(layer, null);
+            var layer = new MainShiftActivityLayer(activity, period);
+            return  new MainShiftLayerViewModel(null,layer,null,null);
         }
 
         private static void VerifyApplicationCommandModel(CommandModel commandModel,string appFunction)
@@ -444,8 +446,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private void VerifyCanOnlyExecuteIfMeetingIsSelected(CommandModel model)
         {
             TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
-            ILayer layer = new MainShiftActivityLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
-            MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(layer, null);
+            var layer = new MainShiftActivityLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
+            MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null,layer,null,null);
             _target.SelectLayer(mainShiftLayerViewModel);
             Assert.IsFalse(testerForCommandModels.CanExecute(model), "Should not be able to execute if the selected layer isnt a meeting");
             CreateAndSelectAMeeting();

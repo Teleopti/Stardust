@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -1137,6 +1139,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
 		[Test]
+		public void ShouldMakeClaesSConfused()
+		{
+			try
+			{
+				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
+				if (Environment.UserInteractive)
+				{
+					Process.Start(fileInfo.FullName);
+				}
+
+			}
+			catch (Exception)
+			{
+				// do nada
+			}
+
+		}
+
+		[Test]
 		public void ShouldReturnPeriodFromScheduleDays()
 		{
 			IList<IScheduleDay> days = new List<IScheduleDay> {_schedulePart1, _schedulePart2};
@@ -1191,12 +1212,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     	private IPersonAssignment CreatePersonAssignment()
         {
 					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));
-            IMainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period));
-            personAssignment.SetMainShift(mainShift);
+            mainShift.LayerCollection.Add(new EditorActivityLayer(ActivityFactory.CreateActivity("activity"), period));
+            new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
             return personAssignment;
         }

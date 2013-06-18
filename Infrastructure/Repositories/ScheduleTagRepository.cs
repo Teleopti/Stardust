@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,5 +18,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    
 	    }
+
+        public IList<IScheduleTag> FindAllScheduleTags()
+        {
+            IList<IScheduleTag> scheduleTags = Session.CreateCriteria(typeof(ScheduleTag))
+                .List<IScheduleTag>();
+
+            return scheduleTags.OrderBy(sc => sc.Description).ToList();
+        }
     }
 }

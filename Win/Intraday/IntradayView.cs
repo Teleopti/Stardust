@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.Win.Intraday
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_sendCommandToSdk = sendCommandToSdk;
 
+			var authorization = PrincipalAuthorization.Instance();
+
 			InitializeComponent();
             if (DesignMode) return;
 
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
             _settingManager = new IntradaySettingManager();
 
-			if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccVersion8))
+			if (authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting))
 				toolStripExChangeForecast.Visible = true;
         }
 

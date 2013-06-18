@@ -12,15 +12,11 @@ namespace Teleopti.Ccc.Domain.Common
         public PersonProvider(IEnumerable<IPerson> persons)
         {
             SetInnerPersons(persons);
-            //LoadRestrictions = true;
-            //LoadNotes = true;
         }
 
         public PersonProvider(IPersonRepository personRepository)
         {
             _personRepository = personRepository;
-            //LoadRestrictions = true;
-            //LoadNotes = true;
         }
 
         protected IList<IPerson> InnerPersons
@@ -49,7 +45,5 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
         public bool DoLoadByPerson { get; set; }
-        //public bool LoadRestrictions { get; set; }
-        //public bool LoadNotes { get; set; }
     }
 }

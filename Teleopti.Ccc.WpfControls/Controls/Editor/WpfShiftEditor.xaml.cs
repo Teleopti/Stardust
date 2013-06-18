@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode)
         {
-			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode);
+			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode, new EditableShiftMapper());
             _model.AddObserver(this); //Because we are using events for now. We could add schedscreen (if implementing IShiftEditorObserver)here instead of events..
             DataContext = _model;
             setupforEventAggregator(eventAggregator);
@@ -56,7 +57,10 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             //Listen for changes in editor
             _triggerShiftEditoEvent = eventAggregator.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>();
             _subscriptionToken = _triggerShiftEditoEvent.Subscribe(TriggerUpdate);
+		
         }
+
+	
 
         private void TriggerUpdate(EventParameters<TriggerShiftEditorUpdate> obj)
         {

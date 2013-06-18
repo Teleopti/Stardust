@@ -8,13 +8,12 @@ namespace Teleopti.Ccc.WinCode.Common
     public class CreateLayerViewModelService : ICreateLayerViewModelService
     {
 
-        private static ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer, IEventAggregator eventAggregator, TimeSpan interval)
+        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, TimeSpan interval)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, eventAggregator);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, eventAggregator);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, eventAggregator);
-            ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
 
             visualLayerViewModel.Interval = interval;
             return visualLayerViewModel;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Common
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)
                     {
-                        var viewModel = CreateViewModelFromVisualLayer(visualLayer, eventAggregator, interval);
+                        var viewModel = createViewModelFromVisualLayer(visualLayer, interval);
                         viewModel.SchedulePart = scheduleDay;
                         retList.Add(viewModel);
                     }
@@ -43,14 +42,14 @@ namespace Teleopti.Ccc.WinCode.Common
             return retList;
         }
 
-        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, IEventAggregator eventAggregator, TimeSpan interval)
+        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, TimeSpan interval)
         {
             IList<ILayerViewModel> projectionViewModels = new List<ILayerViewModel>();
             if (projectionSource != null)
             {
                 foreach (IVisualLayer visualLayer in projectionSource.ProjectionService().CreateProjection())
                 {
-                    projectionViewModels.Add(CreateViewModelFromVisualLayer(visualLayer, eventAggregator, interval));
+                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, interval));
                 }
             }
             return projectionViewModels;
@@ -63,18 +62,21 @@ namespace Teleopti.Ccc.WinCode.Common
             IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
             if (assignment != null)
             {
-                if (assignment.ToMainShift() != null)
+#pragma warning disable 612,618
+	            var ms = assignment.ToMainShift();
+#pragma warning restore 612,618
+                if (ms != null)
                 {
-                    foreach (ILayer<IActivity> layer in assignment.ToMainShift().LayerCollection)
+                    foreach (ILayer<IActivity> layer in ms.LayerCollection)
                     {
-                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment.ToMainShift(), eventAggregator));
+                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, ms, eventAggregator));
                     }
                 }
 
                 foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
                 {
                     foreach (
-                        IOvertimeShiftActivityLayer layer in overtimeShift.LayerCollectionWithDefinitionSet())
+                        var layer in overtimeShift.LayerCollectionWithDefinitionSet())
                     {
                         layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, eventAggregator));
                     }

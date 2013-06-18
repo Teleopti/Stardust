@@ -54,5 +54,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the person.
 		/// </summary>
 		IPerson Person { get; }
+
+		IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod);
 	}
 }

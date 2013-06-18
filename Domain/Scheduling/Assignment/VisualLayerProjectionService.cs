@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _standardVisualLayerFactory = new VisualLayerFactory();
         }
 
-        public void Add(IShift shift)
+				public void Add(IProjectableLayerCollectionOwner<IActivity> shift)
         {
             InParameter.NotNull("shift", shift);
             IVisualLayerFactory factory = shift.CreateVisualLayerFactory();
-            foreach (IActivityLayer layer in shift.LayerCollection)
+            foreach (var layer in shift.LayerCollection)
             {
                 _layerCollectionOriginal.Add(factory.CreateShiftSetupLayer(layer,_person));
             }

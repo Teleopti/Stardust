@@ -32,8 +32,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 Id = entity.Id,
                 Version = entity.Version.GetValueOrDefault(0)
             };
-            if (entity.ToMainShift() != null)
-                retDto.MainShift = CreateMainShiftDto(entity.ToMainShift(), entity.Person);
+#pragma warning disable 612,618
+	        var entityMs = entity.ToMainShift();
+#pragma warning restore 612,618
+            if (entityMs != null)
+							retDto.MainShift = CreateMainShiftDto(entityMs, entity.Person);
             foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)
             {
                 retDto.PersonalShiftCollection.Add(CreatePersonalShiftDto(personalShift, entity.Person));
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if(dto.MainShift!=null)
             {
                 IShiftCategory shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
-                IMainShift mainShift = new MainShift(shiftCategory);
+                var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, dto.MainShift.LayerCollection);
                 assignment.SetMainShift(mainShift);
             }

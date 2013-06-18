@@ -8,6 +8,7 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 
-                var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService());
+				var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule());
                 var model = new DayLayerModel(person, period.Period(), team, layerViewModelCollection, commonNameDescription);
 
                 rebuildLayerViewModelCollection(model);

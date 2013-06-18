@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private ShiftEditorViewModel _shifteditorViewModel;
         private ICreateLayerViewModelService _service;
         private LayerViewModelCollection _collection;
+	    private IEditableShiftMapper _editableShiftMapper;
 
         [SetUp]
         public void Setup()
@@ -31,8 +32,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
             _eventAggregator = new EventAggregator();
             _service = _mocker.StrictMock<ICreateLayerViewModelService>();
-            _collection = new LayerViewModelCollection(_eventAggregator, _service);
-            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, true);
+			_collection = new LayerViewModelCollection(_eventAggregator, _service, new RemoveLayerFromSchedule(), null);
+	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
+            _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, true, _editableShiftMapper);
         }
 
         [Test,RequiresSTA]
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyThatSelectedLayerStillSelectedByCallingWithASelectorIfALayerIsSelected()
         {
             MainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("dummy"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-            ILayerViewModel layer = new MainShiftLayerViewModel(mainShiftActivityLayer, _eventAggregator);
+            ILayerViewModel layer = new MainShiftLayerViewModel(null,mainShiftActivityLayer,null,null);
             _shifteditorViewModel.SelectedLayer = layer;
 
             using (_mocker.Record())

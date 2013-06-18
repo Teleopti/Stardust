@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,36 +13,46 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
 
-		public PersonScheduleViewModelFactory(
-			IPersonRepository personRepository, 
-			IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, 
-			IAbsenceRepository absenceRepository, 
-			IPersonScheduleViewModelMapper personScheduleViewModelMapper, 
-			IPersonAbsenceRepository personAbsenceRepository)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer<ExpandoObject> deserializer)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_absenceRepository = absenceRepository;
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 			_personAbsenceRepository = personAbsenceRepository;
+			_deserializer = deserializer;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
 			var person = _personRepository.Get(personId);
-			var utcDate = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
-	
+			var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
+			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), personId);
+			var start = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
+			var end = TimeZoneInfo.ConvertTimeToUtc(date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
+
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftStart.HasValue)
+				start = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftStart.Value, DateTimeKind.Utc);
+			if (previousDayReadModel != null && previousDayReadModel.ShiftEnd.HasValue && previousDayReadModel.ShiftEnd.Value > start)
+				start = DateTime.SpecifyKind(previousDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftEnd.HasValue)
+				end = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
+
+			var absencePeriod = new DateTimePeriod(start, end);
+
 			var data = new PersonScheduleData
-				{
-					Person = person, 
-					Date = date, 
-					PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId),
-					Absences = _absenceRepository.LoadAllSortByName(),
-					PersonAbsences = _personAbsenceRepository.Find(new List<IPerson>() { person }, new DateTimePeriod(utcDate, utcDate.AddHours(24)))
-				};
-			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
-				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(data.PersonScheduleDayReadModel.Shift);
+			{
+				Person = person,
+				Date = date,
+				Absences = _absenceRepository.LoadAllSortByName(),
+				PersonAbsences = _personAbsenceRepository.Find(new[] { person }, absencePeriod)
+			};
+
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
+				data.Shift = _deserializer.DeserializeObject(personScheduleDayReadModel.Shift);
+
 			return _personScheduleViewModelMapper.Map(data);
 		}
 	}

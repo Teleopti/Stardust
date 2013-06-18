@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         //}
 		
 		[Test]
-        public void VerifyOnLoad()
+        public void VerifyOnLoadWithMoreThanOneHundredPeople()
         {
 			_mocks.BackToRecord(_schedulingResultLoader);
             var uow = _mocks.DynamicMock<IUnitOfWork>();
@@ -404,14 +404,50 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
         	Expect.Call(
         		() => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
-				IgnoreArguments().Repeat.Twice();
-			Expect.Call(
-				() => _messageBroker.RegisterEventSubscription(MyEventHandler, Guid.Empty, null, DateTime.UtcNow, DateTime.UtcNow)).
-				IgnoreArguments().Repeat.Twice();
+				IgnoreArguments().Repeat.Times(3);
 
 			_mocks.ReplayAll();
 
+		    Enumerable.Range(0, 101)
+		              .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+		    _schedulerStateHolder.RequestedPeriod =
+		        new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
+		                                           TimeZoneInfo.Utc);
             _target.Initialize();
+
+            _mocks.VerifyAll();
+            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
+        }
+
+        [Test]
+        public void VerifyOnLoad()
+        {
+            _mocks.BackToRecord(_schedulingResultLoader);
+            var uow = _mocks.DynamicMock<IUnitOfWork>();
+
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
+
+            CreateRtaStateHolderExpectation();
+            CreateRealTimeAdherenceInitializeExpectation();
+
+            _rtaStateHolder.Expect(r => r.ActualAgentStates)
+                           .Return(new Dictionary<Guid, IActualAgentState> { { Guid.NewGuid(), new ActualAgentState() } }).IgnoreArguments();
+            Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
+            Expect.Call(
+                () => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
+                IgnoreArguments().Repeat.Twice();
+            Expect.Call(
+                () => _messageBroker.RegisterEventSubscription(MyEventHandler, Guid.Empty, null, DateTime.UtcNow, DateTime.UtcNow)).
+                IgnoreArguments();
+
+            _mocks.ReplayAll();
+
+            _schedulerStateHolder.RequestedPeriod =
+                new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
+                                                   TimeZoneInfo.Utc);
+            _target.Initialize();
+
             _mocks.VerifyAll();
             Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
         }

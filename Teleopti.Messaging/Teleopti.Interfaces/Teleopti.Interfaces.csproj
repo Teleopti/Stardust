@@ -118,13 +118,13 @@
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
-    <Compile Include="Domain\IEditorShift.cs" />
+    <Compile Include="Domain\IEditableShift.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
-    <Compile Include="Domain\IPersistedActivityLayer.cs" />
+    <Compile Include="Domain\IMainShiftActivityLayerNew.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -165,9 +165,11 @@
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
     <Compile Include="Domain\IJobResultDetail.cs" />
+    <Compile Include="Domain\IProjectableLayerCollectionOwner.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
+    <Compile Include="Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRestrictionCombiner.cs" />
     <Compile Include="Domain\IRevision.cs" />
@@ -200,7 +202,6 @@
     <Compile Include="Domain\ICustomShrinkage.cs" />
     <Compile Include="Domain\ICustomShrinkageWrapper.cs" />
     <Compile Include="Domain\IDayOffDecisionMaker.cs" />
-    <Compile Include="Domain\IKeepRestrictionCreator.cs" />
     <Compile Include="Domain\IMasterActivity.cs" />
     <Compile Include="Domain\IGroupPageOptions.cs" />
     <Compile Include="Domain\IMoveTimeDecisionMaker.cs" />
@@ -423,7 +424,7 @@
     <Compile Include="Domain\IRecurrentMonthlyByDayMeeting.cs" />
     <Compile Include="Domain\IRecurrentMonthlyByWeekMeeting.cs" />
     <Compile Include="Domain\IRecurrentWeeklyMeeting.cs" />
-    <Compile Include="Domain\IRemoveLayerFromScheduleService.cs" />
+    <Compile Include="Domain\IRemoveLayerFromSchedule.cs" />
     <Compile Include="Domain\IRepositoryNonGeneric.cs" />
     <Compile Include="Domain\IRequestApprovalService.cs" />
     <Compile Include="Domain\IRequest.cs" />
@@ -487,7 +488,6 @@
     <Compile Include="Domain\IAbsenceLayer.cs" />
     <Compile Include="Domain\IActiveAgentCount.cs" />
     <Compile Include="Domain\IActivity.cs" />
-    <Compile Include="Domain\IActivityLayer.cs" />
     <Compile Include="Domain\IAggregateEntity.cs">
       <SubType>Code</SubType>
     </Compile>

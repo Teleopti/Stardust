@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -102,19 +103,35 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
             }
         }
 
-        private void AddAndPersist(IUnitOfWork uow)
-        {
-            IPushMessageDialogueRepository repository = _repositoryFactory.CreatePushMessageDialogueRepository(uow);
-            uow.Reassociate(_model.PushMessage);
-            _model.DialogueReply(ReplyText,_model.PushMessage.Sender);
-            repository.Add(_model);
-           
-            Messages.Clear();
-            _model.DialogueMessages.ForEach(r => Messages.Add(new DialogueMessageViewModel{Created = r.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(r.Created),Text = r.Text,Sender = r.Sender}));
-            
-            uow.PersistAll();
-            ReplyText = string.Empty;
-        }
+
+
+		private void AddAndPersist(IUnitOfWork uow)
+		{
+			IPushMessageDialogueRepository repository = _repositoryFactory.CreatePushMessageDialogueRepository(uow);
+			uow.Reassociate(_model.PushMessage);
+			_model.DialogueReply(ReplyText, _model.PushMessage.Sender);
+			repository.Add(_model);
+
+			try
+			{
+				uow.PersistAll();
+			}
+			catch (OptimisticLockException)
+			{
+				// rollback changes: ask Roger if better solution exist
+				_model.DialogueMessages.RemoveAt(_model.DialogueMessages.Count - 1);
+
+				// notify user
+				var message = UserTexts.Resources.RecipientAnsweredToEarlierMessage;
+				MessageBox.Show(message, string.Empty, MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+
+			// refresh view models 
+			Messages.Clear();
+			_model.DialogueMessages.ForEach(r => Messages.Add(new DialogueMessageViewModel { Created = r.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(r.Created), Text = r.Text, Sender = r.Sender }));
+
+			ReplyText = string.Empty;
+		}
 
         private void RemoveAndPersist(IUnitOfWork uow)
         {

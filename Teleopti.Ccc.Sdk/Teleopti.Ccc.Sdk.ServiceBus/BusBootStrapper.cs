@@ -7,12 +7,11 @@ using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus

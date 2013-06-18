@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset];
                         IScheduleDay part = scheduleDayPro.DaySchedulePart();
                     	IPersonAssignment assignment = part.AssignmentHighZOrder();
-						if(assignment == null || assignment.ToMainShift() == null )
+											if (assignment == null || assignment.ShiftCategory == null)
 							return new dayOffOptimizerMoveDaysResult { Result = false, MovedDays = movedDays };
                         var changed = new changedDay
                                           {
@@ -410,24 +410,19 @@ namespace Teleopti.Ccc.Domain.Optimization
                 // reviewed and fixed version
                 IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
-                IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
             	schedulingOptions.MainShiftOptimizeActivitySpecification = null;
-                if (originalPersonAssignment != null)
-                {
-                    IMainShift originalMainShift = originalPersonAssignment.ToMainShift();
-                    if (originalMainShift != null)
-                    {
-											originalShiftCategory = originalPersonAssignment.ShiftCategory;
-						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
-                    }
 
-                }
+	            var originalMainShift = originalScheduleDay.GetEditorShift();
+	            if (originalMainShift != null)
+	            {
+					originalShiftCategory = originalMainShift.ShiftCategory;
+		            _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences,
+		                                                                           originalMainShift, dateOnly);
+	            }
 
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
+	            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
-
-				
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)

@@ -317,11 +317,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateIllegalTimesAvailabilityPermissionState()
         {
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
-
             IAvailabilityRestriction dayRestriction = new AvailabilityRestriction
             {
                 StartTimeLimitation =
@@ -358,11 +353,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateIllegalWorkLengthAvailabilityPermissionState()
         {
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
-
             IAvailabilityRestriction dayRestriction = new AvailabilityRestriction
             {
                 WorkTimeLimitation =
@@ -480,10 +470,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryRotationsPermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             IRotationRestriction dayRestriction = new RotationRestriction
                                                       {
                 StartTimeLimitation =
@@ -525,9 +512,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         public void VerifyCanCalculateIllegalShiftCategoryRotationsPermissionState()
         {
             IShiftCategory wrongCategory = ShiftCategoryFactory.CreateShiftCategory("WrongShiftCat");
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -662,10 +647,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
             IRotationRestriction dayRestriction = new RotationRestriction
             {
                 StartTimeLimitation =
@@ -709,10 +690,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
             IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff(_person,_scenario,new DateOnly(2007, 1, 1),dayOffTemplate);
-
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -757,9 +735,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -818,9 +794,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateNoDayOffOnShiftRotationsPermissionState()
         {
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -860,9 +834,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateNoRotationsPermissionState()
         {
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             var dayRestrictions = new List<IRestrictionBase>();
 
@@ -870,7 +842,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             {
                 Expect.Call(_schedulePartMock.PersonAssignmentConflictCollection).Return(new List<IPersonAssignment> { assignment }).Repeat.Any();
                 Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions);
-                
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
             }
 
@@ -936,9 +907,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test] 
         public void VerifyCanCalculateIllegalStartPreferencePermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
@@ -956,8 +925,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
 
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
-
             using (_mockRepository.Record())
             {
                 Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
@@ -971,12 +938,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -989,10 +954,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateIllegalEndPreferencePermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1009,7 +971,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
 			
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1023,12 +984,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1041,10 +1000,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalTimesPreferencePermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1060,7 +1016,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1074,12 +1029,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1095,9 +1048,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             DateTime dateTimeStart = new DateTime(2010, 1,10,22,0,0, DateTimeKind.Utc);
             DateTime dateTimeEnd = dateTimeStart.AddHours(7);
             DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
@@ -1114,7 +1065,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1128,12 +1078,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(period);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     period.EndDateTime.Subtract(period.StartDateTime));
-				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1149,10 +1097,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             DateTime dateTimeStart = new DateTime(2010, 1, 10, 22, 0, 0, DateTimeKind.Utc);
             DateTime dateTimeEnd = dateTimeStart.AddHours(7);
             DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1168,7 +1113,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1182,12 +1126,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(period);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     period.EndDateTime.Subtract(period.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1200,10 +1142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateIllegalWorkTimePreferencePermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1220,7 +1159,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1234,12 +1172,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1252,10 +1188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryPreferencePermissionState()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1273,7 +1206,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1287,12 +1219,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1307,14 +1237,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mockRepository.Record())
             {
-				//var layerCollection = CreateLayerCollection();
 				var assignment = CreatePersonAssignment();
 				var dayRestriction = CreatePreferenceRestriction();
 
 				IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
 				IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
 				var dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-				//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
 				Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
 				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
@@ -1327,13 +1255,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
 				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-				//Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
 
 				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
 					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
 				Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.Any();
             }
 
             using (_mockRepository.Playback())
@@ -1365,9 +1291,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
         private IPersonAssignment CreatePersonAssignment()
         {
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             return assignment;
         }
@@ -1376,10 +1300,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         public void VerifyCanCalculateIllegalShiftCategoryPreferencePermissionState()
         {
             IShiftCategory wrongCategory = ShiftCategoryFactory.CreateShiftCategory("WrongShiftCat");
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1396,7 +1317,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1411,12 +1331,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1448,7 +1366,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1462,12 +1379,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1485,9 +1400,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var layerPeriod = new DateTimePeriod(start, end);
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
 			var layer = _mockRepository.StrictMock<IVisualLayer>();
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-			assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
@@ -1536,9 +1449,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var layerPeriod = new DateTimePeriod(start, end);
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
 			var layer = _mockRepository.StrictMock<IVisualLayer>();
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-			assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(11, 30, 0));
@@ -1583,9 +1494,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void ShouldGetPermissionStateBrokenOnActivityWhenNoPreferredActivityInShift()
 		{
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-			assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity);
 			preferenceRestriction.AddActivityRestriction(activityRestriction);
@@ -1634,11 +1543,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
-
-            IMainShift mainShift = MainShiftFactory.CreateMainShift(_activity, _dateTimePeriod, _shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1652,12 +1557,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 ShiftCategory = _shiftCategory, DayOffTemplate = dayOffTemplate
 
             };
-            //dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
 
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1671,10 +1574,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
@@ -1729,10 +1630,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1782,11 +1679,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
-
-
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation =
@@ -1829,9 +1722,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateNoPreferencePermissionState()
         {
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
 
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>());
 
@@ -1887,9 +1778,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
             DateTime start = _dateTimePeriod.StartDateTimeLocal( TimeZoneInfo);
@@ -1928,9 +1817,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
             DateTime start = TimeZoneInfo.ConvertTimeFromUtc(_dateTimePeriod.StartDateTime, TimeZoneInfo);
@@ -1970,9 +1857,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod,_person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
             TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
             DateTime start = _dateTimePeriod.StartDateTimeLocal(TimeZoneInfo);
