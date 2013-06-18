@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
-        private readonly IActivityLayerAssembler<IMainShiftActivityLayer> _mainActivityLayerAssembler;
+        private readonly IActivityLayerAssembler<IMainShiftActivityLayerNew> _mainActivityLayerAssembler;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRepository _personRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayerNew> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;
@@ -55,22 +55,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
                 var shiftCategory = _shiftCategoryRepository.Load(command.ShiftCategoryId);
-                var mainShift = new MainShift(shiftCategory);
-                addLayersToMainShift(mainShift, command.LayerCollection);
+	            var mainShiftLayers = _mainActivityLayerAssembler.DtosToDomainEntities(command.LayerCollection);
+               
 				IPersonAssignment currentAss = scheduleDay.AssignmentHighZOrder();
-				scheduleDay.MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
+				scheduleDay.MergePersonalShiftsToOneAssignment(mainShiftLayers.Period().Value);
 				if (currentAss == null)
 				{
 					currentAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);
 					scheduleDay.Add(currentAss);
 				}
-				// use scheduleDay.AddMainShift again when MainShift is removed
-				var layerList = new List<IMainShiftActivityLayerNew>();
-				foreach (var layer in mainShift.LayerCollection)
-				{
-					layerList.Add(new MainShiftActivityLayerNew(layer.Payload, layer.Period));
-				}
-				currentAss.SetMainShiftLayers(layerList, mainShift.ShiftCategory);
+				currentAss.SetMainShiftLayers(mainShiftLayers, shiftCategory);
 				_saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
@@ -84,10 +78,5 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	{
     		return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
     	}
-
-    	private void addLayersToMainShift(IMainShift mainShift, IEnumerable<ActivityLayerDto> layerDtos)
-        {
-            _mainActivityLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(mainShift.LayerCollection.Add);
-        }
     }
 }
