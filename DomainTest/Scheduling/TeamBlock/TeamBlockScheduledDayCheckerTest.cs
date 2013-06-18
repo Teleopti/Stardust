@@ -59,6 +59,71 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void ShouldReturnFalseIfDateIsScheduledForNonSelectedTeamMember()
+        {
+            IPerson person1 = PersonFactory.CreatePerson("test1");
+            IPerson person2 = PersonFactory.CreatePerson("test2");
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            var matrixes = new List<IScheduleMatrixPro> { _matrix1,_matrix2  };
+            var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+            var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+            IBlockInfo blockInfo = new BlockInfo(period);
+            ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_matrix1.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
+                Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+                Expect.Call(_schedulingResultStateHolder.Schedules[person2]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
+                Expect.Call(scheduleDay.IsScheduled()).Return(false);
+
+            }
+
+            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons( teamBlockInfo, _dateOnly, new List<IPerson>{person2 }));
+        }
+
+        [Test]
+        public void ShouldReturnTrueIfDateIsScheduledForSelectedTeamMember()
+        {
+            IPerson person1 = PersonFactory.CreatePerson("test1");
+            IPerson person2 = PersonFactory.CreatePerson("test2");
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            var matrixes = new List<IScheduleMatrixPro> { _matrix1, _matrix2 };
+            var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+            var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+            IBlockInfo blockInfo = new BlockInfo(period);
+            ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_matrix1.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
+                Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+                Expect.Call(_schedulingResultStateHolder.Schedules[person2]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
+                Expect.Call(scheduleDay.IsScheduled()).Return(true);
+
+            }
+            Assert.IsTrue(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockInfo, _dateOnly, new List<IPerson> { person2 }));
+        }
+
+        [Test]
         public void ShouldReturnFalseIfDateIsNotScheduled()
         {
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
@@ -78,6 +143,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
         }
+
+
 
         private IScheduleDay commonMocks(DateOnly dateOnly)
         {

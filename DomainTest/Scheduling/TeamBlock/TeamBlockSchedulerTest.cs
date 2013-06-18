@@ -39,8 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IGroupPerson _groupPerson;
 	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private IScheduleRange _scheduleRange;
+	    private IScheduleMatrixPro _matrix2;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_timeZoneInfo = (zone);
 			_person = PersonFactory.CreatePerson("bill");
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixes = new List<IScheduleMatrixPro> { _matrix1 };
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
 			_groupPerson = _mocks.StrictMock<IGroupPerson>();
@@ -213,6 +215,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
 	    }
 
+        private void expectCallForCheckerForMatrix2(IPerson person,bool isSchedule )
+        {
+            IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+            ISchedulingResultStateHolder schedulingResultStateHolder =_mocks.StrictMock<ISchedulingResultStateHolder>();
+            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            Expect.Call(_matrix2.SchedulePeriod).Return(virtualSchedulePeriod);
+            Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+
+
+            Expect.Call(_matrix2.SchedulingStateHolder).Return(schedulingResultStateHolder);
+            Expect.Call(_matrix2.Person).Return(person).Repeat.AtLeastOnce();
+            Expect.Call(schedulingResultStateHolder.Schedules[person]).Return(_scheduleRange);
+            Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
+            Expect.Call(scheduleDay.IsScheduled()).Return(isSchedule);
+            
+        }
+
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldContinueScheduleSelectedBlockForShiftsAvailable()
 		{
@@ -301,43 +322,57 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldSkipScheduleSelectedBlockDoesNotContainThePerson()
-		{
-			var restriction =
-				new EffectiveRestriction(new StartTimeLimitation(),
-				                         new EndTimeLimitation(),
-				                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var shifts = getCashes();
-			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-		    var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
+     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldSkipScheduleSelectedBlockDoesNotContainThePerson()
+        {
+            var restriction =
+                new EffectiveRestriction(new StartTimeLimitation(),
+                                         new EndTimeLimitation(),
+                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+            var shifts = getCashes();
+            var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
+                Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
+                Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
                                                            finderResult))
-				      .Return(shifts).Repeat.AtLeastOnce();
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-				      .Return(activityData).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-				                                                          _schedulingOptions.WorkShiftLengthHintOption,
-				                                                          _schedulingOptions.UseMinimumPersons,
-				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
+                      .Return(shifts).Repeat.AtLeastOnce();
+                Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
+                      .Return(activityData).Repeat.AtLeastOnce();
+                Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
+                                                                          _schedulingOptions.WorkShiftLengthHintOption,
+                                                                          _schedulingOptions.UseMinimumPersons,
+                                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { PersonFactory.CreatePerson("test1") }));
 
 
-                expectCallForChecker(scheduleDay);
-				Expect.Call(scheduleDay.IsScheduled()).Return(false);
-			}
-			using (_mocks.Playback())
-			{
-				Assert.IsFalse(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
-				                                            new List<IPerson>()));
-			}
-		}
+                IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+                DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+                var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+                Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix1.SchedulePeriod).Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay.IsScheduled()).Return(false);
+
+                Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
+            }
+            using (_mocks.Playback())
+            {
+                Assert.IsFalse(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
+                                                            new List<IPerson> { _person }));
+            }
+        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSkipScheduleSelectedBlockIfItIsAlreadyScheduled()
@@ -493,15 +528,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>{_person}));
+				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>{PersonFactory.CreatePerson( "Test3")}));
 
-                expectCallForChecker(scheduleDay);
-				Expect.Call(scheduleDay.IsScheduled()).Return(false);
+                //expectCallForChecker(scheduleDay);
+                IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+                DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+                var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+                Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrix1.SchedulePeriod).Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay.IsScheduled()).Return(false);
+
+                Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
 			}
 			using (_mocks.Playback())
 			{
 				Assert.IsFalse(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
-				                                            new List<IPerson>()));
+                                                            new List<IPerson> { _person }));
 			}
 		}
 

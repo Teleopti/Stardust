@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 	        var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
-            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(dailyTeamBlockInfo, day)) return true;
+        if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(dailyTeamBlockInfo, day, selectedPersons)) return true;
 		    var roleModelShift = suggestedShiftProjectionCache;
 			var isTeamScheduling = false;
 	        foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
@@ -108,14 +108,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				isTeamScheduling = true;
 	        }
-			return TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(dailyTeamBlockInfo, day);
+            return TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(dailyTeamBlockInfo, day, selectedPersons);
 	    }
 
         private bool scheduleSelectedBlockForSameShift(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, DateOnly day, IShiftProjectionCache suggestedShiftProjectionCache, DateOnlyPeriod selectedPeriod)
         {
             var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
-            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock( dailyTeamBlockInfo, day)) return true;
+            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(dailyTeamBlockInfo, day, selectedPersons)) return true;
 	        if (!schedulingOptions.UseGroupScheduling && schedulingOptions.UseTeamBlockPerOption)
 			{
 				if (_cancelMe)
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 
-	        return TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(dailyTeamBlockInfo, day);
+            return TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(dailyTeamBlockInfo, day, selectedPersons);
         }
 
 
