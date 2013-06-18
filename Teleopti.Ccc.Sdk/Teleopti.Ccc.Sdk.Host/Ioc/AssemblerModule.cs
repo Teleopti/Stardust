@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
             builder.RegisterType<ActivityRestrictionAssembler<IActivityRestrictionTemplate>>().As
                 <IAssembler<IActivityRestrictionTemplate, ActivityRestrictionDto>>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ActivityLayerAssembler<IMainShiftActivityLayer>>().As<IActivityLayerAssembler<IMainShiftActivityLayer>>().InstancePerLifetimeScope();
+            builder.RegisterType<ActivityLayerAssembler<IMainShiftActivityLayerNew>>().As<IActivityLayerAssembler<IMainShiftActivityLayerNew>>().InstancePerLifetimeScope();
             builder.RegisterType<ActivityLayerAssembler<IPersonalShiftActivityLayer>>().As<IActivityLayerAssembler<IPersonalShiftActivityLayer>>().InstancePerLifetimeScope();
 
         	builder.RegisterType<SdkProjectionServiceFactory>().As<ISdkProjectionServiceFactory>();
