@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             //If there are remaining shift they should be valid
             Assert.IsTrue(_startTimeLimiter.IsValidAtEnd(_visualLayerCollection));
             //If no shifts, return false
-            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(new IMainShiftActivityLayerNew[0].CreateProjection()));
+            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(Enumerable.Empty<IMainShiftActivityLayerNew>().CreateProjection()));
         }
 
     }
