@@ -1499,7 +1499,7 @@
     <EmbeddedResource Include="AgentInfo\PersonSkill.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\MainShiftActivityLayer.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Assignment\MainShiftLayer.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonalShiftActivityLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

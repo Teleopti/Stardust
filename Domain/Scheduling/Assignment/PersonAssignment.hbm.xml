@@ -47,7 +47,7 @@
 		  inverse="true">
 			<key column="Parent" on-delete="cascade" />
 			<index type="Byte" column ="OrderIndex" />
-			<one-to-many class="MainShiftActivityLayerNew"/>
+			<one-to-many class="MainShiftLayer"/>
 		</list>
 
 		<list name="PersonalShiftCollection"
