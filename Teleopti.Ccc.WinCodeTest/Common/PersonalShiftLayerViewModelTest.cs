@@ -6,9 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
@@ -264,13 +262,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
 
-			var model = new PersonalShiftLayerViewModel(null, layer, personalShift2, null);
-			model.MoveUp();
+			_target = new PersonalShiftLayerViewModel(null, layer, personalShift2, null);
+			_target.MoveUp();
 			
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 1);
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 0);
 
-			model.MoveDown();
+			_target.MoveDown();
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
 		}
