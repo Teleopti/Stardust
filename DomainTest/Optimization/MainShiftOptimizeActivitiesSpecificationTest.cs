@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
@@ -104,19 +104,46 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyLockedActivityNotMoved()
         {
             //Create a mirrored shift, all except lunch is altered
-            IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_shbrAct, _lunchAct, _baseAct);
-            IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-            Assert.IsTrue(_target.LockedActivityNotMoved(layers));
+            var projection = createProjectionWithLayers();
+						Assert.IsTrue(_target.LockedActivityNotMoved(projection));
 
             _preferences.SetDoNotMoveActivities(new List<IActivity>{_lunchAct});
-            Assert.IsTrue(_target.LockedActivityNotMoved(layers));
+						Assert.IsTrue(_target.LockedActivityNotMoved(projection));
 
             _preferences.SetDoNotMoveActivities(new List<IActivity> { _lunchAct, _shbrAct });
-            Assert.IsFalse(_target.LockedActivityNotMoved(layers));
+						Assert.IsFalse(_target.LockedActivityNotMoved(projection));
 
             _preferences.SetDoNotMoveActivities(new List<IActivity> { _lunchAct, _baseAct });
-            Assert.IsFalse(_target.LockedActivityNotMoved(layers));
+						Assert.IsFalse(_target.LockedActivityNotMoved(projection));
 
         }
+
+				private IVisualLayerCollection createProjectionWithLayers()
+				{
+
+					DateTimePeriod period1 =
+							new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+																 new DateTime(2007, 1, 1, 18, 0, 0, DateTimeKind.Utc));
+
+					DateTimePeriod period2 =
+							new DateTimePeriod(new DateTime(2007, 1, 1, 11, 0, 0, DateTimeKind.Utc),
+																 new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+
+					DateTimePeriod period3 =
+							new DateTimePeriod(new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc),
+																 new DateTime(2007, 1, 1, 15, 15, 0, DateTimeKind.Utc));
+
+					DateTimePeriod period4 =
+							new DateTimePeriod(new DateTime(2007, 1, 1, 16, 0, 0, DateTimeKind.Utc),
+																 new DateTime(2007, 1, 1, 16, 15, 0, DateTimeKind.Utc));
+
+					return new[]
+						{
+							new MainShiftActivityLayerNew(_shbrAct, period1),
+							new MainShiftActivityLayerNew(_lunchAct, period2),
+							new MainShiftActivityLayerNew(_baseAct, period3),
+							new MainShiftActivityLayerNew(_baseAct, period4),
+						}.CreateProjection();
+				}
     }
 }

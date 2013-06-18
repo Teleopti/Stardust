@@ -1806,12 +1806,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																											scenario);
 			DateTimePeriod mainPeriodCoverOne = new DateTimePeriod(new DateTime(2000, 3, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 3, 1, 12, 0, 0, DateTimeKind.Utc));
 			IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("Day");
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(activityMain, mainPeriodCoverOne, category);
 			part.Add(personAssignment);
 			part.Add(personAssignment2);
 
 			Assert.AreEqual(2, part.PersonAssignmentCollection().Count);
-			part.MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
+			part.MergePersonalShiftsToOneAssignment(mainPeriodCoverOne);
 			Assert.AreEqual(2, part.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, part.PersonAssignmentCollection()[0].PersonalShiftCollection.Count);
 			Assert.AreEqual(1, part.PersonAssignmentCollection()[1].PersonalShiftCollection.Count);

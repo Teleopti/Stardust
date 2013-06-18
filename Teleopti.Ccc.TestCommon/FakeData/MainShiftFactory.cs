@@ -80,39 +80,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             return resultShift;
         }
-
-        public static MainShift CreateMainShiftWithLayers(IActivity baseAct, IActivity lunchAct, IActivity shortAct)
-        {
-
-            DateTimePeriod period1 =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 1, 18, 0, 0, DateTimeKind.Utc));
-
-            DateTimePeriod period2 =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 11, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc));
-
-            DateTimePeriod period3 =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 1, 15, 15, 0, DateTimeKind.Utc));
-
-            DateTimePeriod period4 =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 16, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 1, 16, 15, 0, DateTimeKind.Utc));
-
-
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(baseAct, period1);
-            MainShiftActivityLayer layer2 = new MainShiftActivityLayer(lunchAct, period2);
-            MainShiftActivityLayer layer3 = new MainShiftActivityLayer(shortAct, period3);
-            MainShiftActivityLayer layer4 = new MainShiftActivityLayer(shortAct, period4);
-
-            MainShift resultShift = CreateMainShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
-            resultShift.LayerCollection.Add(layer1);
-            resultShift.LayerCollection.Add(layer2);
-            resultShift.LayerCollection.Add(layer3);
-            resultShift.LayerCollection.Add(layer4);
-
-            return resultShift;
-        }
     }
 }
