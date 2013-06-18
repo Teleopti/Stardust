@@ -267,12 +267,4 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             Assert.IsTrue(_target.IsValidAtStart(shift, extenders));
         }
     }
-
-    /// <summary>
-    /// Class to fake an implementation of shift
-    /// </summary>
-    internal class FakeShift : MainShift
-    {
-        
-    }
 }
