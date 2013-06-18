@@ -143,12 +143,15 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
         {
             var text = LanguageResourceHelper.TranslateEnumValue(_personRequestDto.RequestStatus);
 
-            if (_personRequestDto.RequestStatus == RequestStatusDto.New && LoggedOnPerson.Id != _personRequestDto.Person.Id)
+            if (_personRequestDto.RequestStatus == RequestStatusDto.New 
+				&& LoggedOnPerson.Id != _personRequestDto.Person.Id)
             {
                 return new StatusDisplay(text, _personRequestDto.RequestStatus);
             }
 
-            if (_personRequestDto.RequestStatus != RequestStatusDto.Denied && _personRequestDto.RequestStatus != RequestStatusDto.Approved)
+            if (_personRequestDto.RequestStatus != RequestStatusDto.Denied 
+				&& _personRequestDto.RequestStatus != RequestStatusDto.Approved
+				&& _personRequestDto.RequestStatus != RequestStatusDto.Autodenied)
             {
                 var requestDto = _personRequestDto.Request as ShiftTradeRequestDto;
                 if (requestDto != null)
