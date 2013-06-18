@@ -520,9 +520,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person, insidePeriod);
 
 			int actualValue = foundRequests.Count;
-			Assert.AreEqual(2, actualValue);
-			Assert.AreEqual(2, foundRequests.Count(r => r.IsDenied));
-			Assert.AreEqual(1, foundRequests.Count(r => r.IsAutoDenied));
+			Assert.AreEqual(1, actualValue);
+			Assert.AreEqual(1, foundRequests.Count(r => r.IsDenied));
+			Assert.AreEqual(0, foundRequests.Count(r => r.IsAutoDenied));
 
 			foundRequests.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
 		}
