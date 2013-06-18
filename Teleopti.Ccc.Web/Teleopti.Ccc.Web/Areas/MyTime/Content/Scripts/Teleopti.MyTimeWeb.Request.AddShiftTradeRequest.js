@@ -11,7 +11,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
-	function shiftTradeViewModel() {
+	function shiftTradeViewModel(sendRequestCallback) {
 		var self = this;
 		var layerCanvasPixelWidth = 700;
 
@@ -19,7 +19,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days',-1));
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
-		self.selectedDate = ko.observable(moment().startOf('day'));
 		self.missingWorkflowControlSet = ko.observable(true);
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
@@ -31,6 +30,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.IsLoading = ko.observable(false);
 		self.errorMessage = ko.observable();
 		self.isReadyLoaded = ko.observable(false);
+		self.requestedDateInternal = ko.observable(moment().startOf('day'));
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -42,8 +42,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
-
-		self._createMySchedule = function (myScheduleObject) {
+        
+	    self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
@@ -78,6 +78,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.clearInputForm(); 
 		};
 
+		self.sendRequest = function () {
+		    self.isSendEnabled(false);
+		    sendRequestCallback(self);
+		};
+
+		self.cancelRequest = function () {
+		    self.chooseAgent(null);
+		};
+
 		self.clearInputForm = function () {
 			self.subject(undefined);
 			self.message(undefined);
@@ -93,24 +102,26 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		    
 			self.hours([]);
-			self.hours(arrayMap);
+			self.hours.push.apply(self.hours, arrayMap);
 			_positionTimeLineHourTexts();
 		};
 
-		self.requestedDate.subscribe(function (newValue) {
-		    if (self.selectedDate().diff(newValue) == 0) return;
-		    self.chooseAgent(null);
-            if (newValue.diff(self.openPeriodStartDate()) < 0) {
-                if (self.selectedDate().diff(self.openPeriodStartDate()) == 0) return;
-                self.selectedDate(self.openPeriodStartDate());
-            } else if (self.openPeriodEndDate().diff(newValue) < 0) {
-                if (self.selectedDate().diff(self.openPeriodEndDate()) == 0) return;
-                self.selectedDate(self.openPeriodEndDate());
-            } else {
-                self.selectedDate(newValue);
+        self.requestedDate = ko.computed({
+            read: function() {
+                return self.requestedDateInternal();
+            },
+            write: function (value) {
+                if (self.requestedDateInternal().diff(value) == 0) return;
+                //    self.setScheduleLoadedReady();
+                //    self.isReadyLoaded(true);
+                //    return;
+                //}
+                self.chooseAgent(null);
+                self.requestedDateInternal(value);
+                self.loadSchedule();
             }
-			self.loadSchedule();
-		});
+        });
+
 
 	    self.isRequestedDateValid = function(date) {
 	        if (date.diff(self.openPeriodStartDate()) < 0) {
@@ -145,7 +156,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
 				type: 'GET',
-				data: { selectedDate: self.selectedDate().toDate().toJSON() },
+				data: { selectedDate: self.requestedDateInternal().toDate().toJSON() },
 				beforeSend: function () {
 					self.IsLoading(true);
 				},
@@ -154,7 +165,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
-					//self._createTimeLine([{ "HourText": "98", "LengthInMinutesToDisplay": 15 }, { "HourText": "99", "LengthInMinutesToDisplay": 15 }]);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
@@ -165,7 +175,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 	    self.changeRequestedDate = function(movement) {
-	        var date = moment(self.selectedDate()).add('days', movement);
+	        var date = moment(self.requestedDateInternal()).add('days', movement);
 	        if (self.isRequestedDateValid(date))
 	            self.requestedDate(date);
 	    };
@@ -186,54 +196,42 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _init() {
-	    _unbind();
-		var elementToBind = $('#Request-add-shift-trade').get(0);
+		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (_hasPermission(elementToBind)) {
-			vm = new shiftTradeViewModel();
-			ko.applyBindings(vm, elementToBind);
-			_initButtons();
+		    if ((vm || '') == '') {
+		        vm = new shiftTradeViewModel(_saveNewShiftTrade);
+		        ko.applyBindings(vm, elementToBind);
+		    }
 		}
 	}
 
 	function _hasPermission(element) {
 		return element!==undefined;
 	}
-	
-	function _initButtons() {
-		$('#Request-add-shift-trade-detail-section .send-button')
-			.click(function () {
-				vm.isSendEnabled(false);
-				_saveNewShiftTrade();
-			});
-		$('#Request-add-shift-trade-detail-section .cancel-button')
-			.click(function () {
-				vm.chooseAgent(null);
-			});
-	}
 
-	function _saveNewShiftTrade() {
+	function _saveNewShiftTrade(viewModel) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-				Date: vm.selectedDate().toDate().toJSON(),
-				Subject: vm.subject(),
-				Message: vm.message(),
-				PersonToId: vm.agentChoosed().personId
+			    Date: viewModel.requestedDateInternal().toDate().toJSON(),
+			    Subject: viewModel.subject(),
+			    Message: viewModel.message(),
+			    PersonToId: viewModel.agentChoosed().personId
 			}),
 			success: function (data) {
-				vm.agentChoosed(null);
-				vm.isSendEnabled(true);
+			    viewModel.agentChoosed(null);
+			    viewModel.isSendEnabled(true);
 				_hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
-					vm.errorMessage(data.Errors.join('</br>'));
-					vm.isSendEnabled(true);
+					viewModel.errorMessage(data.Errors.join('</br>'));
+					viewModel.isSendEnabled(true);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -288,12 +286,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		;
 	}
     
-	function _unbind() {
-	    vm = null;
-        var element = $('#Request-add-shift-trade')[0];
-        if (element) ko.cleanNode(element);
-    }
-
 	return {
 		Init: function () {
 		},
@@ -309,7 +301,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			_hideShiftTradeWindow();
 		},
 		Dispose: function() {
-		    _unbind();
 		}
 	};
 

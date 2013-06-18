@@ -143,13 +143,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see my details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
 		{
-			EventualAssert.That(()=>Pages.Pages.RequestsPage.MyScheduleDayOff.Text,Is.EqualTo(dayOffText));
+			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see other details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.OtherScheduleDayOff.Text, Is.EqualTo(dayOffText));
+			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule-to .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see details with a schedule to")]
