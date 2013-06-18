@@ -588,6 +588,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripMenuItemAddPreference.Name = "toolStripMenuItemAddPreference";
 			this.SetShortcut(this.toolStripMenuItemAddPreference, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddPreference.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
 			this.toolStripMenuItemAddPreference.Size = new System.Drawing.Size(282, 22);
 			this.toolStripMenuItemAddPreference.Text = "xxAddPreferenceThreeDots";
 			this.toolStripMenuItemAddPreference.Click += new System.EventHandler(this.addPreferenceToolStripMenuItemClick);
@@ -596,6 +597,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripMenuItemAddStudentAvailability.Name = "toolStripMenuItemAddStudentAvailability";
 			this.SetShortcut(this.toolStripMenuItemAddStudentAvailability, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddStudentAvailability.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
 			this.toolStripMenuItemAddStudentAvailability.Size = new System.Drawing.Size(282, 22);
 			this.toolStripMenuItemAddStudentAvailability.Text = "xxAddStudentAvailabilityThreeDots";
 			this.toolStripMenuItemAddStudentAvailability.Click += new System.EventHandler(this.addStudentAvailabilityToolStripMenuItemClick);
