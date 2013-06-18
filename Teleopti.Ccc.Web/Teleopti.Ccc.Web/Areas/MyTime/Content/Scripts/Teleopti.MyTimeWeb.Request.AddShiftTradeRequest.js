@@ -19,7 +19,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days',-1));
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
-		self.selectedDate = ko.observable(moment().startOf('day'));
 		self.missingWorkflowControlSet = ko.observable(true);
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
@@ -31,6 +30,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.IsLoading = ko.observable(false);
 		self.errorMessage = ko.observable();
 		self.isReadyLoaded = ko.observable(false);
+		self.requestedDateInternal = ko.observable(moment().startOf('day'));
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -106,20 +106,22 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			_positionTimeLineHourTexts();
 		};
 
-		self.requestedDate.subscribe(function (newValue) {
-		    if (self.selectedDate().diff(newValue) == 0) return;
-		    self.chooseAgent(null);
-            if (newValue.diff(self.openPeriodStartDate()) < 0) {
-                if (self.selectedDate().diff(self.openPeriodStartDate()) == 0) return;
-                self.selectedDate(self.openPeriodStartDate());
-            } else if (self.openPeriodEndDate().diff(newValue) < 0) {
-                if (self.selectedDate().diff(self.openPeriodEndDate()) == 0) return;
-                self.selectedDate(self.openPeriodEndDate());
-            } else {
-                self.selectedDate(newValue);
+        self.requestedDate = ko.computed({
+            read: function() {
+                return self.requestedDateInternal();
+            },
+            write: function (value) {
+                if (self.requestedDateInternal().diff(value) == 0) return;
+                //    self.setScheduleLoadedReady();
+                //    self.isReadyLoaded(true);
+                //    return;
+                //}
+                self.chooseAgent(null);
+                self.requestedDateInternal(value);
+                self.loadSchedule();
             }
-			self.loadSchedule();
-		});
+        });
+
 
 	    self.isRequestedDateValid = function(date) {
 	        if (date.diff(self.openPeriodStartDate()) < 0) {
@@ -154,7 +156,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
 				type: 'GET',
-				data: { selectedDate: self.selectedDate().toDate().toJSON() },
+				data: { selectedDate: self.requestedDateInternal().toDate().toJSON() },
 				beforeSend: function () {
 					self.IsLoading(true);
 				},
@@ -163,7 +165,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
-					//self._createTimeLine([{ "HourText": "98", "LengthInMinutesToDisplay": 15 }, { "HourText": "99", "LengthInMinutesToDisplay": 15 }]);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
@@ -174,7 +175,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 	    self.changeRequestedDate = function(movement) {
-	        var date = moment(self.selectedDate()).add('days', movement);
+	        var date = moment(self.requestedDateInternal()).add('days', movement);
 	        if (self.isRequestedDateValid(date))
 	            self.requestedDate(date);
 	    };
@@ -215,7 +216,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-			    Date: viewModel.selectedDate().toDate().toJSON(),
+			    Date: viewModel.requestedDateInternal().toDate().toJSON(),
 			    Subject: viewModel.subject(),
 			    Message: viewModel.message(),
 			    PersonToId: viewModel.agentChoosed().personId
