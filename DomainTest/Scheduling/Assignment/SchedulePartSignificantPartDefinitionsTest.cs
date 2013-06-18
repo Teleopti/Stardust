@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             //Definition: main layer(s) is covered by one or more absence layers
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var mainLayer1 = new MainShiftActivityLayer(new Activity("main1"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
-            var mainLayer2 = new MainShiftActivityLayer(new Activity("main2"), new DateTimePeriod(_baseDateTime.AddHours(6), _baseDateTime.AddHours(8)));
+            var mainLayer1 = new MainShiftActivityLayerNew(new Activity("main1"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
+            var mainLayer2 = new MainShiftActivityLayerNew(new Activity("main2"), new DateTimePeriod(_baseDateTime.AddHours(6), _baseDateTime.AddHours(8)));
             var absenceLayer1 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(5)));
             var absenceLayer3 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime, _baseDateTime.AddHours(24)));
 
@@ -145,8 +145,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             //Definition: Has One layer in projection, and that layer is an absencelayer
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var layer = new MainShiftActivityLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
-            var layer2 = new MainShiftActivityLayer(new Activity("underlying2"), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
+            var layer = new MainShiftActivityLayerNew(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
+            var layer2 = new MainShiftActivityLayerNew(new Activity("underlying2"), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
             var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
             var absenceLayer2 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
 			var target = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasAbsenceNightshift()
         {
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var layer = new MainShiftActivityLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(21), _baseDateTime.AddHours(31)));
+            var layer = new MainShiftActivityLayerNew(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(21), _baseDateTime.AddHours(31)));
             var pAbs = new PersonAbsence(_part.Person, _part.Scenario,
                              new AbsenceLayer(new Absence(),
                                               new DateTimePeriod(_baseDateTime.AddHours(26),

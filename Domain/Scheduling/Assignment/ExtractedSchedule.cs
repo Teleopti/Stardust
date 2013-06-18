@@ -871,7 +871,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void CreateAndAddActivity(IMainShiftActivityLayer layer, IShiftCategory shiftCategory)
+        public void CreateAndAddActivity(IMainShiftActivityLayerNew layer, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
@@ -880,24 +880,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
-			var mainShift = new MainShift(shiftCategory);
-			mainShift.LayerCollection.Add(layer);
-			MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
+			MergePersonalShiftsToOneAssignment(layer.Period);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
 				{
 					if (personAssignment.ShiftCategory == null)
 					{
-						personAssignment.SetMainShift(mainShift);
+						personAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
 					}
 					else
 					{
-#pragma warning disable 612,618
-						var oldShift = personAssignment.ToMainShift();
-#pragma warning restore 612,618
-						oldShift.LayerCollection.Add(layer);
-						personAssignment.SetMainShift(oldShift);
+						//introduce AddLayer on PersonAssignment instead?
+						//rk: Micke and I have talked about this... 
+						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
+						var oldLayers = personAssignment.MainShiftActivityLayers.ToList();
+						oldLayers.Add(layer);
+						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}
 					return;
 				}
@@ -907,7 +906,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.SetMainShift(mainShift);
+	        newPersonAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);
