@@ -16,6 +16,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
     var settingsViewModel = function() {
         var self = this;
 
+	    self.culturesLoaded = ko.observable(false);
         self.avoidReload = false;
         self.cultures = ko.observableArray();
         self.selectedUiCulture = ko.observable();
@@ -30,6 +31,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
             if (!self.avoidReload)
                 _selectorChanged(newValue, "Settings/UpdateCulture");
         });
+
     };
 
     function _init() {
@@ -59,6 +61,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
 	            vm.selectedCulture(data.ChoosenCulture.id);
 	            vm.avoidReload = false;
+		        vm.culturesLoaded(true);
 	        },
 	        error: function(e) {
 	            //console.log(e);

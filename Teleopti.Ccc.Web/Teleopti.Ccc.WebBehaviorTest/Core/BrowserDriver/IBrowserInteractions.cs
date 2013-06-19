@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);
 		void DumpInfo(Action<string> writer);
+		void WaitUntilEnabled(string selector);
 	}
 
 	public static class BrowserInteractionsExtensions
