@@ -187,12 +187,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void IOpenTheCultureUiPicker()
 		{
-			Select2Box.OpenWaitForOptions("CultureUi-Picker");
+			Select2Box.Open("CultureUi-Picker");
 		}
 
 		private static void IOpenTheCulturePicker()
 		{
-			Select2Box.OpenWaitForOptions("Culture-Picker");
+			Select2Box.Open("Culture-Picker");
 		}
 
 	}
