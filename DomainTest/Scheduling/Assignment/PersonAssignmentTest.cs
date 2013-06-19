@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void AtLeastOneMainShiftLayerMustBeSet()
 		{
 			Assert.Throws<ArgumentOutOfRangeException>(() => 
-				target.SetMainShiftLayers(new IMainShiftActivityLayerNew[0], new ShiftCategory("foo")));
+				target.SetMainShiftLayers(new IMainShiftLayer[0], new ShiftCategory("foo")));
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
-			target.MainShiftActivityLayers.Should().Be.Empty();
+			target.MainShiftLayers.Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
@@ -202,19 +202,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddPersonalShift(null);
 		}
 
-		/// <summary>
-		/// BaseShift can be set on an assignement.
-		/// </summary>
-		[Test]
-		public void CanSetBaseShift()
-		{
-			var category = new ShiftCategory("Morning");
-			MainShift baseShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, category);
-			target.SetMainShift(baseShift);
-			Assert.AreEqual(target.MainShiftActivityLayers.Count(), baseShift.LayerCollection.Count);
-			Assert.AreSame(target.ShiftCategory, baseShift.ShiftCategory);
-		}
-
 
 		/// <summary>
 		/// Verifies default constructor is not public.
@@ -236,16 +223,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNotNull(target);
 		}
 
-		/// <summary>
-		/// Verifies the set main shift does not accept null.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void VerifySetMainShiftDoesNotAcceptNull()
-		{
-			target = new testAssignment();
-			target.SetMainShift(null);
-		}
 
 		/// <summary>
 		/// Verifies the period property.
@@ -401,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
-			target.MainShiftActivityLayers.Should().Be.Empty();
+			target.MainShiftLayers.Should().Be.Empty();
 			Assert.AreEqual(0, targetClone.PersonalShiftCollection.Count);
 		}
 

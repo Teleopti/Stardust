@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenINavigateTo(string url)
 		{
 			Navigation.GoToWaitForCompleted(url, new BustCache());
-			Browser.Interactions.AssertUrlContains(".html");
 			Browser.Interactions.AssertExists("#qunit-tests");
 		}
 

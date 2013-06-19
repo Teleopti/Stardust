@@ -208,6 +208,7 @@
     <Compile Include="Common\ICurrentDataSource.cs" />
     <Compile Include="Common\ICurrentIdentity.cs" />
     <Compile Include="Common\IModifyNow.cs" />
+    <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificDataSource.cs" />
@@ -491,7 +492,8 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
+    <Compile Include="Scheduling\Assignment\MoveLayerVertical.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
@@ -1244,7 +1246,6 @@
     </Compile>
     <Compile Include="Scheduling\AgentDate.cs" />
     <Compile Include="Scheduling\Rules\OverlappingAssignmentRule.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParameter.cs" />
@@ -1319,7 +1320,6 @@
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
-    <Compile Include="Scheduling\Assignment\MainShift.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShift.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1499,7 +1499,7 @@
     <EmbeddedResource Include="AgentInfo\PersonSkill.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\MainShiftActivityLayer.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Assignment\MainShiftLayer.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonalShiftActivityLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

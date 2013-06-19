@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
@@ -25,7 +25,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
-		Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateToolbarButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateDateButtons();
@@ -41,11 +40,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//disable navigation controls on ajax-begin
 	function _disablePortalControls() {
-		var dp = $('.datepicker');
-		dp.css("background-position", "right 0");
-		dp.datepicker("destroy");
-
-
 		$('.ui-buttonset').buttonset("option", "disabled", true);
 		$('nav .ui-button').button("option", "disabled", true);
 
@@ -55,14 +49,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//enable navigation controls on ajax-complete
 	function _enablePortalControls(periodRangeSelectorId) {
-		if (periodRangeSelectorId.substring(0, 1) !== "#") {
-			periodRangeSelectorId = "#" + periodRangeSelectorId;
-		}
-
-		$(periodRangeSelectorId + ' .datepicker').css("background-position", "right -120px");
 		$('.ui-buttonset').buttonset("option", "disabled", false);
 		$('.ui-button').button("option", "disabled", false);
-		$('.selected-date-period').css({ opacity: 1 });
 		$('#Team-Picker').select2("enable", true);
 	}
 
@@ -96,15 +84,17 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		tabs = $('#tabs')
 			.tabberiet({
-				click: function () {
+			    click: function (e) {
+			        e.preventDefault();
 					_navigateTo($(this).data('mytime-action'));
 				},
 				emptyContentSelector: '#EmptyTab'
 			})
 			;
 
-		$('#toolbar-right .ui-menu-item [data-mytime-action]')
-			.click(function () {
+	    $('.dropdown-menu a[data-mytime-action]')
+			.click(function (e) {
+			    e.preventDefault();
 				_navigateTo($(this).data('mytime-action'));
 			})
 			;
@@ -277,7 +267,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return currentFixedDate;
 		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
-			var common = Teleopti.MyTimeWeb.Common;
+			/*var common = Teleopti.MyTimeWeb.Common;
 			var range = $(rangeSelectorId);
 			var actionPrefix = range.data('mytime-action');
 			actionSuffix = actionSuffix || '';
@@ -300,7 +290,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				});
 
 				range.find('.datepicker')
-					.datepicker('setDate', common.ParseToDate(periodData.Date));
+					.datepicker('viewDate', moment(common.ParseToDate(periodData.Date)));
 
 				var nextPeriod = periodData.PeriodNavigation.NextPeriod;
 				var prevPeriod = periodData.PeriodNavigation.PrevPeriod;
@@ -322,7 +312,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					;
 
 				_enablePortalControls(rangeSelectorId);
-			}
+			}*/
 
 		}
 	};

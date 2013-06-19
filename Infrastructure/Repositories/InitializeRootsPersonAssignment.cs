@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                      where a.ShiftCategory != null
                                      select a);
             var mainShiftActivities = (from a in assWithShiftCategories
-                                       from al in a.MainShiftActivityLayers
+                                       from al in a.MainShiftLayers
                                        select al.Payload).Distinct();
             var persShiftActivities = (from a in _personAssignments
                                        from p in a.PersonalShiftCollection

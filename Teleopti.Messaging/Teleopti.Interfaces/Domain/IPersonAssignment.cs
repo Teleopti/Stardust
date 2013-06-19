@@ -21,14 +21,7 @@ namespace Teleopti.Interfaces.Domain
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
-			void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayerNew> activityLayers, IShiftCategory shiftCategory);
-
-	    /// <summary>
-	    /// Gets the main shift.
-	    /// </summary>
-	    /// <returns>The main shift.</returns>
-	    [Obsolete("Mainshift will not be supported in near future")]
-	    IMainShift ToMainShift();
+			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
 
 	    /// <summary>
         /// Gets the personal shift collection.
@@ -63,12 +56,6 @@ namespace Teleopti.Interfaces.Domain
         void ClearMainShiftLayers();
 
         /// <summary>
-        /// Sets the main shift.
-        /// </summary>
-        /// <param name="mainShift">The main shift.</param>
-        void SetMainShift(IMainShift mainShift);
-
-        /// <summary>
         /// Gets or sets the ZOrder for PersonAssignment, used in gui.
         /// </summary>
         DateTime ZOrder{get; set;}
@@ -89,7 +76,7 @@ namespace Teleopti.Interfaces.Domain
 	    DateOnly Date { get; }
 
 	    IShiftCategory ShiftCategory { get; }
-	    IEnumerable<IMainShiftActivityLayerNew> MainShiftActivityLayers { get; }
+	    IEnumerable<IMainShiftLayer> MainShiftLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.
@@ -115,5 +102,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
 		void ScheduleChanged(string dataSource);
+
+	    bool RemoveLayer(IMainShiftLayer layer);
     }
 }

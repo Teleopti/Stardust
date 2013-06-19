@@ -8,7 +8,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPersonAbsence : IPersistableScheduleData,
 										IAggregateRootWithEvents,
-										IVisualLayerFactoryFactory,
                                         ICloneableEntity<IPersonAbsence>,
 										ILayerCollectionOwner<ISkillStaff>
     {

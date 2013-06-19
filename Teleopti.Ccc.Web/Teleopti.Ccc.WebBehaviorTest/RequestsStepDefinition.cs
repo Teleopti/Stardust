@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -19,20 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 		private RequestsPage _page { get { return Pages.Pages.RequestsPage; } }
 
-		[When(@"I click on the request")]
-		public void WhenIClickOnTheRequest()
+		[When(@"I click on the request at position '(.*)' in the list")]
+		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
 		{
-			_page.FirstRequest.Click();
+			Browser.Interactions.Click(string.Format(".request-body:nth-child({0})", position));
 		}
-
-		[When(@"I click the delete button on the shift trade request")]
-		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
-		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.True);
-			_page.RequestDeleteButtonById(requestId).EventualClick();
-		}
-
+		
 		[When(@"I navigate to the requests page")]
 		public void WhenINavigateToTheRequestsPage()
 		{
@@ -192,14 +182,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
+			EventualAssert.That(() => _page.RequestsDeleteButton().IsDisplayed(), Is.False);
 			_page.DenyShiftTradeButton.EventualClick();
 		}
 
 		[Then(@"I should not see a delete button on the request")]
 		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
 		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+			Browser.Interactions.AssertNotExists(".request-data-subject", ".close");	
 		}
 
 		[Then(@"I should see '(.*)' as the sender of the request")]

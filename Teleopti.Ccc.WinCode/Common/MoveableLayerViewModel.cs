@@ -11,77 +11,49 @@ namespace Teleopti.Ccc.WinCode.Common
     public abstract class MoveableLayerViewModel : LayerViewModel
     {
 	    private readonly ILayer<IActivity> _layer;
-	    private readonly IShift _parent;
+	    private readonly IPersonAssignment _assignment;
+	    private readonly IMoveLayerVertical _moveLayerVertical;
 
 	    protected MoveableLayerViewModel(ILayer<IPayload> layer)
 						: base(null, layer, null, true)
         {
         }
 
-        protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent,IEventAggregator eventAggregator)
+        protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IPersonAssignment assignment,IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
             : base(observer, layer, eventAggregator, false)
         {
 	        _layer = layer;
-	        _parent = parent;
+	        _assignment = assignment;
+	        _moveLayerVertical = moveLayerVertical;
         }
 
-	    public override bool CanMoveUp
-        {
-            get
-            {
-                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveUpLayer(_layer);
-            }
-        }
-
-        public override bool CanMoveDown
-        {
-            get
-            {
-                return _parent != null && IsMovePermitted() && _parent.LayerCollection.CanMoveDownLayer(_layer);
-            }
-        }
-
-
-        public override void MoveDown()
-        {
-            if (CanMoveDown)
-            {
-	            _parent.LayerCollection.MoveDownLayer(_layer);
-	            hackToUpdateAssignmentJustForNow();
-                LayerMoved();
-            }
-
-        }
-
-        public override void MoveUp()
-        {
-            if (CanMoveUp)
-            {
-	            _parent.LayerCollection.MoveUpLayer(_layer);
-							hackToUpdateAssignmentJustForNow();
-							LayerMoved();
-            }
-        }
-
-			private void hackToUpdateAssignmentJustForNow()
-			{
-				//this will go away when mainshift is gone
-				var ms = _parent as IMainShift;
-				if (ms != null)
+				public override void MoveDown()
 				{
-					var ass = (IPersonAssignment)ms.Root();
-					ass.SetMainShift(ms);
-				}
-			}
+					if (CanMoveDown)
+					{
+						_moveLayerVertical.MoveDown(_assignment, _layer);
+						LayerMoved();
+					}
 
-        private void LayerMoved()
-        {
-            if (ParentObservingCollection != null)
-            {
-                ParentObservingCollection.LayerMovedVertically(this);
-				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-            }
-        }
+				}
+
+				public override void MoveUp()
+				{
+					if (CanMoveUp)
+					{
+						_moveLayerVertical.MoveUp(_assignment, _layer);
+						LayerMoved();
+					}
+				}
+
+				private void LayerMoved()
+				{
+					if (ParentObservingCollection != null)
+					{
+						ParentObservingCollection.LayerMovedVertically(this);
+						new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+					}
+				}
 
        
     }

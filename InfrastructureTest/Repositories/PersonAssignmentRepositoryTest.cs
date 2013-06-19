@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.SetMainShiftLayers(
-		        new[] {new MainShiftActivityLayerNew(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
+		        new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalShift(new PersonalShift());
 					ass.AddPersonalShift(new PersonalShift());
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftActivityLayers));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
@@ -367,49 +367,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             finally
             {
                 cleanUp(loaded);
-            }
-        }
-
-
-        /// <summary>
-        /// Verifies the cascade delete works so removed shift reference deletes layers from database.
-        /// </summary>
-        [Test]
-        public void VerifyCascadeDeleteWorksSoRemovedShiftReferenceDeletesLayersFromDatabase()
-        {
-            //Setup
-            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                _dummyCategory,
-                _dummyScenario);
-            PersistAndRemoveFromUnitOfWork(ass);
-
-            //Load
-            IPersonAssignment loaded = _rep.Load(ass.Id.Value);
-            bool mainShiftExists = (loaded.ShiftCategory != null);
-            Assert.IsTrue(mainShiftExists); //ensures factory method creates mainshift
-            int noOfPersonalShift = loaded.PersonalShiftCollection.Count;
-            Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts
-
-            //Remove shifts
-            loaded.ClearMainShiftLayers();
-            PersistAndRemoveFromUnitOfWork(loaded);
-
-            foreach (int items in Session.CreateCriteria(typeof(MainShift))
-                                        .SetProjection(Projections.RowCount())
-                                        .List<int>())
-            {
-                //no mainshifts 
-                Assert.AreEqual(0, items);
-            }
-            foreach (int items in Session.CreateCriteria(typeof(ActivityLayer))
-                            .SetProjection(Projections.RowCount())
-                            .List<int>())
-            {
-                //no layers
-                Assert.AreEqual(0, items);
             }
         }
 

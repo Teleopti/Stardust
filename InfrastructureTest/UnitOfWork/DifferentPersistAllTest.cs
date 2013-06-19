@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                                                                                           new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity();
 	        var sc = ass.ShiftCategory;
-					IPayload pLoad = ass.MainShiftActivityLayers.First().Payload;
+					IPayload pLoad = ass.MainShiftLayers.First().Payload;
             try
             {
                 SkipRollback();
@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 PersistAndRemoveFromUnitOfWork(ass.Scenario);
                 PersistAndRemoveFromUnitOfWork(ass.ShiftCategory);
-                ass.MainShiftActivityLayers.First().Payload.GroupingActivity = groupingActivity;
-                PersistAndRemoveFromUnitOfWork(ass.MainShiftActivityLayers.First().Payload);
+                ass.MainShiftLayers.First().Payload.GroupingActivity = groupingActivity;
+                PersistAndRemoveFromUnitOfWork(ass.MainShiftLayers.First().Payload);
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 new PersonAssignmentRepository(UnitOfWork).Add(ass);
                 UnitOfWork.PersistAll();
