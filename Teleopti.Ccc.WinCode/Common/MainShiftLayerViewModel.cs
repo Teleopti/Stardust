@@ -57,14 +57,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				get { return _moveLayer!=null && !_assignment.MainShiftLayers.Last().Equals(_layer); }
 	    }
 
-	    protected override void DeleteLayer()
-		{
-			if (ParentObservingCollection != null)
-			{
-				ParentObservingCollection.RemoveActivity(this,Layer as ILayer<IActivity>,SchedulePart);
-				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-			}
-		}
 
 		protected override void Replace()
 		{

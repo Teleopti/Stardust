@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return UserTexts.Resources.PersonalShifts; }
         }
 
-        protected override int OrderIndexBase
+	    protected override int OrderIndexBase
         {
             get
             {
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.WinCode.Common
 	            var personAssignment = getPersonAssignment(personalShift);
 				if (personAssignment != null)
 				{
-					var index = personAssignment.PersonalShiftCollection.IndexOf(personalShift);
 					return personAssignment.PersonalShiftCollection.IndexOf(personalShift) > 0;
 				}
 

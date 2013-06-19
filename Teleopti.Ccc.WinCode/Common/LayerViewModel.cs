@@ -179,8 +179,12 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		protected virtual void DeleteLayer()
 		{
-			//Handle where necessary.
-			//This should probably be abstract
+			//for activity layers - overriden in absencelayerviewmodel
+			if (ParentObservingCollection != null)
+			{
+				ParentObservingCollection.RemoveActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
+			}
 		}
 
 		public bool CanExecuteMoveDown()

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 
 		[Test]
-		public void VerifyDeleteCommandCallsObserver()
+		public void VerifyDeleteCommandForMainShiftCallsObserver()
 		{
 			#region setup
 			var observer = _mocks.StrictMock<ILayerViewModelObserver>();
@@ -75,6 +75,27 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(() => observer.RemoveActivity(model,firstLayer,model.SchedulePart));
 			}
 			#endregion
+
+			using (_mocks.Playback())
+			{
+				//Execute Delete
+				commandTester.ExecuteCommandModel(model.DeleteCommand);
+			}
+		}
+
+		[Test]
+		public void VerifyDeleteCommandForPersonalShiftCallsObserver()
+		{
+			var observer = _mocks.StrictMock<ILayerViewModelObserver>();
+			var commandTester = new TesterForCommandModels();
+			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(new Person(), new DateTimePeriod());
+			var firstLayer = ass.PersonalShiftCollection[0].LayerCollection.Single();
+			var model = new PersonalShiftLayerViewModel(observer, firstLayer, ass.PersonalShiftCollection[0], new EventAggregator());
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => observer.RemoveActivity(model, firstLayer, model.SchedulePart));
+			}
 
 			using (_mocks.Playback())
 			{
