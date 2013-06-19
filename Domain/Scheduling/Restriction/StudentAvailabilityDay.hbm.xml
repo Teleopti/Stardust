@@ -37,7 +37,6 @@
     <property name="NotAvailable"
               type="Boolean"
               not-null="true"/>
-    
     <property name="RestrictionDate"
 					not-null="true"
 					type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>

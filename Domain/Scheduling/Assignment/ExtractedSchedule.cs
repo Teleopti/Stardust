@@ -150,7 +150,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     		return PersonMeetingCollection(false);
     	}
 
-		public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay)
+	    public ReadOnlyCollection<IOvertimeAvailability> OvertimeAvailablityCollection()
+	    {
+			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
+
+			var overtimeRestrictions = scheduleDataInternalCollection.OfType<IOvertimeAvailability>();
+			var ret = new List<IOvertimeAvailability>();
+
+			foreach (var overtimeRestriction in overtimeRestrictions)
+			{
+				ret.Add(overtimeRestriction);
+			}
+			return ret.AsReadOnly();
+	    }
+
+	    public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay)
 		{
 			var sorter = new PersonMeetingByDateSorter();
 			var org = new List<IPersonMeeting>(ScheduleDataInternalCollection().OfType<IPersonMeeting>());
@@ -335,6 +349,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Clear<IStudentAvailabilityDay>();
         }
+
+		public void DeleteOvertimeAvailability()
+		{
+			Clear<IOvertimeAvailability>();
+		}
 
         public void RemoveEmptyAssignments()
         {
@@ -1014,6 +1033,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (options.StudentAvailability)
                 DeleteStudentAvailabilityRestriction();
+            
+            if(options.OvertimeAvailability)
+                DeleteOvertimeAvailability();
         }
     }
 }

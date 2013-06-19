@@ -973,6 +973,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripMenuItemMeetingOrganizer.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
 			toolStripMenuItemWriteProtectSchedule.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 
 			_backgroundWorkerRunning = true;
@@ -1910,7 +1912,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var options = new PasteOptions();
 			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options) { Text = Resources.PasteNew };
+			var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options, false ) { Text = Resources.PasteNew };
 			pasteSpecial.ShowDialog();
 
 			if (_scheduleView != null)
@@ -3083,7 +3085,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				disableAllExceptCancelInRibbon();
 				var clipHandler = new ClipHandler<IScheduleDay>();
 				GridHelper.GridCopySelection(_scheduleView.ViewGrid, clipHandler, true);
-				var list = _scheduleView.DeleteList(clipHandler);
+				var list = _scheduleView.DeleteList(clipHandler,deleteOption);
 				IGridlockRemoverForDelete gridlockRemoverForDelete = new GridlockRemoverForDelete(_gridLockManager);
 				list = gridlockRemoverForDelete.RemoveLocked(list);
 				toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.DeletingSchedules, list.Count);
@@ -3386,7 +3388,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var options = new PasteOptions();
 			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			var cutSpecial = new FormClipboardSpecial(true, showRestrictions, options) { Text = Resources.CutSpecial };
+			var cutSpecial = new FormClipboardSpecial(true, showRestrictions, options, false ) { Text = Resources.CutSpecial };
 			cutSpecial.ShowDialog();
 
 			if (_scheduleView != null)
@@ -3436,7 +3438,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var options = new PasteOptions();
 			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			using (var deleteSpecial = new FormClipboardSpecial(true, showRestrictions, options))
+            var authorization = PrincipalAuthorization.Instance();
+            var showOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+            using (var deleteSpecial = new FormClipboardSpecial(true, showRestrictions, options, showOvertimeAvailability))
 			{
 				deleteSpecial.Text = Resources.DeleteSpecial;
 				deleteSpecial.ShowDialog();
@@ -5362,19 +5366,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView != null)
 			{
-				var deleteOption = new DeleteOption();
-				deleteOption.MainShift = deleteOptions.MainShift;
-				deleteOption.DayOff = deleteOptions.DayOff;
-				deleteOption.PersonalShift = deleteOptions.PersonalShifts;
-				deleteOption.Overtime = deleteOptions.Overtime;
-				deleteOption.Preference = deleteOptions.Preference;
-				deleteOption.StudentAvailability = deleteOptions.StudentAvailability;
+				var localDeleteOption = new DeleteOption();
+				localDeleteOption.MainShift = deleteOptions.MainShift;
+				localDeleteOption.DayOff = deleteOptions.DayOff;
+				localDeleteOption.PersonalShift = deleteOptions.PersonalShifts;
+				localDeleteOption.Overtime = deleteOptions.Overtime;
+				localDeleteOption.Preference = deleteOptions.Preference;
+				localDeleteOption.StudentAvailability = deleteOptions.StudentAvailability;
+                localDeleteOption.OvertimeAvailability = deleteOptions.OvertimeAvailability;
 				PasteAction pasteAction = deleteOptions.Absences;
 				if (pasteAction == PasteAction.Replace)
-					deleteOption.Absence = true;
+					localDeleteOption.Absence = true;
 
-				deleteOption.Default = deleteOptions.Default;
-				deleteFromSchedulePart(deleteOption);
+				localDeleteOption.Default = deleteOptions.Default;
+				deleteFromSchedulePart(localDeleteOption);
 			}
 		}
 
@@ -7105,6 +7110,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			enableSave();
 		}
+
+		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var selectedDay = _scheduleView.SelectedSchedules()[0];
+			if (selectedDay.SignificantPart() == SchedulePartView.MainShift)
+			{
+				using (var view = new AgentOvertimeAvailabilityForScheduledDayView(selectedDay))
+				{
+					view.ShowDialog(this);
+					updateOvertimeAvailability(view.ScheduleDay);
+				}
+			}
+			else
+			{
+				using (var view = new AgentOvertimeAvailabilityView(selectedDay))
+				{
+					view.ShowDialog(this);
+					updateOvertimeAvailability(view.ScheduleDay);
+				}
+			}
+		}
+
+		private void updateOvertimeAvailability(IScheduleDay scheduleDay)
+		{
+			if (_scheduleView == null || scheduleDay == null) return;
+			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
+			_scheduleView.Presenter.UpdateOvertimeAvailability();
+			enableSave();
+		}
+
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
