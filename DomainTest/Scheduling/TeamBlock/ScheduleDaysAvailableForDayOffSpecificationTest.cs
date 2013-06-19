@@ -35,17 +35,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnTrueIfNoDayOffOrAbsenceOrAssignmentOrMeeting()
 		{
-			var dayOffCollection = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>());
 			var absenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>());
 			var assCollection = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
 			var meetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
 
-			Expect.Call(_part1.PersonDayOffCollection()).Return(dayOffCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part1.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part1.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part1.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
 
-			Expect.Call(_part2.PersonDayOffCollection()).Return(dayOffCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part2.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part2.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part2.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
