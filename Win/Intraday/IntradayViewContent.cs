@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void IntradayViewContent_Load(object sender, EventArgs e)
         {
-			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false, true) { MinHeight = 80 };
+			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false) { MinHeight = 80 };
             pinnedLayerView = new PinnedLayerView();
             elementHostShiftEditor.Child = wpfShiftEditor1;
             elementHostPinnedLayerView.Child = pinnedLayerView;
@@ -613,23 +613,17 @@ namespace Teleopti.Ccc.Win.Intraday
                 _settingManager.CurrentIntradaySetting.ChartSetting.SelectedRows.Remove(key);
             }
         }
+
         public void ToggleSchedulePartModified(bool enable)
         {
-            if (_schedulerStateHolder != null &&
-                _schedulerStateHolder.Schedules != null)
-            {
-                if (enable)
-                {
-                    _schedulerStateHolder.Schedules.PartModified += Schedules_PartModified;
-                }
-                else
-                {
-                    _schedulerStateHolder.Schedules.PartModified -= Schedules_PartModified;
-                }
-            }
+	        if (_schedulerStateHolder == null || _schedulerStateHolder.Schedules == null) return;
+	        if (enable)
+		        _schedulerStateHolder.Schedules.PartModified += Schedules_PartModified;
+	        else
+		        _schedulerStateHolder.Schedules.PartModified -= Schedules_PartModified;
         }
-
-        public void Close()
+		
+	    public void Close()
         {
             _userWantsToCloseIntraday = true;
         }

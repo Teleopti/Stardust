@@ -21,16 +21,12 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
             get { return _dayLayerViewModel; }
             private set
             {
-                _dayLayerViewModel = value;
-                var handler = PropertyChanged;
-                if (handler!=null)
-                {
-                    handler.Invoke(this, new PropertyChangedEventArgs("DayLayerViewModel"));
-                }
+	            _dayLayerViewModel = value;
+				notifyPropertyChanged("DayLayerViewModel");
             }
         }
-		
-        public DateTimePeriod Period
+
+	    public DateTimePeriod Period
         {
             get { return (DateTimePeriod)GetValue(PeriodProperty); }
             set { SetValue(PeriodProperty, value); }
@@ -72,15 +68,24 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
         {
             _eventAggregator = eventAggregator;
             DayLayerViewModel = dayLayerViewModel;
-            TimelineModel = new TimelineControlViewModel(_eventAggregator,createLayerViewModelService)
-	            {
-		            ShowHoverTime = false,
-		            ShowDate = true,
-		            ShowNowPeriod = true
-	            };
+	        TimelineModel = new TimelineControlViewModel(_eventAggregator, createLayerViewModelService)
+		        {
+			        ShowHoverTime = false,
+			        ShowDate = true,
+			        ShowNowPeriod = true
+		        };
         }
 
-        private static void nowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private void notifyPropertyChanged(string property)
+		{
+			var handler = PropertyChanged;
+			if (handler != null)
+			{
+				handler.Invoke(this, new PropertyChangedEventArgs(property));
+			}
+		}
+
+		private static void nowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var model = (RealTimeScheduleViewModel)d;
             model.TimelineModel.HoverTime = ((DateTimePeriod)e.NewValue).StartDateTime;
