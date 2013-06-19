@@ -1,15 +1,52 @@
 using System;
+using System.Text.RegularExpressions;
 using Coypu;
+using Coypu.Queries;
 using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
+
+	public class HasCssJQueryQuery : Query<bool>
+	{
+		private readonly BrowserSession browser;
+		private readonly string cssSelector;
+
+		public HasCssJQueryQuery(BrowserSession browser, string cssSelector, Options options)
+		{
+			this.browser = browser;
+			this.cssSelector = cssSelector;
+			this.Timeout = options.Timeout;
+			this.RetryInterval = options.RetryInterval;
+		}
+
+		public TimeSpan Timeout { get; set; }
+		public TimeSpan RetryInterval { get; set; }
+
+		public bool ExpectedResult { get { return true; } }
+
+		public bool Run()
+		{
+			try
+			{
+				this.browser.ExecuteScript(JQueryInteractions.JQuery(this.cssSelector, "return true"));
+				return true;
+			}
+			catch (MissingHtmlException ex)
+			{
+				return false;
+			}
+		}
+	}
+
+
+
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{
 		private readonly BrowserSession _browser;
 		private Options _options;
 		private readonly SessionConfiguration _configuration;
-		private JQueryInteractions _jquery;
+		private readonly JQueryInteractions _jquery;
 
 		public CoypuBrowserInteractions(BrowserSession browser, SessionConfiguration configuration)
 		{
@@ -66,7 +103,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			Assert.That(_browser.HasCss(selector));
+			_browser.Query(new HasCssJQueryQuery(_browser, selector, options()));
+			//Assert.That(_browser.HasCss(selector));
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)

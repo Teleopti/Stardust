@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -11,16 +12,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_javascript = javascript;
 		}
 
-		private string JQuery(string selector, string call)
+
+		private static string MakeSelector(string selector)
 		{
-			return string.Format(
-				"var selection = $(\"{0}\");" +
-				"if (selection.length > 0) " +
-				"selection." + call + ";" +
-				" else " +
-				"throw \"Cannot find element with selector '{0}' using jquery \";"
-				,
-				selector.JSEncode())
+			if (selector.Contains("'"))
+			{
+				return string.Format(@"$(""{0}"")", selector);
+			}
+			return string.Format("$('{0}')", selector);
+		}
+
+		public static string JQuery(string selector, string jsOnFound)
+		{
+			var jq = MakeSelector(selector);
+			var error = string.Format("throw \"Cannot find element with selector '{0}' using jquery \";", selector);
+			return
+				"var jq = " + jq + ";" +
+				"if (jq.length > 0) {" +
+				jsOnFound +
+				"} else {" +
+				error +
+				"}"
 				;
 		}
 
@@ -41,12 +53,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			Javascript(JQuery(selector, "click()"));
+			Javascript(JQuery(selector, "jq.click();"));
 		}
 
 		public void AssertExists(string selector)
 		{
-			throw new NotImplementedException();
+			Assert.That(Javascript(JQuery(selector, "return true;")), Is.EqualTo("true"));
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
