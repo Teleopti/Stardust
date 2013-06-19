@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
+		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period);
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
