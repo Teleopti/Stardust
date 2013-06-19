@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
     {
 		private readonly IEventAggregator _eventAggregator;
         private IDayLayerViewModel _dayLayerViewModel;
-     
-        public TimelineControlViewModel TimelineModel { get; private set; }
+
+	    public TimelineControlViewModel TimelineModel { get; private set; }
 
 		public IDayLayerViewModel DayLayerViewModel
         {
@@ -47,20 +47,26 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
             get { return (double) GetValue(ZoomWidthProperty); }
             set { SetValue(ZoomWidthProperty, value); }
         }
-
-        public static readonly DependencyProperty ZoomWidthProperty =
-            DependencyProperty.Register("ZoomWidth", 
-            typeof (double), 
-            typeof (RealTimeScheduleViewModel), 
-            new UIPropertyMetadata(1000d));
-
-
-        public static readonly DependencyProperty NowPeriodProperty =
-            DependencyProperty.Register("NowPeriod", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),nowPeriodChanged));
+		
+	    public static readonly DependencyProperty ZoomWidthProperty =
+		    DependencyProperty.Register("ZoomWidth",
+		                                typeof (double),
+		                                typeof (RealTimeScheduleViewModel),
+		                                new UIPropertyMetadata(1000d));
 
 
-        public static readonly DependencyProperty PeriodProperty =
-            DependencyProperty.Register("Period", typeof(DateTimePeriod), typeof(RealTimeScheduleViewModel), new UIPropertyMetadata(new DateTimePeriod(),periodChanged));
+	    public static readonly DependencyProperty NowPeriodProperty =
+		    DependencyProperty.Register("NowPeriod",
+		                                typeof (DateTimePeriod),
+		                                typeof (RealTimeScheduleViewModel),
+		                                new UIPropertyMetadata(new DateTimePeriod(), nowPeriodChanged));
+
+
+	    public static readonly DependencyProperty PeriodProperty =
+		    DependencyProperty.Register("Period",
+		                                typeof (DateTimePeriod),
+		                                typeof (RealTimeScheduleViewModel),
+		                                new UIPropertyMetadata(new DateTimePeriod(), periodChanged));
 		
         public RealTimeScheduleViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService,IDayLayerViewModel dayLayerViewModel)
         {

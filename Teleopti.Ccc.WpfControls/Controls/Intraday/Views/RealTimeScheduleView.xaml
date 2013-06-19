@@ -70,7 +70,7 @@
 					   ItemsSource="{Binding Path=DayLayerViewModel.ModelEditable}"
 					   AutoGenerateColumns="False"
                        CellStyle="{StaticResource CellStyle}"
-                       SelectionMode="Extended" CanUserSortColumns="True"
+                       SelectionMode="Single" CanUserSortColumns="True"
                        RowStyle="{StaticResource RtaScheduleRowStyle}"
                        EnableColumnVirtualization="True"
 					   EnableRowVirtualization="False"
@@ -184,20 +184,7 @@
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellTemplate>
                 </controls:DataGridTemplateColumn>
-
-				<!--Edit layer Column Binding="{Binding Path=EditLayer}, Mode=TwoWay" -->
-				<controls:DataGridTemplateColumn HeaderStyle="{StaticResource HeaderWithHand}"
-												 Header="{x:Static Member=userTexts:Resources.Edit}"
-												 Width="Auto"
-												 CanUserSort="False"
-												 SortMemberPath="Edit">
-					<controls:DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Button HorizontalAlignment="Center" VerticalAlignment="Center" Width="35" Height="Auto"/>
-						</DataTemplate>
-					</controls:DataGridTemplateColumn.CellTemplate>
-					
-				</controls:DataGridTemplateColumn>
+				
                 <!-- ScheduleColumn -->
                 <!-- Note: In codebehind, we get the schedulecolumn by getting the last column!!!! Dont move this column without refactoring the codebehind! -->
                 <controls:DataGridTemplateColumn CanUserReorder="False" 
