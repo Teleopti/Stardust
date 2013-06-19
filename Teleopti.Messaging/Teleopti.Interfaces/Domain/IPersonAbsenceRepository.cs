@@ -60,5 +60,15 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-12
         /// </remarks>
         ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence);
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="persons"></param>
+	    /// <param name="optimizedPeriod"></param>
+	    /// <param name="scenario"></param>
+	    /// <param name="absence"></param>
+	    /// <returns></returns>
+	    IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence);
     }
 }
