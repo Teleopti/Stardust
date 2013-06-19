@@ -4,12 +4,12 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
-using WatiN.Core;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -17,21 +17,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PasswordPolicyStepDefinitions
 	{
-		private static TimeSpan? timeoutBefore;
+		private IDisposable _timeoutScope;
 
-		[AfterFeature("Password_policy_configuration_file_teardown")]
-		public static void Hook()
+		[BeforeScenario("PasswordPolicy")]
+		public void BeforePasswordPolicyScenario()
+		{
+			_timeoutScope = Browser.TimeoutScope(TimeSpan.FromSeconds(20));
+		}
+
+		[AfterScenario("PasswordPolicy")]
+		public void AfterPasswordPolicyScenario()
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
-			{
 				File.Delete(targetTestPasswordPolicyFile);
-			}
-
-			if (timeoutBefore.HasValue)
-			{
-				Timeouts.Set(timeoutBefore.Value);
-			}
+			_timeoutScope.Dispose();
+			_timeoutScope = null;
 		}
 
 		[Given(@"There is a password policy with")]
@@ -53,12 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 
 			File.WriteAllText(targetTestPasswordPolicyFile, contents);
-
-			if (!timeoutBefore.HasValue)
-			{
-				timeoutBefore = Timeouts.Timeout;
-			}
-			Timeouts.Set(TimeSpan.FromSeconds(20));
 		}
 
 		[Given(@"I have user logon details with")]

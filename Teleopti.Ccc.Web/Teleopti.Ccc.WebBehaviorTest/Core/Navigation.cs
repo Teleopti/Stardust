@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -298,20 +299,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
 	public class ApplicationStartupTimeout : IGoToInterceptor
 	{
-		private WatiNWaitForCompleteTimeout _timeout;
+		private IDisposable _timeoutScope;
 
 		public void Before(GotoArgs args)
 		{
-			_timeout = new WatiNWaitForCompleteTimeout(60);
+			_timeoutScope = Browser.TimeoutScope(TimeSpan.FromSeconds(60));
 		}
 
 		public void After(GotoArgs args)
 		{
-			_timeout.Dispose();
-			_timeout = null;
+			_timeoutScope.Dispose();
+			_timeoutScope = null;
 		}
 	}
 
