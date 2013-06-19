@@ -433,6 +433,7 @@
     <Compile Include="Repositories\ILicenseStatusRepository.cs" />
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\IApplicationRolePersonRepository.cs" />
+    <Compile Include="Repositories\IOvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Repositories\IRequestHistoryReadOnlyRepository.cs" />
@@ -495,6 +496,7 @@
     <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVertical.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
+	<Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -1851,7 +1853,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Scheduling\Restriction\OvertimeAvailability.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

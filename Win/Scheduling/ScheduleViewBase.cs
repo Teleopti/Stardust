@@ -988,6 +988,28 @@ namespace Teleopti.Ccc.Win.Scheduling
             return schedulesForDelete;
         }
 
+        public IList<IScheduleDay> DeleteList<T>(ClipHandler<T> clipHandler,DeleteOption deleteOption )
+        {
+            IList<IScheduleDay> schedulesForDelete = new List<IScheduleDay>();
+
+            foreach (Clip<T> clip in clipHandler.ClipList)
+            {
+                int row = clipHandler.AnchorRow + clip.RowOffset;
+                int col = clipHandler.AnchorColumn + clip.ColOffset;
+
+                IScheduleDay scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
+
+                if (deleteOption.OvertimeAvailability)
+                    schedulesForDelete.Add(scheduleRange);
+                else if (scheduleRange.SignificantPart() != SchedulePartView.None )
+                    schedulesForDelete.Add(scheduleRange);
+                 
+
+            }
+
+            return schedulesForDelete;
+        }
+
         /// <summary>
         /// Gets a list with selected schedules for current column
         /// </summary>

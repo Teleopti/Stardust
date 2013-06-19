@@ -970,6 +970,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Overtime Availability....
+        /// </summary>
+        public static string AddOvertimeAvailabilityThreeDots {
+            get {
+                return ResourceManager.GetString("AddOvertimeAvailabilityThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Part-time percentage definition.
         /// </summary>
         public static string AddPartTimePercentage {
@@ -8978,6 +8987,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Ends At:.
+        /// </summary>
+        public static string FromShiftEndsAtColon {
+            get {
+                return ResourceManager.GetString("FromShiftEndsAtColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From - To.
         /// </summary>
         public static string FromTo {
@@ -15743,6 +15761,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime Availability.
+        /// </summary>
+        public static string OvertimeAvailability {
+            get {
+                return ResourceManager.GetString("OvertimeAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime:.
         /// </summary>
         public static string OvertimeColon {
@@ -17113,6 +17140,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreviousPeriod {
             get {
                 return ResourceManager.GetString("PreviousPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous saved overtime availability:.
+        /// </summary>
+        public static string PreviousSavedOvertimeAvailabilityColon {
+            get {
+                return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
             }
         }
         
@@ -23492,6 +23528,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TooManyAgentsIsUsedWarning {
             get {
                 return ResourceManager.GetString("TooManyAgentsIsUsedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Starts At:.
+        /// </summary>
+        public static string ToShiftStartsAtColon {
+            get {
+                return ResourceManager.GetString("ToShiftStartsAtColon", resourceCulture);
             }
         }
         
