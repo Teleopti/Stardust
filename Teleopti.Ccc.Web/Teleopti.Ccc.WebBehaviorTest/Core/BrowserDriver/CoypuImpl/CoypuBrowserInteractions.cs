@@ -1,7 +1,6 @@
 using System;
 using Coypu;
 using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -9,10 +8,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{
 		private readonly BrowserSession _browser;
+		private Options _options;
+		private readonly SessionConfiguration _configuration;
 
-		public CoypuBrowserInteractions(BrowserSession browser)
+		public CoypuBrowserInteractions(BrowserSession browser, SessionConfiguration configuration)
 		{
 			_browser = browser;
+			_configuration = configuration;
+		}
+
+		public void SetTimeout(TimeSpan timeout)
+		{
+			if (timeout == _configuration.Timeout)
+				_options = null;
+			else
+			{
+				_options = new Options
+					{
+						ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements,
+						RetryInterval = _configuration.RetryInterval,
+						Timeout = timeout,
+						WaitBeforeClick = _configuration.WaitBeforeClick
+					};
+			}
 		}
 
 		public object Javascript(string javascript)
@@ -30,6 +48,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.Visit(uri);
 		}
 
+		private Options Options()
+		{
+			return _options ?? _configuration;
+		}
+
 		public void Click(string selector)
 		{
 			var javascript = string.Format("var selection = $(\"{0}\");", selector.JSEncode()) +
@@ -39,12 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 							 "throw 'Cant find it!';" +
 							 "}"
 				;
-			_browser.RetryUntilTimeout(() => _browser.ExecuteScript(javascript), 
-				new Options
-					{
-						RetryInterval = Timeouts.Poll,
-						Timeout = Timeouts.Timeout
-					});
+			_browser.RetryUntilTimeout(() => _browser.ExecuteScript(javascript), Options());
 		}
 
 		public void AssertExists(string selector)
@@ -98,5 +116,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			writer(_browser.Location.ToString());
 		}
+
 	}
 }

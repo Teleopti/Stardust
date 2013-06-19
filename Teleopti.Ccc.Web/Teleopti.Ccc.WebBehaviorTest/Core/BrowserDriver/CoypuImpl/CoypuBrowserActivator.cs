@@ -9,16 +9,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 	public class CoypuBrowserActivator : IBrowserActivator
 	{
 		private BrowserSession _browser;
-
-		public void Start()
+		private CoypuBrowserInteractions _interactions;
+		
+		public void SetTimeout(TimeSpan timeout)
 		{
-			var sessionConfiguration = new SessionConfiguration
+			_interactions.SetTimeout(timeout);
+		}
+
+		public void Start(TimeSpan timeout, TimeSpan retry)
+		{
+			var configuration = new SessionConfiguration
 				{
 					AppHost = "about:blank",
 					Port = 80,
 					SSL = false,
 					ConsiderInvisibleElements = true,
 					WaitBeforeClick = TimeSpan.Zero,
+					RetryInterval = retry,
+					Timeout = timeout,
 					Driver = typeof(ChromeWebDriverWithProfile),
 					//Driver = typeof(SeleniumWebDriver),
 					//Browser = Coypu.Drivers.Browser.InternetExplorer,
@@ -27,7 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				};
 			// to get chrome to be fast, disable automatic detection of proxy settings. odd, but it works:
 			// http://stackoverflow.com/questions/16179808/chromedriver-is-extremely-slow-on-a-specific-machine-using-selenium-grid-and-ne
-			_browser = new BrowserSession(sessionConfiguration);
+			_browser = new BrowserSession(configuration);
+			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
 
 		public bool IsRunning()
@@ -52,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public IBrowserInteractions GetInteractions()
 		{
-			return new CoypuBrowserInteractions(_browser);
+			return _interactions;
 		}
 	}
 
