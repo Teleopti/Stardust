@@ -46,7 +46,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public static void Open(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			Browser.Interactions.WaitUntilEnabled(string.Format("#{0}", select2Id));
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			AssertIsOpen(select2Id);
+		}
+
+		public static void OpenWhenOptionsAreLoaded(string select2Id)
+		{
+			AssertIsClosed(select2Id);
+			//Browser.Interactions.WaitUntilEnabled(string.Format("#{0}", select2Id));
+			Browser.Interactions.AssertExists(string.Format("#{0} > option", select2Id));
 			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
 			AssertIsOpen(select2Id);
 		}
