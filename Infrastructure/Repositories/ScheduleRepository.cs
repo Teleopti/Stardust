@@ -165,13 +165,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                                    <IPersistableScheduleData>());
             using(TurnoffPermissionScope.For(retDic))
             {
-                foreach (DateTimePeriod p in searchPeriods)
-                {
-                    addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario),false,people);
-                }                
+				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), false, people);
+				foreach (DateTimePeriod p in searchPeriods)
+				{
+					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
+					addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
+				}
             }
 
             return retDic[person];
