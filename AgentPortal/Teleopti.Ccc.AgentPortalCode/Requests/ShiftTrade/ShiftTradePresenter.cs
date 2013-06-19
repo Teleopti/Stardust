@@ -130,8 +130,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 return;
             }
             bool bothAreSamePerson = _loggedOnPerson.Id == _model.PersonRequestDto.Person.Id;
-            bool requestStatusIsPending = _model.PersonRequestDto.RequestStatus == RequestStatusDto.Pending || (_model.PersonRequestDto.RequestStatus == RequestStatusDto.New && bothAreSamePerson);
-            bool okToDelete = _model.PersonRequestDto.CanDelete && bothAreSamePerson && (_model.PersonRequestDto.RequestStatus != RequestStatusDto.New);
+            bool requestStatusIsPending = _model.PersonRequestDto.RequestStatus == RequestStatusDto.Pending 
+				|| (_model.PersonRequestDto.RequestStatus == RequestStatusDto.New && bothAreSamePerson);
+            bool okToDelete = _model.PersonRequestDto.CanDelete 
+				&& bothAreSamePerson 
+				&& (_model.PersonRequestDto.RequestStatus != RequestStatusDto.New);
             checkMainButtonSet(!requestStatusIsPending);
             if (requestStatusIsPending)
             {
@@ -199,7 +202,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 {
                     _view.SetStatus(UserTexts.Resources.GrantedBySupervisor);
                 }
-                else if (_model.PersonRequestDto.RequestStatus==RequestStatusDto.Denied)
+                else if (_model.PersonRequestDto.RequestStatus==RequestStatusDto.Denied
+					|| _model.PersonRequestDto.RequestStatus == RequestStatusDto.Autodenied)
                 {
                     _view.SetStatus(UserTexts.Resources.Denied);
                     _view.ReasonMessage = LanguageResourceHelper.Translate(_model.PersonRequestDto.DenyReason);

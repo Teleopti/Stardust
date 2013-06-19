@@ -11472,4 +11472,8 @@ Reduce the complexity to use these shifts.</value>
     <value>View active agents</value>
     <comment>permission</comment>
   </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Denied</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
 </root>

@@ -75,7 +75,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
                 _view.SetDenyReasonVisible(false);
             }
 
-            if (_model.RequestStatus == RequestStatusDto.Approved || _model.RequestStatus == RequestStatusDto.Denied)
+            if (_model.RequestStatus == RequestStatusDto.Approved 
+				|| _model.RequestStatus == RequestStatusDto.Denied
+				|| _model.RequestStatus == RequestStatusDto.Autodenied)
                 _view.SetFormReadOnly(true);
         }
 
