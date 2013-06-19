@@ -62,7 +62,7 @@
 
         <controls:DataGrid Grid.ColumnSpan="4"
         HorizontalScrollBarVisibility="Visible" 
-                       FrozenColumnCount="10" 
+                       FrozenColumnCount="9" 
                        BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
                        Background="{StaticResource RaptorStandardLightGradientBrush}"  
                        HorizontalAlignment="Stretch"  
