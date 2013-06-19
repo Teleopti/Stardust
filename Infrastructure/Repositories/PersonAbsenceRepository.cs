@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                 and pa.Layer.Period.period.Maximum > :startTime
                                 and pa.Layer.Period.period.Minimum < :endTime
                                 and pa.Scenario =:scenario
-                                and pa.Layer.Payload =:absence";
+                                and pa.Layer.Payload =:absence
+								ORDER BY pa.Layer.Period.period.Minimum";
            
             IList<DateTimePeriod> periods = Session.CreateQuery(q)
                                     .SetEntity("person", person)
@@ -125,7 +126,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return periods;
         }
 
-        /// <summary>
+	    public IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence)
+	    {
+			var retList = new List<IPersonAbsence>();
+
+			foreach (var personList in persons.Batch(400))
+			{
+
+				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
+					.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(optimizedPeriod, scenario)
+											   .Add(Restrictions.In("Person", personList.ToArray()))
+											   .Add(Restrictions.Eq("Layer.Payload", absence))))
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPersonAbsence>());
+			}
+
+			initializeAbsences(retList);
+			return retList;
+	    }
+
+	    /// <summary>
         /// Finds the specified period.
         /// </summary>
         /// <param name="period">The period.</param>
