@@ -477,7 +477,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-		[Ignore]
 		public void VerifyFindAllRequestModifiedWithinPeriodOrPendingShouldNotListAutoDeniedForPersonTo()
 		{
 
