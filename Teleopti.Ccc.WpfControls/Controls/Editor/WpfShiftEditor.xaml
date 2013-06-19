@@ -26,7 +26,7 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Grid IsEnabled="{Binding Path=ReadonlyMode, Converter={StaticResource InverseBoolConverter}}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>

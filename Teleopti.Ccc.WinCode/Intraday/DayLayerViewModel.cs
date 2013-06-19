@@ -26,6 +26,13 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
 
+		public IEditableCollectionView ModelEditable { get; private set; }
+
+		public ICollection<DayLayerModel> Models
+		{
+			get { return _models; }
+		}
+
 	    public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
         {
             _eventAggregator = eventAggregator;
@@ -37,14 +44,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
 	        ModelEditable = CollectionViewSource.GetDefaultView(Models) as IEditableCollectionView;
         }
-
-		public IEditableCollectionView ModelEditable { get; private set; }
 		
-        public ICollection<DayLayerModel> Models
-        {
-            get { return _models; }
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period)
         {

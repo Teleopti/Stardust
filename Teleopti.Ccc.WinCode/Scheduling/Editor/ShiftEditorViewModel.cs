@@ -22,8 +22,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         private const double ExpandSize = 0.8d;
         #endregion
 
+		private IEventAggregator _eventAggregator;
+		private readonly IEditableShiftMapper _editableShiftMapper;
+		private bool _enabled;
+
         #region properties
-        public TimeSpan SurroundingTime { get; private set; }
+		public TimeSpan SurroundingTime { get; private set; }
         public TimelineControlViewModel Timeline { get; private set; }
         public LayerViewModelCollection Layers { get; private set; }
 	    public bool ShowMeetingsInContextMenu { get; private set; }
@@ -31,15 +35,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public EditLayerViewModel EditLayer { get; private set; }
         public IScheduleDay SchedulePart { get; private set; }
         public ShiftEditorSettings Settings { get; private set; }
-	    public bool ReadonlyMode
-	    {
-		    get { return _readonlyMode; }
-		    set 
+
+		public bool Enabled
+		{
+			get
 			{
-				_readonlyMode = value;
-				NotifyPropertyChanged("ReadonlyMode");
+				return _enabled;
 			}
-	    }
+			private set
+			{
+				if (value == _enabled) return;
+				_enabled = value;
+				NotifyPropertyChanged("Enabled");
+			}
+		}
 
 	    public ILayerViewModel SelectedLayer
         {
@@ -92,14 +101,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         #endregion
 
-        private IEventAggregator _eventAggregator;
-	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    #region ctor
-		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode, IEditableShiftMapper editableShiftMapper)
+		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
         {
             _eventAggregator = eventAggregator;
-			_readonlyMode = readonlyMode;
 			_editableShiftMapper = editableShiftMapper;
 			SurroundingTime = TimeSpan.FromHours(4);
             Layers = layerCollection;
@@ -113,8 +119,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         }
 
 
-		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, bool readonlyMode, IEditableShiftMapper editableShiftMapper)
-			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, readonlyMode, editableShiftMapper)
+		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
+			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
         {
 
         }
@@ -167,8 +173,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         
         }
 
-       
-
         private void MoveUpLayerExecuted()
         {
             SelectedLayer.MoveUp();
@@ -191,7 +195,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private void DeleteLayer()
         {
-          //  Layers.Remove(SelectedLayer);
             SelectedLayer.Delete();
         }
 
@@ -379,25 +382,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             get { return Settings.ShiftCategories; }
         }
 
-        private bool _enabled;
-	    private bool _readonlyMode;
-
-	    public bool Enabled
-        {
-            get {
-                return _enabled;
-            }
-            private set
-            {
-                if (value != _enabled)
-                {
-                    _enabled = value;
-                    NotifyPropertyChanged("Enabled");
-                }
-            }
-        }
-
-        private void NotifyPropertyChanged(string property)
+		private void NotifyPropertyChanged(string property)
 		{
 			var handler = PropertyChanged;
 			if (handler != null)

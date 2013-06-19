@@ -3,10 +3,7 @@ using UserControl=System.Windows.Controls.UserControl;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday
 {
-    /// <summary>
-    /// Interaction logic for SimpleLayerView.xaml
-    /// </summary>
-    public partial class SimpleLayerView : UserControl
+    public partial class SimpleLayerView
     {
         public static readonly RoutedEvent SelectShiftEvent =
             EventManager.RegisterRoutedEvent("SelectShift",
