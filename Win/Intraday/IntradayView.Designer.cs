@@ -80,6 +80,8 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.gradientPanelContent = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.backgroundWorkerLoadControls = new System.ComponentModel.BackgroundWorker();
+			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
 			this.statusStripExLastUpdate.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
@@ -92,6 +94,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExQuickAccess.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelContent)).BeginInit();
 			this.gradientPanelContent.SuspendLayout();
+			this.toolStripEx1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStripExLastUpdate
@@ -166,6 +169,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			// 
 			this.toolStripTabItemHome.Panel.Controls.Add(this.toolStripExDatePicker);
 			this.toolStripTabItemHome.Panel.Controls.Add(this.toolStripExChangeForecast);
+			this.toolStripTabItemHome.Panel.Controls.Add(this.toolStripEx1);
 			this.toolStripTabItemHome.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItemHome.Panel.ScrollPosition = 0;
 			this.toolStripTabItemHome.Panel.TabIndex = 2;
@@ -464,6 +468,39 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.backgroundWorkerLoadControls.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLoadControls_DoWork);
 			this.backgroundWorkerLoadControls.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLoadControls_RunWorkerCompleted);
 			// 
+			// toolStripEx1
+			// 
+			this.toolStripEx1.AutoSize = false;
+			this.ribbonControlAdv1.SetDescription(this.toolStripEx1, "");
+			this.toolStripEx1.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripEx1.Image = null;
+			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonEdit});
+			this.toolStripEx1.Location = new System.Drawing.Point(108, 1);
+			this.toolStripEx1.Name = "toolStripEx1";
+			this.toolStripEx1.Size = new System.Drawing.Size(84, 88);
+			this.toolStripEx1.TabIndex = 2;
+			this.toolStripEx1.Text = "Edit";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx1, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripEx1, false);
+			// 
+			// toolStripButtonEdit
+			// 
+			this.toolStripButtonEdit.AutoSize = false;
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonEdit, "");
+			this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButtonEdit.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Page_SetUp_32x32;
+			this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonEdit.Name = "toolStripButtonEdit";
+			this.SetShortcut(this.toolStripButtonEdit, System.Windows.Forms.Keys.None);
+			this.toolStripButtonEdit.Size = new System.Drawing.Size(61, 76);
+			this.toolStripButtonEdit.Text = "toolStripButton1";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonEdit, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonEdit, false);
+			this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEditClick);
+			// 
 			// IntradayView
 			// 
 			this.ClientSize = new System.Drawing.Size(907, 681);
@@ -494,6 +531,8 @@ namespace Teleopti.Ccc.Win.Intraday
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelContent)).EndInit();
 			this.gradientPanelContent.ResumeLayout(false);
 			this.gradientPanelContent.PerformLayout();
+			this.toolStripEx1.ResumeLayout(false);
+			this.toolStripEx1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -526,5 +565,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private Syncfusion.Windows.Forms.Tools.StatusStripButton statusStripButtonServerUnavailable;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExChangeForecast;
 		private System.Windows.Forms.ToolStripButton toolStripButtonChangeForecast;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;
+		private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
     }
 }

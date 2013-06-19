@@ -674,5 +674,9 @@ namespace Teleopti.Ccc.Win.Intraday
             }
 		}
 
+		private void toolStripButtonEditClick(object sender, EventArgs e)
+		{
+			
+		}
     }
 }
