@@ -4,17 +4,18 @@ using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
-
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{
 		private readonly BrowserSession _browser;
 		private Options _options;
 		private readonly SessionConfiguration _configuration;
+		private JQueryInteractions _jquery;
 
 		public CoypuBrowserInteractions(BrowserSession browser, SessionConfiguration configuration)
 		{
 			_browser = browser;
 			_configuration = configuration;
+			_jquery = new JQueryInteractions(new JavascriptInteractions(Javascript));
 		}
 
 		public void SetTimeout(TimeSpan timeout)
@@ -35,7 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public object Javascript(string javascript)
 		{
-			return _browser.ExecuteScript(javascript);
+			string result = null;
+			_browser.RetryUntilTimeout(() =>
+				{
+					result = _browser.ExecuteScript(javascript);
+				}, options());
+			return result;
 		}
 
 		public void GoToWaitForCompleted(string uri)
@@ -48,21 +54,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.Visit(uri);
 		}
 
-		private Options Options()
+		private Options options()
 		{
 			return _options ?? _configuration;
 		}
 
 		public void Click(string selector)
 		{
-			var javascript = string.Format("var selection = $(\"{0}\");", selector.JSEncode()) +
-							 "if (selection.length > 0) {" +
-							 "selection.click();" +
-							 "} else {" +
-							 "throw 'Cant find it!';" +
-							 "}"
-				;
-			_browser.RetryUntilTimeout(() => _browser.ExecuteScript(javascript), Options());
+			_jquery.Click(selector);
 		}
 
 		public void AssertExists(string selector)
