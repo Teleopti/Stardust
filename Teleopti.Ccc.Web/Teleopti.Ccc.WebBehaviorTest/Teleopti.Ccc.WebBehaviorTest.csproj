@@ -188,7 +188,7 @@
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
-    <Compile Include="Core\Robustness\Timeouts.cs" />
+    <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -556,7 +556,7 @@
     <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
-    <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
+    <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\UserFactory.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">

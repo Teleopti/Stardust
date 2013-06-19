@@ -14,13 +14,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public FireFox Internal { get; set; }
 
-		public void Start()
+		public void SetTimeout(TimeSpan timeout)
+		{
+			Settings.WaitForCompleteTimeOut = Convert.ToInt32(timeout.TotalSeconds);
+			Settings.WaitUntilExistsTimeOut = Convert.ToInt32(timeout.TotalSeconds);
+		}
+
+		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
 			Settings.AutoMoveMousePointerToTopLeft = false;
 			Settings.HighLightColor = "Green";
 			Settings.HighLightElement = true;
+			SetTimeout(timeout);
+
 			Internal = new FireFox();
 			Internal.BringToFront();
 		}

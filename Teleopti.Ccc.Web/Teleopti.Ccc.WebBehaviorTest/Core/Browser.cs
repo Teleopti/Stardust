@@ -3,6 +3,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 using log4net;
 
@@ -24,9 +25,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static IBrowserInteractions Interactions { get { return BrowserActivator.GetInteractions(); } }
 
-		public static void Start()
+		public static void Start(TimeSpan timeout, TimeSpan retry)
 		{
-			BrowserActivator.Start();
+			BrowserActivator.Start(timeout, retry);
+			Timeouts.Timeout = timeout;
+			Timeouts.Poll = retry;
+		}
+
+		public static IDisposable TimeoutScope(TimeSpan timeout)
+		{
+			return new TimeoutScope(BrowserActivator, timeout);
 		}
 
 		public static bool IsStarted()
