@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -524,12 +525,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act,
 									new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 									defSet));
-
-			var mShift = new EditableShift(new ShiftCategory("d"));
-			mShift.LayerCollection.Add(new EditorActivityLayer(act,
-											new DateTimePeriod(2000, 1, 5, 2000, 1, 6)));
-
-			new EditableShiftMapper().SetMainShiftLayers(target, mShift);
+			target.SetMainShiftLayers(new[] { new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6))}, new ShiftCategory("d"));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 
