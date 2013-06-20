@@ -69,7 +69,7 @@
 					   VerticalAlignment="Stretch" 
 					   ItemsSource="{Binding Path=DayLayerViewModel.ModelEditable}"
 					   AutoGenerateColumns="False"
-                       CellStyle="{StaticResource CellStyle}"
+                       CellStyle="{StaticResource UnclickableCellStyle}"
                        SelectionMode="Single" CanUserSortColumns="True"
                        RowStyle="{StaticResource RtaScheduleRowStyle}"
                        EnableColumnVirtualization="True"
@@ -78,7 +78,7 @@
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
 					   x:Name="RealTimeDataGrid"
 					   x:FieldModifier="private">
-
+			
             <!--AgentName Column-->
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn HeaderStyle="{StaticResource SpecialLeftHeader}"
@@ -87,9 +87,9 @@
                                              CanUserSort="True"
                                              SortMemberPath="CommonNameDescription"
                                              CanUserReorder="False"
-                                             Binding="{Binding Path=CommonNameDescription,Mode=OneWay, FallbackValue=''}"/>
+                                             Binding="{Binding Path=CommonNameDescription,Mode=OneWay, FallbackValue=''}" />
 
-                <!--AgentGroup Column-->
+	            <!--AgentGroup Column-->
                 <controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
                                              Header="{x:Static Member=userTexts:Resources.Team}" 
                                              Width="Auto"                            
@@ -172,7 +172,8 @@
 					SortMemberPath="IsPinned" 
 					CanUserSort="True" 
 					HeaderStyle="{StaticResource HeaderWithHand}" 
-					Header="{x:Static Member=userTexts:Resources.Pin}" >
+					Header="{x:Static Member=userTexts:Resources.Pin}"
+					CellStyle="{StaticResource PinnedCellStyle}">
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox 
@@ -180,7 +181,8 @@
 								VerticalAlignment="Center" 
 								IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False}" 
 								Opacity="1" 
-								Cursor="Hand"/>
+								Cursor="Hand"
+								PreviewMouseDown="CheckBox_OnPreviewMouseDown"/>
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellTemplate>
                 </controls:DataGridTemplateColumn>
@@ -189,6 +191,7 @@
                 <!-- Note: In codebehind, we get the schedulecolumn by getting the last column!!!! Dont move this column without refactoring the codebehind! -->
                 <controls:DataGridTemplateColumn CanUserReorder="False" 
 											 HeaderStyle="{StaticResource SpecialHeader}"
+											 CellStyle="{StaticResource CellStyle}"
                                              SortMemberPath="ScheduleStartDateTime"
                                              CanUserSort="True" 
 											 Width="2400" >
@@ -200,8 +203,7 @@
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded"
-											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}"/>
-
+											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}" />
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellTemplate>
                 </controls:DataGridTemplateColumn>

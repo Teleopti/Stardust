@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
@@ -167,5 +168,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
         }
 
         #endregion
+
+	    private void CheckBox_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+	    {
+		    var checkbox = sender as CheckBox;
+		    if (checkbox != null)
+			    checkbox.IsChecked = !checkbox.IsChecked;
+		    e.Handled = true;
+	    }
     }
 }

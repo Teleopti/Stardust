@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using UserControl=System.Windows.Controls.UserControl;
+using System.Windows.Input;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday
 {
@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             InitializeComponent();
         }
 
-
-        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(SelectShiftEvent, this));
         }
