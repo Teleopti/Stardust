@@ -445,7 +445,8 @@ VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, 
 SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 
-
+SET NOCOUNT OFF
+GO
 ----------------  
 --Name: Asad Mirza
 --Date: 2013-06-10
