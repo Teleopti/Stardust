@@ -362,10 +362,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Person; }
 		}
 
-		public void AddLayer(IPersonalShiftLayer personalShiftLayer)
+		public void AddPersonalLayer(IActivity activity, DateTimePeriod period)
 		{
-			personalShiftLayer.SetParent(this);
-			_personalLayers.Add(personalShiftLayer);
+			var layer = new PersonalShiftLayer(activity, period);
+			layer.SetParent(this);
+			_personalLayers.Add(layer);
 		}
 	}
 }

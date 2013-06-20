@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-			ass.AddLayer(new PersonalShiftLayer(new Activity("d"), new DateTimePeriod(start, start.AddHours(1))));
+			ass.AddPersonalLayer(new Activity("d"), new DateTimePeriod(start, start.AddHours(1)));
 			var layer2check = ass.PersonalLayers.Single();
-			layer2check.Parent.Should().Not.Be.SameInstanceAs(ass);
+			layer2check.Parent.Should().Be.SameInstanceAs(ass);
 			var clone = (IPersonalShiftLayer)layer2check.NoneEntityClone();
 			clone.Parent.Should().Be.Null();
 		}
@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-			ass.AddLayer(new PersonalShiftLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1))));
-			ass.AddLayer(new PersonalShiftLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1))));
-			ass.AddLayer(new PersonalShiftLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1))));
+			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
+			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
+			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
 			ass.PersonalLayers.Last().OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
