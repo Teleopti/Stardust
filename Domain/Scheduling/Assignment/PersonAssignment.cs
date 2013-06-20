@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IList<IPersonalShift> _personalShiftCollection;
 		private IList<IOvertimeShift> _overtimeShiftCollection;
 		private IList<IMainShiftLayer> _mainLayers;
+		private IList<IPersonalShiftLayer> _personalLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_personalShiftCollection = new List<IPersonalShift>();
 			_overtimeShiftCollection = new List<IOvertimeShift>();
 			_mainLayers = new List<IMainShiftLayer>();
+			_personalLayers = new List<IPersonalShiftLayer>();
 		}
 
 		protected PersonAssignment()
@@ -109,6 +111,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IEnumerable<IMainShiftLayer> MainLayers
 		{
 			get { return _mainLayers; }
+		}
+
+		public IEnumerable<IPersonalShiftLayer> PersonalLayers
+		{
+			get { return _personalLayers; }
 		}
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
@@ -353,6 +360,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IAggregateRoot MainRoot
 		{
 			get { return Person; }
+		}
+
+		public void AddLayer(IPersonalShiftLayer personalShiftLayer)
+		{
+			personalShiftLayer.SetParent(this);
+			_personalLayers.Add(personalShiftLayer);
 		}
 	}
 }

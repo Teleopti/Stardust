@@ -3,13 +3,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class MainShiftLayer : ShiftLayer, IMainShiftLayer
+	public class PersonalShiftLayer : ShiftLayer, IPersonalShiftLayer
 	{
-		public MainShiftLayer(IActivity activity, DateTimePeriod period)
+		public PersonalShiftLayer(IActivity activity, DateTimePeriod period)
 			:base(activity, period)
-		{
-		}
-		protected MainShiftLayer()
 		{
 		}
 
@@ -20,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var ass = Parent as IPersonAssignment;
 				if (ass == null)
 					return -1;
-				return ass.MainLayers.ToList().IndexOf(this);
+				return ass.PersonalLayers.ToList().IndexOf(this);
 			}
 		}
 	}

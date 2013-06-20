@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -29,6 +30,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			layer2check.Parent.Should().Not.Be.Null();
 			var clone = (IMainShiftLayer)layer2check.NoneEntityClone();
 			clone.Parent.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldKnowItsIndex()
+		{
+			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
+			ass.MainLayers.Last().OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
 }

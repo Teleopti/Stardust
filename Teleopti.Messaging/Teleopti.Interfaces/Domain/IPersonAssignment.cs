@@ -77,6 +77,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    IShiftCategory ShiftCategory { get; }
 	    IEnumerable<IMainShiftLayer> MainLayers { get; }
+			IEnumerable<IPersonalShiftLayer> PersonalLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.
@@ -104,5 +105,6 @@ namespace Teleopti.Interfaces.Domain
 		void ScheduleChanged(string dataSource);
 
 	    bool RemoveLayer(IMainShiftLayer layer);
+	    void AddLayer(IPersonalShiftLayer personalShiftLayer);
     }
 }
