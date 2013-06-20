@@ -171,7 +171,6 @@ Scenario: Keep selected team when changing date
 	Then I should see my colleague
 	And I should not see myself
 
-@ignore
 Scenario: Keep selected date when changing team
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
