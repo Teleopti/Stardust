@@ -1,7 +1,7 @@
-﻿
+
 using System;
 
-namespace Teleopti.Ccc.OnlineReporting
+namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 {
     public interface IReportData
     {
