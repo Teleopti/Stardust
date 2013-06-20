@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -534,6 +532,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			pShift.LayerCollection.Add(new PersonalShiftActivityLayer(act,
 											new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
+		}
+
+		[Test]
+		public void PersonLayerShouldNotBePartOfProjectionIfBetweenMainLayers()
+		{
+			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+			var act = new Activity("d");
+			target.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2))), 
+					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7))), 
+				}, new ShiftCategory("d"));
+			var pShift = new PersonalShift();
+			target.AddPersonalShift(pShift);
+			pShift.LayerCollection.Add(new PersonalShiftActivityLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4))));
+			target.ProjectionService().CreateProjection()
+				.Count().Should().Be.EqualTo(2);
 		}
 
 		private class testAssignment : PersonAssignment

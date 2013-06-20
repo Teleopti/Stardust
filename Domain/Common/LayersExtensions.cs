@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -6,17 +7,27 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public static class LayersExtensions
 	{
-		public static DateTimePeriod? Period(this IEnumerable<ILayer<IPayload>> layers)
+		public static IEnumerable<DateTimePeriod> PeriodBlocks(this IEnumerable<ILayer<IPayload>> layers)
 		{
-			DateTimePeriod? ret = null;
-			foreach (var layer in layers)
+			var blockPeriods = new List<DateTimePeriod>();
+			var sortedOnStartDate = layers.ToList();
+			sortedOnStartDate.Sort(new SortStartDate());
+			foreach (var layer in sortedOnStartDate)
 			{
-				if (layer != null)
+				var layerPeriod = layer.Period;
+				for (var i = blockPeriods.Count - 1; i >= 0; i--)
 				{
-					ret = DateTimePeriod.MaximumPeriod(ret, layer.Period);
+					var blockPeriod = blockPeriods[i];
+					var blockPeriodLayerIntersection = blockPeriod.Intersection(layerPeriod);
+					if (blockPeriodLayerIntersection.HasValue)
+					{
+						blockPeriods.Remove(blockPeriod);
+						blockPeriods.Add(blockPeriodLayerIntersection.Value);
+					}
 				}
+				blockPeriods.Add(layerPeriod);
 			}
-			return ret;
+			return blockPeriods;
 		}
 
 		public static IVisualLayerCollection CreateProjection(this IEnumerable<IMainShiftLayer> layers)
