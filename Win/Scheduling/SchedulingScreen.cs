@@ -5916,6 +5916,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
 			}
 
+			if (toolStripComboBoxExFilterDays != null)
+				toolStripComboBoxExFilterDays.SelectedIndexChanged -= toolStripComboBoxExFilterDays_SelectedIndexChanged;
+
+			if (toolStripComboBoxAutoTag != null)
+				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTag_SelectedIndexChanged;
+
 			if (SchedulerState != null && SchedulerState.Schedules != null)
 				SchedulerState.Schedules.PartModified -= _schedules_PartModified;
 
