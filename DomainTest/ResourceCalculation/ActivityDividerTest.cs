@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             IDictionary<ISkill, double> personLoggedOnSumma = dividedActivity.RelativePersonSkillResourcesSum;
             Assert.IsNotNull(personLoggedOnSumma);
-            Assert.AreEqual(2, personLoggedOnSumma.Count);
+            Assert.AreEqual(4, personLoggedOnSumma.Count);
             Assert.AreEqual(1.3333, personLoggedOnSumma[_testContainer.ContainedSkills["PhoneA"]], 0.0001);
             Assert.AreEqual(1.9999, personLoggedOnSumma[_testContainer.ContainedSkills["PhoneB"]], 0.0001);
         }
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             KeyedSkillResourceDictionary resourceMatrix = dividedActivity.RelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
             Assert.AreEqual(3, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[person1].Count);
+            Assert.AreEqual(4, resourceMatrix[person1].Count);
             Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
             Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
             Assert.AreEqual(2, resourceMatrix[person2].Count);

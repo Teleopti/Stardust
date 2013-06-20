@@ -44,9 +44,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        var periodResources = filteredProjections.AffectedResources(activity, periodToCalculate);
 	        foreach (var periodResource in periodResources)
 	        {
-				if (periodResource.Value.Item2 == 0) continue;
-		        var skills = periodResource.Value.Item1;
-				var traff = periodResource.Value.Item2;
+				if (periodResource.Value.Resource == 0) continue;
+		        var skills = periodResource.Value.Skills;
+				var traff = periodResource.Value.Resource;
+				var headCount = periodResource.Value.Count;
 
 				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
 				var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
@@ -54,10 +55,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (var skill in skills)
 				{
-					const double skillEfficiencyValue = 1;
+					double skillEfficiencyValue;
+					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue))
+					{
+						skillEfficiencyValue = 1;
+					}
+					else
+					{
+						skillEfficiencyValue = skillEfficiencyValue/headCount;
+					}
 
 					double personSkillResourceValue = traff;
-					const double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
+					double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
 					double relativePersonSkillResourceValue = traff * bitwiseSkillEfficiencyValue;
 
 					relativePersonSkillResourceRow.Add(skill, relativePersonSkillResourceValue);

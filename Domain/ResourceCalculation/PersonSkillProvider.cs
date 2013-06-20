@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			IPersonPeriod personPeriod = person.Period(date);
-			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod());
+			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new Dictionary<Guid, double>());
 
 			var skills = personPeriod.PersonSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
@@ -34,9 +35,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				.Distinct()
 				.ToList();
 
+			var skillEfficiencies =
+				personPeriod.PersonSkillCollection.Where(
+					s => s.Active && s.SkillPercentage.Value > 0 && s.SkillPercentage.Value != 1d).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
+
 			var key = string.Join("_", skills.Where(s => !((IDeleteTag)s).IsDeleted).OrderBy(s => s.Name).Select(s => s.Id.GetValueOrDefault()));
 
-			var combination = new SkillCombination(key, skills.ToArray(), personPeriod.Period);
+			var combination = new SkillCombination(key, skills.ToArray(), personPeriod.Period, skillEfficiencies);
 			if (foundCombinations != null)
 			{
 				foundCombinations.Add(combination);
@@ -54,9 +59,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly DateOnlyPeriod _period;
 
-		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period)
+		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period, IDictionary<Guid, double> skillEfficiencies)
 		{
 			_period = period;
+			SkillEfficiencies = skillEfficiencies;
 			Key = key;
 			Skills = skills;
 		}
@@ -68,5 +74,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public string Key { get; private set; }
 		public ISkill[] Skills { get; private set; }
+		public IDictionary<Guid, double> SkillEfficiencies { get; private set; }
 	}
 }

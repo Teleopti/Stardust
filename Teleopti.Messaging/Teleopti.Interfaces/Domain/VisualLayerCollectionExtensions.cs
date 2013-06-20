@@ -71,6 +71,14 @@ namespace Teleopti.Interfaces.Domain
 		double SkillResources(ISkill skill, DateTimePeriod period);
 		bool AllIsSingleSkill();
 		double ActivityResources(Func<IActivity, bool> activitiesToLookFor, ISkill skill, DateTimePeriod period);
-		IDictionary<string, Tuple<IEnumerable<ISkill>, double>> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
+		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
+	}
+
+	public struct AffectedSkills
+	{
+		public IEnumerable<ISkill> Skills { get; set; }
+		public IDictionary<Guid, double> SkillEffiencies { get; set; }
+		public double Resource { get; set; }
+		public double Count { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -8,9 +9,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainer
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly IDictionary<DateTimePeriod,IDictionary<string, double>> _dictionary = new Dictionary<DateTimePeriod, IDictionary<string, double>>();
+		private readonly IDictionary<DateTimePeriod, PeriodResource> _dictionary = new Dictionary<DateTimePeriod, PeriodResource>();
 		private readonly IDictionary<Guid,IActivity> _activities = new Dictionary<Guid, IActivity>(); 
 		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
+		
 		private int MinSkillResolution = 60;
 
 		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider)
@@ -31,10 +33,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void AddResources(DateTimePeriod period, Guid activity, IPerson person, DateOnly personDate,
 		                         double resource)
 		{
-			IDictionary<string, double> resources;
+			PeriodResource resources;
 			if (!_dictionary.TryGetValue(period, out resources))
 			{
-				resources = new Dictionary<string, double>();
+				resources = new PeriodResource();
 				_dictionary.Add(period, resources);
 			}
 
@@ -52,20 +54,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				_skills.Add(skills.Key,skills.Skills);
 			}
-			double foundResource;
-			if (resources.TryGetValue(key, out foundResource))
-			{
-				resources[key] = resource + foundResource;
-			}
-			else
-			{
-				resources.Add(key, resource);
-			}
+			resources.AppendResource(key, skills, resource);
 		}
 
 		public double SkillResources(ISkill skill, DateTimePeriod period)
 		{
-			var skillKey = skill.Id.GetValueOrDefault().ToString();
+			var skillKey = skill.Id.GetValueOrDefault();
 			var activityKey = string.Empty;
 			if (skill.Activity != null)
 			{
@@ -76,14 +70,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				IDictionary<string,double> interval;
+				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource += (from pair in interval
-				             where
-					             (string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) &&
-					             (pair.Key.Contains(skillKey))
-				             select pair.Value).Sum();
+				resource += interval.GetResources(activityKey, skillKey).Resource;
 			}
 			return resource;
 		}
@@ -92,18 +82,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var activities = _activities.Values.Where(activitiesToLookFor);
 			var activityKeys = activities.Select(a => a.Id.GetValueOrDefault().ToString()).ToArray();
-			var skillKey = skill.Id.GetValueOrDefault().ToString();
+			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				IDictionary<string, double> interval;
+				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource +=
-					interval.Where(pair => activityKeys.Any(a => pair.Key.StartsWith(a)) && pair.Key.Contains(skillKey))
-					        .Sum(pair => pair.Value);
+				resource += interval.GetResources(activityKeys, skillKey).Resource;
+
 			}
 			return resource;
 		}
@@ -113,35 +102,159 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return !_skills.Any(k => k.Key.Contains("_"));
 		}
 
-		public  IDictionary<string, Tuple<IEnumerable<ISkill>, double>> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
 		{
-			var result = new Dictionary<string, Tuple<IEnumerable<ISkill>, double>>();
+			var result = new Dictionary<string, AffectedSkills>();
 
 			var activityKey = activity.Id.GetValueOrDefault().ToString();
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				IDictionary<string, double> interval;
+				PeriodResource interval;
 				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
 				{
-					foreach (var pair in interval)
+					foreach (var pair in interval.GetSkillKeyResources(activityKey))
 					{
-						if (!pair.Key.StartsWith(activityKey)) continue;
-
-						var skillKey = pair.Key.Split('|')[1];
 						IEnumerable<ISkill> skills;
-						if (_skills.TryGetValue(skillKey, out skills))
+						if (_skills.TryGetValue(pair.SkillKey, out skills))
 						{
-							Tuple<IEnumerable<ISkill>, double> value;
-							value = result.TryGetValue(skillKey, out value)
-								        ? new Tuple<IEnumerable<ISkill>, double>(skills, value.Item2 + pair.Value)
-								        : new Tuple<IEnumerable<ISkill>, double>(skills, pair.Value);
-							result[skillKey] = value;
+							AffectedSkills value;
+							if (result.TryGetValue(pair.SkillKey, out value))
+							{
+								foreach (var skill in value.SkillEffiencies)
+								{
+									double effiency;
+									if (pair.Effiencies.TryGetValue(skill.Key, out effiency))
+									{
+										pair.Effiencies[skill.Key] = effiency + skill.Value;
+									}
+									else
+									{
+										pair.Effiencies.Add(skill.Key, skill.Value);
+									}
+								}
+								value = new AffectedSkills
+									{
+										Skills = skills,
+										Resource = value.Resource + pair.Resource.Resource,
+										Count = value.Count + pair.Resource.Count,
+										SkillEffiencies = pair.Effiencies
+									};
+							}
+							else
+							{
+								value = new AffectedSkills { Skills = skills, Resource = pair.Resource.Resource, Count = pair.Resource.Count, SkillEffiencies = pair.Effiencies };
+							}
+							result[pair.SkillKey] = value;
 						}
 					}
 				}
 			}
 			return result;
+		}
+
+		private class PeriodResource
+		{
+			private readonly ConcurrentDictionary<string, PeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, PeriodResourceDetail>();
+			private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>> _skillEffiencies = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>>();
+			private static readonly ConcurrentDictionary<Guid, double> EmptyEfficiencyDictionary = new ConcurrentDictionary<Guid, double>();
+
+			public void AppendResource(string key, SkillCombination skillCombination, double resource)
+			{
+				_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(1, resource), (s, d) => new PeriodResourceDetail(d.Count+1, d.Resource+resource));
+
+				foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
+				{
+					_skillEffiencies.AddOrUpdate(key,
+					                             new ConcurrentDictionary<Guid, double>(new[]
+						                             {new KeyValuePair<Guid, double>(skillEfficiency.Key, skillEfficiency.Value)}),
+					                             (s, doubles) =>
+						                             {
+							                             doubles.AddOrUpdate(skillEfficiency.Key, skillEfficiency.Value,
+							                                                 (guid, d) => d + skillEfficiency.Value);
+							                             return doubles;
+						                             });
+				}
+			}
+
+			public PeriodResourceDetail GetResources(string activityKey, Guid skillKey)
+			{
+				var count = 0;
+				var resource = 0d;
+				foreach (var pair in _resourceDictionary)
+				{
+					if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKey.ToString())))
+					{
+						count += pair.Value.Count;
+						resource += pair.Value.Resource;
+					}
+				}
+				return new PeriodResourceDetail(count,resource);
+			}
+
+			public PeriodResourceDetail GetResources(IEnumerable<string> activityKeys, Guid skillKey)
+			{
+				var count = 0;
+				var resource = 0d;
+				foreach (var pair in _resourceDictionary)
+				{
+					if (activityKeys.Any(a => pair.Key.StartsWith(a)) && pair.Key.Contains(skillKey.ToString()))
+					{
+						count += pair.Value.Count;
+						resource += pair.Value.Resource;
+					}
+				}
+				return new PeriodResourceDetail(count, resource);
+			}
+
+			public IEnumerable<SkillKeyResource> GetSkillKeyResources(string activityKey)
+			{
+				foreach (var pair in _resourceDictionary)
+				{
+					if (!pair.Key.StartsWith(activityKey)) continue;
+
+					ConcurrentDictionary<Guid, double> effiencies;
+					if (!_skillEffiencies.TryGetValue(pair.Key, out effiencies))
+					{
+						effiencies = EmptyEfficiencyDictionary;
+					}
+
+					var skillKey = pair.Key.Split('|')[1];
+					yield return new SkillKeyResource {SkillKey = skillKey, Resource = pair.Value, Effiencies = effiencies};
+				}
+			}
+		}
+
+		private struct PeriodResourceDetail
+		{
+			private double _resource;
+			private int _count;
+
+			public PeriodResourceDetail(int count, double resource)
+			{
+				_count = count;
+				_resource = resource;
+			}
+
+			public double Resource
+			{
+				get { return _resource; }
+				set { _resource = value; }
+			}
+
+			public int Count
+			{
+				get { return _count; }
+				set { _count = value; }
+			}
+		}
+
+		private class SkillKeyResource
+		{
+			public string SkillKey { get; set; }
+			public PeriodResourceDetail Resource { get; set; }
+
+			public IDictionary<Guid, double> Effiencies { get; set; }
 		}
 	}
 }
