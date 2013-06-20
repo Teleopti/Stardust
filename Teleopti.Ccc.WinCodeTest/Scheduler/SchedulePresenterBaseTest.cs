@@ -1538,7 +1538,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.Result).Return(true);
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
-            Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null)).IgnoreArguments();
+            Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
             Expect.Call(_viewBase.TheGrid).Return(_grid);
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
@@ -1630,7 +1630,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.Result).Return(true);
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
-            Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null)).IgnoreArguments();
+            Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly()).Repeat.AtLeastOnce();
             Expect.Call(ass.CheckRestrictions);
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);

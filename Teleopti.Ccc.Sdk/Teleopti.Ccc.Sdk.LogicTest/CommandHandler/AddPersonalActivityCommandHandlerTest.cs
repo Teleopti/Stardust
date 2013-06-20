@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
-				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null)).IgnoreArguments();
+				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
-				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null)).IgnoreArguments();
+				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
