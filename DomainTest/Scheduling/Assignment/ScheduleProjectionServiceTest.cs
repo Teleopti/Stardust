@@ -58,11 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyEnumeratorDoesNotMessWithLayers()
 		{
 			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(8, 16));
-			IPersonalShift personalShift = new PersonalShift();
 			IActivity pActivity = ActivityFactory.CreateActivity("personal");
-			IPersonalShiftActivityLayer pLayer = new PersonalShiftActivityLayer(pActivity, createPeriod(10, 13));
-			personalShift.LayerCollection.Add(pLayer);
-			ass1.AddPersonalShift(personalShift);
+			ass1.AddPersonalLayer(pActivity, createPeriod(10,13));
 			IPersonAbsence abs1 = createPersonAbsence(100, createPeriod(8, 13));
 			scheduleDay.Add(ass1);
 			scheduleDay.Add(abs1);

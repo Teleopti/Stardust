@@ -265,15 +265,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (overTimePeriod.HasValue)
 						validPeriods.Add(overTimePeriod.Value);
 				}
-				foreach (var personalShift in _personalShiftCollection)
+				foreach (var personalLayer in PersonalLayers)
 				{
-					var persShiftPeriod = personalShift.LayerCollection.Period();
-					if (persShiftPeriod.HasValue)
+					if (validPeriods.Any(validPeriod => validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period)))
 					{
-						if (validPeriods.Any(validPeriod => validPeriod.Intersect(persShiftPeriod.Value) || validPeriod.AdjacentTo(persShiftPeriod.Value)))
-						{
-							proj.Add(personalShift.LayerCollection, new VisualLayerFactory());
-						}
+						proj.Add(personalLayer, new VisualLayerFactory());
 					}
 				}
 			}
