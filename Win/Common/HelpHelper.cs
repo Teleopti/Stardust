@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Win.Common
 			return _current;
 		} }
 
+        private readonly bool _staticHelp = false;
 		private readonly string _http;
 		private readonly string _httpOnline;
 		private readonly string _divider;
@@ -26,12 +27,14 @@ namespace Teleopti.Ccc.Win.Common
 		private readonly string _suffixOnline  = string.Empty;
 		private const HelpType _helpType = HelpType.Http;
 		private readonly string _helpLang = string.Empty;
-
+	    private readonly string _defaultHelpLanguage = "en";
   
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
 		private HelpHelper()
 		{
 			//Read help settings from config file
+            string staticHelp = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["StaticHelp"];
+            if (!string.IsNullOrEmpty(staticHelp)) if (!bool.TryParse(staticHelp, out _staticHelp)){}
 			string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
 			if (!string.IsNullOrEmpty(helpUrl)) _http = helpUrl;
 			string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
@@ -49,6 +52,9 @@ namespace Teleopti.Ccc.Win.Common
 			if (!string.IsNullOrEmpty(helpSuffixOnline)) _suffixOnline = helpSuffixOnline;
 			string helpDividerOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
 			if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
+
+            string defaultHelpLanguage = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["DefaultHelpLanguage"];
+            if (!string.IsNullOrEmpty(helpUrl)) _defaultHelpLanguage = defaultHelpLanguage;
 
 			//Select language is handled in Wiki site
 			_helpLang = string.Empty;
@@ -69,14 +75,19 @@ namespace Teleopti.Ccc.Win.Common
 			Help.ShowHelp(null, GetOnlineUrl(formName, control));
 		}
 
-		private string GetUrl(string formName, IHelpContext control)
-		{
-			var topic = GetTopic(formName, control);
-			topic = HttpUtility.UrlEncode(topic);
-			return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
-		}
+	    private string GetUrl(string formName, IHelpContext control)
+	    {
+	        var topic = GetTopic(formName, control);
+	        if (!_staticHelp)
+	        {
+	            topic = HttpUtility.UrlEncode(topic);
+	            return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
+	        }
 
-		private string GetOnlineUrl(string formName, IHelpContext control)
+	        return string.Concat(_http, _helpLang, _prefix, topic, "\\" + _defaultHelpLanguage, _suffix);
+	    }
+
+	    private string GetOnlineUrl(string formName, IHelpContext control)
 		{
 			var topic = GetTopicUrlOnline(formName, control);
 			topic = HttpUtility.UrlEncode(topic);
