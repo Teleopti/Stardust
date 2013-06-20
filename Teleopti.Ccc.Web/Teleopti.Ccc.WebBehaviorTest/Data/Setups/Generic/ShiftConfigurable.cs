@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(StartTime));
-			var mainShift = MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory);
+			var mainShift = EditableShiftFactory.CreateEditorShift(activity, _assignmentPeriod, shiftCategory);
 
 			// add lunch
 			DateTimePeriod? lunchPeriod = null;
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
 			}
 			if (lunchPeriod.HasValue)
-				mainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod.Value));
+				mainShift.LayerCollection.Add(new EditorActivityLayer(lunchActivity, lunchPeriod.Value));
 
-			assignment.SetMainShift(mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
 
 
 			// simply publish the schedule changed event so that the read model is updated

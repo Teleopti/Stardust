@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public EditableShift(IShiftCategory shiftCategory)
 		{
 			ShiftCategory = shiftCategory;
-
 		}
 
 		public virtual ILayerCollection<IActivity> LayerCollection
@@ -34,18 +33,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(null);
-			proj.Add(this);
+			proj.Add(LayerCollection, new VisualLayerFactory());
 			return proj;
 		}
 
 		public bool HasProjection { get; private set; }
 
 		public IShiftCategory ShiftCategory { get; set; }
-
-		public IVisualLayerFactory CreateVisualLayerFactory()
-		{
-			return new VisualLayerFactory();
-		}
 
 		public object Clone()
 		{

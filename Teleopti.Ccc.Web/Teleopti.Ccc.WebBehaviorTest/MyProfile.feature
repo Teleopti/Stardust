@@ -7,6 +7,7 @@
 		be able to change language
 		be able to change my password
 
+
 Scenario: See my profile
 	Given I am an agent
 	When I view my regional settings

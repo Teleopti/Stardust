@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(null);
-			proj.Add(this);
+			proj.Add(LayerCollection, new VisualLayerOvertimeFactory());
 			return proj;
 		}
 
@@ -96,11 +96,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public virtual IEnumerable<IOvertimeShiftActivityLayer> LayerCollectionWithDefinitionSet()
         {
             return LayerCollection.Cast<IOvertimeShiftActivityLayer>();
-        }
-
-        public virtual IVisualLayerFactory CreateVisualLayerFactory()
-        {
-            return new VisualLayerOvertimeFactory();
         }
     }
 }

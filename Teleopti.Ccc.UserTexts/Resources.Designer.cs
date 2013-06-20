@@ -18194,6 +18194,15 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Denied.
         /// </summary>
+        public static string RequestStatusDtoAutodenied {
+            get {
+                return ResourceManager.GetString("RequestStatusDtoAutodenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denied.
+        /// </summary>
         public static string RequestStatusDtoDenied {
             get {
                 return ResourceManager.GetString("RequestStatusDtoDenied", resourceCulture);
@@ -24662,6 +24671,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View active agents.
+        /// </summary>
+        public static string ViewActiveAgents {
+            get {
+                return ResourceManager.GetString("ViewActiveAgents", resourceCulture);
             }
         }
         

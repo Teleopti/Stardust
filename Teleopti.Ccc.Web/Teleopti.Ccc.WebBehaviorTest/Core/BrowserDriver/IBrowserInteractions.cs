@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);
 		void DumpInfo(Action<string> writer);
+		void WaitUntilEnabled(string selector);
 	}
 
 	public static class BrowserInteractionsExtensions
@@ -70,6 +71,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		private static string JSEncode(this string value)
 		{
 			return System.Web.HttpUtility.JavaScriptStringEncode(value);
+		}
+
+		public static void AssertElementsAreVisible(this IBrowserInteractions interactions, string selectSelector)
+		{
+			var js = string.Format("return $('{0}').filter(\":visible\").length > 0 ? 'visible' : 'not visible';", selectSelector);
+			interactions.AssertJavascriptResultContains(js, "visible");
 		}
 	}
 }

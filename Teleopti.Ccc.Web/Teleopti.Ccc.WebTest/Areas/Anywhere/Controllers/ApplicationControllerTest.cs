@@ -12,7 +12,6 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class ApplicationControllerTest
 	{
 		private ApplicationController target;
@@ -25,6 +24,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			target = new ApplicationController(authorization, currentTeleoptiPrincipal);
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			target.Dispose();
 		}
 
 		[Test]
@@ -71,10 +76,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Content.Should().Not.Be.Null();
 		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			target.Dispose();
-		}
 	}
 }

@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldMapShiftCategory()
 		{
-			var mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			_personAssignment.SetMainShift(mainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			_target.SetMainShiftLayers(_personAssignment, mainShift);
 			var editorShift = _target.CreateEditorShift(_personAssignment);
 			Assert.AreSame(_personAssignment.ShiftCategory, editorShift.ShiftCategory);
 		}
@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldMapLayers()
 		{
-			var mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			_personAssignment.SetMainShift(mainShift);
+			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
+			_target.SetMainShiftLayers(_personAssignment, mainShift);
 			var editorShift = _target.CreateEditorShift(_personAssignment);
 			Assert.AreEqual(3, editorShift.LayerCollection.Count);
-			var assignedLayers = _personAssignment.MainShiftActivityLayers.ToList();
+			var assignedLayers = _personAssignment.MainShiftLayers.ToList();
 			Assert.AreSame(assignedLayers[0].Payload, editorShift.LayerCollection[0].Payload);
 			Assert.AreSame(assignedLayers[1].Payload, editorShift.LayerCollection[1].Payload);
 			Assert.AreSame(assignedLayers[2].Payload, editorShift.LayerCollection[2].Payload);
@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var editorActivityLayer = new EditorActivityLayer(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			editorShift.LayerCollection.Add(editorActivityLayer);
 			_target.SetMainShiftLayers(_personAssignment, editorShift);
-			Assert.AreEqual(1, _personAssignment.MainShiftActivityLayers.Count());
-			var firstMainShiftLayer = _personAssignment.MainShiftActivityLayers.First();
+			Assert.AreEqual(1, _personAssignment.MainShiftLayers.Count());
+			var firstMainShiftLayer = _personAssignment.MainShiftLayers.First();
 			Assert.AreSame(activity, firstMainShiftLayer.Payload);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), firstMainShiftLayer.Period);
 			Assert.AreSame(shiftCategory, _personAssignment.ShiftCategory);

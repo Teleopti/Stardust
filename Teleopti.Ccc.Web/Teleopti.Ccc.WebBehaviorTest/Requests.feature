@@ -111,12 +111,22 @@ Scenario: Hide indication that there are more items to load if no more items
 	When I view requests
 	Then I should not see an indication that there are more requests
 
-Scenario: Close details when deleting a request
-Given I am an agent
+Scenario: Show auto denied shift trade request for sender
+	Given I am an agent
 	And I have created a shift trade request
-	| Field   | Value        |
-	| Subject | swap with me |
+	| Field      | Value         |
+	| Subject    | swap with me  |
+	| To         | Ashley Andeen |
+	| AutoDenied | true          |
 	And I am viewing requests
-	When I click on the request
-	And I click the delete button on the shift trade request
-	Then Details should be closed
+	Then I should see my existing shift trade request with subject 'swap with me'
+
+Scenario: Do not show auto denied shift trade request for recipient
+	Given I am an agent
+	And I have received a shift trade request
+	| Field      | Value         |
+	| Subject    | swap with me  |
+	| From       | Ashley Andeen |
+	| AutoDenied | true          |
+	And I am viewing requests
+	Then I should not see any request

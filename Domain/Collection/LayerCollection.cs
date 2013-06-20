@@ -101,7 +101,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void Insert(int index, ILayer<T> item)
         {
-            Items.Insert(index, item);
+					var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);
+					}
+           Items.Insert(index, item);
         }
 
         public void MoveUpLayer(ILayer<T> layer)

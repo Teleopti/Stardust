@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     public class PersonAssignmentAssembler : ScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto>
     {
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
-        private readonly IActivityLayerAssembler<IMainShiftActivityLayer> _mainActivityLayerAssembler;
+        private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
         private readonly IActivityLayerAssembler<IPersonalShiftActivityLayer> _personalActivityLayerAssembler;
         private readonly IOvertimeLayerAssembler _overtimeShiftLayerAssembler;
 
-        public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftActivityLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
+        public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftActivityLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
         {
             _shiftCategoryRepository = shiftCategoryRepository;
             _mainActivityLayerAssembler = mainActivityLayerAssembler;
@@ -32,11 +32,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 Id = entity.Id,
                 Version = entity.Version.GetValueOrDefault(0)
             };
-#pragma warning disable 612,618
-	        var entityMs = entity.ToMainShift();
-#pragma warning restore 612,618
-            if (entityMs != null)
-							retDto.MainShift = CreateMainShiftDto(entityMs, entity.Person);
+					if (entity.ShiftCategory != null)
+					{
+						retDto.MainShift = CreateMainShiftDto(entity.MainShiftLayers, entity.ShiftCategory, entity.Person);						
+					}
             foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)
             {
                 retDto.PersonalShiftCollection.Add(CreatePersonalShiftDto(personalShift, entity.Person));
@@ -91,16 +90,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             if(dto.MainShift!=null)
             {
-                IShiftCategory shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
-                IMainShift mainShift = new MainShift(shiftCategory);
-                addLayersToMainShift(mainShift, dto.MainShift.LayerCollection);
-                assignment.SetMainShift(mainShift);
+                var shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
+	            var layers = new List<IMainShiftLayer>();
+	            _mainActivityLayerAssembler.DtosToDomainEntities(dto.MainShift.LayerCollection).ForEach(layers.Add);
+							assignment.SetMainShiftLayers(layers, shiftCategory);
             }
-        }
-
-        private void addLayersToMainShift(IMainShift mainShift, IEnumerable<ActivityLayerDto> layerDtos)
-        {
-            _mainActivityLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(mainShift.LayerCollection.Add);
         }
 
         //merge this one with addLaysersToMainshift when we only have one type of activitylayer
@@ -114,18 +108,17 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             _overtimeShiftLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(overtimeShift.LayerCollection.Add);
         }
 
-        private MainShiftDto CreateMainShiftDto(IMainShift mainShift, IPerson shiftOwner)
+        private MainShiftDto CreateMainShiftDto(IEnumerable<IMainShiftLayer> mainShiftLayers, IShiftCategory shiftCategory, IPerson shiftOwner)
         {
-            MainShiftDto retDto = new MainShiftDto();
-            if (mainShift.ShiftCategory != null)
-            {
-                retDto.ShiftCategoryId = mainShift.ShiftCategory.Id.Value;
-                retDto.ShiftCategoryName = mainShift.ShiftCategory.Description.Name;
-                retDto.ShiftCategoryShortName = mainShift.ShiftCategory.Description.ShortName;
-            }
+            var retDto = new MainShiftDto
+	            {
+		            ShiftCategoryId = shiftCategory.Id.Value,
+		            ShiftCategoryName = shiftCategory.Description.Name,
+		            ShiftCategoryShortName = shiftCategory.Description.ShortName
+	            };
 
-            _mainActivityLayerAssembler.SetCurrentPerson(shiftOwner);
-            var layers = _mainActivityLayerAssembler.DomainEntitiesToDtos(mainShift.LayerCollection.OfType<IMainShiftActivityLayer>());
+	        _mainActivityLayerAssembler.SetCurrentPerson(shiftOwner);
+            var layers = _mainActivityLayerAssembler.DomainEntitiesToDtos(mainShiftLayers);
             layers.ForEach(retDto.LayerCollection.Add);
             
             return retDto;

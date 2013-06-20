@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using NHibernate.Criterion;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -95,16 +94,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShift(_dummyCat);
-					mainShift.LayerCollection.Add(new MainShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2)));
-            IList<IPersonalShift> persShifts = new List<IPersonalShift> {new PersonalShift(), new PersonalShift()};
+	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
+	        ass.SetMainShiftLayers(
+		        new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
+					ass.AddPersonalShift(new PersonalShift());
+					ass.AddPersonalShift(new PersonalShift());
 
-        	IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignmentAggregate(_dummyAgent,
-                                                                                        mainShift,
-                                                                                        persShifts,
-                                                                                        _dummyScenario,
-																																												new DateOnly(2000,1,1));
-            IOvertimeShift ot = new OvertimeShift();
+						IOvertimeShift ot = new OvertimeShift();
             ass.AddOvertimeShift(ot);
             ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
             return ass;
@@ -119,15 +115,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.OvertimeShiftCollection[0].LayerCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection[0].LayerCollection.Count);
         }
 
-		 [Test]
-		 public void VerifyDatabasePeriod()
-		 {
-		 	PersonAssignment ass = (PersonAssignment) CreateAggregateWithCorrectBusinessUnit();
-			 PersistAndRemoveFromUnitOfWork(ass);
-			 Session.Refresh(ass);
-		 	ass.DatabasePeriod.Should().Be.EqualTo(ass.Period);
-		 }
-
 			[Test]
         public void VerifyLoadGraphById()
         {
@@ -136,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftActivityLayers));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
@@ -380,51 +367,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             finally
             {
                 cleanUp(loaded);
-            }
-        }
-
-
-        /// <summary>
-        /// Verifies the cascade delete works so removed shift reference deletes layers from database.
-        /// </summary>
-        [Test]
-        public void VerifyCascadeDeleteWorksSoRemovedShiftReferenceDeletesLayersFromDatabase()
-        {
-            //Setup
-            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                _dummyCategory,
-                _dummyScenario);
-            PersistAndRemoveFromUnitOfWork(ass);
-
-            //Load
-            IPersonAssignment loaded = _rep.Load(ass.Id.Value);
-#pragma warning disable 612,618
-            bool mainShiftExists = (loaded.ToMainShift() != null);
-#pragma warning restore 612,618
-            Assert.IsTrue(mainShiftExists); //ensures factory method creates mainshift
-            int noOfPersonalShift = loaded.PersonalShiftCollection.Count;
-            Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts
-
-            //Remove shifts
-            loaded.ClearMainShiftLayers();
-            PersistAndRemoveFromUnitOfWork(loaded);
-
-            foreach (int items in Session.CreateCriteria(typeof(MainShift))
-                                        .SetProjection(Projections.RowCount())
-                                        .List<int>())
-            {
-                //no mainshifts 
-                Assert.AreEqual(0, items);
-            }
-            foreach (int items in Session.CreateCriteria(typeof(ActivityLayer))
-                            .SetProjection(Projections.RowCount())
-                            .List<int>())
-            {
-                //no layers
-                Assert.AreEqual(0, items);
             }
         }
 

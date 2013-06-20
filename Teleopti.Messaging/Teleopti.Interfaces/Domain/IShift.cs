@@ -1,9 +1,9 @@
 namespace Teleopti.Interfaces.Domain
 {
 		//TODO! Remove me!
-    public interface IShift : IProjectableLayerCollectionOwner<IActivity>,
-                                IProjectionSource,
-                                ICloneableEntity<IShift>
+    public interface IShift : IProjectionSource,
+                                ICloneableEntity<IShift>,
+																ILayerCollectionOwner<IActivity>
     {
     }
 }

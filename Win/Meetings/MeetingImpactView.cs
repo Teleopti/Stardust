@@ -573,5 +573,15 @@ namespace Teleopti.Ccc.Win.Meetings
 		{
 			dateTimePickerAdvStartSlotPeriod.Value = dateTime;
 		}
+
+		public string GetStartTimeText
+		{
+			get { return outlookTimePickerStartTime.Text; }
+		}
+
+		public string GetEndTimeText
+		{
+			get { return outlookTimePickerEndTime.Text; }
+		}
 	}
 }

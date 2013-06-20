@@ -1,6 +1,9 @@
 ﻿.hoverBorder {
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
+.add-shifttrade-datepicker {
+	
+}
 
 .request-body-inner ol
 {
@@ -13,15 +16,6 @@
 }
 .request-not-selected {
 	background: #f8f8f8;
-}
-.request-list 
-{
-    padding-top: 1.5em;
-	width: 483px;
-}
-.rtl .request-list
-{
-    margin-right: 483px;
 }
 .request-body-inner .request-item
 {
@@ -104,12 +98,31 @@
 {
 	width: 8em;
 }
+
+.date-from {
+	
+}
+
+.time-from {
+	
+}
+
+
+.time-to {
+	
+}
+
+.date-to {
+	
+}
+
 .request-data-subject {
 	word-wrap: break-word;	
 }
 .request-data-text {
 	word-wrap: break-word;	
 }
+
 .absence-type-input-label 
 {
 	width: 8em;
@@ -140,11 +153,7 @@
 .shift-trade-add-schedule
 {
 	position: relative;
-	height: 100%;
 	margin-top: 18px;
-	background: #f8f8f8;
-	display: block;
-	z-index: 9;
 }
 .shift-trade-my-schedule-row 
 {
@@ -256,7 +265,6 @@
 	white-space: nowrap;
 	width: 150px;
 	height: 18px;
-	background-color: #f8f8f8;
 	float: left; 
 	text-overflow: ellipsis;		
 }
@@ -278,7 +286,6 @@
 	position: absolute;
 	left: 0px;
 	display: inline;
-	margin-top: 3px
 }
 
 .shift-trade-swap-detail-schedule-to
@@ -289,14 +296,25 @@
 	margin-top: 24px
 }
 
+
 .shift-trade-swap-detail-schedule-row {
 	height: 22px;
 	position: relative;
 }
 
+.shift-trade-swap-detail-timeline 
+{
+	height: 46px;
+	position: absolute;
+	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
+	width: 450px;
+}
+
 .shift-trade-swap-detail-agent-name {
 	width: 150px;
 	height: 30px;
+	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
+	padding-left: 0;
 
 }
 
@@ -311,46 +329,10 @@
 {
 	margin-top: 10px;
 }
-.shift-trade-agent-name {
-	position: absolute;
-	overflow: hidden;
-	white-space: nowrap;
-	width: 150px;
-	background-color: #f8f8f8;
-	float: left; 
-	text-overflow: ellipsis;		
-}
-.rtl .shift-trade-agent-name {
-	right: auto;
-	left: 0;
-}
-.shift-trade-agent-name-hover
-{
-	padding-right: 10px;
-	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
-	border-right: 1px solid rgba(0, 0, 0, 0.20);
-	width: auto;
-	z-index: 11;
-}
 
 .shift-trade-swap-detail-timeline-line 
 {
 	height: 100%;
 	float: left;
 	border-left: 1px solid rgb(216, 216, 216);
-}
-
-.shift-trade-swap-detail-timeline 
-{
-	height: 46px;
-	position: absolute;
-	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
-	width: 450px;
-}
-
-.shift-trade-swap-detail-agent-name 
-{
-	height: 30px;
-	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
-	padding-left: 0;
 }

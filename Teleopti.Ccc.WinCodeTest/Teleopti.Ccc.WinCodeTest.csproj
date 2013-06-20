@@ -286,7 +286,6 @@
     <Compile Include="Common\Models\DataModelForTest.cs" />
     <Compile Include="Common\Models\DataModelWithDataErrorInfoTest.cs" />
     <Compile Include="Common\ModifySelectionPresenterTest.cs" />
-    <Compile Include="Common\MoveableLayerViewModelTest.cs" />
     <Compile Include="Common\OpenPeriodModeTest.cs" />
     <Compile Include="Common\OpenPeriodSpecificationTest.cs" />
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
@@ -309,7 +308,6 @@
     <Compile Include="Common\PersonalShiftLayerViewModelTest.cs" />
     <Compile Include="Common\MainShiftLayerViewModelTest.cs" />
     <Compile Include="Common\DateTimePeriodPanelTest.cs" />
-    <Compile Include="Common\LayerViewModelTest.cs" />
     <Compile Include="Common\MeetingLayerViewModelTest.cs" />
     <Compile Include="Common\SearchPersonPresenterTest.cs" />
     <Compile Include="Common\Time\DateTimeViewModelTest.cs" />
@@ -559,6 +557,8 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
+    <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />

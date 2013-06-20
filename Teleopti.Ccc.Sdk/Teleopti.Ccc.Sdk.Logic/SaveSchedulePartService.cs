@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +14,8 @@ namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface ISaveSchedulePartService
     {
-		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection);
+	    void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection);
+		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag);
     }
 
     public class SaveSchedulePartService : ISaveSchedulePartService
@@ -31,16 +33,22 @@ namespace Teleopti.Ccc.Sdk.Logic
     		_unitOfWorkFactory = unitOfWorkFactory;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			Save(scheduleDay, newBusinessRuleCollection, NullScheduleTag.Instance);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
         {
             var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();
+            IEnumerable<IBusinessRuleResponse> invalidList;
+            
+            invalidList = dic.Modify(ScheduleModifier.Scheduler,
+                                        scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
 
-            var invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                         scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
-
-			if (invalidList != null && invalidList.Any())
+            if (invalidList != null && invalidList.Any())
 			{
 				throw new FaultException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture, "At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common
         /// <returns>
         /// Only the projected layers
         /// </returns>
-        IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, IEventAggregator eventAggregator, TimeSpan interval);
+        IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, TimeSpan interval);
 
         /// <summary>
         /// Creates  all the viewmodels from schedule.

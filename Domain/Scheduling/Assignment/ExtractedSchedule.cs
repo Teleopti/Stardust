@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var shiftsToMove = new List<IPersonalShift>();
                 foreach (var shift in assignment.PersonalShiftCollection)
                 {
-					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.Adjacent(shift.LayerCollection.Period().Value))
+					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.AdjacentTo(shift.LayerCollection.Period().Value))
                         shiftsToMove.Add(shift);
                 }
                 foreach (var shift in shiftsToMove)
@@ -840,7 +840,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static bool overtimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
         {
-            return personAssignment.Period.Adjacent(overtimeShiftActivityLayer.Period) ||
+            return personAssignment.Period.AdjacentTo(overtimeShiftActivityLayer.Period) ||
                    personAssignment.Period.Intersect(overtimeShiftActivityLayer.Period);
         }
 
@@ -871,7 +871,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void CreateAndAddActivity(IMainShiftActivityLayer layer, IShiftCategory shiftCategory)
+        public void CreateAndAddActivity(IMainShiftLayer layer, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
@@ -880,24 +880,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
-			var mainShift = new MainShift(shiftCategory);
-			mainShift.LayerCollection.Add(layer);
-			MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
+			MergePersonalShiftsToOneAssignment(layer.Period);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
+				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
 				{
 					if (personAssignment.ShiftCategory == null)
 					{
-						personAssignment.SetMainShift(mainShift);
+						personAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
 					}
 					else
 					{
-#pragma warning disable 612,618
-						var oldShift = personAssignment.ToMainShift();
-#pragma warning restore 612,618
-						oldShift.LayerCollection.Add(layer);
-						personAssignment.SetMainShift(oldShift);
+						//introduce AddLayer on PersonAssignment instead?
+						//rk: Micke and I have talked about this... 
+						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
+						var oldLayers = personAssignment.MainShiftLayers.ToList();
+						oldLayers.Add(layer);
+						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}
 					return;
 				}
@@ -907,7 +906,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.SetMainShift(mainShift);
+	        newPersonAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);
@@ -918,13 +917,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			IPersonalShift personalShift = new PersonalShift();
 			personalShift.LayerCollection.Add(layer);
 
+			var closest = PersonAssignmentCollection().FirstOrDefault();
+			var period = personalShift.LayerCollection.Period();
+
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
+				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
 				{
 					personAssignment.AddPersonalShift(personalShift);
 					return;
 				}
+
+				if (period.HasValue && closest != null)
+				{
+					var diff = personAssignment.Period.StartDateTime.Subtract(period.Value.StartDateTime);
+					var closestDiff = closest.Period.StartDateTime.Subtract(period.Value.StartDateTime);
+
+					if (Math.Abs(diff.TotalSeconds) < Math.Abs(closestDiff.TotalSeconds))
+						closest = personAssignment;
+				}
+
+			}
+
+			if (closest != null)
+			{
+				closest.AddPersonalShift(personalShift);
+				return;
 			}
 
 			//TODO create inparameters to check on if to create new personassignment

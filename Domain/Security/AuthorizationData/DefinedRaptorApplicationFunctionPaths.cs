@@ -44,6 +44,7 @@
         public const string ModifySchedule = "Raptor/Global/ModifySchedule";
 		public const string ViewRestrictedScenario = "Raptor/Global/ViewRestrictedScenario";
 		public const string ModifyRestrictedScenario = "Raptor/Global/ModifyRestrictedScenario";
+		public const string ViewActiveAgents = "Raptor/Global/ViewActiveAgents";
 
         // PersonAdmin
         public const string ModifyPersonNameAndPassword = "Raptor/PersonAdmin/ModifyPersonNameAndPassword";

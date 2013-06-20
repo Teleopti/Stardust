@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -13,43 +15,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class VisualLayerProjectionServiceTest
 	{
-		private IShift shift;
 		private IAbsence absence;
 		private IPerson person;
 
 		[SetUp]
 		public void Setup()
 		{
-			shift = new fakeShift();
 			person = PersonFactory.CreatePerson();
 			absence = AbsenceFactory.CreateAbsence("Tandl�karen");
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CannotAddIfNull()
-		{
-			var proj = new VisualLayerProjectionService(person);
-			proj.Add((MainShift)null);
 		}
 
 		[Test]
 		public void VerifyCombineReturnTwoWhenNotIntersecting()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			var layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			var layer2 = new MainShiftLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
 
-			Assert.AreEqual(2, retList.Count);
-			Assert.AreEqual(layer2.Payload, retList[0].Payload);
-			Assert.AreEqual(layer2.Period, retList[0].Period);
-			Assert.AreEqual(layer1.Payload, retList[1].Payload);
-			Assert.AreEqual(layer1.Period, retList[1].Period);
+			var retList = new[] {layer1, layer2}.CreateProjection();
+
+			Assert.AreEqual(2, retList.Count());
+			Assert.AreEqual(layer2.Payload, retList.First().Payload);
+			Assert.AreEqual(layer2.Period, retList.First().Period);
+			Assert.AreEqual(layer1.Payload, retList.Last().Payload);
+			Assert.AreEqual(layer1.Period, retList.Last().Period);
 		}
 
 		[Test]
@@ -59,9 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(person, defSet);
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			IActivity act = ActivityFactory.CreateActivity("the one");
-			MainShift main = new MainShift(ShiftCategoryFactory.CreateShiftCategory("cat"));
-			main.LayerCollection.Add(new MainShiftActivityLayer(act, createPeriod(10, 19)));
-			ass.SetMainShift(main);
+			ass.SetMainShiftLayers(new[]{new MainShiftLayer(act, createPeriod(10,19))}, new ShiftCategory("cat"));
 			OvertimeShift ot = new OvertimeShift();
 			ass.AddOvertimeShift(ot);
 			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act, createPeriod(16, 17), defSet));
@@ -77,20 +65,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
-			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer2 = new MainShiftLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
-			IProjectionService svc = shift.ProjectionService();
+			var retList = new[] { layer1, layer2 }.CreateProjection();
 
-			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
-
-			Assert.AreEqual(2, retList.Count);
-			Assert.AreEqual(layer1.Payload, retList[0].Payload);
-			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), retList[0].Period);
-			Assert.AreEqual(layer2.Payload, retList[1].Payload);
-			Assert.AreEqual(layer2.Period, retList[1].Period);
+			Assert.AreEqual(2, retList.Count());
+			Assert.AreEqual(layer1.Payload, retList.First().Payload);
+			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), retList.First().Period);
+			Assert.AreEqual(layer2.Payload, retList.Last().Payload);
+			Assert.AreEqual(layer2.Period, retList.Last().Period);
 		}
 
 		[Test]
@@ -98,36 +82,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(1900, 1, 5, 2000, 1, 5));
-			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer2 = new MainShiftLayer(newActivity, new DateTimePeriod(1900, 1, 5, 2000, 1, 5));
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
-			IProjectionService svc = shift.ProjectionService();
+			var retList = new[] { layer1, layer2 }.CreateProjection();
 
-			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
-			Assert.AreEqual(2, retList.Count);
-			Assert.AreEqual(layer2.Payload, retList[0].Payload);
-			Assert.AreEqual(layer2.Period, retList[0].Period);
-			Assert.AreEqual(layer1.Payload, retList[1].Payload);
-			Assert.AreEqual(new DateTimePeriod(2000, 1, 5, 2001, 1, 1), retList[1].Period);
+			Assert.AreEqual(2, retList.Count());
+			Assert.AreEqual(layer2.Payload, retList.First().Payload);
+			Assert.AreEqual(layer2.Period, retList.First().Period);
+			Assert.AreEqual(layer1.Payload, retList.Last().Payload);
+			Assert.AreEqual(new DateTimePeriod(2000, 1, 5, 2001, 1, 1), retList.Last().Period);
 		}
 
 		[Test]
 		public void VerifyCombineReturnOneWhenIntersectingOneActivity()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			ActivityLayer layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
-			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer2 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> resWrapper = new List<IVisualLayer>(svc.CreateProjection());
+			var proj = new[] { layer1, layer2 }.CreateProjection();
 
-			Assert.AreEqual(1, resWrapper.Count);
-			Assert.AreSame(act, resWrapper[0].Payload);
-			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2010, 1, 1), resWrapper[0].Period);
+			Assert.AreSame(act, proj.Single().Payload);
+			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2010, 1, 1), proj.Single().Period);
 		}
 
 		[Test]
@@ -135,14 +112,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer2 = new MainShiftLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
-			IProjectionService svc = shift.ProjectionService();
+			var retList = new[] { layer1, layer2 }.CreateProjection().ToList();
 
-			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
 			Assert.AreEqual(3, retList.Count);
 			Assert.AreEqual(act, retList[0].Payload);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), retList[0].Period);
@@ -157,16 +131,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyCombineReturnOneWhenInsideAndOneActivity()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			ActivityLayer layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
+			var layer2 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var layer1 = new MainShiftLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> resWrapper = new List<IVisualLayer>(svc.CreateProjection());
-			Assert.AreEqual(1, resWrapper.Count);
-			Assert.AreEqual(layer1.Payload, resWrapper[0].Payload);
-			Assert.AreEqual(layer1.Period, resWrapper[0].Period);
+			var retList = new[] { layer1, layer2 }.CreateProjection();
+
+			Assert.AreEqual(layer1.Payload, retList.Single().Payload);
+			Assert.AreEqual(layer1.Period, retList.Single().Period);
 		}
 
 		/// <summary>
@@ -197,22 +168,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 12, 00, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 13, 30, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
-			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
-			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
+			var layer1 = new MainShiftLayer(act1, period1);
+			var layer2 = new MainShiftLayer(act2, period2);
+			var layer3 = new MainShiftLayer(act3, period3);
+			var layer4 = new MainShiftLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new MainShiftActivityLayer(act1, period1);
-			ActivityLayer layer6 = new MainShiftActivityLayer(act2, period2);
-			ActivityLayer layer7 = new MainShiftActivityLayer(act3, period8);
-			ActivityLayer layer8 = new MainShiftActivityLayer(act5, period6);
-			ActivityLayer layer9 = new MainShiftActivityLayer(act3, period7);
-
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
-			shift.LayerCollection.Add(layer3);
-			shift.LayerCollection.Add(layer4);
+			var layer5 = new MainShiftLayer(act1, period1);
+			var layer6 = new MainShiftLayer(act2, period2);
+			var layer7 = new MainShiftLayer(act3, period8);
+			var layer8 = new MainShiftLayer(act5, period6);
+			var layer9 = new MainShiftLayer(act3, period7);
 
 			orderedListLayerList.Add(layer5);
 			orderedListLayerList.Add(layer6);
@@ -220,8 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			orderedListLayerList.Add(layer8);
 			orderedListLayerList.Add(layer9);
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> result = new List<IVisualLayer>(svc.CreateProjection());
+			var result = new[] { layer1, layer2, layer3, layer4 }.CreateProjection().ToList();
 
 			Assert.AreEqual(orderedListLayerList[0].Period, result[0].Period);
 			Assert.AreEqual(orderedListLayerList[1].Period, result[1].Period);
@@ -274,29 +239,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
-			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
-			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
+			var layer1 = new MainShiftLayer(act1, period1);
+			var layer2 = new MainShiftLayer(act2, period2);
+			var layer3 = new MainShiftLayer(act3, period3);
+			var layer4 = new MainShiftLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new MainShiftActivityLayer(act2, period4);
-			ActivityLayer layer6 = new MainShiftActivityLayer(act3, period5);
-			ActivityLayer layer7 = new MainShiftActivityLayer(act5, period6);
-			ActivityLayer layer8 = new MainShiftActivityLayer(act3, period7);
+			var layer5 = new MainShiftLayer(act2, period4);
+			var layer6 = new MainShiftLayer(act3, period5);
+			var layer7 = new MainShiftLayer(act5, period6);
+			var layer8 = new MainShiftLayer(act3, period7);
 
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
-			shift.LayerCollection.Add(layer3);
-			shift.LayerCollection.Add(layer4);
 
 			orderedListLayerList.Add(layer5);
 			orderedListLayerList.Add(layer6);
 			orderedListLayerList.Add(layer7);
 			orderedListLayerList.Add(layer8);
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> result = new List<IVisualLayer>(svc.CreateProjection());
+			var result = new[] { layer1, layer2, layer3, layer4 }.CreateProjection().ToList();
 
 			Assert.AreEqual(orderedListLayerList.Count, result.Count);
 
@@ -345,27 +305,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
-			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
-			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
+			var layer1 = new MainShiftLayer(act1, period1);
+			var layer2 = new MainShiftLayer(act2, period2);
+			var layer3 = new MainShiftLayer(act3, period3);
+			var layer4 = new MainShiftLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new MainShiftActivityLayer(act2, period4); //10-12 Rast
-			ActivityLayer layer6 = new MainShiftActivityLayer(act3, period5); //12-15:30 M�te
-			ActivityLayer layer7 = new MainShiftActivityLayer(act5, period6); //15:30-18 M�lsamtal
+			var layer5 = new MainShiftLayer(act2, period4); //10-12 Rast
+			var layer6 = new MainShiftLayer(act3, period5); //12-15:30 M�te
+			var layer7 = new MainShiftLayer(act5, period6); //15:30-18 M�lsamtal
 
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
-			shift.LayerCollection.Add(layer3);
-			shift.LayerCollection.Add(layer4);
 
 			orderedListLayerList.Add(layer5);
 			orderedListLayerList.Add(layer6);
 			orderedListLayerList.Add(layer7);
 
-			IProjectionService svc = shift.ProjectionService();
-			IList<IVisualLayer> resWrapper = new List<IVisualLayer>(svc.CreateProjection());
+			var resWrapper = new[] { layer1, layer2, layer3, layer4 }.CreateProjection().ToList();
 
 			Assert.AreEqual(orderedListLayerList[0].Period, resWrapper[0].Period);
 			Assert.AreEqual(orderedListLayerList[1].Period, resWrapper[1].Period);
@@ -395,20 +350,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 48, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 1, 16, 55, 0, DateTimeKind.Utc));
 
-			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
-			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
-
-			shift.LayerCollection.Add(layer1);
-			shift.LayerCollection.Add(layer2);
-			shift.LayerCollection.Add(layer3);
+			var layer1 = new MainShiftLayer(act1, period1);
+			var layer2 = new MainShiftLayer(act2, period2);
+			var layer3 = new MainShiftLayer(act3, period3);
 
 			DateTimePeriod period4 =
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 45, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-			IProjectionService projectionService = shift.ProjectionService();
-			projectionService.CreateProjection();
-			IList<IVisualLayer> payloads = new List<IVisualLayer>(projectionService.CreateProjection().FilterLayers(period4));
+			var proj = new[] { layer1, layer2, layer3 }.CreateProjection();
+
+			IList<IVisualLayer> payloads = new List<IVisualLayer>(proj.FilterLayers(period4));
 
 
 			Assert.AreEqual(3, payloads.Count);
@@ -444,13 +395,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 2, 00, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			MainShiftActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
-			MainShiftActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
 			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(act3, period3);
 
-			MainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("test"));
-			mainShift.LayerCollection.Add(layer1);
-			mainShift.LayerCollection.Add(layer2);
 
 			PersonalShift personShift = new PersonalShift();
 			personShift.LayerCollection.Add(layer3);
@@ -458,7 +404,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
 			personAss.AddPersonalShift(personShift);
-			personAss.SetMainShift(mainShift);
+			personAss.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(act1, period1), 
+					new MainShiftLayer(act2, period2)
+				}, new ShiftCategory("test"));
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
 			var day =
@@ -568,10 +518,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = date.AddHours(startHour);
 			DateTime end = date.AddHours(endHour);
 			return new DateTimePeriod(start, end);
-		}
-
-		private class fakeShift : MainShift
-		{
 		}
 	}
 }

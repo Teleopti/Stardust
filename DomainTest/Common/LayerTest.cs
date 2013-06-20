@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
-            Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
 
@@ -74,22 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-        [Test]
-        public void VerifyPayloadSetter()
-        {
-            DateTimePeriod per =
-                new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-            FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
-
-            ILayer castedLayer = actL;
-
-            IActivity act = new Activity("sdf");
-            castedLayer.Payload = act;
-            Assert.AreSame(act, castedLayer.Payload);
-        }
-
-
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
         /// </summary>
@@ -98,33 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void PayloadMustNotBeSetToNull()
         {
             new FakeLayerClass(null, new DateTimePeriod());
-        }
-
-        /// <summary>
-        /// Verifies the adjacent method.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-30
-        /// </remarks>
-        [Test]
-        public void VerifyAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            ILayer<IActivity> layer2001 = new ActivityLayer(fakeActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1));
-            ILayer<IActivity> layer2002 = new ActivityLayer(fakeActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-
-            Assert.IsTrue(layer2000.AdjacentTo(layer2001));
-            Assert.IsTrue(layer2002.AdjacentTo(layer2001));
-            Assert.IsFalse(layer2002.AdjacentTo(layer2000));
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyNotNullToAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            layer2000.AdjacentTo(null);
         }
 
         /// <summary>

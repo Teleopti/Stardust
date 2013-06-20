@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Editor
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
     /// </summary>
     public class EditLayerViewModel:DependencyObject,ILayerEditor
     {
-        private readonly ShowOnlyCollection<IPayload> _selectablePayloads = new ShowOnlyCollection<IPayload>();
+	    private readonly ShowOnlyCollection<IPayload> _selectablePayloads = new ShowOnlyCollection<IPayload>();
 
         public IList<IPayload> SelectablePayloads
         {
@@ -45,13 +47,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                  model.Period.Start = layer.Period.StartDateTime;
                  model.Period.End = layer.Period.EndDateTime;
                  layer.PropertyChanged += model.LayerPropertyChanged;
-                 model._selectablePayloads.SetFilter(layer.Layer.Payload.GetType());
+                 model._selectablePayloads.SetFilter(layer.Payload.GetType());
                  model.IsEnabled = true;
                 
                 //Pick the correct Payload if it exists in the collection:
-                if(CollectionViewSource.GetDefaultView(model.SelectablePayloads).Contains(layer.Layer.Payload)) 
+                if(CollectionViewSource.GetDefaultView(model.SelectablePayloads).Contains(layer.Payload)) 
                 {
-                    CollectionViewSource.GetDefaultView(model.SelectablePayloads).MoveCurrentTo(layer.Layer.Payload);
+                    CollectionViewSource.GetDefaultView(model.SelectablePayloads).MoveCurrentTo(layer.Payload);
                 }
             }
             else
@@ -82,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         public EditLayerViewModel()
         {
-            Period = new DateTimePeriodViewModel();
+	        Period = new DateTimePeriodViewModel();
             UpdateLayerCommand = CommandModelFactory.CreateCommandModel(UpdateLayer,UpdateLayerCanExecute, UserTexts.Resources.Update);
             ChangePayloadCommand = CommandModelFactory.CreateCommandModel(ChangePayload, ChangePayloadCanExecute, UserTexts.Resources.Update);
                                                                                
@@ -112,6 +114,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 			                	? (IPayload) CollectionViewSource.GetDefaultView(SelectablePayloads).CurrentItem
 			                	: Layer.Payload;
 
+		
+			Layer.UpdatePeriod();
+			
 			var handler = LayerUpdated;
 			if (handler != null)
 			{

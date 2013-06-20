@@ -447,12 +447,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-										Assert.AreEqual(ass1.MainShiftActivityLayers.First().Period,
-																		day1.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
-										Assert.AreEqual(ass2.MainShiftActivityLayers.First().Period,
-																		day2.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
-										Assert.AreEqual(ass3.MainShiftActivityLayers.First().Period,
-																		day2.PersonAssignmentConflictCollection[0].MainShiftActivityLayers.First().Period);
+										Assert.AreEqual(ass1.MainShiftLayers.First().Period,
+																		day1.PersonAssignmentCollection()[0].MainShiftLayers.First().Period);
+										Assert.AreEqual(ass2.MainShiftLayers.First().Period,
+																		day2.PersonAssignmentCollection()[0].MainShiftLayers.First().Period);
+										Assert.AreEqual(ass3.MainShiftLayers.First().Period,
+																		day2.PersonAssignmentConflictCollection[0].MainShiftLayers.First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
@@ -644,8 +644,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAssignment> res =
                     _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection();
                 Assert.AreEqual(2, res.Count);
-								Assert.AreEqual(pAssOk2.MainShiftActivityLayers.First().Period, res[0].MainShiftActivityLayers.First().Period);
-								Assert.AreEqual(pAssOk.MainShiftActivityLayers.First().Period, res[1].MainShiftActivityLayers.First().Period);
+								Assert.AreEqual(pAssOk2.MainShiftLayers.First().Period, res[0].MainShiftLayers.First().Period);
+								Assert.AreEqual(pAssOk.MainShiftLayers.First().Period, res[1].MainShiftLayers.First().Period);
             }
 			_mocks.VerifyAll();
 		}
@@ -714,16 +714,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setShiftCategoryJusticeValues(low, 1);
 			IShiftCategory high = ShiftCategoryFactory.CreateShiftCategory("High");
 			setShiftCategoryJusticeValues(high, 5);
-			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 2,
-																											  2000, 1, 3));
-			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 5,
-																											  2000, 1, 6));
-#pragma warning disable 612,618
-			ass1.ToMainShift().ShiftCategory = low;
-			ass2.ToMainShift().ShiftCategory = high;
-#pragma warning restore 612,618
+
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("d"), _person,
+			                                                                 new DateTimePeriod(2000, 1, 2, 2000, 1, 3), low,
+			                                                                 _scenario);
 
 			((ScheduleRange)dic1[_person]).Add(ass1);
 
@@ -742,24 +736,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IShiftCategory high = ShiftCategoryFactory.CreateShiftCategory("High");
 			setShiftCategoryJusticeValues(high, 5);
 			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 2,
-																											  2000, 1, 3));           
+																						   new DateTimePeriod(2000, 1, 2, 2000, 1, 3), low);           
 			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 5,
-																											  2000, 1, 6));
+																						   new DateTimePeriod(2000, 1, 5, 2000, 1, 6), high);
 			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
 																		  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-#pragma warning disable 612,618
-			var tmpShift = ass1.ToMainShift();
-#pragma warning restore 612,618
-			tmpShift.ShiftCategory = low;
-			ass1.SetMainShift(tmpShift);
-
-#pragma warning disable 612,618
-			tmpShift = ass2.ToMainShift();
-#pragma warning restore 612,618
-			tmpShift.ShiftCategory = high;
-			ass2.SetMainShift(tmpShift);
 
 			((ScheduleRange)dic1[_person]).Add(ass1);
 			Assert.AreEqual(1, dic1[_person].FairnessPoints().FairnessPoints);

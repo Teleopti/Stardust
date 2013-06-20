@@ -5,7 +5,7 @@
 	/// </summary>
 	public interface IEditableShift : IProjectionSource,
 																ICloneableEntity<IEditableShift>,
-																IProjectableLayerCollectionOwner<IActivity>
+																ILayerCollectionOwner<IActivity>
 	{
 		/// <summary>
 		/// Returns the shift category

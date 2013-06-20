@@ -7,7 +7,8 @@
     /// Created by: rogerkr
     /// Created date: 2009-02-05
     /// </remarks>
-	public interface IOvertimeShiftActivityLayer : IActivityLayer, IAggregateEntity  //, IPersistedLayer<IActivity>
+	public interface IOvertimeShiftActivityLayer : ILayer<IActivity>, IAggregateEntity  //, IPersistedLayer<IActivity>
     {
+		IMultiplicatorDefinitionSet DefinitionSet { get; }
     }
 }
