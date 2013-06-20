@@ -48,7 +48,7 @@ INNER JOIN Stage.stg_schedule_updated_personLocal dp
 				(stg.schedule_date	>= dp.valid_from_date_local)
 
 			AND
-				(stg.schedule_date < dp.valid_to_date_local)
+				(stg.schedule_date <= dp.valid_to_date_local)
 		)
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
