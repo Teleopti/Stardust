@@ -1116,14 +1116,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IActivity activity = ActivityFactory.CreateActivity("sdf");
                 IPersonAssignment pAss = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                         _parameters.Scenario);
-                pAss.AddPersonalShift(new PersonalShift());
-                pAss.PersonalShiftCollection[0].LayerCollection.Add(new PersonalShiftActivityLayer(activity,
-                                                                                                   _parameters.Period));
+                pAss.AddPersonalLayer(activity,_parameters.Period);
                 IPersonAssignment pAss2 = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                          _parameters.Scenario);
-                pAss2.AddPersonalShift(new PersonalShift());
-                pAss2.PersonalShiftCollection[0].LayerCollection.Add(new PersonalShiftActivityLayer(activity,
-                                                                                                    _parameters.Period));
+                pAss2.AddPersonalLayer(activity, _parameters.Period);
 
                 _target.Add(new PersonAbsence(_parameters.Person, _parameters.Scenario,
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));

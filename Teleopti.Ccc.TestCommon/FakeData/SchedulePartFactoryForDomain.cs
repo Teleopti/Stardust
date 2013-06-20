@@ -145,14 +145,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public SchedulePartFactoryForDomain AddPersonalLayer()
         {
-            _part.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod));
+            _part.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod);
             return this;
         }
 
 
 		public SchedulePartFactoryForDomain AddPersonalLayer(IScheduleDay scheduleDay)
 		{
-			scheduleDay.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod));
+			scheduleDay.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod);
 			return this;
 		}
 

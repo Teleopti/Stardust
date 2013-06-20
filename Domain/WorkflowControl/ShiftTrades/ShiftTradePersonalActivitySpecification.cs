@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -51,16 +52,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private static bool checkCover(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			foreach (var personalShift in personAssignment.PersonalShiftCollection)
-			{
-				var personalShiftPeriod = personalShift.LayerCollection.Period();
-				if (!personalShiftPeriod.HasValue) continue;
-
-				if (!period.Contains(personalShiftPeriod.Value))
-					return false;
-			}
-
-			return true;
+			return personAssignment.PersonalLayers.All(personalLayer => period.Contains(personalLayer.Period));
 		}
 	}
 }

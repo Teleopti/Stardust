@@ -31,18 +31,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layer in personalShift
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
-                    foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                    {
-                        if (shift.LayerCollection.Contains(layer))
-                        {
-                            shift.LayerCollection.Remove(layer);
-                            if (shift.LayerCollection.Count == 0)
-                            {
-                                assignment.RemovePersonalShift(shift);
-                            }
-                            return;
-                        }
-                    }
+	                foreach (var personalLayer in assignment.PersonalLayers)
+	                {
+		                if (layer.Equals(personalLayer))
+		                {
+			                assignment.RemoveLayer(personalLayer);
+			                return;
+		                }
+	                }
                 }
 
                 //Check for the layer in overtime

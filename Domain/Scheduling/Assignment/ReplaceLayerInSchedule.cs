@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						if (layer.Equals(layerToRemove))
 						{
+							//MICKE! DENNA FIXAR JAG/ROGER!
 							var indexOfLayer = layer.OrderIndex;
 							personalShift.LayerCollection.Remove(layer);
 							personalShift.LayerCollection.Insert(indexOfLayer, new PersonalShiftActivityLayer(newActivity, newPeriod));

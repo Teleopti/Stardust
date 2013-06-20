@@ -53,14 +53,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			DateTimePeriod? mergedPeriod = null;
-			//fix later 
 			foreach (var mainShiftActivityLayer in MainLayers)
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
 			}
-			foreach (IPersonalShift personalShift in _personalShiftCollection)
+			foreach (var personalLayer in PersonalLayers)
 			{
-				mergedPeriod = DateTimePeriod.MaximumPeriod(personalShift.LayerCollection.Period(), mergedPeriod);
+				mergedPeriod = DateTimePeriod.MaximumPeriod(personalLayer.Period, mergedPeriod);
 			}
 			foreach (IOvertimeShift overtimeShift in _overtimeShiftCollection)
 			{
@@ -188,6 +187,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual bool RemoveLayer(IMainShiftLayer layer)
 		{
 			return _mainLayers.Remove(layer);
+		}
+
+		public bool RemoveLayer(IPersonalShiftLayer layer)
+		{
+			return _personalLayers.Remove(layer);
 		}
 
 		#region Manipulate personalshifts

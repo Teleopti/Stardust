@@ -105,6 +105,7 @@ namespace Teleopti.Interfaces.Domain
 		void ScheduleChanged(string dataSource);
 
 	    bool RemoveLayer(IMainShiftLayer layer);
+	    bool RemoveLayer(IPersonalShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);
     }
 }

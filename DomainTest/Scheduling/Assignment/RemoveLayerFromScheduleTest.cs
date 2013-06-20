@@ -28,12 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddPersonalLayer().CreatePart();
            
-            ILayer<IActivity> firstPersonalLayer =
-								schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.First();
+            var firstPersonalLayer = schedulePart.AssignmentHighZOrder().PersonalLayers.First();
 
-						Assert.IsTrue(schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.Contains(firstPersonalLayer), "Verify contains the layer");
 						target.Remove(schedulePart, firstPersonalLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalShiftCollection.Count);
+						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalLayers.Count());
         }
 
         [Test]

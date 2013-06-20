@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanCreateAssignmentAndPropertiesAreSet()
 		{
-			Assert.AreEqual(0, target.PersonalShiftCollection.Count);
+			Assert.AreEqual(0, target.PersonalLayers.Count());
 			Assert.AreEqual(null, target.Id);
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);

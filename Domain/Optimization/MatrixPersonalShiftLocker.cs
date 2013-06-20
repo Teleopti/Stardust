@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 {
                     var personAssignment = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder();
 
-                    if (personAssignment != null && personAssignment.PersonalShiftCollection.Count > 0)
+                    if (personAssignment != null && personAssignment.PersonalLayers.Any())
                     {
                         matrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
                     }

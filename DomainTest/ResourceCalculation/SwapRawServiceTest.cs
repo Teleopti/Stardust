@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].PersonalShiftCollection.Count());
-				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignmentCollection()[0].PersonalShiftCollection.Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].PersonalLayers.Count());
+				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignmentCollection()[0].PersonalLayers.Count());
 				Assert.IsTrue(_scheduleDayOnePersonOne.SignificantPart() == SchedulePartView.PersonalShift);
 			}
 		}
