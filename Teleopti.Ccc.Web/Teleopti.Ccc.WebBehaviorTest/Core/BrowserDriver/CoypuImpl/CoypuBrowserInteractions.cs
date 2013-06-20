@@ -1,46 +1,10 @@
 using System;
 using System.Text.RegularExpressions;
 using Coypu;
-using Coypu.Queries;
 using NUnit.Framework;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
-
-	public class HasCssJQueryQuery : Query<bool>
-	{
-		private readonly BrowserSession browser;
-		private readonly string cssSelector;
-
-		public HasCssJQueryQuery(BrowserSession browser, string cssSelector, Options options)
-		{
-			this.browser = browser;
-			this.cssSelector = cssSelector;
-			this.Timeout = options.Timeout;
-			this.RetryInterval = options.RetryInterval;
-		}
-
-		public TimeSpan Timeout { get; set; }
-		public TimeSpan RetryInterval { get; set; }
-
-		public bool ExpectedResult { get { return true; } }
-
-		public bool Run()
-		{
-			try
-			{
-				this.browser.ExecuteScript(JQueryInteractions.JQuery(this.cssSelector, "return true"));
-				return true;
-			}
-			catch (MissingHtmlException ex)
-			{
-				return false;
-			}
-		}
-	}
-
-
-
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{
 		private readonly BrowserSession _browser;
@@ -103,8 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			_browser.Query(new HasCssJQueryQuery(_browser, selector, options()));
-			//Assert.That(_browser.HasCss(selector));
+			Assert.That(_browser.HasJQueryCss(selector, options()));
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
@@ -136,7 +99,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			Assert.That(_browser.ExecuteScript(javascript), Is.StringContaining(text));
+			var value = Javascript(javascript);
+			Assert.That(value, Is.StringContaining(text));
 		}
 
 		public void DumpInfo(Action<string> writer)

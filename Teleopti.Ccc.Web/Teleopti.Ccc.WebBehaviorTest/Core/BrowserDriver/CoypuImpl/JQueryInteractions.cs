@@ -12,30 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_javascript = javascript;
 		}
 
-
-		private static string MakeSelector(string selector)
-		{
-			if (selector.Contains("'"))
-			{
-				return string.Format(@"$(""{0}"")", selector);
-			}
-			return string.Format("$('{0}')", selector);
-		}
-
-		public static string JQuery(string selector, string jsOnFound)
-		{
-			var jq = MakeSelector(selector);
-			var error = string.Format("throw \"Cannot find element with selector '{0}' using jquery \";", selector);
-			return
-				"var jq = " + jq + ";" +
-				"if (jq.length > 0) {" +
-				jsOnFound +
-				"} else {" +
-				error +
-				"}"
-				;
-		}
-
 		public object Javascript(string javascript)
 		{
 			return _javascript.Javascript(javascript);
@@ -53,12 +29,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			Javascript(JQuery(selector, "jq.click();"));
+			Javascript(JQueryScript.WhenFoundOrThrow(selector, "{0}.click();"));
 		}
 
 		public void AssertExists(string selector)
 		{
-			Assert.That(Javascript(JQuery(selector, "return true;")), Is.EqualTo("true"));
+			Assert.That(Javascript(JQueryScript.WhenFoundOrThrow(selector, "return true;")), Is.EqualTo("true"));
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
