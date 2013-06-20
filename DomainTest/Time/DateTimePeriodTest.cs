@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -812,28 +813,6 @@ namespace Teleopti.Ccc.DomainTest.Time
 
         }
 
-        [Test]
-        public void VerifyMergedListWhenOneListIsEmpty()
-        {
-            _period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-            DateTimePeriod dtp2 = new DateTimePeriod(2000, 1, 3, 2000, 1, 4);
-            //DateTimePeriod dtp3 = new DateTimePeriod(2000, 1, 5, 2000, 1, 6);
-            //DateTimePeriod dtp4 = new DateTimePeriod(2000, 1, 7, 2000, 1, 8);
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
-
-            list1.Add(_period);
-            list1.Add(dtp2);
-
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
-            Assert.AreEqual(_period, ret[0]);
-            Assert.AreEqual(dtp2, ret[1]);
-
-            //Reverse parameters
-            ret = DateTimePeriod.MergeLists(list2, list1);
-            Assert.AreEqual(_period, ret[0]);
-            Assert.AreEqual(dtp2, ret[1]);
-        }
 
         [Test]
         public void VerifyMergedList1()
@@ -846,20 +825,18 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTimePeriod dtp5 = new DateTimePeriod(2001, 1, 1, 2006, 1, 1);
             DateTimePeriod dtp6 = new DateTimePeriod(2011, 1, 1, 2043, 1, 1);
             DateTimePeriod dtp7 = new DateTimePeriod(2069, 1, 1, 2070, 1, 1);
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
+            IList<DateTimePeriod> list = new List<DateTimePeriod>();
 
-            list1.Add(_period);
-            list1.Add(dtp2);
-            list2.Add(dtp3);
-            list2.Add(dtp4);
+            list.Add(_period);
+            list.Add(dtp2);
+            list.Add(dtp3);
+            list.Add(dtp4);
+            list.Add(dtp5);
+            list.Add(dtp6);
+            list.Add(dtp7);
 
-            list1.Add(dtp5);
-            list2.Add(dtp6);
-            list2.Add(dtp7);
-
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
-            Assert.AreEqual(3, ret.Count);
+	        DateTimePeriod.MergeLists(list).Count()
+	                      .Should().Be.EqualTo(3);
         }
 
         [Test]
@@ -869,15 +846,14 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTimePeriod dtp2 = new DateTimePeriod(2000, 1, 3, 2000, 1, 4);
             DateTimePeriod dtp3 = new DateTimePeriod(2000, 1, 5, 2000, 1, 6);
             DateTimePeriod dtp4 = new DateTimePeriod(2000, 1, 7, 2000, 1, 8);
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
+            IList<DateTimePeriod> list = new List<DateTimePeriod>();
 
-            list1.Add(_period);
-            list1.Add(dtp2);
-            list2.Add(dtp3);
-            list2.Add(dtp4);
+            list.Add(_period);
+            list.Add(dtp2);
+            list.Add(dtp3);
+            list.Add(dtp4);
 
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
+            var ret = new List<DateTimePeriod>(DateTimePeriod.MergeLists(list));
             Assert.AreEqual(4, ret.Count);
             Assert.AreEqual(_period, ret[0]);
             Assert.AreEqual(dtp2, ret[1]);
@@ -892,15 +868,14 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTimePeriod dtp2 = new DateTimePeriod(2000, 1, 3, 2000, 1, 4);
             DateTimePeriod dtp3 = new DateTimePeriod(2000, 1, 7, 2000, 1, 9);
             DateTimePeriod dtp4 = new DateTimePeriod(2000, 1, 8, 2000, 1, 10);
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
+            var list = new List<DateTimePeriod>();
 
-            list1.Add(_period);
-            list1.Add(dtp2);
-            list2.Add(dtp3);
-            list2.Add(dtp4);
+            list.Add(_period);
+            list.Add(dtp2);
+            list.Add(dtp3);
+            list.Add(dtp4);
 
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
+            var ret = DateTimePeriod.MergeLists(list).ToList();
             Assert.AreEqual(2, ret.Count);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret[0]);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 7, 2000, 1, 10), ret[1]);
@@ -913,17 +888,15 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTimePeriod dtp2 = new DateTimePeriod(2000, 1, 5, 2000, 1, 6);
             DateTimePeriod dtp3 = new DateTimePeriod(2000, 1, 6, 2000, 1, 7);
             DateTimePeriod dtp4 = new DateTimePeriod(2000, 1, 7, 2000, 1, 10);
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
+            IList<DateTimePeriod> list = new List<DateTimePeriod>();
 
-            list1.Add(_period);
-            list1.Add(dtp2);
-            list2.Add(dtp3);
-            list2.Add(dtp4);
+            list.Add(_period);
+            list.Add(dtp2);
+            list.Add(dtp3);
+            list.Add(dtp4);
 
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
-            Assert.AreEqual(1, ret.Count);
-            Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 10), ret[0]);
+            var ret = DateTimePeriod.MergeLists(list);
+            Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 10), ret.Single());
         }
 
         [Test]
@@ -932,15 +905,13 @@ namespace Teleopti.Ccc.DomainTest.Time
             _period = new DateTimePeriod(2000, 1, 1, 2000, 1, 5);
             DateTimePeriod dtp2 = new DateTimePeriod(2000, 1, 1, 2000, 1, 5);
 
-            IList<DateTimePeriod> list1 = new List<DateTimePeriod>();
-            IList<DateTimePeriod> list2 = new List<DateTimePeriod>();
+            IList<DateTimePeriod> list = new List<DateTimePeriod>();
 
-            list1.Add(_period);
-            list2.Add(dtp2);
+            list.Add(_period);
+            list.Add(dtp2);
 
-            IList<DateTimePeriod> ret = DateTimePeriod.MergeLists(list1, list2);
-            Assert.AreEqual(1, ret.Count);
-            Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret[0]);
+            var ret = DateTimePeriod.MergeLists(list);
+            Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret.Single());
         }
 
         [Test]

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTime startDateTime, IPerson person,IActivity activity )
         {
-            IList<DateTimePeriod> ret = new List<DateTimePeriod>();
+            IEnumerable<DateTimePeriod> ret = new List<DateTimePeriod>();
 
             IList<ISkill> agentSkills = SkillsOnPerson(startDateTime, person);
 
@@ -130,7 +130,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 }
                 if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkills[index], out skillStaffPeriodDictionary))
                 {
-                    ret = DateTimePeriod.MergeLists(ret, new ReadOnlyCollection<DateTimePeriod>(skillStaffPeriodDictionary.SkillOpenHoursCollection));
+	                var oldPlusNew = ret.Union(skillStaffPeriodDictionary.SkillOpenHoursCollection);
+                    ret = DateTimePeriod.MergeLists(oldPlusNew);
                 }   
             }
             return ret;
