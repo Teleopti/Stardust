@@ -245,13 +245,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService(Person);
 			if (HasProjection)
 			{
-				var validPeriods = new List<DateTimePeriod>();
 				proj.Add(MainShiftLayers, new VisualLayerFactory());
-				var mainshiftLayerPeriod = MainShiftLayers.Period();
-				if (mainshiftLayerPeriod.HasValue)
-				{
-					validPeriods.Add(mainshiftLayerPeriod.Value);				
-				}
+				var validPeriods = new List<DateTimePeriod>(MainShiftLayers.PeriodBlocks());
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();

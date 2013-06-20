@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -11,38 +12,57 @@ namespace Teleopti.Ccc.DomainTest.Common
 	public class LayersExtensionsPeriodTest
 	{
 		[Test]
-		public void ShouldReturnNullIfEmpty()
+		public void ShouldReturnEmptyIfEmpty()
 		{
 			new ILayer<IActivity>[0]
-				.Period().HasValue.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldReturnNullIfAllIsNull()
-		{
-			new ILayer<IActivity>[]{null, null}
-				.Period().HasValue.Should().Be.False();
+				.PeriodBlocks().Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldReturnValueIfOnlyOne()
 		{
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 3);
-			new [] {new MainShiftLayer(new Activity("sdf"), period)}
-				.Period().Value.Should().Be.EqualTo(period);
+			new[] { new MainShiftLayer(new Activity("sdf"), period) }.PeriodBlocks().Single()
+				.Should().Be.EqualTo(period);
 		}
 
 		[Test]
-		public void ShouldReturnMaximumPeriodAndIgnoreNull()
+		public void ShouldReturnPeriodBlocks()
 		{
 			new[]
 				{
-					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2000, 11, 11)),
-					null,
-					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2001, 1, 1)),
+					//block 4th-12th
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2000, 1, 11)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 6, 2000, 1, 12)),
+					//block 1th-3th
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 3)),
 					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))
-				}
-				.Period().Value.Should().Be.EqualTo(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+				}.PeriodBlocks()
+				.Should().Have.SameValuesAs(new DateTimePeriod(2000, 1, 4, 2000, 1, 12), new DateTimePeriod(2000, 1, 1, 2000, 1, 3));
+		}
+
+		[Test]
+		public void ShouldBeOneBlockOnly()
+		{
+			new[]
+				{
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 8, 2000, 1, 10)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 2, 2000, 1, 6)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 4, 2000, 1, 8))
+				}.PeriodBlocks()
+					.Should().Have.SameValuesAs(new DateTimePeriod(2000, 1, 1, 2000, 1, 10));
+		}
+
+		[Test]
+		public void ShouldCombineIntersectingLayers()
+		{
+			new[]
+				{
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
+					new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 2, 2000, 1, 3))
+				}.PeriodBlocks()
+				 .Should().Have.SameValuesAs(new DateTimePeriod(2000, 1, 1, 2000, 1, 3));
 		}
 	}
 }
