@@ -58,6 +58,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.IsFalse(_deleteOption.MainShift);
             Assert.IsFalse(_deleteOption.PersonalShift);
             Assert.IsTrue(_deleteOption.Default);
+
+            _deleteOption.OvertimeAvailability = true;
+            Assert.IsTrue(_deleteOption.OvertimeAvailability);
         }
+
+        
     }
 }

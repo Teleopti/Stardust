@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(_target.NoteCollection().Count, clone.NoteCollection().Count);
 			Assert.IsFalse(clone.FullAccess);
 			Assert.IsFalse(clone.IsFullyPublished);
+			Assert.AreEqual(_target.OvertimeAvailablityCollection().Count, clone.OvertimeAvailablityCollection().Count);
 		}
 
 		[Test]
@@ -863,6 +864,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.DeleteStudentAvailabilityRestriction();
 
 			Assert.IsTrue(((IList<IRestrictionBase>)source.RestrictionCollection()).Count == 0);
+		}
+
+		[Test]
+		public void VerifyDeleteOvertimeAvailability()
+		{
+			SetupForMergeTests();
+
+			var overtimeAvailabilityDay = new OvertimeAvailability(source.Person, new DateOnly(source.Period.StartDateTimeLocal(timeZoneInfo)), TimeSpan.FromHours(17), TimeSpan.FromHours(19));
+
+			source.Add(overtimeAvailabilityDay);
+
+			source.DeleteOvertimeAvailability();
+
+			Assert.IsTrue(source.OvertimeAvailablityCollection().Count == 0);
 		}
 
 		[Test]
