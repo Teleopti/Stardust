@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.OnlineReporting.Model
+namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 {
     public class ScheduledTimePerActivityModel : IReportData
     {
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.OnlineReporting.Model
         {
             var list = new List<IReportData>();
 
-            IVirtualSchedulePeriod virtualSchedulePeriod = schedulePart.Person.VirtualSchedulePeriod(schedulePart.DateOnlyAsPeriod.DateOnly);
-            if (!virtualSchedulePeriod.IsValid)
-                return list;
+			//IVirtualSchedulePeriod virtualSchedulePeriod = schedulePart.Person.VirtualSchedulePeriod(schedulePart.DateOnlyAsPeriod.DateOnly);
+			//if (!virtualSchedulePeriod.IsValid)
+			//	return list;
 
             var visualLayerCollection = schedulePart.ProjectionService().CreateProjection();
             foreach (IVisualLayer layer in visualLayerCollection)
@@ -64,23 +64,23 @@ namespace Teleopti.Ccc.OnlineReporting.Model
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public static IList<IReportData> GetDummyData()
-        {
-            var list = new List<IReportData>();
-            list.Add(new ScheduledTimePerActivityModel{ActivityName = "Aktivitet 1", ScheduledTime = 2000,ScheduledDate = new DateTime(2010,2,2)});
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 3000, ScheduledDate = new DateTime(2010, 2, 2) });
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 3", ScheduledTime = 3500, ScheduledDate = new DateTime(2010, 2, 2) });
+		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+		//public static IList<IReportData> GetDummyData()
+		//{
+		//	var list = new List<IReportData>();
+		//	list.Add(new ScheduledTimePerActivityModel{ActivityName = "Aktivitet 1", ScheduledTime = 2000,ScheduledDate = new DateTime(2010,2,2)});
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 3000, ScheduledDate = new DateTime(2010, 2, 2) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 3", ScheduledTime = 3500, ScheduledDate = new DateTime(2010, 2, 2) });
 
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 1", ScheduledTime = 1000, ScheduledDate = new DateTime(2010, 2, 3) });
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 2500, ScheduledDate = new DateTime(2010, 2, 3) });
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 4", ScheduledTime = 3500, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 1", ScheduledTime = 1000, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 2500, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 4", ScheduledTime = 3500, ScheduledDate = new DateTime(2010, 2, 3) });
 
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 1", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
-            list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 4", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 1", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 2", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
+		//	list.Add(new ScheduledTimePerActivityModel { ActivityName = "Aktivitet 4", ScheduledTime = 500, ScheduledDate = new DateTime(2010, 2, 3) });
 
-            return list;
-        }
+		//	return list;
+		//}
     }
 }
