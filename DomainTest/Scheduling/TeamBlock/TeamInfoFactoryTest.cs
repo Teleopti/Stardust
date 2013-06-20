@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(groupPerson);
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnlyPeriod(2013, 2, 26, 2013, 2, 27))).Return(groupPerson);
 				Expect.Call(groupPerson.GroupMembers)
 					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _baseLineData.Person1 })).Repeat.Twice();
 
