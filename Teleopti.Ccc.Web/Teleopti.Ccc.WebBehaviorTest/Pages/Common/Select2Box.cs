@@ -72,5 +72,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
 			AssertSelectedOptionValue(select2Id, optionValue);
 		}
+
+		public static void SelectFirstOption(string select2Id)
+		{
+			Browser.Interactions.Javascript("$('.select2-result-selectable div').trigger('mouseup');");
+		}
 	}
 }

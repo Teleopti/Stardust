@@ -39,6 +39,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Select2Box.SelectItemByText("Team-Picker", optionText);
 		}
 
+		[When(@"I select something in the team picker")]
+		public void WhenISelectSomethingInTheTeamPicker()
+		{
+			IOpenTheTeamPicker();
+
+			Select2Box.SelectFirstOption("Team-Picker");
+		}
+
+
 
 		[Then(@"I should see the team schedule tab")]
 		public void ThenIShouldSeeTheTeamScheduleTab()
