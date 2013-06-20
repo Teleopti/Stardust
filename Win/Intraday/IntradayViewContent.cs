@@ -26,6 +26,7 @@ using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
+using Teleopti.Ccc.WpfControls.Common.Interop;
 using Teleopti.Ccc.WpfControls.Controls.Intraday;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private ISchedulerStateHolder _schedulerStateHolder;
         private bool _userWantsToCloseIntraday;
+	    private MultipleHostControl shiftEditorHost;
 
         public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
             IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
@@ -104,11 +106,8 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             if (Disposing || IsDisposed) return;
             DrawSkillGrid(true);
-            if (dataSourceExceptionOccurred(e))
-            {
-                _owner.FinishProgress();
-                return;
-            }
+	        if (dataSourceExceptionOccurred(e))
+		        _owner.FinishProgress();
         }
 
         private void _backgroundWorkerResources_DoWork(object sender, DoWorkEventArgs e)
@@ -140,9 +139,11 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void IntradayViewContent_Load(object sender, EventArgs e)
         {
+			shiftEditorHost = new MultipleHostControl();
 			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false) { MinHeight = 80 };
+			shiftEditorHost.AddItem("", wpfShiftEditor1);
             pinnedLayerView = new PinnedLayerView();
-            elementHostShiftEditor.Child = wpfShiftEditor1;
+			elementHostShiftEditor.Child = shiftEditorHost;
             elementHostPinnedLayerView.Child = pinnedLayerView;
 
             _settingManager.Initialize(dockingManager1);
@@ -540,6 +541,7 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             _lastSchedulePartInEditor = e.SchedulePart;
             UpdateShiftEditor(new List<IScheduleDay> { e.SchedulePart });
+			shiftEditorHost.UpdateItems();
         }
 
         private void Schedules_PartModified(object sender, ModifyEventArgs e)

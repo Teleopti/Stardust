@@ -74,11 +74,8 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
                 <Setter Property="Background" Value="{Binding Path=Color, Converter={StaticResource colorConverter}}"/>
-            </DataTrigger>
-			<Trigger Property="IsSelected" Value="True">
-				<Setter Property="Background" Value="{StaticResource RaptorDarkGridSelectionGradientBrush}"/>
-			</Trigger>
-            <!--<Trigger Property="IsMouseOver" Value="True">
+			</DataTrigger>
+			<!--<Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
                 <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>-->
