@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retObj = (MainShiftLayer)MemberwiseClone();
 			retObj.SetId(null);
+			retObj.SetParent(null);
 			return retObj;
 		}
 
