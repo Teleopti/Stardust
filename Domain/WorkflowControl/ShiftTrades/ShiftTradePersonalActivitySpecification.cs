@@ -53,8 +53,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			foreach (var personalShift in personAssignment.PersonalShiftCollection)
 			{
-				if (!personalShift.HasProjection) continue;
-
 				var personalShiftPeriod = personalShift.LayerCollection.Period();
 				if (!personalShiftPeriod.HasValue) continue;
 

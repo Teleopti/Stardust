@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                     break;
                 case SchedulePartView.PersonalShift:
-                    IVisualLayer layer = (from personAssignment in schedulePart.PersonAssignmentCollection()
+                    var layer = (from personAssignment in schedulePart.PersonAssignmentCollection()
                                           from personalShift in personAssignment.PersonalShiftCollection
-                                          from l in personalShift.ProjectionService().CreateProjection()
+                                          from l in personalShift.LayerCollection
                                           select l).FirstOrDefault();
                     if (layer != null)
                     {

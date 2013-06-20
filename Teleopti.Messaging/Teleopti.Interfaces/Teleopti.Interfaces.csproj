@@ -705,9 +705,6 @@
     </Compile>
     <Compile Include="Domain\ISchedulePeriod.cs" />
     <Compile Include="Domain\IServiceLevel.cs" />
-    <Compile Include="Domain\IShift.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IShiftCategory.cs" />
     <Compile Include="Domain\ISite.cs" />
     <Compile Include="Domain\ISkill.cs" />
