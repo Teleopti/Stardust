@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkills[index], out skillStaffPeriodDictionary))
                 {
 	                var oldPlusNew = ret.Union(skillStaffPeriodDictionary.SkillOpenHoursCollection);
-                    ret = DateTimePeriod.MergeLists(oldPlusNew);
+                    ret = DateTimePeriod.MergePeriods(oldPlusNew);
                 }   
             }
             return ret;

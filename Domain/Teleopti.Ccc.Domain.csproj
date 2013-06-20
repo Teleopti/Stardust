@@ -211,7 +211,6 @@
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
-    <Compile Include="Common\SortStartDate.cs" />
     <Compile Include="Common\SpecificDataSource.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />

@@ -835,9 +835,16 @@ namespace Teleopti.Ccc.DomainTest.Time
             list.Add(dtp6);
             list.Add(dtp7);
 
-	        DateTimePeriod.MergeLists(list).Count()
+	        DateTimePeriod.MergePeriods(list).Count()
 	                      .Should().Be.EqualTo(3);
         }
+
+			[Test]
+			public void ShouldCreateEmptyListWhenMergingEmpty()
+			{
+				DateTimePeriod.MergePeriods(Enumerable.Empty<DateTimePeriod>())
+				              .Should().Be.Empty();
+			}
 
         [Test]
         public void VerifyMergedListNoIntersect()
@@ -853,7 +860,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             list.Add(dtp3);
             list.Add(dtp4);
 
-            var ret = new List<DateTimePeriod>(DateTimePeriod.MergeLists(list));
+            var ret = new List<DateTimePeriod>(DateTimePeriod.MergePeriods(list));
             Assert.AreEqual(4, ret.Count);
             Assert.AreEqual(_period, ret[0]);
             Assert.AreEqual(dtp2, ret[1]);
@@ -875,7 +882,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             list.Add(dtp3);
             list.Add(dtp4);
 
-            var ret = DateTimePeriod.MergeLists(list).ToList();
+            var ret = DateTimePeriod.MergePeriods(list).ToList();
             Assert.AreEqual(2, ret.Count);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret[0]);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 7, 2000, 1, 10), ret[1]);
@@ -895,7 +902,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             list.Add(dtp3);
             list.Add(dtp4);
 
-            var ret = DateTimePeriod.MergeLists(list);
+            var ret = DateTimePeriod.MergePeriods(list);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 10), ret.Single());
         }
 
@@ -910,7 +917,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             list.Add(_period);
             list.Add(dtp2);
 
-            var ret = DateTimePeriod.MergeLists(list);
+            var ret = DateTimePeriod.MergePeriods(list);
             Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 5), ret.Single());
         }
 

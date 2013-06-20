@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -716,8 +717,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke, algorithm by Tamas
         /// Created date: 2009-01-26
         /// </remarks>
-        public static IEnumerable<DateTimePeriod> MergeLists(IEnumerable<DateTimePeriod> periods)
+        public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
+	        if (!periods.Any())
+		        return Enumerable.Empty<DateTimePeriod>();
             var ret = new List<DateTimePeriod>();
 
             List<DateTime> startTimes = new List<DateTime>();
