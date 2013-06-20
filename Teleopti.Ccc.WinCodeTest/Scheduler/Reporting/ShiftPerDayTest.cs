@@ -75,16 +75,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 						IPersonAssignment ass = new PersonAssignment(_person1, _scenario, new DateOnly(2009, 2, 2));
 	        var layers = new[]
 		        {
-			        new MainShiftActivityLayerNew(mainActivity,
+			        new MainShiftLayer(mainActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 17, 0, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(lunchActivity,
+			        new MainShiftLayer(lunchActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(breakActivity,
+			        new MainShiftLayer(breakActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 9, 30, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 9, 45, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(breakActivity,
+			        new MainShiftLayer(breakActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 15, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 15, 15, 0, DateTimeKind.Utc)))
 		        };
@@ -95,19 +95,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 						IPersonAssignment ass2 = new PersonAssignment(_person2, _scenario, new DateOnly(2009, 2, 2));
 	        layers = new[]
 		        {
-			        new MainShiftActivityLayerNew(mainActivity,
+			        new MainShiftLayer(mainActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 7, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 18, 0, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(lunchActivity,
+			        new MainShiftLayer(lunchActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 10, 30, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(breakActivity,
+			        new MainShiftLayer(breakActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 9, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 9, 15, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(breakActivity,
+			        new MainShiftLayer(breakActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 14, 15, 0, DateTimeKind.Utc))),
-			        new MainShiftActivityLayerNew(breakActivity,
+			        new MainShiftLayer(breakActivity,
 			                                   new DateTimePeriod(new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc),
 			                                                      new DateTime(2009, 2, 2, 17, 30, 0, DateTimeKind.Utc)))
 		        };

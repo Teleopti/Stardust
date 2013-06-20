@@ -4,15 +4,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class MainShiftActivityLayerNew : AggregateEntity, IMainShiftActivityLayerNew
+	public class MainShiftLayer : AggregateEntity, IMainShiftLayer
 	{
-		public MainShiftActivityLayerNew(IActivity activity, DateTimePeriod period)
+		public MainShiftLayer(IActivity activity, DateTimePeriod period)
 		{
 			InParameter.EnsureNoSecondsInPeriod(period);
 			Payload = activity;
 			Period = period;
 		}
-		protected MainShiftActivityLayerNew()
+		protected MainShiftLayer()
 		{
 		}
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var ass = Parent as IPersonAssignment;
 				if (ass == null)
 					return -1;
-				return ass.MainShiftActivityLayers.ToList().IndexOf(this);
+				return ass.MainShiftLayers.ToList().IndexOf(this);
 			}
 		}
 
@@ -35,16 +35,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return NoneEntityClone();
 		}
 
-		public virtual IMainShiftActivityLayerNew NoneEntityClone()
+		public virtual ILayer<IActivity> NoneEntityClone()
 		{
-			var retObj = (MainShiftActivityLayerNew)MemberwiseClone();
+			var retObj = (MainShiftLayer)MemberwiseClone();
 			retObj.SetId(null);
 			return retObj;
 		}
 
-		public virtual IMainShiftActivityLayerNew EntityClone()
+		public virtual ILayer<IActivity> EntityClone()
 		{
-			return (MainShiftActivityLayerNew)MemberwiseClone();
+			return (MainShiftLayer)MemberwiseClone();
 		}
 	}
 }

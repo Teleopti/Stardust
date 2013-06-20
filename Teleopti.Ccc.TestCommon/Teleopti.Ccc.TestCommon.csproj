@@ -106,7 +106,6 @@
     <Compile Include="FakeData\GroupingAbsenceFactory.cs" />
     <Compile Include="FakeData\GroupingActivityFactory.cs" />
     <Compile Include="FakeData\LicenseDataFactory.cs" />
-    <Compile Include="FakeData\MainShiftFactory.cs" />
     <Compile Include="FakeData\MultiplicatorDefinitionSetFactory.cs" />
     <Compile Include="FakeData\MultiplicatorFactory.cs" />
     <Compile Include="FakeData\OvertimeShiftFactory.cs" />

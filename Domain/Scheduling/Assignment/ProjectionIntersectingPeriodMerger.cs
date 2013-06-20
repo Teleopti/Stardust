@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfPrevious = i - 1;
 				var currLayer = clonedUnmergedCollection[i];
 				var prevLayer = clonedUnmergedCollection[indexOfPrevious];
-				if (currLayer.AdjacentTo(prevLayer))
+				if (currLayer.Period.AdjacentTo(prevLayer.Period))
 				{
 					clonedUnmergedCollection.Remove(currLayer);
 					clonedUnmergedCollection.Remove(prevLayer);

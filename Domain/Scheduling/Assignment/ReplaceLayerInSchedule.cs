@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
@@ -10,25 +11,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 
 		//this can be done MUCH simpler when we have one list of layers and no shifts....
+		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
 			foreach (var ass in scheduleDay.PersonAssignmentCollection())
 			{
-#pragma warning disable 612,618
-				var ms = ass.ToMainShift();
-#pragma warning restore 612,618
-				if (ms != null)
+				foreach (var layer in ass.MainShiftLayers)
 				{
-					foreach (var layer in ms.LayerCollection)
+					if (layer.Equals(layerToRemove))
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							ms.LayerCollection.Remove(layer);
-							ms.LayerCollection.Insert(indexOfLayer, new MainShiftActivityLayer(newActivity, newPeriod));
-							ass.SetMainShift(ms);
-							return;
-						}
+						var indexOfLayer = layer.OrderIndex;
+						var newLayers = new List<IMainShiftLayer>(ass.MainShiftLayers);
+						newLayers.Remove(layer);
+						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
+						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
+						return;
 					}
 				}
 
@@ -72,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					//behövs nån form av orderindex på personabsence kommas ihåg?
 					scheduleDay.Remove(personAbsence);
 					scheduleDay.Add(new PersonAbsence(personAbsence.Person, personAbsence.Scenario,
-					                                  new AbsenceLayer(newAbsence, newPeriod)));
+																						new AbsenceLayer(newAbsence, newPeriod)));
 					return;
 				}
 			}

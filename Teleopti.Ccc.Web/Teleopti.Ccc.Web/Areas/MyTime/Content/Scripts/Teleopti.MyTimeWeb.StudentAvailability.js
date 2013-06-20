@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
@@ -21,11 +21,45 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var dayViewModels = {};
 	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
+    var vm = null;
+
+    var selectionViewModel = function() {
+        var self = this;
+        
+        self.minDate = ko.observable(moment());
+        self.maxDate = ko.observable(moment());
+
+        self.displayDate = ko.observable();
+        self.nextPeriodDate = ko.observable(moment());
+        self.previousPeriodDate = ko.observable(moment());
+
+        self.selectedDate = ko.observable(moment().startOf('day'));
+
+        self.setCurrentDate = function (date) {
+            self.selectedDate(date);
+            self.selectedDate.subscribe(function (d) {
+                Teleopti.MyTimeWeb.Portal.NavigateTo("Availability/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+            });
+        };
+
+        self.nextPeriod = function () {
+            self.selectedDate(self.nextPeriodDate());
+        };
+
+        self.previousPeriod = function () {
+            self.selectedDate(self.previousPeriodDate());
+        };
+    };
 
 	function _initPeriodSelection() {
-		var rangeSelectorId = '#AvailabilityDateRangeSelector';
-		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
-		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
+	    var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
+	    vm = new selectionViewModel();
+	    vm.displayDate(periodData.Display);
+	    vm.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
+	    vm.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
+	    vm.setCurrentDate(moment(periodData.Date));
+	    
+	    ko.applyBindings(vm, $('div.navbar')[1]);
 	}
     
 	function _ajaxForDate(model, options) {
@@ -119,62 +153,54 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 		editFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel();
 
+		editButton.click(function (e) { e.preventDefault(); });
 		studentAvailabilityToolTip = $('<div/>')
-			.qtip({
-				id: "edit-student-availability",
-				content: {
-					text: template,
-					title: {
-						text: '&nbsp;',
-						button: 'Close'
-					}
-				},
-				position: {
-					target: editButton,
-					my: "left top",
-					at: "left bottom",
-					adjust: {
-						x: 11,
-						y: 0
-					}
-				},
-				show: {
-					target: editButton,
-					event: 'click'
-				},
-				hide: {
-					target: editButton,
-					event: 'click'
-				},
-				style: {
-					def: false,
-					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-					tip: {
-						corner: "top left"
-					}
-				},
-				events: {
-					render: function () {
-						$('#Student-availability-reset')
-							.button()
-							.click(function () {
-								editFormViewModel.reset();
-							});
-						$('#Student-availability-apply')
-							.button()
-							.click(function () {
-								_setStudentAvailability(ko.toJS(editFormViewModel));
-							});
-						ko.applyBindings(editFormViewModel, template[0]);
-					}
-				}
-			});
+	        .qtip({
+	            id: "edit-student-availability",
+	            content: {
+	                text: template,
+	                title: {
+	                    text: '&nbsp;',
+	                    button: 'Close'
+	                }
+	            },
+	            position: {
+	                target: editButton,
+	                my: "left top",
+	                at: "left bottom",
+	                adjust: {
+	                    x: 11,
+	                    y: 0
+	                }
+	            },
+	            show: {
+	                target: editButton,
+	                event: 'mousedown'
+	            },
+	            hide: {
+	                target: editButton,
+	                event: 'mousedown'
+	            },
+	            style: {
+	                def: false,
+	                classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+	                tip: {
+	                    corner: "top left"
+	                }
+	            },
+	            events: {
+	                render: function() {
+	                    ko.applyBindings(editFormViewModel, template[0]);
+	                }
+	            }
+	        });
 		editButton.removeAttr('disabled');
 
 		var deleteButton = $('#Availability-delete-button');
 		deleteButton.removeAttr('disabled');
-		deleteButton.click(function () {
-			_deleteStudentAvailability();
+		deleteButton.click(function (e) {
+		    e.preventDefault();
+		    _deleteStudentAvailability();
 		});
 	}
 
@@ -228,7 +254,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	return {
 		Init: function () {
-			_initToolbarButtons();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
 				'Availability/Index',
 				Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityPartialInit,
@@ -239,6 +264,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			if (!$('#StudentAvailability-body').length) {
 				return;
 			}
+			_initToolbarButtons();
 			_initPeriodSelection();
 			_initViewModels();
 			_activateSelectable();
@@ -246,7 +272,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		StudentAvailabilityPartialDispose: function () {
 			studentAvailabilityToolTip.qtip('toggle', false);
 			ajax.AbortAll();
-		    _cleanBindings();
+			_cleanBindings();
+		},
+		SetStudentAvailability: function(studentAvailabilityViewModel) {
+		    _setStudentAvailability(ko.toJS(studentAvailabilityViewModel));
 		}
 	};
 

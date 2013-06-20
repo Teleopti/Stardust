@@ -1,17 +1,15 @@
 ﻿
 $(document).ready(function () {
 
-	module("Teleopti.MyTimeWeb.Preference must have view model");
-
+	module("Teleopti.MyTimeWeb.Preference selection view model");
 
 	test("should summarize must have", function () {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
-		var mustHaveViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel();
-	    mustHaveViewModel.SetData([viewModelDay1, viewModelDay2], 5);
+		var mustHaveViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel([viewModelDay1, viewModelDay2], 5);
 		viewModelDay1.MustHave(true);
 		viewModelDay2.MustHave(true);
-		expect(1);
-		equal(mustHaveViewModel.MustHaveText(), '2(5)');
+	    equal(mustHaveViewModel.maxMustHave(), 5);
+	    equal(mustHaveViewModel.currentMustHaves(), 2);
 	});
 });

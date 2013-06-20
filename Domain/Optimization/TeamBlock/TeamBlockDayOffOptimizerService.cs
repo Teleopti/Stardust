@@ -94,7 +94,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+				if (teamInfo != null)
+					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 
 			// find a random selected TeamInfo/matrix
@@ -256,6 +258,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                                                                                             .BlockFinderTypeForAdvanceScheduling, 
 																							singleAgentTeam,
 																							allPersonMatrixList);
+				if (teamBlockInfo == null) continue;
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 

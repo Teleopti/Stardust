@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			Assert.Throws<ArgumentException>(() =>
-			       target.Replace(scheduleDay, new MainShiftActivityLayer(new Activity("d"), new DateTimePeriod()), new Activity("d"), new DateTimePeriod()));
+			       target.Replace(scheduleDay, new MainShiftLayer(new Activity("d"), new DateTimePeriod()), new Activity("d"), new DateTimePeriod()));
 		}
 
 		[Test]
@@ -54,17 +54,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-#pragma warning disable 612,618
-			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().ToMainShift().LayerCollection;
+			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().MainShiftLayers;
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.AssignmentHighZOrder().ToMainShift().LayerCollection;
-			orgLayerCollection.Count.Should().Be.EqualTo(newLayerCollection.Count);
+			var newLayerCollection = scheduleDay.AssignmentHighZOrder().MainShiftLayers;
+			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.First();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
 			newLayer.Period.Should().Be.EqualTo(newPeriod);
-#pragma warning restore 612,618
 		}
 
 		[Test]

@@ -5,8 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
@@ -244,6 +244,33 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void Teardown()
 		{
 			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldMoveUpAndDown()
+		{
+			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+			var layer = new PersonalShiftActivityLayer(activity, period);
+			var personalShift1 = PersonalShiftFactory.CreatePersonalShift(activity, period);
+			var personalShift2 = PersonalShiftFactory.CreatePersonalShift(activity, period);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+			personAssignment.AddPersonalShift(personalShift1);
+			personAssignment.AddPersonalShift(personalShift2);
+
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
+
+			_target = new PersonalShiftLayerViewModel(null, layer, personalShift2, null);
+			_target.MoveUp();
+			
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 1);
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 0);
+
+			_target.MoveDown();
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
+			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
 		}
     }
 }

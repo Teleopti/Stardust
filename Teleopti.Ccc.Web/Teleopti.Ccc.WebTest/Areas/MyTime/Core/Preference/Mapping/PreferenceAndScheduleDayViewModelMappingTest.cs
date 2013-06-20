@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -29,12 +30,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IProjectionProvider _projectionProvider;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
+		private IPreferenceOptionsProvider _preferenceOptionsProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
 			_timeZone = TimeZoneInfo.Local;
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 			Mapper.Reset();
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				{
 					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
-					c.AddProfile(new PreferenceViewModelMappingProfile());
+					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), ()=>_preferenceOptionsProvider));
 					c.AddProfile(new CommonViewModelMappingProfile());
 				});
 		}
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
 			personAssignment.SetMainShiftLayers(
-				new[] {new MainShiftActivityLayerNew(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))},
+				new[] {new MainShiftLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2))},
 				new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 

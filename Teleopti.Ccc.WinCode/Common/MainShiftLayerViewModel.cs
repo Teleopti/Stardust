@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -9,14 +10,21 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
+	    private readonly IMainShiftLayer _layer;
+	    private readonly IPersonAssignment _assignment;
+	    private readonly IMoveLayerVertical _moveLayer;
+
 	    public MainShiftLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IShift parent, IEventAggregator eventAggregator)
-            : base(observer,layer, parent, eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
+				: base(observer, layer, assignment, eventAggregator, moveLayer)
         {
+	        _layer = layer;
+	        _assignment = assignment;
+	        _moveLayer = moveLayer;
         }
 
 
@@ -39,18 +47,21 @@ namespace Teleopti.Ccc.WinCode.Common
             return true;
         }
 
-		protected override void DeleteLayer()
-		{
-			if (ParentObservingCollection != null)
-			{
-				ParentObservingCollection.RemoveActivity(this,Layer as ILayer<IActivity>,SchedulePart);
-				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
-			}
-		}
+	    public override bool CanMoveUp
+	    {
+				get { return _moveLayer!=null && _layer.OrderIndex > 0; }
+	    }
+
+	    public override bool CanMoveDown
+	    {
+				get { return _moveLayer!=null && !_assignment.MainShiftLayers.Last().Equals(_layer); }
+	    }
+
 
 		protected override void Replace()
 		{
 			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
 		}
+
     }
 }

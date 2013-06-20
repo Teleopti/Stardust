@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -8,19 +9,55 @@ namespace Teleopti.Ccc.WinCode.Common
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
 	    private readonly IOvertimeShiftActivityLayer _layer;
-        public OvertimeLayerViewModel(IVisualLayer layer)
+	    private readonly IPersonAssignment _assignment;
+	    private readonly IMoveLayerVertical _moveLayerVertical;
+	    private IOvertimeShift _overtimeShift;
+
+	    public OvertimeLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IEventAggregator eventAggregator)
-            : base(observer, layer, null, eventAggregator)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
+            : base(observer, layer, assignment, eventAggregator, moveLayerVertical)
         {
 	        _layer = layer;
+	        _assignment = assignment;
+	        _moveLayerVertical = moveLayerVertical;
+
+	        tempFindShift();
         }
 
-        public override bool Opaque
+			private void tempFindShift()
+			{
+				//just a hack for now
+				if (_assignment == null)
+					return;
+				foreach (var overtimeShift in _assignment.OvertimeShiftCollection)
+				{
+					foreach (var layer in overtimeShift.LayerCollection)
+					{
+						if (layer.Equals(_layer))
+						{
+							_overtimeShift = overtimeShift;
+							return;
+						}
+					}
+				}
+			}
+
+	    public override bool CanMoveUp
+	    {
+				get { return _moveLayerVertical != null && _layer.OrderIndex > 0; }
+	    }
+
+	    public override bool CanMoveDown
+	    {
+				get { return _moveLayerVertical != null && _overtimeShift.LayerCollection.CanMoveDownLayer(_layer); }
+	    }
+
+	    public override bool Opaque
         {
             get{ return true; }
         }

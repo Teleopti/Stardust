@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	      {
 		      var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
-            //Get the first layer in the mainshift..
-#pragma warning disable 612,618
-						var mainShift = schedulePart.AssignmentHighZOrder().ToMainShift();
-#pragma warning restore 612,618
-            ILayer<IActivity> firstLayer = mainShift.LayerCollection.First();
-            Assert.IsTrue(mainShift.LayerCollection.Contains(firstLayer),"Verify contains the layer");
+		      var ass = schedulePart.AssignmentHighZOrder();
+
+            var firstLayer = ass.MainShiftLayers.Single();
+            Assert.IsTrue(ass.MainShiftLayers.Contains(firstLayer),"Verify contains the layer");
 						target.Remove(schedulePart, firstLayer);
 						Assert.AreEqual(0, schedulePart.PersonAssignmentCollection().Count);
         }

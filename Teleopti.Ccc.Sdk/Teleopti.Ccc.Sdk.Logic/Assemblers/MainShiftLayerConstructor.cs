@@ -3,11 +3,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class MainShiftLayerConstructor : ILayerConstructor<IMainShiftActivityLayer>
+    public class MainShiftLayerConstructor : ILayerConstructor<IMainShiftLayer>
     {
-        public IMainShiftActivityLayer CreateLayer(IActivity activity, DateTimePeriod period)
+        public IMainShiftLayer CreateLayer(IActivity activity, DateTimePeriod period)
         {
-            return new MainShiftActivityLayer(activity,period);
+	        return new MainShiftLayer(activity, period);
         }
     }
 }

@@ -8,17 +8,15 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
-	class AbsenceRequestFormMappingTest
+	public class AbsenceRequestFormMappingTest
 	{
 		private ILoggedOnUser _loggedOnUser;
 		private Person _person;

@@ -211,7 +211,6 @@
     <Compile Include="Core\Requests\RespondToShiftTradeTest.cs" />
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
-    <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Core\Settings\PersonPersisterTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />

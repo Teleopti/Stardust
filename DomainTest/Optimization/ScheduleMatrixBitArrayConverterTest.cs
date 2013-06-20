@@ -158,9 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void mockExpectations()
         {
-            var earlyShift = _mocks.StrictMock<IMainShift>();
             _early = ShiftCategoryFactory.CreateShiftCategory("XX");
-            var lateShift = _mocks.StrictMock<IMainShift>();
             IShiftCategory late = ShiftCategoryFactory.CreateShiftCategory("YY");
             var earlyAssignment = _mocks.StrictMock<IPersonAssignment>();
             var lateAssignment = _mocks.StrictMock<IPersonAssignment>();
