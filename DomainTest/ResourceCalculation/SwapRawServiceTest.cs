@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
 				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayOnePersonOne.PersonAssignmentCollection()[0].AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(new Activity("activity"), dateTimePeriod2));
+				_scheduleDayOnePersonOne.PersonAssignmentCollection()[0].AddPersonalLayer(new Activity("activity"), dateTimePeriod2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
