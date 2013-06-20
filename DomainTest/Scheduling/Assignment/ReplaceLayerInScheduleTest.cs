@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().MainShiftLayers;
+			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers;
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.AssignmentHighZOrder().MainShiftLayers;
+			var newLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers;
 			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.First();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private IEnumerable<ICriteria> personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
 	        var assWithMain = Session.CreateCriteria(typeof (PersonAssignment), "ass")
-	                                 .SetFetchMode("MainShiftLayers", FetchMode.Join);
+	                                 .SetFetchMode("MainLayers", FetchMode.Join);
 
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
                     .SetFetchMode("PersonalShiftCollection", FetchMode.Join);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IPersonAssignment ass = Session.CreateCriteria(typeof(PersonAssignment))
                         .SetFetchMode("PersonalShiftCollection", FetchMode.Join)
                         .SetFetchMode("PersonalShiftCollection.LayerCollection", FetchMode.Join)
-                        .SetFetchMode("MainShiftLayers", FetchMode.Join)
+                        .SetFetchMode("MainLayers", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection.LayerCollection", FetchMode.Join)
                         .Add(Restrictions.Eq("Id", id))

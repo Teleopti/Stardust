@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainShiftLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers);
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
-			ass.MainShiftLayers.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
+			ass.MainLayers.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
 		}
 
 		[Test]
@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainShiftLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers);
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
-			ass.MainShiftLayers.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
+			ass.MainLayers.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
 		}
 
 		[Test]

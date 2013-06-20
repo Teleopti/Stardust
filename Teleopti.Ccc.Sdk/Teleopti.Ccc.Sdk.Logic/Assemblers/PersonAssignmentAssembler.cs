@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             };
 					if (entity.ShiftCategory != null)
 					{
-						retDto.MainShift = CreateMainShiftDto(entity.MainShiftLayers, entity.ShiftCategory, entity.Person);						
+						retDto.MainShift = CreateMainShiftDto(entity.MainLayers, entity.ShiftCategory, entity.Person);						
 					}
             foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)
             {

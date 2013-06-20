@@ -42,7 +42,7 @@
 						foreign-key="FK_PersonAssignment_ShiftCategory"
 						access="property"/>
 
-		<list name="MainShiftLayers"
+		<list name="MainLayers"
 		  cascade="all-delete-orphan"
 		  inverse="true">
 			<key column="Parent" on-delete="cascade" />

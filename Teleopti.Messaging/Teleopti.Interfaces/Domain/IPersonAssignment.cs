@@ -76,7 +76,7 @@ namespace Teleopti.Interfaces.Domain
 	    DateOnly Date { get; }
 
 	    IShiftCategory ShiftCategory { get; }
-	    IEnumerable<IMainShiftLayer> MainShiftLayers { get; }
+	    IEnumerable<IMainShiftLayer> MainLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.

@@ -447,12 +447,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-										Assert.AreEqual(ass1.MainShiftLayers.First().Period,
-																		day1.PersonAssignmentCollection()[0].MainShiftLayers.First().Period);
-										Assert.AreEqual(ass2.MainShiftLayers.First().Period,
-																		day2.PersonAssignmentCollection()[0].MainShiftLayers.First().Period);
-										Assert.AreEqual(ass3.MainShiftLayers.First().Period,
-																		day2.PersonAssignmentConflictCollection[0].MainShiftLayers.First().Period);
+										Assert.AreEqual(ass1.MainLayers.First().Period,
+																		day1.PersonAssignmentCollection()[0].MainLayers.First().Period);
+										Assert.AreEqual(ass2.MainLayers.First().Period,
+																		day2.PersonAssignmentCollection()[0].MainLayers.First().Period);
+										Assert.AreEqual(ass3.MainLayers.First().Period,
+																		day2.PersonAssignmentConflictCollection[0].MainLayers.First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
@@ -644,8 +644,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAssignment> res =
                     _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection();
                 Assert.AreEqual(2, res.Count);
-								Assert.AreEqual(pAssOk2.MainShiftLayers.First().Period, res[0].MainShiftLayers.First().Period);
-								Assert.AreEqual(pAssOk.MainShiftLayers.First().Period, res[1].MainShiftLayers.First().Period);
+								Assert.AreEqual(pAssOk2.MainLayers.First().Period, res[0].MainLayers.First().Period);
+								Assert.AreEqual(pAssOk.MainLayers.First().Period, res[1].MainLayers.First().Period);
             }
 			_mocks.VerifyAll();
 		}

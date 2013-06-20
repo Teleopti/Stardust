@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private IList<IPersonalShift> _personalShiftCollection;
 		private IList<IOvertimeShift> _overtimeShiftCollection;
-		private IList<IMainShiftLayer> _mainShiftLayers;
+		private IList<IMainShiftLayer> _mainLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_zorder = DateTime.MinValue;
 			_personalShiftCollection = new List<IPersonalShift>();
 			_overtimeShiftCollection = new List<IOvertimeShift>();
-			_mainShiftLayers = new List<IMainShiftLayer>();
+			_mainLayers = new List<IMainShiftLayer>();
 		}
 
 		protected PersonAssignment()
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			DateTimePeriod? mergedPeriod = null;
 			//fix later 
-			foreach (var mainShiftActivityLayer in MainShiftLayers)
+			foreach (var mainShiftActivityLayer in MainLayers)
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
 			}
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				if (!_mainShiftLayers.Any())
+				if (!_mainLayers.Any())
 					return null;
 
 				return _shiftCategory;
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			protected set { _shiftCategory = value; }
 		}
 
-		public virtual IEnumerable<IMainShiftLayer> MainShiftLayers
+		public virtual IEnumerable<IMainShiftLayer> MainLayers
 		{
-			get { return _mainShiftLayers; }
+			get { return _mainLayers; }
 		}
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			activityLayers.ForEach(layer =>
 			{
 				layer.SetParent(this);
-				_mainShiftLayers.Add(layer);
+				_mainLayers.Add(layer);
 			});
 			ShiftCategory = shiftCategory;
 		}
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool RemoveLayer(IMainShiftLayer layer)
 		{
-			return _mainShiftLayers.Remove(layer);
+			return _mainLayers.Remove(layer);
 		}
 
 		#region Manipulate personalshifts
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void ClearMainShiftLayers()
 		{
-			_mainShiftLayers.Clear();
+			_mainLayers.Clear();
 		}
 
 		#endregion
@@ -245,8 +245,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService(Person);
 			if (HasProjection)
 			{
-				proj.Add(MainShiftLayers, new VisualLayerFactory());
-				var validPeriods = new List<DateTimePeriod>(MainShiftLayers.PeriodBlocks());
+				proj.Add(MainLayers, new VisualLayerFactory());
+				var validPeriods = new List<DateTimePeriod>(MainLayers.PeriodBlocks());
 				foreach (var overtimeShift in _overtimeShiftCollection)
 				{
 					var overTimePeriod = overtimeShift.LayerCollection.Period();
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				return MainShiftLayers.Any() || _overtimeShiftCollection.Count > 0;
+				return MainLayers.Any() || _overtimeShiftCollection.Count > 0;
 			}
 		}
 		#endregion
@@ -303,11 +303,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
 			//fix this!
-			retobj._mainShiftLayers = new List<IMainShiftLayer>();
-			foreach (IMainShiftLayer newLayer in _mainShiftLayers.Select(layer => layer.NoneEntityClone()))
+			retobj._mainLayers = new List<IMainShiftLayer>();
+			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._mainShiftLayers.Add(newLayer);
+				retobj._mainLayers.Add(newLayer);
 			}
 			//
 			foreach (IPersonalShift shift in _personalShiftCollection)
@@ -328,11 +328,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
 			//fix this
-			retobj._mainShiftLayers = new List<IMainShiftLayer>();
-			foreach (IMainShiftLayer newLayer in _mainShiftLayers.Select(layer => layer.EntityClone()))
+			retobj._mainLayers = new List<IMainShiftLayer>();
+			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._mainShiftLayers.Add(newLayer);
+				retobj._mainLayers.Add(newLayer);
 			}
 			//
 			foreach (IPersonalShift shift in _personalShiftCollection)

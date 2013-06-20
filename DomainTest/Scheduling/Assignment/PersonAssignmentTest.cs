@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
-			target.MainShiftLayers.Should().Be.Empty();
+			target.MainLayers.Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
-			target.MainShiftLayers.Should().Be.Empty();
+			target.MainLayers.Should().Be.Empty();
 			Assert.AreEqual(0, targetClone.PersonalShiftCollection.Count);
 		}
 
