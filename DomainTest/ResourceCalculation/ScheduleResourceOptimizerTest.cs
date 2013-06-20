@@ -63,6 +63,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _furnessEvaluator = new FurnessEvaluator(furnessData);
             _furnessEvaluator.Evaluate(1, 8);
             _optimizedDivideActivity = furnessDataConverter.ConvertFurnessDataBackToActivity();
+
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_personAssignmentListContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
             
             // Iteration
             Assert.AreEqual(5, _furnessEvaluator.InnerIteration);
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             KeyedSkillResourceDictionary resourceMatrix = _optimizedDivideActivity.WeightedRelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
             Assert.AreEqual(3, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix["Person1"].Count);
+            Assert.AreEqual(4, resourceMatrix[person1].Count);
 
             Assert.AreEqual(12.49, _optimizedDivideActivity.WeightedRelativePersonSkillResourcesSum[_personAssignmentListContainer.ContainedSkills["PhoneA"]], 0.1);
             Assert.AreEqual(20, _optimizedDivideActivity.WeightedRelativePersonSkillResourcesSum[_personAssignmentListContainer.ContainedSkills["PhoneB"]], 0.1);

@@ -54,12 +54,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ((ScheduleRange)dic[dOff.Person]).Add(dOff);
             ((ScheduleRange)dic[pAbs.Person]).Add(pAbs);
 
-            var retList = _target.CreateRelevantProjectionList(dic);
-            Assert.IsTrue(retList.HasItems());
+	        using (_mocks.Record())
+	        {
+		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
+		              .IgnoreArguments()
+		              .Return(new SkillCombination("key", new ISkill[] {}, new DateOnlyPeriod(),
+		                                           new Dictionary<Guid, double>()));
+	        }
+	        using (_mocks.Playback())
+	        {
+		        var retList = _target.CreateRelevantProjectionList(dic);
+		        Assert.IsTrue(retList.HasItems());
 
-            retList = _target.CreateRelevantProjectionList(dic, period);
-            Assert.IsTrue(retList.HasItems());
-
+		        retList = _target.CreateRelevantProjectionList(dic, period);
+		        Assert.IsTrue(retList.HasItems());
+	        }
         }
 
     }

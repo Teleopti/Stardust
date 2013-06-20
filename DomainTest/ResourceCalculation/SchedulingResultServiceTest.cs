@@ -140,16 +140,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldNotUseSingleSkillCalculationsWhenToRemoveIsNotSingleSkilled()
 		{
 			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
 			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
-			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
-
+			
 			using (_mocks.Record())
 			{
-				Expect.Call(visualLayerCollection.Person).Return(person);
-				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod);
 			}
 
 			using (_mocks.Playback())
@@ -163,16 +158,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldNotUseSingleSkillCalculationsWhenToAddIsNotSingleSkilled()
 		{
 			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
 			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
-			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
 
 			using (_mocks.Record())
 			{
-				Expect.Call(visualLayerCollection.Person).Return(person);
-				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod);
 			}
 
 			using (_mocks.Playback())
@@ -185,20 +175,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldUseSingleSkillCalculationsWhenToAddAndToRemoveIsSingleSkilled()
 		{
-			var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
-			var visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
 			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
 			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
-			var dateTimePeriod = new DateTimePeriod(2011, 1, 1, 2011, 1, 1);
 
 			using (_mocks.Record())
 			{
-				Expect.Call(visualLayerCollection1.Person).Return(person);
-				Expect.Call(visualLayerCollection1.Period()).Return(dateTimePeriod);
-				Expect.Call(visualLayerCollection2.Person).Return(person);
-				Expect.Call(visualLayerCollection2.Period()).Return(dateTimePeriod);
+				Expect.Call(toAdd.HasItems()).Return(true);
+				Expect.Call(toAdd.AllIsSingleSkill()).Return(true);
+				Expect.Call(toRemove.AllIsSingleSkill()).Return(true);
 			}
 
 			using (_mocks.Playback())

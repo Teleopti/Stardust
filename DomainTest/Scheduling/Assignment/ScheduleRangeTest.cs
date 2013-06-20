@@ -331,7 +331,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2100, 1, 1); 
 			
-			_target.Person.WorkflowControlSet = workflowControlSet;
+			_person.WorkflowControlSet = workflowControlSet;
+			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 
 			using (_mocks.Record())
 			{

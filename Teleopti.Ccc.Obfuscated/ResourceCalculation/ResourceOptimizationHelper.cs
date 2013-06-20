@@ -155,13 +155,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return result;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-			foreach (var resourceLayer in layerCollection.ToResourceLayers(_stateHolder.Skills.Min(s => s.DefaultResolution)))
-			{
-				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, dateOnly, resourceLayer.Resource);
-			}
-
-			_nonBlendSkillCalculator.Calculate(dateOnly, container, relevantSkillStaffPeriods, true);
 		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
 			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
