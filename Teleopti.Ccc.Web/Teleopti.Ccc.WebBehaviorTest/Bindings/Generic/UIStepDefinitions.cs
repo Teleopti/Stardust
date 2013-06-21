@@ -46,6 +46,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
 		}
 
+		[When(@"I click '(.*)' on browser")]
+		public void WhenIClickOnBrowser(string p0)
+		{
+			Browser.Current.NativeBrowser.GoBack();
+		}
+
+
 		// I click agent 'mathias stenbom'
 		// I click the agent 'mathias stenbom'
 		// I click super agent 'james bond'

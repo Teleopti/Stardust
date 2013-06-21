@@ -208,3 +208,21 @@ Scenario: Invalid dates
 	| End date | 2012-12-01 |
 	Then I should see the alert 'Invalid end date'
 
+Scenario: Backward from browser works with person schedule view
+	Given I have the role 'Anywhere Team Green'
+	When I view schedules for '2013-04-08'
+	And I click person 'Pierre Baldi'
+	And I click 'add full day absence'
+	And I input these full day absence values
+	| Field    | Value      |
+	| Absence  | Vacation   |
+	| End date | 2013-04-08 |
+	And I click 'apply'
+	Then I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 00:00 |
+	| End time   | 2013-04-08 23:59 |
+	When I click 'backward' on browser
+	Then I should be viewing schedules for '2013-04-08'
+
