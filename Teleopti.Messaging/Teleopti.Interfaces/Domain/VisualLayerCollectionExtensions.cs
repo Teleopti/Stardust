@@ -33,11 +33,20 @@ namespace Teleopti.Interfaces.Domain
 						startDiff = layer.Period.StartDateTime.Subtract(startTime).TotalMinutes;
 					if (startTime.AddMinutes(minutesSplit) > layer.Period.EndDateTime)
 						endDiff = startTime.AddMinutes(minutesSplit).Subtract(layer.Period.EndDateTime).TotalMinutes;
+
+					var payload = layer.Payload.UnderlyingPayload;
+					var requiresSeat = false;
+					var activity = payload as IActivity;
+					if (activity != null)
+					{
+						requiresSeat = activity.RequiresSeat;
+					}
 					yield return
 						new ResourceLayer
 							{
 								Resource = 1d * (1 * ((minutesSplit - startDiff - endDiff) / minutesSplit)),
-								Activity = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
+								PayloadId = payload.Id.GetValueOrDefault(),
+								RequiresSeat = requiresSeat,
 								Period = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit))
 							};
 					if (startTime.AddMinutes(minutesSplit) >= layer.Period.EndDateTime)
@@ -55,7 +64,7 @@ namespace Teleopti.Interfaces.Domain
 			var resourceLayers = projection.ToResourceLayers(minutesSplit);
 			foreach (var resourceLayer in resourceLayers)
 			{
-				resources.AddResources(resourceLayer.Period, resourceLayer.Activity, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, 1d);
+				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
 			}
 		}
 	}
@@ -65,12 +74,11 @@ namespace Teleopti.Interfaces.Domain
 		void Clear();
 		bool HasItems();
 
-		void AddResources(DateTimePeriod period, Guid activity, IPerson person, DateOnly personDate,
-										  double resource);
+		void AddResources(IPerson person, DateOnly personDate,ResourceLayer resourceLayer);
 
-		double SkillResources(ISkill skill, DateTimePeriod period);
+		Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period);
 		bool AllIsSingleSkill();
-		double ActivityResources(Func<IActivity, bool> activitiesToLookFor, ISkill skill, DateTimePeriod period);
+		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
 		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
 	}
 

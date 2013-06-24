@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				foreach (var resourceLayer in layer.ToResourceLayers(15))
 				{
-					_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, layer.Person, new DateOnly(2008, 1, 1), resourceLayer.Resource);
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
 				}
 			}
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				foreach (var resourceLayer in layer.ToResourceLayers(15))
 				{
-					_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, layer.Person, new DateOnly(2008, 1, 1), resourceLayer.Resource);
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
 				}
 			}
 

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var resourceLayers = projection.ToResourceLayers(_minResolution);
 					foreach (var resourceLayer in resourceLayers)
 					{
-						retList.AddResources(resourceLayer.Period, resourceLayer.Activity, schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly, resourceLayer.Resource);
+						retList.AddResources(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly, resourceLayer);
 					}
 				}
 			}

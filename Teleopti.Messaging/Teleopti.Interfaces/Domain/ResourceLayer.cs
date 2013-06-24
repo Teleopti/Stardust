@@ -8,6 +8,8 @@ namespace Teleopti.Interfaces.Domain
 
 		public DateTimePeriod Period { get; set; }
 
-		public Guid Activity { get; set; }
+		public Guid PayloadId { get; set; }
+
+		public bool RequiresSeat { get; set; }
 	}
 }

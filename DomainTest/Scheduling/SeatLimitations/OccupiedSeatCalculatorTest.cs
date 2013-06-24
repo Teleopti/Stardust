@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			
 			using(_mocks.Record())
 			{
-				Expect.Call(relevantProjections.ActivityResources(null, skill, new DateTimePeriod())).IgnoreArguments().Return(4.5d);
+				Expect.Call(relevantProjections.ActivityResourcesWhereSeatRequired(skill, skillStaffPeriod.Period)).Return(4.5d);
 			}
 
 			using(_mocks.Playback())

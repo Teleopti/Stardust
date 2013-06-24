@@ -17,18 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IResourceCalculationDataContainer shiftList, ISkill skill)
         {
-            //ISkill skill = ((ISkillDay)skillStaffPeriod.Parent).Skill;
-            //if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-            //    return 0;
-            
-            double result = 0;
-
-	        var periods = skillStaffPeriod.Period.Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
-	        foreach (var dateTimePeriod in periods)
-	        {
-		        result += shiftList.SkillResources(skill, dateTimePeriod);
-	        }
-            return result;
+            return shiftList.SkillResources(skill, skillStaffPeriod.Period).Item1;
         }
 
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity)

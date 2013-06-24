@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 	        var date = new DateOnly(vcPeriod.Value.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
 			foreach (var resourceLayer in layers.ToResourceLayers(resolution))
 			{
-				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, date,
-				                       resourceLayer.Resource);
+				container.AddResources(person, date, resourceLayer);
 			}
 
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriodDictionaryKeyValue in skillStaffPeriods)

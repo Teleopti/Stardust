@@ -42,8 +42,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_absence = AbsenceFactory.CreateAbsence("Vacation");
 			_skillCarnaby = SkillFactory.CreateNonBlendSkill("Carnaby Street");
 		    _skillCarnaby.Activity = _mejeriVaror;
+			_skillCarnaby.SetId(Guid.NewGuid());
 			_skillPhone = SkillFactory.CreateSkill("The Mall");
 		    _skillPhone.Activity = _mejeriVaror;
+			_skillPhone.SetId(Guid.NewGuid());
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skillCarnaby, _skillPhone });
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skillCarnaby, _skillPhone });
 			_visualLayerFactory = new VisualLayerFactory();
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			{
 				foreach (var resourceLayer in layer.ToResourceLayers(15))
 				{
-					_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, layer.Person, new DateOnly(2008, 1, 1), resourceLayer.Resource);
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
 				}
 			}
 
@@ -77,7 +79,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		[Test]
 		public void ShouldCalculateIfActivityIntersectsPeriod()
 		{
-
             double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
 			Assert.AreEqual(0.5, result);
 		}
@@ -104,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			foreach (var resourceLayer in _layerCollection3.ToResourceLayers(15))
 			{
-				_resources.AddResources(resourceLayer.Period, resourceLayer.Activity, _person2, new DateOnly(2008, 1, 1),
-				                        resourceLayer.Resource);
+				_resources.AddResources(_person2, new DateOnly(2008, 1, 1), resourceLayer);
 			}
 
 			double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);

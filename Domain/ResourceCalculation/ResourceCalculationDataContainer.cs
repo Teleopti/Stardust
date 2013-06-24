@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IDictionary<DateTimePeriod, PeriodResource> _dictionary = new Dictionary<DateTimePeriod, PeriodResource>();
-		private readonly IDictionary<Guid,IActivity> _activities = new Dictionary<Guid, IActivity>(); 
 		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
+		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>(); 
 		
 		private int MinSkillResolution = 60;
 
@@ -30,18 +30,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _dictionary.Count > 0;
 		}
 
-		public void AddResources(DateTimePeriod period, Guid activity, IPerson person, DateOnly personDate,
-		                         double resource)
+		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
 			PeriodResource resources;
-			if (!_dictionary.TryGetValue(period, out resources))
+			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
 			{
 				resources = new PeriodResource();
-				_dictionary.Add(period, resources);
+				_dictionary.Add(resourceLayer.Period, resources);
 			}
 
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
-			var key = new ActivitySkillsCombination(activity, skills).GenerateKey();
+			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 			if (!_skills.ContainsKey(skills.Key))
 			{
 				if (skills.Skills.Any())
@@ -54,10 +53,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				_skills.Add(skills.Key,skills.Skills);
 			}
-			resources.AppendResource(key, skills, resource);
+			if (resourceLayer.RequiresSeat)
+			{
+				_activityRequiresSeat.Add(resourceLayer.PayloadId);
+			}
+			resources.AppendResource(key, skills, resourceLayer.Resource);
 		}
 
-		public double SkillResources(ISkill skill, DateTimePeriod period)
+		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
 		{
 			var skillKey = skill.Id.GetValueOrDefault();
 			var activityKey = string.Empty;
@@ -66,22 +69,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
 			}
 
-			double resource = 0;
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
+			PeriodResourceDetail result = new PeriodResourceDetail();
 			foreach (var dateTimePeriod in periodSplit)
 			{
 				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource += interval.GetResources(activityKey, skillKey).Resource;
+				var detail = interval.GetResources(activityKey, skillKey);
+				result = new PeriodResourceDetail(result.Count + detail.Count, result.Resource + detail.Resource);
 			}
-			return resource;
+			return new Tuple<double, double>(result.Resource,result.Count);
 		}
 
-		public double ActivityResources(Func<IActivity, bool> activitiesToLookFor, ISkill skill, DateTimePeriod period)
+		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
 		{
-			var activities = _activities.Values.Where(activitiesToLookFor);
-			var activityKeys = activities.Select(a => a.Id.GetValueOrDefault().ToString()).ToArray();
+			var activityKeys = _activityRequiresSeat.Select(a => a.ToString()).ToArray();
 			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;
@@ -91,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource += interval.GetResources(activityKeys, skillKey).Resource;
+				resource = Math.Max(resource, interval.GetResources(activityKeys, skillKey).Resource);
 
 			}
 			return resource;
@@ -179,14 +182,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			public PeriodResourceDetail GetResources(string activityKey, Guid skillKey)
 			{
-				var count = 0;
+				var count = 0d;
 				var resource = 0d;
 				foreach (var pair in _resourceDictionary)
 				{
 					if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKey.ToString())))
 					{
-						count += pair.Value.Count;
-						resource += pair.Value.Resource;
+						double currentResource = pair.Value.Resource;
+						ConcurrentDictionary<Guid, double> effiencies;
+						if (_skillEffiencies.TryGetValue(pair.Key, out effiencies))
+						{
+							double effiency;
+							if (effiencies.TryGetValue(skillKey, out effiency))
+								currentResource = currentResource * effiency;
+						}
+
+						count += pair.Value.Resource;
+						resource += currentResource;
 					}
 				}
 				return new PeriodResourceDetail(count,resource);
@@ -194,14 +206,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			public PeriodResourceDetail GetResources(IEnumerable<string> activityKeys, Guid skillKey)
 			{
-				var count = 0;
+				var count = 0d;
 				var resource = 0d;
 				foreach (var pair in _resourceDictionary)
 				{
 					if (activityKeys.Any(a => pair.Key.StartsWith(a)) && pair.Key.Contains(skillKey.ToString()))
 					{
+						double currentResource = pair.Value.Resource;
+						ConcurrentDictionary<Guid, double> effiencies;
+						if (_skillEffiencies.TryGetValue(pair.Key, out effiencies))
+						{
+							double effiency;
+							if (effiencies.TryGetValue(skillKey, out effiency))
+								currentResource = currentResource*effiency;
+						}
+
 						count += pair.Value.Count;
-						resource += pair.Value.Resource;
+						resource += currentResource;
 					}
 				}
 				return new PeriodResourceDetail(count, resource);
@@ -228,9 +249,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private struct PeriodResourceDetail
 		{
 			private double _resource;
-			private int _count;
+			private double _count;
 
-			public PeriodResourceDetail(int count, double resource)
+			public PeriodResourceDetail(double count, double resource)
 			{
 				_count = count;
 				_resource = resource;
@@ -242,7 +263,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				set { _resource = value; }
 			}
 
-			public int Count
+			public double Count
 			{
 				get { return _count; }
 				set { _count = value; }

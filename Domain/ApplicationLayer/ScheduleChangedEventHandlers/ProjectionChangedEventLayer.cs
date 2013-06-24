@@ -47,5 +47,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// Is this absence
 		/// </summary>
 		public bool IsAbsence { get; set; }
+		/// <summary>
+		/// Requires seat
+		/// </summary>
+		public bool RequiresSeat { get; set; }
 	}
 }

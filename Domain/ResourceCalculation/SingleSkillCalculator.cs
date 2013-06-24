@@ -55,66 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static Tuple<double, double> nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IResourceCalculationDataContainer shiftList, ISkill skill)
 		{
-			var resources = shiftList.SkillResources(skill, skillStaffPeriod.Period);
-			return new Tuple<double, double>(resources,resources);
-
-			/*foreach (var layercollection in shiftList)
-			{
-				DateOnly dateOnly = skillStaffPeriodDate(skillStaffPeriod, layercollection.Person);
-				double skillEfficiency = checkPersonSkill(skill, layercollection.Person, dateOnly);
-				if (skillEfficiency == 0)
-					continue;
-
-				double result = calculateShift(skillStaffPeriod, layercollection, skill.Activity);
-				result2 += result;
-				result1 += result * skillEfficiency;
-			}
-
-			return new Tuple<double, double>(result1, result2);*/
-		}
-
-		private static double calculateShift(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> layercollection, IActivity skillActivity)
-		{
-			double result = 0;
-			long skillStaffPeriodElapsedTime = skillStaffPeriod.Period.ElapsedTime().Ticks;
-			foreach (var layer in layercollection)
-			{
-				var activity = layer.Payload as IActivity;
-				if (activity == null)
-					continue;
-
-				if (!skillActivity.Equals(activity))
-					continue;
-
-				DateTimePeriod? intersection = skillStaffPeriod.Period.Intersection(layer.Period);
-				if (intersection.HasValue)
-				{
-					result += (double)intersection.Value.ElapsedTime().Ticks / skillStaffPeriodElapsedTime;
-				}
-			}
-			return result;
-		}
-
-		private static DateOnly skillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person)
-		{
-			DateTime localStartDateTime =
-				skillStaffPeriod.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
-			return new DateOnly(localStartDateTime.Date);
-		}
-
-		private static double checkPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
-		{
-			IPersonPeriod personPeriod = person.Period(skillStaffPeriodDate);
-			if (personPeriod == null)
-				return 0;
-
-			foreach (var personSkill in personPeriod.PersonSkillCollection)
-			{
-				if (personSkill.Skill.Equals(skill) && personSkill.Active)
-					return personSkill.SkillPercentage.Value;
-			}
-
-			return 0;
+			return shiftList.SkillResources(skill, skillStaffPeriod.Period);
 		}
 	}
 }

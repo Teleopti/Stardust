@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				ISkillStaffPeriodDictionary skillStaffPeriodDictionary = pair.Value;
 				foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionary.Values)
 				{
-					double result = relevantProjections.ActivityResources(a => a.RequiresSeat, pair.Key, skillStaffPeriod.Period);
+					double result = relevantProjections.ActivityResourcesWhereSeatRequired(pair.Key, skillStaffPeriod.Period);
 
 					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
 					skillStaffPeriod.Payload.CalculatedUsedSeats = result;

@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod,
 		                                                               IEnumerable<IScheduleDay> shiftList, ISkill skill)
 		{
-			if (skill.Activity == null || !skill.Activity.RequiresSeat) return 0;
-			
 			var container = new ResourceCalculationDataContainer(_personSkillProvider);
 			
 			var resolution = skill.DefaultResolution;
@@ -58,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				container.AddScheduleDayToContainer(scheduleDay, resolution);
 			}
 
-			return container.SkillResources(skill, skillStaffPeriod.Period);
+			return container.ActivityResourcesWhereSeatRequired(skill, skillStaffPeriod.Period);
 		}
 	}
 }

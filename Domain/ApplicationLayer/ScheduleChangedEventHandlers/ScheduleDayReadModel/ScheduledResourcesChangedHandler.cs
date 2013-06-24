@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
 				foreach (var resourceLayer in resources)
 				{
-					removeResourceFromInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.Activity,combination), resourceLayer.Period);
+					removeResourceFromInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.PayloadId,combination), resourceLayer.Period);
 				}
 
 				resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
 				foreach (var resourceLayer in resources)
 				{
-					addResourceToInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.Activity, combination), resourceLayer.Period);
+					addResourceToInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), resourceLayer.Period);
 				}
 			}
 		}
@@ -91,7 +91,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						new ResourceLayer
 							{
 								Resource = (minutesSplit - startDiff - endDiff)/minutesSplit,
-								Activity = layer.PayloadId,
+								PayloadId = layer.PayloadId,
+								RequiresSeat = layer.RequiresSeat,
 								Period = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit))
 							};
 					if (startTime.AddMinutes(minutesSplit) >= layer.EndDateTime)
