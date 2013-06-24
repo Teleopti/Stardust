@@ -253,13 +253,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod personalShiftPeriod3 = personalShiftPeriod1.MovePeriod(TimeSpan.FromHours(4));
 			DateTimePeriod expected = new DateTimePeriod(personalShiftPeriod1.StartDateTime, personalShiftPeriod3.EndDateTime);
 
-			IPersonalShift personalShift1 = PersonalShiftFactory.CreatePersonalShift(activity, personalShiftPeriod1);
-			IPersonalShift personalShift2 = PersonalShiftFactory.CreatePersonalShift(activity, personalShiftPeriod2);
-			IPersonalShift personalShift3 = PersonalShiftFactory.CreatePersonalShift(activity, personalShiftPeriod3);
-
-			target.AddPersonalShift(personalShift1);
-			target.AddPersonalShift(personalShift2);
-			target.AddPersonalShift(personalShift3);
+			target.AddPersonalLayer(activity, personalShiftPeriod1);
+			target.AddPersonalLayer(activity, personalShiftPeriod2);
+			target.AddPersonalLayer(activity, personalShiftPeriod3);
 
 			Assert.AreEqual(expected, target.Period);
 		}
@@ -482,18 +478,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.ZOrder = zOrder;
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			IPersonalShift persShift =
-				PersonalShiftFactory.CreatePersonalShift(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			persShift.SetId(Guid.NewGuid());
 			IOvertimeShift overtime = new OvertimeShift();
 			overtime.SetId(Guid.NewGuid());
 
 			target.AddOvertimeShift(overtime);
-			target.AddPersonalShift(persShift);
+			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.PersonalLayers.Single().SetId(Guid.NewGuid());
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
-			Assert.AreEqual(target.PersonalShiftCollection[0].Id, pAss.PersonalShiftCollection[0].Id);
+			Assert.AreEqual(target.PersonalLayers.Single().Id, pAss.PersonalLayers.Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 			Assert.AreEqual(target.OvertimeShiftCollection[0].Id, pAss.OvertimeShiftCollection[0].Id);
@@ -501,14 +495,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
+			Assert.IsNull(pAss.PersonalLayers.Single().Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
+			Assert.IsNull(pAss.PersonalLayers.Single().Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 		}

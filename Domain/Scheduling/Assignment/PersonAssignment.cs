@@ -305,25 +305,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IPersonAssignment NoneEntityClone()
 		{
-			PersonAssignment retobj = (PersonAssignment)MemberwiseClone();
+			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			//fix this!
 			retobj._mainLayers = new List<IMainShiftLayer>();
+			retobj._personalLayers = new List<IPersonalShiftLayer>();
 			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._mainLayers.Add(newLayer);
 			}
-			//
-			foreach (IPersonalShift shift in _personalShiftCollection)
+			foreach (IPersonalShiftLayer newLayer in _personalLayers.Select(layer => layer.NoneEntityClone()))
 			{
-				retobj.AddPersonalShift((IPersonalShift)shift.NoneEntityClone());
+				newLayer.SetParent(retobj);
+				retobj._personalLayers.Add(newLayer);
 			}
-			foreach (IOvertimeShift overtimeShift in _overtimeShiftCollection)
+			foreach (var overtimeShift in _overtimeShiftCollection)
 			{
-				retobj.AddOvertimeShift((IOvertimeShift)overtimeShift.NoneEntityClone());
+				retobj.AddOvertimeShift(overtimeShift.NoneEntityClone());
 			}
 
 			return retobj;
@@ -331,24 +330,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IPersonAssignment EntityClone()
 		{
-			PersonAssignment retobj = (PersonAssignment)MemberwiseClone();
-			retobj._personalShiftCollection = new List<IPersonalShift>();
+			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			//fix this
 			retobj._mainLayers = new List<IMainShiftLayer>();
+			retobj._personalLayers = new List<IPersonalShiftLayer>();
 			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._mainLayers.Add(newLayer);
 			}
-			//
-			foreach (IPersonalShift shift in _personalShiftCollection)
+			foreach (IPersonalShiftLayer newLayer in _personalLayers.Select(layer => layer.EntityClone()))
 			{
-				retobj.AddPersonalShift((PersonalShift)shift.EntityClone());
+				newLayer.SetParent(retobj);
+				retobj._personalLayers.Add(newLayer);
 			}
-			foreach (IOvertimeShift overtimeShift in _overtimeShiftCollection)
+			foreach (var overtimeShift in _overtimeShiftCollection)
 			{
-				retobj.AddOvertimeShift((IOvertimeShift)overtimeShift.EntityClone());
+				retobj.AddOvertimeShift(overtimeShift.EntityClone());
 			}
 
 
