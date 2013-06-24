@@ -412,7 +412,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
-						
+					    selectionViewModel.enableDateSelection();
 					});
 				});
 			}
@@ -424,7 +424,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _soon(call) {
-		setTimeout(function () { call(); }, 300);
+		setTimeout(function () { call(); }, 0);
 	}
 
 	function _initExtendedPanels() {
@@ -489,6 +489,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	        ko.cleanNode(mustHaveTextElement[0]);
 	    }
 
+	    var navbarElement = $('div.navbar');
+	    if (navbarElement.length > 1) {
+	        ko.cleanNode(navbarElement[1]);
+	    }
+
+	    if (selectionViewModel && selectionViewModel.subscription) {
+	        selectionViewModel.subscription.dispose();
+	    }
+	    selectionViewModel = null;
 	    periodFeedbackViewModel = null;
 	    preferencesAndScheduleViewModel = null;
 	}

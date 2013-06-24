@@ -1,10 +1,7 @@
 using System.Globalization;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -45,6 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
 		}
+
+
 
 		// I click agent 'mathias stenbom'
 		// I click the agent 'mathias stenbom'

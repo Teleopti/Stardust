@@ -27,12 +27,9 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     self.previousPeriodDate = ko.observable(moment());
 
     self.selectedDate = ko.observable(moment().startOf('day'));
-    
+
     self.setCurrentDate = function (date) {
         self.selectedDate(date);
-        self.selectedDate.subscribe(function (d) {
-            Teleopti.MyTimeWeb.Portal.NavigateTo("Preference/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
-        });
     };
 
     self.nextPeriod = function () {
@@ -89,4 +86,10 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         }
         return '';
     });
+
+    self.enableDateSelection = function() {
+        self.subscription = self.selectedDate.subscribe(function(d) {
+            Teleopti.MyTimeWeb.Portal.NavigateTo("Preference/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+        });
+    };
 };

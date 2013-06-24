@@ -162,6 +162,13 @@ Scenario: Show other team's schedule
 	Then I should see my colleague
 	And I should not see myself
 
+Scenario: Keep selected date when changing team
+	Given I am an agent in a team with access to the whole site
+	And the site has another team
+	And I am viewing team schedule for tomorrow
+	When I select the other team in the team picker
+	Then I should see tomorrow
+
 Scenario: Show team-picker with teams for my site for another day
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team tomorrow
