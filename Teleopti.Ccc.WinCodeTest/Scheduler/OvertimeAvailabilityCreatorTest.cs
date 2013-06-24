@@ -185,5 +185,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsFalse(startTimeError);
 			Assert.IsTrue(endTimeError);
 		}
+	
+		[Test]
+		public void ShouldBeInvalidWhenStartTimeEndTimeAreSameAsShiftPeriod()
+		{
+			bool startTimeError;
+			bool endTimeError;
+
+			var result = _target.CanCreate(TimeSpan.Zero, TimeSpan.FromHours(1), TimeSpan.Zero, TimeSpan.FromHours(1), out startTimeError, out endTimeError);
+			Assert.IsFalse(result);
+			Assert.IsTrue(startTimeError);
+			Assert.IsTrue(endTimeError);
+		}
 	}
 }
