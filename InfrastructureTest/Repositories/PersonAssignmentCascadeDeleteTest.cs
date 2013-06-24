@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -40,12 +41,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeletePersonalShiftShouldGenerateOneStatement()
 		{
-			target.RemovePersonalShift(target.PersonalShiftCollection[0]);
+			target.RemoveLayer(target.PersonalLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(2); //delete mainshift + mainshiftlayer
+				.Should().Be.EqualTo(1); //delete personalshiftlayer
 		}
 
 		[Test]

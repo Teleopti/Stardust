@@ -26,9 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                        from al in a.MainLayers
                                        select al.Payload).Distinct();
             var persShiftActivities = (from a in _personAssignments
-                                       from p in a.PersonalShiftCollection
-                                       from al in p.LayerCollection
-                                       select al.Payload).Distinct();
+                                       from pl in a.PersonalLayers
+                                       select pl.Payload).Distinct();
             var overTimeActivities = (from a in _personAssignments
                                       from o in a.OvertimeShiftCollection
                                       from al in o.LayerCollection

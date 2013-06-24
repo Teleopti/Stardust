@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
-            Assert.AreEqual(org.PersonalShiftCollection.Count, loadedAggregateFromDatabase.PersonalShiftCollection.Count);
+            Assert.AreEqual(org.PersonalLayers.Count(), loadedAggregateFromDatabase.PersonalLayers.Count());
             Assert.AreEqual(org.OvertimeShiftCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection.Count);
             Assert.AreEqual(org.OvertimeShiftCollection[0].LayerCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection[0].LayerCollection.Count);
         }
@@ -124,8 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection));
