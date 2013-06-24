@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private LayerViewModel _target;
 		private MockRepository _mocks;
-		private ILayer<IActivity> _layerWithPayload;
+		private IPersonalShiftLayer _layerWithPayload;
 		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;
@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			_layerWithPayload = new PersonalShiftActivityLayer(_payload, _period);
+			_layerWithPayload = new PersonalShiftLayer(_payload, _period);
 			Expect.Call(_scheduleDay.Person).Return(person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(null, _layerWithPayload, null, null);
+			_target = new PersonalShiftLayerViewModel(null, _layerWithPayload, null, null, null);
 
 			_testRunner = new CrossThreadTestRunner();
 		}
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
 			var activity = ActivityFactory.CreateActivity("activity");
-			var layer = new PersonalShiftActivityLayer(activity, period);
+			var layer = new PersonalShiftLayer(activity, period);
 			var personalShift1 = PersonalShiftFactory.CreatePersonalShift(activity, period);
 			var personalShift2 = PersonalShiftFactory.CreatePersonalShift(activity, period);
 
@@ -262,7 +262,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
 
-			_target = new PersonalShiftLayerViewModel(null, layer, personalShift2, null);
+			//FIX LATER
+			_target = new PersonalShiftLayerViewModel(null, layer, null, null, new MoveLayerVertical());
 			_target.MoveUp();
 			
 			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 1);

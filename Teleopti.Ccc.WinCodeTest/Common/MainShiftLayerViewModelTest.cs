@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = _mocks.StrictMock<ILayerViewModelObserver>();
 			var commandTester = new TesterForCommandModels();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(new Person(), new DateTimePeriod());
-			var firstLayer = ass.PersonalShiftCollection[0].LayerCollection.Single();
-			var model = new PersonalShiftLayerViewModel(observer, firstLayer, ass.PersonalShiftCollection[0], new EventAggregator());
+			var firstLayer = ass.PersonalLayers.Single();
+			var model = new PersonalShiftLayerViewModel(observer, firstLayer, ass, new EventAggregator(), null);
 
 			using (_mocks.Record())
 			{

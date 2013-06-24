@@ -15,30 +15,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class StubFactory
 	{
-		public IBusinessUnit BusinessUnitStub(string name)
-		{
-			var id = Guid.NewGuid();
-			var businessUnit = MockRepository.GenerateStub<IBusinessUnit>();
-			businessUnit.Stub(x => x.Id).Return(id);
-			businessUnit.Name = name;
-			return businessUnit;
-		}
-
-		public IPerson PersonStub()
-		{
-			var id = Guid.NewGuid();
-			var person = MockRepository.GenerateStub<IPerson>();
-			person.Stub(x => x.Id).Return(id);
-			return person;
-		}
-
-		public IDataSource DataSourceStub(string name)
-		{
-			var dataSource = MockRepository.GenerateStub<IDataSource>();
-			dataSource.Stub(x => x.DataSourceName).Return(name);
-			return dataSource;
-		}
-
 		public IScheduleDay ScheduleDayStub()
 		{
 			return ScheduleDayStub(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
@@ -90,10 +66,6 @@ namespace Teleopti.Ccc.TestCommon
 			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, new[] { personAbsence }, null);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonMeeting personMeeting)
-		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, null, null, new[] {personMeeting}, null);
-		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
 		{
@@ -236,28 +208,6 @@ namespace Teleopti.Ccc.TestCommon
 			return personAssignment;
 		}
 
-		public IPersonAssignment PersonAssignmentPersonalShiftStub(IPersonalShiftActivityLayer activity)
-		{
-			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
-			var layers = new LayerCollection<IActivity> {activity};
-			personalShift.Stub(x => x.LayerCollection).Return(layers);
-			personAssignment.Stub(x => x.Person).Return(new Person());
-			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
-				new ReadOnlyCollection<IPersonalShift>(new[] { personalShift }));
-			return personAssignment;
-		}
-
-		public IPersonAssignment PersonAssignmentOvertimeStub()
-		{
-			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var overtimeShift = MockRepository.GenerateStub<IOvertimeShift>();
-			personAssignment.Stub(x => x.OvertimeShiftCollection).Return(
-				new ReadOnlyCollection<IOvertimeShift>(new[] { overtimeShift }));
-			return personAssignment;
-		}
-
-		public IShiftCategory ShiftCategoryStub() { return ShiftCategoryStub(Color.Black); }
 
 		public IShiftCategory ShiftCategoryStub(Color color)
 		{
@@ -305,8 +255,6 @@ namespace Teleopti.Ccc.TestCommon
 						new VisualLayer(new Activity("for test"), period, new Activity("also for test"), new Person())
 					});
 		}
-
-		public IVisualLayer VisualLayerStub() { return VisualLayerStub(Color.Transparent); }
 
 		public IVisualLayer VisualLayerStub(Color displayColor)
 		{

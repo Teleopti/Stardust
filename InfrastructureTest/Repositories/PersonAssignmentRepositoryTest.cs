@@ -163,12 +163,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                    new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
                 _dummyCategory,
                 _dummyScenario);
-            agAssValid.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_dummyActivity,
-                                                                                 new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
-            agAssValid.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_dummyActivity,
-                                                                                 new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
-            agAssValid.PersonalShiftCollection[0].LayerCollection.Add(
-                new PersonalShiftActivityLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddOvertimeShift(new OvertimeShift());
             agAssValid.OvertimeShiftCollection[0].LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet));
 
@@ -247,12 +244,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                    new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
                 _dummyCategory,
                 _dummyScenario);
-            agAssValid.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_dummyActivity,
-                                                                                 new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
-            agAssValid.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_dummyActivity,
-                                                                                 new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
-            agAssValid.PersonalShiftCollection[0].LayerCollection.Add(
-                new PersonalShiftActivityLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2)));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
                 _dummyActivity,

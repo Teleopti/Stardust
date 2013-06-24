@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
@@ -266,7 +267,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var now = DateTime.Now;
 			var stubs = new StubFactory();
 			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
-			var personalShift = MockRepository.GenerateMock<IPersonalShift>();
 			var activityLayer = MockRepository.GenerateMock<ILayer<IActivity>>();
 			var payload = MockRepository.GenerateMock<IActivity>();
 			payload.Stub(x => x.ConfidentialDescription(new Person(),DateOnly.Today)).IgnoreArguments().Return(new Description("activity"));
@@ -274,10 +274,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
-			var layers = new LayerCollection<IActivity> {activityLayer};
-			personalShift.Stub(x => x.LayerCollection).Return(layers);
-			var shifts = new ReadOnlyCollection<IPersonalShift>(new[] { personalShift });
-			personAssignment.Stub(x => x.PersonalShiftCollection).Return(shifts);
+			personAssignment.Stub(x => x.PersonalLayers).Return(new List<IPersonalShiftLayer>());
 			var assignments = new ReadOnlyCollection<IPersonAssignment>(new[] { personAssignment });
 			scheduleDay.Stub(x => x.PersonAssignmentCollection()).Return(assignments);
 

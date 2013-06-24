@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -11,13 +10,17 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class PersonalShiftLayerViewModel : LayerViewModel
     {
-	    private readonly IPersonalShift _parent;
+	    private readonly IPersonalShiftLayer _layer;
+	    private readonly IPersonAssignment _parent;
+	    private readonly IMoveLayerVertical _moveLayerVertical;
 
-	    public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IPersonalShift parent, IEventAggregator eventAggregator)
+	    public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, IPersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
             : base(observer,layer, eventAggregator, false)
-        {
-	        _parent = parent;
-        }
+	    {
+		    _layer = layer;
+		    _parent = parent;
+				_moveLayerVertical = moveLayerVertical;
+	    }
 
 
 	    public override string LayerDescription
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 var idx = 0;
                 if (_parent != null)
-                    idx = _parent.OrderIndex;
+									idx = _parent.PersonalLayers.ToList().IndexOf(_layer);
                 return 200 + idx;
             }
         }
@@ -49,11 +52,9 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-	            var personalShift = getPersonalShift();
-	            var personAssignment = getPersonAssignment(personalShift);
-				if (personAssignment != null)
+				if (_parent != null)
 				{
-					return personAssignment.PersonalShiftCollection.IndexOf(personalShift) > 0;
+					return _parent.PersonalLayers.ToList().IndexOf(_layer) > 0;
 				}
 
 	            return false;
@@ -64,11 +65,9 @@ namespace Teleopti.Ccc.WinCode.Common
         {
 			get
 			{
-				var personalShift = getPersonalShift();
-				var personAssignment = getPersonAssignment(personalShift);
-				if (personAssignment != null)
+				if (_parent != null)
 				{
-					return personAssignment.PersonalShiftCollection.Contains(personalShift) && personAssignment.PersonalShiftCollection.Last() != personalShift;
+					return _parent.PersonalLayers.Contains(_layer) && !_parent.PersonalLayers.ToList().Last().Equals(_layer);
 				}
 
 				return false;
@@ -79,16 +78,17 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (CanMoveDown)
 			{
-				movePersonalShift(false);
+				_moveLayerVertical.MoveDown(_parent, _layer);
+				LayerMoved();
 			}
-
 		}
 
 		public override void MoveUp()
 		{
 			if (CanMoveUp)
 			{
-				movePersonalShift(true);
+				_moveLayerVertical.MoveUp(_parent, _layer);
+				LayerMoved();
 			}
 		}
 
@@ -97,34 +97,6 @@ namespace Teleopti.Ccc.WinCode.Common
             return false;
         }
 
-		private void movePersonalShift(bool moveUp)
-		{
-			var personalShift = getPersonalShift();
-			var personAssignment = getPersonAssignment(personalShift);
-			if (personAssignment != null)
-			{
-				var index = personAssignment.PersonalShiftCollection.IndexOf(personalShift);
-				personAssignment.RemovePersonalShift(personalShift);
-				IList<IPersonalShift> personalShiftsList = personAssignment.PersonalShiftCollection.ToList();
-
-				if (moveUp) index--;
-				else index++;
-
-				if (index == personalShiftsList.Count)
-					personalShiftsList.Add(personalShift);
-				else
-					personalShiftsList.Insert(index, personalShift);
-
-				personAssignment.ClearPersonalShift();
-				foreach (var ps in personalShiftsList)
-				{
-					personAssignment.AddPersonalShift(ps);
-				}
-
-			}
-
-			LayerMoved();	
-		}
 
 		private void LayerMoved()
 		{
@@ -133,22 +105,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				ParentObservingCollection.LayerMovedVertically(this);
 				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 			}
-		}
-
-		private IPersonalShift getPersonalShift()
-		{
-			return _parent as Domain.Scheduling.Assignment.PersonalShift;
-		}
-
-		private IPersonAssignment getPersonAssignment(IPersonalShift personalShift)
-		{
-			if (personalShift != null)
-			{
-				var personAssignment = personalShift.Parent as Domain.Scheduling.Assignment.PersonAssignment;
-				return personAssignment;
-			}
-
-			return null;
 		}
     }
 }
