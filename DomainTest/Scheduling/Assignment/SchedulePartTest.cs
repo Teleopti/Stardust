@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -1661,7 +1660,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.CreateAndAddOvertime(layer);
 			source.DeleteMainShift(source);
 			source.DeletePersonalStuff();
-			Assert.IsEmpty(source.PersonAssignmentCollection());
+			Assert.IsNotEmpty(source.PersonAssignmentCollection());
 			
 			//personal shift
 			SetupForMergeTests();
@@ -1698,9 +1697,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
 			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
 			source.DeleteMainShift(source);
-            Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
+            Assert.AreEqual(1, source.PersonAssignmentCollection().Count);
 
-			//no mainshift and overtime shift
+			//no mainshift and no overtime shift
+			source.DeleteOvertime();
 			source.DeleteMainShift(source);
             Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
 		}
