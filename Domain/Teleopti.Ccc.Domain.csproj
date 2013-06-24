@@ -1410,9 +1410,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\PersonalShift.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Common\BusinessUnit.hbm.xml" />
     <EmbeddedResource Include="Common\Scenario.hbm.xml" />
     <EmbeddedResource Include="Scheduling\ShiftCategory.hbm.xml" />
@@ -1502,7 +1499,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\MainShiftLayer.hbm.xml" />
-    <EmbeddedResource Include="Scheduling\Assignment\PersonalShiftActivityLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\WorkloadDayBase.hbm.xml" />
@@ -1853,7 +1849,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Scheduling\Assignment\PersonalShiftLayer.hbm.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

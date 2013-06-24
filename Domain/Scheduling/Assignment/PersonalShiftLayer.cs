@@ -10,6 +10,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
+		protected PersonalShiftLayer()
+		{
+		}
+
 		public virtual int OrderIndex
 		{
 			get

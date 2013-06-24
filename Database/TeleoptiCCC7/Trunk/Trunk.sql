@@ -444,3 +444,72 @@ INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [C
 VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0) 
 SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-06-12
+--Desc: #23812 - Migrate PersonalShift and OvertimeShift to PersonAssignment
+---------------- 
+
+--1) [dbo].[PersonalShiftActivityLayer] 
+
+--drop FKs
+ALTER TABLE [dbo].[PersonalShift] DROP CONSTRAINT [FK_PersonalShift_PersonAssignment]
+ALTER TABLE [dbo].[PersonalShiftActivityLayer] DROP CONSTRAINT [FK_PersonalShiftActivityLayer_Activity]
+ALTER TABLE [dbo].[PersonalShiftActivityLayer] DROP CONSTRAINT [FK_PersonalShiftActivityLayer_PersonalShift]
+GO
+
+--Create new layer table
+CREATE TABLE [dbo].[PersonalShiftActivityLayer_new](
+	[Id] [uniqueidentifier] NOT NULL,
+	[payLoad] [uniqueidentifier] NOT NULL,
+	[Minimum] [datetime] NOT NULL,
+	[Maximum] [datetime] NOT NULL,
+	[Parent] [uniqueidentifier] NOT NULL,
+	[OrderIndex] [int] NOT NULL,
+ CONSTRAINT [PK_PersonalShiftActivityLayer_new] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE CLUSTERED INDEX [CIX_PersonalShiftActivityLayer] ON [dbo].[PersonalShiftActivityLayer_new]
+(
+	[Parent] ASC
+)
+GO
+
+--move data
+INSERT INTO [dbo].[PersonalShiftActivityLayer_new] (Id, payLoad, Minimum, Maximum, Parent, OrderIndex)
+select
+L2.Id,
+L2.payLoad,
+L2.Minimum,
+L2.Maximum,
+L1.Parent,
+NewOrderIndex = ROW_NUMBER() OVER(PARTITION BY L0.Id ORDER BY L1.OrderIndex,L2.OrderIndex) -1
+from  dbo.PersonAssignment L0
+inner join dbo.personalShift L1
+	on L0.Id = L1.Parent
+inner join dbo.PersonalShiftActivityLayer L2
+	on L1.Id = L2.Parent
+GO
+
+ALTER TABLE [dbo].[PersonalShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+ALTER TABLE [dbo].[PersonalShiftActivityLayer_new] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_Activity]
+
+ALTER TABLE [dbo].[PersonalShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+ON DELETE CASCADE
+ALTER TABLE [dbo].[PersonalShiftActivityLayer_new] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_PersonAssignment]
+
+DROP TABLE PersonalShiftActivityLayer
+DROP TABLE PersonalShift
+GO
+
+EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer_new]', N'PersonalShiftActivityLayer', N'OBJECT'
+EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer].[PK_PersonalShiftActivityLayer_new]', N'PK_PersonalShiftActivityLayer', N'INDEX'
+GO

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _mainLayers; }
 		}
 
-		public IEnumerable<IPersonalShiftLayer> PersonalLayers
+		public virtual IEnumerable<IPersonalShiftLayer> PersonalLayers
 		{
 			get { return _personalLayers; }
 		}
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _mainLayers.Remove(layer);
 		}
 
-		public bool RemoveLayer(IPersonalShiftLayer layer)
+		public virtual bool RemoveLayer(IPersonalShiftLayer layer)
 		{
 			return _personalLayers.Remove(layer);
 		}
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Person; }
 		}
 
-		public void AddPersonalLayer(IActivity activity, DateTimePeriod period)
+		public virtual void AddPersonalLayer(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
