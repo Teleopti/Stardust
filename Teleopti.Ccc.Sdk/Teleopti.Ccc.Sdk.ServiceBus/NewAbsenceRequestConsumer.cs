@@ -125,10 +125,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 if (!HasWorkflowControlSet())
                 {
                     denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow", _absenceRequest.Person.PermissionInformation.Culture()));
-					
-                    if (Logger.IsWarnEnabled)
+
+                    if (Logger.IsDebugEnabled)
                     {
-                        Logger.WarnFormat(CultureInfo.CurrentCulture,
+                        Logger.DebugFormat(CultureInfo.CurrentCulture,
                                           "No workflow control set defined for {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
                                           _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
                                           _absenceRequest.Person.Id, message.PersonRequestId);
@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     {
                         if (_absenceRequest.Absence.Tracker != null)
                         {
-                            if (Logger.IsWarnEnabled)
+                            if (Logger.IsDebugEnabled)
                             {
-                                Logger.WarnFormat(CultureInfo.CurrentCulture,
+                                Logger.DebugFormat(CultureInfo.CurrentCulture,
                                                   "No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
                                                   _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
                                                   _absenceRequest.Person.Id, message.PersonRequestId,
@@ -195,25 +195,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
                                                                                              _absenceRequest.Period,
                                                                                              _absenceRequest.Person);
-                    if (Logger.IsWarnEnabled)
+                    if (Logger.IsDebugEnabled)
                     {
                         foreach (var brokenBusinessRule in brokenBusinessRules)
                         {
-                            Logger.WarnFormat("A rule was broken: {0}", brokenBusinessRule.Message);
+                            Logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
                         }
-                    }
-                    if (Logger.IsDebugEnabled)
-                    {
+
                         Logger.Debug("Simulated approving absence successfully");
                     }
-
+                    
                     if (_process.GetType() == typeof (GrantAbsenceRequest) && alreadyAbsent)
                     {
 						denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", _absenceRequest.Person.PermissionInformation.Culture()));
 
-                        if (Logger.IsWarnEnabled)
+                        if (Logger.IsDebugEnabled)
                         {
-                            Logger.WarnFormat(CultureInfo.CurrentCulture,
+                            Logger.DebugFormat(CultureInfo.CurrentCulture,
                                               "The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
                                               _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
                                               _absenceRequest.Person.Id,
