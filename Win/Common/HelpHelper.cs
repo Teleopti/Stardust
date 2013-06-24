@@ -27,15 +27,12 @@ namespace Teleopti.Ccc.Win.Common
 		private readonly string _suffixOnline  = string.Empty;
 		private const HelpType _helpType = HelpType.Http;
 		private readonly string _helpLang = string.Empty;
-	    private readonly string _defaultHelpLanguage = "en";
-  
+	    
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
 		private HelpHelper()
 		{
 			//Read help settings from config file
-            string staticHelp = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["StaticHelp"];
-            if (!string.IsNullOrEmpty(staticHelp)) if (!bool.TryParse(staticHelp, out _staticHelp)){}
-			string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
+            string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
 			if (!string.IsNullOrEmpty(helpUrl)) _http = helpUrl;
 			string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
 			if (!string.IsNullOrEmpty(helpPrefix)) _prefix = helpPrefix;
@@ -52,9 +49,6 @@ namespace Teleopti.Ccc.Win.Common
 			if (!string.IsNullOrEmpty(helpSuffixOnline)) _suffixOnline = helpSuffixOnline;
 			string helpDividerOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
 			if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
-
-            string defaultHelpLanguage = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["DefaultHelpLanguage"];
-            if (!string.IsNullOrEmpty(helpUrl)) _defaultHelpLanguage = defaultHelpLanguage;
 
 			//Select language is handled in Wiki site
 			_helpLang = string.Empty;
@@ -78,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common
 	    private string GetUrl(string formName, IHelpContext control)
 	    {
 	        var topic = GetTopic(formName, control);
-	        if (!_staticHelp) topic = HttpUtility.UrlEncode(topic);
+	        //if (!_staticHelp) topic = HttpUtility.UrlEncode(topic);
             return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
 	        
 	    }
