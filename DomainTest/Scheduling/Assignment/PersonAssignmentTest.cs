@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyProjectionIsEmptyIfNoMainShift()
 		{
-			target.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000,1,1,2001,1,1)));
+			target.AddPersonalLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000,1,1,2001,1,1));
 			IProjectionService svc = target.ProjectionService();
 			Assert.IsNull(svc.CreateProjection().Period());
 		}

@@ -1192,10 +1192,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			//create personassignment with no mainshift
 			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
-			//create personal shift
-			IPersonalShift personalShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("activity"), period3);
-			//add personal shift to assignment
-			newPersonAssignment.AddPersonalShift(personalShift);
+			//add personal layer to assignment
+			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period3);
 			//add assignment to source
 			source.Add(newPersonAssignment);
 
@@ -1273,10 +1271,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			//create assignment with no mainshift
 			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person2, scenario);
-			//add a personal shift
-			IPersonalShift personalShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("activity"), period1.MovePeriod(TimeSpan.FromDays(1)));
-			//add personal shift to assignment
-			newPersonAssignment.AddPersonalShift(personalShift);
+			//add a personal layer
+			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period1.MovePeriod(TimeSpan.FromDays(1)));
 
 			//add assignment to destination
 			destination.Add(newPersonAssignment);
@@ -1292,8 +1288,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			//create absence
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person2, scenario, period);
-			//add personal shift to assignment with no mainshift
-			newPersonAssignment.AddPersonalShift(personalShift);
+			//add personal layer to assignment with no mainshift
+			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period1.MovePeriod(TimeSpan.FromDays(1)));
 
 			//clear absences
 			destination.Clear<IPersonAbsence>();
