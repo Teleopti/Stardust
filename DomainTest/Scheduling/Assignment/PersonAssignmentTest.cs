@@ -84,11 +84,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyClearPersonalShiftWorks()
 		{
-			target.AddPersonalShift(new PersonalShift());
-			target.AddPersonalShift(new PersonalShift());
-			Assert.AreEqual(2, target.PersonalShiftCollection.Count);
-			target.ClearPersonalShift();
-			Assert.AreEqual(0, target.PersonalShiftCollection.Count);
+			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
+			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
+			Assert.AreEqual(2, target.PersonalLayers.Count());
+			target.ClearPersonalLayers();
+			Assert.AreEqual(0, target.PersonalLayers.Count());
 		}
 
 		/// <summary>

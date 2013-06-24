@@ -53,7 +53,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        void ClearMainShiftLayers();
+        void ClearMainLayers();
 
         /// <summary>
         /// Gets or sets the ZOrder for PersonAssignment, used in gui.

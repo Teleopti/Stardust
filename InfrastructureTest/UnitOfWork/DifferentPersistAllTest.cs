@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 new PersonAssignmentRepository(UnitOfWork).Add(ass);
                 UnitOfWork.PersistAll();
-                ass.ClearMainShiftLayers();
+                ass.ClearMainLayers();
                 IEnumerable<IRootChangeInfo> changes = UnitOfWork.PersistAll();
 
                 UnitOfWork.Dispose();

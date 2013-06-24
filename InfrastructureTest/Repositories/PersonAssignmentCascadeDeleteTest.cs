@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeleteMainShiftShouldGenerateOneStatement()
 		{
-			target.ClearMainShiftLayers();
+			target.ClearMainLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete layer + update personassignment

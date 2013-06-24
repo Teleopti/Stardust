@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
 			//clear or new list?
-			ClearMainShiftLayers();
+			ClearMainLayers();
 			activityLayers.ForEach(layer =>
 			{
 				layer.SetParent(this);
@@ -214,9 +214,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			personalShift.SetParent(this);
 		}
 
-		public virtual void ClearPersonalShift()
+		public virtual void ClearPersonalLayers()
 		{
-			_personalShiftCollection.Clear();
+			_personalLayers.Clear();
 		}
 
 		public virtual void RemovePersonalShift(IPersonalShift personalShift)
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Manipulate MainShift
 
-		public virtual void ClearMainShiftLayers()
+		public virtual void ClearMainLayers()
 		{
 			_mainLayers.Clear();
 		}
