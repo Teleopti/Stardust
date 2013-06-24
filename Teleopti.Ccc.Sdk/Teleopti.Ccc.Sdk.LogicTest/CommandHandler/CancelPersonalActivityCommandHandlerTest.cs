@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_activity, _period));
+			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_activity, _period));
+			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
