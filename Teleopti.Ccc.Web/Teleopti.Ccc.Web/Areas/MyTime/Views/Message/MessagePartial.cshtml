@@ -51,17 +51,18 @@
                             <br/>
                             <!-- /ko -->
                         </div>
-                        <div class="bdd-asm-message-detail-reply">
-                            <textarea data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
-                            <!-- ko foreach: replyOptions -->
-                            <input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
-                            <label data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
-                            <!-- /ko -->
-                        </div>
-                        <div>
-                            <button class="btn btn-primary bdd-asm-message-confirm-button" data-bind="click : confirmReadMessage, enable : canConfirm">@Html.AttributeEncode(Resources.Ok)</button>
-                        </div>
-                        <div>
+	                    <div class="bdd-asm-message-detail-reply btn-group-vertical" data-toggle="buttons-radio">
+		                    <textarea data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
+		                    <!-- ko foreach: replyOptions -->
+							 <button class="btn btn-primary message-option"  data-bind="text: text, visible: $parent.userMustSelectReplyOption, click: select" ></button>
+		                    <!-- /ko -->
+	                    </div>
+						
+						<hr/>
+	                    <div>
+		                    <button class="btn btn-primary bdd-asm-message-confirm-button" data-bind="click : confirmReadMessage, enable : canConfirm">@Html.AttributeEncode(Resources.Ok)</button>
+	                    </div>
+	                    <div>
                             <span class="error" data-bind="text: errorMessage"></span>
                         </div>
                     </div>
