@@ -174,7 +174,7 @@
 			this.buttonDBconnect.TabIndex = 8;
 			this.buttonDBconnect.Text = "Connect";
 			this.buttonDBconnect.UseVisualStyleBackColor = true;
-			this.buttonDBconnect.Click += new System.EventHandler(this.CheckDBConnection_Click);
+			this.buttonDBconnect.Click += new System.EventHandler(this.CheckDbConnection_Click);
 			// 
 			// groupBoxDBConnectivity
 			// 
