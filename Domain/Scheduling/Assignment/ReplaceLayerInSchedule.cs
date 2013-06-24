@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -29,15 +30,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 				}
 
-				foreach (var personalLayer in ass.PersonalLayers)
+				var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
+				if (layerAsPersonal != null)
 				{
-					if (personalLayer.Equals(layerToRemove))
+					var personalLayers = ass.PersonalLayers.ToList();
+					var indexOfLayer = personalLayers.IndexOf(layerAsPersonal);
+					personalLayers.RemoveAt(indexOfLayer);
+					personalLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
+					ass.ClearPersonalLayers();
+					foreach (var personalLayer in personalLayers)
 					{
-						//MICKE! DENNA FIXAR JAG/ROGER!
-						var indexOfLayer = personalLayer.OrderIndex;
-						//här ska det insertas! fixas sen!
-						return;
+						ass.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
 					}
+					return;
 				}
 
 				foreach (var overtimeShift in ass.OvertimeShiftCollection)
