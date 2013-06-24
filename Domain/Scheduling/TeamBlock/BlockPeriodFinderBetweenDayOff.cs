@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        
 			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
             // the day off and absence should be checked  on team level
-            if (isSingleAgentTeam && (isAbsenceDay(scheduleDay ) ||  isDayOff(scheduleDay) ))
+            if ( isDayOff(scheduleDay) || (isSingleAgentTeam &&  isAbsenceDay(scheduleDay )) )
 		        return null;
 
 			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
