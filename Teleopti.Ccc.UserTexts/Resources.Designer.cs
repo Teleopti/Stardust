@@ -20683,6 +20683,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Share my calendar.
+        /// </summary>
+        public static string ShareMyCalendar {
+            get {
+                return ResourceManager.GetString("ShareMyCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift.
         /// </summary>
         public static string Shift {

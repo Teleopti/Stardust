@@ -10,10 +10,16 @@
         </select>
     </div>
     <br/>
-    <div class="clearfix">
-        <label for="Culture-Picker">@Resources.DateFormat</label>
-        <select id="Culture-Picker" data-bind="foreach: cultures, select2: { width: 'resolve', value: selectedCulture }, enable: culturesLoaded">
-            <option data-bind="text: text, value: id"></option>
-        </select>
-    </div>
+	<div class="clearfix">
+		<label for="Culture-Picker">@Resources.DateFormat</label>
+		<select id="Culture-Picker" data-bind="foreach: cultures, select2: { width: 'resolve', value: selectedCulture }, enable: culturesLoaded">
+			<option data-bind="text: text, value: id"></option>
+		</select>
+	</div>
+	<br/>
+	<div class="clearfix">
+		<label>@Resources.ShareMyCalendar</label>
+		<a class="btn btn-large" data-bind="css: { active: CalendarSharingActive }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</a>
+		<label data-bind="text: CalendarUrl"></label>
+	</div>
 </div>

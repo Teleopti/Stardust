@@ -11484,4 +11484,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Share Calendar</value>
     <comment>Share Calendar</comment>
   </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Share my calendar</value>
+    <comment>Share my calendar</comment>
+  </data>
 </root>

@@ -22,6 +22,13 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         self.selectedUiCulture = ko.observable();
         self.selectedCulture = ko.observable();
 
+        self.CalendarSharingActive = ko.observable(false);
+	    self.CalendarUrl = ko.observable();
+	    self.ActivateCalendarSharing = function() {
+	    	self.CalendarSharingActive(true);
+		    self.CalendarUrl("http://xxx.xxx.xxx.xxx/ServiceBus/Calendar/[hashvalue]");
+	    };
+
         self.selectedUiCulture.subscribe(function(newValue) {
             if (!self.avoidReload)
                 _selectorChanged(newValue, "Settings/UpdateUiCulture");
