@@ -127,15 +127,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30)))
+	                  .Return(new[]
+		                  {day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours});
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(9);
 
             }
@@ -185,15 +179,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30)))
+	                  .Return(new[]
+		                  {day0Hours, day0Hours, day1, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours});
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(8);
                 Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol2).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Start);
@@ -247,15 +235,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day2);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30)))
+	                  .Return(new[]
+		                  {day0Hours, day0Hours, day1, day0Hours, day0Hours, day2, day0Hours, day0Hours, day0Hours});
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(7);
                 Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol1).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
@@ -308,15 +290,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30)))
+	                  .Return(new[]
+		                  {day0Hours, day0Hours, day1, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours, day0Hours});
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(8);
                 Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol2).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
@@ -381,15 +357,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30)))
+	                  .Return(new[]
+		                  {day0Hours, day0Hours, day1, day0Hours, day0Hours, day0Hours, day1, day0Hours, day0Hours});
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(7);
                 Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol2);
                 Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol3);
@@ -453,16 +423,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day0Hours);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
-				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-				Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(3);
+				Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30))).Return(new[] { day0Hours, day1, day1, day1, day1, day1, day1, day0Hours });
+				Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(2);
 				Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol2).Repeat.Times(6);
 
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
@@ -532,22 +494,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
  
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Any();
                 Expect.Call(_personContract.Contract).Return(_contract).Repeat.Twice();
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours).Repeat.Twice();
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day1).Repeat.Twice();
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 31))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 1))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 2))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 3))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 4))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 5))).Return(day1);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 6))).Return(day1);
+                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010,8,22,2010,8,30))).Return(new[]{ day1,day1,day1,day1,day1,day1,day1,day0Hours,day1});
+				Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 29, 2010, 9, 6))).Return(new[] { day0Hours, day1, day1, day1, day1, day1, day1, day1, day1 });
 
                 Expect.Call(day0Hours.PersonAssignmentCollection()).Return(emptyPersonAssCol).Repeat.Twice();
                 Expect.Call(day1.PersonAssignmentCollection()).Return(scheduledPersonAssCol).Repeat.AtLeastOnce();

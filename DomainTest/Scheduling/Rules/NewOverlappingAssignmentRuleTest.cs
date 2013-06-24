@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, _timeZone);
             var ass = _mocks.StrictMock<IPersonAssignment>();
 
-            Expect.Call(day.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Twice();
+            Expect.Call(day.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(day.Person).Return(_person);
             Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(dateOnlyBefore, dateOnlyAfter))).Return(threeDays);
             Expect.Call(day.PersonAssignmentConflictCollection).Return(new List<IPersonAssignment>{ass});
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, _timeZone);
 
-            Expect.Call(day.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+            Expect.Call(day.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(day.Person).Return(_person);
             Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(dateOnlyBefore, dateOnlyAfter))).Return(threeDays);
             Expect.Call(day.PersonAssignmentConflictCollection).Return(new List<IPersonAssignment> ());

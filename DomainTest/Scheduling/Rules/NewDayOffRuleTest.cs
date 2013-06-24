@@ -101,10 +101,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             Expect.Call(_day.Person).Return(_person);
             Expect.Call(_scheduleRange.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>());
-            Expect.Call(_day.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Twice();
+            Expect.Call(_day.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 
-            Expect.Call(_scheduleRange.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(2007, 7, 31),
-                                             new DateOnly(2007, 8, 6)))).Return(_dayBeforeDayAfter);
+    		Expect.Call(_scheduleRange.ScheduledDayCollection(new DateOnlyPeriod(2007, 7, 31, 2007, 8, 6)))
+    		      .Return(_dayBeforeDayAfter);
 
             Expect.Call(_dayBefore.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnlyAsDateTimePeriod.DateOnly.AddDays(-1), _timeZone));
             Expect.Call(_dayAfter.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnlyAsDateTimePeriod.DateOnly.AddDays(1), _timeZone));
