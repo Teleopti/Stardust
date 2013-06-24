@@ -11480,4 +11480,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Local time</value>
     <comment>Agents local time</comment>
   </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Share Calendar</value>
+    <comment>Share Calendar</comment>
+  </data>
 </root>

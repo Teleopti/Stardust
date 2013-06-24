@@ -35,6 +35,8 @@
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
 
+		public const string TeleoptiCccCalendarLink = "Teleopti CCC7 Calendar Link";
+
 		public const string TeleoptiCccVersion8 = "Teleopti CCC8";
     }
 }

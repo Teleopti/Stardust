@@ -4,17 +4,17 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public class TeleoptiCccSmsLinkLicenseOption : LicenseOption
+	public class TeleoptiCccCalendarLinkLicenseOption : LicenseOption
 	{
-		public TeleoptiCccSmsLinkLicenseOption()
-			: base(DefinedLicenseOptionPaths.TeleoptiCccSmsLink, DefinedLicenseOptionNames.TeleoptiCccSmsLink)
+		public TeleoptiCccCalendarLinkLicenseOption()
+			: base(DefinedLicenseOptionPaths.TeleoptiCccCalendarLink, DefinedLicenseOptionNames.TeleoptiCccCalendarLink)
 		{
 		}
 
 		public override void EnableApplicationFunctions(IList<Interfaces.Domain.IApplicationFunction> allApplicationFunctions)
 		{
 			EnabledApplicationFunctions.Clear();
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShareCalendar));
 		}
 	}
 }

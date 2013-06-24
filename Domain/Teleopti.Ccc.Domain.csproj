@@ -989,6 +989,7 @@
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
