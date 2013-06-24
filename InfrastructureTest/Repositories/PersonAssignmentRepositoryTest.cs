@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NHibernate.Criterion;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -96,10 +94,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
-	        ass.SetMainShiftLayers(
-		        new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
-					ass.AddPersonalShift(new PersonalShift());
-					ass.AddPersonalShift(new PersonalShift());
+	        ass.SetMainShiftLayers(new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
+					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
 
 						IOvertimeShift ot = new OvertimeShift();
             ass.AddOvertimeShift(ot);
@@ -311,7 +307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
                 //Do change
                 loaded = _rep.Load(org.Id.Value);
-                loaded.AddPersonalShift(new PersonalShift());
+							loaded.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
                 UnitOfWork.PersistAll();
                 loaded = _rep.Load(org.Id.Value);
                 Assert.AreEqual(2, casted.Version);
@@ -349,7 +345,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
                 //Do change
                 loaded = _rep.LoadAggregate(org.Id.Value);
-                loaded.AddPersonalShift(new PersonalShift());
+	            loaded.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
                 UnitOfWork.PersistAll();
                 UnitOfWork.Remove(loaded);
                 loaded = _rep.LoadAggregate(org.Id.Value);

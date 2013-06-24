@@ -83,11 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	                                 .SetFetchMode("MainLayers", FetchMode.Join);
 
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                    .SetFetchMode("PersonalShiftCollection", FetchMode.Join);
-
-            var persWithLayers = Session.CreateCriteria(typeof(PersonalShift))
-                        .CreateAlias("Parent", "ass")
-                        .SetFetchMode("LayerCollection", FetchMode.Join);
+										.SetFetchMode("PersonalLayers", FetchMode.Join);
 
             var assWithOvertime = Session.CreateCriteria(typeof(PersonAssignment), "ass")
                     .SetFetchMode("OvertimeShiftCollection", FetchMode.Join);
@@ -96,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .CreateAlias("Parent", "ass")
                         .SetFetchMode("LayerCollection", FetchMode.Join);
 
-            var ret = new[] { assWithMain, assWithPers, persWithLayers, assWithOvertime, overWithLayers };
+            var ret = new[] { assWithMain, assWithPers, assWithOvertime, overWithLayers };
             ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
             ret.ForEach(addBuClauseToNonRootQuery);
             return ret;
