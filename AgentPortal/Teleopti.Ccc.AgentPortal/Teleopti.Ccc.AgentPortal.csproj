@@ -285,7 +285,9 @@
     <Compile Include="Common\Controls\Columns\RowHeaderColumn.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridColumnBase.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridVisualProjectionColumn.cs" />
-    <Compile Include="Common\Controls\CustomScheduleControl.cs" />
+    <Compile Include="Common\Controls\CustomScheduleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Common\Controls\MailButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -492,7 +494,9 @@
     <Compile Include="Settings\AgentPortalOptions.Designer.cs">
       <DependentUpon>AgentPortalOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\CustomScheduleGrid.cs" />
+    <Compile Include="Common\Controls\CustomScheduleGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\NavigationMonthCalendar.cs">
       <SubType>Component</SubType>
     </Compile>
