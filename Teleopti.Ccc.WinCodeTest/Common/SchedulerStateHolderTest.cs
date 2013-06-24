@@ -27,14 +27,19 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private MockRepository mocks;
         private IScenario scenario;
         private IList<IPerson> selectedPersons;
+	    private IPerson _person1;
+		private IPerson _person2;
 
         [SetUp]
         public void Setup()
         {
             scenario = ScenarioFactory.CreateScenarioAggregate();
             dtp = new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2001,1,1));
-            IPerson person = PersonFactory.CreatePerson("first", "last");
-            selectedPersons = new List<IPerson>{person};
+            _person1 = PersonFactory.CreatePerson("first", "last");
+	        _person2 = PersonFactory.CreatePerson("firstName", "lastName");
+	        _person1.SetId(Guid.NewGuid());
+			_person2.SetId(Guid.NewGuid());
+            selectedPersons = new List<IPerson>{_person1, _person2};
         	target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
@@ -283,5 +288,36 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(target.ConsiderShortBreaks);
 		}
 
+		[Test]
+		public void ShouldReturnIsFilteredOnAgentsWhenFilterCountNotEqualToAllPermittedCount()
+		{
+			target.FilterPersons(new List<IPerson>{_person1});
+			var result = target.AgentFilter();
+			Assert.IsTrue(result);
+		}
+
+		[Test]
+		public void ShouldReturnIsNotFilteredOnAgentsWhenFilterCountEqualToAllPermittedCount()
+		{
+			target.FilterPersons(new List<IPerson> { _person1, _person2 });
+			var result = target.AgentFilter();
+			Assert.IsFalse(result);	
+		}
+
+		[Test]
+		public void ShouldReturnIsFilteredOnOvertimeAvailabilityWhenFilterCountNotEqualToAllPermittedCount()
+		{
+			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1 });
+			var result = target.OvertimeAvailabilityFilter();
+			Assert.IsTrue(result);	
+		}
+
+		[Test]
+		public void ShouldReturnIsNotFilteredOnOvertimeAvailabilityWhenFilterCountCountEqualToAllPermittedCount()
+		{
+			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2 });
+			var result = target.OvertimeAvailabilityFilter();
+			Assert.IsFalse(result);
+		}
     }
 }
