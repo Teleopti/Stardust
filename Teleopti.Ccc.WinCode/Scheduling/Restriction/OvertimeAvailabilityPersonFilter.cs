@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                 {
                     var startTime = overtimeAvailability.StartTime.GetValueOrDefault();
                     var endTime = overtimeAvailability.EndTime.GetValueOrDefault();
-                    if(startTime >= filterStartTime && endTime <= filterEndTime )
+                    if( startTime  <= filterStartTime  && endTime >=filterEndTime  )
                         personList.Add(overtimeAvailability.Person);
                 }
             }

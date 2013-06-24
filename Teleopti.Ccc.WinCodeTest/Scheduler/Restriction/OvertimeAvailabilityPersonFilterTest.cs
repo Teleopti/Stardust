@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         public void OnePersonFoundInFilterWithOvertimeAvailability()
         {
             _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
-                                                              TimeSpan.FromHours(10));
+                                                              TimeSpan.FromHours(17));
             _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
 
             using (_mock.Record())
@@ -110,10 +110,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         public void AllPersonFoundInFilterWithOvertimeAvailability()
         {
             _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(7),
-                                                              TimeSpan.FromHours(15));
+                                                              TimeSpan.FromHours(19));
             _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(7),
-                                                              TimeSpan.FromHours(15));
-            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(10),
+                                                              TimeSpan.FromHours(17));
+            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                               TimeSpan.FromHours(16));
             _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
             _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                 commonPersistableScheduleDataCollectionMocks();
             }
             var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime );
-            Assert.AreEqual(personList.Count(),2);
+            Assert.AreEqual(personList.Count(),3);
             
         }
         
