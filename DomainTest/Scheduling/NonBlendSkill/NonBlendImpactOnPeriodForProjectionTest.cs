@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private IVisualLayer _visualLayer2;
 		private IActivity _mejeriVaror;
 		private IActivity _lunch;
-		private IAbsence _absence;
 		private IVisualLayerFactory _visualLayerFactory;
 		private ResourceCalculationDataContainer _resources;
 		private DateTimePeriod _shiftPeriod;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             _target = new NonBlendSkillImpactOnPeriodForProjection();
 			_lunch = ActivityFactory.CreateActivity("lunch");
 			_mejeriVaror = ActivityFactory.CreateActivity("mejeri");
-			_absence = AbsenceFactory.CreateAbsence("Vacation");
 			_skillCarnaby = SkillFactory.CreateNonBlendSkill("Carnaby Street");
 		    _skillCarnaby.Activity = _mejeriVaror;
 			_skillCarnaby.SetId(Guid.NewGuid());
@@ -76,81 +74,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_skillStaffPeriod.SetSkillDay(skillDay);
 		}
 
-		[Test]
-		public void ShouldCalculateIfActivityIntersectsPeriod()
-		{
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
-			Assert.AreEqual(0.5, result);
-		}
-
         [Test]
         public void ShouldCalculateOnOneLayerCollectionToo()
         {
             double result = _target.CalculatePeriod(_skillStaffPeriod, _layerCollection1, _mejeriVaror);
             Assert.AreEqual(0.5, result);
         }
-
-		[Test]
-		public void ShouldNotCalculateIfPayloadNotActivity()
-		{
-			var period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
-
-			IVisualLayer baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, period, _person2);
-			IVisualLayer absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period);
-			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> {absenceLayer, _visualLayer1},
-			                                              new ProjectionPayloadMerger());
-
-			_resources.Clear();
-
-			foreach (var resourceLayer in _layerCollection3.ToResourceLayers(15))
-			{
-				_resources.AddResources(_person2, new DateOnly(2008, 1, 1), resourceLayer);
-			}
-
-			double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
-			Assert.AreEqual(0.5, result);
-		}
-
-		[Test]
-		public void ShouldCalculateOnlyIfPersonSkillExist()
-		{
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
-			Assert.AreEqual(0.5, result);
-
-			IPersonPeriod personPeriod = _person1.Period(new DateOnly(2010, 1, 1));
-			IPersonSkill personSkill = personPeriod.PersonNonBlendSkillCollection[0];
-			Assert.AreEqual(_skillCarnaby, personSkill.Skill);
-            personPeriod.PersonNonBlendSkillCollection.Remove(personSkill);
-
-            result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
-			Assert.AreEqual(0, result);
-		}
-
-		[Test]
-		public void ShouldNotCalculateIfPersonPeriodIsNull()
-		{
-			_person2.RemoveAllPersonPeriods();
-			_person1.RemoveAllPersonPeriods();
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillCarnaby);
-			Assert.AreEqual(0, result);
-		}
-
-		[Test]
-		public void ShouldNotCalculateIfSkillStaffPeriodSkillIsWrongType()
-		{
-			_skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skillPhone,
-																			   new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc), 60,
-																			   0, 0);
-			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillPhone,
-											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
-											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetSkillDay(skillDay);
-            double result = _target.CalculatePeriod(_skillStaffPeriod, _resources, _skillPhone);
-			Assert.AreEqual(0, result);
-		}
-
 	}
-
-    
 }

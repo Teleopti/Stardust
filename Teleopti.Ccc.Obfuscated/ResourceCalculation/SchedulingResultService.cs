@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		{
 			_useOccupancyAdjustment = useOccupancyAdjustment;
 			_relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
-			_relevantProjections = createRelevantProjectionList(stateHolder.Schedules);
 			_allSkills = allSkills;
+			_relevantProjections = createRelevantProjectionList(stateHolder.Schedules);
 			_singleSkillCalculator = singleSkillCalculator;
 			_personSkillProvider = personSkillProvider;
 		}

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -34,14 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 				return 0;
 
 			double result = 0;
-	        var resolution = skillStaffPeriods.Keys.Min(k => k.DefaultResolution);
-	        var container = new ResourceCalculationDataContainer(_personSkillProvider);
-	        var date = new DateOnly(vcPeriod.Value.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
-			foreach (var resourceLayer in layers.ToResourceLayers(resolution))
-			{
-				container.AddResources(person, date, resourceLayer);
-			}
-
+	        
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriodDictionaryKeyValue in skillStaffPeriods)
 			{
 				ISkill skill = skillStaffPeriodDictionaryKeyValue.Key;

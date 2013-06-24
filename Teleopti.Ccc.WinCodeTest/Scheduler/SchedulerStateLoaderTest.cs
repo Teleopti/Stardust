@@ -1,7 +1,9 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -17,9 +19,6 @@ using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-    /// <summary>
-    /// Represents a .
-    /// </summary>
     [TestFixture]
     public class SchedulerStateLoaderTest
     {
@@ -33,13 +32,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IRepositoryFactory _repositoryFactory;
     	private ILazyLoadingManager _lazyManager;
-        
-        [SetUp]
+	    private DateTimePeriod _period;
+
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _permittedPeople = new List<IPerson> { _mocks.StrictMock<IPerson>() };
+            _permittedPeople = new List<IPerson> { PersonFactory.CreatePerson() };
 
+			_period = _targetPeriod.ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _targetScenario = _mocks.StrictMock<IScenario>();
@@ -78,10 +79,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.IgnoreArguments().Repeat.Once();
 
             IScheduleDictionary scheduleDictionary = CreateScheduleInitializationExpectation(uow);
-#pragma warning disable 618
-            scheduleDictionary.ExtractAllScheduleData(null);
-#pragma warning restore 618
-            LastCall.IgnoreArguments();
 
             PrepareSkill(_selectedSkill);
 
@@ -115,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             var scheduleDateTimePeriod =
-                new ScheduleDateTimePeriod(_targetPeriod.ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()));
+                new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
             _targetStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
             _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill });
@@ -131,10 +128,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
+	        var range = _mocks.StrictMock<IScheduleRange>();
+	        var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             Expect.Call(_repositoryFactory.CreateScheduleRepository(uow)).Return(scheduleRepository);
             Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null))
                 .IgnoreArguments()
                 .Return(scheduleDictionary);
+	        Expect.Call(scheduleDictionary.Keys).Return(_permittedPeople);
+	        Expect.Call(scheduleDictionary[_permittedPeople[0]]).Return(range);
+	        Expect.Call(range.TotalPeriod()).Return(_period);
+	        Expect.Call(range.ScheduledDayCollection(_targetPeriod)).Return(new[] {scheduleDay, scheduleDay});
+	        Expect.Call(scheduleDay.ProjectionService())
+	              .Return(new VisualLayerProjectionService(_permittedPeople[0]))
+	              .Repeat.AtLeastOnce();
 
             return scheduleDictionary;
         }
@@ -151,7 +157,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Expect.Call(skillRepository.FindAllWithSkillDays(_targetPeriod)).Return(new List<ISkill> { skill }).Repeat.Once();
             Expect.Call(
-                skillDayRepository.FindRange(new DateOnlyPeriod(period.StartDate,period.EndDate), new List<ISkill> { skill }, _targetScenario))
+                skillDayRepository.FindRange(period, new List<ISkill> { skill }, _targetScenario))
                 .Return(new List<ISkillDay>()).Repeat.Once();
         }
 

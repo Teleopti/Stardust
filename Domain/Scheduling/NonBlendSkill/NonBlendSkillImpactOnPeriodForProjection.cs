@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
     public interface INonBlendSkillImpactOnPeriodForProjection
     {
-		double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IResourceCalculationDataContainer shiftList, ISkill skill);
         double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity);
         DateOnly SkillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person);
         bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate);
@@ -14,13 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 
     public class NonBlendSkillImpactOnPeriodForProjection : INonBlendSkillImpactOnPeriodForProjection
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IResourceCalculationDataContainer shiftList, ISkill skill)
-        {
-            return shiftList.SkillResources(skill, skillStaffPeriod.Period).Item1;
-        }
-
-        public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity)
+		public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity)
         {
             return calculateShift(skillStaffPeriod, shift, skillActivity);
         }

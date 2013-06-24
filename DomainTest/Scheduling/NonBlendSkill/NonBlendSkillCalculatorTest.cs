@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Record())
 			{
-                Expect.Call(_nonBlendSkillImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, relevantProjections, skill)).Return(4.5d);
+				Expect.Call(relevantProjections.SkillResources(skill, skillStaffPeriod.Period)).Return(new Tuple<double, double>(4.5d,4.5d));
 			}
 
 			using (_mocks.Playback())
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Record())
 			{
-
+				Expect.Call(relevantProjections.SkillResources(skill, skillStaffPeriod.Period)).Repeat.Never();
 			}
 
 			using (_mocks.Playback())
