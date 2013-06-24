@@ -1280,6 +1280,12 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityForScheduledDayView.Designer.cs">
       <DependentUpon>AgentOvertimeAvailabilityForScheduledDayView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\FilterOvertimeAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\FilterOvertimeAvailabilityView.Designer.cs">
+      <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
@@ -2812,6 +2818,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\FilterOvertimeAvailabilityView.resx">
+      <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatchingNew.resx">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
