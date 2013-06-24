@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -212,16 +211,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			bool ret = ReflectionHelper.HasDefaultConstructor(target.GetType());
 			Assert.IsTrue(ret);
-		}
-
-		/// <summary>
-		/// Protected constructor works.
-		/// </summary>
-		[Test]
-		public void ProtectedConstructorWorks()
-		{
-			target = new testAssignment();
-			Assert.IsNotNull(target);
 		}
 
 
@@ -514,10 +503,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 
-			var pShift = new PersonalShift();
-			target.AddPersonalShift(pShift);
-			pShift.LayerCollection.Add(new PersonalShiftActivityLayer(act,
-											new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
+			target.AddPersonalLayer(act, new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 		}
 
@@ -531,15 +517,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2))), 
 					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7))), 
 				}, new ShiftCategory("d"));
-			var pShift = new PersonalShift();
-			target.AddPersonalShift(pShift);
-			pShift.LayerCollection.Add(new PersonalShiftActivityLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4))));
+
+			target.AddPersonalLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4)));
 			target.ProjectionService().CreateProjection()
 				.Count().Should().Be.EqualTo(2);
-		}
-
-		private class testAssignment : PersonAssignment
-		{
 		}
 	}
 }
