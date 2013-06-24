@@ -222,11 +222,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				var pShift = new PersonalShift();
-				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainLayers.First().Payload,
-																							 PersonAssignment.MainLayers.First().Period));
+
 				PersonAssignment.ClearMainLayers();
-				PersonAssignment.AddPersonalShift(pShift);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers.First().Payload,
+																							 PersonAssignment.MainLayers.First().Period);
 				uow.PersistAll();
 			}
 

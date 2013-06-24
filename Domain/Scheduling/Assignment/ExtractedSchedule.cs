@@ -582,36 +582,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteMainShift(IScheduleDay source)
 		{
-			IPersonAssignment destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
 			IPersonAssignment highAss = AssignmentHighZOrder();
 
 			if (highAss != null)
-			{
-				foreach (var personalShift in highAss.PersonalShiftCollection)
-				{
-					var destPersonalShift = createDestPersonalShift(source, personalShift);
-
-					destAss.AddPersonalShift(destPersonalShift);
-				}
-
-				RemovePersonAssignment(AssignmentHighZOrder());
-
-				if (destAss.PersonalShiftCollection.Count > 0)
-					Add(destAss);
-			}
+				highAss.ClearMainLayers();
 		}
-
-	    private PersonalShift createDestPersonalShift(IScheduleDay source, IPersonalShift personalShift)
-	    {
-		    var destPersonalShift = new PersonalShift();
-		    var diff = CalculatePeriodOffset(source.Period);
-		    foreach (var layer in personalShift.LayerCollection)
-		    {
-			    var newLayer = new PersonalShiftActivityLayer(layer.Payload, layer.Period.MovePeriod(diff));
-			    destPersonalShift.LayerCollection.Add(newLayer);
-		    }
-		    return destPersonalShift;
-	    }
 
 	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
         {
@@ -737,35 +712,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IPersonAssignment sourceAss = source.AssignmentHighZOrder();
             IPersonAssignment destAss = AssignmentHighZOrder();
 
-            if (sourceAss != null)
-            {
-                if (destAss == null)
-                {
-                    destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
+	        if (sourceAss != null)
+	        {
+		        if (destAss == null)
+		        {
+			        destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
+			        Add(destAss);
+		        }
 
-                    foreach (var personalShift in sourceAss.PersonalShiftCollection)
-                    {
-	                    var destPersonalShift = createDestPersonalShift(source, personalShift);
-                        
-                        destAss.AddPersonalShift(destPersonalShift);
-                    }
+		        foreach (var personalLayer in sourceAss.PersonalLayers)
+		        {
+			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+		        }
 
-                    Add(destAss);
-                }
-                else
-                {
-                    foreach (IPersonalShift personalShift in sourceAss.PersonalShiftCollection)
-                    {
-						var destPersonalShift = createDestPersonalShift(source, personalShift);
-
-                        if (destPersonalShift.LayerCollection.Period().HasValue)
-                        {
-                            if (destAss.Period.Contains((DateTimePeriod)destPersonalShift.LayerCollection.Period()))
-                                destAss.AddPersonalShift(destPersonalShift);
-                        }
-                    }
-                }
-            }         
+	        }
         }
 
         public IScheduleTag ScheduleTag()
