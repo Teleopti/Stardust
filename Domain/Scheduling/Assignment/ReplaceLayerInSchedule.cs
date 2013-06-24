@@ -29,18 +29,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 				}
 
-				foreach (var personalShift in ass.PersonalShiftCollection)
+				foreach (var personalLayer in ass.PersonalLayers)
 				{
-					foreach (var layer in personalShift.LayerCollection)
+					if (personalLayer.Equals(layerToRemove))
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							//MICKE! DENNA FIXAR JAG/ROGER!
-							var indexOfLayer = layer.OrderIndex;
-							personalShift.LayerCollection.Remove(layer);
-							personalShift.LayerCollection.Insert(indexOfLayer, new PersonalShiftActivityLayer(newActivity, newPeriod));
-							return;
-						}
+						//MICKE! DENNA FIXAR JAG/ROGER!
+						var indexOfLayer = personalLayer.OrderIndex;
+						//här ska det insertas! fixas sen!
+						return;
 					}
 				}
 
