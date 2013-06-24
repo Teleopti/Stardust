@@ -38,7 +38,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
-        void ClearPersonalShift();
+        void ClearPersonalLayers();
 
         /// <summary>
         /// Removes the personal shift.

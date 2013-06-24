@@ -726,7 +726,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IPersonAssignment ass = AssignmentHighZOrder();
             if (ass != null)
             {
-                ass.ClearPersonalShift();
+                ass.ClearPersonalLayers();
                 if (!ass.HasProjection)
                     Remove(ass);
             }
