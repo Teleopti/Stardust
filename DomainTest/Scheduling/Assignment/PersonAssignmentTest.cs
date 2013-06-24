@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -271,8 +272,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod expected = new DateTimePeriod(start, end);
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, mainShiftPeriod, shiftCategory);
-			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
+			target.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(activity, mainShiftPeriod)
+				}, shiftCategory);
 
 			Assert.AreEqual(expected, target.Period);
 		}
@@ -289,12 +292,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 			DateTimePeriod personalShiftPeriod = mainShiftPeriod.ChangeStartTime(TimeSpan.FromHours(-1)).ChangeEndTime(TimeSpan.FromHours(1));
 
-			IPersonalShift personalShift = PersonalShiftFactory.CreatePersonalShift(activity, personalShiftPeriod);
-
-			target.AddPersonalShift(personalShift);
-
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, mainShiftPeriod, shiftCategory);
-			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
+			target.AddPersonalLayer(activity, personalShiftPeriod);
+			target.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(activity, mainShiftPeriod) 
+				}, shiftCategory);
 
 			Assert.AreEqual(personalShiftPeriod, target.Period);
 		}
@@ -317,13 +319,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var mainShift = EditableShiftFactory.CreateEditorShift(activity, mainShiftPeriod, shiftCategory);
 			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
 
-			IPersonalShift personalShift1 = PersonalShiftFactory.CreatePersonalShift(activity, personalPeriod1);
-			IPersonalShift personalShift2 = PersonalShiftFactory.CreatePersonalShift(activity, personalPeriod2);
-			IPersonalShift personalShift3 = PersonalShiftFactory.CreatePersonalShift(activity, personalPeriod3);
-
-			target.AddPersonalShift(personalShift1);
-			target.AddPersonalShift(personalShift2);
-			target.AddPersonalShift(personalShift3);
+			target.AddPersonalLayer(activity, personalPeriod1);
+			target.AddPersonalLayer(activity, personalPeriod2);
+			target.AddPersonalLayer(activity, personalPeriod3);
 
 			Assert.AreEqual(expectedPeriod, target.Period);
 		}
@@ -398,15 +396,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyProjection()
 		{
-			Activity mainShiftActivity = ActivityFactory.CreateActivity("mainshift");
-			Activity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			var mainShift =
-				EditableShiftFactory.CreateEditorShift(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1), ShiftCategoryFactory.CreateShiftCategory("sdf"));
-			PersonalShift persShift =
-				PersonalShiftFactory.CreatePersonalShift(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-
-			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
-			target.AddPersonalShift(persShift);
+			var mainShiftActivity = ActivityFactory.CreateActivity("mainshift");
+			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			target.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+				}, new ShiftCategory("sdf"));
+			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			IProjectionService svc = target.ProjectionService();
 			svc.CreateProjection();
 			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
@@ -434,11 +430,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var personalShiftEnd = new DateTime(2000, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var personalShiftPeriod = new DateTimePeriod(personalShiftStart, personalShiftEnd);
 
-			var persShift = PersonalShiftFactory.CreatePersonalShift(personalShiftActivity, personalShiftPeriod);
-			var mainShift = EditableShiftFactory.CreateEditorShift(mainShiftActivity, mainShiftPeriod, new ShiftCategory("hej"));
+			target.SetMainShiftLayers(new []
+				{
+					new MainShiftLayer(mainShiftActivity, mainShiftPeriod) 
+				}, new ShiftCategory("hej"));
 
-			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
-			target.AddPersonalShift(persShift);
+			target.AddPersonalLayer(personalShiftActivity, personalShiftPeriod);
 
 			var svc = target.ProjectionService();
 			svc.CreateProjection();
@@ -455,19 +452,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyRemovePersonalShift()
 		{
-			Activity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			PersonalShift persShift =
-				PersonalShiftFactory.CreatePersonalShift(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.AddPersonalShift(persShift);
-			PersonalShift persShift1 =
-				PersonalShiftFactory.CreatePersonalShift(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.AddPersonalShift(persShift1);
+			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 
-			Assert.AreEqual(2, target.PersonalShiftCollection.Count);
-			target.RemovePersonalShift(persShift);
+			Assert.AreEqual(2, target.PersonalLayers.Count());
+			target.RemoveLayer(target.PersonalLayers.First());
 
-			Assert.AreEqual(1, target.PersonalShiftCollection.Count);
-			Assert.AreEqual(persShift1, target.PersonalShiftCollection[0]);
+			Assert.AreEqual(1, target.PersonalLayers.Count());
 		}
 
 		[Test]
