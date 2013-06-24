@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
                 {
                     brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.LimeGreen));
 				}
-				else if (requestStatus == RequestStatusDto.Denied || requestStatus == RequestStatusDto.Autodenied)
+				else if (requestStatus == RequestStatusDto.Denied)
                 {
                     brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.Crimson));
                 }

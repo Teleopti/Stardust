@@ -202,8 +202,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 {
                     _view.SetStatus(UserTexts.Resources.GrantedBySupervisor);
                 }
-                else if (_model.PersonRequestDto.RequestStatus==RequestStatusDto.Denied
-					|| _model.PersonRequestDto.RequestStatus == RequestStatusDto.Autodenied)
+                else if (_model.PersonRequestDto.RequestStatus==RequestStatusDto.Denied)
                 {
                     _view.SetStatus(UserTexts.Resources.Denied);
                     _view.ReasonMessage = LanguageResourceHelper.Translate(_model.PersonRequestDto.DenyReason);

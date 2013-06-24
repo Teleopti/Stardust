@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 
@@ -397,5 +398,30 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.IsTrue(personRequestDtoInReturn.CanDelete);
             _mocks.VerifyAll();
         }
+
+		[Test]
+		public void VerifyDoToDtoSwallowAutodeny()
+		{
+			AbsenceRequestDto absenceRequestDto = new AbsenceRequestDto();
+			AbsenceRequest absenceRequest = new AbsenceRequest(_absence, new DateTimePeriod());
+			IPersonRequest personRequest = new PersonRequest(_person, absenceRequest);
+			personRequest.Deny(_person, string.Empty, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsTrue(personRequest.IsAutoDenied);
+
+			Expect.Call(_absenceRequestAssembler.DomainEntityToDto(absenceRequest)).Return(
+				absenceRequestDto);
+			Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
+			{
+				Id = _person.Id,
+				Name = _person.Name.ToString()
+			});
+
+			_mocks.ReplayAll();
+			PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
+			Assert.AreEqual(RequestStatusDto.Denied, personRequestDtoInReturn.RequestStatus);
+			_mocks.VerifyAll();
+		}
+
+
     }
 }
