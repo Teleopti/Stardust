@@ -170,12 +170,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
 
-		[When(@"I click backward on browser")]
-		public void WhenIClickBackwardOnBrowser()
-		{
-			Browser.Current.NativeBrowser.GoBack();
-		}
-
 
 
 

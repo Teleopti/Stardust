@@ -223,6 +223,6 @@ Scenario: Backward from browser works with person schedule view
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-08 23:59 |
-	When I click backward on browser
+	When I press back in the web browser
 	Then I should be viewing schedules for '2013-04-08'
 
