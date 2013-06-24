@@ -671,7 +671,8 @@ namespace CheckPreRequisites
 					break;
 				case 6:
 					if (SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2008R2
-					    || SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2008)
+						|| SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2008
+						|| SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2012)
 						printFeatureStatus(true);
 					else
 						printFeatureStatus(false);
