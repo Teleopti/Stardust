@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(ass);
 			_target.RemoveEmptyAssignments();
 			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
-			ass.RemovePersonalShift(ass.PersonalShiftCollection[0]);
+			ass.RemoveLayer(ass.PersonalLayers.Single());
 			_target.RemoveEmptyAssignments();
 			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
 		}
@@ -1717,7 +1717,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             SetupForMergeTests();
 
 			//remove personal stuff
-			personAssignmentSource.ClearPersonalShift();
+			personAssignmentSource.ClearPersonalLayers();
 
 			//add conflicting shifts
 			source.Add(personAssignmentSource);

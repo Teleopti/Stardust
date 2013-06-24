@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                         IScenario scenario)
         {
 					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
-            ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
+					ass.AddPersonalLayer(activity, period);
             return ass;
         }
 

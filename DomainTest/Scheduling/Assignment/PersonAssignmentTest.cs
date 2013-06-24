@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
 			target.MainLayers.Should().Be.Empty();
-			Assert.AreEqual(0, targetClone.PersonalShiftCollection.Count);
+			Assert.AreEqual(0, targetClone.PersonalLayers.Count());
 		}
 
 		[Test]
