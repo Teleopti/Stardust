@@ -125,6 +125,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 			    return false;
 		    }
 			
+			if (startTime.Value == shiftStarts && endTime.Value == shiftEnds)
+			{
+				startTimeError = true;
+				endTimeError = true;
+				return false;
+			}
+
 		    startTimeError = false;
 		    endTimeError = false;
 		    return true;
