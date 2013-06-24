@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     foreach(PersonalShift ps in pa.PersonalShiftCollection) 
                     {
                         sb.AppendLine();
-                        sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
+                        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
                         foreach (ActivityLayer layer in ps.LayerCollection)
                         {
                             sb.AppendLine();

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 				if (_parent != null)
 				{
-					return _parent.PersonalLayers.ToList().IndexOf(_layer) > 0;
+					return _layer.OrderIndex > 0;
 				}
 
 	            return false;

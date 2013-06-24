@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -251,27 +253,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
 			var activity = ActivityFactory.CreateActivity("activity");
-			var layer = new PersonalShiftLayer(activity, period);
-			var personalShift1 = PersonalShiftFactory.CreatePersonalShift(activity, period);
-			var personalShift2 = PersonalShiftFactory.CreatePersonalShift(activity, period);
 
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
-			personAssignment.AddPersonalShift(personalShift1);
-			personAssignment.AddPersonalShift(personalShift2);
+			personAssignment.AddPersonalLayer(activity, period);
+			personAssignment.AddPersonalLayer(activity, period);
 
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
+			var layer = personAssignment.PersonalLayers.Last();
 
-			//FIX LATER
-			_target = new PersonalShiftLayerViewModel(null, layer, null, null, new MoveLayerVertical());
+			_target = new PersonalShiftLayerViewModel(null, layer, personAssignment, null, new MoveLayerVertical());
 			_target.MoveUp();
-			
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 1);
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 0);
 
+			layer.OrderIndex.Should().Be.EqualTo(0);
+			
 			_target.MoveDown();
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift1) == 0);
-			Assert.IsTrue(personAssignment.PersonalShiftCollection.IndexOf(personalShift2) == 1);
+			layer.OrderIndex.Should().Be.EqualTo(1);
 		}
     }
 }

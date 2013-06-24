@@ -117,15 +117,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyCreateSpanDictionaryFromSchedulePersonalShift()
         {
-            IPersonAssignment pa1 = mocks.StrictMock<IPersonAssignment>();
-            IPersonalShift ps1 =new PersonalShift();
-	        ps1.LayerCollection.Add(new PersonalShiftActivityLayer(new Activity("d"),
-	                                                               new DateTimePeriod(_date.AddHours(10), _date.AddHours(15))));
-
+            var pa1 = mocks.StrictMock<IPersonAssignment>();
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.PersonalShift);
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { pa1 })).Repeat.AtLeastOnce();
-            Expect.Call(pa1.PersonalShiftCollection).Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { ps1 })).Repeat.AtLeastOnce();
+	        Expect.Call(pa1.PersonalLayers)
+	              .Return(new List<IPersonalShiftLayer>
+		              {
+			              new PersonalShiftLayer(new Activity("d"), new DateTimePeriod(_date.AddHours(10), _date.AddHours(15)))
+		              })
+	              .Repeat.AtLeastOnce();
             
             mocks.ReplayAll();
             var result = WeekPresenter.CreateSpanDictionaryFromSchedule(schedulePart);

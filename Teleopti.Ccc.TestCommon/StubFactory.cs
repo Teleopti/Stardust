@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -202,9 +203,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IPersonAssignment PersonAssignmentPersonalShiftStub()
 		{
 			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
-			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
-				new ReadOnlyCollection<IPersonalShift>(new[] {personalShift}));
+			personAssignment.Stub(x => x.PersonalLayers).Return(Enumerable.Empty<IPersonalShiftLayer>());
 			return personAssignment;
 		}
 
