@@ -199,7 +199,7 @@
     <value>期間の種類:</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>かい離率 (%)</value>
+    <value>欠勤率 (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
     <value>遵守率 (%)</value>
@@ -271,7 +271,7 @@
     <value>シナリオ:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>放棄呼(短通話以外%）</value>
+    <value>放棄呼(短通話除く）（%）</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
     <value>放棄率 (%)</value>
@@ -307,7 +307,7 @@
     <value>放棄までの時間</value>
   </data>
   <data name="ResTotalsColon" xml:space="preserve">
-    <value>総計</value>
+    <value>総計:</value>
   </data>
   <data name="ResPercent" xml:space="preserve">
     <value>パーセント</value>
@@ -325,7 +325,7 @@
     <value>平均通話時間（ATT）</value>
   </data>
   <data name="ResCalculatedCalls" xml:space="preserve">
-    <value>計算呼量</value>
+    <value>算出呼量</value>
   </data>
   <data name="ResCalls" xml:space="preserve">
     <value>通話</value>
@@ -343,7 +343,7 @@
     <value>の数</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>予測　実測</value>
+    <value>ワークロード　予測値対実値</value>
   </data>
   <data name="ResAgentsReady" xml:space="preserve">
     <value>レディ状態エージェント</value>
@@ -355,7 +355,7 @@
     <value>相対差異 (%)</value>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>予測時間（時：分）</value>
+    <value>時間（時：分）　予測値</value>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
     <value>着信呼</value>
@@ -367,7 +367,7 @@
     <value>着信呼/レディ状態の予定エージェント</value>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>予測時間に対する予定時間</value>
+    <value>時間　予測値対予定値</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
     <value>サービスレベルとレディ状態エージェント</value>
@@ -376,7 +376,7 @@
     <value>予定レディ時間</value>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
-    <value>予定エージェントに対するレディ状態エージェント</value>
+    <value>予定エージェント対レディ状態エージェント</value>
   </data>
   <data name="LogInSuccessTitleText" xml:space="preserve">
     <value> </value>
@@ -520,7 +520,7 @@
     <value>直接発信呼の通話時間</value>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
-    <value>アイドル時間</value>
+    <value>アイドルタイム</value>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
     <value>ログイン時間</value>
@@ -541,7 +541,7 @@
     <value>発信呼のオーバーフロー</value>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>目減りを含む予測時間（時:分）</value>
+    <value>シュリンケージを含む予測時間（時:分）</value>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
     <value>予定時間（時:分）</value>
@@ -553,7 +553,7 @@
     <value>週:</value>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>エージェントあたりの予定時間</value>
+    <value>エージェント当たりの予定時間</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
     <value>予定欠勤時間（時:分）</value>
@@ -574,19 +574,19 @@
     <value>予定時間（時:分）</value>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>予測時間（目減り）（時:分）</value>
+    <value>予測時間（シュリンケージ）（時:分）</value>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>目減りを含む相対差異 (%)</value>
+    <value>シュリンケージを含む相対差異 (%)</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>1日あたりのシフトカテゴリ</value>
+    <value>1日当たりのシフトカテゴリ</value>
   </data>
   <data name="ResShiftCategoryColon" xml:space="preserve">
     <value>シフトカテゴリ:</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>エージェントあたりのシフトカテゴリと全日欠勤</value>
+    <value>エージェント当たりのシフトカテゴリと全日欠勤</value>
   </data>
   <data name="ResDayOffColon" xml:space="preserve">
     <value>休暇:</value>
@@ -595,7 +595,7 @@
     <value>選択</value>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>活動あたりの予定時間</value>
+    <value>活動当たりの予定時間</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
     <value>チームの評価指標</value>
@@ -622,7 +622,7 @@
     <value>承認されたプリファレンス</value>
   </data>
   <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
-    <value>プリファレンス承認率 (%)</value>
+    <value>承認されたプリファレンス (%)</value>
   </data>
   <data name="ResPreferencesDeclined" xml:space="preserve">
     <value>否認されたプリファレンス</value>
@@ -634,13 +634,13 @@
     <value>プリファレンスカテゴリ</value>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
-    <value>1日あたりのプリファレンス</value>
+    <value>1日当たりのプリファレンス</value>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>エージェントあたりのプリファレンス</value>
+    <value>エージェント当たりのプリファレンス</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>インターバルおよびチームあたりの予定エージェント</value>
+    <value>インターバルおよびチーム当たりの予定エージェント</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>改善</value>
@@ -715,13 +715,13 @@
     <value>勤務時間（時:分）</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>エージェントあたりの欠勤時間</value>
+    <value>エージェント当たりの欠勤時間</value>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
-    <value>全日</value>
+    <value>全休</value>
   </data>
   <data name="ResAbsencePartDayCount" xml:space="preserve">
-    <value>パートタイム</value>
+    <value>一部休</value>
   </data>
   <data name="AuthenticationFailedForUser" xml:space="preserve">
     <value>ユーザーの認証に失敗しました。</value>
@@ -802,13 +802,13 @@
     <value>未定義</value>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>レディ時間に対する契約予定時間</value>
+    <value>レディ時間対契約予定時間</value>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>レディ時間に対する予定レディ時間</value>
+    <value>レディ時間対予定レディ時間</value>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>レディ時間に対する予定時間（シフト開始前後の時間を含む）</value>
+    <value>レディ時間対予定時間（シフト開始前後の時間を含む）</value>
   </data>
   <data name="ResShiftCategory" xml:space="preserve">
     <value>シフトカテゴリ</value>
@@ -841,7 +841,7 @@
     <value>利用可能なスコアカードはありません</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>欠勤あたりの欠勤時間</value>
+    <value>欠勤当たりの欠勤時間</value>
   </data>
   <data name="Main" xml:space="preserve">
     <value>業務階層</value>
@@ -857,7 +857,7 @@
     <value>メモ</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
     <value>シフトバッグ</value>
@@ -872,7 +872,7 @@
     <value>スキル</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>エージェントあたりの予定残業時間</value>
+    <value>エージェント当たりの予定残業時間</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
     <value>残業:</value>
@@ -893,7 +893,7 @@
     <value>エージェントキューの評価指標</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>エージェントあたりの活動時間</value>
+    <value>エージェント当たりの活動時間</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
     <value>残業時間（時:分）</value>
@@ -914,7 +914,7 @@
     <value>テキスト</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>エージェントあたりの要求</value>
+    <value>エージェント当たりの要求</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
     <value>承認</value>
@@ -962,10 +962,10 @@
     <value>エージェント当たりの遵守率</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>1日あたりの遵守率</value>
+    <value>1日当たりの遵守率</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>活動あたりの予定エージェント</value>
+    <value>活動当たりの予定エージェント</value>
   </data>
   <data name="ResTotals" xml:space="preserve">
     <value>トータル</value>

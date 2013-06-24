@@ -292,16 +292,16 @@
     <value>基本活動</value>
   </data>
   <data name="BusinessRulesConflict" xml:space="preserve">
-    <value>業務規則の競合</value>
+    <value>ビジネスルールの競合</value>
   </data>
   <data name="BusinessUnitHierarchy" xml:space="preserve">
-    <value>事業部門の階層</value>
+    <value>ビジネスユニットの階層</value>
   </data>
   <data name="CalculatedCalls" xml:space="preserve">
-    <value>計算呼量</value>
+    <value>算出呼量</value>
   </data>
   <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
-    <value>計算稼働率 %</value>
+    <value>算出稼働率 %</value>
   </data>
   <data name="Calls" xml:space="preserve">
     <value>呼量</value>
@@ -328,13 +328,13 @@
     <value>カテゴリ</value>
   </data>
   <data name="ManageContracts" xml:space="preserve">
-    <value>運用契約</value>
+    <value>契約の管理</value>
   </data>
   <data name="ChangeYourCultureSettings" xml:space="preserve">
     <value>コンピューターの既定の設定</value>
   </data>
   <data name="ManagePartTimePercentages" xml:space="preserve">
-    <value>パートタイム率の管理</value>
+    <value>パートタイム比率の管理</value>
   </data>
   <data name="ChangeYourPassword" xml:space="preserve">
     <value>パスワードの変更</value>
@@ -349,7 +349,7 @@
     <value>全てチェック</value>
   </data>
   <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
-    <value>規則を上書きするには[OK]を押してください。上書きする前にエラーを修正するには[キャンセル]を押してください。</value>
+    <value>ルールを上書きするには[OK]を押してください。上書きする前にエラーを修正するには[キャンセル]を押してください。</value>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
     <value>&amp;コマンドを選択:</value>
@@ -373,7 +373,7 @@
     <value>色</value>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
-    <value>編集するパートタイム率定義を選択</value>
+    <value>編集するパートタイム比率を定義を選択</value>
   </data>
   <data name="CommunicationErrorEndPoint" xml:space="preserve">
     <value>通信エンドポイントエラー</value>
@@ -472,7 +472,7 @@
     <value>利用可能な日付</value>
   </data>
   <data name="Day" xml:space="preserve">
-    <value>日数</value>
+    <value>日</value>
   </data>
   <data name="DayOff" xml:space="preserve">
     <value>休暇</value>
@@ -487,7 +487,7 @@
     <value>休暇</value>
   </data>
   <data name="DayView" xml:space="preserve">
-    <value>日数ビュー</value>
+    <value>日ビュー</value>
   </data>
   <data name="DefaultColor" xml:space="preserve">
     <value>既定の色</value>
@@ -718,13 +718,13 @@
     <value>{0} 個の項目が選択されました。</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>かい離率 (%)</value>
+    <value>欠勤率 (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
     <value>遵守率 (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>予定通話時間あたりの応答呼量</value>
+    <value>予定通話時間当たりの応答呼量</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
     <value>平均アフターコールワーク (秒)</value>
@@ -817,7 +817,7 @@
     <value>日数テンプレートの管理...</value>
   </data>
   <data name="ManageTemplate" xml:space="preserve">
-    <value>テンプレートの結合</value>
+    <value>テンプレートの管理</value>
   </data>
   <data name="MaximumAgents" xml:space="preserve">
     <value>最大エージェント数</value>
@@ -952,7 +952,7 @@
     <value>なし</value>
   </data>
   <data name="NoRulesetsavailable" xml:space="preserve">
-    <value>利用可能な規則セットがありません</value>
+    <value>利用可能なルールセットがありません</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>メモ</value>
@@ -1015,10 +1015,10 @@
     <value>ページの設定</value>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>パスワード</value>
@@ -1163,7 +1163,7 @@
     <value>トレンドのリセット</value>
   </data>
   <data name="ResolveBusinessRulesConflict" xml:space="preserve">
-    <value>業務規則の競合を解決</value>
+    <value>ビジネスルールの競合を解決</value>
   </data>
   <data name="ResultView" xml:space="preserve">
     <value>結果ビュー</value>
@@ -1178,16 +1178,16 @@
     <value>役割</value>
   </data>
   <data name="Rules" xml:space="preserve">
-    <value>規則</value>
+    <value>ルール</value>
   </data>
   <data name="RuleSet" xml:space="preserve">
-    <value>規則セット</value>
+    <value>ルールセット</value>
   </data>
   <data name="Rulesetavailable" xml:space="preserve">
-    <value>1個の規則セットが利用可能です</value>
+    <value>1個のルールセットが利用可能です</value>
   </data>
   <data name="Rulesetsavailables" xml:space="preserve">
-    <value>規則セットが利用可能です</value>
+    <value>ルールセットが利用可能です</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>保存</value>
@@ -1313,7 +1313,7 @@
     <value>前のシフトを表示</value>
   </data>
   <data name="Shrinkage" xml:space="preserve">
-    <value>目減り</value>
+    <value>シュリンケージ</value>
   </data>
   <data name="SixMinutes" xml:space="preserve">
     <value>6分</value>
@@ -1613,16 +1613,16 @@
     <value>ワークロードウィザードへようこそ</value>
   </data>
   <data name="WorkShiftRule" xml:space="preserve">
-    <value>ワークシフト規則</value>
+    <value>ワークシフトルール</value>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>ワークシフト規則セット</value>
+    <value>ワークシフトルールセット</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>年</value>
   </data>
   <data name="YearlyTrend" xml:space="preserve">
-    <value>年間トレンド</value>
+    <value>年次トレンド</value>
   </data>
   <data name="Years" xml:space="preserve">
     <value>年数</value>
@@ -1655,7 +1655,7 @@
     <value>メッセージ</value>
   </data>
   <data name="NewApplicationRole" xml:space="preserve">
-    <value>新規アプリケーション規則</value>
+    <value>新規アプリケーションロール</value>
   </data>
   <data name="NewContract" xml:space="preserve">
     <value>新規契約</value>
@@ -1895,7 +1895,7 @@
     <value>契約スケジュール</value>
   </data>
   <data name="GroupByPersonPeriodPartTimePercentage" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
     <value>シフトバッグ</value>
@@ -1931,7 +1931,7 @@
     <value>グループページ名の変更</value>
   </data>
   <data name="HoursPerDay" xml:space="preserve">
-    <value>1日あたりの時間</value>
+    <value>1日当たりの時間</value>
   </data>
   <data name="Override" xml:space="preserve">
     <value>上書き</value>
@@ -1961,8 +1961,8 @@
     <value>水曜日</value>
   </data>
   <data name="IncludeExclude" xml:space="preserve">
-    <value>包含
-除外</value>
+    <value>含む
+除く</value>
   </data>
   <data name="FromDate" xml:space="preserve">
     <value>From</value>
@@ -1974,10 +1974,10 @@
     <value>開始週</value>
   </data>
   <data name="AverageWorkTimePerDayColon" xml:space="preserve">
-    <value>1日あたりの平均勤務時間:</value>
+    <value>1日当たりの平均勤務時間:</value>
   </data>
   <data name="MaximumTimePerWeekColon" xml:space="preserve">
-    <value>1週間あたりの最大時間</value>
+    <value>1週間当たりの最大時間</value>
   </data>
   <data name="EmploymentTypeColon" xml:space="preserve">
     <value>雇用形態:</value>
@@ -2013,10 +2013,10 @@
     <value>パーセンテージ:</value>
   </data>
   <data name="PartTimePercentageColon" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="EnterPartTimePercentageValue" xml:space="preserve">
-    <value>パートタイム率を入力</value>
+    <value>パートタイム比率を入力</value>
   </data>
   <data name="Contracts" xml:space="preserve">
     <value>契約</value>
@@ -2043,7 +2043,7 @@
     <value>契約の追加</value>
   </data>
   <data name="AddPartTimePercentage" xml:space="preserve">
-    <value>パートタイム率定義の追加</value>
+    <value>パートタイム比率の定義の追加</value>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
     <value>シナリオの追加</value>
@@ -2133,7 +2133,7 @@
     <value>サービスレベル (秒):</value>
   </data>
   <data name="ShrinkageColon" xml:space="preserve">
-    <value>目減り:</value>
+    <value>シュリンケージ:</value>
   </data>
   <data name="SkillColon" xml:space="preserve">
     <value>スキル:</value>
@@ -2184,7 +2184,7 @@
     <value>最小</value>
   </data>
   <data name="RuleSets" xml:space="preserve">
-    <value>規則セット</value>
+    <value>ルールセット</value>
   </data>
   <data name="ShiftBags" xml:space="preserve">
     <value>シフトバッグ</value>
@@ -2392,13 +2392,13 @@
     <value>応答タスク数</value>
   </data>
   <data name="CalculatedEmails" xml:space="preserve">
-    <value>計算Eメール数</value>
+    <value>算出Eメール数</value>
   </data>
   <data name="CalculatedFacsimiles" xml:space="preserve">
-    <value>計算FAX数</value>
+    <value>算出FAX数</value>
   </data>
   <data name="CalculatedTasks" xml:space="preserve">
-    <value>計算タスク数</value>
+    <value>算出タスク数</value>
   </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
     <value>キャンペーンのEメール処理時間 %</value>
@@ -2449,13 +2449,13 @@
     <value>元の処理時間</value>
   </data>
   <data name="OriginalOfferedEmails" xml:space="preserve">
-    <value>元の着信Eメール</value>
+    <value>元の着信Eメール数</value>
   </data>
   <data name="OriginalOfferedFacsimiles" xml:space="preserve">
-    <value>元の着信FAX</value>
+    <value>元の着信FAX数</value>
   </data>
   <data name="OriginalOfferedTasks" xml:space="preserve">
-    <value>元の着信タスク</value>
+    <value>元の着信タスク数</value>
   </data>
   <data name="ValidatedEmails" xml:space="preserve">
     <value>有効なEメール数</value>
@@ -2506,7 +2506,7 @@
     <value>Teleopti CCC</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
-    <value>パートタイム率</value>
+    <value>パートタイム比率</value>
   </data>
   <data name="Optional" xml:space="preserve">
     <value>任意</value>
@@ -2536,7 +2536,7 @@
     <value>パスワード:</value>
   </data>
   <data name="PleaseChooseABusinessUnit" xml:space="preserve">
-    <value>事業部門を選択してください</value>
+    <value>ビジネスユニットを選択してください</value>
   </data>
   <data name="PleaseChooseADatasource" xml:space="preserve">
     <value>データソースを選択してください</value>
@@ -2596,34 +2596,34 @@
     <value>要員挿入画面</value>
   </data>
   <data name="NewRule" xml:space="preserve">
-    <value>新規規則</value>
+    <value>新規ルール</value>
   </data>
   <data name="NewRuleSet" xml:space="preserve">
-    <value>新規規則セット</value>
+    <value>新規ルールセット</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
     <value>シフト - Teleopti CCC</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
-    <value>&lt; 規則セット名 &gt;</value>
+    <value>&lt; ルールセット名 &gt;</value>
   </data>
   <data name="CutActivity" xml:space="preserve">
     <value>活動の切り取り</value>
   </data>
   <data name="CutRuleSet" xml:space="preserve">
-    <value>規則セットの切り取り</value>
+    <value>ルールセットの切り取り</value>
   </data>
   <data name="CutRuleSetBag" xml:space="preserve">
-    <value>規則セットバッグの切り取り</value>
+    <value>ルールセットバッグの切り取り</value>
   </data>
   <data name="DeleteActivity" xml:space="preserve">
     <value>活動の削除</value>
   </data>
   <data name="DeleteRuleSet" xml:space="preserve">
-    <value>規則セットの削除</value>
+    <value>ルールセットの削除</value>
   </data>
   <data name="DeleteRuleSetBag" xml:space="preserve">
-    <value>規則セットバッグの削除</value>
+    <value>ルールセットバッグの削除</value>
   </data>
   <data name="NewActivity" xml:space="preserve">
     <value>新規活動</value>
@@ -2635,25 +2635,25 @@
     <value>活動の貼り付け</value>
   </data>
   <data name="PasteRuleSet" xml:space="preserve">
-    <value>規則セットの貼り付け</value>
+    <value>ルールセットの貼り付け</value>
   </data>
   <data name="PasteRuleSetBag" xml:space="preserve">
-    <value>規則セットバッグの貼り付け</value>
+    <value>ルールセットバッグの貼り付け</value>
   </data>
   <data name="SelectRuleSetBagMessage" xml:space="preserve">
-    <value>規則セットバッグメッセージの選択</value>
+    <value>ルールセットバッグメッセージの選択</value>
   </data>
   <data name="SelectRuleSetMessage" xml:space="preserve">
-    <value>規則セットメッセージの選択</value>
+    <value>ルールセットメッセージの選択</value>
   </data>
   <data name="CreateForecastWorkflowTool" xml:space="preserve">
     <value>予測ワークフローツールの作成</value>
   </data>
   <data name="CopyRuleSet" xml:space="preserve">
-    <value>規則セットのコピー</value>
+    <value>ルールセットのコピー</value>
   </data>
   <data name="CopyRuleSetBag" xml:space="preserve">
-    <value>規則セットバッグのコピー</value>
+    <value>ルールセットバッグのコピー</value>
   </data>
   <data name="Accrued" xml:space="preserve">
     <value>未払い</value>
@@ -2719,16 +2719,16 @@
     <value>自動更新</value>
   </data>
   <data name="Approved" xml:space="preserve">
-    <value>承認</value>
+    <value>承認済み</value>
   </data>
   <data name="Balance" xml:space="preserve">
     <value>相殺</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>作成されました</value>
+    <value>作成済み</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>否認</value>
+    <value>否認済み</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>保留</value>
@@ -2749,28 +2749,28 @@
     <value>シフト交代</value>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>実エージェント</value>
+    <value>エージェント数　実値</value>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
-    <value>実処理時間</value>
+    <value>処理時間　実値</value>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
-    <value>実通話時間</value>
+    <value>通話時間　実値</value>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
     <value>平均応答速度</value>
   </data>
   <data name="ForecastedEmails" xml:space="preserve">
-    <value>予測Eメール数</value>
+    <value>Eメール数　予測値</value>
   </data>
   <data name="ForecastedFacsimiles" xml:space="preserve">
-    <value>予測FAX数</value>
+    <value>FAX数　予測値</value>
   </data>
   <data name="ForecastedHandlingTime" xml:space="preserve">
-    <value>予測処理時間</value>
+    <value>処理時間　予測値</value>
   </data>
   <data name="ForecastedTasks" xml:space="preserve">
-    <value>予測タスク数</value>
+    <value>タスク数　予測値</value>
   </data>
   <data name="OfferedCalls" xml:space="preserve">
     <value>着信呼</value>
@@ -2854,7 +2854,7 @@
     <value>チームのフィルター</value>
   </data>
   <data name="ListOfValues" xml:space="preserve">
-    <value>規則セットリスト</value>
+    <value>ルールセットリスト</value>
   </data>
   <data name="Overtime" xml:space="preserve">
     <value>残業</value>
@@ -2875,7 +2875,7 @@
     <value>要求で使用</value>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
-    <value>&lt;規則セットバッグ名&gt;</value>
+    <value>&lt;ルールセットバッグ名&gt;</value>
   </data>
   <data name="SortAtoZ" xml:space="preserve">
     <value>昇順ソート</value>
@@ -2899,7 +2899,7 @@
     <value>テキスト</value>
   </data>
   <data name="AddRuleSet" xml:space="preserve">
-    <value>規則セットの追加</value>
+    <value>ルールセットの追加</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>&lt;空&gt;</value>
@@ -3032,7 +3032,7 @@
     <value>組織構造</value>
   </data>
   <data name="SkillTypeBackoffice" xml:space="preserve">
-    <value>事務管理部門</value>
+    <value>バックオフィス</value>
   </data>
   <data name="SkillTypeEmail" xml:space="preserve">
     <value>Eメール</value>
@@ -3041,7 +3041,7 @@
     <value>FAX</value>
   </data>
   <data name="SkillTypeInboundTelephony" xml:space="preserve">
-    <value>インバウンドテレフォニー</value>
+    <value>インバウンド</value>
   </data>
   <data name="SkillTypeProject" xml:space="preserve">
     <value>プロジェクト</value>
@@ -3068,7 +3068,7 @@
     <value>オプション列名</value>
   </data>
   <data name="PartTimePercentageName" xml:space="preserve">
-    <value>パートタイム率名</value>
+    <value>パートタイム比率名</value>
   </data>
   <data name="PleaseSelectAnEmploymentType" xml:space="preserve">
     <value>雇用形態を選択してください。</value>
@@ -3137,7 +3137,7 @@
     <value>グループを削除するにはグループを空にする必要があります</value>
   </data>
   <data name="ViolationOfABusinessRule" xml:space="preserve">
-    <value>業務規則違反</value>
+    <value>ビジネスルールの違反</value>
   </data>
   <data name="AuthenticationError" xml:space="preserve">
     <value>認証エラー</value>
@@ -3356,7 +3356,7 @@
     <value>シフトカテゴリを使用</value>
   </data>
   <data name="NewPartTimePercentage" xml:space="preserve">
-    <value>新規パートタイム率</value>
+    <value>新規パートタイム比率</value>
   </data>
   <data name="Attendees" xml:space="preserve">
     <value>出席者</value>
@@ -3374,10 +3374,10 @@
     <value>エージェントチーム</value>
   </data>
   <data name="Alarm" xml:space="preserve">
-    <value>警報</value>
+    <value>アラーム</value>
   </data>
   <data name="AlarmName" xml:space="preserve">
-    <value>警報名</value>
+    <value>アラーム名</value>
   </data>
   <data name="Current" xml:space="preserve">
     <value>現在</value>
@@ -3404,7 +3404,7 @@
     <value>作成日</value>
   </data>
   <data name="YourChangesWillBeDiscarded" xml:space="preserve">
-    <value>変更が破棄されました。</value>
+    <value>変更が破棄されます。</value>
   </data>
   <data name="SelectRotationColon" xml:space="preserve">
     <value>ローテーションの選択:</value>
@@ -3413,16 +3413,16 @@
     <value>従業員番号</value>
   </data>
   <data name="CreateAlarmTypes" xml:space="preserve">
-    <value>警報の種類を作成</value>
+    <value>アラームの種類を作成</value>
   </data>
   <data name="AlarmList" xml:space="preserve">
-    <value>既存の警報の種類</value>
+    <value>既存のアラームの種類</value>
   </data>
   <data name="NewAlarm" xml:space="preserve">
-    <value>新規警報の作成</value>
+    <value>新規アラームの作成</value>
   </data>
   <data name="SetTresholdTime" xml:space="preserve">
-    <value>警報しきい値を設定 (秒)</value>
+    <value>アラームしきい値を設定 (秒)</value>
   </data>
   <data name="GlobalFunctions" xml:space="preserve">
     <value>グローバル機能</value>
@@ -3476,7 +3476,7 @@
     <value>リストから削除</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
-    <value>人材配置効果</value>
+    <value>要員配置効果</value>
   </data>
   <data name="OpenBudgetThreeDots" xml:space="preserve">
     <value>予算を開く...</value>
@@ -3563,10 +3563,10 @@
     <value>エージェントの統計値</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>予測ワークロードに対する実ワークロード</value>
+    <value>ワークロード　予測値対実値</value>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>予測時間に対する予定時間</value>
+    <value>時間　予測値対予定値</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
     <value>キューの統計値</value>
@@ -3587,7 +3587,7 @@
     <value>および</value>
   </data>
   <data name="NoRuleSetBagDefined" xml:space="preserve">
-    <value>規則セットバッグが定義されていません</value>
+    <value>ルールセットバッグが定義されていません</value>
   </data>
   <data name="PersonName" xml:space="preserve">
     <value>名前</value>
@@ -3659,7 +3659,7 @@
     <value>カンマ区切りテキストファイル</value>
   </data>
   <data name="AverageWorkTimePerDay" xml:space="preserve">
-    <value>1日あたりの平均勤務時間</value>
+    <value>1日当たりの平均勤務時間</value>
   </data>
   <data name="ContractTime" xml:space="preserve">
     <value>契約時間</value>
@@ -3677,7 +3677,7 @@
     <value>種類</value>
   </data>
   <data name="DeletePartTimePercentage" xml:space="preserve">
-    <value>パートタイム率の削除</value>
+    <value>パートタイム比率の削除</value>
   </data>
   <data name="ViewReports" xml:space="preserve">
     <value>レポートの表示</value>
@@ -3872,7 +3872,7 @@
     <value>受託業者</value>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
-    <value>1週間あたりの休暇</value>
+    <value>1週間当たりの休暇</value>
   </data>
   <data name="Difference" xml:space="preserve">
     <value>差異</value>
@@ -3971,7 +3971,7 @@
     <value>最大の座席数</value>
   </data>
   <data name="RequiresSeat" xml:space="preserve">
-    <value>必要な座席数</value>
+    <value>座席を要求</value>
   </data>
   <data name="Sites" xml:space="preserve">
     <value>サイト</value>
@@ -4088,7 +4088,7 @@
     <value>ローテーションのロック</value>
   </data>
   <data name="BusinessUnitRequired" xml:space="preserve">
-    <value>事業部門が必要です</value>
+    <value>ビジネスユニットが必要です</value>
   </data>
   <data name="PasswordRequired" xml:space="preserve">
     <value>パスワードが必要です</value>
@@ -4154,7 +4154,7 @@
     <value>タイムスタンプ</value>
   </data>
   <data name="BusinessUnit" xml:space="preserve">
-    <value>事業部門</value>
+    <value>ビジネスユニット</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>エラー</value>
@@ -4163,7 +4163,7 @@
     <value>新規エクスポート...</value>
   </data>
   <data name="TargetBusinessUnit" xml:space="preserve">
-    <value>ターゲット事業部門</value>
+    <value>ターゲットビジネスユニット</value>
   </data>
   <data name="TargetSkill" xml:space="preserve">
     <value>ターゲットスキル</value>
@@ -4331,13 +4331,13 @@
     <value>20</value>
   </data>
   <data name="RowsPerPage" xml:space="preserve">
-    <value>1ページあたりの行数</value>
+    <value>1ページ当たりの行数</value>
   </data>
   <data name="TogglePinStatus" xml:space="preserve">
     <value>前面に固定</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>エージェントあたりの要求数</value>
+    <value>エージェント当たりの要求数</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>ターゲット値</value>
@@ -4400,7 +4400,7 @@
     <value>ジョブ履歴の表示</value>
   </data>
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
-    <value>1日あたりのシフトをPDFにエクスポート</value>
+    <value>1日当たりのシフトをPDFにエクスポート</value>
   </data>
   <data name="ShowPublicNote" xml:space="preserve">
     <value>公開メモの表示</value>
@@ -4439,19 +4439,19 @@
     <value>長期予測</value>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
-    <value>規則セットの管理</value>
+    <value>ルールセットの管理</value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
     <value>エージェント（手動で上書き）</value>
   </data>
   <data name="SkillTypeRetail" xml:space="preserve">
-    <value>小売店</value>
+    <value>リテール</value>
   </data>
   <data name="ActualEmployees" xml:space="preserve">
-    <value>実際の従業員数</value>
+    <value>従業員数　実値</value>
   </data>
   <data name="ExportToBU" xml:space="preserve">
-    <value>事業部門にエクスポート</value>
+    <value>ビジネスユニットにエクスポート</value>
   </data>
   <data name="ExportToFile" xml:space="preserve">
     <value>ファイルにエクスポート</value>
@@ -4472,13 +4472,13 @@
     <value>CSVファイル (*.csv)|*.csv</value>
   </data>
   <data name="ExportStaffing" xml:space="preserve">
-    <value>人材配置のエクスポート</value>
+    <value>要員配置のエクスポート</value>
   </data>
   <data name="ExportWorkload" xml:space="preserve">
     <value>ワークロードのエクスポート</value>
   </data>
   <data name="ExportWorkloadAndStaffing" xml:space="preserve">
-    <value>ワークロードと人材配置のエクスポート</value>
+    <value>ワークロードと要員配置のエクスポート</value>
   </data>
   <data name="AfterCustomerWorkTime" xml:space="preserve">
     <value>アフターカスタマーワーク時間</value>
@@ -4490,10 +4490,10 @@
     <value>平均顧客数</value>
   </data>
   <data name="CalculatedCustomers" xml:space="preserve">
-    <value>計算顧客数</value>
+    <value>算出顧客数</value>
   </data>
   <data name="CampaignCustomersPercent" xml:space="preserve">
-    <value>キャンペーンの顧客数 %</value>
+    <value>キャンペーン顧客 %</value>
   </data>
   <data name="Customers" xml:space="preserve">
     <value>顧客</value>
@@ -4523,7 +4523,7 @@
     <value>SMSの設定</value>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>勤務時間が変更されました:</value>
+    <value>労働時間が変更されました:</value>
   </data>
   <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
     <value>7～8月</value>
@@ -4619,7 +4619,7 @@
     <value>シフトを作成しています</value>
   </data>
   <data name="TooComplexRuleset" xml:space="preserve">
-    <value>は規則セットが複雑すぎます!</value>
+    <value>はルールセットが複雑すぎます!</value>
   </data>
   <data name="ViewAllGroupPages" xml:space="preserve">
     <value>全てのグループページを表示</value>
@@ -4664,7 +4664,7 @@
     <value>Windowsのドメイン</value>
   </data>
   <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
-    <value>予測エージェント（目減りを含む）</value>
+    <value>予測エージェント（シュリンケージを含む）</value>
   </data>
   <data name="GridActions" xml:space="preserve">
     <value>グリッドアクション</value>
@@ -4811,13 +4811,13 @@
     <value>要員期間のエラー</value>
   </data>
   <data name="NightlyRestTimeColon" xml:space="preserve">
-    <value>夜の休憩時間</value>
+    <value>夜間の休憩時間</value>
   </data>
   <data name="WeeklyRestTimeColon" xml:space="preserve">
     <value>1週間の休憩時間</value>
   </data>
   <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
-    <value>この契約スケジュールの就業日を選択</value>
+    <value>この契約スケジュールの労働日を選択</value>
   </data>
   <data name="AddNewWeekToSchedule" xml:space="preserve">
     <value>契約スケジュールに新規週を追加</value>
@@ -4844,22 +4844,22 @@
     <value>の要員ローテーションでは重複した日付を指定することはできません</value>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
-    <value>目減りを含むエージェント</value>
+    <value>エージェント（シュリンケージを含む）</value>
   </data>
   <data name="BusinessRuleDayOffErrorMessage1" xml:space="preserve">
     <value>{0} の休暇がその前後の活動と競合しています。</value>
   </data>
   <data name="BusinessRuleDayOffErrorMessage2" xml:space="preserve">
-    <value>{0} の休暇がその前の活動と競合しています。フレックス時間を先に動かすことはできません。</value>
+    <value>{0} の休暇がその前の活動と競合しています。フレックス時間を前に動かすことはできません。</value>
   </data>
   <data name="BusinessRuleDayOffErrorMessage3" xml:space="preserve">
-    <value>{0} の休暇がその前の活動と競合しています。この休暇を先に動かすことはできません。</value>
+    <value>{0} の休暇がその前の活動と競合しています。この休暇を前に動かすことはできません。</value>
   </data>
   <data name="BusinessRuleDayOffErrorMessage4" xml:space="preserve">
-    <value>{0} の休暇がその後の活動と競合しています。フレックス時間を前に動かすことはできません。</value>
+    <value>{0} の休暇がその後の活動と競合しています。フレックス時間を後ろに動かすことはできません。</value>
   </data>
   <data name="BusinessRuleDayOffErrorMessage5" xml:space="preserve">
-    <value>{0} の休暇がその後の活動と競合しています。この休暇を前に動かすことはできません。</value>
+    <value>{0} の休暇がその後の活動と競合しています。この休暇を後ろに動かすことはできません。</value>
   </data>
   <data name="BusinessRuleMaxWeekWorkTimeErrorMessage" xml:space="preserve">
     <value>この週の勤務時間が多すぎます（{0}）。最大値は {1} です。</value>
@@ -4886,7 +4886,7 @@
     <value>を含むエージェント</value>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>目減りを含むエージェント</value>
+    <value>エージェント（シュリンケージを含む）</value>
   </data>
   <data name="HandledWithin" xml:space="preserve">
     <value>以内の処理</value>
@@ -4895,7 +4895,7 @@
     <value>を含む時間</value>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
-    <value>目減りを含む時間</value>
+    <value>時間（シュリンケージを含む）</value>
   </data>
   <data name="TotalAEW" xml:space="preserve">
     <value>総アフターEメールワーク</value>
@@ -5015,17 +5015,17 @@
     <value>追加</value>
   </data>
   <data name="ShrinkagePercentSignColon" xml:space="preserve">
-    <value>目減り %</value>
+    <value>シュリンケージ %</value>
   </data>
   <data name="PersonAccounts" xml:space="preserve">
     <value>個人
-口座</value>
+アカウント</value>
   </data>
   <data name="AddPersonToRole" xml:space="preserve">
     <value>役割に要員を追加</value>
   </data>
   <data name="NewPersonAccount" xml:space="preserve">
-    <value>新規個人口座</value>
+    <value>新規個人アカウント</value>
   </data>
   <data name="NewPersonPeriod" xml:space="preserve">
     <value>新規要員期間</value>
@@ -5061,7 +5061,7 @@
     <value>現在の分散要求</value>
   </data>
   <data name="ForecastedDistributedDemand" xml:space="preserve">
-    <value>予測分散要求</value>
+    <value>分散要求　予測値</value>
   </data>
   <data name="AndThenOn" xml:space="preserve">
     <value>および</value>
@@ -5085,7 +5085,7 @@
     <value>マルチサイト分布の管理</value>
   </data>
   <data name="SelectYourListOfValues" xml:space="preserve">
-    <value>規則セットのリストを選択</value>
+    <value>ルールセットのリストを選択</value>
   </data>
   <data name="InsufficientPermission" xml:space="preserve">
     <value>このタスクを実行するのに必要な権限がありません。管理者にお問い合わせください。</value>
@@ -5118,7 +5118,7 @@
     <value>既定の状態グループとして設定</value>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(電話応対エージェントが利用可能です)</value>
+    <value>(電話応対可能なージェントがいます)</value>
   </data>
   <data name="AddPersonTimeActivity" xml:space="preserve">
     <value>時間活動の追加</value>
@@ -5136,13 +5136,13 @@
     <value>{0} の名前を入力</value>
   </data>
   <data name="CopyOf" xml:space="preserve">
-    <value>部コピー</value>
+    <value>のコピー</value>
   </data>
   <data name="KeepFreeWeekEndDays" xml:space="preserve">
-    <value>自由な週末の数を保持</value>
+    <value>週末のフリー日数を保持</value>
   </data>
   <data name="KeepFreeWeekEnds" xml:space="preserve">
-    <value>自由な週末の数を保持</value>
+    <value>週末のフリー日数を保持</value>
   </data>
   <data name="KeepWeekEndsTogether" xml:space="preserve">
     <value>週末を結合</value>
@@ -5157,7 +5157,7 @@
     <value>連続した休暇を使用</value>
   </data>
   <data name="UseDaysOffPerWeek" xml:space="preserve">
-    <value>1週間あたりの休暇を使用</value>
+    <value>1週間当たりの休暇を使用</value>
   </data>
   <data name="UseRotations" xml:space="preserve">
     <value>ローテーションを使用</value>
@@ -5166,7 +5166,7 @@
     <value>ローテーション日のみスケジュール作成</value>
   </data>
   <data name="UseConsecutiveWorkDays" xml:space="preserve">
-    <value>連続した平日を使用</value>
+    <value>連続した労働日を使用</value>
   </data>
   <data name="WitAmpersandhinColon" xml:space="preserve">
     <value>&amp;以内:</value>
@@ -5187,7 +5187,7 @@
     <value>入力された文字列を有効な時刻形式に変換できません</value>
   </data>
   <data name="ThereAreAgentsAssignedToTheTeam" xml:space="preserve">
-    <value>チームに割り当てられているエージェントがあります</value>
+    <value>チームに割り当てられているエージェントがいます</value>
   </data>
   <data name="ThereAreTeamsAssignedUnderneath" xml:space="preserve">
     <value>下に割り当てられているチームがあります</value>
@@ -5199,7 +5199,7 @@
     <value>応答済みの契約</value>
   </data>
   <data name="NoAllowedBusinessUnitFoundInCurrentDatabase" xml:space="preserve">
-    <value>現在のデータベースに許可された事業部門が見つかりません</value>
+    <value>現在のデータベースに許可されたビジネスユニットが見つかりません</value>
   </data>
   <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
     <value>以下の理由により、外部のマトリクスシステムの処理を進めることができませんでした: {0}。外部システムなしで読み込みを継続します。</value>
@@ -5245,7 +5245,7 @@
     <value>固定給スタッフの通常勤務時間</value>
   </data>
   <data name="NightlyRestTimeCannotBeMoreThan24Hours" xml:space="preserve">
-    <value>夜の休憩時間は24時間を超えることはできません</value>
+    <value>夜間の休憩時間は24時間を超えることはできません</value>
   </data>
   <data name="WeeksColon" xml:space="preserve">
     <value>週:</value>
@@ -5311,7 +5311,7 @@
     <value>早期警報</value>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
-    <value>ミニマックス人材配置</value>
+    <value>最小最大要員配置</value>
   </data>
   <data name="ScheduleOnlyAvailabilityDays" xml:space="preserve">
     <value>空いている日のみスケジュール作成</value>
@@ -5320,10 +5320,10 @@
     <value>希望日のみスケジュール作成</value>
   </data>
   <data name="UseMaxStaffing" xml:space="preserve">
-    <value>最大の要員配置を使用</value>
+    <value>最大要員配置を使用</value>
   </data>
   <data name="UseMinStaffing" xml:space="preserve">
-    <value>最小の要員配置を使用</value>
+    <value>最小要員配置を使用</value>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
     <value>一般ビュー: ユーザーの詳細</value>
@@ -5344,10 +5344,10 @@
     <value>次の活動開始</value>
   </data>
   <data name="AlarmTime" xml:space="preserve">
-    <value>現在の警報時間</value>
+    <value>現在のアラーム時間</value>
   </data>
   <data name="AlarmTotalTime" xml:space="preserve">
-    <value>トータルの警報時間</value>
+    <value>トータルのアラーム時間</value>
   </data>
   <data name="NextStart" xml:space="preserve">
     <value>次の開始</value>
@@ -5362,7 +5362,7 @@
     <value>トータルの時間</value>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
-    <value>要員期間ビューに読み込む契約、契約スケジュール、パートタイム率、チームを設定ページで追加してください。</value>
+    <value>要員期間ビューに読み込む契約、契約スケジュール、パートタイム比率、チームを設定ページで追加してください。</value>
   </data>
   <data name="People" xml:space="preserve">
     <value>要員</value>
@@ -5380,7 +5380,7 @@
     <value>プリファレンスの日付が無効です。選択した日付は既にスケジュールが定義されています。</value>
   </data>
   <data name="GiveAlarmAName" xml:space="preserve">
-    <value>警報の種類に説明的な名前を付けてください</value>
+    <value>アラームの種類に説明的な名前を付けてください</value>
   </data>
   <data name="SkillCreatedDotParameter0" xml:space="preserve">
     <value>スキルが作成されました {0}</value>
@@ -5407,13 +5407,13 @@
     <value>名前を入力してください</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
-    <value>警報発生状況の管理</value>
+    <value>アラーム発生状況の管理</value>
   </data>
   <data name="CannotChangeSystemAlarmType" xml:space="preserve">
-    <value>システムの警報は変更できません</value>
+    <value>システムのアラームは変更できません</value>
   </data>
   <data name="CannotDeleteSystemAlarmType" xml:space="preserve">
-    <value>システムの警報は削除できません</value>
+    <value>システムのアラームは削除できません</value>
   </data>
   <data name="SelectSuitableColor" xml:space="preserve">
     <value>適切な色を選択</value>
@@ -5470,10 +5470,10 @@
     <value>最小稼働率 (%)</value>
   </data>
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
-    <value>目減り (%)</value>
+    <value>シュリンケージ (%)</value>
   </data>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
-    <value>始めにRTA状態グループを設定してください。</value>
+    <value>はじめにRTA状態グループを設定してください。</value>
   </data>
   <data name="ApplyLicense" xml:space="preserve">
     <value>ライセンスの適用</value>
@@ -5488,8 +5488,8 @@
     <value>パスを含む有効なファイル名を入力してください</value>
   </data>
   <data name="LicenseApplicationSuccess" xml:space="preserve">
-    <value>ライセンスキーの適用に成功しました。おめでとうございます! これで、ワークフォースの管理に定評があるこのソリューションのライセンスを取得できました。
-このアプリケーションを一旦終了します。その後、アプリケーションを起動して使用することができます。なおその際、新たにライセンスが与えられたオプションを使用するには、MyTimeも起動する必要があります。</value>
+    <value>ライセンスキーの適用に成功しました。おめでとうございます! これで、定評のあるワークフォースマネジメントソリューションのライセンスを取得できました。
+このアプリケーションを一旦終了します。その後、アプリケーションを起動して使用することができます。その際、新たにライセンスが与えられたオプションを使用するには、MyTimeも起動する必要があります。</value>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>ライセンスキーの有効期限が切れています。新しいライセンスを適用してください。</value>
@@ -5519,7 +5519,7 @@
     <value>&amp;ブラウズ</value>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>個人口座を読み込めませんでした。[オプション]にて追跡者が指定された欠勤を1つ以上定義する必要があります。</value>
+    <value>個人アカウントを読み込めませんでした。[オプション]にて追跡者が指定された欠勤が少なくとも1つ必要です。</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>1週間の休憩時間は168時間以内でなければなりません</value>
@@ -5531,19 +5531,19 @@
     <value>フォーキャスターを終了します。</value>
   </data>
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
-    <value>他のユーザーにより同じデータが変更されています</value>
+    <value>他のユーザーによって同じデータが変更されています</value>
   </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
-    <value>就業日</value>
+    <value>労働日</value>
   </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>{0} 名のアクティブエージェントを持っていますが、{1} 名分のライセンスしか持っていません。今すぐライセンスキーを更新してください</value>
+    <value>{0} 名のアクティブなエージェントがいますが、{1} 名分のライセンスしか保有していません。今すぐライセンスキーを更新してください</value>
   </data>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>{0} 名のアクティブエージェントを持っていますが、{1} 名分のライセンスしか持っていません。作業を継続する前に、ライセンスキーを更新する必要があります</value>
+    <value>{0} 名のアクティブなエージェントがいますが、{1} 名分のライセンスしか保有していません。作業を継続する前に、ライセンスキーを更新する必要があります</value>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>{1} 名のアクティブエージェントを持っていますが、このライセンスは {0} 名のアクティブエージェントしか対応していません。所有しているアクティブエージェントの人数に対応したライセンスを取得する必要があります</value>
+    <value>このライセンスは {0} 名のアクティブなエージェントにしか対応していません。{1} 名のアクティブなエージェントに対応したライセンスを取得する必要があります</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>日数</value>
@@ -5619,7 +5619,7 @@
     <value>状態グループの概要</value>
   </data>
   <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
-    <value>パートタイム率 '{0}' を削除しますか?</value>
+    <value>パートタイム比率 '{0}' を削除しますか?</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
     <value>トータルの遵守違反</value>
@@ -5667,16 +5667,16 @@
     <value>分</value>
   </data>
   <data name="MaxMoveDayPerPersonPerIteration" xml:space="preserve">
-    <value>1回あたりの要員ごとの最大移動日数</value>
+    <value>1人当たりの1回ごとの最大移動日数</value>
   </data>
   <data name="MaxIteration" xml:space="preserve">
     <value>最大反復回数</value>
   </data>
   <data name="MaxUnsuccessfulCirclePerIteration" xml:space="preserve">
-    <value>1回あたりの最大失敗サークル</value>
+    <value>1回当たりの最大失敗サークル</value>
   </data>
   <data name="MinImprovementPerIteration" xml:space="preserve">
-    <value>1回あたりの最小改善率</value>
+    <value>1回当たりの最小改善率</value>
   </data>
   <data name="CalculatingResourcesInTheBackground" xml:space="preserve">
     <value>バックグラウンドでリソースを計算しています</value>
@@ -5742,13 +5742,13 @@
     <value>エージェントごとの予定時間</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>予定エージェントに対する実絵エージェント</value>
+    <value>エージェント 予定値と実値</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>エージェントごとのシフトカテゴリと全日欠勤</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>1日あたりのシフトカテゴリ</value>
+    <value>1日当たりのシフトカテゴリ</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
     <value>休暇 '{0}' を削除しますか?</value>
@@ -5763,7 +5763,7 @@
     <value>新規乗数</value>
   </data>
   <data name="CannotFindAValidPeriodAccordingToTheBusinessRules" xml:space="preserve">
-    <value>業務規則を満たす有効な期間が見つかりません</value>
+    <value>ビジネスルールを満たす有効な期間が見つかりません</value>
   </data>
   <data name="FilterOnContractTimeLimitations" xml:space="preserve">
     <value>契約時間の制限をフィルター</value>
@@ -5817,13 +5817,13 @@
     <value>利用可能な勤務シフトがありません</value>
   </data>
   <data name="RulesetIsNotValidThisDate" xml:space="preserve">
-    <value>規則セット {0} はその日に対して有効ではありません</value>
+    <value>ルールセット {0} はその日に対して有効ではありません</value>
   </data>
   <data name="TheEmploymentTypeIsNotFixedStaff" xml:space="preserve">
-    <value>雇用形態が固定給スタッフではありません</value>
+    <value>雇用形態は固定給ではありません</value>
   </data>
   <data name="TheEmploymentTypeIsNotHourlyStaff" xml:space="preserve">
-    <value>雇用形態が時給スタッフではありません</value>
+    <value>雇用形態は時給ではありません</value>
   </data>
   <data name="ThereIsAlreadyADayOff" xml:space="preserve">
     <value>その日は既に休暇に設定されています</value>
@@ -5871,7 +5871,7 @@
     <value>要員の追加</value>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
-    <value>個人口座のフィルター</value>
+    <value>個人アカウントのフィルター</value>
   </data>
   <data name="SchedulingDays" xml:space="preserve">
     <value>{0} 日のスケジュールを作成</value>
@@ -5901,7 +5901,7 @@
     <value>{0} は制限が定義されていません</value>
   </data>
   <data name="AverageWorkTimePerSlot" xml:space="preserve">
-    <value>スロットあたりの平均勤務時間</value>
+    <value>スロット当たりの平均勤務時間</value>
   </data>
   <data name="FairnessValue" xml:space="preserve">
     <value>フェアネス値</value>
@@ -6038,7 +6038,7 @@
 更新日: {1}</value>
   </data>
   <data name="SelectRuleSets" xml:space="preserve">
-    <value>規則セットの選択</value>
+    <value>ルールセットの選択</value>
   </data>
   <data name="WorkTimeLimitation" xml:space="preserve">
     <value>勤務時間の制限</value>
@@ -6047,7 +6047,7 @@
     <value>シナリオなし</value>
   </data>
   <data name="ScenarioMustBeCreated" xml:space="preserve">
-    <value>始めに1つ以上のシナリオを作成する必要があります。</value>
+    <value>はじめに1つ以上のシナリオを作成する必要があります。</value>
   </data>
   <data name="EarliestEndTime" xml:space="preserve">
     <value>最も早い終了時刻</value>
@@ -6062,13 +6062,13 @@
     <value>最も遅い開始時刻</value>
   </data>
   <data name="UseShrinkage" xml:space="preserve">
-    <value>目減りを使用</value>
+    <value>シュリンケージを使用</value>
   </data>
   <data name="ESL" xml:space="preserve">
     <value>ESL</value>
   </data>
   <data name="BusinessRulePersonAccountError1" xml:space="preserve">
-    <value>{1} に開始した {0} の個人口座が未払いの値を超えています</value>
+    <value>{1} に開始した {0} の個人アカウントが未払いの値を超えています</value>
   </data>
   <data name="TeamSettings" xml:space="preserve">
     <value>チームの設定</value>
@@ -6131,16 +6131,16 @@
     <value>学生の空き状況を使用</value>
   </data>
   <data name="Alarms" xml:space="preserve">
-    <value>警報</value>
+    <value>アラーム</value>
   </data>
   <data name="AlarmTypes" xml:space="preserve">
-    <value>警報の種類</value>
+    <value>アラームの種類</value>
   </data>
   <data name="ManageAlarms" xml:space="preserve">
-    <value>警報の管理</value>
+    <value>アラームの管理</value>
   </data>
   <data name="ManageAlarmTypes" xml:space="preserve">
-    <value>警報種類の管理</value>
+    <value>アラーム種類の管理</value>
   </data>
   <data name="StateGroups" xml:space="preserve">
     <value>状態グループ</value>
@@ -6161,7 +6161,7 @@
     <value>除外</value>
   </data>
   <data name="Included" xml:space="preserve">
-    <value>包含</value>
+    <value>含む</value>
   </data>
   <data name="UndoRedoDeleteSchedules" xml:space="preserve">
     <value>スケジュールが削除されました</value>
@@ -6242,7 +6242,7 @@
     <value>読み込み</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>エージェントあたりの欠勤時間</value>
+    <value>エージェント当たりの欠勤時間</value>
   </data>
   <data name="AllowTextReply" xml:space="preserve">
     <value>テキストによる応答を許可</value>
@@ -6446,10 +6446,10 @@
     <value>既定のセグメント長</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>レディ時間に対する予定レディ時間</value>
+    <value>レディ時間対予定レディ時間</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>レディ時間に対する予定レディ時間（シフト開始前後の時間を含む）</value>
+    <value>レディ時間対予定レディ時間（シフト開始前後の時間を含む）</value>
   </data>
   <data name="AnsweredContacts" xml:space="preserve">
     <value>応答済みのコンタクト</value>
@@ -6705,7 +6705,7 @@
     <value>他のシナリオにエクスポート</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
-    <value>フィルターエージェント</value>
+    <value>エージェントをフィルター</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>情報</value>
@@ -6732,7 +6732,7 @@
     <value>詳細</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>シフト交代要求 {0} ～ {1} が他の要員により承認されました。</value>
+    <value>シフト交代要求 {0} ～ {1} が他の人から承認されました。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>シフト交代要求 {0} ～ {1} が承認されました</value>
@@ -6762,16 +6762,16 @@
     <value>{0} ～ {1} の新規シフト要求; 要求リストで承認または否認してください。</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
-    <value>承認</value>
+    <value>承認済み</value>
   </data>
   <data name="RequestStatusDenied" xml:space="preserve">
-    <value>否認</value>
+    <value>否認済み</value>
   </data>
   <data name="RequestStatusDtoApproved" xml:space="preserve">
-    <value>承認</value>
+    <value>承認済み</value>
   </data>
   <data name="RequestStatusDtoDenied" xml:space="preserve">
-    <value>否認</value>
+    <value>否認済み</value>
   </data>
   <data name="RequestStatusDtoPending" xml:space="preserve">
     <value>保留</value>
@@ -6792,7 +6792,7 @@
     <value>最小:</value>
   </data>
   <data name="WeeklyWorkTime" xml:space="preserve">
-    <value>1週間あたりの勤務時間</value>
+    <value>1週間当たりの勤務時間</value>
   </data>
   <data name="Validate" xml:space="preserve">
     <value>有効化</value>
@@ -6878,7 +6878,7 @@
     <value>インターバルにスナップ:</value>
   </data>
   <data name="Business" xml:space="preserve">
-    <value>業務</value>
+    <value>ビジネス</value>
   </data>
   <data name="UseMaxStddev" xml:space="preserve">
     <value>インターバル内の逸脱を使用</value>
@@ -6908,7 +6908,7 @@
     <value>結果</value>
   </data>
   <data name="ShiftsPerDay" xml:space="preserve">
-    <value>1日あたりのシフト</value>
+    <value>1日当たりのシフト</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>添付されたPDFファイルには {0} ～ {1} のスケジュールが含まれています。</value>
@@ -6995,10 +6995,10 @@
     <value>このプリファレンスで利用可能なシフトはありません</value>
   </data>
   <data name="PerPeriod" xml:space="preserve">
-    <value>期間あたり</value>
+    <value>期間当たり</value>
   </data>
   <data name="PerWeek" xml:space="preserve">
-    <value>1週間あたり</value>
+    <value>1週間当たり</value>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
     <value>シフトカテゴリの制限</value>
@@ -7052,7 +7052,7 @@
     <value>受信者によりシフト交代要求が拒否されました。</value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
-    <value>個人口座の残高に十分な時間が残っていないため、欠勤要求が自動的に拒否されました。</value>
+    <value>個人アカウントの残高に十分な時間が残っていないため、欠勤要求が自動的に拒否されました。</value>
   </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
     <value>必要な数のリソースが要求されるしきい値を下回るため、欠勤要求が自動的に拒否されました。</value>
@@ -7085,7 +7085,7 @@
     <value>[{0}] にはレイヤーがありません</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
-    <value>一部の欠勤を保存できませんでした。個人口座で使用されている欠勤の追跡者の種類を変更することはできません。</value>
+    <value>欠勤を保存できませんでした。個人アカウントで使用されている欠勤の追跡者の種類を変更することはできません。</value>
   </data>
   <data name="TrackerType" xml:space="preserve">
     <value>追跡者の種類</value>
@@ -7094,13 +7094,13 @@
     <value>事前にスケジュールされたシフトカテゴリが競合しています。有効なブロックではありません。</value>
   </data>
   <data name="ActualHeads" xml:space="preserve">
-    <value>実要員数</value>
+    <value>要員数　実値</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
-    <value>予定日に新規テンプレートを適用しますか?</value>
+    <value>選択した日に新規テンプレートを適用しますか?</value>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
-    <value>規則セットを作成する前に、活動とシフトカテゴリをそれぞれ1つ以上設定する必要があります。</value>
+    <value>ルールセットを作成する前に、活動とシフトカテゴリをそれぞれ1つ以上設定する必要があります。</value>
   </data>
   <data name="PublishingDateSchedule" xml:space="preserve">
     <value>公開日
@@ -7128,13 +7128,13 @@
     <value>データの競合</value>
   </data>
   <data name="OptimisticLockText" xml:space="preserve">
-    <value>このデータは他のユーザーにより変更されました。再度実行してください。</value>
+    <value>このデータは他のユーザーによって既に変更されています。再度実行してください。</value>
   </data>
   <data name="NoRuleSetSelected" xml:space="preserve">
-    <value>規則セットが選択されていません</value>
+    <value>ルールセットが選択されていません</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneRuleSet" xml:space="preserve">
-    <value>規則セットを1つ以上選択する必要があります</value>
+    <value>ルールセットを1つ以上選択する必要があります</value>
   </data>
   <data name="MessageForm" xml:space="preserve">
     <value>メッセージ</value>
@@ -7146,13 +7146,13 @@
     <value>ラベル</value>
   </data>
   <data name="UseFreeWeekEndDays" xml:space="preserve">
-    <value>自由な週末を使用</value>
+    <value>週末のフリー日を使用</value>
   </data>
   <data name="UseFreeWeekEnds" xml:space="preserve">
-    <value>自由な週末を使用</value>
+    <value>週末のフリー日を使用</value>
   </data>
   <data name="MinTimeSchedulePeriodColon" xml:space="preserve">
-    <value>スケジュール期間あたりの最小時間:</value>
+    <value>スケジュール期間当たりの最小時間:</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
     <value>行わない:</value>
@@ -7224,10 +7224,10 @@
     <value>自動承認</value>
   </data>
   <data name="CheckPersonAccount" xml:space="preserve">
-    <value>個人口座のチェック</value>
+    <value>個人アカウントのチェック</value>
   </data>
   <data name="CheckStaffing" xml:space="preserve">
-    <value>人材配置のチェック</value>
+    <value>要員配置のチェック</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
     <value>編集するワークフローコントロールセットを選択</value>
@@ -7251,8 +7251,8 @@
     <value>ワークフローコントロールセット:</value>
   </data>
   <data name="WorkflowControlSetToolTip" xml:space="preserve">
-    <value>個人口座のチェック: {0}
-人材配置のチェック: {1}
+    <value>個人アカウントのチェック: {0}
+要員配置のチェック: {1}
 自動承認: {2}
 期間: {3}</value>
   </data>
@@ -7314,16 +7314,16 @@
     <value>連続した休暇の制限をフィルター</value>
   </data>
   <data name="ConsecutiveWorkdaysRule" xml:space="preserve">
-    <value>連続した自由な就業日の制限をフィルター</value>
+    <value>連続した自由な労働日の制限をフィルター</value>
   </data>
   <data name="DaysOffPerWeekRule" xml:space="preserve">
-    <value>1週間あたりの休暇をフィルター</value>
+    <value>1週間当たりの休暇をフィルター</value>
   </data>
   <data name="FreeWeekendDayRule" xml:space="preserve">
-    <value>自由な週末の制限をフィルター</value>
+    <value>週末のフリー日制限をフィルター</value>
   </data>
   <data name="FreeWeekendRule" xml:space="preserve">
-    <value>自由な週末の制限をフィルター</value>
+    <value>週末のフリー日制限をフィルター</value>
   </data>
   <data name="NewWorkflowControlSet" xml:space="preserve">
     <value>新規ワークフローコントロールセット</value>
@@ -7338,7 +7338,7 @@
     <value>活動ごとの予定時間</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>管理者が設定した規則により、欠勤要求が自動的に拒否されました。</value>
+    <value>管理者が設定したルールにより、欠勤要求が自動的に拒否されました。</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>欠勤要求を承認できません。現時点では一部の日付にて要求が受け付けられません。</value>
@@ -7365,7 +7365,7 @@
     <value>次の日数より古い書き込み禁止スケジュール:</value>
   </data>
   <data name="BusinessRuleNoSkillsOpenErrorMessage" xml:space="preserve">
-    <value>活動 {0} に関連した空き時間を持つスキルが {1} ～ {2} の間で見つかりませんでした</value>
+    <value>活動 {0} に関連したスキルのうち、空き時間があるものが {1} ～ {2} の間では見つかりませんでした</value>
   </data>
   <data name="OpenPreferences" xml:space="preserve">
     <value>プリファレンスを開く</value>
@@ -7425,10 +7425,10 @@
     <value>一致するスキル</value>
   </data>
   <data name="MoveOneIntervalEarlier" xml:space="preserve">
-    <value>インターバル1つ分早くする</value>
+    <value>1インターバル早くする</value>
   </data>
   <data name="MoveOneIntervalLater" xml:space="preserve">
-    <value>インターバル1つ分遅くする</value>
+    <value>1インターバル遅くする</value>
   </data>
   <data name="SuggestTimesBetweenColon" xml:space="preserve">
     <value>次の間の時間を提案:</value>
@@ -7452,7 +7452,7 @@
     <value>許可されていないシフトカテゴリ</value>
   </data>
   <data name="YouDontHaveAWorkflowControlSet" xml:space="preserve">
-    <value>ワークフローコントロールセットを持っていません</value>
+    <value>ワークフローコントロールセットがありません</value>
   </data>
   <data name="AbandonedAfterServiceLevel" xml:space="preserve">
     <value>サービス後の放棄レベル</value>
@@ -7461,7 +7461,7 @@
     <value>短期間の放棄</value>
   </data>
   <data name="AbandonedWithinServiceLevel" xml:space="preserve">
-    <value>サービス内の放棄レベル</value>
+    <value>サービス中の放棄レベル</value>
   </data>
   <data name="Offered" xml:space="preserve">
     <value>着信</value>
@@ -7482,10 +7482,10 @@
     <value>開始日は終了日より前でなければなりません</value>
   </data>
   <data name="YouShouldHaveDaysOffParameterDotYouHaveParameterDot" xml:space="preserve">
-    <value>{0} 日の休暇を取る必要があります。現在 {1} 日の休暇を取っています。</value>
+    <value>休暇は {0} 日取る必要があります。現在は {1} です。</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>欠勤あたりの欠勤時間</value>
+    <value>欠勤当たりの欠勤時間</value>
   </data>
   <data name="MyProfile" xml:space="preserve">
     <value>マイプロファイル</value>
@@ -7504,22 +7504,22 @@
     <value>拡張プリファレンスのテンプレート</value>
   </data>
   <data name="MoveEndOneIntervalEarlier" xml:space="preserve">
-    <value>終了時刻をインターバル1つ分早くする</value>
+    <value>終了時刻を1インターバル早くする</value>
   </data>
   <data name="MoveEndOneIntervalLater" xml:space="preserve">
-    <value>終了時刻をインターバル1つ分遅くする</value>
+    <value>終了時刻を1インターバル遅くする</value>
   </data>
   <data name="MovePeriodOneIntervalEarlier" xml:space="preserve">
-    <value>期間をインターバル1つ分早くする</value>
+    <value>期間を1インターバル早くする</value>
   </data>
   <data name="MovePeriodOneIntervalLater" xml:space="preserve">
-    <value>期間をインターバル1つ分遅くする</value>
+    <value>期間を1インターバル遅くする</value>
   </data>
   <data name="MoveStartOneIntervalEarlier" xml:space="preserve">
-    <value>開始時刻をインターバル1つ分早くする</value>
+    <value>開始時刻を1インターバル早くする</value>
   </data>
   <data name="MoveStartOneIntervalLater" xml:space="preserve">
-    <value>開始時刻をインターバル1つ分遅くする</value>
+    <value>開始時刻を1インターバル遅くする</value>
   </data>
   <data name="CanNotOvertimeWithoutMultiplicatorDefinitionSets" xml:space="preserve">
     <value>乗数定義セットなしで残業を追加することはできません</value>
@@ -7549,10 +7549,10 @@
     <value>{0} が作成されました。{2} ページ中 {1} ページ目</value>
   </data>
   <data name="FilterPersonAccount" xml:space="preserve">
-    <value>個人口座のフィルター</value>
+    <value>個人アカウントのフィルター</value>
   </data>
   <data name="DaysPerYearColon" xml:space="preserve">
-    <value>1年あたりの日数:</value>
+    <value>1年当たりの日数:</value>
   </data>
   <data name="LessThanBudgetGroupNameGreaterThan" xml:space="preserve">
     <value>&lt;予算グループ名&gt;</value>
@@ -7561,22 +7561,22 @@
     <value>学生の時間</value>
   </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
-    <value>効率減少を追加</value>
+    <value>効率シュリンケージを追加</value>
   </data>
   <data name="AddShrinkageRow" xml:space="preserve">
-    <value>目減りを追加</value>
+    <value>シュリンケージを追加</value>
   </data>
   <data name="DeleteEfficiencyShrinkageRow" xml:space="preserve">
-    <value>効率減少を削除</value>
+    <value>効率シュリンケージを削除</value>
   </data>
   <data name="DeleteShrinkageRow" xml:space="preserve">
-    <value>目減りを削除</value>
+    <value>シュリンケージを削除</value>
   </data>
   <data name="CustomEfficiencyShrinkage" xml:space="preserve">
-    <value>カスタムの効率減少</value>
+    <value>カスタム効率シュリンケージ</value>
   </data>
   <data name="CustomShrinkage" xml:space="preserve">
-    <value>カスタムの目減り</value>
+    <value>カスタムシュリンケージ</value>
   </data>
   <data name="CouldNotAddOverTimeNoPersonPeriods" xml:space="preserve">
     <value>エージェントの要員期間が選択されていないため、残業を追加できません</value>
@@ -7610,7 +7610,7 @@
     <value>外部ログオンビュー</value>
   </data>
   <data name="PersonalAccountView" xml:space="preserve">
-    <value>個人口座</value>
+    <value>個人アカウント</value>
   </data>
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
     <value>必須プリファレンスのみ使用</value>
@@ -7619,10 +7619,10 @@
     <value>選択した活動を削除できません</value>
   </data>
   <data name="RenameEfficiencyShrinkageRow" xml:space="preserve">
-    <value>効率減少の名前を変更</value>
+    <value>効率シュリンケージの名前を変更</value>
   </data>
   <data name="RenameShrinkageRow" xml:space="preserve">
-    <value>目減りの名前を変更</value>
+    <value>シュリンケージの名前を変更</value>
   </data>
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
     <value>（{0} ～ {1}）</value>
@@ -7634,7 +7634,7 @@
     <value>テンプレートの日数をフィルター</value>
   </data>
   <data name="Include" xml:space="preserve">
-    <value>包含</value>
+    <value>含める</value>
   </data>
   <data name="ReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>エージェントごとの予定残業時間</value>
@@ -7649,7 +7649,7 @@
     <value>入力された値は有効な時刻ではありません</value>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
-    <value>予定時間に対する目標時間</value>
+    <value>予定時間対目標時間</value>
   </data>
   <data name="NoMeetingIsSelected" xml:space="preserve">
     <value>会議が選択されていません!</value>
@@ -7685,10 +7685,10 @@
     <value>割り当て</value>
   </data>
   <data name="UpdateEfficiencyShrinkageRow" xml:space="preserve">
-    <value>効率減少を編集</value>
+    <value>効率シュリンケージを編集</value>
   </data>
   <data name="UpdateShrinkageRow" xml:space="preserve">
-    <value>目減りを編集</value>
+    <value>シュリンケージを編集</value>
   </data>
   <data name="TotalAllowance" xml:space="preserve">
     <value>トータルの割り当て</value>
@@ -7712,7 +7712,7 @@
     <value>検索...</value>
   </data>
   <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
-    <value>設定を保存中にエラーが発生しました。</value>
+    <value>設定を保存しようとする際にエラーが発生しました。</value>
   </data>
   <data name="RunningBackgroundJob" xml:space="preserve">
     <value>バックグラウンドジョブを実行中...</value>
@@ -7736,7 +7736,7 @@
     <value>連続した休暇</value>
   </data>
   <data name="ConsecutiveWorkDays" xml:space="preserve">
-    <value>連続した就業日</value>
+    <value>連続した労働日</value>
   </data>
   <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
     <value>フレックス時間の休暇</value>
@@ -7763,10 +7763,10 @@
     <value>最大席数</value>
   </data>
   <data name="MaximumStaffing" xml:space="preserve">
-    <value>最大の人材配置</value>
+    <value>最大要員配置</value>
   </data>
   <data name="MinimumStaffing" xml:space="preserve">
-    <value>最小の人材配置</value>
+    <value>最小要員配置</value>
   </data>
   <data name="MustHaves" xml:space="preserve">
     <value>必須項目</value>
@@ -7808,13 +7808,13 @@
     <value>書き込み禁止の解除</value>
   </data>
   <data name="ImportStaffing" xml:space="preserve">
-    <value>人材配置のインポート</value>
+    <value>要員配置のインポート</value>
   </data>
   <data name="ImportWorkloadAndStaffing" xml:space="preserve">
-    <value>ワークロードと人材配置のインポート</value>
+    <value>ワークロードと要員配置のインポート</value>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
-    <value>必須項目の実現</value>
+    <value>必須項目の達成</value>
   </data>
   <data name="DuplicateDaysOffValidationError" xml:space="preserve">
     <value>{0} は休暇が重複しています</value>
@@ -7832,13 +7832,13 @@
     <value>逸脱顧客:</value>
   </data>
   <data name="EmployeesIncWithShrinkage" xml:space="preserve">
-    <value>目減りを含む要員</value>
+    <value>従業員（シュリンケージを含む）</value>
   </data>
   <data name="EmployeesWithShrinkage" xml:space="preserve">
-    <value>目減りを含む要員</value>
+    <value>従業員（シュリンケージを含む）</value>
   </data>
   <data name="ForecastedEmployeesIncoming" xml:space="preserve">
-    <value>着信時の予測従業員</value>
+    <value>着信時の予測従業員数</value>
   </data>
   <data name="IndexAfterCustomerWork" xml:space="preserve">
     <value>アフターカスタマーワークのインデックスを作成</value>
@@ -7847,10 +7847,10 @@
     <value>顧客のインデックスを作成</value>
   </data>
   <data name="MaximumEmployees" xml:space="preserve">
-    <value>最大の従業員数</value>
+    <value>最大従業員数</value>
   </data>
   <data name="MinimumEmployees" xml:space="preserve">
-    <value>最小の従業員数</value>
+    <value>最小従業員数</value>
   </data>
   <data name="OfferedCustomers" xml:space="preserve">
     <value>顧客</value>
@@ -7859,7 +7859,7 @@
     <value>元の顧客</value>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">
-    <value>着信時の予定従業員</value>
+    <value>着信時の予定従業員数</value>
   </data>
   <data name="WalkAways" xml:space="preserve">
     <value>退出</value>
@@ -7907,13 +7907,13 @@
     <value>マスター活動</value>
   </data>
   <data name="MasterActivityCanResultInColon" xml:space="preserve">
-    <value>これらの活動になることができます:</value>
+    <value>これらの活動に変更することができます:</value>
   </data>
   <data name="MasterActivityColon" xml:space="preserve">
     <value>マスター活動</value>
   </data>
   <data name="SelectActivitiesIncludedInMaster" xml:space="preserve">
-    <value>マスター活動がなることができる活動を選択</value>
+    <value>マスター活動をどの活動に変更可能とするかを選択</value>
   </data>
   <data name="SelectMasterActivitetToManage" xml:space="preserve">
     <value>変更するマスター活動を選択</value>
@@ -8024,7 +8024,7 @@
     <value>設定可能な最小勤務時間が高すぎます!</value>
   </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
-    <value>以下のスキルにより使用されているため、選択した活動を削除できません:</value>
+    <value>以下のスキルが使用しているため、選択した活動を削除できません:</value>
   </data>
   <data name="DoNotBreakMaxStaffing" xml:space="preserve">
     <value>最大要員数を超えないようにしてください</value>
@@ -8039,7 +8039,7 @@
     <value>フェアネスシステムをスケジューリングに使用</value>
   </data>
   <data name="PointsPerShiftCategory" xml:space="preserve">
-    <value>シフトカテゴリあたりのポイント数</value>
+    <value>シフトカテゴリ当たりのポイント数</value>
   </data>
   <data name="ClosePreviousPeriod" xml:space="preserve">
     <value>前の期間を閉じる</value>
@@ -8057,7 +8057,7 @@
     <value>スケジュール期間の計算を表示</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
-    <value>マスター活動を持つシフトはスケジュールで使用できません!</value>
+    <value>マスター活動をもつシフトはスケジュールで使用できません!</value>
   </data>
   <data name="TimedOutWhileWaitingforProcessing" xml:space="preserve">
     <value>処理を待っている間にタイムアウトが発生しました。</value>
@@ -8222,10 +8222,10 @@
     <value>現在、全ての会議を表示できません!</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>1日あたりのシフトカテゴリと全日欠勤</value>
+    <value>1日当たりのシフトカテゴリと全日欠勤</value>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
-    <value>子スキルが親スキルと同じ名前になっているか、複数の子スキルが同じ名前になっている可能性があります。マルチサイトスキルのプロパティを確認してください。フォーキャスターを終了します。</value>
+    <value>子スキルと親スキルが同じ名前になっているか、同名の子スキルが複数存在する可能性があります。マルチサイトスキルのプロパティを確認してください。フォーキャスターを終了します。</value>
   </data>
   <data name="AuditingIsNotRunning" xml:space="preserve">
     <value>監査証跡のスケジューリングが実行されていません。</value>
@@ -8249,13 +8249,13 @@
     <value>追加</value>
   </data>
   <data name="BudgetedLeave" xml:space="preserve">
-    <value>予算が計上された退職</value>
+    <value>予算計上済みの退職</value>
   </data>
   <data name="BudgetedSurplus" xml:space="preserve">
-    <value>予算が計上された剰余</value>
+    <value>予算計上済みの剰余</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
-    <value>要求の割り当てを含む</value>
+    <value>要求の割り当てに含む</value>
   </data>
   <data name="ShiftsWithinDay" xml:space="preserve">
     <value>1日のシフト数</value>
@@ -8276,13 +8276,13 @@
     <value>欠勤要求が自動的に拒否されました。この要求に対して十分な予算が割り当てられていません。</value>
   </data>
   <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
-    <value>制限されたシナリオを閲覧する一般的な権限を持っていますが、選択したチームと日付に対する閲覧権限は持っていません。</value>
+    <value>制限されたシナリオを閲覧する一般的な権限はありますが、選択したチームと日付に対する閲覧権限はありませんせん。</value>
   </data>
   <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
-    <value>制限されたシナリオを閲覧する権限を持っていません。全てのシナリオが制限されています。</value>
+    <value>制限されたシナリオを閲覧する権限がありません。全てのシナリオが制限されています。</value>
   </data>
   <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
-    <value>他の事業部門に予測をエクスポート</value>
+    <value>他のビジネスユニットに予測をエクスポート</value>
   </data>
   <data name="DayOffTolerancePlus" xml:space="preserve">
     <value>休暇の許容範囲 +</value>
@@ -8300,16 +8300,16 @@
     <value>シフト上限</value>
   </data>
   <data name="AvailabilityFulfillment" xml:space="preserve">
-    <value>空き状況の実現</value>
+    <value>空き状況の達成</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
-    <value>プリファレンスの実現</value>
+    <value>プリファレンスの完了</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
-    <value>ローテーションの実現</value>
+    <value>ローテーションの完了</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>学生の空き状況の実現</value>
+    <value>学生の空き状況の達成</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
     <value>要求の割り当て</value>
@@ -8318,7 +8318,7 @@
     <value>拡張プリファレンス</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>活動あたりの予定エージェント</value>
+    <value>活動当たりの予定エージェント</value>
   </data>
   <data name="NotReadyTime" xml:space="preserve">
     <value>非レディ時間</value>
@@ -8351,7 +8351,7 @@
     <value>ワークロードを1つ以上選択する必要があります</value>
   </data>
   <data name="DataHasBeenDeleted" xml:space="preserve">
-    <value>変更を保存中にエラーが発生しました。最も可能性があるのは、あなた（または他のユーザー）が、あなたが設定したデータを削除したためだと思われます。データの整合性を保つため、フォームを閉じます。変更は失われます。</value>
+    <value>変更を保存中にエラーが発生しました。あなたが設定したデータが、あなた自身または他のユーザーによって削除された可能性があります。データの整合性を保つため、フォームを閉じます。変更は失われます。</value>
   </data>
   <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
     <value>シフト交代で利用可能なエージェントがありません</value>
@@ -8399,7 +8399,7 @@
     <value>{0} 日の次の時間に致命的な要員不足が発生しています</value>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
-    <value>警告! これらの規則に基づいてシフトを作成すると、処理に非常に時間がかかります。これにより、後のステージにてスケジューリングと最適化のパフォーマンスが低下します!</value>
+    <value>警告! これらのルールに基づいてシフトを作成すると、処理に非常に時間がかかります。これにより、後のステージにてスケジューリングと最適化のパフォーマンスが低下します!</value>
   </data>
   <data name="GenerateForecastFor" xml:space="preserve">
     <value>の予測を作成</value>
@@ -8412,7 +8412,7 @@
   </data>
   <data name="ApplyLicenseInstructions" xml:space="preserve">
     <value>手順:
-* ライセンスを購入します（お問い合わせ情報はwww.teleopti.comを参照）
+* ライセンスを購入します（お問い合わせ先の情報はこちら www.teleopti.com）
 * メールなどでライセンスファイルを受け取ります
 * ライセンスをディスクに保存します
 * アプリケーションで保存していない作業がある場合は、ライセンスを適用する前に作業を保存します
@@ -8435,10 +8435,10 @@
     <value>の週:</value>
   </data>
   <data name="RecurrentTextMonthly" xml:space="preserve">
-    <value>{2} か月ごとの {0} {1} にて、{4} {7} {5} {8} {6} まで有効な {3} が発生</value>
+    <value>{3} から{4} {7} {5} {8} {6} までの {2} か月ごとの {0} {1} に発生</value>
   </data>
   <data name="RecurrentTextWeekly" xml:space="preserve">
-    <value>{0} ごとに、{2} {5} {3} {6} {4} まで有効な {1} が発生</value>
+    <value>{1} から{2} {5} {3} {6} {4} までの毎 {0} に発生</value>
   </data>
   <data name="PersonSelection" xml:space="preserve">
     <value>要員の選択</value>
@@ -8447,7 +8447,7 @@
     <value>スケジュールを書き込み禁止にする</value>
   </data>
   <data name="RecentWorkShiftRuleSets" xml:space="preserve">
-    <value>最近使用した勤務シフト規則セット</value>
+    <value>最近使用した勤務シフトルールセット</value>
   </data>
   <data name="SuperRole" xml:space="preserve">
     <value>スーパー管理者ロール</value>
@@ -8459,7 +8459,7 @@
     <value>1週間の連続休暇日数は最大日数以下でなければなりません。</value>
   </data>
   <data name="ConsecutiveWorkdaysPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
-    <value>1週間の連続就業日は最大日数以下でなければなりません。</value>
+    <value>1週間の連続労働日は最大日数以下でなければなりません。</value>
   </data>
   <data name="MinDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
     <value>1週間の最小休暇日数は最大日数以下でなければなりません。</value>
@@ -8469,11 +8469,11 @@
 
 エラーに関する有益な情報を得るため、[Eメールレポートを送信] ボタンをクリックしてレポートをお送りください。このボタンをクリックすると、既定のEメールプログラムが開きます。このレポートには以下の情報も含めてください。
 
-1. 手順を追ったエラー再現方法
+1. エラーの再現手順
 2. 作業していたデータに関する情報
 3. Teleopti CCCの画面をバックにしたエラーのスクリーンショット
 
-なお、エラーメッセージのテキストをクリップボードにコピーしてEメールの本文に貼り付けて頂いても構いません。
+エラーメッセージのテキストをクリップボードにコピーして、Eメールの本文に貼り付けていただいても構いません。
 
 ご協力ありがとうございます。
 Teleopti研究開発グループ</value>
@@ -8481,7 +8481,7 @@ Teleopti研究開発グループ</value>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
     <value>今後の改善のために、以下の情報をお送りください。
 
-1. 手順を追ったエラー再現方法
+1. エラーの再現手順
 
 2. 作業していたデータに関する情報
 
@@ -8491,7 +8491,7 @@ Teleopti研究開発グループ</value>
 Teleopti研究開発グループ</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>このレコードは他のユーザーにより変更されました。作業を継続する前に以下のいずれかを選択してください。他のユーザーの変更を受け入れるには[OK]をクリックします。この場合、あなたが行った変更は失われます。また、変更を保存せずに作業を継続するには[キャンセル]をクリックします。この場合、[保存]をクリックすると再度この競合メッセージが表示されます。あなたが行った変更内容で上書きして他のユーザーによる変更を削除するには[上書き]をクリックします。</value>
+    <value>このレコードは他のユーザーにより変更されました。作業を継続する前に以下のいずれかを選択してください。他のユーザーの変更を受け入れるには[OK]をクリックします。この場合、あなたが変更した内容は失われます。また、変更を保存せずに作業を継続するには[キャンセル]をクリックします。この場合、[保存]をクリックすると再度この競合メッセージが表示されます。あなたが変更した内容を保存して、他のユーザーが行った変更を削除するには、[上書き]をクリックします。</value>
   </data>
   <data name="SorryForTheInconvenianceButSchedulerHasToCloseNowEtc" xml:space="preserve">
     <value>変更した内容は他のユーザーの変更内容と競合しています。スケジューラーを直ちに終了してください。ご不便をおかけして申し訳ありません。スケジューラーを再起動して作業を継続することができます。</value>
@@ -8519,7 +8519,7 @@ Teleopti研究開発グループ</value>
     <value>指定された期間のスケジュールには既に欠勤が存在します。</value>
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>ライセンスで許可された数（{1}）より多いエージェント（{0}）を使おうとしています。{2} 日以内にエージェントの数を減らすか、必要な数のエージェントに対応したライセンスを適用してください。</value>
+    <value>ライセンスで許可された数（{1}）を超えるエージェント（{0}）を使用しようとしています。{2} 日以内にエージェントの数を減らすか、エージェント数に対応したライセンスを適用してください。</value>
   </data>
   <data name="FromRole" xml:space="preserve">
     <value>役割から</value>
@@ -8537,7 +8537,7 @@ Teleopti研究開発グループ</value>
     <value>利用可能なシフトがありません</value>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
-    <value>実アフターコールワーク時間</value>
+    <value>アフターコールワーク時間　実値</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>欠勤要求 {0} が承認されました。</value>
@@ -8621,16 +8621,16 @@ Teleopti研究開発グループ</value>
     <value>従業員を含む</value>
   </data>
   <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
-    <value>予測される平均アフターカスタマーワーク</value>
+    <value>平均アフターカスタマーワーク　予測値</value>
   </data>
   <data name="ForecastedCustomers" xml:space="preserve">
-    <value>予測顧客</value>
+    <value>顧客数　予測値</value>
   </data>
   <data name="ForecastedCustomersColon" xml:space="preserve">
-    <value>予測顧客:</value>
+    <value>顧客数　予測値:</value>
   </data>
   <data name="ForecastedEmployees" xml:space="preserve">
-    <value>予測従業員</value>
+    <value>従業員数　予測値</value>
   </data>
   <data name="OriginalAfterCustomerWork" xml:space="preserve">
     <value>元のアフターカスタマーワーク</value>
@@ -8639,7 +8639,7 @@ Teleopti研究開発グループ</value>
     <value>元の顧客</value>
   </data>
   <data name="ScheduledEmployees" xml:space="preserve">
-    <value>予定従業員</value>
+    <value>予定従業員数</value>
   </data>
   <data name="ServedCustomers" xml:space="preserve">
     <value>対応した顧客</value>
@@ -8651,7 +8651,7 @@ Teleopti研究開発グループ</value>
     <value>有効なアフターカスタマーワーク</value>
   </data>
   <data name="ValidatedCustomers" xml:space="preserve">
-    <value>有効な顧客</value>
+    <value>有効な顧客数</value>
   </data>
   <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
     <value>プリファレンスが範囲を超えています。</value>
@@ -8684,7 +8684,7 @@ Teleopti研究開発グループ</value>
     <value>サービスレベルとレディ状態エージェント</value>
   </data>
   <data name="FromContract" xml:space="preserve">
-    <value>連絡先から</value>
+    <value>契約から</value>
   </data>
   <data name="FromSchedulePeriod" xml:space="preserve">
     <value>スケジュール期間から</value>
@@ -8699,7 +8699,7 @@ Teleopti研究開発グループ</value>
     <value>動作していません。</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>エージェントあたりの遵守率</value>
+    <value>エージェント当たりの遵守率</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>1日の遵守率</value>
@@ -8720,13 +8720,13 @@ Teleopti研究開発グループ</value>
     <value>最大エージェント数は最小エージェント数以上でなければなりません。</value>
   </data>
   <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
-    <value>選択したファイル出力先が存在しません。有効なパスを入力してください。</value>
+    <value>選択したファイルの出力先が存在しません。有効なパスを入力してください。</value>
   </data>
   <data name="CouldNotExportForecastToFile" xml:space="preserve">
     <value>ファイルをエクスポート中に問題が発生しました。別の場所を指定してください。</value>
   </data>
   <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
-    <value>選択したファイル出力先のパスが長すぎます。有効なパスを入力してください。</value>
+    <value>選択したファイルの出力先のパスが長すぎます。有効なパスを入力してください。</value>
   </data>
   <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
     <value>このウィザードを終了すると、クイック予測がバックグランドジョブとして開始されます。ジョブ履歴にて状態を確認してください。</value>
@@ -8735,8 +8735,8 @@ Teleopti研究開発グループ</value>
     <value>シフト交代要求の状態が、新規、否認、承認である場合、スケジュールを表示できません。</value>
   </data>
   <data name="ShiftGenerationStop" xml:space="preserve">
-    <value>中断しました! これらの規則は複雑すぎるため、最大リミットの範囲内でシフトを作成できませんでした。
-この規則セットからは、スケジューリングと最適化で使用可能なシフトを作成できません。これらのシフトを使用するには、規則を簡単にしてください。</value>
+    <value>中断しました! これらのルールは複雑すぎるため、最大リミットの範囲内でシフトを作成できませんでした。
+このルールセットからは、スケジューリングと最適化で使用可能なシフトを作成できません。これらのシフトを使用するには、ルールを簡単にしてください。</value>
   </data>
   <data name="WpfControls_LayerExpander_ShowDetails" xml:space="preserve">
     <value>詳細の表示/非表示</value>
