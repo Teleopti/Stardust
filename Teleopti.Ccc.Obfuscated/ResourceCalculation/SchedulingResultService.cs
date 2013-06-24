@@ -69,7 +69,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			var toRemoveContainer = new ResourceCalculationDataContainer(_personSkillProvider);
 			var toAddContainer = new ResourceCalculationDataContainer(_personSkillProvider);
 
-			var minResolution = _allSkills.Min(s => s.DefaultResolution);
+			var minResolution = 15;
+			if (_allSkills.Any())
+			{
+				minResolution = _allSkills.Min(s => s.DefaultResolution);
+			}
 			foreach (var scheduleDay in toRemove)
 			{
 				toRemoveContainer.AddScheduleDayToContainer(scheduleDay,minResolution);
