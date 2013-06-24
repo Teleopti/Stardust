@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.WinCode.Common
         /// </summary>
         void ResetFilteredPersons();
 
+	    void ResetFilteredPersonsOvertimeAvailability();
+
         /// <summary>
         /// Loads the schedules.
         /// </summary>
@@ -75,6 +77,8 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created date: 2009-03-21
         /// </remarks>
         IDictionary<Guid, IPerson> FilteredPersonDictionary { get; }
+
+		IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary { get; }
 
         /// <summary>
         /// Gets the time zone info.
@@ -135,6 +139,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void FilterPersons(IList<IPerson> selectedPersons);
 
+	    void FilterPersonsOvertimeAvailability(IList<IPerson> selectedPersons);
+
 		void FilterPersons(HashSet<Guid> selectedGuids);
 
         void ClearDaysToRecalculate();
@@ -157,5 +163,9 @@ namespace Teleopti.Ccc.WinCode.Common
         IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId);
 
         IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
+
+	    bool AgentFilter();
+
+	    bool OvertimeAvailabilityFilter();
     }
 }

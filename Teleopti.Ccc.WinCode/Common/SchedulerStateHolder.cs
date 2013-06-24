@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private DefaultSegment _defaultSegment = new DefaultSegment();
         private readonly CommonStateHolder _commonStateHolder = new CommonStateHolder();
         private IDictionary<Guid, IPerson> _filteredPersons;
+		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 	    private bool _considerShortBreaks = true;
 	    private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 
@@ -96,6 +97,11 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get { return _filteredPersons; }
         }
+
+		public IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary
+		{
+			get { return _filteredPersonsOvertimeAvailability; }
+		}
 
         public IScheduleDictionary Schedules
         {
@@ -271,6 +277,14 @@ namespace Teleopti.Ccc.WinCode.Common
                                 select p).ToDictionary(p => p.Id.Value);
         }
 
+		public void ResetFilteredPersonsOvertimeAvailability()
+		{
+			_filteredPersonsOvertimeAvailability = (from p in SchedulingResultState.PersonsInOrganization
+								where AllPermittedPersons.Contains(p)
+								orderby CommonAgentName(p)
+								select p).ToDictionary(p => p.Id.Value);
+		}
+
         public void FilterPersons(IList<ITeam> selectedTeams)
         {
             List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
@@ -279,12 +293,20 @@ namespace Teleopti.Ccc.WinCode.Common
                 (from p in list orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
         }
+
         public void FilterPersons(IList<IPerson> selectedPersons)
         {
             _filteredPersons =
                 (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
         }
+
+		public void FilterPersonsOvertimeAvailability(IList<IPerson> selectedPersons)
+		{
+			_filteredPersonsOvertimeAvailability =
+				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void FilterPersons(HashSet<Guid> selectedGuids)
@@ -349,5 +371,15 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get { return _defaultSegment.SegmentLength; }
         }
+
+		public bool AgentFilter()
+		{
+			return _filteredPersons.Count != _allPermittedPersons.Count;
+		}
+
+		public bool OvertimeAvailabilityFilter()
+		{
+			return _filteredPersonsOvertimeAvailability.Count != _allPermittedPersons.Count;
+		}
     }
 }
