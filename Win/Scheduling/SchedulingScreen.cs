@@ -7145,7 +7145,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonFilterOvertimeAvailability_Click(object sender, EventArgs e)
 		{
-
+			using (var view = new FilterOvertimeAvailabilityView())
+			{
+				view.ShowDialog(this);
+			}
 		}
 
 		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)

@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.labelTo = new System.Windows.Forms.Label();
 			this.outlookTimePickerFrom = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
 			this.labelFrom = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -70,8 +69,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 86.20689F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.7931F));
@@ -81,25 +80,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// tableLayoutPanel2
 			// 
+			this.tableLayoutPanel2.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.71186F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.28814F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 91F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 98F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonCancel, 2, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(6, 226);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 225);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(315, 30);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(327, 37);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// buttonOk
 			// 
+			this.buttonOk.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.buttonOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.Location = new System.Drawing.Point(143, 3);
+			this.buttonOk.Location = new System.Drawing.Point(146, 7);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonOk.Size = new System.Drawing.Size(75, 23);
@@ -110,9 +112,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(226, 3);
+			this.buttonCancel.Location = new System.Drawing.Point(231, 7);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -125,27 +128,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.panel1.Controls.Add(this.tableLayoutPanel3);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(6, 6);
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(315, 214);
+			this.panel1.Size = new System.Drawing.Size(327, 225);
 			this.panel1.TabIndex = 1;
 			// 
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.datePicker, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 2);
-			this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.datePicker, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 3;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.33485F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.66515F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(315, 214);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(327, 225);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// datePicker
@@ -177,7 +180,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.Name = "monthCalendar";
 			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.datePicker.Calendar.SelectedDates = new System.DateTime[0];
-			this.datePicker.Calendar.Size = new System.Drawing.Size(182, 174);
+			this.datePicker.Calendar.Size = new System.Drawing.Size(154, 174);
 			this.datePicker.Calendar.SizeToFit = true;
 			this.datePicker.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.datePicker.Calendar.TabIndex = 0;
@@ -188,7 +191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// 
 			this.datePicker.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(110, 0);
+			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(82, 0);
 			this.datePicker.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.datePicker.Calendar.NoneButton.Text = "None";
 			this.datePicker.Calendar.NoneButton.UseVisualStyle = true;
@@ -197,7 +200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.datePicker.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.datePicker.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(110, 20);
+			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(82, 20);
 			this.datePicker.Calendar.TodayButton.Text = "Today";
 			this.datePicker.Calendar.TodayButton.UseVisualStyle = true;
 			this.datePicker.CalendarForeColor = System.Drawing.SystemColors.ControlText;
@@ -205,12 +208,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.datePicker.DropDownImage = null;
 			this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.datePicker.Location = new System.Drawing.Point(3, 46);
+			this.datePicker.Location = new System.Drawing.Point(3, 20);
 			this.datePicker.MinValue = new System.DateTime(1990, 12, 31, 23, 59, 0, 0);
 			this.datePicker.Name = "datePicker";
 			this.datePicker.NoneButtonVisible = false;
 			this.datePicker.ShowCheckBox = false;
-			this.datePicker.Size = new System.Drawing.Size(309, 20);
+			this.datePicker.Size = new System.Drawing.Size(321, 20);
 			this.datePicker.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.datePicker.TabIndex = 8;
 			this.datePicker.ThemedChildControls = true;
@@ -231,13 +234,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel4.Controls.Add(this.outlookTimePickerFrom, 1, 0);
 			this.tableLayoutPanel4.Controls.Add(this.labelFrom, 0, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 84);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 64);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 3;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(309, 127);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(321, 158);
 			this.tableLayoutPanel4.TabIndex = 3;
 			// 
 			// checkBoxAdvNextDay
@@ -300,16 +303,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.labelFrom.TabIndex = 2;
 			this.labelFrom.Text = "xxFromColon";
 			// 
-			// label1
-			// 
-			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(194, 13);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "xxFilterOvertimeAvailabilityOnDateColon";
-			// 
 			// errorProvider1
 			// 
 			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
@@ -333,13 +326,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.Name = "FilterOvertimeAvailabilityView";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "xxFilterOvertimeAvailability";
 			this.Load += new System.EventHandler(this.FilterOvertimeAvailabilityView_Load);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
-			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.datePicker.Calendar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.datePicker)).EndInit();
 			this.tableLayoutPanel4.ResumeLayout(false);
@@ -367,7 +360,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private Common.Controls.OutlookTimePicker outlookTimePickerFrom;
 		private System.Windows.Forms.Label labelFrom;
 		private System.Windows.Forms.ErrorProvider errorProvider1;
-		private System.Windows.Forms.Label label1;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv datePicker;
     }
 }

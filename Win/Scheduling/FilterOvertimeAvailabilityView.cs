@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
@@ -10,9 +11,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
     public partial class FilterOvertimeAvailabilityView : BaseDialogForm
     {
-        private FilterOvertimeAvailabilityView()
+        public FilterOvertimeAvailabilityView()
         {
 			InitializeComponent();
+			tableLayoutPanel2.BackColor = Color.FromArgb(191, 219, 254);
 			datePicker.Value = DateTime.Today;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
