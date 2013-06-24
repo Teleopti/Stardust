@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			if (shiftList == null) return null;
-			if(!schedulingOptions.UseAverageShiftLengths)
+			bool usingTeamBlockAndSameShift = schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShift;
+			if (schedulingOptions.WorkShiftLengthHintOption != WorkShiftLengthHintOption.AverageWorkTime &&
+			    !usingTeamBlockAndSameShift)
+				return shiftList;
+
+			if (!schedulingOptions.UseAverageShiftLengths && !usingTeamBlockAndSameShift)
 				return shiftList;
 
 			//ta reda på alla skiftlängder i _shiftList, som en lista
@@ -27,7 +32,8 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				resultingTimes.Add(shiftProjectionCache.WorkShiftProjectionContractTime);
 			}
 			//hämta önskad skiftlängd
-			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions);
+			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix,
+			                                                                       schedulingOptions);
 			//välj närmaste från listan
 			IList<TimeSpan> resultingList = new List<TimeSpan>(resultingTimes);
 
@@ -58,7 +64,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 
 				resultingList.RemoveAt(selectedIndex);
 			}
-			
+
 			return new List<IShiftProjectionCache>();
 		}
 	}
