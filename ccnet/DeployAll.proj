@@ -176,11 +176,13 @@
   <Target Name="BuildLocalWiki">
 	<Message Text="Buliding local wiki" />	
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\$(SevenZipFileName).exe&quot;"/>
-	<Exec Command="wget -k -p &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html">
-	<Zip Files="$(SharedMSIWorkingFolder)\LocalWiki\"
-		WorkingDirectory="$(SharedMSIWorkingFolder)\LocalWiki\"
-		ZipFileName="$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip"
-		ZipLevel="9" />
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wget.exe&quot;"/>
+	<Exec Command="wget.exe -k -p &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
+	<Exec Command="7za.exe x -y -o &qout;$(SharedMSIWorkingFolder)\LocalWiki&qout; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip&quot;" />
+	<!-- <Zip Files="$(SharedMSIWorkingFolder)\LocalWiki\"
+	WorkingDirectory="$(SharedMSIWorkingFolder)\LocalWiki\"
+	ZipFileName="$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip"
+	ZipLevel="9" /> -->
   </Target>
 			
 	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
