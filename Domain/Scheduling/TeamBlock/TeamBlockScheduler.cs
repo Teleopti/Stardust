@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private bool _cancelMe;
 
 		public TeamBlockScheduler(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 			IRestrictionAggregator restrictionAggregator,
@@ -48,7 +49,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             //need to refactor the code alot i dont like these ifs probably split it into classes
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-            {
+			{
+				if (_cancelMe)
+					break;
                 if (!selectedPeriod.DayCollection().Contains(day)) 
 					continue;
                 if (schedulingOptions.UseTeamBlockSameShift)
@@ -81,7 +84,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            return false;
 
 	        foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-	        {
+			{
+				if (_cancelMe)
+					break;
 	            if (!selectedPersons.Contains(person)) continue;
 	            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
 	            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
@@ -106,7 +111,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return;
 
             foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-            {
+			{
+				if (_cancelMe)
+					break;
                 if (!selectedPersons.Contains(person)) continue;
 				_teamScheduling.DayScheduled += OnDayScheduled;
                 _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, selectedPeriod);
@@ -148,6 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				temp(this, e);
 			}
+			_cancelMe = e.Cancel;
 		}
 	}
 }
