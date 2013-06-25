@@ -31,7 +31,6 @@
 		<LocalWikiDependencies>\\hebe\Installation\Dependencies\localWiki</LocalWikiDependencies>
 		<LocalWikiDeployment>\\hebe\Installation\localWiki</LocalWikiDeployment>
 		<LocalWikiInstallation>$(CCNetWorkingDirectory)\WISE\LocalWiki\</LocalWikiInstallation>
-		<SevenZipFileName>7za</SevenZipFileName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -177,10 +176,10 @@
   
   <Target Name="BuildLocalWiki">
 	<Message Text="Buliding local wiki" />
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(LocalWikiDeployment)\$(SevenZipFileName).exe&quot;"/>
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\7za.exe&quot; &quot;$(LocalWikiDeployment)\7za.exe&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(LocalWikiInstallation)\wget.exe&quot;"/>
 	<Exec Command="&quot;$(LocalWikiInstallation)\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
-	<Exec Command="&quot;$(LocalWikiInstallation)\7za.exe&quot; a &quot;$(LocalWikiDeployment)\TeleoptiWiki.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot;"/>
+	<Exec Command="&quot;$(LocalWikiDeployment)\7za.exe&quot; a &quot;$(LocalWikiDeployment)\TeleoptiWiki.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiInstallation)\InstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\InstallWiki.bat&quot;" />
 	<Exec Command="copy &quot;$(LocalWikiInstallation)\UninstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\UninstallWiki.bat&quot;" />
   </Target>
