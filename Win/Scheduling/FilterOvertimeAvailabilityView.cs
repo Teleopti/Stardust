@@ -5,19 +5,23 @@ using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
     public partial class FilterOvertimeAvailabilityView : BaseDialogForm
     {
-        public FilterOvertimeAvailabilityView()
+	    private readonly FilterOvertimeAvailabilityPresenter _presenter;
+	    public FilterOvertimeAvailabilityView(ISchedulerStateHolder schedulerStateHolder)
         {
-			InitializeComponent();
+	        InitializeComponent();
 			tableLayoutPanel2.BackColor = Color.FromArgb(191, 219, 254);
 			datePicker.Value = DateTime.Today;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
+		    _presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);
         }
 
 		private void FilterOvertimeAvailabilityView_Load(object sender, EventArgs e)
@@ -26,6 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var nextFullHour = TimeSpan.FromHours(Math.Ceiling(timeOfDay.TotalHours));
 			outlookTimePickerFrom.SetTimeValue(nextFullHour);
 			outlookTimePickerTo.SetTimeValue(nextFullHour.Add(TimeSpan.FromHours(1)));
+			_presenter.Initialize();
 		}
 
 		public DateOnly SelectedDate
@@ -37,8 +42,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (validateTimes())
 			{
-				
+				_presenter.Filter(outlookTimePickerFrom.TimeValue().Value, outlookTimePickerTo.TimeValue().Value);
 			}
+			Close();
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
@@ -62,6 +68,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var startTime = outlookTimePickerFrom.TimeValue();
 			var endTime = outlookTimePickerTo.TimeValue();
+			if (startTime == null)
+			{
+				setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
+				return false;
+			}
+			if (endTime == null)
+			{
+				setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
+				return false;
+			}
 			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 				endTime = endTime.Value.Add(TimeSpan.FromHours(1));
 

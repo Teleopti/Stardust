@@ -587,6 +587,7 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\FilterOvertimeAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\IAgentOvertimeAvailabilityView.cs" />
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />

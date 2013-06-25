@@ -7145,10 +7145,44 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonFilterOvertimeAvailability_Click(object sender, EventArgs e)
 		{
-			using (var view = new FilterOvertimeAvailabilityView())
+			toolStripButtonFilterOvertimeAvailability.Checked = !toolStripButtonFilterOvertimeAvailability.Checked;
+			if (!toolStripButtonFilterOvertimeAvailability.Checked)
 			{
-				view.ShowDialog(this);
+				_schedulerState.ResetFilteredPersonsOvertimeAvailability();
+				_schedulerState.ResetFilteredPersons();
+				reloadFilteredPeople();
+				return;
 			}
+
+			using (var view = new FilterOvertimeAvailabilityView(_schedulerState))
+			{
+				if (view.ShowDialog() == DialogResult.OK)
+				{
+					reloadFilteredPeople();
+				}
+			}
+		}
+
+		private void reloadFilteredPeople()
+		{
+			_schedulerState.FilterPersons(_schedulerState.FilteredPersonDictionary.Values.ToList());
+
+			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
+
+			if (_scheduleView != null)
+			{
+				if (_scheduleView.Presenter.SortCommand == null || _scheduleView.Presenter.SortCommand is NoSortCommand)
+					_scheduleView.Presenter.ApplyGridSort();
+				else
+					_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
+
+				_grid.Refresh();
+				GridHelper.GridlockWriteProtected(_grid, LockManager);
+				_grid.Refresh();
+			}
+			if (_requestView != null)
+				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
+			drawSkillGrid();
 		}
 
 		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
