@@ -249,24 +249,21 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void ShouldMoveUpAndDown()
+		public void ShouldMoveUp()
 		{
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var activity = ActivityFactory.CreateActivity("activity");
 
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 			personAssignment.AddPersonalLayer(activity, period);
-			personAssignment.AddPersonalLayer(activity, period);
+			personAssignment.AddPersonalLayer(activity, period2);
 
-			var layer = personAssignment.PersonalLayers.Last();
 
-			_target = new PersonalShiftLayerViewModel(null, layer, personAssignment, null, new MoveLayerVertical());
+			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalLayers.Last(), personAssignment, null, new MoveLayerVertical());
 			_target.MoveUp();
 
-			layer.OrderIndex.Should().Be.EqualTo(0);
-			
-			_target.MoveDown();
-			layer.OrderIndex.Should().Be.EqualTo(1);
-		}
+			personAssignment.PersonalLayers.First().Period.Should().Be.EqualTo(period2);
+					}
     }
 }

@@ -341,6 +341,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		    return ret;
 	    }
 
+			public static IPersonAssignment CreateAssignmentWithThreePersonalLayers()
+			{
+				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+				var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+				ret.AddPersonalLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
+				ret.AddPersonalLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
+				ret.AddPersonalLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
+				return ret;
+			}
+
 			public static IPersonAssignment CreateAssignmentWithThreeOvertimeLayers()
 			{
 				var p = new Person();
