@@ -1,10 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -205,6 +207,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
+		[Test]
+		public void VerifyFindValueByKeyAndPerson()
+		{
+			setupFieldsForExternalPerson();
+
+			var rep = new PersonalSettingDataRepository(UnitOfWork);
+			testData s = rep.FindValueByKeyAndPerson("rätt", TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork)), new testData());
+			Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
+			Session.Flush();
+			Session.Clear();
+			Assert.AreEqual(44, rep.FindValueByKey("rätt", defaultValue).Data);
+		}
+
         [Serializable]
         private class testData : SettingValue
         {
@@ -227,5 +242,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Flush();
             personalForPerson = ((ISettingValue)persValue).BelongsTo;
         }
+
+		private void setupFieldsForExternalPerson()
+		{
+			rep = new PersonalSettingDataRepository(UnitOfWork);
+			var person = TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork));
+			ISettingData personalSettingData = new PersonalSettingData("rätt", person);
+			personalSettingData.SetValue(new testData { Data = 44 });
+			PersistAndRemoveFromUnitOfWork(personalSettingData);
+
+			Session.Flush();
+		}
     }
 }

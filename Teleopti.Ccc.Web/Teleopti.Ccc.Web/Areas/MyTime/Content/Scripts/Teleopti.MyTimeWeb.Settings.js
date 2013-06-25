@@ -25,7 +25,8 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         self.CalendarSharingActive = ko.observable(false);
 	    self.CalendarUrl = ko.observable();
 	    self.ActivateCalendarSharing = function() {
-	    	self.CalendarSharingActive(true);
+	        self.CalendarSharingActive(true);
+	        _activateCalendarLink(true);
 		    self.CalendarUrl("http://xxx.xxx.xxx.xxx/ServiceBus/Calendar/[hashvalue]");
 	    };
 
@@ -92,6 +93,23 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
+	}
+    
+	function _activateCalendarLink(isActive) {
+	    ajax.Ajax({
+	        url: "Settings/ActivateCalendarLink",
+	        contentType: 'application/json; charset=utf-8',
+	        type: "POST",
+	        data: JSON.stringify({IsActive: isActive}),
+	        success: function (data, textStatus, jqXHR) {
+	            ajax.CallWhenAllAjaxCompleted(function () {
+	                //location.reload();
+	            });
+	        },
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+	        }
+	    });
 	}
 
 	return {

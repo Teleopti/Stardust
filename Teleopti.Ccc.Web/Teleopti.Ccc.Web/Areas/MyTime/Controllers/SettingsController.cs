@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
@@ -16,13 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
+		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
 
-		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister)
+		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister, IPersonalSettingDataRepository personalSettingDataRepository)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
+			_personalSettingDataRepository = personalSettingDataRepository;
 		}
 
 		[EnsureInPortal]
@@ -76,6 +80,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Response.StatusCode = 400;
 			}
 			return Json(result);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
+		public void ActivateCalendarLink(bool isActive)
+		{
+			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
+			setting.IsActive = isActive;
+			_personalSettingDataRepository.PersistSettingValue(setting);
 		}
 	}
 }
