@@ -120,9 +120,9 @@ ko.bindingHandlers.timepicker = {
     },
     update: function(element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
-        if (typeof value === 'function') {
-            return;
-        }
+        if (typeof value === 'function') return;
+        if (value === undefined) value = '';
+            
         $(element).timepicker("setTime", value);
     }
 };
@@ -156,5 +156,25 @@ ko.bindingHandlers.button = {
             disabled = ko.utils.unwrapObservable(value.disabled);
 
         $(element).button("option", "disabled", disabled);
+    }
+};
+
+ko.bindingHandlers.buttonToggle = {
+    init: function (element, valueAccessor) {
+        $(element).click(function () {
+            var value = valueAccessor();
+            value(!value()); // toggle the value.. this calls update:
+        });
+
+    },
+    update: function (element, valueAccessor) {
+        // update the button toggle based on the boolean value...
+        var value = valueAccessor();
+        if (value()) {
+            $(element).addClass('active');
+        } else {
+            $(element).removeClass('active');
+        }
+
     }
 };

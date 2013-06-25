@@ -188,10 +188,10 @@ $(document).ready(function () {
 
 		viewModelDay.SetPreference({
 			PreferenceId: "id1",
-			EarliestStartTime: "8:00",
-			LatestStartTime: "9:00",
-			EarliestEndTime: "15:00",
-			LatestEndTime: "18:00",
+			EarliestStartTimeInternal: "8:00",
+			LatestStartTimeInternal: "9:00",
+			EarliestEndTimeInternal: "15:00",
+			LatestEndTimeInternal: "18:00",
 			WorkTimeMinimum: "6:00",
 			WorkTimeMaximum: "8:00",
 			ActivityPreferenceId: "id2",

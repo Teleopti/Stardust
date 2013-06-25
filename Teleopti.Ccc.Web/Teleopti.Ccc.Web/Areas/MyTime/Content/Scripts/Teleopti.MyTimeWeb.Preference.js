@@ -257,11 +257,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _reset() {
 		addExtendedPreferenceFormViewModel.PreferenceId('');
-		addExtendedPreferenceFormViewModel.EarliestStartTime(undefined);
-		addExtendedPreferenceFormViewModel.LatestStartTime(undefined);
-		addExtendedPreferenceFormViewModel.EarliestEndTime(undefined);
+		addExtendedPreferenceFormViewModel.EarliestStartTimeInternal(undefined);
+		addExtendedPreferenceFormViewModel.LatestStartTimeInternal(undefined);
+		addExtendedPreferenceFormViewModel.EarliestEndTimeInternal(undefined);
 		addExtendedPreferenceFormViewModel.EarliestEndTimeNextDay(undefined);
-		addExtendedPreferenceFormViewModel.LatestEndTime(undefined);
+		addExtendedPreferenceFormViewModel.LatestEndTimeInternal(undefined);
 		addExtendedPreferenceFormViewModel.LatestEndTimeNextDay(undefined);
 		addExtendedPreferenceFormViewModel.MinimumWorkTime(undefined);
 		addExtendedPreferenceFormViewModel.MaximumWorkTime(undefined);
