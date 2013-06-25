@@ -5,10 +5,29 @@
 		be able to activate calendar sharing on my settings
 		be able to have a unique url to share my calendar
 
+Background:
+	Given there is a shift category named 'Day'
+	And there is an activity with
+	| Field | Value |
+	| Name  | Phone |
 
 Scenario: Activate calendar sharing
 	Given I am an agent
 	When I view my settings
-	And I click 'activate calendar sharing'
+	And I click 'share my calendar'
 	Then I should see a unique url
+
+Scenario: View calendar sharing link
+	Given 'Pierre Baldi' has a person period with
+	| Field      | Value      |
+	| Start date | 2013-06-20 |
+	And 'Pierre Baldi' have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2013-06-20 08:00 |
+	| End time         | 2013-06-20 17:00 |
+	And 'Pierre Baldi' has shared calendar
+	When I am viewing sharing link
+	Then I should see ical calendar
 
