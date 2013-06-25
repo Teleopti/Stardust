@@ -19,21 +19,6 @@ GO
 
 ----------------  
 --Name: Roger Kratz
---Date: 2013-04-15
---Desc: Adding date for person assignment audit table. Hard coded to 1800-1-1. Will be replaced by .net code
-ALTER TABLE Auditing.PersonAssignment_AUD
-ADD [Date] datetime
-GO
-
-declare @Date datetime
-set @Date = '1800-01-01T00:00:00'
-
-update Auditing.PersonAssignment_AUD
-set [Date] = @Date
-GO
-
-----------------  
---Name: Roger Kratz
 --Date: 2013-05-15
 
 ---------------- MAIN TABLES --------------------------
@@ -70,23 +55,6 @@ GO
 
 --drop mainshift table
 DROP TABLE dbo.MainShift
-GO
-
------------------- AUDIT TABLES ----------------------------
---Add shiftcategory to personassignment
-ALTER TABLE auditing.PersonAssignment_AUD
-add ShiftCategory uniqueidentifier
-GO
-
---move data for ShiftCategory
-UPDATE pa
-SET pa.ShiftCategory = ms.ShiftCategory
-FROM auditing.PersonAssignment_AUD pa
-INNER JOIN auditing.MainShift_AUD ms
-	ON pa.Id = ms.Id
-
---drop mainshift table
-drop table auditing.mainshift_aud
 GO
 
 ----------------  
@@ -182,8 +150,8 @@ GO
 
 CREATE TABLE [mart].[LastUpdatedPerStep](
 	[StepName] [varchar](500) NOT NULL,
-	[BusinessUnit] [uniqueidentifier] NOT NULL,
-	[Date] [datetime] NOT NULL
+	[BusinessUnit] uniqueidentifier NOT NULL,
+	[Date] datetime NOT NULL
 )
 GO
 
@@ -290,9 +258,9 @@ BEGIN
 	SET NOCOUNT ON
 
 	CREATE TABLE [dbo].[MeetingPerson_new](
-		[Id] [uniqueidentifier] NOT NULL,
-		[Person] [uniqueidentifier] NOT NULL,
-		[Parent] [uniqueidentifier] NOT NULL,
+		[Id] uniqueidentifier NOT NULL,
+		[Person] uniqueidentifier NOT NULL,
+		[Parent] uniqueidentifier NOT NULL,
 		[Optional] [bit] NOT NULL,
 	 CONSTRAINT [PK_MeetingPerson_new] PRIMARY KEY NONCLUSTERED 
 	(
@@ -463,12 +431,12 @@ GO
 
 --Create new layer table
 CREATE TABLE [dbo].[PersonalShiftActivityLayer_new](
-	[Id] [uniqueidentifier] NOT NULL,
-	[payLoad] [uniqueidentifier] NOT NULL,
-	[Minimum] [datetime] NOT NULL,
-	[Maximum] [datetime] NOT NULL,
-	[Parent] [uniqueidentifier] NOT NULL,
-	[OrderIndex] [int] NOT NULL,
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
  CONSTRAINT [PK_PersonalShiftActivityLayer_new] PRIMARY KEY NONCLUSTERED 
 (
 	[Id] ASC
@@ -513,3 +481,223 @@ GO
 EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer_new]', N'PersonalShiftActivityLayer', N'OBJECT'
 EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer].[PK_PersonalShiftActivityLayer_new]', N'PK_PersonalShiftActivityLayer', N'INDEX'
 GO
+
+----------------  
+--Name: David J
+--Date: 2013-06-24
+--Desc: PBI #21978 - New Audit layout
+----------------  
+CREATE SCHEMA [Auditing_Old] AUTHORIZATION [dbo]
+GO
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[PersonAssignment_AUD];
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[MainShiftActivityLayer_AUD];
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[MainShift_AUD];
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[OvertimeShiftActivityLayer_AUD]
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[OvertimeShift_AUD]
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[PersonalShiftActivityLayer_AUD]
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[PersonalShift_AUD]
+ALTER SCHEMA [Auditing_Old]
+    TRANSFER [Auditing].[PersonDayOff_AUD]
+ALTER SCHEMA [Auditing_Old]
+	TRANSFER [Auditing].[PersonAbsence_AUD]
+ALTER SCHEMA [Auditing_Old]
+	TRANSFER [Auditing].[Revision]
+GO
+
+CREATE TABLE [Auditing].[Revision](
+	[Id] bigint IDENTITY(1,1) NOT NULL,
+	[ModifiedAt] datetime NULL,
+	[ModifiedBy] uniqueidentifier NOT NULL,
+ CONSTRAINT [PK_Revision] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+ALTER TABLE [Auditing].[Revision]  WITH CHECK ADD  CONSTRAINT [FK_Revision_Person] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[Person] ([Id])
+
+ALTER TABLE [Auditing].[Revision] CHECK CONSTRAINT [FK_Revision_Person]
+GO
+
+CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Minimum] datetime NULL,
+	[Maximum] datetime NULL,
+	[OrderIndex] int NULL,
+	[Payload] uniqueidentifier NULL,
+	[Parent] uniqueidentifier NULL,
+ CONSTRAINT [PK_MainShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+
+ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_MainShiftActivityLayer_REV]
+GO
+
+
+CREATE TABLE [Auditing].[OvertimeShiftActivityLayer_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Minimum] datetime NULL,
+	[Maximum] datetime NULL,
+	[OrderIndex] int NULL,
+	[Payload] uniqueidentifier NULL,
+	[DefinitionSet] uniqueidentifier NULL,
+	[Parent] uniqueidentifier NULL,
+ CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+
+ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
+GO
+
+CREATE TABLE [Auditing].[PersonalShiftActivityLayer_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Minimum] datetime NULL,
+	[Maximum] datetime NULL,
+	[OrderIndex] int NULL,
+	[Payload] uniqueidentifier NULL,
+	[Parent] uniqueidentifier NULL,
+ CONSTRAINT [PK_PersonalShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_REV]
+
+GO
+
+CREATE TABLE [Auditing].[PersonAssignment_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Version] int NULL,
+	[Minimum] datetime NULL,
+	[Maximum] datetime NULL,
+	[Person] uniqueidentifier NULL,
+	[Scenario] uniqueidentifier NULL,
+	[BusinessUnit] uniqueidentifier NULL,
+	[ShiftCategory] uniqueidentifier,
+	[Date] datetime
+ CONSTRAINT [PK_PersonAssignment_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+ALTER TABLE [Auditing].[PersonAssignment_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[Auditing].[FK_PersonAssignment_REV]') AND parent_object_id = OBJECT_ID(N'[Auditing].[PersonAssignment_AUD]'))
+ALTER TABLE [Auditing].[PersonAssignment_AUD] CHECK CONSTRAINT [FK_PersonAssignment_REV]
+
+
+GO
+
+CREATE TABLE [Auditing].[PersonAbsence_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Version] int NULL,
+	[LastChange] datetime NULL,
+	[Minimum] datetime NULL,
+	[Maximum] datetime NULL,
+	[Person] uniqueidentifier NULL,
+	[Scenario] uniqueidentifier NULL,
+	[Payload] uniqueidentifier NULL,
+	[BusinessUnit] uniqueidentifier NULL,
+ CONSTRAINT [PK_PersonAbsence_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+
+ALTER TABLE [Auditing].[PersonAbsence_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonalAbsence_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[PersonAbsence_AUD] CHECK CONSTRAINT [FK_PersonalAbsence_REV]
+
+
+GO
+CREATE TABLE [Auditing].[PersonDayOff_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[Version] int NULL,
+	[Anchor] datetime NULL,
+	[TargetLength] bigint NULL,
+	[Flexibility] bigint NULL,
+	[DisplayColor] int NULL,
+	[PayrollCode] nvarchar(20) NULL,
+	[Name] nvarchar(50) NULL,
+	[ShortName] nvarchar(25) NULL,
+	[Person] uniqueidentifier NULL,
+	[Scenario] uniqueidentifier NULL,
+	[BusinessUnit] uniqueidentifier NULL,
+ CONSTRAINT [PK_PersonDayOff_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+ALTER TABLE [Auditing].[PersonDayOff_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonDayOff_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[PersonDayOff_AUD] CHECK CONSTRAINT [FK_PersonDayOff_REV]
+GO
+
+
+CREATE TABLE [Auditing].[OvertimeShift_AUD](
+	[Id] uniqueidentifier NOT NULL,
+	[REV] bigint NOT NULL,
+	[REVTYPE] tinyint NOT NULL,
+	[OrderIndex] int NULL,
+	[Parent] uniqueidentifier NULL,
+ CONSTRAINT [PK_OvertimeShift_AUD] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[REV] ASC
+)
+)
+ALTER TABLE [Auditing].[OvertimeShift_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShift_REV] FOREIGN KEY([REV])
+REFERENCES [Auditing].[Revision] ([Id])
+ON DELETE CASCADE
+
+ALTER TABLE [Auditing].[OvertimeShift_AUD] CHECK CONSTRAINT [FK_OvertimeShift_REV]
+
+GO
+
