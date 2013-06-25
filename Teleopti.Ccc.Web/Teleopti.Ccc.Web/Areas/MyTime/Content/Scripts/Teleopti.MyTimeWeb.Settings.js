@@ -27,7 +27,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	    self.ActivateCalendarSharing = function() {
 	        self.CalendarSharingActive(true);
 	        _activateCalendarLink(true);
-		    self.CalendarUrl("http://xxx.xxx.xxx.xxx/ServiceBus/Calendar/[hashvalue]");
 	    };
 
         self.selectedUiCulture.subscribe(function(newValue) {
@@ -103,7 +102,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	        data: JSON.stringify({IsActive: isActive}),
 	        success: function (data, textStatus, jqXHR) {
 	            ajax.CallWhenAllAjaxCompleted(function () {
-	                //location.reload();
+		            vm.CalendarUrl(data);
 	            });
 	        },
 	        error: function (jqXHR, textStatus, errorThrown) {

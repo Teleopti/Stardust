@@ -84,11 +84,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void ActivateCalendarLink(bool isActive)
+		public JsonResult ActivateCalendarLink(bool isActive)
 		{
 			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = isActive;
 			_personalSettingDataRepository.PersistSettingValue(setting);
+			var requestUrl = Request.Url.OriginalString;
+			var url = requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) + "Calendar/Get/" +
+			          _loggedOnUser.CurrentUser().Id.Value;
+			return Json(url);
 		}
 	}
 }

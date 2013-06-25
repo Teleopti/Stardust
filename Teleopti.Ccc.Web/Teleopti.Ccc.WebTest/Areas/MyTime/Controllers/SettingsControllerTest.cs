@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
@@ -152,15 +153,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldActivateCalendarLink()
 		{
 			var person = new Person();
+			var id = Guid.NewGuid();
+			person.SetId(id);
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
+			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/ActivateCalendarLink"));
 			var settings = new CalendarLinkSettings();
 			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
 			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository))
 			{
-				target.ActivateCalendarLink(true);
+				var context = new FakeHttpContext("/");
+				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+				context.SetRequest(request);
+
+				var result = target.ActivateCalendarLink(true).Data as string;
 				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
 				Assert.IsTrue(settings.IsActive);
+				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Calendar/Get/" + id);
 			}
 		}
 	}
