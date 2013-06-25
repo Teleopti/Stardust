@@ -51,12 +51,14 @@ namespace Teleopti.Ccc.WinCode.Common
             _schedulingResultState = schedulingResultStateHolder;
             _allPermittedPersons = new List<IPerson>(allPermittedPersons);
             ResetFilteredPersons();
+			ResetFilteredPersonsOvertimeAvailability();
         }
 
         public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _schedulingResultState = schedulingResultStateHolder;
             _allPermittedPersons = new List<IPerson>();
+			ResetFilteredPersonsOvertimeAvailability();
         }
 
 
@@ -95,8 +97,14 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public IDictionary<Guid, IPerson> FilteredPersonDictionary
         {
-            get { return _filteredPersons; }
+			get { return combinedFilters(); }
         }
+
+		private IDictionary<Guid, IPerson> combinedFilters()
+		{
+			if (_filteredPersonsOvertimeAvailability.IsEmpty()) return _filteredPersons;
+			return _filteredPersons.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
+		}
 
 		public IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary
 		{
@@ -279,10 +287,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void ResetFilteredPersonsOvertimeAvailability()
 		{
-			_filteredPersonsOvertimeAvailability = (from p in SchedulingResultState.PersonsInOrganization
-								where AllPermittedPersons.Contains(p)
-								orderby CommonAgentName(p)
-								select p).ToDictionary(p => p.Id.Value);
+			_filteredPersonsOvertimeAvailability = new Dictionary<Guid, IPerson>();
 		}
 
         public void FilterPersons(IList<ITeam> selectedTeams)
@@ -379,6 +384,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public bool OvertimeAvailabilityFilter()
 		{
+			if (_filteredPersonsOvertimeAvailability.IsEmpty()) return false;
 			return _filteredPersonsOvertimeAvailability.Count != _allPermittedPersons.Count;
 		}
     }
