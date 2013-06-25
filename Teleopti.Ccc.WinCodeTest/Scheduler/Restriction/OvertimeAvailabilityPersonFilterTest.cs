@@ -127,9 +127,74 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             Assert.AreEqual(personList.Count(),3);
             
         }
-        
+
+       [Test]
+       public void ShouldReturnEmptyListWhenShiftsAreOnNextDay()
+       {
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+                                                             TimeSpan.FromHours(8));
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+                                                             TimeSpan.FromHours(5));
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+                                                             TimeSpan.FromHours(15));
+           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
+           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
+           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+
+           using (_mock.Record())
+           {
+               commonPersistableScheduleDataCollectionMocks();
+           }
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14),TimeSpan.FromHours(16));
+           Assert.AreEqual(personList.Count(), 0);
+
+       }
+
+       [Test]
+       public void ShouldReturnOnePersonListWhenTwoOfTheThreeShiftsAreOnNextDay()
+       {
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+                                                             TimeSpan.FromHours(8));
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+                                                             TimeSpan.FromHours(5));
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+                                                             TimeSpan.FromHours(16));
+           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
+           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
+           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+
+           using (_mock.Record())
+           {
+               commonPersistableScheduleDataCollectionMocks();
+           }
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14), TimeSpan.FromHours(16));
+           Assert.AreEqual(personList.Count(), 1);
+
+       }
+
+       [Test]
+       public void ShouldReturnTwoPersonListWhenTwoOfTheThreeShiftsAreOnNextDay()
+       {
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+                                                             TimeSpan.FromHours(8));
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+                                                             TimeSpan.FromHours(5));
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+                                                             TimeSpan.FromHours(16));
+           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
+           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
+           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+
+           using (_mock.Record())
+           {
+               commonPersistableScheduleDataCollectionMocks();
+           }
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(23), TimeSpan.FromHours(1));
+           Assert.AreEqual(personList.Count(), 2);
+
+       }
+
        
-        
         private void commonPersistableScheduleDataCollectionMocks()
         {
             Expect.Call(_scheduleDay1.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
