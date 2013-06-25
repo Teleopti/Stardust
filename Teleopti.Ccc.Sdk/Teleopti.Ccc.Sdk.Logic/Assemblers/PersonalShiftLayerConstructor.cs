@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     {
         public IPersonalShiftLayer CreateLayer(IActivity activity, DateTimePeriod period)
         {
-            return new PersonalShiftActivityLayer(activity, period);
+            return new PersonalShiftLayer(activity, period);
         }
     }
 }

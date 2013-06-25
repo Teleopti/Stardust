@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		public static readonly DateTimePeriod UndefinedPeriod = new DateTimePeriod(1800,1,1,1800,1,2);
 
-		private IList<IPersonalShift> _personalShiftCollection;
 		private IList<IOvertimeShift> _overtimeShiftCollection;
 		private IList<IMainShiftLayer> _mainLayers;
 		private IList<IPersonalShiftLayer> _personalLayers;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
-			_personalShiftCollection = new List<IPersonalShift>();
 			_overtimeShiftCollection = new List<IOvertimeShift>();
 			_mainLayers = new List<IMainShiftLayer>();
 			_personalLayers = new List<IPersonalShiftLayer>();
@@ -133,11 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			});
 			ShiftCategory = shiftCategory;
 		}
-	
-		public virtual ReadOnlyCollection<IPersonalShift> PersonalShiftCollection
-		{
-			get { return new ReadOnlyCollection<IPersonalShift>(_personalShiftCollection); }
-		}
+
 
 		public virtual IPerson Person
 		{
@@ -194,46 +188,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _personalLayers.Remove(layer);
 		}
 
-		#region Manipulate personalshifts
-
-		public virtual void AddPersonalShift(IPersonalShift personalShift)
-		{
-			InsertPersonalShiftInternal(personalShift, _personalShiftCollection.Count);
-		}
-
-		private void InsertPersonalShiftInternal(IPersonalShift personalShift, int index)
-		{
-			InParameter.NotNull("personalShift", personalShift);
-			if (_personalShiftCollection.Contains(personalShift))
-			{
-				if (personalShift.OrderIndex < index)
-					index = index - 1;
-				_personalShiftCollection.Remove(personalShift);
-			}
-			_personalShiftCollection.Insert(index, personalShift);
-			personalShift.SetParent(this);
-		}
-
 		public virtual void ClearPersonalLayers()
 		{
 			_personalLayers.Clear();
 		}
-
-		public virtual void RemovePersonalShift(IPersonalShift personalShift)
-		{
-			_personalShiftCollection.Remove(personalShift);
-		}
-
-		#endregion
-
-		#region Manipulate MainShift
 
 		public virtual void ClearMainLayers()
 		{
 			_mainLayers.Clear();
 		}
 
-		#endregion
 
 		#region IRestrictionChecker Members
 

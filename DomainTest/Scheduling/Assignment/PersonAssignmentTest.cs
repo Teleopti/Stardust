@@ -152,16 +152,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(testPerson, target.MainRoot);
 		}
 
-		/// <summary>
-		/// Null personal shifts are not allowed.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void NullPersonalShiftsAreNotAllowed()
-		{
-			target.AddPersonalShift(null);
-		}
-
 
 		/// <summary>
 		/// Verifies default constructor is not public.

@@ -467,7 +467,6 @@
     <Compile Include="Domain\ISwapDetail.cs" />
     <Compile Include="Domain\ISystemSetting.cs" />
     <Compile Include="Domain\ITemplateReference.cs" />
-    <Compile Include="Domain\IPersonalShiftActivityLayer.cs" />
     <Compile Include="Domain\DateHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -662,7 +661,6 @@
     <Compile Include="Domain\IPermissionInformation.cs" />
     <Compile Include="Domain\IPerson.cs" />
     <Compile Include="Domain\IPersonAbsence.cs" />
-    <Compile Include="Domain\IPersonalShift.cs" />
     <Compile Include="Domain\IPersonAssignment.cs" />
     <Compile Include="Domain\IPersonAssignmentRepository.cs" />
     <Compile Include="Domain\IPersonContract.cs" />

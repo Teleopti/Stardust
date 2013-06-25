@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             global::Domain.ActivityLayer oldActLayer =
                 new global::Domain.ActivityLayer(new global::Domain.TimePeriod(new TimeSpan(8, 9, 0), new TimeSpan(16, 17, 0)), oldActivity);
 
-            ActivityLayer newActLayer = target.Map(oldActLayer);
+            var newActLayer = target.Map(oldActLayer);
 
             Assert.AreEqual(convertedActivity, newActLayer.Payload);
             Assert.AreEqual(new DateTime(2007, 1, 1, 8, 9, 0), newActLayer.Period.StartDateTime);

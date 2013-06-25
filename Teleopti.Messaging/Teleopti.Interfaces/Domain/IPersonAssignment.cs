@@ -23,32 +23,12 @@ namespace Teleopti.Interfaces.Domain
     {
 			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
 
-	    /// <summary>
-        /// Gets the personal shift collection.
-        /// </summary>
-        /// <value>The personal shift collection.</value>
-        ReadOnlyCollection<IPersonalShift> PersonalShiftCollection { get; }
-
-        /// <summary>
-        /// Adds a personal shift.
-        /// </summary>
-        /// <param name="personalShift">The personal shift.</param>
-        void AddPersonalShift(IPersonalShift personalShift);
 
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
         void ClearPersonalLayers();
 
-        /// <summary>
-        /// Removes the personal shift.
-        /// </summary>
-        /// <param name="personalShift">The personal shift.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-02-28
-        /// </remarks>
-        void RemovePersonalShift(IPersonalShift personalShift);
 
         /// <summary>
         /// Clears the main shift.

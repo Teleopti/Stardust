@@ -833,7 +833,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
             _personAssignments = new List<IPersonAssignment> { _personAssignment };
-             var personalShift = _mocks.StrictMock<IPersonalShift>();
             
             var currentDate = new DateTime(2009, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var lunch = ActivityFactory.CreateActivity("lunch");
