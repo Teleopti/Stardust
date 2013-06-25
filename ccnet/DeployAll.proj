@@ -29,6 +29,8 @@
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<LocalWikiDependencies>\\hebe\Installation\Dependencies\localWiki</LocalWikiDependencies>
+		<LocalWikiDeployment>\\hebe\Installation\localWiki</LocalWikiDeployment>
+		<LocalWikiInstallation>$(CCNetWorkingDirectory)\WISE\LocalWiki\</LocalWikiInstallation>
 		<SevenZipFileName>7za</SevenZipFileName>
 	</PropertyGroup>
 	
@@ -174,15 +176,13 @@
   </Target>
   
   <Target Name="BuildLocalWiki">
-	<Message Text="Buliding local wiki" />	
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\$(SevenZipFileName).exe&quot;"/>
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wget.exe&quot;"/>
-	<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
-	<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;c:\TeleoptiWiki.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot;"/>
-	<!-- <Zip Files="$(SharedMSIWorkingFolder)\LocalWiki\"
-	WorkingDirectory="$(SharedMSIWorkingFolder)\LocalWiki\"
-	ZipFileName="$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip"
-	ZipLevel="9" /> -->
+	<Message Text="Buliding local wiki" />
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(LocalWikiDeployment)\$(SevenZipFileName).exe&quot;"/>
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(LocalWikiInstallation)\wget.exe&quot;"/>
+	<Exec Command="&quot;$(LocalWikiInstallation)\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
+	<Exec Command="&quot;$(LocalWikiInstallation)\7za.exe&quot; a &quot;$(LocalWikiDeployment)\TeleoptiWiki.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot;"/>
+	<Exec Command="copy &quot;$(LocalWikiInstallation)\InstallWiki.bat&quot; &quot;&(LocalWikiDeployment)\InstallWiki.bat&quot;" />
+	<Exec Command="copy &quot;$(LocalWikiInstallation)\UninstallWiki.bat&quot; &quot;&(LocalWIkiDeployment)\UninstallWiki.bat&quot;" />
   </Target>
 			
 	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
