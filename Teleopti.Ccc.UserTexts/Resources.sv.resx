@@ -11004,10 +11004,17 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Tillgänglighet per agent</value>
   </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Nekad</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Din frånvaroförfrågan har avslagits. Några dagar i den aktuella perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar gällande följande period: {0}.</value>
   </data>
   <data name="ViewActiveAgents" xml:space="preserve">
     <value>Visa aktiva agenter</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Lokal tid</value>
   </data>
 </root>
