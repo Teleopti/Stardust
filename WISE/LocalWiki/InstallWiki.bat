@@ -17,7 +17,7 @@ SET /P INSTALLDIR="Please enter Installpath (eg C:\Program Files(x86)\Teleopti\)
 )
 
 :: Unzip wikifiles to Local folder
-7za.exe x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%wiki.teleopti.com.zip"
+7za.exe x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%TeleoptiWiki.zip"
 
 :: Deploy virtual directory to IIS
 %SYSTEMROOT%\system32\inetsrv\APPCMD add vdir /app.name:"Default Web Site/" /path:/TeleoptiCCC/LocalWiki /physicalPath:"%INSTALLPATH%TeleoptiCCC\LocalWiki"
