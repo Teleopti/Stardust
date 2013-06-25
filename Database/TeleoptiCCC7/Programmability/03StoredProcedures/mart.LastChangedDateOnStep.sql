@@ -55,6 +55,10 @@ INNER JOIN dbo.BusinessUnit bu
 WHERE bu.id=@buId
 
 --Get the time for last update on this particular object; updated after last ETL run
+IF @stepName = 'Forecast'
+BEGIN
+	SELECT @thisTime = MAX(UpdatedOn) FROM SkillDay WHERE UpdatedOn >= @lastTime
+END
 IF @stepName = 'Preferences'
 BEGIN
 	SELECT @thisTime = MAX(UpdatedOn) FROM PreferenceDay WHERE UpdatedOn >= @lastTime
