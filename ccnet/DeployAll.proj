@@ -28,6 +28,8 @@
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
+		<LocalWikiDependencies>\\hebe\Installation\Dependencies\localWiki</LocalWikiDependencies>
+		<7zipFileName>7za</7zipFileName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -171,6 +173,15 @@
 	<Exec Command="rd &quot;$(MSIPath)&quot; /Q /S"/>
   </Target>
   
+  <Target Name="BuildLocalWiki">
+	<Message Text="Buliding local wiki" />	
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(7zipFileName).exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\$(7zipFileName).exe&quot;"/>
+	<Exec Command="wget -k -p &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html">
+	<Zip Files="$(SharedMSIWorkingFolder)\LocalWiki\"
+		WorkingDirectory="$(SharedMSIWorkingFolder)\LocalWiki\"
+		ZipFileName="$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip"
+		ZipLevel="9" />
+  </Target>
 			
 	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
 		<ItemGroup>
