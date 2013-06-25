@@ -5,11 +5,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// <summary>
     /// PersonalShiftActivityLayer class
     /// </summary>
-    public class PersonalShiftActivityLayer : PersistedActivityLayer, IPersonalShiftActivityLayer
+    public class PersonalShiftActivityLayer : PersistedActivityLayer, IPersonalShiftLayer
     {
-		//private IEntity _parent;
-		//private Guid? _id;
-
         public PersonalShiftActivityLayer(IActivity activity, DateTimePeriod period) : base(activity, period)
         {
         }

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private DateTimePeriodAssembler dateTimePeriodAssembler;
         private ActivityAssembler activityAssembler;
         private IActivityLayerAssembler<IMainShiftLayer> mainShiftLayerAssembler;
-        private IActivityLayerAssembler<IPersonalShiftActivityLayer> personalShiftLayerAssembler;
+        private IActivityLayerAssembler<IPersonalShiftLayer> personalShiftLayerAssembler;
         private IOvertimeLayerAssembler overtimeShiftLayerAssembler;
 
         [SetUp]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             mainShiftLayerAssembler =
                 new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
                                                                     dateTimePeriodAssembler,activityAssembler);
-            personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftActivityLayer>(new PersonalShiftLayerConstructor(),
+            personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
                                                                                                   dateTimePeriodAssembler, activityAssembler);
             overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
         }
@@ -130,7 +130,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Assert.AreEqual(dto.Id, entity.Id);
                 Assert.AreEqual(1, entity.MainLayers.Count());
                 Assert.AreEqual(1, entity.PersonalLayers.Count());
-                Assert.AreEqual(dto.PersonalShiftCollection.First().Id, entity.PersonalShiftCollection[0].Id);
                 Assert.AreEqual(1, entity.OvertimeShiftCollection.Count);
                 Assert.AreEqual(dto.OvertimeShiftCollection.First().Id, entity.OvertimeShiftCollection[0].Id);
                 Assert.AreEqual(1, entity.OvertimeShiftCollection[0].LayerCollection.Count);
