@@ -91,16 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(0, target.PersonalLayers.Count());
 		}
 
-		/// <summary>
-		/// PersonalShiftCol property should be locked.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof (NotSupportedException))]
-		public void PersonalShiftCollectionPropertyShouldBeLocked()
-		{
-			ICollection<IPersonalShift> temp = target.PersonalShiftCollection;
-			temp.Add(new PersonalShift());
-		}
 
 		[Test]
 		public void VerifyCreateWithReplacedParameters()
@@ -145,45 +135,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(target, ((IAggregateEntity)overtimeShift).Root());
 		}
 
-		/// <summary>
-		/// Verifies a personal shift can be added.
-		/// </summary>
-		[Test]
-		public void VerifyPersonalShiftCanBeAdded()
-		{
-			PersonalShift shift = new PersonalShift();
-			target.AddPersonalShift(shift);
-			Assert.Contains(shift, target.PersonalShiftCollection);
-		}
-
-		/// <summary>
-		/// Duplicate personal shifts should be ignored when added to list.
-		/// </summary>
-		[Test]
-		public void DoNotDuplicatePersonalShiftInstancesWhenAddedToList()
-		{
-			PersonalShift shift = new PersonalShift();
-			target.AddPersonalShift(shift);
-			target.AddPersonalShift(shift);
-			Assert.AreSame(shift, target.PersonalShiftCollection[0]);
-			Assert.AreEqual(1, target.PersonalShiftCollection.Count);
-		}
 
 		/// <summary>
 		/// Verifies that the reference back to assignment works from a personal shift instance.
 		/// </summary>
 		[Test]
-		public void VerifyReferenceBackToAssignmentWorksFromAPersonalShift()
+		public void VerifyReferenceBackToAssignmentWorksFromAPersonalLayer()
 		{
-			PersonalShift personalShift = new PersonalShift();
-			Activity act = ActivityFactory.CreateActivity("TestActivity");
-			act.GroupingActivity = new GroupingActivity("test");
-			PersonalShiftActivityLayer actLay = new PersonalShiftActivityLayer(act, new DateTimePeriod());
-			personalShift.LayerCollection.Add(actLay);
-			target.AddPersonalShift(personalShift);
-			Assert.AreSame(target, personalShift.Parent);
-			Assert.AreSame(target, ((IAggregateEntity) actLay).Root());
-			Assert.AreSame(target, ((IAggregateEntity) personalShift).Root());
+			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.PersonalLayers.Single().Parent.Should().Be.SameInstanceAs(target);
 		}
 
 		[Test]
