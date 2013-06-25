@@ -718,13 +718,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        {
 		        if (destAss == null)
 		        {
-			        destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
+			        destAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 			        Add(destAss);
 		        }
 
+				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
+				
 		        foreach (var personalLayer in sourceAss.PersonalLayers)
 		        {
-			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
+			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
 		        }
 
 	        }
