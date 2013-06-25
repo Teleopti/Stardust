@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(AuthenticationController),
 																		typeof(AuthenticationApiController),
 																		typeof(ApplicationAuthenticationApiController),
+																		typeof(CalendarController),
 																		typeof(TestController),
 																		typeof(OpenIdController)
 			                                                    	}));

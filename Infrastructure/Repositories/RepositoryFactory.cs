@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -417,7 +418,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new RequestHistoryReadOnlyRepository(unitOfWork);
         }
 
-        public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
+	    public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
         {
             return new AgentDayScheduleTagRepository(unitOfWork);
         }

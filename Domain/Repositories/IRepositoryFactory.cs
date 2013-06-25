@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -489,5 +490,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
         ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
         IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
+	    IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
     }
 }
