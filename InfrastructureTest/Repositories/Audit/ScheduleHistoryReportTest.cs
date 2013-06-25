@@ -222,10 +222,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers.First().Payload, PersonAssignment.MainLayers.First().Period);
 				PersonAssignment.ClearMainLayers();
-				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers.First().Payload,
-																							 PersonAssignment.MainLayers.First().Period);
 				uow.PersistAll();
 			}
 
