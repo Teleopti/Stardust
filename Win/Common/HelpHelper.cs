@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Win.Common
 			return _current;
 		} }
 
-        private readonly bool _staticHelp = false;
-		private readonly string _http;
+        private readonly string _http;
 		private readonly string _httpOnline;
 		private readonly string _divider;
 		private readonly string _prefix;
