@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -716,35 +717,23 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Merges two lists of DataTimePeriods into one.
+        /// Merges a list lists of DataTimePeriods into one.
         /// </summary>
-        /// <param name="list1">The list1.</param>
-        /// <param name="list2">The list2.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: micke, algorithm by Tamas
         /// Created date: 2009-01-26
         /// </remarks>
-        public static IList<DateTimePeriod> MergeLists(IList<DateTimePeriod> list1, IList<DateTimePeriod> list2)
+        public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
-            IList<DateTimePeriod> ret = new List<DateTimePeriod>();
-
-            if(list1.Count == 0)
-                return list2;
-
-            if(list2.Count == 0)
-                return list1;
+	        if (!periods.Any())
+		        return Enumerable.Empty<DateTimePeriod>();
+            var ret = new List<DateTimePeriod>();
 
             List<DateTime> startTimes = new List<DateTime>();
             List<DateTime> endTimes = new List<DateTime>();
 
-            foreach (var dateTimePeriod in list1)
-            {
-                startTimes.Add(dateTimePeriod.StartDateTime);
-                endTimes.Add(dateTimePeriod.EndDateTime);
-            }
-
-            foreach (var dateTimePeriod in list2)
+            foreach (var dateTimePeriod in periods)
             {
                 startTimes.Add(dateTimePeriod.StartDateTime);
                 endTimes.Add(dateTimePeriod.EndDateTime);

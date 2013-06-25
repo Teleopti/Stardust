@@ -37,7 +37,7 @@ ON
 				(stg.request_date	>= dp.valid_from_date)
 
 			AND
-				(stg.request_date < dp.valid_to_date)
+				(stg.request_date <= dp.valid_to_date)
 		)
 
 ----------------
