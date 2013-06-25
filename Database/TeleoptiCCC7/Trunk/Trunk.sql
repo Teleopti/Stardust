@@ -607,8 +607,8 @@ CREATE TABLE [Auditing].[PersonAssignment_AUD](
 	[Person] uniqueidentifier NULL,
 	[Scenario] uniqueidentifier NULL,
 	[BusinessUnit] uniqueidentifier NULL,
-	[ShiftCategory] uniqueidentifier,
-	[Date] datetime
+	[ShiftCategory] uniqueidentifier NULL,
+	[Date] datetime NULL
  CONSTRAINT [PK_PersonAssignment_AUD] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC,
