@@ -101,12 +101,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
         }
 
-        //merge this one with addLaysersToMainshift when we only have one type of activitylayer
-        private void addLayersToPersonalShift(IPersonalShift personalShift, IEnumerable<ActivityLayerDto> layerDtos)
-        {
-            _personalActivityLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(personalShift.LayerCollection.Add);
-        }
-
         private void addLayersToOvertimeShift(IOvertimeShift overtimeShift, IEnumerable<OvertimeLayerDto> layerDtos)
         {
             _overtimeShiftLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(overtimeShift.LayerCollection.Add);
