@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)
 		{
+			Browser.Interactions.AssertExists(string.Format("#{0} > option", select2Id));
 			Browser.Interactions.Javascript(string.Format(
 				"$('#{0}').select2('data', {{id:'{1}', text:'{2}'}}).trigger('change')", select2Id, optionValue, optionText));
 			AssertSelectedOptionValue(select2Id, optionValue);

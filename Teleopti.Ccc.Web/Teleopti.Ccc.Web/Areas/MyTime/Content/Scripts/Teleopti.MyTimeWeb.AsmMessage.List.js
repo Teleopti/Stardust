@@ -115,10 +115,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	var replyOptionViewModel = function (replyOption, parent) {
 		var self = this;
 		self.text = ko.observable(replyOption);
-		self.selected = ko.observable();
-		self.selected.subscribe(function () {
+		self.select = function () {
 			parent.selectedReply(self.text());
-		});
+		};
 	};
 
 	function _addNewMessageAtTop(messageItem) {

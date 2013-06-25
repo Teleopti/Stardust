@@ -160,18 +160,20 @@ Scenario: Do not allow empty reply
 Scenario: Show replyoptions for message with multiple options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field					| Value				|
-	| Title					| New message		|
-	| Message				| Text in message	|
-	| Text reply allowed	| False				|
-	| ReplyOption1			| Yes				|
-	| ReplyOption2			| No				|
+	| Field					| Value					|
+	| Title					| New message			|
+	| Message				| Text in message		|
+	| Text reply allowed	| False					|
+	| ReplyOption1			| Yes					|
+	| ReplyOption2			| No					|
+	| ReplyOption3			| A longer replyoption	|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then I should see radiobuttons on the message at position '1' in the list with 
-	| Captions	|
-	| Yes		|
-	| No		|
+	| Captions				|
+	| Yes					|
+	| No					|
+	| A longer replyoption	|
 
 Scenario: Confirm message with multiple replyoptions
 Given I have the role 'Full access to mytime'

@@ -50,7 +50,7 @@ ON
 				(stg.request_date	>= dp.valid_from_date)
 
 			AND
-				(stg.request_date < dp.valid_to_date)
+				(stg.request_date <= dp.valid_to_date)
 		)
 INNER JOIN mart.dim_request_type rt
 	ON rt.request_type_id = stg.request_type_code

@@ -150,8 +150,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
             }
 
             if (_personRequestDto.RequestStatus != RequestStatusDto.Denied 
-				&& _personRequestDto.RequestStatus != RequestStatusDto.Approved
-				&& _personRequestDto.RequestStatus != RequestStatusDto.Autodenied)
+				&& _personRequestDto.RequestStatus != RequestStatusDto.Approved)
             {
                 var requestDto = _personRequestDto.Request as ShiftTradeRequestDto;
                 if (requestDto != null)

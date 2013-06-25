@@ -11476,4 +11476,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Denied</value>
     <comment>Translation for enum status Autodenied for requests</comment>
   </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Local time</value>
+    <comment>Agents local time</comment>
+  </data>
 </root>
