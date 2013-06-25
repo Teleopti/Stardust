@@ -8,61 +8,60 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-    public class PersonalShiftLayerViewModel : LayerViewModel
-    {
-	    private readonly IPersonalShiftLayer _layer;
-	    private readonly IPersonAssignment _parent;
-	    private readonly IMoveLayerVertical _moveLayerVertical;
+	public class PersonalShiftLayerViewModel : LayerViewModel
+	{
+		private readonly IPersonalShiftLayer _layer;
+		private readonly IPersonAssignment _parent;
+		private readonly IMoveLayerVertical _moveLayerVertical;
 
-	    public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, IPersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
-            : base(observer,layer, eventAggregator, false)
-	    {
-		    _layer = layer;
-		    _parent = parent;
-				_moveLayerVertical = moveLayerVertical;
-	    }
+		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, IPersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
+			: base(observer, layer, eventAggregator, false)
+		{
+			_layer = layer;
+			_parent = parent;
+			_moveLayerVertical = moveLayerVertical;
+		}
 
+		public override string LayerDescription
+		{
+			get { return UserTexts.Resources.PersonalShifts; }
+		}
 
-	    public override string LayerDescription
-        {
-            get { return UserTexts.Resources.PersonalShifts; }
-        }
+		protected override int OrderIndexBase
+		{
+			get
+			{
+				var idx = 0;
+				if (_parent != null)
+					idx = _parent.PersonalLayers.ToList().IndexOf(_layer);
+				return 200 + idx;
+			}
+		}
 
-	    protected override int OrderIndexBase
-        {
-            get
-            {
-                var idx = 0;
-                if (_parent != null)
-									idx = _parent.PersonalLayers.ToList().IndexOf(_layer);
-                return 200 + idx;
-            }
-        }
+		public override bool IsMovePermitted()
+		{
+			if (SchedulePart != null)
+			{
+				return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			}
+			return true;
+		}
 
-        public override bool IsMovePermitted()
-        {
-            if (SchedulePart != null)
-            {
-                return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-            }
-            return true;
-        }
-
-        public override bool CanMoveUp
-        {
-            get
-            {
+		public override bool CanMoveUp
+		{
+			get
+			{
 				if (_parent != null)
 				{
 					return _layer.OrderIndex > 0;
 				}
 
-	            return false;
-            }
-        }
+				return false;
+			}
+		}
 
-        public override bool CanMoveDown
-        {
+		public override bool CanMoveDown
+		{
 			get
 			{
 				if (_parent != null)
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 				return false;
 			}
-        }
+		}
 
 		public override void MoveDown()
 		{
@@ -92,16 +91,16 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
-        public override bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
-        {
-            return false;
-        }
+		public override bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
+		{
+			return false;
+		}
 
-				protected override void Replace()
-				{
-					if (ParentObservingCollection != null)
-						ParentObservingCollection.ReplaceActivity(this, _layer, SchedulePart);
-				}
+		protected override void Replace()
+		{
+			if (ParentObservingCollection != null)
+				ParentObservingCollection.ReplaceActivity(this, _layer, SchedulePart);
+		}
 
 		private void LayerMoved()
 		{
@@ -111,5 +110,5 @@ namespace Teleopti.Ccc.WinCode.Common
 				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 			}
 		}
-    }
+	}
 }
