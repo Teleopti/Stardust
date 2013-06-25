@@ -9,10 +9,12 @@ GO
 -- =============================================
 -- Date			Who	Description
 -- =============================================
--- exec [mart].[LastChangedDateOnStep] @stepName='Schedules', @buId='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+-- exec [mart].[LastChangedDateOnStep] 'Forecast','928DD0BC-BF40-412E-B970-9B5E015AADEA', '2000-01-01', '2013-06-30'
 CREATE PROCEDURE [mart].[LastChangedDateOnStep]
 @stepName nvarchar(500),
-@buId uniqueidentifier
+@buId uniqueidentifier,
+@start datetime = '2000-01-01',
+@end datetime  = '2100-01-01'
 AS
 
 DECLARE @thisTime datetime
@@ -58,6 +60,7 @@ WHERE bu.id=@buId
 IF @stepName = 'Forecast'
 BEGIN
 	SELECT @thisTime = MAX(UpdatedOn) FROM SkillDay WHERE UpdatedOn >= @lastTime
+	AND UpdatedOn BETWEEN @start AND @end
 END
 IF @stepName = 'Preferences'
 BEGIN
