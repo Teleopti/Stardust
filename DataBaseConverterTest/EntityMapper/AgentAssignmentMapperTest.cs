@@ -105,11 +105,12 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void CanMapAgentPersonalAssignment()
         {
-            _agDay.AgentDayAssignment.AddFillup(_agdFactory.FillUpShift(), _agdFactory.ScheduleType);
+	        var fillup = _agdFactory.FillUpShift();
+            _agDay.AgentDayAssignment.AddFillup(fillup, _agdFactory.ScheduleType);
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.AreEqual(1, newAgAss.PersonalShiftCollection.Count);
+            Assert.AreEqual(fillup.LayerCollection.Count, newAgAss.PersonalLayers.Count());
         }
 
         /// <summary>
@@ -145,13 +146,15 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void CanMapAgentPersonalAssignmentWithOvertime()
         {
+					//ett övertidslager och två personalshiftlager
             SetOvertime();
-            _agDay.AgentDayAssignment.AddFillup(_agdFactory.FillUpShift(), _agdFactory.ScheduleType);
+	        var fillup = _agdFactory.FillUpShift();
+            _agDay.AgentDayAssignment.AddFillup(fillup, _agdFactory.ScheduleType);
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.AreEqual(1, newAgAss.PersonalShiftCollection.Count);
-            Assert.AreEqual(1, newAgAss.OvertimeShiftCollection.Count);
+            Assert.AreEqual(2, newAgAss.PersonalLayers.Count());
+            Assert.AreEqual(1, newAgAss.OvertimeShiftCollection.Single().LayerCollection.Count);
         }
     }
 }
