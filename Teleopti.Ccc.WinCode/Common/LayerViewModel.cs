@@ -251,7 +251,6 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		protected virtual void Replace()
 		{
-			
 		}
 
 		#region vertical sorting

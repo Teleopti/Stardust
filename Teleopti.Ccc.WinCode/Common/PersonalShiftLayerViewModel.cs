@@ -97,6 +97,11 @@ namespace Teleopti.Ccc.WinCode.Common
             return false;
         }
 
+				protected override void Replace()
+				{
+					if (ParentObservingCollection != null)
+						ParentObservingCollection.ReplaceActivity(this, _layer, SchedulePart);
+				}
 
 		private void LayerMoved()
 		{

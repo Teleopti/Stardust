@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
-			Assert.IsFalse(_target.IsChanged);
+			_target.IsChanged.Should().Be.EqualTo(false);
 		}
 
 		[Test]
