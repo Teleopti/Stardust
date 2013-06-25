@@ -178,7 +178,7 @@
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\$(SevenZipFileName).exe&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wget.exe&quot;"/>
 	<Exec Command="wget.exe -k -p &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
-	<Exec Command="7za.exe x -y -o &qout;$(SharedMSIWorkingFolder)\LocalWiki&qout; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip&quot;" />
+	<Exec Command="7za.exe x -y -o &quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; &quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip&quot;" />
 	<!-- <Zip Files="$(SharedMSIWorkingFolder)\LocalWiki\"
 	WorkingDirectory="$(SharedMSIWorkingFolder)\LocalWiki\"
 	ZipFileName="$(CCNetWorkingDirectory)\WISE\LocalWiki\wiki.teleopti.com.zip"
