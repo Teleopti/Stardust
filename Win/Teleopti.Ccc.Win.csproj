@@ -2822,9 +2822,6 @@
     <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityView.resx">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityForScheduledDayView.resx">
-      <DependentUpon>AgentOvertimeAvailabilityForScheduledDayView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </EmbeddedResource>
