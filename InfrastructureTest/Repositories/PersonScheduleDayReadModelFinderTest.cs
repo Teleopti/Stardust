@@ -68,10 +68,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-
+			var businessUnitId = Guid.NewGuid();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, businessUnitId, new DateTime(2012, 8, 29));
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -79,6 +79,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				var ret = _target.ForTeam(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc), new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), teamId);
 				Assert.That(ret.Count(), Is.EqualTo(1));
 			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId, businessUnitId, new DateTime(2012, 8, 29));
+				uow.PersistAll();
+			}
+		}
+
+		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)
+		{
+			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
+																	MockRepository.GenerateMock<IMessageBroker>(),
+																	MockRepository.GenerateMock<ICurrentDataSource>());
+
+			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
 
 		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date)
