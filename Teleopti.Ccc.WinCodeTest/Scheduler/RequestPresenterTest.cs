@@ -438,6 +438,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void ShouldNotCrashWhen_NullSubject()
+		{
+			_requestViewAdapters.First().PersonRequest.Subject = null;
+			RequestPresenter.FilterAdapters(_requestViewAdapters, new List<string> {"StringThatDoesNotExistInLists"});
+		}
 
         #region Undo/redo tests
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
