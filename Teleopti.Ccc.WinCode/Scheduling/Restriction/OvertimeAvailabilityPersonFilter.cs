@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
         public IList<IPerson> GetFilterdPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime)
         {
             var personList = new List<IPerson>();
-            var overnightFilter = filterStartTime > filterEndTime;
+            var overnightFilter = isPeriodOvernight(filterEndTime);
             foreach (var scheduleDay in scheduleDaysList)
             {
                 var overtimeAvailability =
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                 {
                     var startTime = overtimeAvailability.StartTime.GetValueOrDefault();
                     var endTime = overtimeAvailability.EndTime.GetValueOrDefault();
-                    var overnightShift = startTime > endTime;
+                    var overnightShift = isPeriodOvernight(endTime);
                     if ((overnightShift && overnightFilter) || (!overnightShift && !overnightFilter))
                     {
                         if (startTime <= filterStartTime && endTime >= filterEndTime)
@@ -34,5 +34,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
             }
             return personList;
         }
+
+        private bool isPeriodOvernight(TimeSpan filterEndTime)
+        {
+            return filterEndTime.Days > 0;
+        }
+
     }
 }
