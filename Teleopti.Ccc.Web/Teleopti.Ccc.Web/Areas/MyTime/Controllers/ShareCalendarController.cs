@@ -10,13 +10,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-    public class CalendarController : Controller
+    public class ShareCalendarController : Controller
     {
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly IDataSourcesProvider _dataSourcesProvider;
 	    private readonly IJsonDeserializer<ExpandoObject> _deserializer;
 
-	    public CalendarController(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer)
+	    public ShareCalendarController(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer)
 	    {
 		    _repositoryFactory = repositoryFactory;
 		    _dataSourcesProvider = dataSourcesProvider;
@@ -24,19 +24,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	    }
 
 		[HttpGet]
-		public ContentResult Get(string dataSourceName, Guid personId)
+		public ContentResult iCal(string dataSourceName, Guid publishedId)
 		{
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(dataSourceName);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.Get(personId);
+				var person = personRepository.Get(publishedId);
 				if (person == null)
 					return null;
 				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
 				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(DateOnly.Today.AddDays(-60),
-																		   DateOnly.Today.AddDays(180), personId);
+																		   DateOnly.Today.AddDays(180), publishedId);
 				if (scheduleDays == null || scheduleDays.IsEmpty())
 					return null;
 				foreach (var scheduleDay in scheduleDays)

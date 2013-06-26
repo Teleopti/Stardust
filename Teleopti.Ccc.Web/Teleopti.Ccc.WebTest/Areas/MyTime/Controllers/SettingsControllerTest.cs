@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.ActivateCalendarLink(true).Data as string;
 				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
 				Assert.IsTrue(settings.IsActive);
-				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Calendar/Get/" + dataName + "/" + id);
+				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Share/" + dataName + "/" + id);
 			}
 		}
 	}

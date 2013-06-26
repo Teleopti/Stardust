@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var dataSourceName = _currentDataSource.CurrentName();
 			var url =
 				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) +
-				"Calendar/Get/" + dataSourceName + "/" +
+				"Share/" + dataSourceName + "/" +
 				_loggedOnUser.CurrentUser().Id.Value;
 			return Json(url);
 		}

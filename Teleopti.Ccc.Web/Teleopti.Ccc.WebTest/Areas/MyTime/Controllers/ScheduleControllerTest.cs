@@ -23,11 +23,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
-			var personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			var deserializer = MockRepository.GenerateMock<IJsonDeserializer<ExpandoObject>>();
-			using (var target = new CalendarController(repositoryFactory, dataSourcesProvider, deserializer))
+			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, deserializer))
 			{
 				//var result = target.Get(Guid.NewGuid());
 				//result.Content.
