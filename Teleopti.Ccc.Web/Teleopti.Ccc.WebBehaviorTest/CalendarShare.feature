@@ -3,7 +3,7 @@
 	As an agent
 	I want to 
 		be able to activate calendar sharing on my settings
-		be able to have a unique url to share my calendar
+		be able to share my calendar with a calendar link
 
 Background:
 	Given there is a shift category named 'Day'
@@ -15,7 +15,7 @@ Scenario: Activate calendar sharing
 	Given I am an agent
 	When I view my settings
 	And I click 'share my calendar'
-	Then I should see a unique url
+	Then I should see a sharing link
 
 Scenario: View calendar sharing link
 	Given 'Pierre Baldi' has a person period with
@@ -29,5 +29,10 @@ Scenario: View calendar sharing link
 	| End time         | 2013-06-20 17:00 |
 	And 'Pierre Baldi' has shared calendar
 	When I am viewing sharing link
-	Then I should see ical calendar
+	Then I should see ical calendar with
+	| Field    | Value            |
+	| Activity | Phone            |
+	| DTSTART  | 20130620T080000Z |
+	| DTEND    | 20130620T170000Z |
+
 
