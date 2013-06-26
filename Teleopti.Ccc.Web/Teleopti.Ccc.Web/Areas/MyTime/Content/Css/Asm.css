@@ -116,6 +116,7 @@
 	background: #F8F8F8;
 	left: 365px;
 	width: 35px;
+	padding-bottom: 2px;
 	position: absolute;
 	text-align: right;
 	opacity: 0.8;
