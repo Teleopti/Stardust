@@ -23,6 +23,8 @@
 	margin: 2px;
 	height: 52px;
 	display: none; /*hide when loaded, before moved to correct place*/
+	margin-left: -19px;
+	margin-right: -19px;
 }
 
 .asm-layer
@@ -34,6 +36,8 @@
 	height: 12px;
 	top: 3px;
 }
+
+
 
 .asm-timeline-line
 {
@@ -85,6 +89,7 @@
 	font-family: verdana;
 	font-size: 9px;
 	white-space: nowrap;
+	line-height: 9px;
 }
 
 .asm-info-canvas-column-current {

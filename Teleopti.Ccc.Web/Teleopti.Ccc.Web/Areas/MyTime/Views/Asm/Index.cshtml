@@ -10,20 +10,23 @@
 			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.SetMessageCount);
 		});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
-			notifyText: '@Resources.YourScheduleTheDATEHasChanged',
-			originalDocumentTitle: document.title,
-			baseUrl: '@Url.Content("~/")',
-			webNotification: function () {
-				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+				notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+				originalDocumentTitle: document.title,
+				baseUrl: '@Url.Content("~/")',
+				webNotification: function () {
+					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+				},
+				header: '@Resources.Teleopti'
 			},
-			header: '@Resources.Teleopti'
-		},
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 			});
 	});
 </script>
+
+	
+
 <div class="asm-outer-canvas ui-corner-all">
 	<div class="asm-schedule-canvas ui-corner-all">
 		<div class="asm-time-marker">
