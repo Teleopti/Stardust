@@ -8987,15 +8987,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to From shift ends at:.
-        /// </summary>
-        public static string FromShiftEndsAtColon {
-            get {
-                return ResourceManager.GetString("FromShiftEndsAtColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to From - To.
         /// </summary>
         public static string FromTo {
@@ -23528,15 +23519,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TooManyAgentsIsUsedWarning {
             get {
                 return ResourceManager.GetString("TooManyAgentsIsUsedWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To shift starts at:.
-        /// </summary>
-        public static string ToShiftStartsAtColon {
-            get {
-                return ResourceManager.GetString("ToShiftStartsAtColon", resourceCulture);
             }
         }
         
