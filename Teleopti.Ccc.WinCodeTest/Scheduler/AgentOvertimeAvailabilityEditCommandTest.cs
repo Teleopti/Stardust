@@ -56,25 +56,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_target.Execute();
 			}
 		}
-	
-		[Test]
-		public void ShouldEditForExistingShift()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _scheduleDay.DeleteOvertimeAvailability());
-				Expect.Call(() => _scheduleDay.Add(_overtimeAvailabilityDay)).Repeat.Twice();
-
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod());
-			}
-
-			using (_mock.Playback())
-			{
-				_target.Execute();
-			}
-		}
 
 		[Test]
 		public void ShouldNotEditWhenCannotCreateDay()
