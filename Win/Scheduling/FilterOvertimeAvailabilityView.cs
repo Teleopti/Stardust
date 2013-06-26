@@ -42,7 +42,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (validateTimes())
 			{
-				_presenter.Filter(outlookTimePickerFrom.TimeValue().Value, outlookTimePickerTo.TimeValue().Value);
+				var startTime = outlookTimePickerFrom.TimeValue();
+				var endTime = outlookTimePickerTo.TimeValue();
+				if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+					endTime = endTime.Value.Add(TimeSpan.FromDays(1));
+				_presenter.Filter(startTime.Value, endTime.Value);
 			}
 			Close();
 		}
@@ -68,6 +72,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var startTime = outlookTimePickerFrom.TimeValue();
 			var endTime = outlookTimePickerTo.TimeValue();
+			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
 			if (startTime == null)
 			{
 				setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
