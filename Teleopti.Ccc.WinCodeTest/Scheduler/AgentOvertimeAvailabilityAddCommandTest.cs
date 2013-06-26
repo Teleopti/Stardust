@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				_target.Initialize();
 				_target.Execute();
 			}
 		}
@@ -65,13 +64,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				bool startTimeError;
-				bool endTimeError;
-				Expect.Call(_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, TimeSpan.Zero, TimeSpan.Zero,
-				                                                      out startTimeError, out endTimeError))
-				      .IgnoreArguments()
-				      .Return(true);
-				Expect.Call(_overtimeAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime, TimeSpan.Zero, TimeSpan.Zero)).IgnoreArguments().Return(new List<IOvertimeAvailability>{_overtimeAvailabilityDay, _overtimeAvailabilityDay});
 				Expect.Call(() => _scheduleDay.Add(_overtimeAvailabilityDay)).Repeat.Twice();
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -80,7 +72,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				_target.Initialize();
 				_target.Execute();
 			}
 		}
