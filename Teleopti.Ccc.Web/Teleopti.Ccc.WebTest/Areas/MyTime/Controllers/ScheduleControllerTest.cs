@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			var deserializer = MockRepository.GenerateMock<IJsonDeserializer<ExpandoObject>>();
-			using (var target = new CalendarController(repositoryFactory,personScheduleDayReadModelFinder, dataSourcesProvider, deserializer))
+			using (var target = new CalendarController(repositoryFactory, dataSourcesProvider, deserializer))
 			{
-				var result = target.Get(Guid.NewGuid().ToString());
+				//var result = target.Get(Guid.NewGuid());
 				//result.Content.
 				//var result = target.Index() as RedirectToRouteResult;
 				//result.RouteValues["action"].Should().Be.EqualTo("Week");

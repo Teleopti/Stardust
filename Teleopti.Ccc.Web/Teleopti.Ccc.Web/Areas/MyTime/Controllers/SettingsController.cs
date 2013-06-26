@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -19,14 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
 		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister, IPersonalSettingDataRepository personalSettingDataRepository)
+		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister, IPersonalSettingDataRepository personalSettingDataRepository, ICurrentDataSource currentDataSource)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
 			_personalSettingDataRepository = personalSettingDataRepository;
+			_currentDataSource = currentDataSource;
 		}
 
 		[EnsureInPortal]
@@ -90,8 +93,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			setting.IsActive = isActive;
 			_personalSettingDataRepository.PersistSettingValue(setting);
 			var requestUrl = Request.Url.OriginalString;
-			var url = requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) + "Calendar/Get/" +
-			          _loggedOnUser.CurrentUser().Id.Value;
+			var dataSourceName = _currentDataSource.CurrentName();
+			var url =
+				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) +
+				"Calendar/Get/" + dataSourceName + "/" +
+				_loggedOnUser.CurrentUser().Id.Value;
 			return Json(url);
 		}
 	}

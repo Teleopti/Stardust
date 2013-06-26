@@ -10,11 +10,5 @@
 		/// </summary>
 		/// <returns></returns>
 		IUnitOfWorkFactory LoggedOnUnitOfWorkFactory();
-
-		/// <summary>
-		/// Returns <see cref="IUnitOfWorkFactory"/> for current logged on user
-		/// </summary>
-		/// <returns></returns>
-		IUnitOfWorkFactory WithoutLoggedOnUnitOfWorkFactory();
 	}
 }
