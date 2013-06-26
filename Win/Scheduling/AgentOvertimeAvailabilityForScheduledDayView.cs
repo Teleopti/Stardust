@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			outlookTimePickerFrom.SetTimeValue(startTime);
-			outlookTimePickerToShiftStarts.SetTimeValue(_shiftTimePeriod.StartTime);
+			labelShiftStartsAt.Text = OutlookTimePicker.TimeOfDayFromTimeSpan(_shiftTimePeriod.StartTime);
 
 			if (endTime.HasValue && endTime.Value.Days > 0)
 			{
@@ -55,10 +56,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				checkBoxAdvNextDay.Checked = false;
 			}
 
-			outlookTimePickerFromShiftEnds.SetTimeValue(_shiftTimePeriod.EndTime);
+			labelShiftEndsAt.Text = OutlookTimePicker.TimeOfDayFromTimeSpan(_shiftTimePeriod.EndTime);
 			outlookTimePickerTo.SetTimeValue(endTime);
 		}
-
+		
 		private void agentOvertimeAvailabilityViewLoad(object sender, EventArgs e)
 		{
 			_presenter.UpdateView();

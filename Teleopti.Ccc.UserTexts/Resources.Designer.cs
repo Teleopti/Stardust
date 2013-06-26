@@ -8987,7 +8987,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Ends At:.
+        ///   Looks up a localized string similar to From shift ends at:.
         /// </summary>
         public static string FromShiftEndsAtColon {
             get {
@@ -17144,7 +17144,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous saved overtime availability:.
+        ///   Looks up a localized string similar to Previously saved overtime availability:.
         /// </summary>
         public static string PreviousSavedOvertimeAvailabilityColon {
             get {
@@ -23532,7 +23532,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Starts At:.
+        ///   Looks up a localized string similar to To shift starts at:.
         /// </summary>
         public static string ToShiftStartsAtColon {
             get {

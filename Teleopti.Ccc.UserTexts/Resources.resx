@@ -11476,7 +11476,6 @@ Reduce the complexity to use these shifts.</value>
     <value>Denied</value>
     <comment>Translation for enum status Autodenied for requests</comment>
   </data>
-
   <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
     <value>Add Overtime Availability...</value>
     <comment>Add overtime availability on a day</comment>
@@ -11486,10 +11485,10 @@ Reduce the complexity to use these shifts.</value>
     <comment>Caption for the dialog to add overtime availability</comment>
   </data>
   <data name="FromShiftEndsAtColon" xml:space="preserve">
-    <value>Shift Ends At:</value>
+    <value>From shift ends at:</value>
   </data>
   <data name="ToShiftStartsAtColon" xml:space="preserve">
-    <value>Shift Starts At:</value>
+    <value>To shift starts at:</value>
   </data>
   <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
     <value>Previously saved overtime availability:</value>
