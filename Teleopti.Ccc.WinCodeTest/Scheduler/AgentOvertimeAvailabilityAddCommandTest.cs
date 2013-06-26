@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private TimeSpan _endTime;
 		private IOvertimeAvailability _overtimeAvailabilityDay;
 		private IOvertimeAvailabilityCreator _overtimeAvailabilityDayCreator;
-		private IProjectionService _projectionService;
-		private IVisualLayerCollection _visualLayerCollection;
 
 		[SetUp]
 		public void Setup()
@@ -32,8 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_endTime = TimeSpan.FromHours(10);
 			_target = new AgentOvertimeAvailabilityAddCommand(_scheduleDay, _startTime, _endTime, _overtimeAvailabilityDayCreator);
 			_overtimeAvailabilityDay = _mock.StrictMock<IOvertimeAvailability>();
-			_projectionService = _mock.StrictMock<IProjectionService>();
-			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 		}
 
 		[Test]
@@ -48,9 +44,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)).Return(true);
 				Expect.Call(_overtimeAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime)).Return(_overtimeAvailabilityDay);
 				Expect.Call(() => _scheduleDay.Add(_overtimeAvailabilityDay));
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(null);
 			}
 
 			using (_mock.Playback())
@@ -59,23 +52,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 	
-		[Test]
-		public void ShouldAddForExistingShift()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _scheduleDay.Add(_overtimeAvailabilityDay)).Repeat.Twice();
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod());
-			}
-
-			using (_mock.Playback())
-			{
-				_target.Execute();
-			}
-		}
-
 		[Test]
 		public void ShouldNotAddWhenCannotCreateDay()
 		{
