@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var removeCommand = new AgentOvertimeAvailabilityRemoveCommand(_presenter.ScheduleDay);
 				_presenter.Remove(removeCommand);
 				_isDirty = true;
-				Hide();
+				Close();
 				return;	
 			}
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				addCommand.Initialize();
 				_presenter.Add(addCommand);
 				_isDirty = true;
-				Hide();
+				Close();
 				return;
 			}
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				editCommand.Initialize();
 				_presenter.Edit(editCommand);
 				_isDirty = true;
-				Hide();
+				Close();
 				return;
 			}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void buttonAdvCancelClick(object sender, EventArgs e)
 		{
 			_isDirty = false;
-			Hide();
+			Close();
 		}
 
 		private bool validateTimes()

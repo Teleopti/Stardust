@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				else
 				{
 					_startTime = _existingShiftTimePeriod.Value.StartTime;
-					_endTime = _existingShiftTimePeriod.Value.EndTime;
+					_endTime = _existingShiftTimePeriod.Value.EndTime.Add(TimeSpan.FromHours(1));
 
 					if (overtimeAvailabilities.Count == 1)
 					{
