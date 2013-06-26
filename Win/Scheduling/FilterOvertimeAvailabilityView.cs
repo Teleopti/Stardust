@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Win.Scheduling
     public partial class FilterOvertimeAvailabilityView : BaseDialogForm
     {
 	    private readonly FilterOvertimeAvailabilityPresenter _presenter;
-	    public FilterOvertimeAvailabilityView(ISchedulerStateHolder schedulerStateHolder)
+	    public FilterOvertimeAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
         {
 	        InitializeComponent();
 			tableLayoutPanel2.BackColor = Color.FromArgb(191, 219, 254);
-			datePicker.Value = DateTime.Today;
+			datePicker.Value = defaultDate;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
 		    _presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);

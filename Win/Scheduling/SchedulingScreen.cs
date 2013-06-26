@@ -7134,18 +7134,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonFilterOvertimeAvailability_Click(object sender, EventArgs e)
 		{
-			toolStripButtonFilterOvertimeAvailability.Checked = !toolStripButtonFilterOvertimeAvailability.Checked;
-			if (!toolStripButtonFilterOvertimeAvailability.Checked)
+			if (toolStripButtonFilterOvertimeAvailability.Checked)
 			{
+				toolStripButtonFilterOvertimeAvailability.Checked = false;
+			
 				_schedulerState.ResetFilteredPersonsOvertimeAvailability();
 				reloadFilteredPeople();
 				return;
 			}
-
-			using (var view = new FilterOvertimeAvailabilityView(_schedulerState))
+			var defaultDate = _scheduleView.SelectedDateLocal();
+			using (var view = new FilterOvertimeAvailabilityView(defaultDate, _schedulerState))
 			{
 				if (view.ShowDialog() == DialogResult.OK)
 				{
+					toolStripButtonFilterOvertimeAvailability.Checked = true;
 					reloadFilteredPeople();
 				}
 			}
