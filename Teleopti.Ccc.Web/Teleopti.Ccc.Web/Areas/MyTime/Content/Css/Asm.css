@@ -60,8 +60,8 @@
 	padding-left: 2px;
 	padding-right: 3px;
 	position: relative;
-	top: -16px;
-	left: -20px;
+	top: -18px;
+	left: -5px;
 	font-family: verdana;
 	font-size: 8px;
 }
@@ -90,25 +90,7 @@
 	font-size: 9px;
 	white-space: nowrap;
 	line-height: 9px;
-}
-
-.asm-info-canvas-column-current {
-	width: 200px;
-	position:absolute;
-	text-align: left;
-	opacity: 0.8;
-	filter: alpha(opacity=80);
-	overflow:hidden;
-}
-
-.asm-info-canvas-column-next {
-	top: 0px;
-	left: 200px;
-	width: 150px;
-	position: absolute;
-	text-align: right;
-	opacity: 0.5;
-	filter: alpha(opacity=50);
+	margin-top: 0;
 }
 
 .asm-info-canvas-column-messages 
@@ -122,6 +104,26 @@
 	opacity: 0.8;
 	filter: alpha(opacity=80);	
 }
+
+.asm-info-canvas-column-current {
+	width: 200px;
+	position:absolute;
+	text-align: left;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+	overflow:hidden;
+}
+
+.asm-info-canvas-column-next {
+	top: 2px;
+	left: 200px;
+	width: 150px;
+	position: absolute;
+	text-align: right;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+
 .ui-state-default a.asm-new-message-indicator
 {
     font-weight: bold;
