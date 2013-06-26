@@ -25,6 +25,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	    }
 
+				public override bool ValidateUserLoggedOn
+				{
+					get
+					{
+						return false;
+					}
+				}
+
         public override ISettingData FindByKey(string key)
         {
 
