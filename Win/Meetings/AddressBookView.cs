@@ -246,11 +246,12 @@ namespace Teleopti.Ccc.Win.Meetings
         public void PrepareGridView(IList<ContactPersonViewModel> personViewDataList)
         {
             gridControlPeople.BeginUpdate(BeginUpdateOptions.SynchronizeScrollBars);
-            _gridHelper = new SFGridColumnGridHelper<ContactPersonViewModel>(
-                gridControlPeople,
-                new ReadOnlyCollection<SFGridColumnBase<ContactPersonViewModel>>(_gridColumns),
-                personViewDataList
-                );
+			if (_gridHelper == null)
+				_gridHelper = new SFGridColumnGridHelper<ContactPersonViewModel>(
+					gridControlPeople,
+					new ReadOnlyCollection<SFGridColumnBase<ContactPersonViewModel>>(_gridColumns),
+					personViewDataList
+					);
 
             // Overrides grid styles.
             gridControlPeople.ActivateCurrentCellBehavior = GridCellActivateAction.None;
