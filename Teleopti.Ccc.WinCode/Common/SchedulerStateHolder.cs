@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -33,10 +34,11 @@ namespace Teleopti.Ccc.WinCode.Common
         private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
         private DefaultSegment _defaultSegment = new DefaultSegment();
         private readonly CommonStateHolder _commonStateHolder = new CommonStateHolder();
-        private IDictionary<Guid, IPerson> _filteredPersons;
+        private IDictionary<Guid, IPerson> _filteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 	    private bool _considerShortBreaks = true;
 	    private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
+	    private bool _filterOnOvertimeAvailability;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -95,20 +97,28 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _workingPersonRequests; }
         }
 
+		//returns all filters combined
         public IDictionary<Guid, IPerson> FilteredPersonDictionary
         {
 			get { return combinedFilters(); }
         }
 
-		private IDictionary<Guid, IPerson> combinedFilters()
+		//returns filter on Agents
+		public IDictionary<Guid, IPerson> FilteredAgentsDictionary
 		{
-			if (_filteredPersonsOvertimeAvailability.IsEmpty()) return _filteredPersons;
-			return _filteredPersons.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
+			get { return _filteredAgents; }
 		}
 
+		//returns filter on OvertimeAvaialbility
 		public IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary
 		{
 			get { return _filteredPersonsOvertimeAvailability; }
+		}
+
+		private IDictionary<Guid, IPerson> combinedFilters()
+		{
+			if (!_filterOnOvertimeAvailability) return _filteredAgents;
+			return _filteredAgents.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
 		}
 
         public IScheduleDictionary Schedules
@@ -279,7 +289,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void ResetFilteredPersons()
         {
-            _filteredPersons = (from p in SchedulingResultState.PersonsInOrganization
+            _filteredAgents = (from p in SchedulingResultState.PersonsInOrganization
                                 where AllPermittedPersons.Contains(p)
                                 orderby CommonAgentName(p)
                                 select p).ToDictionary(p => p.Id.Value);
@@ -288,20 +298,21 @@ namespace Teleopti.Ccc.WinCode.Common
 		public void ResetFilteredPersonsOvertimeAvailability()
 		{
 			_filteredPersonsOvertimeAvailability = new Dictionary<Guid, IPerson>();
+			_filterOnOvertimeAvailability = false;
 		}
 
         public void FilterPersons(IList<ITeam> selectedTeams)
         {
             List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
                 new PersonBelongsToTeamSpecification(RequestedPeriod.DateOnlyPeriod, selectedTeams).IsSatisfiedBy);
-            _filteredPersons =
+            _filteredAgents =
                 (from p in list orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
         }
 
         public void FilterPersons(IList<IPerson> selectedPersons)
         {
-            _filteredPersons =
+            _filteredAgents =
                 (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
         }
@@ -310,7 +321,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			_filteredPersonsOvertimeAvailability =
 				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
-
+			_filterOnOvertimeAvailability = true;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -322,7 +333,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.Contains(person))
 					selectedPersons.Add(person);
 			}
-			_filteredPersons = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredAgents = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 		}
 
 		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)
@@ -379,13 +390,12 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public bool AgentFilter()
 		{
-			return _filteredPersons.Count != _allPermittedPersons.Count;
+			return _filteredAgents.Count != _allPermittedPersons.Count;
 		}
 
 		public bool OvertimeAvailabilityFilter()
 		{
-			if (_filteredPersonsOvertimeAvailability.IsEmpty()) return false;
-			return _filteredPersonsOvertimeAvailability.Count != _allPermittedPersons.Count;
+			return _filterOnOvertimeAvailability;
 		}
     }
 }

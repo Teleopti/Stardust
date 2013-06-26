@@ -47,6 +47,9 @@ namespace Teleopti.Ccc.WinCode.Common
         /// </summary>
         void ResetFilteredPersons();
 
+		/// <summary>
+		/// Resets the filtered overtime availability
+		/// </summary>
 	    void ResetFilteredPersonsOvertimeAvailability();
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Common
         IScheduleDictionary Schedules { get; }
 
         /// <summary>
-        /// Gets the filtered person dictionary.
+        /// Gets the combined filters person dictionary.
         /// </summary>
         /// <value>The filtered person dictionary.</value>
         /// <remarks>
@@ -78,6 +81,14 @@ namespace Teleopti.Ccc.WinCode.Common
         /// </remarks>
         IDictionary<Guid, IPerson> FilteredPersonDictionary { get; }
 
+		/// <summary>
+		/// Gets the filtered agents
+		/// </summary>
+		IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
+
+		/// <summary>
+		/// Gets the filtered overtime availabilities
+		/// </summary>
 		IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary { get; }
 
         /// <summary>

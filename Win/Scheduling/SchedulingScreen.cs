@@ -7149,7 +7149,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!toolStripButtonFilterOvertimeAvailability.Checked)
 			{
 				_schedulerState.ResetFilteredPersonsOvertimeAvailability();
-				_schedulerState.ResetFilteredPersons();
 				reloadFilteredPeople();
 				return;
 			}
@@ -7165,8 +7164,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void reloadFilteredPeople()
 		{
-			_schedulerState.FilterPersons(_schedulerState.FilteredPersonDictionary.Values.ToList());
-
 			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 			if (_scheduleView != null)

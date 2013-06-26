@@ -308,27 +308,37 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsFalse(result);	
 		}
 
-		[Test]
-		public void ShouldReturnIsFilteredOnOvertimeAvailabilityWhenFilterCountNotEqualToAllPermittedCountAndIsNotEmpty()
-		{
-			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1 });
-			var result = target.OvertimeAvailabilityFilter();
-			Assert.IsTrue(result);	
-		}
+		//[Test]
+		//public void ShouldReturnIsFilteredOnOvertimeAvailabilityWhenFilterCountNotEqualToAllPermittedCountAndIsNotEmpty()
+		//{
+		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1 });
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsTrue(result);	
+		//}
+
+		//[Test]
+		//public void ShouldReturnIsNotFilteredWhenIsEmpty()
+		//{
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsFalse(result);	
+		//}
+
+		//[Test]
+		//public void ShouldReturnIsNotFilteredOnOvertimeAvailabilityWhenFilterCountCountEqualToAllPermittedCount()
+		//{
+		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2 });
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsFalse(result);
+		//}
 
 		[Test]
-		public void ShouldReturnIsNotFilteredWhenIsEmpty()
+		public void ShouldReturnFilterStatusOnOvertimeAvailability()
 		{
-			var result = target.OvertimeAvailabilityFilter();
-			Assert.IsFalse(result);	
-		}
+			target.FilterPersonsOvertimeAvailability(new List<IPerson>());
+			Assert.IsTrue(target.OvertimeAvailabilityFilter());
 
-		[Test]
-		public void ShouldReturnIsNotFilteredOnOvertimeAvailabilityWhenFilterCountCountEqualToAllPermittedCount()
-		{
-			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2 });
-			var result = target.OvertimeAvailabilityFilter();
-			Assert.IsFalse(result);
+			target.ResetFilteredPersonsOvertimeAvailability();
+			Assert.IsFalse(target.OvertimeAvailabilityFilter());
 		}
 
 		[Test]

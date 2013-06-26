@@ -331,21 +331,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void ApplyGridSort()
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
-
+		
 			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			if (IsAscendingSort)
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType) _currentSortColumn), comparer).ToList();
+			}
 			else
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType) _currentSortColumn), comparer).ToList();	
+			}
 
-
-			SchedulerState.FilteredPersonDictionary.Clear();
+			SchedulerState.FilteredAgentsDictionary.Clear();
 			foreach (var keyValuePair in sortedFilteredPersonDictionary)
 			{
-				SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
 			}
+
 		}
 
         /// <summary>
@@ -357,6 +361,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             // Resort _schedulerState.FilteredPersonDictionary
             List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
+
             if (_currentSortColumn != column || !_isAscendingSort)
             {
                 // removed as bugfix: 15718
@@ -367,9 +372,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
-                
+
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
+		 
                 IsAscendingSort = true;
             }
             else
@@ -382,24 +389,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
- 
+		
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
                 IsAscendingSort = false;
             }
             _currentSortColumn = column;
             SortCommand = new NoSortCommand(_schedulerState);
 
-            if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredPersonDictionary))
-            {
-                return false;
-            }
+			if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredAgentsDictionary))
+			{
+				return false;
+			}
 
-            SchedulerState.FilteredPersonDictionary.Clear();
-            foreach (var keyValuePair in sortedFilteredPersonDictionary)
-            {
-                SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
-            }
+			SchedulerState.FilteredAgentsDictionary.Clear();
+			foreach (var keyValuePair in sortedFilteredPersonDictionary)
+			{
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
+			}
 
             return true;
         }
