@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				if (_existingShiftTimePeriod != null)
 				{
-					_startTime = _existingShiftTimePeriod.Value.StartTime;
+					_startTime = _existingShiftTimePeriod.Value.EndTime;
 					_endTime = _existingShiftTimePeriod.Value.EndTime.Add(TimeSpan.FromHours(1));
 				}
 			}
