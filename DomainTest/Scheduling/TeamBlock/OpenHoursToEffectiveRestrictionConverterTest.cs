@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,248 +15,68 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[TestFixture]
 	public class OpenHoursToEffectiveRestrictionConverterTest
 	{
-		private MockRepository _mocks;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private OpenHoursToEffectiveRestrictionConverter _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_groupPersonSkillAggregator = _mocks.StrictMock<IGroupPersonSkillAggregator>();
-			_target = new OpenHoursToEffectiveRestrictionConverter(_schedulingResultStateHolder, _groupPersonSkillAggregator);
+			_target = new OpenHoursToEffectiveRestrictionConverter();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldConvertOpenHoursToRestriction()
+		[Test]
+		public void ShouldConvertOverlappingActivies()
 		{
-			var dateOnly = new DateOnly(2012, 12, 7);
-			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-			var person1 = PersonFactory.CreatePerson("bill");
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var skill = SkillFactory.CreateSkill("skill1");
-			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, dateOnly.Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(11, 0, 18, 0)
-		                                                       }));
+			IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activitySkillIntervalDatas =
+				new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 
-			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, dateOnly.AddDays(1).Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(10, 0, 17, 30)
-		                                                       }));
-			var skillDays = new List<ISkillDay> { skillDay1, skillDay2 };
 			
-			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupPerson, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)))).Return(new[] { skillDay1.Skill });
-				Expect.Call(groupPerson.GroupMembers)
-					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 }))
-					  .Repeat.AtLeastOnce();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-				Expect.Call(scheduleDictionary[person1]).Return(scheduleRange1).Repeat.Twice();
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly)).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
-				Expect.Call(scheduleDay2.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-			}
+			var dtp = new DateTimePeriod(new DateTime(2013, 6, 26, 8, 0, 0, 0, DateTimeKind.Utc),
+			                             new DateTime(2013, 6, 26, 9, 0, 0, 0, DateTimeKind.Utc));
 
-			using (_mocks.Playback())
-			{
-				var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-											 new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
-											 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			// one phone skill open 8 to 10
+			IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas = new Dictionary<TimeSpan, ISkillIntervalData>();
+			skillIntervalDatas.Add(TimeSpan.FromHours(8), new SkillIntervalData(dtp, 0, 0, 0, null, null));
+			skillIntervalDatas.Add(TimeSpan.FromHours(9), new SkillIntervalData(dtp.MovePeriod(TimeSpan.FromHours(1)), 0, 0, 0, null, null));
+			activitySkillIntervalDatas.Add(new Activity("phone"), skillIntervalDatas);
 
-				var restriction = _target.Convert(groupPerson, dateList);
+			// one bo skill open 9 to 11
+			skillIntervalDatas = new Dictionary<TimeSpan, ISkillIntervalData>();
+			skillIntervalDatas.Add(TimeSpan.FromHours(9), new SkillIntervalData(dtp.MovePeriod(TimeSpan.FromHours(1)), 0, 0, 0, null, null));
+			skillIntervalDatas.Add(TimeSpan.FromHours(10), new SkillIntervalData(dtp.MovePeriod(TimeSpan.FromHours(2)), 0, 0, 0, null, null));
+			activitySkillIntervalDatas.Add(new Activity("bo"), skillIntervalDatas);
 
-				Assert.That(restriction, Is.EqualTo(result));
-			}
+			// should return 8 to 11
+			var restriction = _target.Convert(activitySkillIntervalDatas);
+
+			Assert.AreEqual(TimeSpan.FromHours(8), restriction.StartTimeLimitation.StartTime);
+			Assert.IsNull(restriction.StartTimeLimitation.EndTime);
+			Assert.AreEqual(TimeSpan.FromHours(11), restriction.EndTimeLimitation.EndTime);
+			Assert.IsNull(restriction.EndTimeLimitation.StartTime);
 		}
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldAggregateDaysWithoutDayOff()
+		[Test]
+		public void ShouldHandleOpenHoursOverMidnight()
 		{
-			var dateOnly = new DateOnly(2012, 12, 7);
-			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-			var person1 = PersonFactory.CreatePerson("bill");
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var skill = SkillFactory.CreateSkill("skill1");
-			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, dateOnly.Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(11, 0, 18, 0)
-		                                                       }));
+			IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activitySkillIntervalDatas =
+				new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 
-			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, dateOnly.AddDays(1).Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(10, 0, 17, 30)
-		                                                       }));
-			var skillDays = new List<ISkillDay> { skillDay1, skillDay2 };
-			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupPerson, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)))).Return(new[] { skillDay1.Skill });
-				Expect.Call(groupPerson.GroupMembers)
-					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 }))
-					  .Repeat.AtLeastOnce();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-				Expect.Call(scheduleDictionary[person1]).Return(scheduleRange1).Repeat.Twice();
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly)).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
-				Expect.Call(scheduleDay2.SignificantPart())
-					  .Return(SchedulePartView.DayOff);
-			}
 
-			using (_mocks.Playback())
-			{
-				var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-											 new EndTimeLimitation(null, TimeSpan.FromHours(18)),
-											 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var dtp = new DateTimePeriod(new DateTime(2013, 6, 26, 23, 0, 0, 0, DateTimeKind.Utc),
+										 new DateTime(2013, 6, 27, 0, 0, 0, 0, DateTimeKind.Utc));
 
-				var restriction = _target.Convert(groupPerson, dateList);
+			// one phone skill open 23 to 01
+			IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas = new Dictionary<TimeSpan, ISkillIntervalData>();
+			skillIntervalDatas.Add(new TimeSpan(0, 23, 0, 0), new SkillIntervalData(dtp, 0, 0, 0, null, null));
+			skillIntervalDatas.Add(new TimeSpan(1, 0, 0, 0), new SkillIntervalData(dtp.MovePeriod(TimeSpan.FromHours(1)), 0, 0, 0, null, null));
+			activitySkillIntervalDatas.Add(new Activity("phone"), skillIntervalDatas);
 
-				Assert.That(restriction, Is.EqualTo(result));
-			}
+			var restriction = _target.Convert(activitySkillIntervalDatas);
+
+			Assert.AreEqual(new TimeSpan(0, 23, 0, 0), restriction.StartTimeLimitation.StartTime);
+			Assert.IsNull(restriction.StartTimeLimitation.EndTime);
+			Assert.AreEqual(new TimeSpan(1, 1, 0, 0), restriction.EndTimeLimitation.EndTime);
+			Assert.IsNull(restriction.EndTimeLimitation.StartTime);
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldAggregateOpenHoursFromOpenSkills()
-		{
-			var dateOnly = new DateOnly(2012, 12, 7);
-			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-			var person1 = PersonFactory.CreatePerson("bill");
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var skill = SkillFactory.CreateSkill("skill1");
-			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, dateOnly.Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(11, 0, 18, 0)
-		                                                       }));
-
-			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, dateOnly.AddDays(1).Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(10, 0, 17, 30)
-		                                                       }));
-			var skillDay3 = SkillDayFactory.CreateSkillDay(dateOnly.AddDays(2).Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-				                                               {
-					                                               new TimePeriod(13, 0, 15, 30)
-				                                               }));
-			var skillDays = new List<ISkillDay> { skillDay1, skillDay2, skillDay3 };
-
-			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupPerson, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)))).Return(new[] { skillDay1.Skill });
-				Expect.Call(groupPerson.GroupMembers)
-					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 }))
-					  .Repeat.AtLeastOnce();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-				Expect.Call(scheduleDictionary[person1]).Return(scheduleRange1).Repeat.Twice();
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly)).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
-				Expect.Call(scheduleDay2.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-											 new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
-											 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-
-				var restriction = _target.Convert(groupPerson, dateList);
-
-				Assert.That(restriction, Is.EqualTo(result));
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldNotAggregateDaysWithoutDayOff()
-		{
-			var dateOnly = new DateOnly(2012, 12, 7);
-			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-			var person1 = PersonFactory.CreatePerson("bill");
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var skill = SkillFactory.CreateSkill("skill1");
-			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, dateOnly.Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(11, 0, 18, 0)
-		                                                       }));
-
-			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, dateOnly.AddDays(1).Date,
-														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
-		                                                       {
-			                                                       new TimePeriod(10, 0, 17, 30)
-		                                                       }));
-			var skillDays = new List<ISkillDay> { skillDay1, skillDay2 };
-			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupPerson, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)))).Return(new List<ISkill>());
-				Expect.Call(groupPerson.GroupMembers)
-					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 }))
-					  .Repeat.AtLeastOnce();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-				Expect.Call(scheduleDictionary[person1]).Return(scheduleRange1).Repeat.Twice();
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly)).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart())
-					  .Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleRange1.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
-				Expect.Call(scheduleDay2.SignificantPart())
-					  .Return(SchedulePartView.DayOff);
-			}
-
-			using (_mocks.Playback())
-			{
-				var restriction = _target.Convert(groupPerson, dateList);
-
-				Assert.That(restriction, Is.Null);
-			}
-		}
-
-        [Test]
-        public void ShouldNotContinueIfGroupPersonIsNull()
-        {
-            _target.Convert(null, new List<DateOnly>());
-        }
-
-        [Test]
-        public void ShouldNotContinueIfDateOnlyListIsNull()
-        {
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            _target.Convert(groupPerson, null);
-        }
 
 	}
 }
