@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -16,12 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			foreach (var ass in scheduleDay.PersonAssignmentCollection())
 			{
-				foreach (var layer in ass.MainShiftLayers)
+				foreach (var layer in ass.MainLayers)
 				{
 					if (layer.Equals(layerToRemove))
 					{
 						var indexOfLayer = layer.OrderIndex;
-						var newLayers = new List<IMainShiftLayer>(ass.MainShiftLayers);
+						var newLayers = new List<IMainShiftLayer>(ass.MainLayers);
 						newLayers.Remove(layer);
 						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
 						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
@@ -29,18 +30,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 				}
 
-				foreach (var personalShift in ass.PersonalShiftCollection)
+				var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
+				if (layerAsPersonal != null)
 				{
-					foreach (var layer in personalShift.LayerCollection)
+					var personalLayers = ass.PersonalLayers.ToList();
+					var indexOfLayer = personalLayers.IndexOf(layerAsPersonal);
+					personalLayers.RemoveAt(indexOfLayer);
+					personalLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
+					ass.ClearPersonalLayers();
+					foreach (var personalLayer in personalLayers)
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							personalShift.LayerCollection.Remove(layer);
-							personalShift.LayerCollection.Insert(indexOfLayer, new PersonalShiftActivityLayer(newActivity, newPeriod));
-							return;
-						}
+						ass.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
 					}
+					return;
 				}
 
 				foreach (var overtimeShift in ass.OvertimeShiftCollection)

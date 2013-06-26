@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -17,6 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private IScheduleDictionary _scheduleDictionary;
 	    private IPerson _person;
 	    private IScheduleDay _scheduleDay;
+		private IScheduleDay _scheduleDay1;
+		private IScheduleDay _scheduleDay2;
+		private IScheduleDay _scheduleDay3;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 
         [SetUp]
@@ -28,8 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	        _range = _mocks.StrictMock<IScheduleRange>();
 	        _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 	        _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-	        _person = PersonFactory.CreatePerson();
+	        _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			_scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
 	        _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
         }
 
@@ -87,11 +94,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				commonMocks(rangePeriod, matrixPeriod);
 
-				for (int i = 0; i < 3; i++)
-				{
-					Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1).AddDays(i))).Return(_scheduleDay);
-					Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				}	
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay2).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
+
 			}
 
 			using (_mocks.Playback())
@@ -109,18 +118,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			//matrix is 1 day
 			var matrixPeriod = new DateOnlyPeriod(2013, 4, 11, 2013, 4, 11);
 
-			using (_mocks.Record())
-			{
-				commonMocks(rangePeriod, matrixPeriod);
+		    using (_mocks.Record())
+		    {
+			    commonMocks(rangePeriod, matrixPeriod);
 
-				for (int i = 0; i < 365; i++)
-				{
-					Expect.Call(_range.ScheduledDay(new DateOnly(2013, 1, 1).AddDays(i))).Return(_scheduleDay).Repeat.Any();
-				}
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.Times(21);
-			}
+			    Expect.Call(_range.ScheduledDay(new DateOnly(2013, 1, 1)))
+			          .IgnoreArguments()
+			          .Return(_scheduleDay)
+			          .Repeat.Any();
 
-			using (_mocks.Playback())
+			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.Times(23);
+		    }
+
+		    using (_mocks.Playback())
 			{
                 var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 11), false);
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 21), period);
@@ -139,15 +149,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				commonMocks(rangePeriod, matrixPeriod);
 
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
 				//1 is first because of nullcheck
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 
-				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 
-				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
 			}
 
 			using (_mocks.Playback())
@@ -169,21 +185,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				commonMocks(rangePeriod, matrixPeriod);
 
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
 				//3 is first because of nullcheck
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 
-				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None);
 
-				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 4))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 4))).Return(_scheduleDay3);
+				Expect.Call(_scheduleDay3.SignificantPart()).Return(SchedulePartView.ContractDayOff);
 			}
 
 			using (_mocks.Playback())
 			{
                 var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3), false);
-				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 3, 2013, 4, 3), period);
+				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 2, 2013, 4, 3), period);
 			}
 		}
 
@@ -200,16 +225,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 commonMocks(rangePeriod, matrixPeriod);
 
                 //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None  );
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.Absence);
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.Absence);
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
+                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
             }
 
             using (_mocks.Playback())
@@ -232,16 +256,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 commonMocks(rangePeriod, matrixPeriod);
 
                 //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
+	            Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
+                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
             }
 
             using (_mocks.Playback())
@@ -264,14 +287,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 commonMocks(rangePeriod, matrixPeriod);
 
                 //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence).Repeat.AtLeastOnce();
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
+                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
             }
 
             using (_mocks.Playback())
@@ -294,14 +317,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 commonMocks(rangePeriod, matrixPeriod);
 
                 //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
+                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
             }
 
             using (_mocks.Playback())

@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             //isSingleAgentTeam can be removed if more scheduling options are needed then we can move the scheduling options.
             if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
-            IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[scheduleMatrixPro.Person];
+	        var person = scheduleMatrixPro.Person;
+			IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[person];
 	        
 			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
             if (isDayOff(scheduleDay) || (isSingleAgentTeam && isAbsenceDay(scheduleDay )))
@@ -23,23 +24,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
-
-            DateOnly startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly.AddDays(-1), -1, schedulePeriod, isSingleAgentTeam);
-            DateOnly endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly.AddDays(1), 1, schedulePeriod, isSingleAgentTeam);
+			var personPeriod = person.Period(providedDateOnly);
+			if (personPeriod == null)
+				return new DateOnlyPeriod(providedDateOnly, providedDateOnly);
+	        DateOnly personPeriodStartDate = personPeriod.StartDate;
+			DateOnly startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, isSingleAgentTeam, personPeriodStartDate);
+			DateOnly endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, isSingleAgentTeam, personPeriodStartDate);
 
 	        return new DateOnlyPeriod(startDate, endDate);
         }
 
 		private static DateOnly traverse(IScheduleRange rangeForPerson, DateOnlyPeriod rangePeriod, DateOnly providedDateOnly,
-								  int stepDays, DateOnlyPeriod currentSchedulePeriod,bool isSingleAgentTeam)
+								  int stepDays, DateOnlyPeriod currentSchedulePeriod, bool isSingleAgentTeam, DateOnly personPeriodStartDate)
 		{
 			DateOnly edgeDate = providedDateOnly;
 			currentSchedulePeriod = new DateOnlyPeriod(currentSchedulePeriod.StartDate.AddDays(-10),
 			                                           currentSchedulePeriod.EndDate.AddDays(10));
-			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate))
+			
+			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate) && edgeDate >= personPeriodStartDate)
 			{
 				IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(edgeDate);
-                if (isDayOff(scheduleDay) || (isSingleAgentTeam && isAbsenceDay(scheduleDay)))
+				if (isDayOff(scheduleDay) || (isSingleAgentTeam && isAbsenceDay(scheduleDay)))
 					break;
 
 				edgeDate = edgeDate.AddDays(stepDays);

@@ -338,11 +338,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void RemoveEmptyAssignments()
         {
-            foreach (var assignment in PersonAssignmentCollection())
-            {
-							if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.ShiftCategory == null)
-                    Remove(assignment);
-            }
+	        foreach (var assignment in PersonAssignmentCollection())
+	        {
+		        if (!assignment.PersonalLayers.Any() && assignment.OvertimeShiftCollection.Count == 0 &&
+		            assignment.ShiftCategory == null)
+			        Remove(assignment);
+	        }
         }
 
         public void MergeStudentAvailabilityRestriction(ISchedulePart source)
@@ -544,7 +545,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     assignment.RemoveOvertimeShift(overTime);
                 }
 
-								if (assignment.PersonalShiftCollection.Count == 0 && assignment.ShiftCategory == null)
+								if (!assignment.PersonalLayers.Any() && assignment.ShiftCategory == null)
                     personAssToRemoveList.Add(assignment);
             }
 
@@ -563,16 +564,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (currentAss == null || assignment == currentAss)
                     continue;
-                var shiftsToMove = new List<IPersonalShift>();
-                foreach (var shift in assignment.PersonalShiftCollection)
+                var layersToMove = new List<IPersonalShiftLayer>();
+                foreach (var layer in assignment.PersonalLayers)
                 {
-					if (mainShiftPeriod.ContainsPart(shift.LayerCollection.Period().Value) || mainShiftPeriod.AdjacentTo(shift.LayerCollection.Period().Value))
-                        shiftsToMove.Add(shift);
+					if (mainShiftPeriod.ContainsPart(layer.Period) || mainShiftPeriod.AdjacentTo(layer.Period))
+						layersToMove.Add(layer);
                 }
-                foreach (var shift in shiftsToMove)
+                foreach (var layer in layersToMove)
                 {
-                    assignment.RemovePersonalShift(shift);
-                    currentAss.AddPersonalShift((IPersonalShift)shift.NoneEntityClone());
+	                assignment.RemoveLayer(layer);
+                    currentAss.AddPersonalLayer(layer.Payload, layer.Period);
                     if (!assignmentsToDelete.Contains(assignment))
                         assignmentsToDelete.Add(assignment);
                 }
@@ -582,36 +583,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteMainShift(IScheduleDay source)
 		{
-			IPersonAssignment destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
 			IPersonAssignment highAss = AssignmentHighZOrder();
 
 			if (highAss != null)
-			{
-				foreach (var personalShift in highAss.PersonalShiftCollection)
-				{
-					var destPersonalShift = createDestPersonalShift(source, personalShift);
+				highAss.ClearMainLayers();
 
-					destAss.AddPersonalShift(destPersonalShift);
-				}
-
-				RemovePersonAssignment(AssignmentHighZOrder());
-
-				if (destAss.PersonalShiftCollection.Count > 0)
-					Add(destAss);
-			}
+			RemoveEmptyAssignments();
 		}
-
-	    private PersonalShift createDestPersonalShift(IScheduleDay source, IPersonalShift personalShift)
-	    {
-		    var destPersonalShift = new PersonalShift();
-		    var diff = CalculatePeriodOffset(source.Period);
-		    foreach (var layer in personalShift.LayerCollection)
-		    {
-			    var newLayer = new PersonalShiftActivityLayer(layer.Payload, layer.Period.MovePeriod(diff));
-			    destPersonalShift.LayerCollection.Add(newLayer);
-		    }
-		    return destPersonalShift;
-	    }
 
 	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
         {
@@ -726,9 +704,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IPersonAssignment ass = AssignmentHighZOrder();
             if (ass != null)
             {
-                ass.ClearPersonalShift();
-                if (!ass.HasProjection)
-                    Remove(ass);
+                ass.ClearPersonalLayers();
+                RemoveEmptyAssignments();
             }
         }
 
@@ -737,35 +714,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IPersonAssignment sourceAss = source.AssignmentHighZOrder();
             IPersonAssignment destAss = AssignmentHighZOrder();
 
-            if (sourceAss != null)
-            {
-                if (destAss == null)
-                {
-                    destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
+	        if (sourceAss != null)
+	        {
+		        if (destAss == null)
+		        {
+			        destAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+			        Add(destAss);
+		        }
 
-                    foreach (var personalShift in sourceAss.PersonalShiftCollection)
-                    {
-	                    var destPersonalShift = createDestPersonalShift(source, personalShift);
-                        
-                        destAss.AddPersonalShift(destPersonalShift);
-                    }
+				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
+				
+		        foreach (var personalLayer in sourceAss.PersonalLayers)
+		        {
+					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
+			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
+		        }
 
-                    Add(destAss);
-                }
-                else
-                {
-                    foreach (IPersonalShift personalShift in sourceAss.PersonalShiftCollection)
-                    {
-						var destPersonalShift = createDestPersonalShift(source, personalShift);
-
-                        if (destPersonalShift.LayerCollection.Period().HasValue)
-                        {
-                            if (destAss.Period.Contains((DateTimePeriod)destPersonalShift.LayerCollection.Period()))
-                                destAss.AddPersonalShift(destPersonalShift);
-                        }
-                    }
-                }
-            }         
+	        }
         }
 
         public IScheduleTag ScheduleTag()
@@ -894,7 +859,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						//introduce AddLayer on PersonAssignment instead?
 						//rk: Micke and I have talked about this... 
 						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
-						var oldLayers = personAssignment.MainShiftLayers.ToList();
+						var oldLayers = personAssignment.MainLayers.ToList();
 						oldLayers.Add(layer);
 						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}
@@ -912,26 +877,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SplitAbsences(Period);
 		}
 
-		public void CreateAndAddPersonalActivity(IPersonalShiftActivityLayer layer)
+		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
-			IPersonalShift personalShift = new PersonalShift();
-			personalShift.LayerCollection.Add(layer);
-
 			var closest = PersonAssignmentCollection().FirstOrDefault();
-			var period = personalShift.LayerCollection.Period();
 
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
+				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
 				{
-					personAssignment.AddPersonalShift(personalShift);
+					personAssignment.AddPersonalLayer(activity, period);
 					return;
 				}
 
-				if (period.HasValue && closest != null)
+				if (closest != null)
 				{
-					var diff = personAssignment.Period.StartDateTime.Subtract(period.Value.StartDateTime);
-					var closestDiff = closest.Period.StartDateTime.Subtract(period.Value.StartDateTime);
+					var diff = personAssignment.Period.StartDateTime.Subtract(period.StartDateTime);
+					var closestDiff = closest.Period.StartDateTime.Subtract(period.StartDateTime);
 
 					if (Math.Abs(diff.TotalSeconds) < Math.Abs(closestDiff.TotalSeconds))
 						closest = personAssignment;
@@ -941,13 +902,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (closest != null)
 			{
-				closest.AddPersonalShift(personalShift);
+				closest.AddPersonalLayer(activity, period);
 				return;
 			}
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.AddPersonalShift(personalShift);
+			newPersonAssignment.AddPersonalLayer(activity, period);
 			Add(newPersonAssignment);
 		}
 

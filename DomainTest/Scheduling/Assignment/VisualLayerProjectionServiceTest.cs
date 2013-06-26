@@ -394,16 +394,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 2, 00, 00, 0, DateTimeKind.Utc));
 
-			//Original layers in list
-			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(act3, period3);
-
-
-			PersonalShift personShift = new PersonalShift();
-			personShift.LayerCollection.Add(layer3);
-
+			
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
-			personAss.AddPersonalShift(personShift);
+			personAss.AddPersonalLayer(act3, period3);
 			personAss.SetMainShiftLayers(new[]
 				{
 					new MainShiftLayer(act1, period1), 

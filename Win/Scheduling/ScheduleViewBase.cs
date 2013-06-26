@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var personAssignments = scheduleRange.PersonAssignmentCollection();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalShiftCollection.Count > 0)
+                if (personAssignment.PersonalLayers.Any())
                 {
                     Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
                     Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
