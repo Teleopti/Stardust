@@ -28,10 +28,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get{return _isDirty ? _presenter.ScheduleDay : null;}
 		}
 
-		public void ShowPreviousSavedOvertimeAvailability(string timePeriod)
-		{
-		}
-
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			outlookTimePickerFrom.SetTimeValue(startTime);
@@ -79,7 +75,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Add)
 			{
 				var addCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				addCommand.Initialize();
 				_presenter.Add(addCommand);
 				_isDirty = true;
 				Close();
@@ -89,7 +84,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Edit)
 			{
 				var editCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				editCommand.Initialize();
 				_presenter.Edit(editCommand);
 				_isDirty = true;
 				Close();

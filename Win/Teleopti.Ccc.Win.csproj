@@ -1274,12 +1274,6 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\AgentOvertimeAvailabilityForScheduledDayView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\AgentOvertimeAvailabilityForScheduledDayView.Designer.cs">
-      <DependentUpon>AgentOvertimeAvailabilityForScheduledDayView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
@@ -2818,9 +2812,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityView.resx">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityForScheduledDayView.resx">
-      <DependentUpon>AgentOvertimeAvailabilityForScheduledDayView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
