@@ -422,5 +422,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return new AgentDayScheduleTagRepository(unitOfWork);
         }
+
+		public IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
+		{
+			return new PersonScheduleDayReadModelFinder(unitOfWork);
+		}
     }
 }

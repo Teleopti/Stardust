@@ -5,65 +5,57 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
     public class CalendarController : Controller
     {
-	    private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
-	    private readonly IPersonRepository _personRepository;
+	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly IDataSourcesProvider _dataSourcesProvider;
 	    private readonly IJsonDeserializer<ExpandoObject> _deserializer;
 
-	    public CalendarController(IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder, IPersonRepository personRepository, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer)
+	    public CalendarController(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer)
 	    {
-		    _personScheduleDayReadModelFinder = personScheduleDayReadModelFinder;
-		    _personRepository = personRepository;
+		    _repositoryFactory = repositoryFactory;
 		    _dataSourcesProvider = dataSourcesProvider;
 		    _deserializer = deserializer;
 	    }
 
-	    //
-        // GET: /MyTime/Calendar/
-		[UnitOfWork]
+		[HttpGet]
 		public ContentResult Get(string dataSourceName, Guid personId)
 		{
-			//personId = "11610fe4-0130-4568-97de-9b5e015b2564";
-			//Guid personGuid;
-			//Guid.TryParseExact(personId, "D", out personGuid);
-
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(dataSourceName);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-			}
-
-			var person = _personRepository.Get(personId);
-			if (person == null)
-				return null;
-			var scheduleDays = _personScheduleDayReadModelFinder.ForPerson(DateOnly.Today.AddDays(-60),
-																		   DateOnly.Today.AddDays(180), personId);
-			if (scheduleDays == null || scheduleDays.IsEmpty())
-				return null;
-			foreach (var scheduleDay in scheduleDays)
-			{
-				dynamic shift  = _deserializer.DeserializeObject(scheduleDay.Shift);
-				if (shift == null)
+				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+				var person = personRepository.Get(personId);
+				if (person == null)
 					return null;
-				var layers = shift.Projection as IEnumerable<dynamic>;
-				layers.ForEach(l =>
+				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
+				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(DateOnly.Today.AddDays(-60),
+																		   DateOnly.Today.AddDays(180), personId);
+				if (scheduleDays == null || scheduleDays.IsEmpty())
+					return null;
+				foreach (var scheduleDay in scheduleDays)
 				{
-					l.TimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-				});
-				foreach (var layer in layers)
-				{
-					var b = layer;
+					dynamic shift = _deserializer.DeserializeObject(scheduleDay.Shift);
+					if (shift == null)
+						return null;
+					var layers = shift.Projection as IEnumerable<dynamic>;
+					layers.ForEach(l =>
+					{
+						l.TimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+					});
+					foreach (var layer in layers)
+					{
+						var b = layer;
+					}
 				}
 			}
+			
 			var a = 
 @"BEGIN:VCALENDAR
 PRODID:-//Microsoft Corporation//Outlook 14.0 MIMEDIR//EN

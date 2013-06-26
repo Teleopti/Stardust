@@ -41,6 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 				);
 
 			context.MapRoute(
+				"MyTime-calendar",
+				"MyTime/Calendar/{action}/{dataSourceName}/{personId}",
+				new { controller = "Calendar", action = "Get" },
+				new { personId = new GuidConstraint() }
+				);
+
+			context.MapRoute(
 				"MyTime-default",
 				"MyTime/{controller}/{action}/{id}",
 				new { controller = "Portal", action = "Index", id = UrlParameter.Optional }
