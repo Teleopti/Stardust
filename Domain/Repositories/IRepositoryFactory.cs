@@ -491,5 +491,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
         IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
 	    IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
+	    IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
     }
 }

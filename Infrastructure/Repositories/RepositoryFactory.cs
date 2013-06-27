@@ -427,5 +427,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new PersonScheduleDayReadModelFinder(unitOfWork);
 		}
+
+	    public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
+	    {
+			return new PersonalSettingDataRepository(unitOfWork);
+	    }
     }
 }

@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .UniqueResult<ISettingData>();
         }
 
-		public T FindValueByKeyAndPerson<T>(string key,IPerson person, T defaultValue) where T : class, ISettingValue
+		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
 		{
 
 			var data = Session.CreateCriteria(typeof(PersonalSettingData))
 						.Add(Restrictions.Eq("Key", key))
-						.Add(Restrictions.Eq("OwnerPerson", person))
+						.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
 						.SetCacheable(true)
 						.UniqueResult<ISettingData>();
 

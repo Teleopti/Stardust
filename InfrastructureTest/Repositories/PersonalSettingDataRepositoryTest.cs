@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setupFieldsForExternalPerson();
 
 			var rep = new PersonalSettingDataRepository(UnitOfWork);
-			testData s = rep.FindValueByKeyAndPerson("rätt", TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork)), new testData());
+			testData s = rep.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork)), new testData());
 			Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
 			Session.Flush();
 			Session.Clear();
