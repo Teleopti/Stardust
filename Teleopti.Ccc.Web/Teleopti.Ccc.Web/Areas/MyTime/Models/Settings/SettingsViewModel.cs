@@ -7,11 +7,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 		public IList<CultureViewModel> Cultures { get; set; }
 		public CultureViewModel ChoosenUiCulture { get; set; }
 		public CultureViewModel ChoosenCulture { get; set; }
+		public SettingsPermissionViewModel SettingsPermission { get; set; }
 	}
 
 	public class CultureViewModel
 	{
 		public int id { get; set; }
 		public string text { get; set; }
+	}
+
+	public class SettingsPermissionViewModel
+	{
+		public bool ShareCalendarPermission { get; set; }
 	}
 }

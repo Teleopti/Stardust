@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -87,6 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
+		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public JsonResult ActivateCalendarLink(bool isActive)
 		{
 			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
