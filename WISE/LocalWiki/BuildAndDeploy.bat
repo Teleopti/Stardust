@@ -7,7 +7,6 @@ SET Deployment=\\hebe\Installation\localWiki\latest
 SET
 SET WorkingFolder=C:\temp\localWiki
 SET WebSite=www.goodellgroup.com
-
 ::all good so far
 SET /A ERRORLEV=0
 COLOR A
@@ -34,7 +33,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::crawle the website and export to working folder
 ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
-::"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
+"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
 SET /A wgetError=%ERRORLEVEL%
 IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
@@ -43,7 +42,7 @@ copy "%ROOTDIR%\web.config" "%WorkingFolder%\%WebSite%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::zip static web files into the deployment folder
-"%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%WebSite%"
+"%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%WebSite%\*"
 SET /A zipError=%ERRORLEVEL%
 IF %zipError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
@@ -55,6 +54,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 copy "%ROOTDIR%\UninstallWiki.bat" "%Deployment%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+::clean up
+rmdir "%WorkingFolder%" /S /Q
 GOTO :Finish
 
 :Error
