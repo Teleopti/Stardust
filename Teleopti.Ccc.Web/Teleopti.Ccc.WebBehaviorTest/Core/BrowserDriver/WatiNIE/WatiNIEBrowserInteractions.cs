@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
-			EventualAssert.That(value, constraint, () => buildMessage(message));
+			EventualAssert.That(value, constraint, () => buildMessage(message), new WatiNIEExceptionCatcher());
 		}
 
 		private T browserOperation<T>(Func<T> operation, string message)
