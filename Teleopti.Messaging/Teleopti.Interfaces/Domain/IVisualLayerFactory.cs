@@ -32,7 +32,7 @@
     	/// Created by: rogerkr
     	/// Created date: 2009-03-17
     	/// </remarks>
-    	IVisualLayer CreateShiftSetupLayer(IActivityLayer layer, IPerson person);
+    	IVisualLayer CreateShiftSetupLayer(ILayer<IActivity> layer, IPerson person);
 
         /// <summary>
         /// Creates the result layer.

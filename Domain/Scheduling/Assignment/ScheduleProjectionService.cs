@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private static IEnumerable<IVisualLayer> createMeetingProjection(IPersonMeeting personMeeting, IEnumerable<IVisualLayer> assignmentProjection)
 		{
 			var retList = new List<IVisualLayer>();
-			var layerFactory = personMeeting.CreateVisualLayerFactory();
+			var layerFactory = new VisualLayerFactory();
 			foreach (var visualLayer in assignmentProjection)
 			{
 				var intersectPeriod = visualLayer.Period.Intersection(personMeeting.Period);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			foreach (var personAbsence in ScheduleDay.PersonAbsenceCollection(true))
 			{
-				var layerFactory = personAbsence.CreateVisualLayerFactory();
+				var layerFactory = new VisualLayerFactory(); 
 				foreach (var visualLayer in assignmentProjection)
 				{
 					var intersectPeriod = visualLayer.Period.Intersection(personAbsence.Period);

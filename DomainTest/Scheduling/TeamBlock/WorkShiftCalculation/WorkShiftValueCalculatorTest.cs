@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
@@ -46,10 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldHandleClosedDay()
 		{
-            
 			IActivity activity = new Activity("bo");
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, _period1, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
 
 			double? result =_target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
 										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
@@ -61,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingAndEndingInsideInterval()
 		{
 			DateTimePeriod period2 =new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -85,8 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingAndEndingOnExactInterval()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start, _end);
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -109,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingOutsideOpenHoursAndEndingInsideInterval()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-5), _end);
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{}
@@ -128,8 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldHandleLayerStartingInsideIntervalAndEndingOutsideOpenHours()
 		{
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(5));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -150,10 +144,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			DateTimePeriod period1 = new DateTimePeriod(_start.AddMinutes(1), _end.AddMinutes(-28));
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(27), _end.AddMinutes(-1));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period1, new ShiftCategory("cat"));
-			IMainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(_phoneActivity, period2);
-			mainShift.LayerCollection.Add(mainShiftActivityLayer);
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+
+			var visualLayerCollection = new[]
+				{
+					new MainShiftLayer(_phoneActivity, period1), 
+					new MainShiftLayer(_phoneActivity, period2)
+				}.CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -181,8 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_dic.Add(period1.StartDateTime.TimeOfDay, data2);
 
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(15), _end.AddMinutes(20));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -208,11 +203,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = false;
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-15), _end.AddMinutes(15));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(otherActivity, period2, new ShiftCategory("cat"));
 			DateTimePeriod period1 = new DateTimePeriod(_start.AddMinutes(10), _end.AddMinutes(-10));
-			IMainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(_phoneActivity, period1);
-			mainShift.LayerCollection.Add(mainShiftActivityLayer);
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			
+			var visualLayerCollection = new[]
+				{
+					new MainShiftLayer(otherActivity, period2), 
+					new MainShiftLayer(_phoneActivity, period1)
+				}.CreateProjection();
+
 
 			using (_mocks.Record())
 			{
@@ -237,8 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(otherActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -262,8 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-5), _end.AddMinutes(-5));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(otherActivity, period2, new ShiftCategory("cat"));
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();
 
 			using (_mocks.Record())
 			{
@@ -288,10 +284,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period1 = new DateTimePeriod(_start, _end);
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddHours(1), _end.AddHours(1));
-			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period1, new ShiftCategory("cat"));
-			IMainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(_phoneActivity, period2);
-			mainShift.LayerCollection.Add(mainShiftActivityLayer);
-			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+
+			var visualLayerCollection = new[]
+				{
+					new MainShiftLayer(_phoneActivity, period1), 
+					new MainShiftLayer(_phoneActivity, period2)
+				}.CreateProjection();
+
 			var data1 = new SkillIntervalData(toBasePeriod(period1), 5, -5, 0, null, null);
 			var data2 = new SkillIntervalData(toBasePeriod(period2), 5, -5, 0, null, null);
 			_dic.Clear();

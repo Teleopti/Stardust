@@ -11471,6 +11471,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="MaxParallelTasks" xml:space="preserve">
     <value>Max Parallel Tasks:</value>
     <comment>used in Chat skills</comment>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>View active agents</value>
+    <comment>permission</comment>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>Chat</value>
@@ -11483,6 +11486,17 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="AverageChats" xml:space="preserve">
     <value>Average chats</value>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Denied</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Local time</value>
+    <comment>Agents local time</comment>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Overtime Availability...</value>
+    <comment>Add overtime availability on a day</comment>
   </data>
   <data name="CalculatedChats" xml:space="preserve">
     <value>Calculated chats</value>
@@ -11490,6 +11504,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="CampaignChatsPercentSign" xml:space="preserve">
     <value>Campaign chats %</value>
   </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Overtime Availability</value>
+    <comment>Caption for the dialog to add overtime availability</comment>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Previously saved overtime availability:</value>
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
   </data>

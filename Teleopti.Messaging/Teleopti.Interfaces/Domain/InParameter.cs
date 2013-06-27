@@ -262,17 +262,5 @@ namespace Teleopti.Interfaces.Domain
                 throw new ArgumentException(@"The seconds part is not allowed for this period.", "period");
             }
         }
-
-        /// <summary>
-        /// Ensure that there are no seconds specified in the given time span.
-        /// </summary>
-        /// <param name="timeSpan">The time span to check.</param>
-        public static void EnsureNoSecondsInTimeSpan(TimeSpan timeSpan)
-        {
-            if (timeSpan.Seconds != 0)
-            {
-                throw new ArgumentException(@"The given time span contains a seconds part which is not allowed in this context.", "timeSpan");
-            }
-        }
     }
 }

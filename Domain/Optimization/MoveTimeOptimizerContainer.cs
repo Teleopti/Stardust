@@ -81,8 +81,12 @@ namespace Teleopti.Ccc.Domain.Optimization
                     {
                         newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.WorkShiftOptimization);
                     }
-                    
-                    string who = Resources.OptimizingShiftLengths + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
+
+	                string unlocked = " (" +
+	                                  (int)
+	                                  (optimizer.Matrix.UnlockedDays.Count/
+	                                   (double) optimizer.Matrix.EffectivePeriodDays.Count*100) + "%) ";
+                    string who = Resources.OptimizingShiftLengths + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + unlocked + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
                     string success;
                     if (!result)
                     {

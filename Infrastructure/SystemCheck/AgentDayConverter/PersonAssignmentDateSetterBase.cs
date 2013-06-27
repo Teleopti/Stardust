@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			foreach (DataRow row in dt.Rows)
 			{
 				var utcTime = new DateTime(((DateTime)row["Minimum"]).Ticks, DateTimeKind.Utc);
-				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcTime, timeZoneInfo);
 				row["Date"] = string.Format("{0:s}", localDate.Date);
 			}
 		}

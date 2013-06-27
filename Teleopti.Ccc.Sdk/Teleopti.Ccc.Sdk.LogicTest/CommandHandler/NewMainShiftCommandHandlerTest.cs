@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository _mock;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IShiftCategoryRepository _shiftCategoryRepository;
-        private IActivityLayerAssembler<IMainShiftActivityLayer> _mainActivityLayerAssembler;
+        private IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
         private IScheduleRepository _scheduleRepository;
         private IScenarioRepository _scenarioRepository;
         private IPersonRepository _personRepository;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
         private SchedulePartFactoryForDomain _scheduleRange;
         private Collection<ActivityLayerDto> _activityLayerDtoCollection;
-        private Collection<IMainShiftActivityLayer> _mainShiftActivityLayerCollection;
+        private Collection<IMainShiftLayer> _mainShiftActivityLayerCollection;
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _shiftCategoryRepository = _mock.StrictMock<IShiftCategoryRepository>();
-            _mainActivityLayerAssembler = _mock.StrictMock<IActivityLayerAssembler<IMainShiftActivityLayer>>();
+            _mainActivityLayerAssembler = _mock.StrictMock<IActivityLayerAssembler<IMainShiftLayer>>();
             _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
@@ -84,8 +85,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        period.LocalEndDateTime = dtp.LocalEndDateTime;
 			activityLayerDto.Period = period;
 			_activityLayerDtoCollection.Add(new ActivityLayerDto());
-            _mainShiftActivityLayerCollection = new Collection<IMainShiftActivityLayer>();
-			_mainShiftActivityLayerCollection.Add(new MainShiftActivityLayer(new Activity("hej"), dtp));
+            _mainShiftActivityLayerCollection = new Collection<IMainShiftLayer>();
+			_mainShiftActivityLayerCollection.Add(new MainShiftLayer(new Activity("hej"), dtp));
         }
 
         [Test]
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);

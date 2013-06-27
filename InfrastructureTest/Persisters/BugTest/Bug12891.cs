@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -25,10 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			PersistAndRemoveFromUnitOfWork(_activity);
 
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			var mainShift = new MainShift(_shiftCategory);
-			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
-			mainShift.LayerCollection.Add(layer);
-			personAssignment.SetMainShift(mainShift);
+			personAssignment.SetMainShiftLayers(new[]{new MainShiftLayer(_activity, FirstDayDateTimePeriod)}, _shiftCategory);
 			return personAssignment;
 		}
 
@@ -43,25 +41,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			//user 2
 			ScheduleDictionary.TakeSnapshot();
 			ModifyPersonAbsenceAccount();
-			AddMainShiftActivityLayer();
+			addMainShiftActivityLayer();
 		
 			var result = TryPersistScheduleScreen();
 			Assert.IsTrue(result.Saved);
 		}
 
-		private void AddMainShiftActivityLayer()
+		private void addMainShiftActivityLayer()
 		{
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-#pragma warning disable 612,618
-			var activity = personAssignment.ToMainShift().LayerCollection[0].Payload;
-#pragma warning restore 612,618
-			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-#pragma warning disable 612,618
-			personAssignment.ToMainShift().LayerCollection.Add(layer);
-#pragma warning restore 612,618
-
+			var orgLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+			orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, FirstDayDateTimePeriod));
+			personAssignment.SetMainShiftLayers(orgLayers, personAssignment.ShiftCategory);
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 

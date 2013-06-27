@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         protected OvertimeShiftActivityLayer(){}
 
-        public override IMultiplicatorDefinitionSet DefinitionSet
+        public virtual IMultiplicatorDefinitionSet DefinitionSet
         {
             get { return _definitionSet; }
         }

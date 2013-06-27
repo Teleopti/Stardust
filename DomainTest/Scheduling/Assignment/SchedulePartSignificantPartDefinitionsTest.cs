@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             //Definition: main layer(s) is covered by one or more absence layers
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var mainLayer1 = new MainShiftActivityLayer(new Activity("main1"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
-            var mainLayer2 = new MainShiftActivityLayer(new Activity("main2"), new DateTimePeriod(_baseDateTime.AddHours(6), _baseDateTime.AddHours(8)));
+            var mainLayer1 = new MainShiftLayer(new Activity("main1"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
+            var mainLayer2 = new MainShiftLayer(new Activity("main2"), new DateTimePeriod(_baseDateTime.AddHours(6), _baseDateTime.AddHours(8)));
             var absenceLayer1 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(5)));
             var absenceLayer3 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime, _baseDateTime.AddHours(24)));
 
@@ -145,8 +145,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             //Definition: Has One layer in projection, and that layer is an absencelayer
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var layer = new MainShiftActivityLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
-            var layer2 = new MainShiftActivityLayer(new Activity("underlying2"), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
+            var layer = new MainShiftLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
+            var layer2 = new MainShiftLayer(new Activity("underlying2"), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
             var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
             var absenceLayer2 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
 			var target = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasAbsenceNightshift()
         {
             IShiftCategory category = new ShiftCategory("shiftCategory");
-            var layer = new MainShiftActivityLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(21), _baseDateTime.AddHours(31)));
+            var layer = new MainShiftLayer(new Activity("underlying"), new DateTimePeriod(_baseDateTime.AddHours(21), _baseDateTime.AddHours(31)));
             var pAbs = new PersonAbsence(_part.Person, _part.Scenario,
                              new AbsenceLayer(new Absence(),
                                               new DateTimePeriod(_baseDateTime.AddHours(26),
@@ -192,9 +192,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has Mainshift
 			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-	        IMainShift mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+	        var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
 	                                                      new ShiftCategory("hej"));
-			personAssignmentWithMainShift.SetMainShift(mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(personAssignmentWithMainShift, mainShift);
 
             using (_mocker.Record())
             {
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has PersonalShift
 					IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 					IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithPersonalShift.AddPersonalShift(new PersonalShift());
+            personAssignmentWithPersonalShift.AddPersonalLayer(new Activity("hej"), new DateTimePeriod(2000,1,1,2000,1,1));
 
             using (_mocker.Record())
             {
@@ -319,9 +319,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-			var mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
 			                                                 new ShiftCategory("mainShiftcategory"));
-			personAssignmentWithMainShift.SetMainShift(mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(personAssignmentWithMainShift, mainShift);
 			IProjectionService projectionService = _mocker.StrictMock<IProjectionService>();
 			IVisualLayerCollection visualLayerCollection = _mocker.StrictMock<IVisualLayerCollection>();
 			IVisualLayer visualLayer = _mocker.StrictMock<IVisualLayer>();

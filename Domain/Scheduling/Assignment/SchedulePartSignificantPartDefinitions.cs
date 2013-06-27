@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public bool HasPersonalShift()
         {
             IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
-            if (assignmentToCheck != null) return assignmentToCheck.PersonalShiftCollection.Count > 0;
+            if (assignmentToCheck != null) return assignmentToCheck.PersonalLayers.Any();
             return false;
         }
 

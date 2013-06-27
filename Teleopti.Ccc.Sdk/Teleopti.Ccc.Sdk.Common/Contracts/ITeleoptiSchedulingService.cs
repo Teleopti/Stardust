@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="schedulePartDto">The updated schedule information.</param>
         /// <remarks>Restrictions or meetings will not be saved using this operation.</remarks>
         [OperationContract]
+				[Obsolete("This method is obsolete, instead use any of the available task based methods to modify a schedule.")]
         void SaveSchedulePart(SchedulePartDto schedulePartDto);
 
         /// <summary>
@@ -406,5 +407,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
 		ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Gets the Schedule Tags for the given query.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		[OperationContract]
+		ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto);
     }
 }

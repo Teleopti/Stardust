@@ -32,19 +32,20 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
         private IScheduleDay _part;
-        private IRemoveLayerFromScheduleService _removeService = new RemoveLayerFromScheduleService();
-        private IEventAggregator _eventAggregator;
+        private IRemoveLayerFromSchedule _removeService;
+	    private readonly IReplaceLayerInSchedule _replaceService;
+	    private IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
 
-        public LayerViewModelCollection()
-        {
-        }
-        public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService):this()
+
+		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
-            CreateGroups();
+			_removeService = removeService;
+			_replaceService = replaceService;
+			CreateGroups();
         }
 
         private void CreateGroups()
@@ -101,29 +102,24 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public IRemoveLayerFromScheduleService RemoveService
-        {
-            get { return _removeService; }
-            set { _removeService = value; }
-        }
 
-        public void RemoveActivity(ILayerViewModel sender)
-        {
-            RemoveService.Remove(sender.SchedulePart, sender.Layer as ILayer<IActivity>);
-            CreateProjectionViewModels(sender.SchedulePart);
+		public void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer, IScheduleDay scheduleDay)
+		{
+			_removeService.Remove(scheduleDay, activityLayer);
+			CreateProjectionViewModels(scheduleDay);
 
-            Remove(sender);
-        }
+			Remove(sender);
+		}
 
-        public void RemoveAbsence(ILayerViewModel sender)
-        {
-            RemoveService.Remove(sender.SchedulePart, sender.Layer as ILayer<IAbsence>);
-            CreateProjectionViewModels(sender.SchedulePart);
+	    public void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay)
+	    {
+			_removeService.Remove(scheduleDay, absenceLayer);
+			CreateProjectionViewModels(scheduleDay);
 
-            Remove(sender);
-        }
+			Remove(sender);
+	    }
 
-        public void SelectLayer(ILayerViewModel model)
+	    public void SelectLayer(ILayerViewModel model)
         {
             //deselect all other models:
             if (model != ScheduleLayers.CurrentItem || !model.IsSelected)
@@ -189,7 +185,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 Remove(layer);
             }
 
-            _createLayerViewModelService.CreateProjectionViewModelsFromProjectionSource(projectionSource, _eventAggregator, Interval).ForEach(Add);
+            _createLayerViewModelService.CreateProjectionViewModelsFromProjectionSource(projectionSource, Interval).ForEach(Add);
         }
 
         public void AddFromProjection(IScheduleRange range, DateTimePeriod period)
@@ -206,11 +202,6 @@ namespace Teleopti.Ccc.WinCode.Common
             _part = scheduleDay;
             var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(scheduleDay, _eventAggregator, Interval, this);
             layers.ForEach(Add);
-        }
-
-        public int IndexOfLayer(ILayer layer)
-        {
-            return IndexOf(this.FirstOrDefault(l => l.Layer == layer));
         }
 
         public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
@@ -246,13 +237,13 @@ namespace Teleopti.Ccc.WinCode.Common
             CreateProjectionViewModels(_part);
         }
 
-        private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
+	   
+	    private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, _eventAggregator);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, _eventAggregator);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, _eventAggregator);
-            ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
 
             visualLayerViewModel.Interval = Interval;
             return visualLayerViewModel;
@@ -269,36 +260,18 @@ namespace Teleopti.Ccc.WinCode.Common
             return ((ILayerViewModel)layer).IsProjectionLayer;
         }
 
-        /// <summary>
-        /// Returns the current Layer (used for RTA)
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2009-06-25
-        /// </remarks>
-        public ILayer CurrentLayer(DateTime dateTime)
-        {
-            InParameter.VerifyDateIsUtc("dateTime", dateTime);
-            var ret = this.FirstOrDefault((l => (l.IsProjectionLayer && l.Period.Contains(dateTime))));
-            return ret != null ? ret.Layer : null;
-        }
+	    public void ReplaceActivity(ILayerViewModel sender, ILayer<IActivity> theLayer, IScheduleDay part)
+	    {
+		    if (_replaceService != null)
+				_replaceService.Replace(part, theLayer, sender.Payload as IActivity, sender.Period);
+	    }
 
-        /// <summary>
-        /// Returns the next Layer (used for RTA)
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2009-06-25
-        /// </remarks>
-        public ILayer NextLayer(DateTime dateTime)
-        {
-            InParameter.VerifyDateIsUtc("dateTime", dateTime);
-            var ret = this.FirstOrDefault(l => (l.IsProjectionLayer && l.Period.StartDateTime > dateTime));
-            return ret != null ? ret.Layer : null;
-        }
+	    public void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay)
+	    {
+			if (_replaceService != null)
+				_replaceService.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
+	    }
+
+	   
     }
 }

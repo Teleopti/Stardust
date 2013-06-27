@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IScheduleRepository _target;
         private IPreferenceDayRepository _prefDayRep;
         private IStudentAvailabilityDayRepository _availabilityDayRep;
+        private IOvertimeAvailabilityRepository _overtimeAvailabilityRepository;
         private ICollection<IPersonAssignment> _assignments;
         private ICollection<IPersonAbsence> _absences;
         private ICollection<IPersonDayOff> _dayOffs;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IScheduleDateTimePeriod _schedPeriod;
         private IList<IStudentAvailabilityDay> _studentAvailabilityDays;
         private DateOnlyPeriod _longDateOnlyPeriod;
+        private IList<IOvertimeAvailability> _overtimeAvailbilityDays;
 
         [SetUp]
         public void Setup()
@@ -95,6 +97,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _agentDayScheduleTags = new List<IAgentDayScheduleTag>();
 
             _studentAvailabilityDays = new List<IStudentAvailabilityDay>();
+
+            _overtimeAvailbilityDays = new List<IOvertimeAvailability>();
         }
 
         private void CreateRelatedRepositories()
@@ -109,6 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _publicNoteRepository = _mocks.StrictMock<IPublicNoteRepository>();
             _agentDayScheduleTagRepository = _mocks.StrictMock<IAgentDayScheduleTagRepository>();
             _availabilityDayRep = _mocks.StrictMock<IStudentAvailabilityDayRepository>();
+            _overtimeAvailabilityRepository = _mocks.StrictMock<IOvertimeAvailabilityRepository>();
             _personRep = _mocks.StrictMock<IPersonRepository>();
             _meetingRepository = _mocks.StrictMock<IMeetingRepository>();
         }
@@ -125,6 +130,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Expect.Call(_repositoryFactory.CreatePublicNoteRepository(_unitOfWork)).Return(_publicNoteRepository).Repeat.Any();
             Expect.Call(_repositoryFactory.CreateAgentDayScheduleTagRepository(_unitOfWork)).Return(_agentDayScheduleTagRepository).Repeat.Any();
             Expect.Call(_repositoryFactory.CreateStudentAvailabilityDayRepository(_unitOfWork)).Return(_availabilityDayRep).Repeat.Any();
+            Expect.Call(_repositoryFactory.CreateOvertimeAvailabilityRepository(_unitOfWork))
+                  .Return(_overtimeAvailabilityRepository)
+                  .Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePersonRepository(_unitOfWork)).Return(_personRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreateMeetingRepository(_unitOfWork)).Return(_meetingRepository).Repeat.Any();
         }
@@ -296,6 +304,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_availabilities);
             Expect.Call(_prefDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_prefDays);
             Expect.Call(_availabilityDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_studentAvailabilityDays);
+            Expect.Call(_overtimeAvailabilityRepository.Find(periodToLoad(_longPeriod), visiblePeople))
+                  .Return(_overtimeAvailbilityDays);
         }
 
         private void AddPublicNote(IPerson person)
@@ -377,6 +387,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_availabilities);
             Expect.Call(_prefDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_prefDays);
             Expect.Call(_availabilityDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_studentAvailabilityDays);
+            Expect.Call(_overtimeAvailabilityRepository.Find(periodToLoad(_longPeriod), visiblePeople))
+                  .Return( _overtimeAvailbilityDays);
         }
 
         [Test]
@@ -422,6 +434,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             
             IPersonAvailability availability = new PersonAvailability(person, rotationBase, availabilityStartDate);
             _availabilities.Add(availability);
+
+            //IOvertimeAvailability overtimeAvailability = new OvertimeAvailability(person, availabilityStartDate, TimeSpan.FromHours(8), TimeSpan.FromHours(10));
+            //_availabilities.Add(overtimeAvailability );
         }
 
         [Test]
@@ -479,6 +494,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
            
             Expect.Call(_prefDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_prefDays);
             Expect.Call(_availabilityDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_studentAvailabilityDays);
+            Expect.Call(_overtimeAvailabilityRepository.Find(periodToLoad(_longPeriod), visiblePeople))
+                 .Return(_overtimeAvailbilityDays);
             Expect.Call(_personRep.FindPeopleInOrganization(_longDateOnlyPeriod, true))
                 .Return(persons).Repeat.Once();
         }
@@ -517,6 +534,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
            
             var period1 = new DateTimePeriod(2000,2,1,2000,2,10);
             var period2 = new DateTimePeriod(2000, 3, 1, 2000, 3, 10);
+            var period3 = new DateTimePeriod(2000, 2, 1, 2000, 4, 10);
            
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> {period1,period2};
 
@@ -527,15 +545,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, _longPeriod, absenceToLookFor)).Return(absencePeriods);
 
-                Expect.Call(_absRep.Find(people, period1, _scenario)).Return(_absences);
+				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2000,4,11), _scenario)).Return(_meetings);
 
-                Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
+                //Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period2, _scenario)).Return(new List<IPersonAssignment>());
                 Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
-				Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2000, 4, 11), _scenario)).Return(_meetings);
+				//Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2000, 4, 11), _scenario)).Return(_meetings);
             }
             using (_mocks.Playback())
             {
@@ -557,6 +575,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var searchPeriod = new DateTimePeriod(2000, 1, 1, 2200, 1, 1);
             var period1 = new DateTimePeriod(2000, 2, 1, 2000, 2, 10);
             var period2 = new DateTimePeriod(2000, 3, 1, 2001, 3, 10);
+            var period3 = new DateTimePeriod(2000, 2, 1, 2001, 4, 10);
             //Returnvalues:
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> { period1, period2 };
 
@@ -564,15 +583,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, searchPeriod, absenceToLookFor)).Return(absencePeriods);
 
-                Expect.Call(_absRep.Find(people, period1, _scenario)).Return(_absences);
+				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2001,4,11), _scenario)).Return(_meetings);
 
-                Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
+                //Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period2, _scenario)).Return(new List<IPersonAssignment>());
                 Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
-				Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2001, 4, 11), _scenario)).Return(_meetings);
+				//Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2001, 4, 11), _scenario)).Return(_meetings);
             }
             using (_mocks.Playback())
             {
@@ -587,17 +606,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IAbsence absenceToLookFor = AbsenceFactory.CreateAbsence("for test");
             IPerson person = PersonFactory.CreatePerson("gfsegfwegtwer");
-        
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod>();
-          
+			var searchPeriod = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
             using (_mocks.Record())
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, _longPeriod, absenceToLookFor)).Return(absencePeriods);
+				Expect.Call(_absRep.Find(new List<IPerson>{person}, period, _scenario, absenceToLookFor)).Return(_absences);
+				Expect.Call(_meetingRepository.Find(new List<IPerson> { person }, new DateOnlyPeriod(1999, 12, 31, 2000, 1, 3), _scenario)).Return(_meetings);
                
             }
             using (_mocks.Playback())
             {
-                IScheduleRange range = _target.ScheduleRangeBasedOnAbsence(_longPeriod, _scenario, person, absenceToLookFor);
+				IScheduleRange range = _target.ScheduleRangeBasedOnAbsence(searchPeriod, _scenario, person, absenceToLookFor);
                 Assert.IsNotNull(range);
             }
         }

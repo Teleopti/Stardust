@@ -1548,7 +1548,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     Assert.IsFalse(container.CanRedo());
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 1));
-                    part.PersonAssignmentCollection()[0].ClearMainShiftLayers(); 
+                    part.PersonAssignmentCollection()[0].ClearMainLayers(); 
 
                     container.CreateBatch("a");
                     target.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { part }, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -1596,23 +1596,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					part.PersonAssignmentCollection()[0].ClearMainShiftLayers();
+					part.PersonAssignmentCollection()[0].ClearMainLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
                     CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
                                         PersonAssignmentCollection());
 
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-#pragma warning disable 612,618
-					                                     PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
 
                     //should do nothing
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-#pragma warning disable 612,618
-					                                     PersonAssignmentCollection()[0].ToMainShift());
-#pragma warning restore 612,618
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
 
                     container.Redo();
 					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
@@ -1649,7 +1643,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
 					var oldMainShift = part.GetEditorShift();
-					part.PersonAssignmentCollection()[0].ClearMainShiftLayers();
+					part.PersonAssignmentCollection()[0].ClearMainLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
                     container.Undo();

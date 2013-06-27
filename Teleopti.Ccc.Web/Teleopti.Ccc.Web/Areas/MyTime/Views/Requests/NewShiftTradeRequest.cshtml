@@ -1,20 +1,24 @@
 ﻿@using Teleopti.Ccc.UserTexts
-<div id="Request-add-shift-trade" class="request-shift-trade-add-section displaynone ui-corner-all">
+<div id="Request-add-shift-trade" class="well well-small displaynone">
 	 
-	<span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
+    <div class="displaynone" data-bind="if: isReadyLoaded">
+        <span id="Request-add-loaded-ready"></span>
+    </div>
+    <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
 	<div class="request-detail-title pdb5">@Resources.ShiftTradeRequest</div>
-	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
+	<div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
-	<div data-bind="visible : !missingWorkflowControlSet()">
-		<button type="button" class="shift-trade-add-previous-date" data-bind="click : previousDate, enable: !IsLoading()"></button>
-		<input class="shift-trade-add-datepicker ui-corner-all" type="text" data-bind="datepicker: requestedDate, enable: !IsLoading()" />
-		<button type="button" class="shift-trade-add-next-date" data-bind="click : nextDate, enable: !IsLoading()"></button>
+	<div data-bind="if : !missingWorkflowControlSet()" class="input-append input-prepend">
+		<button class="btn" data-bind="click : previousDate, enable: !IsLoading()"><i class="icon-arrow-left"></i></button>
+		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate() }, enable: !IsLoading()" />
+		<button class="btn" data-bind="click : nextDate, enable: !IsLoading()"><i class="icon-arrow-right"></i></button>
 	</div>
 	
-  
+	<div data-bind="text: selectedDate" class="hidden" id="selectedDate"></div>
+
 	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
-		<div class="shift-trade-add-schedule ui-corner-bottom">
+		<div class="shift-trade-add-schedule">
 			<div class="shift-trade-timeline" data-bind="foreach: hours">
 				<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
 					<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
@@ -34,7 +38,7 @@
 						<div class="loading"></div>
 					</div>
 				</div>
-	   </div>
+	        </div>
 			<div data-bind="foreach: possibleTradeSchedules">
 				<div class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 					<span class="shift-trade-agent-name" data-bind="text: agentName"></span>
@@ -47,18 +51,17 @@
 			</div>
 		</div>
 		
-		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="request-shift-trade-add-section mt10 ui-corner-all" style="width: 400px; overflow: hidden;">
-			<div class="edit-module-element">
-				<label class="displayblock" for="Request-add-shift-trade-subject-input">@Resources.Subject</label>
-				<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="request-subject-input" />
+		<p></p>
+		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
+			<div>
+				<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" />
 			</div>
-			<div class="edit-module-element">
-				<label class="displayblock" for="Request-add-shift-trade-message-input">@Resources.Message</label>
-				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message" class="request-message-input"/>
+			<div>
+				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message" rows="4" class="input-block-level" placeholder="@Resources.Message" />
 			</div>
-		<div class="edit-module-element">
-			<button type="button" class="send-button floatright" data-bind="enable: isSendEnabled">@Resources.Send</button>
-			<button type="button" class="cancel-button floatright mr5">@Resources.Cancel</button>
+		<div class="pull-right">
+			<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+			<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
 		</div>
 		<div class="error" data-bind="html: errorMessage"></div>
 		</div>

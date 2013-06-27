@@ -118,5 +118,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNotNull(repository);
         }
         #endregion
+
+		[Test]
+		public void ShouldLoadActiveAgents()
+		{
+			ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
+			var agents = licenseRepository.GetActiveAgents();
+		}
     }
 }

@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
@@ -218,7 +214,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             if (personAbsence.Layer.Payload.Equals(Layer.Payload))
             {
-                if (personAbsence.Period.Intersect(Period) || personAbsence.Period.Adjacent(Period))
+                if (personAbsence.Period.Intersect(Period) || personAbsence.Period.AdjacentTo(Period))
                 {
 	                var newLayer = new AbsenceLayer(Layer.Payload, Period.MaximumPeriod(personAbsence.Period));
                     mergedPersonAbsence = new PersonAbsence(Person, Scenario, newLayer);
@@ -302,10 +298,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         #endregion
 
-        public virtual IVisualLayerFactory CreateVisualLayerFactory()
-        {
-            return new VisualLayerFactory(); //maybe another object not allowing setuplayers?
-        }
 
         public virtual IAggregateRoot MainRoot
         {

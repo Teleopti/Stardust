@@ -72,19 +72,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			IPersonAssignment personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			IPerson person = PersonFactory.CreatePerson();
-			IPersonalShift personalShift = _mocks.StrictMock<IPersonalShift>();
 			IActivity activity = _mocks.StrictMock<IActivity>();
-			ILayerCollection<IActivity> layerCollection = new LayerCollection<IActivity>();
-			layerCollection.Add(new ActivityLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()));
 
 			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
 				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
 			_scheduleDay.Stub(x=>x.Person)
 				.Return(person);
-			personAssignment.Stub(x=>x.PersonalShiftCollection)
-				.Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift }));
-			personalShift.Stub(x=>x.LayerCollection)
-				.Return(layerCollection);
+			personAssignment.Stub(x=>x.PersonalLayers)
+				.Return(new []{new PersonalShiftLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()) });
+
 
 			using(_mocks.Record())
 			{

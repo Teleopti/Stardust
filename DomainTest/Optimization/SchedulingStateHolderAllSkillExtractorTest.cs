@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,13 +26,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillList = new List<ISkill>();
             _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillType(), 15);
             _skillList.Add(_skill1);
+	        var maxSeatSkill = SkillFactory.CreateSkill("hej", new SkillTypePhone(new Description(), ForecastSource.MaxSeatSkill), 15);
+			_skillList.Add(maxSeatSkill);
             _target = new SchedulingStateHolderAllSkillExtractor(_stateHolder);
         }
 
         [Test]
-        public void VerifyExtractsStateHolderAllSkills()
+        public void VerifyExtractsStateHolderAllSkillsExceptMaxSeat()
         {
-            int skillNumber = _skillList.Count;
+
             using (_mock.Record())
             {
                 Expect.Call(_stateHolder.VisibleSkills)
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mock.Playback())
             {
                 IList<ISkill> result = _target.ExtractSkills().ToList();
-                Assert.AreEqual(skillNumber, result.Count);
+                Assert.AreEqual(1, result.Count);
             }
         }
 

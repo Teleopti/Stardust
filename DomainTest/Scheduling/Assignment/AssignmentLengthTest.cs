@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -46,23 +47,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// </remarks>
         protected override IPersonAssignment CreateInvalidEntityToVerify()
         {
-            MainShift ms1 = new MainShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 6, 0, 0, DateTimeKind.Utc));
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
+	        _testPersonAssignment.SetMainShiftLayers(
+		        new[] {new MainShiftLayer(ActivityFactory.CreateActivity("Phone"), period1)},
+		        new ShiftCategory("myCategory"));
 
-            ms1.LayerCollection.Add(layer1);
-            _testPersonAssignment.SetMainShift(ms1);
-
-            PersonalShift ps1 = new PersonalShift();
             DateTimePeriod period2 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 11, 3, 0, 0, DateTimeKind.Utc));
-            PersonalShiftActivityLayer layer2 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Möte"), period2);
 
-            ps1.LayerCollection.Add(layer2);
-            _testPersonAssignment.AddPersonalShift(ps1);
+						_testPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("Möte"), period2);
 
             return _testPersonAssignment;
         }
@@ -77,14 +73,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// </remarks>
         protected override IPersonAssignment CreateValidEntityToVerify()
         {
-            MainShift ms1 = new MainShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
+			var ms1 = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 11, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 1, 0, 0, DateTimeKind.Utc));
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
+			var layer1 = new EditorActivityLayer(ActivityFactory.CreateActivity("Phone"), period1);
 
             ms1.LayerCollection.Add(layer1);
-            _testPersonAssignment.SetMainShift(ms1);
+			new EditableShiftMapper().SetMainShiftLayers(_testPersonAssignment, ms1);
 
             return _testPersonAssignment;
         }

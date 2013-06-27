@@ -157,6 +157,8 @@
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />
+    <Compile Include="Common\LayersExtensionsPeriodTest.cs" />
+    <Compile Include="Common\LayersExtensionsProjectionTest.cs" />
     <Compile Include="Common\ListAggregatorTest.cs" />
     <Compile Include="Common\ModifyNowTest.cs" />
     <Compile Include="Common\NowTest.cs" />
@@ -352,7 +354,11 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNewTest.cs" />
+ 	<Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftLayerTest.cs" />
+    <Compile Include="Scheduling\Assignment\MoveLayerVerticalTest.cs" />
+    <Compile Include="Scheduling\Assignment\PersonalShiftLayerTest.cs" />
+    <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
@@ -628,7 +634,7 @@
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizerTest.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShiftTest.cs" />
-    <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleServiceTest.cs" />
+    <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitionsTest.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitationTest.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartServiceTest.cs" />
@@ -977,8 +983,6 @@
     <Compile Include="ResourceCalculation\SkillCollectionKeyTest.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionServiceTest.cs" />
     <Compile Include="Scheduling\AgentDateTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerTest.cs" />
-    <Compile Include="Scheduling\Assignment\PersonalShiftActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParametersTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePeriodTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRangeTest.cs" />
@@ -1050,7 +1054,6 @@
     <Compile Include="Scheduling\PersonDayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
-    <Compile Include="Scheduling\Assignment\ShiftTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />
     <Compile Include="Scheduling\ShiftCategoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfoTest.cs" />
@@ -1059,8 +1062,6 @@
     <Compile Include="Security\AuthorizationEntities\AuthorizationSettingsTest.cs" />
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
-    <Compile Include="Scheduling\Assignment\MainShiftTest.cs" />
-    <Compile Include="Scheduling\Assignment\PersonalShiftTest.cs" />
     <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfoTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="Security\UserDetailTest.cs" />
@@ -1087,7 +1088,6 @@
     <Compile Include="Time\DateOnlyTest.cs" />
     <Compile Include="Time\DateTimePeriodTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Time\DateTimePeriodMergerTest.cs" />
     <Compile Include="Time\PeriodScaleUnitTest.cs" />
     <Compile Include="Time\DateTimeExtensionsTest.cs" />
     <Compile Include="Time\SelectedSchedulesAreEmptyTest.cs" />

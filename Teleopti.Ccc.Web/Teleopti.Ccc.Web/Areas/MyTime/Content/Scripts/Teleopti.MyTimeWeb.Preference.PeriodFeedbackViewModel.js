@@ -1,6 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js" />
@@ -73,5 +73,18 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.PossibleResultContractTimeUpper = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
+
+	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
+	    return self.PossibleResultContractTimeUpper() < self.TargetContractTimeLower() || self.TargetContractTimeUpper() < self.PossibleResultContractTimeLower();
+	});
+
+	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
+	    return self.PossibleResultDaysOff() > self.TargetDaysOffUpper() || self.PossibleResultDaysOff() < self.TargetDaysOffLower();
+	});
+
+	this.PreferenceFeedbackClass = ko.computed(function () {
+	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
+	});
+
 };
 

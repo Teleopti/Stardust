@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -37,8 +38,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private IScheduleRepository scheduleRepository;
         private IPerson person;
         private DateTimePeriodAssembler dateTimePeriodAssembler;
+		private IScheduleTagAssembler _tagAssembler;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             person = PersonFactory.CreatePerson();
@@ -58,12 +60,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             personRepository = mocks.StrictMock<IPersonRepository>();
         	sdkProjectionServiceFactory = mocks.DynamicMock<ISdkProjectionServiceFactory>();
             dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        _tagAssembler = mocks.DynamicMock<IScheduleTagAssembler>();
             target = new SchedulePartAssembler(scenarioRepository, assignmentAssembler, absenceAssembler, dayOffAssembler,
                                                personMeetingAssembler, _preferenceRestrictionAssembler,
                                                _studentDayAssembler,
                                                new ProjectedLayerAssembler(dateTimePeriodAssembler),
                                                dateTimePeriodAssembler,
-															  sdkProjectionServiceFactory);
+															  sdkProjectionServiceFactory, _tagAssembler);
             target.PersonRepository = personRepository;
             target.ScheduleRepository = scheduleRepository;
 			  target.TimeZone = (TimeZoneInfo.Utc);
@@ -77,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 											  _studentDayAssembler,
 											  new ProjectedLayerAssembler(dateTimePeriodAssembler),
 											  dateTimePeriodAssembler,
-											  new SdkProjectionServiceFactory());
+											  new SdkProjectionServiceFactory(),_tagAssembler);
 			IActivity act = new Activity("sdf");
 			act.SetId(Guid.NewGuid());
 			var innerDic = new Dictionary<IPerson, IScheduleRange>();
@@ -87,9 +90,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var schedDay = ExtractedSchedule.CreateScheduleDay(schedDic, new Person(), new DateOnly(2000, 2, 1));
 			schedDay.Person.SetId(Guid.NewGuid());
 			var ass = new PersonAssignment(schedDay.Person, schedDay.Scenario, new DateOnly(2000,1,1));
-			var ms = new MainShift(new ShiftCategory("sdf"));
-			ms.LayerCollection.Add(new MainShiftActivityLayer(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12))));
-			ass.SetMainShift(ms);
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)))
+				}, new ShiftCategory("asd"));
 			schedDay.Add(ass);
 			using (mocks.Record())
 			{
@@ -252,7 +256,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting }));
             Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting> { personMeeting })).Return(
                 new List<PersonMeetingDto> { personMeetingDto });
-            
+			Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
             
             mocks.ReplayAll();
             SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
@@ -288,6 +293,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting> { personMeeting })).Return(
                 new List<PersonMeetingDto> { personMeetingDto });
             Expect.Call(part.PersistableScheduleDataCollection()).Return(restrictions).Repeat.Twice();
+			Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
             mocks.ReplayAll();
             SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
             Assert.AreEqual(1, schedulePartDto.PersonAssignmentCollection.Count);
@@ -323,7 +330,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting> { personMeeting })).Return(
                 new List<PersonMeetingDto> { personMeetingDto });
             Expect.Call(part.PersistableScheduleDataCollection()).Return(restrictions).Repeat.Twice();
-
+	        Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
             mocks.ReplayAll();
             SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
             Assert.AreEqual(1, schedulePartDto.PersonAbsenceCollection.Count);
@@ -387,6 +395,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting> { personMeeting })).Return(
                 new List<PersonMeetingDto> { personMeetingDto });
             Expect.Call(part.PersistableScheduleDataCollection()).Return(resstrictions).Repeat.Twice();
+			Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
             mocks.ReplayAll();
             SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
             Assert.AreEqual(personDayOffDto, schedulePartDto.PersonDayOff);
@@ -426,7 +436,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> ()));
             Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting>())).Return(
                 new List<PersonMeetingDto> ());
-            
+			Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
             mocks.ReplayAll();
             SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
             Assert.AreEqual(preferenceRestrictionDto, schedulePartDto.PreferenceRestriction);
@@ -457,7 +468,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 									 _studentDayAssembler,
 									 new ProjectedLayerAssembler(dateTimePeriodAssembler),
 									 dateTimePeriodAssembler,
-									 new SdkProjectionServiceFactory());
+									 new SdkProjectionServiceFactory(),_tagAssembler);
             var activityId = Guid.NewGuid();
             var scheduleDay = CreateScheduleDay(activityId);
             
@@ -497,9 +508,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDictionary, new Person(), new DateOnly(2000, 2, 1));
             scheduleDay.Person.SetId(Guid.NewGuid());
             var assignment = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000,1,1));
-            var mainShift = new MainShift(new ShiftCategory("sdf"));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(activity, period));
-            assignment.SetMainShift(mainShift);
+					assignment.SetMainShiftLayers(new[]
+						{
+							new MainShiftLayer(activity, period)
+						}, new ShiftCategory("sdf"));
             scheduleDay.Add(assignment);
 
             var absence = AbsenceFactory.CreateAbsence("absence");

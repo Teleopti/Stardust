@@ -42,11 +42,21 @@ define([
 				function(schedules) {
 				    var currentPersons = teamSchedule.Persons();
 
-					var dateClone = teamSchedule.SelectedDate().clone();
+				    var dateClone = teamSchedule.SelectedDate().clone();
+
+				    for (var i = 0; i < schedules.length; i++) {
+				    	for (var j = 0; j < currentPersons.length; j++) {
+				    		if (currentPersons[j].Id == schedules[i].Id) {
+				    			currentPersons[j].ClearLayers();
+				    			break;
+				    		}
+				    	}
+				    }
+					
 					for (var i = 0; i < schedules.length; i++) {
 						for (var j = 0; j < currentPersons.length; j++) {
 						    if (currentPersons[j].Id == schedules[i].Id) {
-						        currentPersons[j].SetLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
+						        currentPersons[j].AddLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
 						        currentPersons[j].AddContractTime(schedules[i].ContractTimeMinutes);
 						        currentPersons[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 								break;

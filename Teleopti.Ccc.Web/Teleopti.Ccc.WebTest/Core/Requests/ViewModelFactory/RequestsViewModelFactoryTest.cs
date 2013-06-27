@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -25,8 +27,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	public class RequestsViewModelFactoryTest
 	{
 		[Test]
+		public void ShouldRetrieveDatePickerFormatForPersonForViewModel()
+		{
+			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
+			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
+
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider,
+			                                          MockRepository.GenerateMock<IPermissionProvider>(), null, null, null, null,
+			                                          loggedOnUser);
+
+			var result = target.CreatePageViewModel();
+			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
+		}
+
+		[Test]
 		public void ShouldRetrieveAbsenceTypesforViewModel()
 		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var absence = new Absence { Description = new Description("Vacation") };
 			absence.SetId(Guid.NewGuid());
@@ -35,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null,null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null, null, loggedOnUser);
 
 			var result = target.CreatePageViewModel();
 
@@ -48,13 +75,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveTextRequestPermissionForViewModel()
 		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
 				Return(true);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null, null, loggedOnUser);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -63,13 +95,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveAbsenceRequestPermissionForViewModel()
 		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
 				Return(true);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null, null, loggedOnUser);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
@@ -79,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrievePersonRequestsForPagingViewModel()
 		{
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null, null, null, null, null);
+			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null, null, null, null, null, null);
 			var paging = new Paging();
 			personRequestProvider.Stub(x => x.RetrieveRequests(paging)).Return(new IPersonRequest[] { });
 
@@ -92,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldMapToViewModelForPagingViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null, null, null, null, null);
+			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null, null, null, null, null, null);
 			var requests = new RequestViewModel[] {};
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
@@ -107,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var provider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(provider, mapper, null, null, null, null, null, null);
+			var target = new RequestsViewModelFactory(provider, mapper, null, null, null, null, null, null, null);
 			var personRequest = new PersonRequest(new Person());
 			var id = Guid.NewGuid();
 			var requestViewModel = new RequestViewModel();
@@ -128,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			var now = MockRepository.GenerateMock<INow>();
-			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper,null, now);
+			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper,null, now, null);
 			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
 			var workflowControlSet = new WorkflowControlSet();
 
@@ -144,7 +182,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null, null, null);
+			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null, null, null, null);
 			var viewModel = new ShiftTradeScheduleViewModel();
 
 			mapper.Stub(x => x.Map<DateOnly, ShiftTradeScheduleViewModel>(Arg<DateOnly>.Is.Anything)).Return(viewModel);
@@ -168,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 																	 To = new ShiftTradePersonScheduleViewModel()
 				                                     };
 
-			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null);
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
 			requestCheckSum.Expect(s => s.Check(shiftTrade));		
@@ -200,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				To = new ShiftTradePersonScheduleViewModel()	  {StartTimeUtc = startTimeToSchedule}
 			};
 
-			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null);
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(new Guid())).IgnoreArguments().Return(personRequest);
 			

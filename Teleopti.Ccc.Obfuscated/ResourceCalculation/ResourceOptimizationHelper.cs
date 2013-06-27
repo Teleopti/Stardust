@@ -172,48 +172,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void AddResourcesToNonBlendAndMaxSeat(IMainShift mainShift, IPerson person, DateOnly dateOnly)
-		{
-			var virtualSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
-			if (!virtualSchedulePeriod.IsValid)
-				return;
-
-			var layerCollection = mainShift.ProjectionService().CreateProjection();
-
-			var timePeriod = layerCollection.Period();
-
-			if (!timePeriod.HasValue)
-				return;
-
-			// just a workaround for now so we get as Person attached to the collection
-			var layers = layerCollection.ToList();
-			layerCollection = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
-
-			var personPeriod = person.Period(dateOnly);
-			//var personPeriod = virtualSchedulePeriod.PersonPeriod;
-			var skills = new List<ISkill>();
-			foreach (var personSkill in personPeriod.PersonNonBlendSkillCollection)
-			{
-				skills.Add(personSkill.Skill);
-			}
-			var relevantSkillStaffPeriods =
-				CreateSkillSkillStaffDictionaryOnSkills(
-					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
-
-			_nonBlendSkillCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods, true);
-
-			skills.Clear();
-			foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
-			{
-				skills.Add(personSkill.Skill);
-			}
-			relevantSkillStaffPeriods =
-				CreateSkillSkillStaffDictionaryOnSkills(
-					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
-			_occupiedSeatCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
 			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
