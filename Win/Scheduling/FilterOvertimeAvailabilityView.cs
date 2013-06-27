@@ -38,20 +38,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get { return new DateOnly(datePicker.Value); }
 		}
 
-		private void buttonOk_Click(object sender, EventArgs e)
-		{
-			if (validateTimes())
-			{
-				var startTime = outlookTimePickerFrom.TimeValue();
-				var endTime = outlookTimePickerTo.TimeValue();
-				if (checkBoxAdvNextDay.Checked && endTime.HasValue)
-					endTime = endTime.Value.Add(TimeSpan.FromDays(1));
-				_presenter.Filter(startTime.Value, endTime.Value);
-			}
-			Close();
-		}
+	    private void buttonOk_Click(object sender, EventArgs e)
+	    {
+		    if (!validateTimes()) return;
 
-		private void buttonCancel_Click(object sender, EventArgs e)
+		    var startTime = outlookTimePickerFrom.TimeValue();
+		    var endTime = outlookTimePickerTo.TimeValue();
+		    if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+			    endTime = endTime.Value.Add(TimeSpan.FromDays(1));
+		    _presenter.Filter(startTime.Value, endTime.Value);
+			DialogResult = DialogResult.OK;
+		    Close();
+	    }
+
+	    private void buttonCancel_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
