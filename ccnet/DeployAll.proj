@@ -175,7 +175,7 @@
 	<Target Name="BuildLocalWiki">
 		<Message Text="Buliding local wiki ... " />
 	
-		<Exec Command="$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat" ContinueOnError="false">
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat&quot;" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 		<Message Text="The exit code is $(ErrorCode)"/>
