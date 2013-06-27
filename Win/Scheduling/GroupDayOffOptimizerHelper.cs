@@ -472,8 +472,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 									   _container.Resolve<IRestrictionAggregator>(),
 									   _container.Resolve<IWorkShiftFilterService>(), 
 									   teamScheduling,
-									   _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+									   _container.Resolve<IWorkShiftSelector>());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -547,8 +546,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                        _container.Resolve<IRestrictionAggregator>(),
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
-                                       _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+                                       _container.Resolve<IWorkShiftSelector>());
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
