@@ -174,7 +174,7 @@
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\Robustness\EventualAssert.cs" />
+    <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Pages\SignInPage.cs" />
