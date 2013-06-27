@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.71186F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.28814F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonCancel, 2, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.buttonOk.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.buttonOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOk.Location = new System.Drawing.Point(145, 7);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -114,8 +113,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(230, 7);
+			this.buttonCancel.Location = new System.Drawing.Point(229, 7);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -180,7 +178,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.Name = "monthCalendar";
 			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.datePicker.Calendar.SelectedDates = new System.DateTime[0];
-			this.datePicker.Calendar.Size = new System.Drawing.Size(150, 174);
+			this.datePicker.Calendar.Size = new System.Drawing.Size(146, 174);
 			this.datePicker.Calendar.SizeToFit = true;
 			this.datePicker.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.datePicker.Calendar.TabIndex = 0;
@@ -191,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// 
 			this.datePicker.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(78, 0);
+			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(74, 0);
 			this.datePicker.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.datePicker.Calendar.NoneButton.Text = "None";
 			this.datePicker.Calendar.NoneButton.UseVisualStyle = true;
@@ -200,7 +198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.datePicker.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.datePicker.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(78, 20);
+			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(74, 20);
 			this.datePicker.Calendar.TodayButton.Text = "Today";
 			this.datePicker.Calendar.TodayButton.UseVisualStyle = true;
 			this.datePicker.CalendarForeColor = System.Drawing.SystemColors.ControlText;
