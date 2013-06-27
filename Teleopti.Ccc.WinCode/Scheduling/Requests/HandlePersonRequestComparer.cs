@@ -13,6 +13,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 	public class HandlePersonRequestComparer : SortComparer
 	{
+		private struct HandlePersonRequestHolder
+		{
+			public readonly PersonRequestViewModel X;
+			public readonly PersonRequestViewModel Y;
+
+			public HandlePersonRequestHolder(PersonRequestViewModel x, PersonRequestViewModel y)
+			{
+				X = x;
+				Y = y;
+			}
+		}
+
 		public HandlePersonRequestComparer()
 		{
 			SortDescriptions = new List<SortDescription>();
@@ -23,27 +35,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			var result = 0;
 			foreach (var sort in SortDescriptions)
 			{
+				var holder = decideObjectOrder(x, y, sort);
+				var xModel = holder.X;
+				var yModel = holder.Y;
+
 				switch (sort.PropertyName)
 				{
 					case "RequestedDate":
-						result = compareRequestedDate(sort, x, y);
+						result = compareRequestedDate(xModel, yModel);
 						break;
 					case "LastUpdatedDisplay":
-						result = compareLastUpdatedDisplay(sort, x, y);
+						result = compareLastUpdatedDisplay(xModel, yModel);
 						break;
 					default:
-						var xValue = x.GetType().GetProperty(sort.PropertyName).GetValue(x, null);
-						var yValue = y.GetType().GetProperty(sort.PropertyName).GetValue(y, null);
+						var xValue = xModel.GetType().GetProperty(sort.PropertyName).GetValue(xModel, null);
+						var yValue = yModel.GetType().GetProperty(sort.PropertyName).GetValue(yModel, null);
 
 						var xString = xValue as string;
 						if (xString != null)
-							result = compareString(sort, xString, yValue);
+							result = compareString(xString, (string) yValue);
 
 						else if (xValue is int)
-							result = compareInt(sort, xValue, yValue);
+							result = compareInt((int) xValue, (int) yValue);
 
 						else if (xValue is bool)
-							result = compareBool(sort, xValue, yValue);
+							result = compareBool((bool) xValue, (bool) yValue);
 						break;
 				}
 				if (result != 0) break;
@@ -51,55 +67,41 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			return result;
 		}
 
-		private static int compareRequestedDate(SortDescription sort, object x, object y)
+		private static HandlePersonRequestHolder decideObjectOrder(object x, object y, SortDescription sortDescription)
 		{
-			var xPersonRequestPeriod = ((PersonRequestViewModel) x).PersonRequest.Request.Period;
-			var yPersonReuqestPeriod = ((PersonRequestViewModel) y).PersonRequest.Request.Period;
-
-			if (xPersonRequestPeriod.StartDateTime.Date
-			                        .Equals(yPersonReuqestPeriod.StartDateTime.Date))
-				return sort.Direction == ListSortDirection.Ascending
-					       ? xPersonRequestPeriod.EndDateTime.CompareTo(
-						       yPersonReuqestPeriod.EndDateTime)
-					       : yPersonReuqestPeriod.EndDateTime.CompareTo(
-						       xPersonRequestPeriod.EndDateTime);
-
-			return sort.Direction == ListSortDirection.Ascending
-				       ? xPersonRequestPeriod.CompareTo(
-					       yPersonReuqestPeriod)
-				       : yPersonReuqestPeriod.CompareTo(
-					       xPersonRequestPeriod);
+			return sortDescription.Direction == ListSortDirection.Ascending
+				       ? new HandlePersonRequestHolder((PersonRequestViewModel) x, (PersonRequestViewModel) y)
+				       : new HandlePersonRequestHolder((PersonRequestViewModel) y, (PersonRequestViewModel) x);
 		}
 
-		private static int compareLastUpdatedDisplay(SortDescription sort, object x, object y)
+		private static int compareRequestedDate(IPersonRequestViewModel x, IPersonRequestViewModel y)
 		{
-			var xLastUpdated = ((PersonRequestViewModel) x).LastUpdated;
-			var yLastUpdated = ((PersonRequestViewModel) y).LastUpdated;
-
-			return sort.Direction == ListSortDirection.Ascending
-				       ? xLastUpdated.CompareTo(yLastUpdated)
-				       : yLastUpdated.CompareTo(xLastUpdated);
+			var xPeriod = x.PersonRequest.Request.Period;
+			var yPeriod = y.PersonRequest.Request.Period;
+			
+			return xPeriod.StartDateTime.Date.Equals(yPeriod.StartDateTime.Date) 
+				? xPeriod.EndDateTime.CompareTo(yPeriod.EndDateTime) 
+				: xPeriod.CompareTo(yPeriod);
 		}
 
-		private static int compareString(SortDescription sort, string xString, object yValue)
+		private static int compareLastUpdatedDisplay(IPersonRequestViewModel x, IPersonRequestViewModel y)
 		{
-			return sort.Direction == ListSortDirection.Ascending
-				       ? String.Compare(xString, (string) yValue, StringComparison.CurrentCulture)
-				       : String.Compare((string) yValue, xString, StringComparison.CurrentCulture);
+			return x.LastUpdated.CompareTo(y.LastUpdated);
 		}
 
-		private static int compareInt(SortDescription sort, object xValue, object yValue)
+		private static int compareString(string xString, string yString)
 		{
-			return sort.Direction == ListSortDirection.Ascending
-				       ? ((int) xValue).CompareTo((int) yValue)
-				       : ((int) yValue).CompareTo((int) xValue);
+			return String.Compare(xString, yString, StringComparison.CurrentCulture);
 		}
 
-		private static int compareBool(SortDescription sort, object xValue, object yValue)
+		private static int compareInt(int xInt, int yInt)
 		{
-			return sort.Direction == ListSortDirection.Ascending
-				       ? ((bool) xValue).CompareTo((bool) yValue)
-				       : ((bool) yValue).CompareTo((bool) xValue);
+			return xInt.CompareTo(yInt);
+		}
+
+		private static int compareBool(bool xBool, bool yBool)
+		{
+			return xBool.CompareTo(yBool);
 		}
 	}
 }
