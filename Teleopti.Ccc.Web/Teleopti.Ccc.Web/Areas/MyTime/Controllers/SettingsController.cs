@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -22,8 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPersonPersister _personPersister;
 		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
 		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 
-		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword, IPersonPersister personPersister, IPersonalSettingDataRepository personalSettingDataRepository, ICurrentDataSource currentDataSource)
+		public SettingsController(IMappingEngine mapper, 
+								  ILoggedOnUser loggedOnUser, 
+								  IModifyPassword modifyPassword, 
+								  IPersonPersister personPersister, 
+								  IPersonalSettingDataRepository personalSettingDataRepository, 
+								  ICurrentDataSource currentDataSource, 
+								  ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
@@ -31,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_personPersister = personPersister;
 			_personalSettingDataRepository = personalSettingDataRepository;
 			_currentDataSource = currentDataSource;
+			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
 		}
 
 		[EnsureInPortal]
@@ -38,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public ViewResult Index()
 		{
-			return View("RegionalSettingsPartial");
+			return View("RegionalSettingsPartial", _settingsPermissionViewModelFactory.CreateViewModel());
 		}
 
 		[EnsureInPortal]

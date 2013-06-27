@@ -1,6 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
-@model SettingsViewModel
+@model SettingsPermissionViewModel
 @{
 	Layout = null;
 }
@@ -19,7 +19,7 @@
 		</select>
 	</div>
     <br/>
-    @if (Model.SettingsPermission.ShareCalendarPermission)
+    @if (Model.ShareCalendarPermission)
     {
         <div class="clearfix">
             <label>@Resources.ShareMyCalendar</label>
