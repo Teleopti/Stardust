@@ -182,7 +182,7 @@
 	<!--Exec Command="copy &quot;$(LocalWikiDependencies)\web.config&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC\web.config&quot;"/ -->
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\web.config&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com\web.config&quot;"/>
 	<!--Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC&quot;"/-->
-	<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com&quot;"/>
+	<Exec Command="&quot;$(LocalWikiDeployment)\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(LocalWikiDeployment)\$(SevenZipFileName).exe&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiBatchFiles)\InstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\InstallWiki.bat&quot;"/>
     <Exec Command="copy &quot;$(LocalWikiBatchFiles)\UninstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\UninstallWiki.bat&quot;"/>
