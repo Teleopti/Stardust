@@ -20,15 +20,11 @@ set DeploymentArchive=\\hebe\Installation\localWiki\archive\%mydate%_%mytime%
 
 ::archive previous wiki
 if exist "%DeploymentArchive%" rmdir "%DeploymentArchive%" /S /Q
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 mkdir "%DeploymentArchive%"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 move "%Deployment%\*.*" "%DeploymentArchive%"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::create working dir
 if not exist "%WorkingFolder%" mkdir "%WorkingFolder%"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::copy needed tools to working folder
 copy "%Dependencies%\7za.exe" "%WorkingFolder%\"
@@ -38,8 +34,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::crawle the website and export to working folder
 ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
-"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
-SET wgetError=%ERRORLEVEL%
+::"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
+SET /A wgetError=%ERRORLEVEL%
 IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
 ::add special web.config to the folder
@@ -48,8 +44,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::zip static web files into the deployment folder
 "%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%WebSite%"
-SET 7zaError=%ERRORLEVEL%
-IF %7zaError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
+SET /A zipError=%ERRORLEVEL%
+IF %zipError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 ::deploy needed files for local setup of wiki
 copy "%Dependencies%\7za.exe" "%Deployment%\"
@@ -75,6 +71,5 @@ GOTO :Finish
 
 :Finish
 ::Exit with errorlevel to MsBuild
-ECHO %ERRORLEV%
-PAUSE
+ECHO ErrorLevel is: %ERRORLEV%
 exit %ERRORLEV%
