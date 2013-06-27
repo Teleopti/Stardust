@@ -177,10 +177,12 @@
   <Target Name="BuildLocalWiki">
 	<Message Text="Buliding local wiki" />
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\7za.exe&quot; &quot;$(LocalWikiDeployment)\7za.exe&quot;"/>
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(LocalWikiInstallation)\wget.exe&quot;"/>
-	<Exec Command="&quot;$(LocalWikiInstallation)\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
-	<Exec Command="copy &quot;$(LocalWikiBatchFiles)\web.config&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC\web.config&quot;"/>
-	<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC&quot;"/>
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(LocalWikiDeployment)\wget.exe&quot;"/>
+	<Exec Command="&quot;$(LocalWikiDeployment)\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
+	<!--Exec Command="copy &quot;$(LocalWikiDependencies)\web.config&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC\web.config&quot;"/ -->
+	<Exec Command="copy &quot;$(LocalWikiDependencies)\web.config&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com\web.config&quot;"/>
+	<!--Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\wiki.teleopti.com\TeleoptiCCC&quot;"/-->
+	<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\7za.exe&quot; a &quot;$(LocalWikiDeployment)\wiki.teleopti.com.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiDependencies)\$(SevenZipFileName).exe&quot; &quot;$(LocalWikiDeployment)\$(SevenZipFileName).exe&quot;"/>
 	<Exec Command="copy &quot;$(LocalWikiBatchFiles)\InstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\InstallWiki.bat&quot;"/>
     <Exec Command="copy &quot;$(LocalWikiBatchFiles)\UninstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\UninstallWiki.bat&quot;"/>
