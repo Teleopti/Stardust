@@ -10,20 +10,23 @@
 			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.SetMessageCount);
 		});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
-			notifyText: '@Resources.YourScheduleTheDATEHasChanged',
-			originalDocumentTitle: document.title,
-			baseUrl: '@Url.Content("~/")',
-			webNotification: function () {
-				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+				notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+				originalDocumentTitle: document.title,
+				baseUrl: '@Url.Content("~/")',
+				webNotification: function () {
+					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+				},
+				header: '@Resources.Teleopti'
 			},
-			header: '@Resources.Teleopti'
-		},
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 			});
 	});
 </script>
+
+	
+
 <div class="asm-outer-canvas ui-corner-all">
 	<div class="asm-schedule-canvas ui-corner-all">
 		<div class="asm-time-marker">
@@ -47,10 +50,12 @@
 			<div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString">
 			</div>	
 			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, click : openMessages">
-				<span class="icon mail-small" style="margin-right: 13px; position: relative">
-					<span style="margin-right: -6px; position: relative" data-bind="text: unreadMessageCount" id="message-count"></span>
+				<span class="icon-envelope" style="margin-right: 13px; position: relative; margin-top: 0">
+					<span style="margin-right: -6px; position: relative" data-bind="text: unreadMessageCount" id="message-count" ></span>
 				</span>
 			</div>			
 		</div>
 	</div>
+	
+	
 </div>

@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
 	var addTextRequestTooltip = null;
 	var scheduleHeight = 668;
-	var timeLineOffset = 198;
+	var timeLineOffset = 234;
 	var pixelToDisplayAll = 33;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -372,7 +372,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var timelineHeight = 668;
-		var timelineOffset = 203;
+		var timelineOffset = 245;
 		var timeindicatorHeight = 2;
 
 		var hours = theDate.getHours();

@@ -96,6 +96,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void update()
         {
+	        timerRefresh.Enabled = false;
+
             if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod && _dateIsSelected)
             {
                 updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
@@ -115,6 +117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
             {
+				timerRefresh.Enabled = true;
                 updatePersonInfo(_selectedPerson);
                 return;
             }
@@ -753,6 +756,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (person == null) return;
             var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
             item.Font = item.Font.ChangeToBold();
+	        var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             listViewPerson.Items.Add(item);
             createAndAddItem(listViewPerson, Resources.Email, person.Email ?? "", 2);
             createAndAddItem(listViewPerson, Resources.EmployeeNo, person.EmploymentNumber ?? "", 2);
@@ -763,10 +767,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             //{
             //    createAndAddItem(listViewPerson, applicationRole.Name, "", 2);
             //}
+
             createAndAddItem(listViewPerson, Resources.WorkflowControlSet,
                              person.WorkflowControlSet != null ? person.WorkflowControlSet.Name : "", 2);
-            
-            createAndAddItem(listViewPerson, Resources.TimeZone, person.PermissionInformation.DefaultTimeZone().DisplayName, 2);
+
+			createAndAddItem(listViewPerson, Resources.TimeZone, timeZoneInfo.DisplayName, 2);
+			createAndAddItem(listViewPerson, Resources.LocalTime, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo).ToShortTimeString(), 2);
             createAndAddItem(listViewPerson, Resources.WorkWeekStartsAt, DayOfWeekDisplay.ListOfDayOfWeek.SingleOrDefault(day => day.DayOfWeek == person.FirstDayOfWeek).DisplayName, 2);
             createAndAddItem(listViewPerson, Resources.TerminalDate,
                              person.TerminalDate != null ? person.TerminalDate.Value.ToShortDateString(CultureInfo.CurrentCulture) : "", 2);
@@ -811,6 +817,15 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void AgentInfo_FromLoad(object sender, EventArgs e)
         {
             initializeFairnessTab();
+	        timerRefresh.Interval = 2000;
         }
+
+		private void timerRefreshTick(object sender, EventArgs e)
+		{
+			if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
+			{
+				updatePersonInfo(_selectedPerson);
+			}
+		}
     }
 }

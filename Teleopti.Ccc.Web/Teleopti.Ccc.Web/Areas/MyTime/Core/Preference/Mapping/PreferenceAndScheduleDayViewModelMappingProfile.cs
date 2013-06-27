@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						if (assignments.Count > 0)
 						{
 							return (from personAssignment in assignments
-							        from personalShift in personAssignment.PersonalShiftCollection
-							        from layer in personalShift.LayerCollection
+							        from layer in personAssignment.PersonalLayers
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =

@@ -30,8 +30,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				foreach (var layer in layers)
 				{
-					_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer, _person));
+					Add(layer, visualLayerFactory);
 				}
+			}
+			public void Add(ILayer<IActivity> layer, IVisualLayerFactory visualLayerFactory)
+			{
+				_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer, _person));
 			}
 
         public void Add(IVisualLayer layer)

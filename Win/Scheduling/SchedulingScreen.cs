@@ -722,6 +722,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Refresh();
 				drawSkillGrid();	
 			}
+			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
+			{
+				var options = new PasteOptions();
+				options.PersonalShifts = true;
+				_scheduleView.GridClipboardPaste(options, _undoRedo);
+				checkCutMode();
+			}
 			if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
 			{
 				undoKeyDown();
@@ -5873,6 +5880,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_backgroundWorkerOptimization.DoWork -= _backgroundWorkerOptimization_DoWork;
 				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
 			}
+
+			if (toolStripComboBoxExFilterDays != null)
+				toolStripComboBoxExFilterDays.SelectedIndexChanged -= toolStripComboBoxExFilterDays_SelectedIndexChanged;
+
+			if (toolStripComboBoxAutoTag != null)
+				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTag_SelectedIndexChanged;
 
 			if (SchedulerState != null && SchedulerState.Schedules != null)
 				SchedulerState.Schedules.PartModified -= _schedules_PartModified;

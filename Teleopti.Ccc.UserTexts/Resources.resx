@@ -11476,6 +11476,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Denied</value>
     <comment>Translation for enum status Autodenied for requests</comment>
   </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Local time</value>
+    <comment>Agents local time</comment>
+  </data>
   <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
     <value>Add Overtime Availability...</value>
     <comment>Add overtime availability on a day</comment>

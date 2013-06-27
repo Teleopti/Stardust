@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				var layers = new List<IMainShiftLayer>(PersonAssignment.MainShiftLayers);
+				var layers = new List<IMainShiftLayer>(PersonAssignment.MainLayers);
 				layers.Add((IMainShiftLayer) layers[0].NoneEntityClone());
 				PersonAssignment.SetMainShiftLayers(layers, PersonAssignment.ShiftCategory);
 				uow.PersistAll();

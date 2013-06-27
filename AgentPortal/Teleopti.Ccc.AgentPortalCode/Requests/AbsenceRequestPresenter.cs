@@ -216,8 +216,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
             }
 
             if (_personRequest.RequestStatus == RequestStatusDto.Approved 
-				|| _personRequest.RequestStatus == RequestStatusDto.Denied
-				|| _personRequest.RequestStatus == RequestStatusDto.Autodenied)
+				|| _personRequest.RequestStatus == RequestStatusDto.Denied)
                 _absenceRequestView.SetFormReadOnly(true);
         }
 

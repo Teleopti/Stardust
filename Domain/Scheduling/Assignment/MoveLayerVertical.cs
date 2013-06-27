@@ -13,11 +13,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftLayers);
-				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
 				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
+				return;
+			}
+
+			var pLayer = layer as IPersonalShiftLayer;
+			if (pLayer != null)
+			{
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var index = pLayer.OrderIndex;
+				oldLayers.RemoveAt(index);
+				oldLayers.Insert(index-1, pLayer);
+				personAssignment.ClearPersonalLayers();
+				foreach (var newPersonalLayer in oldLayers)
+				{
+					personAssignment.AddPersonalLayer(newPersonalLayer.Payload, newPersonalLayer.Period);
+				}
+				return;
 			}
 
 			//no need to cast later when agentday is done
@@ -35,11 +51,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainShiftLayers);
-				var indexOfMainShiftLayer = oldLayers.IndexOf(msLayer);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);
 				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
+				return;
+			}
+
+			var pLayer = layer as IPersonalShiftLayer;
+			if (pLayer != null)
+			{
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var index = pLayer.OrderIndex;
+				oldLayers.RemoveAt(index);
+				oldLayers.Insert(index +1, pLayer);
+				personAssignment.ClearPersonalLayers();
+				foreach (var newPersonalLayer in oldLayers)
+				{
+					personAssignment.AddPersonalLayer(newPersonalLayer.Payload, newPersonalLayer.Period);
+				}
+				return;
 			}
 
 			//no need to cast later when agentday is done

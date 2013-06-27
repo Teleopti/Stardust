@@ -223,8 +223,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Creates and adds personal activity
         /// </summary>
-        /// <param name="layer"></param>
-        void CreateAndAddPersonalActivity(IPersonalShiftActivityLayer layer);
+        void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period);
 
         /// <summary>
         /// Creates the and add note.

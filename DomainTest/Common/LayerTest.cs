@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -120,19 +121,17 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOrderIndexWorks()
         {
-	        var shift = PersonalShiftFactory.CreatePersonalShift(fakeActivity, new DateTimePeriod());
-			shift.LayerCollection.Clear();
-            var layer1 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
-			var layer2 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
 
-            shift.LayerCollection.Add(layer1);
-            shift.LayerCollection.Add(layer2);
-            Assert.AreEqual(0, layer1.OrderIndex);
-            Assert.AreEqual(1, layer2.OrderIndex);
-            
-            
-
-        }
+						var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
+						var shift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
+																																			new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+																																			defSet,
+																																			new PersonAssignment(new Person(), new Scenario("d"),
+																																													 new DateOnly(2000, 1, 1)));
+						var layer2 = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1), defSet);
+						shift.LayerCollection.Add(layer2);
+						Assert.AreEqual(1, layer2.OrderIndex);
+				}
 
         [Test]
         public void CanSetProperties()

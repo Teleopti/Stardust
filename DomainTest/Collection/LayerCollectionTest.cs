@@ -1,8 +1,10 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -28,11 +30,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyParentWorksWhenLayerIsAdded()
         {
-	        var dummyShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("hopp"),
-	                                                                  new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+	        var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
+	        var dummyShift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
+	                                                                  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+	                                                                  defSet,
+	                                                                  new PersonAssignment(new Person(), new Scenario("d"),
+	                                                                                       new DateOnly(2000, 1, 1)));
             var actLay =
-                new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
-                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+                new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
+                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1),
+																												defSet);
             dummyShift.LayerCollection.Add(actLay);
             Assert.AreSame(dummyShift, actLay.Parent);
         }
