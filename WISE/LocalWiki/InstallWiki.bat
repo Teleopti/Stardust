@@ -1,6 +1,7 @@
 @ECHO OFF
 
 SET ROOTDIR=%~dp0
+SET ROOTDIR=%ROOTDIR:~0,-1%
 
 :: Get installpath from registry
 SETLOCAL ENABLEEXTENSIONS
@@ -16,8 +17,12 @@ IF NOT DEFINED VALUENAME (
 SET /P INSTALLDIR="Please enter Installpath (eg C:\Program Files(x86)\Teleopti\)"
 )
 
+::get the .zip-file name
+dir /B "%ROOTDIR%\*.zip > %temp%\zipFileName.txt
+set /p zipFileName= <%temp%\zipFileName.txt
+
 :: Unzip wikifiles to Local folder
-7za.exe x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%TeleoptiWiki.zip"
+"%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%\%zipFileName%.zip"
 
 :: Deploy virtual directory to IIS
 %SYSTEMROOT%\system32\inetsrv\APPCMD add vdir /app.name:"Default Web Site/" /path:/TeleoptiCCC/LocalWiki /physicalPath:"%INSTALLPATH%TeleoptiCCC\LocalWiki\wiki.teleopti.com\"
