@@ -29,7 +29,7 @@
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<LocalWikiDependencies>\\hebe\Installation\Dependencies\localWiki</LocalWikiDependencies>
-		<LocalWikiDeployment>\\hebe\Installation\localWiki<\LocalWikiDeploymetn>
+		<LocalWikiDeployment>\\hebe\Installation\localWiki</LocalWikiDeployment>
 		<LocalWikiBatchFiles>$(CCNetWorkingDirectory)\WISE\LocalWiki</LocalWikiBatchFiles>
 	</PropertyGroup>
 	
