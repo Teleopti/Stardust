@@ -1,7 +1,9 @@
 using System;
-using System.Text.RegularExpressions;
+using System.Text;
 using Coypu;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -10,13 +12,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		private readonly BrowserSession _browser;
 		private Options _options;
 		private readonly SessionConfiguration _configuration;
-		private readonly JQueryInteractions _jquery;
 
 		public CoypuBrowserInteractions(BrowserSession browser, SessionConfiguration configuration)
 		{
 			_browser = browser;
 			_configuration = configuration;
-			_jquery = new JQueryInteractions(new JavascriptInteractions(Javascript));
 		}
 
 		public void SetTimeout(TimeSpan timeout)
@@ -37,12 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public object Javascript(string javascript)
 		{
-			string result = null;
-			_browser.RetryUntilTimeout(() =>
-				{
-					result = _browser.ExecuteScript(javascript);
-				}, options());
-			return result;
+			return retryJavascript(javascript);
 		}
 
 		public void GoToWaitForCompleted(string uri)
@@ -55,14 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.Visit(uri);
 		}
 
-		private Options options()
-		{
-			return _options ?? _configuration;
-		}
-
 		public void Click(string selector)
 		{
-			_jquery.Click(selector);
+			var script = JQueryScript.WhenFoundOrThrow(selector, "{0}.click();");
+			retryJavascript(script);
 		}
 
 		public void AssertExists(string selector)
@@ -72,35 +63,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
-			Assert.That(_browser.HasCss(existsSelector));
-			Assert.That(_browser.HasNoCss(notExistsSelector));
+			AssertExists(existsSelector);
+			Assert.That(_browser.HasNoJQueryCss(notExistsSelector, options()));
 		}
 
 		public void AssertContains(string selector, string text)
 		{
-			Assert.That(_browser.FindCss(selector).HasContent(text));
+			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
+			browserAssert(() => _browser.ExecuteScript(script), Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertNotContains(string selector, string text)
 		{
-			Assert.That(_browser.FindCss(selector).HasNoContent(text));
+			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
+			browserAssert(() => _browser.ExecuteScript(script), Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void AssertUrlContains(string url)
 		{
-			Assert.That(_browser.Location.ToString(), Is.StringContaining(url));
+			browserAssert(() => _browser.Location.ToString(), Is.StringContaining(url), "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
-			Assert.That(_browser.Location.ToString(), Is.StringContaining(urlContains));
-			Assert.That(_browser.Location.ToString(), Is.Not.StringContaining(urlNotContains));
+			AssertUrlContains(urlContains);
+			browserAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			var value = Javascript(javascript);
-			Assert.That(value, Is.StringContaining(text));
+			browserAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
 		public void DumpInfo(Action<string> writer)
@@ -118,5 +110,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			writer(_browser.Location.ToString());
 		}
 
+
+
+
+		private Options options()
+		{
+			return _options ?? _configuration;
+		}
+
+		private string retryJavascript(string javascript)
+		{
+			string result = null;
+			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
+			return result;
+		}
+
+		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
+		{
+			EventualAssert.That(value, constraint, () => buildMessage(message), new SeleniumExceptionCatcher());
+		}
+
+		private string buildMessage(string message)
+		{
+			var builder = new StringBuilder();
+			builder.Append(message);
+			builder.Append(" ");
+			DumpInfo(s => builder.Append(s));
+			return builder.ToString();
+		}
 	}
 }

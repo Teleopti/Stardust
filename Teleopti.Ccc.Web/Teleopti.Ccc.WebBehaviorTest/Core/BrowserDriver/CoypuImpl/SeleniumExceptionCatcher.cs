@@ -16,6 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			{
 				return failureCallback.Invoke(ex);
 			}
+			// occurs on js script error, when jquery $ is not initialized for example
+			catch (InvalidOperationException ex)
+			{
+				return failureCallback.Invoke(ex);
+			}
 		}
 
 		public void Action(Action action, Action<Exception> failureCallback)
@@ -26,6 +31,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			}
 			// occurs on js "throw", and that is used with interactions implemented using jquery
 			catch (WebDriverException ex)
+			{
+				failureCallback.Invoke(ex);
+			}
+			// occurs on js script error, when jquery $ is not initialized for example
+			catch (InvalidOperationException ex)
 			{
 				failureCallback.Invoke(ex);
 			}
