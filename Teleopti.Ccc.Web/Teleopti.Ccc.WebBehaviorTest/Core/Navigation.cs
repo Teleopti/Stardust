@@ -319,19 +319,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		public void Before(GotoArgs args)
 		{
-			WaitUntilLoadingOverlayIsHidden();
+			//WaitUntilLoadingOverlayIsHidden();
 		}
 
 		public void After(GotoArgs args)
 		{
-			WaitUntilLoadingOverlayIsHidden();
+			//WaitUntilLoadingOverlayIsHidden();
 		}
 
 		private static void WaitUntilLoadingOverlayIsHidden()
 		{
-			var loading = Browser.Current.Div("loading");
-			if (!loading.Exists) return;
-			loading.WaitUntilHidden();
+			//using (Browser.TimeoutScope(TimeSpan.FromSeconds(3)))
+			//{
+			//	Browser.Interactions.AssertExists("#loading");
+			//	Browser.Interactions.AssertExists("#loading:hidden");
+			//}
+
+			//var loading = Browser.Current.Div("loading");
+			//if (!loading.Exists) return;
+			//loading.WaitUntilHidden();
 		}
 
 	}
