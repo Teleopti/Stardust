@@ -2,7 +2,7 @@ using System;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
+namespace Teleopti.Ccc.WebBehaviorTest.Core.Legacy
 {
 	public static class EventualElementActions
 	{

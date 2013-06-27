@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using List = WatiN.Core.List;

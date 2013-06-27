@@ -1,11 +1,10 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class EventualAssert
 	{

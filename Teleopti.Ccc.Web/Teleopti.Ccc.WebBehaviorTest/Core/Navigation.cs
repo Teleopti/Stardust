@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;

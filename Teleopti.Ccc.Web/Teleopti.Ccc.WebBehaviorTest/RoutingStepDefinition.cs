@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {

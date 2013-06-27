@@ -2,7 +2,7 @@
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE

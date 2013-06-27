@@ -188,8 +188,8 @@
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\Robustness\EventualAssert.cs" />
-    <Compile Include="Core\Robustness\EventualElementActions.cs" />
+    <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
+    <Compile Include="Core\Legacy\EventualElementActions.cs" />
     <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
@@ -206,7 +206,7 @@
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="Core\Robustness\QuicklyFind.cs" />
+    <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="Data\Setups\Specific\ExistingShiftTradeRequest.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
@@ -462,7 +462,7 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Robustness\EventualElementWaits.cs" />
+    <Compile Include="Core\Legacy\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
@@ -500,7 +500,7 @@
     <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
     <Compile Include="Pages\Common\IDeleteButton.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
-    <Compile Include="Core\Extensions\ElementExtensions.cs" />
+    <Compile Include="Core\Legacy\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />

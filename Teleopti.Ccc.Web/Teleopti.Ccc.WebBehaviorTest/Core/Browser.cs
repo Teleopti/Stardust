@@ -3,7 +3,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 using log4net;
 

@@ -1,6 +1,6 @@
 using System;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
