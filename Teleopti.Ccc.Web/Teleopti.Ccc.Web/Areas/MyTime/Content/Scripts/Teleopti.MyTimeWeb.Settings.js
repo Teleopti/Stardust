@@ -28,6 +28,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	        self.CalendarSharingActive(true);
 	        _activateCalendarLink(true);
 	    };
+	    self.DeactivateCalendarSharing = function() {
+	    	self.CalendarSharingActive(false);
+	    	_activateCalendarLink(false);
+	    };
 
         self.selectedUiCulture.subscribe(function(newValue) {
             if (!self.avoidReload)

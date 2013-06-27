@@ -21,10 +21,15 @@
     <br/>
     @if (Model.SettingsPermission.ShareCalendarPermission)
     {
-        <div class="clearfix">
-            <label>@Resources.ShareMyCalendar</label>
-            <a class="btn btn-large" data-bind="css: { active: CalendarSharingActive }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</a>
-            <label data-bind="text: CalendarUrl"></label>
-        </div>
+	    <div class="clearfix">
+		    <div class="btn-group">
+			    <a class="btn btn-large" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</a>
+			    <a class="btn btn-large" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</a>
+		    </div>
+		    <!-- ko if: CalendarSharingActive() -->
+		    <label>@Resources.ShareMyCalendarHint</label>
+		    <label data-bind="text: CalendarUrl"></label>
+		    <!-- /ko -->
+	    </div>
     }
 </div>

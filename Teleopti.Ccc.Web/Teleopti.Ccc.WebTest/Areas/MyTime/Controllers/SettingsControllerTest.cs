@@ -176,5 +176,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Share/" + dataName + "/" + id);
 			}
 		}
+
+		[Test]
+		public void ShouldDeactivateCalendarLink()
+		{
+			var person = new Person();
+			var id = Guid.NewGuid();
+			person.SetId(id);
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
+			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/ActivateCalendarLink"));
+			var settings = new CalendarLinkSettings();
+			var currentDatasource = MockRepository.GenerateMock<ICurrentDataSource>();
+			const string dataName = "TestRepsitory";
+			currentDatasource.Stub(x => x.CurrentName()).Return(dataName);
+			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
+			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource))
+			{
+				var context = new FakeHttpContext("/");
+				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+				context.SetRequest(request);
+
+				var result = target.ActivateCalendarLink(false).Data as string;
+				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
+				Assert.IsFalse(settings.IsActive);
+				Assert.AreEqual(result, string.Empty);
+			}
+		}
 	}
 }

@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = isActive;
 			_personalSettingDataRepository.PersistSettingValue(setting);
+			if (!isActive)
+				return Json(string.Empty);
 			var requestUrl = Request.Url.OriginalString;
 			var dataSourceName = _currentDataSource.CurrentName();
 			var url =
