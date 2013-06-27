@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(AuthenticationController),
 																		typeof(AuthenticationApiController),
 																		typeof(ApplicationAuthenticationApiController),
-																		typeof(CalendarController),
+																		typeof(ShareCalendarController),
 																		typeof(TestController),
 																		typeof(OpenIdController)
 			                                                    	}));

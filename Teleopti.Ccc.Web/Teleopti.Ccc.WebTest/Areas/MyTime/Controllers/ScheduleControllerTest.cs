@@ -1,42 +1,17 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Dynamic;
+﻿using System.Collections.Specialized;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture]
-	public class CalendarControllerTest
-	{
-		[Test]
-		public void ShouldGetCalendarForPerson()
-		{
-			var personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			var deserializer = MockRepository.GenerateMock<IJsonDeserializer<ExpandoObject>>();
-			using (var target = new CalendarController(repositoryFactory, dataSourcesProvider, deserializer))
-			{
-				//var result = target.Get(Guid.NewGuid());
-				//result.Content.
-				//var result = target.Index() as RedirectToRouteResult;
-				//result.RouteValues["action"].Should().Be.EqualTo("Week");
-			}
-		}
-	}
-
 	[TestFixture]
 	public class ScheduleControllerTest
 	{
