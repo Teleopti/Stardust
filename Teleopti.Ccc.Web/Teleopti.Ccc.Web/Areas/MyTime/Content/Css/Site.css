@@ -781,6 +781,13 @@ Personal drop down menu
 End personal drop down menu
 */
 
+.fixed-non-responsive.container{
+	width: 965px;
+}
+
+.visibility {
+	overflow: visible !important;
+}
 
   body {
     padding-top: 40px;
