@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    void InitializeRows();
         ICollection<DayLayerModel> Models { get; }
         void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period);
+	    void SetCurrentSortDescription(SortDescription sortDescription);
     }
 }

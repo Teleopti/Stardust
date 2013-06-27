@@ -76,6 +76,11 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 		        };
         }
 
+		public void SetSortDescription(SortDescription sortDescription)
+		{
+			DayLayerViewModel.SetCurrentSortDescription(sortDescription);
+		}
+
 		private void notifyPropertyChanged(string property)
 		{
 			var handler = PropertyChanged;
@@ -99,10 +104,11 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
             model.TimelineModel.Period = period;
             model.ZoomWidth = (period.ElapsedTime().TotalHours*75);
         }
-        
+
         //Just for fixing mem leaks in WPF
 #pragma warning disable 0067
         public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore 0067
+
     }
 }

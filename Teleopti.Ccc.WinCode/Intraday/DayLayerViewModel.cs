@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private IDispatcherWrapper _dispatcherWrapper;
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
+	    private readonly DayLayerModelComparer _customComparer;
 
-		public IEditableCollectionView ModelEditable { get; private set; }
+		public ListCollectionView ModelEditable { get; private set; }
 
 		public ICollection<DayLayerModel> Models
 		{
@@ -42,7 +43,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder = rtaStateHolder;
 			if (rtaStateHolder != null)
 				_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
-	        ModelEditable = CollectionViewSource.GetDefaultView(Models) as IEditableCollectionView;
+			ModelEditable = CollectionViewSource.GetDefaultView(Models) as ListCollectionView;
+		    
+			if (ModelEditable == null) return;
+		    _customComparer = new DayLayerModelComparer();
+		    ModelEditable.CustomSort = _customComparer;
         }
 		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -69,7 +74,16 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified += OnScheduleModified;
         }
 
-        public void OnScheduleModified(object sender, ModifyEventArgs e)
+	    public void SetCurrentSortDescription(SortDescription sortDescription)
+	    {
+		    if (_customComparer.SortDescriptions.Any(s => s.PropertyName == sortDescription.PropertyName))
+			    sortDescription.Direction = sortDescription.Direction == ListSortDirection.Ascending
+				    ? ListSortDirection.Descending
+				    : ListSortDirection.Ascending;
+		    _customComparer.SortDescriptions = new List<SortDescription> {sortDescription};
+	    }
+
+	    public void OnScheduleModified(object sender, ModifyEventArgs e)
         {
             var model = Models.FirstOrDefault(m => m.Person.Equals(e.ModifiedPerson));
 	        if (model != null)

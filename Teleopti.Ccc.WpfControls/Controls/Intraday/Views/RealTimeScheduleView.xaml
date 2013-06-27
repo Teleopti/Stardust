@@ -77,7 +77,8 @@
                        VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
 					   x:Name="RealTimeDataGrid"
-					   x:FieldModifier="private">
+					   x:FieldModifier="private"
+						   Sorting="RealTimeDataGrid_OnSorting">
 			
             <!--AgentName Column-->
             <controls:DataGrid.Columns>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
@@ -239,6 +240,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			IActualAgentState actualAgentState;
 			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out actualAgentState)).Return(false);
 			target.InitializeRows();
+		}
+
+		[Test]
+		public void ShouldSetSortDirection()
+		{
+			target.SetCurrentSortDescription(new SortDescription("propertyName", ListSortDirection.Ascending));
 		}
     }
 
