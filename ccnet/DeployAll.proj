@@ -28,9 +28,6 @@
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
-		<LocalWikiDependencies>\\hebe\Installation\Dependencies\localWiki</LocalWikiDependencies>
-		<LocalWikiDeployment>\\hebe\Installation\localWiki</LocalWikiDeployment>
-		<LocalWikiInstallation>$(CCNetWorkingDirectory)\WISE\LocalWiki\</LocalWikiInstallation>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -174,15 +171,23 @@
 	<Exec Command="rd &quot;$(MSIPath)&quot; /Q /S"/>
   </Target>
   
-  <Target Name="BuildLocalWiki">
-	<Message Text="Buliding local wiki" />
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\7za.exe&quot; &quot;$(LocalWikiDeployment)\7za.exe&quot;"/>
-	<Exec Command="copy &quot;$(LocalWikiDependencies)\wget.exe&quot; &quot;$(LocalWikiInstallation)\wget.exe&quot;"/>
-	<Exec Command="&quot;$(LocalWikiInstallation)\wget.exe&quot; -k -P&quot;$(SharedMSIWorkingFolder)\LocalWiki&quot; -r -R '*Special*' -R '*Help*' -E http://www.goodellgroup.com/tutorial/chapter4.html"/>
-	<Exec Command="&quot;$(LocalWikiDeployment)\7za.exe&quot; a &quot;$(LocalWikiDeployment)\TeleoptiWiki.zip&quot; &quot;$(SharedMSIWorkingFolder)\LocalWiki\www.goodellgroup.com&quot;"/>
-	<Exec Command="copy &quot;$(LocalWikiInstallation)\InstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\InstallWiki.bat&quot;" />
-	<Exec Command="copy &quot;$(LocalWikiInstallation)\UninstallWiki.bat&quot; &quot;$(LocalWikiDeployment)\UninstallWiki.bat&quot;" />
-  </Target>
+ 
+	<Target Name="BuildLocalWiki">
+		<Message Text="Buliding local wiki ... " />
+	
+		<Exec Command="$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Message Text="Buliding local wiki. Done" />		
+
+		<Error Text="Error while executing: $(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat" Condition="'$(ErrorCode)' != '0'" />
+		<OnError ExecuteTargets="MessageErrorHandler"/>
+	</Target>
+
+	<Target Name="MessageErrorHandler">
+		<Message Text="An error has occurred while building localWiki. Please run batch file manually to find out what's wrong"/>
+	</Target>
 			
 	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
 		<ItemGroup>
