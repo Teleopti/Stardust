@@ -1047,7 +1047,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			    new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 			                           _container.Resolve<IRestrictionAggregator>(),
 			                           _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
-									   _container.Resolve<IWorkShiftSelector>());
+									   _container.Resolve<IWorkShiftSelector>(),
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
 
 		    var advanceSchedulingService =
 			    new TeamBlockSchedulingService(schedulingOptions,
