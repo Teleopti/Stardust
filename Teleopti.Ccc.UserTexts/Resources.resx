@@ -11471,6 +11471,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="MaxParallelTasks" xml:space="preserve">
     <value>Max Parallel Tasks:</value>
     <comment>used in Chat skills</comment>
+  </data>
   <data name="ViewActiveAgents" xml:space="preserve">
     <value>View active agents</value>
     <comment>permission</comment>
@@ -11486,6 +11487,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="AverageChats" xml:space="preserve">
     <value>Average chats</value>
+  </data>
   <data name="RequestStatusDtoAutodenied" xml:space="preserve">
     <value>Denied</value>
     <comment>Translation for enum status Autodenied for requests</comment>
@@ -11510,6 +11512,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
     <value>Previously saved overtime availability:</value>
+  </data>
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
   </data>
