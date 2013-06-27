@@ -1028,8 +1028,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return retList;
         }
 
-									   _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+
         
         #endregion
         
