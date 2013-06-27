@@ -73,7 +73,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 		private static int compareDateTime(DateTime xDateTime, DateTime yDateTime)
 		{
-			return xDateTime.CompareTo(yDateTime);
+			var xTimeSpan = new TimeSpan(xDateTime.Ticks);
+			var yTimeSpan = new TimeSpan(yDateTime.Ticks);
+			return xTimeSpan.TotalSeconds.CompareTo(yTimeSpan.TotalSeconds);
 		}
 
 		private static int compareString(string xString, string yString)
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			if (string.IsNullOrEmpty(yString))
 				return -1;
 			
-			return String.Compare(xString, yString, StringComparison.Ordinal);
+			return String.Compare(xString, yString, StringComparison.CurrentCulture);
 		}
 	}
 }
