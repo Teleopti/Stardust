@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 
             _target = new ActivityDivider();
+			
         }
 
         [Test]

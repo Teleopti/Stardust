@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeleteMainShiftShouldGenerateOneStatement()
 		{
-			target.ClearMainShiftLayers();
+			target.ClearMainLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete layer + update personassignment
@@ -40,12 +41,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeletePersonalShiftShouldGenerateOneStatement()
 		{
-			target.RemovePersonalShift(target.PersonalShiftCollection[0]);
+			target.RemoveLayer(target.PersonalLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(2); //delete mainshift + mainshiftlayer
+				.Should().Be.EqualTo(1); //delete personalshiftlayer
 		}
 
 		[Test]
@@ -54,9 +55,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Delete(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(3); //delete pers assignment, ot, ps (no layers)
+				.Should().Be.EqualTo(2); //delete pers assignment, ot,  (no layers)
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(6); //delete pers assignment, ot, ps, otlayer, mslayer, pslayer
+				.Should().Be.EqualTo(5); //delete pers assignment, ot, otlayer, mslayer, pslayer
 		}
 
 

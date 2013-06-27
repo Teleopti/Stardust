@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -50,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_personAssignments = new List<IPersonAssignment> { _personAssignment };
-			var personalShift = _mocks.StrictMock<IPersonalShift>();
 			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var lunch = ActivityFactory.CreateActivity("lunch");
 			lunch.AllowOverwrite = false;
@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, getLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
-			Expect.Call(_personAssignment.PersonalShiftCollection).Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift })).Repeat.AtLeastOnce();
-			Expect.Call(personalShift.LayerCollection).Return(getPersonalLayers(currentDate)).Repeat.AtLeastOnce();
+			Expect.Call(_personAssignment.PersonalLayers).Return(getPersonalLayers(currentDate)).Repeat.AtLeastOnce();
 			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
 			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
@@ -155,8 +154,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
-			Expect.Call(_personAssignment.PersonalShiftCollection)
-			      .Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift>()));
+			Expect.Call(_personAssignment.PersonalLayers)
+			      .Return(Enumerable.Empty<IPersonalShiftLayer>());
 			_mocks.ReplayAll();
 			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(1);
@@ -190,11 +189,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			return lunchLayer;
 		}
 
-		private static LayerCollection<IActivity> getPersonalLayers(DateTime currentDate)
+		private static IEnumerable<IPersonalShiftLayer> getPersonalLayers(DateTime currentDate)
 		{
-			var personalLayers = new LayerCollection<IActivity>
+			var personalLayers = new []
                                      {
-                                         new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("personal"),
+                                         new PersonalShiftLayer(ActivityFactory.CreateActivity("personal"),
                                                                         new DateTimePeriod(currentDate.AddHours(10),
                                                                                            currentDate.AddHours(13)))
                                      };

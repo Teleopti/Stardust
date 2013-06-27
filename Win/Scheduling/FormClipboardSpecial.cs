@@ -11,12 +11,14 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
-        public FormClipboardSpecial(bool deleteMode, bool showRestrictions, PasteOptions pasteOptions)
+        public FormClipboardSpecial(bool deleteMode, bool showRestrictions, PasteOptions pasteOptions, bool showOvertimeAvailability)
         {
             InitializeComponent();
   
             _clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, deleteMode, showRestrictions);
             _clipboardSpecialPresenter.Initialize();
+
+            checkBoxOvertimeAvailability.Visible = showOvertimeAvailability;
         }
 
         public void ShowRestrictions(bool show)
@@ -120,6 +122,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void checkBoxStudentAvailability_CheckedChanged(object sender, EventArgs e)
         {
             _clipboardSpecialPresenter.OnCheckBoxStudentAvailabilityCheckedChange(checkBoxStudentAvailability.Checked);
+        }
+
+        private void checkBoxOvertimeAvailability_CheckedChanged(object sender, EventArgs e)
+        {
+            _clipboardSpecialPresenter.OnCheckBoxOvertimeAvailabilityCheckedChanged(checkBoxOvertimeAvailability.Checked);
         }
     }
 }

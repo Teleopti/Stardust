@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement)
         {
-            return new SkillStaffPeriod(period, task, serviceAgreement,new StaffingCalculatorService());
+            var staffPeriod =  new SkillStaffPeriod(period, task, serviceAgreement,new StaffingCalculatorService());
+			staffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),period.StartDateTime));
+	        return staffPeriod;
         }
 
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement, ISkillDay parent)
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			SkillStaffPeriod skillStaffPeriod =
 				new SkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(lengthInMinutes)), new Task(),
 									 ServiceAgreement.DefaultValues(), skill.SkillType.StaffingCalculatorService);
+			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),dateTime));
 			skillStaffPeriod.CalculateStaff();
 			skillStaffPeriod.IsAvailable = true;
 
@@ -63,6 +66,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             SkillStaffPeriod skillStaffPeriod =
                 new SkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15)), new Task(),
                                      ServiceAgreement.DefaultValues(), skill.SkillType.StaffingCalculatorService);
+			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(skill, dateTime));
             skillStaffPeriod.CalculateStaff();
             skillStaffPeriod.IsAvailable = true;
 

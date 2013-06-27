@@ -23,6 +23,8 @@
 	margin: 2px;
 	height: 52px;
 	display: none; /*hide when loaded, before moved to correct place*/
+	margin-left: -19px;
+	margin-right: -19px;
 }
 
 .asm-layer
@@ -34,6 +36,8 @@
 	height: 12px;
 	top: 3px;
 }
+
+
 
 .asm-timeline-line
 {
@@ -56,8 +60,8 @@
 	padding-left: 2px;
 	padding-right: 3px;
 	position: relative;
-	top: -16px;
-	left: -20px;
+	top: -18px;
+	left: -5px;
 	font-family: verdana;
 	font-size: 8px;
 }
@@ -85,6 +89,20 @@
 	font-family: verdana;
 	font-size: 9px;
 	white-space: nowrap;
+	line-height: 9px;
+	margin-top: 0;
+}
+
+.asm-info-canvas-column-messages 
+{
+	background: #F8F8F8;
+	left: 365px;
+	width: 35px;
+	padding-bottom: 2px;
+	position: absolute;
+	text-align: right;
+	opacity: 0.8;
+	filter: alpha(opacity=80);	
 }
 
 .asm-info-canvas-column-current {
@@ -97,7 +115,7 @@
 }
 
 .asm-info-canvas-column-next {
-	top: 0px;
+	top: 2px;
 	left: 200px;
 	width: 150px;
 	position: absolute;
@@ -106,16 +124,6 @@
 	filter: alpha(opacity=50);
 }
 
-.asm-info-canvas-column-messages 
-{
-	background: #F8F8F8;
-	left: 365px;
-	width: 35px;
-	position: absolute;
-	text-align: right;
-	opacity: 0.8;
-	filter: alpha(opacity=80);	
-}
 .ui-state-default a.asm-new-message-indicator
 {
     font-weight: bold;

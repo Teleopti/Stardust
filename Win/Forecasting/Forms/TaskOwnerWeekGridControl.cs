@@ -89,14 +89,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             if (_owner.TargetType == TemplateTarget.Workload)
             {
-                if (_owner.SkillType.ForecastSource!=ForecastSource.InboundTelephony)
+				if (_owner.SkillType.ForecastSource != ForecastSource.InboundTelephony && _owner.SkillType.ForecastSource != ForecastSource.Chat)
                     CreateWorkloadNonTelephonyRows();
                 else
                     CreateWorkloadTelephonyRows();
             }
             else if (_owner.TargetType == TemplateTarget.Skill)
             {
-                if (_owner.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+				if (_owner.SkillType.ForecastSource != ForecastSource.InboundTelephony && _owner.SkillType.ForecastSource != ForecastSource.Chat)
                     CreateSkillNonTelephonyRows();
                 else
                     CreateSkillTelephonyRows();
@@ -105,23 +105,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void CreateSkillTelephonyRows()
         {
-            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalTasks", UserTexts.Resources.TotalCalls, UserTexts.Resources.Forecasted, _dateTimes);
+			TextManager manager = GetManager(_owner);
+
+			ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalTasks", manager.WordDictionary["TotalTasks"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell", "TotalAverageTaskTime", UserTexts.Resources.TotalTalkTime, UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell", 
+				"TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell", "TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW, UserTexts.Resources.Forecasted, _dateTimes);
+			gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell", 
+				"TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanReadOnlyCell", "ForecastedIncomingDemand", UserTexts.Resources.Hours, UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanReadOnlyCell", 
+				"ForecastedIncomingDemand", Resources.Hours, Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("ForecastedIncomingDemand");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanReadOnlyCell", "ForecastedIncomingDemandWithShrinkage", UserTexts.Resources.HoursIncShrinkage, UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanReadOnlyCell", 
+				"ForecastedIncomingDemandWithShrinkage", Resources.HoursIncShrinkage, Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("ForecastedIncomingDemandWithShrinkage");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
         }
@@ -130,173 +137,193 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             TextManager manager = GetManager(_owner);
             
-            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalTasks", manager.WordDictionary["TotalTasks"], UserTexts.Resources.Forecasted, _dateTimes);
+            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalTasks", manager.WordDictionary["TotalTasks"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel",
+				"TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", 
+				"TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "ForecastedIncomingDemand", manager.WordDictionary["ForecastedIncomingDemand"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel",
+				"ForecastedIncomingDemand", manager.WordDictionary["ForecastedIncomingDemand"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("ForecastedIncomingDemand");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "ForecastedIncomingDemandWithShrinkage", manager.WordDictionary["ForecastedIncomingDemandWithShrinkage"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", 
+				"ForecastedIncomingDemandWithShrinkage", manager.WordDictionary["ForecastedIncomingDemandWithShrinkage"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("ForecastedIncomingDemandWithShrinkage");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
         }
 
         private void CreateWorkloadTelephonyRows()
         {
+			var manager = GetManager(_owner);
             ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner,
                                                               "NumericWorkloadWeekTaskLimitedCell", "Tasks",
-                                                              UserTexts.Resources.Calls,
-                                                              UserTexts.Resources.Forecasted, _dateTimes, 13);
+															  manager.WordDictionary["Tasks"],
+                                                              Resources.Forecasted, _dateTimes, 13);
             gridRow.ChartSeriesSettings = configureSetting("Tasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", "CampaignTasks",
-                                            UserTexts.Resources.CampaignCallsPercentSign,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											manager.WordDictionary["CampaignTasks"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PositiveTimeSpanTotalSecondsCell",
-                                            "AverageTaskTime", UserTexts.Resources.TalkTime,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											"AverageTaskTime", manager.WordDictionary["AverageTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("AverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", "CampaignTaskTime",
-                                            UserTexts.Resources.CampaignTalkTimePercentSign,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											manager.WordDictionary["CampaignTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PositiveTimeSpanTotalSecondsCell",
-                                            "AverageAfterTaskTime", UserTexts.Resources.ACW,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											"AverageAfterTaskTime", manager.WordDictionary["AverageAfterTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("AverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell",
-                                            "CampaignAfterTaskTime", UserTexts.Resources.CampaignACWPercentSign,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											"CampaignAfterTaskTime", manager.WordDictionary["CampaignAfterTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalTasks",
-                                            UserTexts.Resources.TotalCalls, UserTexts.Resources.Forecasted,
+											manager.WordDictionary["TotalTasks"], Resources.Forecasted,
                                             _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell",
-                                            "TotalAverageTaskTime", UserTexts.Resources.TotalTalkTime,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											"TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell",
-                                            "TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW,
-                                            UserTexts.Resources.Forecasted, _dateTimes);
+											"TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"],
+                                            Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell",
-                                            "TotalStatisticCalculatedTasks", UserTexts.Resources.CalculatedCalls,
-                                            UserTexts.Resources.Actual, _dateTimes);
+											"TotalStatisticCalculatedTasks", manager.WordDictionary["TotalStatisticCalculatedTasks"],
+                                            Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticCalculatedTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell",
-                                            "TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedCalls,
-                                            UserTexts.Resources.Actual, _dateTimes);
+											"TotalStatisticAbandonedTasks", manager.WordDictionary["TotalStatisticAbandonedTasks"],
+                                            Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAbandonedTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell",
-                                            "TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredCalls,
-                                            UserTexts.Resources.Actual, _dateTimes);
+											"TotalStatisticAnsweredTasks", manager.WordDictionary["TotalStatisticAnsweredTasks"],
+                                            Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAnsweredTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell",
-                                            "TotalStatisticAverageTaskTime", UserTexts.Resources.TalkTime,
-                                            UserTexts.Resources.Actual, _dateTimes);
+											"TotalStatisticAverageTaskTime", manager.WordDictionary["TotalStatisticAverageTaskTime"],
+                                            Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
             gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanTotalSecondsReadOnlyCell",
-                                            "TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ACW,
-                                            UserTexts.Resources.Actual, _dateTimes);
+											"TotalStatisticAverageAfterTaskTime", manager.WordDictionary["TotalStatisticAverageAfterTaskTime"],
+                                            Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
         }
 
         private void CreateWorkloadNonTelephonyRows()
         {
-            TextManager manager = new TextManager(_owner.SkillType);
+            var manager = new TextManager(_owner.SkillType);
 
-            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericWorkloadWeekTaskLimitedCell", "Tasks", manager.WordDictionary["Tasks"], UserTexts.Resources.Forecasted, _dateTimes, 13);
+            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericWorkloadWeekTaskLimitedCell", 
+				"Tasks", manager.WordDictionary["Tasks"], Resources.Forecasted, _dateTimes, 13);
             gridRow.ChartSeriesSettings = configureSetting("Tasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", "CampaignTasks", manager.WordDictionary["CampaignTasks"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", 
+				"CampaignTasks", manager.WordDictionary["CampaignTasks"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel", "AverageTaskTime", manager.WordDictionary["AverageTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel",
+				"AverageTaskTime", manager.WordDictionary["AverageTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("AverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", "CampaignTaskTime", manager.WordDictionary["CampaignTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", 
+				"CampaignTaskTime", manager.WordDictionary["CampaignTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel", "AverageAfterTaskTime", manager.WordDictionary["AverageAfterTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel",
+				"AverageAfterTaskTime", manager.WordDictionary["AverageAfterTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("AverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", "CampaignAfterTaskTime", manager.WordDictionary["CampaignAfterTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "PercentWithNegativeCell", 
+				"CampaignAfterTaskTime", manager.WordDictionary["CampaignAfterTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("CampaignAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalTasks", manager.WordDictionary["TotalTasks"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalTasks", manager.WordDictionary["TotalTasks"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel",
+				"TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"], UserTexts.Resources.Forecasted, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", 
+				"TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"], Resources.Forecasted, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalStatisticCalculatedTasks", manager.WordDictionary["TotalStatisticCalculatedTasks"], UserTexts.Resources.Actual, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalStatisticCalculatedTasks", manager.WordDictionary["TotalStatisticCalculatedTasks"], Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticCalculatedTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalStatisticAbandonedTasks", manager.WordDictionary["TotalStatisticAbandonedTasks"], UserTexts.Resources.Actual, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalStatisticAbandonedTasks", manager.WordDictionary["TotalStatisticAbandonedTasks"], Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAbandonedTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", "TotalStatisticAnsweredTasks", manager.WordDictionary["TotalStatisticAnsweredTasks"], UserTexts.Resources.Actual, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericReadOnlyCell", 
+				"TotalStatisticAnsweredTasks", manager.WordDictionary["TotalStatisticAnsweredTasks"], Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAnsweredTasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalStatisticAverageTaskTime", manager.WordDictionary["TotalStatisticAverageTaskTime"], UserTexts.Resources.Actual, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", 
+				"TotalStatisticAverageTaskTime", manager.WordDictionary["TotalStatisticAverageTaskTime"], Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
-            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel", "TotalStatisticAverageAfterTaskTime", manager.WordDictionary["TotalStatisticAverageAfterTaskTime"], UserTexts.Resources.Actual, _dateTimes);
+            gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "TimeSpanLongHourMinutesStaticCellModel",
+				"TotalStatisticAverageAfterTaskTime", manager.WordDictionary["TotalStatisticAverageAfterTaskTime"], Resources.Actual, _dateTimes);
             gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageAfterTaskTime");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
         }

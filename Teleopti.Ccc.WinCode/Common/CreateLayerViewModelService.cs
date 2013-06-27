@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Common
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-	            foreach (var layer in assignment.MainShiftLayers)
+	            foreach (var layer in assignment.MainLayers)
 	            {
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
@@ -77,15 +77,10 @@ namespace Teleopti.Ccc.WinCode.Common
 											layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
                     }
                 }
-
-                foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                {
-                    foreach (ILayer<IActivity> layer in shift.LayerCollection)
-                    {
-                        layerViewModels.Add(new PersonalShiftLayerViewModel(observer, layer, shift, eventAggregator));
-                    }
-                }
-
+	            foreach (var personalLayer in assignment.PersonalLayers)
+	            {
+		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
+	            }
             }
 			// bug 14478 show meetings even if there is no assignment
 			foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())

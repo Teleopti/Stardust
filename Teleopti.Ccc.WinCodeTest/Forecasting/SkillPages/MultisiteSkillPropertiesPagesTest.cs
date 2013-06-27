@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages
         [Test]
         public void VerifyCreateNewRoot()
         {
+			target = new MultisiteSkillPropertiesPages(_skillType, _repositoryFactory, _unitOfWorkFactory);
             IMultisiteSkill newSkill = target.CreateNewRoot();
 
             Assert.IsNotNull(newSkill);

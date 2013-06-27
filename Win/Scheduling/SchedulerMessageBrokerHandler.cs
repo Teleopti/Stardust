@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -236,6 +237,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
             {
                 return _owner.SchedulerState.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+            }
+            if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
+            {
+                return _owner.SchedulerState.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (unitOfWorkFactory), eventMessage.DomainObjectId);
             }
 
 			Log.Warn("Message broker - Got a message of an unknown IScheduleData type: " + eventMessage.DomainObjectType);

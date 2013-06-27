@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 		      var ass = schedulePart.AssignmentHighZOrder();
 
-            var firstLayer = ass.MainShiftLayers.Single();
-            Assert.IsTrue(ass.MainShiftLayers.Contains(firstLayer),"Verify contains the layer");
+            var firstLayer = ass.MainLayers.Single();
+            Assert.IsTrue(ass.MainLayers.Contains(firstLayer),"Verify contains the layer");
 						target.Remove(schedulePart, firstLayer);
 						Assert.AreEqual(0, schedulePart.PersonAssignmentCollection().Count);
         }
@@ -28,12 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddPersonalLayer().CreatePart();
            
-            ILayer<IActivity> firstPersonalLayer =
-								schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.First();
+            var firstPersonalLayer = schedulePart.AssignmentHighZOrder().PersonalLayers.First();
 
-						Assert.IsTrue(schedulePart.AssignmentHighZOrder().PersonalShiftCollection.First().LayerCollection.Contains(firstPersonalLayer), "Verify contains the layer");
 						target.Remove(schedulePart, firstPersonalLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalShiftCollection.Count);
+						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalLayers.Count());
         }
 
         [Test]

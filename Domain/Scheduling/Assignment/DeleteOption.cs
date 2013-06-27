@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private bool _preference;
         private bool _studentAvailability;
         private bool _default;
+        private bool _overtimeAvailability;
 
         /// <summary>
         /// Main shift
@@ -138,6 +139,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     Default = false;
 
                 _studentAvailability = value;
+            }
+        }
+
+        public bool OvertimeAvailability
+        {
+            get { return _overtimeAvailability; }
+            set
+            {
+                if (value)
+                    Default = false;
+
+                _overtimeAvailability = value;
             }
         }
     }

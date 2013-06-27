@@ -42,6 +42,11 @@
 		/// <summary>
 		/// Skill for retail stores.
 		/// </summary>
-		Retail
+		Retail,
+
+		/// <summary>
+		/// Skill for chat conversations.
+		/// </summary>
+		Chat
     }
 }
