@@ -210,6 +210,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\RespondToShiftTradeTest.cs" />
+    <Compile Include="Core\Settings\Mapping\SettingsPermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
@@ -415,7 +416,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Settings\ViewModelFactory\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>

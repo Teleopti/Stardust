@@ -12,13 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 {
 	public class SettingsMappingProfile : Profile
 	{
-		private readonly Func<IPermissionProvider> _permissionProvider;
-
-
-		public SettingsMappingProfile(Func<IPermissionProvider> permissionProvider)
-		{
-			_permissionProvider = permissionProvider;
-		}
 
 		protected override void Configure()
 		{
@@ -44,16 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 																		o.Condition(s => s.PermissionInformation.UICultureLCID().HasValue);
 				                                    	})
 				.ForMember(d => d.Cultures, o => o.MapFrom(s => allCulturesSortedByNamePlusBrowserDefault()))
-				.ForMember(d => d.SettingsPermission, o => o.ResolveUsing(s =>
-				{
-					var permission = new SettingsPermissionViewModel
-					{
-						ShareCalendarPermission = 
-							_permissionProvider.Invoke().HasApplicationFunctionPermission(
-							DefinedRaptorApplicationFunctionPaths.ShareCalendar)
-					};
-					return permission;
-				}))
 				.AfterMap((source, target) =>
 				          	{
 				          		var browserDefault = new CultureViewModel {id = -1, text = Resources.BrowserDefault};
