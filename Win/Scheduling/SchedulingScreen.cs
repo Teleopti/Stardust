@@ -1919,7 +1919,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var options = new PasteOptions();
 			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options, false ) { Text = Resources.PasteNew };
+			var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options, false ) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
 
 			if (_scheduleView != null)
