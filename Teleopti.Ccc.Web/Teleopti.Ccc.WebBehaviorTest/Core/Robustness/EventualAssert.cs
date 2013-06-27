@@ -11,12 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 	{
 		public static void That<T>(Func<T> value, Constraint constraint)
 		{
-			That(value, constraint, null);
-		}
-
-		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message)
-		{
-			That(value, constraint, message, new WatiNIEExceptionCatcher());
+			That(value, constraint, null, new WatiNIEExceptionCatcher());
 		}
 
 		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message, IExceptionCatcher exceptionCatcher)

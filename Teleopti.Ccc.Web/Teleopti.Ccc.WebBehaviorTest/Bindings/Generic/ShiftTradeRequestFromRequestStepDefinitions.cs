@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"Details should be closed")]
 		public void ThenDetailsShouldBeClosed()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDetailSection.IsDisplayed(), Is.False, () => "The detailsection should not be visible");
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDetailSection.IsDisplayed(), Is.False);
 		}
 
 	}
