@@ -198,15 +198,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click the radiobutton with caption '(.*)' on the message at position '(.*)' in the list")]
 		public void WhenIClickTheRadiobuttonWithCaptionOnTheMessageAtPositionInTheList(string option, int position)
 		{
-			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Labels.First(r => r.Text.Equals(option)).EventualGet();
-			label.PreviousSibling.EventualClick();
+			var btn = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Buttons.First(r => r.InnerHtml.Equals(option)).EventualGet();
+			btn.EventualClick();
 		}
 
 		[Then(@"the radiobutton with caption '(.*)' should not be checked on the message at position '(.*)' in the list")]
 		public void ThenTheRadiobuttonWithCaptionShouldNotBeCheckedOnTheMessageAtPositionInTheList(string option, int position)
 		{
-			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Labels.First(r => r.Text.Equals(option)).EventualGet();
-			EventualAssert.That(() => ((RadioButton)label.PreviousSibling).Checked, Is.False);
+			var btn = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Buttons.First(r => r.InnerHtml.Equals(option)).EventualGet();
+			Assert.That(btn.ClassName.Contains("active"),Is.False);
 		}
 
 		[Then(@"I should see radiobuttons on the message at position '(.*)' in the list with")]

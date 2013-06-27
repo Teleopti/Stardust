@@ -595,7 +595,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             var result = PersonRequest.GetUnderlyingStateId(personRequest);
             Assert.AreEqual(result, 3);
         }
-        
+
 		[Test]
 		public void ShouldReturnUpdatedOnServerUtc()
 		{

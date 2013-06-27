@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifySetFilterClearsTheOldFilters()
         {
             _collection.AddFilter(typeof(MainShiftLayer));
-            _collection.AddFilter(typeof(PersonalShiftActivityLayer));
+            _collection.AddFilter(typeof(PersonalShiftLayer));
             _collection.SetFilter(typeof (AbsenceLayer));
             Assert.AreEqual(1,_collection.Filters.Count);
         }

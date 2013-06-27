@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             _gridRows.Add(new DateHeaderGridRow(DateHeaderType.WeekDates, _dateTimes));
             _gridRows.Add(new DateHeaderGridRow(DateHeaderType.MonthDayNumber, _dateTimes));
             TextManager manager = new TextManager(_skillType);
-            if (_skillType.ForecastSource != ForecastSource.InboundTelephony)
+			if (_skillType.ForecastSource != ForecastSource.InboundTelephony && _skillType.ForecastSource != ForecastSource.Chat)
             {
                 _validatedVolumeDayGridRowTasks = new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
                 "NumericReadOnlyCell", "OriginalTasks", manager.WordDictionary["OriginalTasks"]);
@@ -128,29 +128,29 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             else
             {
                 _validatedVolumeDayGridRowTasks = new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                "NumericReadOnlyCell", "OriginalTasks", UserTexts.Resources.OriginalCalls);
+				"NumericReadOnlyCell", "OriginalTasks", manager.WordDictionary["OriginalTasks"]);
                 _validatedVolumeDayGridRowTasks.QueryCellValue += validatedVolumeDayGridRowTasks_QueryCellValue;
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(_validatedVolumeDayGridRowTasks));
                 _gridRows.Add(_rowManagerDayOfWeeks.AddRow(new DayOfWeeksGridRow(_rowManagerDayOfWeeks,
-                    "NumericReadOnlyCell", "AverageTasks", UserTexts.Resources.AverageCalls, _dateTimes)));
+					"NumericReadOnlyCell", "AverageTasks", manager.WordDictionary["AverageTasks"], _dateTimes)));
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                    "NumericCell", "ValidatedTasks", UserTexts.Resources.ValidatedCalls)));
+					"NumericCell", "ValidatedTasks", manager.WordDictionary["ValidatedTasks"])));
                 _validatedVolumeDayGridRowTaskTime = new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                    "TimeSpanTotalSecondsReadOnlyCell", "OriginalAverageTaskTime", UserTexts.Resources.OriginalTalkTime);
+					"TimeSpanTotalSecondsReadOnlyCell", "OriginalAverageTaskTime", manager.WordDictionary["OriginalAverageTaskTime"]);
                 _validatedVolumeDayGridRowTaskTime.QueryCellValue += validatedVolumeDayGridRowTaskTime_QueryCellValue;
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(_validatedVolumeDayGridRowTaskTime));
                 _gridRows.Add(_rowManagerDayOfWeeks.AddRow(new DayOfWeeksGridRow(_rowManagerDayOfWeeks,
-                    "TimeSpanTotalSecondsReadOnlyCell", "AverageTalkTime", UserTexts.Resources.AverageTalkTime, _dateTimes)));
+					"TimeSpanTotalSecondsReadOnlyCell", "AverageTalkTime", manager.WordDictionary["AverageTalkTime"], _dateTimes)));
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                    "TimeSpanTotalSecondsCell", "ValidatedAverageTaskTime", UserTexts.Resources.ValidatedTalkTime)));
+					"TimeSpanTotalSecondsCell", "ValidatedAverageTaskTime", manager.WordDictionary["ValidatedAverageTaskTime"])));
                 _validatedVolumeDayGridRowAfterTaskTime = new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                    "TimeSpanTotalSecondsReadOnlyCell", "OriginalAverageAfterTaskTime", UserTexts.Resources.OriginalACW);
+					"TimeSpanTotalSecondsReadOnlyCell", "OriginalAverageAfterTaskTime", manager.WordDictionary["OriginalAverageAfterTaskTime"]);
                 _validatedVolumeDayGridRowAfterTaskTime.QueryCellValue += validatedVolumeDayGridRowAfterTaskTime_QueryCellValue;
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(_validatedVolumeDayGridRowAfterTaskTime));
                 _gridRows.Add(_rowManagerDayOfWeeks.AddRow(new DayOfWeeksGridRow(_rowManagerDayOfWeeks,
-                    "TimeSpanTotalSecondsReadOnlyCell", "AverageAfterWorkTime", UserTexts.Resources.AverageACW, _dateTimes)));
+					"TimeSpanTotalSecondsReadOnlyCell", "AverageAfterWorkTime", manager.WordDictionary["AverageAfterWorkTime"], _dateTimes)));
                 _gridRows.Add(_rowManagerValidatedVolumeDay.AddRow(new ValidatedVolumeDayGridRow(_rowManagerValidatedVolumeDay,
-                    "TimeSpanTotalSecondsCell", "ValidatedAverageAfterTaskTime", UserTexts.Resources.ValidatedACW)));
+					"TimeSpanTotalSecondsCell", "ValidatedAverageAfterTaskTime", manager.WordDictionary["ValidatedAverageAfterTaskTime"])));
             }
         }
 

@@ -995,7 +995,6 @@
     <Compile Include="Common\Controls\DateSelection\DateTimePickerAdvExtension.cs" />
     <Compile Include="Common\Controls\IntervalLengthItem.cs" />
     <Compile Include="Common\Configuration\TreeFamily.cs" />
-    <Compile Include="Common\IAlarmControlView.cs" />
     <Compile Include="Common\Interop\MultipleElementHost.cs" />
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />

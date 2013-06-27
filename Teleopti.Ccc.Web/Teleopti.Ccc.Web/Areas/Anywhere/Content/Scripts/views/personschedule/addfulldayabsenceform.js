@@ -56,7 +56,7 @@ define([
                         type: 'POST',
                         data: data,
                         success: function(data, textStatus, jqXHR) {
-                            navigation.GotoPersonSchedule(personId, self.StartDate());
+                        	navigation.GotoPersonScheduleWithoutHistory(personId, self.StartDate());
                         }
                     }
                 );

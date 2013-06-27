@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         {
             const string childName = "child";
             const string multisiteName = "MultisiteSkill";
-            IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, null);
+			IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             childSkill.SetId(Guid.NewGuid());
             IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
             childSkill.SetParentSkill(multisiteSkill);
-            ISkill selected = new Skill("source", "desc", Color.Beige, 15, null);
+			ISkill selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(Guid.NewGuid(),
                                                                     selected.Id.GetValueOrDefault(),
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             const string childName = "child";
             const string multisiteName = "MultisiteSkill";
             var guid = Guid.NewGuid();
-            IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, null);
+            IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             childSkill.SetId(guid);
             IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
             childSkill.SetParentSkill(multisiteSkill);
-            ISkill selected = new Skill("source", "desc", Color.Beige, 15, null);
+			ISkill selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(guid,
                                                                     selected.Id.GetValueOrDefault(),

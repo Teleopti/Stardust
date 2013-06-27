@@ -106,6 +106,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             office2007OutlookTimePickerMidnightOffsetBreak.SetTimeValue(skill.MidnightBreakOffset);
 
             updateTotalOpeningHours();
+	        if (skill.SkillType.ForecastSource.Equals(ForecastSource.Chat))
+	        {
+		        numericUpDownMaxParallel.Enabled = true;
+		        numericUpDownMaxParallel.Value = skill.MaxParallelTasks;
+	        }
         }
 
 		public void SetActivityList(IList<IActivity> activities)
@@ -215,6 +220,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             thisSkill.Activity = activity;
             thisSkill.TimeZone = (TimeZoneInfo)comboBoxTimeZones.SelectedItem;
             thisSkill.MidnightBreakOffset = office2007OutlookTimePickerMidnightOffsetBreak.TimeValue();
+		    thisSkill.MaxParallelTasks = (int)numericUpDownMaxParallel.Value;
 
             if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
             {

@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             IWorkloadDayTemplate workloadDayTemplate = (IWorkloadDayTemplate) _workload.GetTemplateAt(TemplateTarget.Workload, _templateIndex);
 
             _templateGridControl = new WorkloadIntradayTemplateGridControl(workloadDayTemplate,
-                new TaskOwnerHelper(new List<ITaskOwner> { workloadDayTemplate }), _workload.Skill.TimeZone, _workload.Skill.DefaultResolution, null, _workload.Skill.SkillType);
+				new TaskOwnerHelper(new List<ITaskOwner> { workloadDayTemplate }), _workload.Skill.TimeZone, _workload.Skill.DefaultResolution, null, _workload.Skill.SkillType);
             _templateGridControl.Create();
 
             _templateGridControl.ModifyCells += templateGridControl_ModifyCells;

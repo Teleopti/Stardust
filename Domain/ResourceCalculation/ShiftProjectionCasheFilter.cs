@@ -356,13 +356,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (schedulePart.PersonAssignmentCollection().Count > 0)
             {
-                foreach (IPersonalShift personalShift in schedulePart.PersonAssignmentCollection()[0].PersonalShiftCollection)
+                foreach (var personalLayer in schedulePart.PersonAssignmentCollection()[0].PersonalLayers)
                 {
-                    if (!period.HasValue && personalShift.LayerCollection.Period().HasValue)
-                        period = personalShift.LayerCollection.Period().Value;
-                    if (personalShift.LayerCollection.Period().HasValue)
-                        if (period != null)
-                            period = period.Value.MaximumPeriod(personalShift.LayerCollection.Period().Value);
+                    if (!period.HasValue)
+                        period = personalLayer.Period;
+                    period = period.Value.MaximumPeriod(personalLayer.Period);
                 }
             }
             return period;
@@ -549,8 +547,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             foreach (var personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalShiftCollection.Any(
-                        x => x.LayerCollection.Any(l => l.Period.Intersect(layer.Period))))
+                if (personAssignment.PersonalLayers.Any(l => l.Period.Intersect(layer.Period)))
                     return true;
             }
             return false;
