@@ -131,12 +131,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
        [Test]
        public void ShouldReturnEmptyListWhenShiftsAreOnNextDay()
        {
+           var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
+           var time2 = TimeSpan.FromHours(5).Add(TimeSpan.FromDays(1));
+           var time3 = TimeSpan.FromHours(15).Add(TimeSpan.FromDays(1));
            _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
-                                                             TimeSpan.FromHours(8));
+                                                             time1);
            _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
-                                                             TimeSpan.FromHours(5));
+                                                             time2);
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
-                                                             TimeSpan.FromHours(15));
+                                                             time3);
            _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
            _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
            _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
@@ -153,8 +156,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
        [Test]
        public void ShouldReturnOnePersonListWhenTwoOfTheThreeShiftsAreOnNextDay()
        {
+           var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
            _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
-                                                             TimeSpan.FromHours(8));
+                                                             time1);
            _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
                                                              TimeSpan.FromHours(5));
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
@@ -175,10 +179,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
        [Test]
        public void ShouldReturnTwoPersonListWhenTwoOfTheThreeShiftsAreOnNextDay()
        {
+           var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
+           var time2 = TimeSpan.FromHours(5).Add(TimeSpan.FromDays(1));
+           var filterEndDate = TimeSpan.FromHours(1).Add(TimeSpan.FromDays(1));
            _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
-                                                             TimeSpan.FromHours(8));
+                                                             time1);
            _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
-                                                             TimeSpan.FromHours(5));
+                                                             time2);
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                              TimeSpan.FromHours(16));
            _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
@@ -189,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            {
                commonPersistableScheduleDataCollectionMocks();
            }
-           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(23), TimeSpan.FromHours(1));
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(23), filterEndDate);
            Assert.AreEqual(personList.Count(), 2);
 
        }
