@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var result = personRequest.Approve(requiredForProcessingAbsenceRequest.RequestApprovalService,requiredForProcessingAbsenceRequest.Authorization);
             foreach (IBusinessRuleResponse ruleResponse in result)
             {
-                Logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",ruleResponse.Message);
+               if(Logger.IsWarnEnabled)
+                    Logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",ruleResponse.Message);
             }
         }
 

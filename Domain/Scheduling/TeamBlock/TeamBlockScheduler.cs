@@ -20,18 +20,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
+		private bool _cancelMe;
 
 		public TeamBlockScheduler(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 			IRestrictionAggregator restrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			ITeamScheduling teamScheduling,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter)
 		{
 			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_restrictionAggregator = restrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
 			_workShiftSelector = workShiftSelector;
+			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -48,7 +52,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             //need to refactor the code alot i dont like these ifs probably split it into classes
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-            {
+			{
+				if (_cancelMe)
+					break;
                 if (!selectedPeriod.DayCollection().Contains(day)) 
 					continue;
                 if (schedulingOptions.UseTeamBlockSameShift)
@@ -81,7 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            return false;
 
 	        foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-	        {
+			{
+				if (_cancelMe)
+					break;
 	            if (!selectedPersons.Contains(person)) continue;
 	            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
 	            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
@@ -106,7 +114,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return;
 
             foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-            {
+			{
+				if (_cancelMe)
+					break;
                 if (!selectedPersons.Contains(person)) continue;
 				_teamScheduling.DayScheduled += OnDayScheduled;
                 _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, selectedPeriod);
@@ -118,16 +128,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private IShiftProjectionCache scheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null) return null;
-            
+
             var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+		    if (restriction == null)
+			    return null;
+
+			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
+		    var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+		    restriction = restriction.Combine(openHourRestriction);
 
             // (should we cover for max seats here?) 
             var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
                                                         schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
             if (shifts == null || shifts.Count <= 0)
                 return null;
-
-            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 
             var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                          schedulingOptions
@@ -148,6 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				temp(this, e);
 			}
+			_cancelMe = e.Cancel;
 		}
 	}
 }

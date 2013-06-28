@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Reflection;
+using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     {
         private StartTimeLimiter _startTimeLimiter;
         private TimePeriod _startTimeLimitation;
-        private Guid _guid = Guid.NewGuid();
-        private FakeShift _shift;
-        DateTimePeriod _period1;
-        DateTimePeriod _period2;
-        DateTimePeriod _period3;
-        DateTimePeriod _period4;
-        DateTimePeriod _period5;
-        Activity _activity1;
-        Activity _activity2;
-        Activity _activity3;
         IVisualLayerCollection _visualLayerCollection;
 
         [SetUp]
@@ -32,47 +22,40 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         {
             _startTimeLimitation = new TimePeriod(7, 0, 8, 0);
             _startTimeLimiter = new StartTimeLimiter(_startTimeLimitation);
-            ((IEntity)_startTimeLimiter).SetId(_guid);
-
-            _shift = new FakeShift();
-            typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(_shift, Guid.NewGuid());
-            _period1 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+            var period1 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc));
 
-            _period2 = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+            var period2 = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
 
-            _period3 = new DateTimePeriod(new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc),
+            var period3 = new DateTimePeriod(new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 
-            _period4 = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc),
+            var period4 = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
 
-            _period5 = new DateTimePeriod(new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc),
+            var period5 = new DateTimePeriod(new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc),
                              new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc));
 
-            _activity1 = new Activity("act1");
-            _activity2 = new Activity("act2");
-            _activity3 = new Activity("act3");
+            var activity1 = new Activity("act1");
+            var activity2 = new Activity("act2");
+            var activity3 = new Activity("act3");
 
-			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity1, _period1));
-			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity2, _period2));
-			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period3));
-			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period4));
-			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period5));
+						_visualLayerCollection = new[]
+		        {
+			        new MainShiftLayer(activity1, period1),
+			        new MainShiftLayer(activity2, period2),
+			        new MainShiftLayer(activity3, period3),
+			        new MainShiftLayer(activity3, period4),
+			        new MainShiftLayer(activity3, period5)
+		        }.CreateProjection();
+        }
 
-            IProjectionService svc = _shift.ProjectionService();
-            _visualLayerCollection = svc.CreateProjection();
-        }
-        [Test]
-        public void VerifyConstructor()
-        {
-            Assert.IsNotNull(_startTimeLimiter);
-        }
 
         [Test]
         public void VerifyClone()
         {
+					_startTimeLimiter.SetId(Guid.NewGuid());
             StartTimeLimiter clonedLimiter = (StartTimeLimiter)_startTimeLimiter.Clone();
             clonedLimiter.StartTimeLimitation = new TimePeriod(10, 0, 11, 0);
 
@@ -100,11 +83,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         {
             //If there are remaining shift they should be valid
             Assert.IsTrue(_startTimeLimiter.IsValidAtEnd(_visualLayerCollection));
-            _shift = new FakeShift();
-            IProjectionService svc = _shift.ProjectionService();
-            _visualLayerCollection = svc.CreateProjection();
             //If no shifts, return false
-            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(_visualLayerCollection));
+            Assert.IsFalse(_startTimeLimiter.IsValidAtEnd(Enumerable.Empty<IMainShiftLayer>().CreateProjection()));
         }
 
     }

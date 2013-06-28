@@ -6,7 +6,6 @@
 @section head {
 	<script type="text/javascript">
 		$(function () { 
-			$.datepicker.setDefaults(@Html.LayoutBase().DatePickerGlobalizationAsJson());
 			Teleopti.MyTimeWeb.Portal.Init(
 				{
 					defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
@@ -33,15 +32,15 @@
 	</script>
 }
 
-<header class="col-1 mb10" dir="ltr"> 
+<header dir="ltr"> 
 		@Html.Partial("Navigation", Model)
 </header>
-<section id="page">
-<article id="body" class="col-1">
-    <div id="body-inner" class="pdl5 pdt5 pdr5">
+<section id="page" class="container fixed-non-responsive">
+<article id="body">
+    <div id="body-inner">
 	</div>
-	<div id="body-bottom" class="pdb5">
-	<div class="pdt5 pdl10 extraextrasmall">
+	<div id="body-bottom">
+	<div>
 		<span id="licensed-to-label">@Resources.LicensedToColon</span>
 		<span id="licensed-to-text">@Model.CustomerName</span>
 	</div>

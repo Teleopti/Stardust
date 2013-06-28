@@ -31,8 +31,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod,
-				                                                               allPersonMatrixList));
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod,
+				                                               allPersonMatrixList);
+				if (teamInfo != null)
+					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 			var allTeamBlocksInHashSet = new HashSet<ITeamBlockInfo>();
 			foreach (var teamInfo in allTeamInfoListOnStartDate)

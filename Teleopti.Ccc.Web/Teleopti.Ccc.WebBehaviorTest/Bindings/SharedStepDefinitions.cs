@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.ClickNext();
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I click previous virtual schedule period button")]
@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
 		}
 
-		[When(@"I click the delete button")]
-		public void WhenIClickTheDeleteButton()
-		{
-			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
-		}
 
 		[When(@"I click the Cancel button")]
 		public void WhenIClickTheCancelButton()
@@ -93,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
-			Browser.Interactions.AssertExists("#friendly-message");
+			Browser.Interactions.AssertExists(".alert.alert-block");
 		}
 
 		[Then(@"I should see next virtual schedule period")]

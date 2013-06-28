@@ -195,7 +195,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 		on	p.id=pp.parent and p.isdeleted=0 
 	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @skillId)
 
-return
 	CREATE TABLE #groupsForSecondCTE
 	(
 		groupid uniqueidentifier not null,

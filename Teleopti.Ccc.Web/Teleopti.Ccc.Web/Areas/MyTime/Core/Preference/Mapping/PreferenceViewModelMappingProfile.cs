@@ -1,15 +1,29 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceViewModelMappingProfile : Profile
 	{
+		private readonly IPermissionProvider _permissionProvider;
+		private readonly Func<IPreferenceOptionsProvider> _preferenceOptionsProvider;
+
+		public PreferenceViewModelMappingProfile(IPermissionProvider permissionProvider, Func<IPreferenceOptionsProvider> preferenceOptionsProvider)
+		{
+			_permissionProvider = permissionProvider;
+			_preferenceOptionsProvider = preferenceOptionsProvider;
+		}
+
 		private class PreferenceWeekMappingData
 		{
 			public DateOnly FirstDayOfWeek { get; set; }
@@ -52,6 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        		        		}).ToArray();
 				                                        	}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
+				.ForMember(d => d.ExtendedPreferencesPermission, c => c.ResolveUsing(s => _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
+				.ForMember(d => d.Options, c => c.ResolveUsing(s => new PreferenceOptionsViewModel(PreferenceOptions(), ActivityOptions())))
 				;
 
 			CreateMap<string, WeekDayHeader>()
@@ -128,6 +144,68 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Period, c => c.MapFrom(s => s.PreferencePeriod))
 				.ForMember(d => d.OpenPeriod, c => c.MapFrom(s => s.PreferenceInputPeriod))
 				;
+		}
+
+		private IEnumerable<IOption> ActivityOptions()
+		{
+			return (from a in _preferenceOptionsProvider().RetrieveActivityOptions().MakeSureNotNull()
+				   select new Option
+				   {
+					   Value = a.Id.ToString(),
+					   Text = a.Description.Name,
+					   Color = a.DisplayColor.ToHtml()
+				   }).ToList();
+		}
+
+		private IEnumerable<IPreferenceOption> PreferenceOptions()
+		{
+			var shiftCategories =
+				_preferenceOptionsProvider()
+					.RetrieveShiftCategoryOptions()
+					.MakeSureNotNull()
+					.Select(s => new PreferenceOption
+					{
+						Value = s.Id.ToString(),
+						Text = s.Description.Name,
+						Color = s.DisplayColor.ToHtml(),
+						Extended = true
+					})
+					.ToArray();
+
+			var dayOffs = _preferenceOptionsProvider()
+				.RetrieveDayOffOptions()
+				.MakeSureNotNull()
+				.Select(s => new PreferenceOption
+				{
+					Value = s.Id.ToString(),
+					Text = s.Description.Name,
+					Color = s.DisplayColor.ToHtml(),
+					Extended = false
+				})
+				.ToArray();
+
+			var absences = _preferenceOptionsProvider()
+				.RetrieveAbsenceOptions()
+				.MakeSureNotNull()
+				.Select(s => new PreferenceOption
+				{
+					Value = s.Id.ToString(),
+					Text = s.Description.Name,
+					Color = s.DisplayColor.ToHtml(),
+					Extended = false
+				})
+				.ToArray();
+
+			var options = new List<IPreferenceOption>();
+			options.AddRange(shiftCategories);
+			if (options.Count > 0 && dayOffs.Any())
+				options.Add(new PreferenceOptionSplit());
+			options.AddRange(dayOffs);
+			if (options.Count > 0 && absences.Any())
+				options.Add(new PreferenceOptionSplit());
+			options.AddRange(absences);
+
+			return options.ToList();
 		}
 	}
 }

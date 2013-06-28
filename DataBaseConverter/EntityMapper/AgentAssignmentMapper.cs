@@ -90,7 +90,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                     if(fillup.LayerCollection.Count == 0)
                         throw new InvalidOperationException("No layers in fill up shift for " + oldEntity.AssignedAgent.FullName() + " on date " + oldEntity.AgentDate);
 
-                    agAss.AddPersonalShift(psMapper.Map(fillup));
+	                foreach (var layer in psMapper.Map(fillup))
+	                {
+		                agAss.AddPersonalLayer(layer.Payload, layer.Period);
+	                }
                     if (_shiftContainsOvertime.IsSatisfiedBy(fillup))
                     {
                         agAss.AddOvertimeShift(overtimeShiftMapper.Map(fillup));

@@ -34,6 +34,7 @@
 			this.textBoxAbout = new System.Windows.Forms.TextBox();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.buttonAdvViewActive = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.label1 = new System.Windows.Forms.Label();
 			this.labelProductName = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -58,7 +59,10 @@
 			// 
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -77,7 +81,7 @@
 			this.buttonAdvApplyLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvApplyLicense.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvApplyLicense.AutoSize = true;
-			this.buttonAdvApplyLicense.Location = new System.Drawing.Point(207, 270);
+			this.buttonAdvApplyLicense.Location = new System.Drawing.Point(207, 264);
 			this.buttonAdvApplyLicense.Name = "buttonAdvApplyLicense";
 			this.buttonAdvApplyLicense.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvApplyLicense.Size = new System.Drawing.Size(94, 23);
@@ -91,7 +95,7 @@
 			// 
 			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvOk.Location = new System.Drawing.Point(307, 270);
+			this.buttonAdvOk.Location = new System.Drawing.Point(307, 264);
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
@@ -111,7 +115,7 @@
 			this.textBoxAbout.Name = "textBoxAbout";
 			this.textBoxAbout.ReadOnly = true;
 			this.textBoxAbout.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxAbout.Size = new System.Drawing.Size(372, 248);
+			this.textBoxAbout.Size = new System.Drawing.Size(372, 242);
 			this.textBoxAbout.TabIndex = 4;
 			// 
 			// gradientPanel1
@@ -125,7 +129,7 @@
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(393, 99);
+			this.gradientPanel1.Size = new System.Drawing.Size(393, 105);
 			this.gradientPanel1.TabIndex = 5;
 			// 
 			// tableLayoutPanel1
@@ -134,6 +138,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(this.buttonAdvViewActive, 2, 3);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelProductName, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
@@ -146,19 +151,35 @@
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(10, 8, 8, 8);
+			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(10, 8, 8, 4);
 			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(393, 99);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(393, 105);
 			this.tableLayoutPanel1.TabIndex = 3;
+			// 
+			// buttonAdvViewActive
+			// 
+			this.buttonAdvViewActive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvViewActive.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvViewActive.Location = new System.Drawing.Point(307, 75);
+			this.buttonAdvViewActive.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.buttonAdvViewActive.Name = "buttonAdvViewActive";
+			this.buttonAdvViewActive.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvViewActive.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvViewActive.TabIndex = 7;
+			this.buttonAdvViewActive.Text = "xxView";
+			this.buttonAdvViewActive.UseVisualStyle = true;
+			this.buttonAdvViewActive.UseVisualStyleBackColor = true;
+			this.buttonAdvViewActive.Click += new System.EventHandler(this.buttonAdvViewActive_Click);
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(13, 8);
+			this.label1.Location = new System.Drawing.Point(13, 11);
+			this.label1.Margin = new System.Windows.Forms.Padding(3);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(116, 13);
 			this.label1.TabIndex = 1;
@@ -168,7 +189,8 @@
 			// 
 			this.labelProductName.AutoSize = true;
 			this.labelProductName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelProductName.Location = new System.Drawing.Point(154, 28);
+			this.labelProductName.Location = new System.Drawing.Point(154, 33);
+			this.labelProductName.Margin = new System.Windows.Forms.Padding(3);
 			this.labelProductName.Name = "labelProductName";
 			this.labelProductName.Size = new System.Drawing.Size(50, 13);
 			this.labelProductName.TabIndex = 0;
@@ -177,7 +199,8 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(13, 28);
+			this.label2.Location = new System.Drawing.Point(13, 33);
+			this.label2.Margin = new System.Windows.Forms.Padding(3);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(109, 13);
 			this.label2.TabIndex = 2;
@@ -187,7 +210,8 @@
 			// 
 			this.labelProductVersion.AutoSize = true;
 			this.labelProductVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelProductVersion.Location = new System.Drawing.Point(154, 8);
+			this.labelProductVersion.Location = new System.Drawing.Point(154, 11);
+			this.labelProductVersion.Margin = new System.Windows.Forms.Padding(3);
 			this.labelProductVersion.Name = "labelProductVersion";
 			this.labelProductVersion.Size = new System.Drawing.Size(48, 13);
 			this.labelProductVersion.TabIndex = 0;
@@ -196,7 +220,8 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(13, 49);
+			this.label3.Location = new System.Drawing.Point(13, 55);
+			this.label3.Margin = new System.Windows.Forms.Padding(3);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(88, 13);
 			this.label3.TabIndex = 3;
@@ -206,7 +231,8 @@
 			// 
 			this.labelCopyright.AutoSize = true;
 			this.labelCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelCopyright.Location = new System.Drawing.Point(154, 49);
+			this.labelCopyright.Location = new System.Drawing.Point(154, 55);
+			this.labelCopyright.Margin = new System.Windows.Forms.Padding(3);
 			this.labelCopyright.Name = "labelCopyright";
 			this.labelCopyright.Size = new System.Drawing.Size(59, 13);
 			this.labelCopyright.TabIndex = 0;
@@ -218,7 +244,7 @@
 			this.pictureBox1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.pictureBox1.Location = new System.Drawing.Point(342, 11);
 			this.pictureBox1.Name = "pictureBox1";
-			this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 4);
+			this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 3);
 			this.pictureBox1.Size = new System.Drawing.Size(40, 40);
 			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.pictureBox1.TabIndex = 4;
@@ -228,7 +254,8 @@
 			// 
 			this.labelActiveAgentsInUse.AutoSize = true;
 			this.labelActiveAgentsInUse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelActiveAgentsInUse.Location = new System.Drawing.Point(154, 70);
+			this.labelActiveAgentsInUse.Location = new System.Drawing.Point(154, 77);
+			this.labelActiveAgentsInUse.Margin = new System.Windows.Forms.Padding(3);
 			this.labelActiveAgentsInUse.Name = "labelActiveAgentsInUse";
 			this.labelActiveAgentsInUse.Size = new System.Drawing.Size(123, 13);
 			this.labelActiveAgentsInUse.TabIndex = 6;
@@ -237,7 +264,8 @@
 			// labelActiveAgentsOrSeats
 			// 
 			this.labelActiveAgentsOrSeats.AutoSize = true;
-			this.labelActiveAgentsOrSeats.Location = new System.Drawing.Point(13, 70);
+			this.labelActiveAgentsOrSeats.Location = new System.Drawing.Point(13, 77);
+			this.labelActiveAgentsOrSeats.Margin = new System.Windows.Forms.Padding(3);
 			this.labelActiveAgentsOrSeats.Name = "labelActiveAgentsOrSeats";
 			this.labelActiveAgentsOrSeats.Size = new System.Drawing.Size(135, 13);
 			this.labelActiveAgentsOrSeats.TabIndex = 5;
@@ -255,10 +283,10 @@
 			this.gradientPanel2.Controls.Add(this.buttonAdvApplyLicense);
 			this.gradientPanel2.Controls.Add(this.buttonAdvOk);
 			this.gradientPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gradientPanel2.Location = new System.Drawing.Point(0, 99);
+			this.gradientPanel2.Location = new System.Drawing.Point(0, 105);
 			this.gradientPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.gradientPanel2.Name = "gradientPanel2";
-			this.gradientPanel2.Size = new System.Drawing.Size(393, 303);
+			this.gradientPanel2.Size = new System.Drawing.Size(393, 297);
 			this.gradientPanel2.TabIndex = 6;
 			// 
 			// buttonAdvLegalNotice
@@ -266,7 +294,7 @@
 			this.buttonAdvLegalNotice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvLegalNotice.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvLegalNotice.AutoSize = true;
-			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(107, 270);
+			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(107, 264);
 			this.buttonAdvLegalNotice.Name = "buttonAdvLegalNotice";
 			this.buttonAdvLegalNotice.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvLegalNotice.Size = new System.Drawing.Size(94, 23);
@@ -325,5 +353,6 @@
         private System.Windows.Forms.Label labelActiveAgentsInUse;
         private System.Windows.Forms.Label labelActiveAgentsOrSeats;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvLegalNotice;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvViewActive;
     }
 }

@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamScheduleViewModel
@@ -7,6 +8,35 @@
 	const int scheduleWidth = 835;
 	var left = Html.HtmlStyleLeft();
 }
+<div class="navbar">
+    <div class="navbar-inner">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
+                <input data-bind="value: displayDate" type="text" class="span2 text-center" readonly="readonly"/>
+                <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
+                <button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
+            </div>
+        </form>
+        <ul class="nav" data-bind="if: showTeamPicker">
+            <li class="divider-vertical"></li>
+        </ul>
+        <div data-bind="if: showTeamPicker">
+            <span class="nav-header" data-bind="if: showGroupings">
+                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { width: 'resolve', value: selectedTeam } ">
+                    <optgroup data-bind="attr: { label: text }, foreach: children">
+                        <option data-bind="text: text, value: id"></option>
+                    </optgroup>
+                </select>
+            </span>
+            <span data-bind="if: !showGroupings()">
+                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { width: 'resolve', value: selectedTeam } ">
+                    <option data-bind="text: text, value: id"></option>
+                </select>
+            </span>
+        </div>
+    </div>
+</div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<div class="body-teamschedule-inner">
 		
@@ -43,7 +73,7 @@
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
 									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
+									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 											style="width: @(widthPixel)px;
 												@left: @(leftPixel)px;
 												background-color: @layer.Color;

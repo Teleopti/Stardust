@@ -3,19 +3,12 @@
     Layout = null;
 }
 
- <div class="pdb5 request-detail-title">@Resources.ShiftTradeRequest</div>
-	 <div id="Request-shift-trade-detail-subject" class="request-data-subject" data-bind="text: Subject"></div>
-	 <div id="Request-shift-trade-detail-message"  class="request-text" data-bind="text: MessageText"></div>
-    <br/>
-    <br/>
-    <br/>
-	
 <div>
     <br/>
     <div>
         <div>
-            <div id="Request-shift-trade-detail-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
-            <br/>
+            <div id="Request-shift-trade-detail-info" class="alert alert-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
+
             <div id="sender-info">
                 <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
             </div>
@@ -50,7 +43,7 @@
 </div>
 <br/>
   <div  class="floatright" data-bind="visible: !IsTradeCreatedByMe()" >
-        <input type="button" id="Approve-shift-trade" value="@Resources.Approve" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="button mb5 ui-button ui-widget ui-state-default ui-corner-all"></input>
-        <input type="button" id="Deny-shift-trade" value="@Resources.Deny" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="button mb5 ui-button ui-widget ui-state-default ui-corner-all"></input>
+        <button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
+        <button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
     </div>
 

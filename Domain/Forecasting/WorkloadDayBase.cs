@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get
             {
             	return _workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
-            	       _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail;
+            	       _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail &&
+					   _workload.Skill.SkillType.ForecastSource != ForecastSource.Chat;
             }
         }
 

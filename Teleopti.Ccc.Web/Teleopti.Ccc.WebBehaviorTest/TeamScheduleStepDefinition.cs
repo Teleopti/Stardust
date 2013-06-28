@@ -7,12 +7,12 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 using Div = WatiN.Core.Div;
 
@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
-			Pages.Pages.TeamSchedulePage.TeamPicker.SelectItemByIdAndText(id, text);
+			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
+			Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
@@ -36,8 +37,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			IOpenTheTeamPicker();
 
-			Pages.Pages.TeamSchedulePage.TeamPicker.SelectItemByText(optionText);
+			Select2Box.SelectItemByText("Team-Picker", optionText);
 		}
+
+		[When(@"I select something in the team picker")]
+		public void WhenISelectSomethingInTheTeamPicker()
+		{
+			IOpenTheTeamPicker();
+
+			Select2Box.SelectFirstOption("Team-Picker");
+		}
+
 
 
 		[Then(@"I should see the team schedule tab")]
@@ -118,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void AssertShowingDay(DateOnly date)
 		{
-			Browser.Current.Url.EndsWith(string.Format("{0}/{1}/{2}", date.Year, date.Month, date.Day));
+			Browser.Interactions.AssertUrlContains(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
 
 		[Then(@"I should not see the absence's color")]
@@ -217,11 +227,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the team-picker")]
 		public void IOpenTheTeamPicker()
 		{
-			var teamPicker = Pages.Pages.TeamSchedulePage.TeamPicker;
-			if (teamPicker.IsClosed)
-				teamPicker.Open();
-
-			EventualAssert.That(() => teamPicker.IsOpen, Is.True);
+			Select2Box.Open("Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker with both teams")]
@@ -231,14 +237,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var myTeam = site + "/" + UserFactory.User().UserData<Team>().TheTeam.Description.Name;
 			var otherTeam = site + "/" + UserFactory.User().UserData<AnotherTeam>().TheTeam.Description.Name;
 
-			AssertTeamPickerHasTeams(new[] {myTeam, otherTeam});
+			Select2Box.AssertOptionExist("Team-Picker", myTeam);
+			Select2Box.AssertOptionExist("Team-Picker", otherTeam);
 		}
 
 		[Then(@"I should see available (team|group) options")]
 		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup,Table table)
 		{
 			var options = table.CreateSet<SingleValue>();
-			AssertTeamPickerHasTeams(from o in options select o.Value);
+
+			foreach (var option in options)
+			{
+				Select2Box.AssertOptionExist("Team-Picker", option.Value);
+			}
 		}
 
 		private class SingleValue
@@ -246,22 +257,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			public string Value { get; set; }
 		}
 
-
-		private void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
-		{
-			IOpenTheTeamPicker();
-
-			var texts = Pages.Pages.TeamSchedulePage.TeamPicker.OptionsTexts;
-			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True));
-		}
-
 		[Then(@"the teams should be sorted alphabetically")]
 		public void ThenTheTeamsShouldBeSortedAlphabetically()
 		{
-			var actual = Pages.Pages.TeamSchedulePage.TeamPicker.OptionsTexts;
-			var sorted = actual.OrderBy(t => t).ToArray();
+			var firstTeam = Select2Box.FirstOptionText;
+			var lastTeam = Select2Box.LastOptionText;
+			var teams = new List<string> {lastTeam, firstTeam}.OrderBy(t => t).ToArray();
 
-			actual.Should().Have.SameSequenceAs(sorted);
+			teams.First().Should().Be.EqualTo(firstTeam);
+			teams.Last().Should().Be.EqualTo(lastTeam);
 		}
 
 		[Then(@"I should see my colleague")]
@@ -315,27 +319,27 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var name = UserFactory.User().Person.Name.ToString();
 			AssertAgentIsDisplayed(name);
 
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Value, Is.EqualTo(teamId.ToString()));
+			Select2Box.AssertSelectedOptionValue("Team-Picker", teamId.ToString());
 		}
 
 		[Then(@"The team picker should have '(.*)' selected")]
 		public void ThenTheTeamPickerShouldHaveSelected(string optionSelected)
 		{
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Container.InnerHtml, Contains.Substring(optionSelected));
+			Select2Box.AssertSelectedOptionText("Team-Picker", optionSelected);
 		}
 
 		[Then(@"I should see the other site's team")]
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Container.InnerHtml, Contains.Substring(theOtherSitesTeam));
+			Browser.Interactions.AssertContains(".select2-container .select2-choice span", theOtherSitesTeam);
 		}
 
 		[Then(@"the team-picker should have my team selected")]
 		public void ThenTheTeam_PickerShouldHaveMyTeamSelected()
 		{
 			var myTeam = UserFactory.User().UserData<Team>().TheTeam.Id.Value.ToString();
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Value, Contains.Substring(myTeam));
+			Select2Box.AssertSelectedOptionValue("Team-Picker", myTeam);
 		}
 
 		[Then(@"the team-picker should have the first of the other site's teams selected")]
@@ -345,29 +349,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var team2 = UserFactory.User().UserData<AnotherSitesSecondTeam>().TheTeam;
 			var expected = new[] {team1, team2}.OrderBy(t => t.Description.Name).First();
 
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Value, Contains.Substring(expected.Id.Value.ToString()));
+			Select2Box.AssertSelectedOptionValue("Team-Picker", expected.Id.Value.ToString());
 		}
 
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name);
-			EventualAssert.That(() => agent.Exists, Is.True);
+			Browser.Interactions.AssertExists(string.Format(".teamschedule-agent-name:contains('{0}')", name));
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
 
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), pushMessageProvider, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), pushMessageProvider, MockRepository.GenerateMock<ILoggedOnUser>());
 
             var result = target.CreatePortalViewModel();
-			SectionNavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
 			message.PayAttention.Should().Be.True();
         }
 
@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
 
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), pushMessageProvider, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), pushMessageProvider, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var result = target.CreatePortalViewModel();
-			SectionNavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
 			message.UnreadMessageCount.Should().Be.EqualTo(1);
 		}
 	}

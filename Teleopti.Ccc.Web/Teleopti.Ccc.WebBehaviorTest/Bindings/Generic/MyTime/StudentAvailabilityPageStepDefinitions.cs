@@ -14,6 +14,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select day '(.*)' in student availability")]
 		public void WhenISelectDayInStudentAvailability(DateTime date)
 		{
+
 			Pages.Pages.StudentAvailabilityPage.SelectCalendarCellByClass(date);
 		}
 
@@ -50,15 +52,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the edit button in student availability")]
 		public void WhenIClickTheEditButtonInStudentAvailability()
 		{
-			Pages.Pages.StudentAvailabilityPage.EditButton.Focus();
-			Pages.Pages.StudentAvailabilityPage.EditButton.EventualClick();
+			Browser.Interactions.Javascript("$('#Availability-edit-button').mousedown();");
 		}
 
 		[When(@"I click the delete button in student availability")]
 		public void WhenIClickTheDeleteButtonInStudentAvailability()
 		{
-			Pages.Pages.StudentAvailabilityPage.DeleteButton.Focus();
-			Pages.Pages.StudentAvailabilityPage.DeleteButton.EventualClick();
+			Browser.Interactions.Click("#Availability-delete-button");
 		}
 
 		[When(@"I input student availability with")]

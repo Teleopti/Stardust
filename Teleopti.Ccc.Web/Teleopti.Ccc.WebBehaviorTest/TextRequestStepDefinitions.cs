@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -22,199 +17,223 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input text request values")]
 		public void WhenIInputTextRequstValues()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+		}
+
+		[When(@"I click new text request menu item in the toolbar")]
+		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
+		{
+			Browser.Interactions.Click(".bdd-add-text-request-link");
+		}
+
+		[When(@"I input text request values with subject '(.*)' for date '(.*)'")]
+		public void WhenIInputSubject(string subject, DateTime date)
+		{
+			var time = date.AddHours(12);
+			SetValuesForDateAndTimeInSchedule(date, time, date, time.AddHours(1));
+			TypeSubject(subject);
+			TypeMessage("A message. A very very very short message. Or maybe not.");
 		}
 
         [When(@"I input text request values for date '(.*)'")]
         public void WhenIInputTextRequestValuesForDate(DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-            var time = date.AddHours(12);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
+			
+			var time = date.AddHours(12);
+			SetValuesForDateAndTimeInSchedule(date, time, date, time.AddHours(1));
+            
         }
 
-		[When(@"I input new text request values")]
-		public void WhenIInputNewTextRequestValues()
+		[When(@"I change the text request values with")]
+		public void WhenIChangeTheTextRequestValuesWith(Table table)
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
+			var subject = table.Rows[1][1];
+			var position = table.Rows[0][1];
+
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(
+				string.Format(".request:nth-child({0}) .request-edit-subject", position), subject);
 		}
 
-		[Then(@"I should see the request's values")]
-		public void ThenIShouldSeeTheRequestsValues()
+		[Then(@"I should see the updated text request values in the list with")]
+		public void ThenIShouldSeeTheUpdatedTextRequestValuesInTheListWith(Table table)
 		{
-			var request= UserFactory.User().UserData<ExistingTextRequest>();
+			var subject = table.Rows[1][1];
+			var position = table.Rows[0][1];
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), 
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value,
-																		Is.EqualTo(request.PersonRequest.GetMessage(new NoFormatting())));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value,
-																		Is.EqualTo(request.PersonRequest.GetSubject(new NoFormatting())));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.Date));
-			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value),
-																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.TimeOfDay));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
+			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
+			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
 		}
 
-		[Then(@"I should see the new text request values in the list")]
-		public void ThenIShouldSeeTheNewTextRequestValuesInTheList()
+		[When(@"I click send request button")]
+		public void WhenIClickSendRequestButton()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
+			Browser.Interactions.Click(".request-new-send");
+		}
+		
+		[Then(@"I should see the text request's values at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)
+		{
+			var request = UserFactory.User().UserData<ExistingTextRequest>();
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
+				request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-message", position),
+				request.PersonRequest.GetMessage(new NoFormatting()));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains(
+				string.Format(".request-body:nth-child({0}) .request-data-date", position),
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
-		public void ThenIShouldSeeTheTextRequestFormWithTodaySDateAsDefault()
+		public void ThenIShouldSeeTheRequestFormWithTodaySDateAsDefault()
 		{
 			var today = DateTime.Today;
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(today));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(today));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = string.Empty;
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", string.Empty);
 		}
 
 		[When(@"I input too long message request values")]
 		[When(@"I input too long text request values")]
         public void WhenIInputTooLongTextRequestValues()
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = new string('t', 2002);
+			TypeSubject("The cake is a.. Cake!");
+			TypeMessage(new string('t', 2002));
+			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
         }
 
 		[When(@"I input too long subject request values")]
 		public void WhenIInputTooLongSubjectRequestValues()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "01234567890123456789012345678901234567890123456789012345678901234567890123456789#";
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			TypeSubject("01234567890123456789012345678901234567890123456789012345678901234567890123456789#");
+			TypeMessage("A message. A very very very short message. Or maybe not.");
+			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
+		}
+
+		private void TypeSubject(string text)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-subject", text);
+		}
+
+		private void TypeMessage(string text)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-message", text);
+		}
+
+		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
+		{
+			EnableTimePickersByUncheckingFullDayCheckbox();
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
+							  fromDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
+							  toDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timeto", toTime.ToShortTimeString(UserFactory.User().Culture));
+		}
+
+		private void SetValuesForDateAndTimeInSchedule(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
+		{
+			EnableTimePickersByUncheckingFullDayCheckbox();
+
+			Browser.Interactions.Javascript(string.Format("$('#Schedule-addRequest-fromDate-input').datepicker('set', '{0}');",
+							  fromDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-fromTime-input-input", fromTime.ToShortTimeString(UserFactory.User().Culture));
+
+			Browser.Interactions.Javascript(string.Format("$('#Schedule-addRequest-toDate-input').datepicker('set', '{0}');",
+							  toDate.ToShortDateString(UserFactory.User().Culture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Schedule-addRequest-toTime-input-input", toTime.ToShortTimeString(UserFactory.User().Culture));
 		}
 
 
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = DateTime.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = DateTime.Today.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
+			SetValuesForDateAndTime(DateTime.Today.AddDays(1), DateTime.Today, DateTime.Today, DateTime.Today.AddHours(-2));
+		}
+		
+		private void EnableTimePickersByUncheckingFullDayCheckbox()
+		{
+			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked');").ToString() == "true")
+				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
         [When(@"I input later start time than end time for date '(.*)'")]
         public void WhenIInputLaterStartTimeThanEndTimeForDate(DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = date.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = date.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);
+			SetValuesForDateAndTime(date.AddDays(1), date.AddHours(1), date, date.AddHours(-2));
         }
 
-		[When(@"I click the text request's delete button")]
- 		public void WhenIClickTheRequestSDeleteButton()
- 		{
-			PersonRequest requestId = null;
-			if (UserFactory.User().HasSetup<ExistingTextRequest>())
-				requestId = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingPendingTextRequest>())
-				requestId = UserFactory.User().UserData<ExistingPendingTextRequest>().PersonRequest;
-			if (requestId == null)
-				ScenarioContext.Current.Pending();
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId.Id.Value).Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).DisplayVisible(), Is.True);
-			Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId.Id.Value).EventualClick();
- 		}
+		[When(@"I click the delete button of request at position '(.*)' in the list")]
+		public void WhenIClickTheDeleteButtonOfRequestAtPositionInTheList(int position)
+		{
+			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-delete", position));
+		}
 
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.OuterHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.Period)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.Period)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MissingSubject));
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MissingSubject);
 		}
 
         [Then(@"I should see texts describing too long text error")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-            EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MessageTooLong));
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MessageTooLong);
         }
 
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.TheNameIsTooLong));
+			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
 		}
 
-		[Then(@"I should not see the absence request in the list")]
-		[Then(@"I should not see the text request in the list")]
-		public void ThenIShouldNotSeeTheTextRequestInTheList()
+		[Then(@"I should not see any requests in the list")]
+		public void ThenIShouldNotSeeAnyRequestsInTheList()
 		{
-			var existingTextRequest = UserFactory.User().UserData<ExistingTextRequest>();
-			if (existingTextRequest != null)
-			{
-				var requestId = existingTextRequest.PersonRequest.Id.Value;
-				EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId).Exists, Is.False);
-				Navigation.GotoRequests();
-				EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(requestId).Exists, Is.False);
-				return;
-			}
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(0));
+			Browser.Interactions.AssertNotExists(".request-list", ".request-list .request");
 		}
 
-		[Then(@"I should not see a delete button")]
-		public void ThenIShouldNotSeeADeleteButton()
+
+		[Then(@"I should not see a delete button for request at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeADeleteButtonForRequestAtPositionInTheList(int position)
 		{
-			PersonRequest request = null;
-			if (UserFactory.User().HasSetup<ExistingApprovedTextRequest>())
-				request = UserFactory.User().UserData<ExistingApprovedTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingDeniedTextRequest>())
-				request = UserFactory.User().UserData<ExistingDeniedTextRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingApprovedAbsenceRequest>())
-				request = UserFactory.User().UserData<ExistingApprovedAbsenceRequest>().PersonRequest;
-			else if (UserFactory.User().HasSetup<ExistingDeniedAbsenceRequest>())
-				request = UserFactory.User().UserData<ExistingDeniedAbsenceRequest>().PersonRequest;
-			if (request == null)
-				ScenarioContext.Current.Pending();
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(request.Id.Value).Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(request.Id.Value).IsDisplayed(), Is.False);
+			Browser.Interactions.AssertNotExists(".request-list", string.Format(".request-list .request-body:nth-child({0}) .request-delete", position));
 		}
 
-		[Then(@"I should not see a save button")]
-		public void ThenIShouldNotSeeASaveButton()
+		[Then(@"I should not see a save button for request at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeASaveButtonForRequestAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.OkButton.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists("#Requests-body-inner",
+			                                     string.Format(
+				                                     ".request-list .request-edit:nth-child({0}) .request-edit-update", position));
 		}
 	}
 }

@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			writer(succeedOrIgnore(() => Browser.Current.Url));
 		}
 
+
+
 		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
 		{
 			_browser.RunScript("document.driverScriptResult = String( function(){" + javascript + "}() );");
@@ -148,14 +150,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			builder.Append(" ");
 			DumpInfo(s => builder.Append(s));
 			return builder.ToString();
-		}
-	}
-
-	public class BrowserInteractionException : Exception
-	{
-		public BrowserInteractionException(string message, Exception innerException)
-			: base(message, innerException)
-		{
 		}
 	}
 }

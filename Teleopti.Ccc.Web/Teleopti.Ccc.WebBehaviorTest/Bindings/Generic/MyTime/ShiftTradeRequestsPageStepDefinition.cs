@@ -29,8 +29,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			gotoAddRequestToday();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.Javascript(script);
+			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
+			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
+			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
 			Browser.Interactions.AssertContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
 
@@ -38,9 +39,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
-			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
+			Browser.Interactions.Click(".shifttrade-request-add");
+			Browser.Interactions.AssertContains("#Request-add-loaded-date", "20"); //date 20xx-xx-xx
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -87,13 +87,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
-
-
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Text), Is.EqualTo(date));
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Year.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Month.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
+
+		[When(@"I click on the next date")]
+		public void WhenIClickOnTheNextDate()
+		{
+			Browser.Interactions.Click(".icon-arrow-right");
+		}
+
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
@@ -112,6 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the datepicker")]
 		public void ThenIShouldNotSeeTheDatepicker()
 		{
+			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-missing-wcs-message", ".add-shifttrade-datepicker ");
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
 		}
 
@@ -136,13 +144,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see my details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
 		{
-			EventualAssert.That(()=>Pages.Pages.RequestsPage.MyScheduleDayOff.Text,Is.EqualTo(dayOffText));
+			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see other details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.OtherScheduleDayOff.Text, Is.EqualTo(dayOffText));
+			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule-to .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see details with a schedule to")]
@@ -161,15 +169,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
+			Browser.Interactions.AssertContains(".request-data-subject", subject);
 		}
 
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
+			Browser.Interactions.AssertContains(".request-text", message);
 		}
-
 
 		[When(@"I enter subject '(.*)'")]
 		public void WhenIEnterSubject(string subject)
@@ -184,6 +191,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue(message);
 		}
+
+		[When(@"I click send shifttrade button")]
+		public void WhenIClickSendShifttradeButton()
+		{
+			Browser.Interactions.Click(".send-button");
+		}
+
 		
 		[Then(@"Add Shift Trade Request view should not be visible")]
 		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
@@ -195,7 +209,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.Text, Is.EqualTo(Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.IsDisplayed(), Is.True);
 		}
 
 		[Then(@"I should not see timelines")]
@@ -204,5 +217,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
 		}
 
+		[When(@"I click cancel button")]
+		public void WhenIClickCancelButton()
+		{
+			Browser.Interactions.Click(".cancel-button");
+		}
 	}
 }

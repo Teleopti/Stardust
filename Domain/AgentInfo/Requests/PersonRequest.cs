@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             authorization.VerifyEditRequestPermission(this);
             IRequest request = GetRequest();
             if (request!=null) request.Deny(denyPerson);
-            RequestState.Deny();
+			RequestState.Deny();
             _denyReason = denyReasonTextResourceKey ?? string.Empty;
             NotifyOnStatusChange();
         }
@@ -486,12 +486,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             RequestState = new ApprovedPersonRequest(this);
         }
 
-        private void MoveToDenied()
-        {
-            RequestState = new DeniedPersonRequest(this);
-        }
+	    private void MoveToDenied(bool autoDenied = false)
+	    {
+		    if (autoDenied)
+			    RequestState = new AutoDeniedPersonRequest(this);
+		    else
+			    RequestState = new DeniedPersonRequest(this);
+	    }
 
-        private void MovetoNew()
+	    private void MovetoNew()
         {
             RequestState = new NewPersonRequest(this);
         }
@@ -510,6 +513,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get { return RequestState.IsDenied; }
         }
+
+		public virtual bool IsAutoDenied
+		{
+			get { return RequestState.IsAutoDenied; }
+		}
 
         public virtual bool IsApproved
         {
@@ -569,6 +577,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
 
             protected internal virtual bool IsDenied { get { return false; } }
+			protected internal virtual bool IsAutoDenied { get { return false; } }
             protected internal virtual bool IsApproved { get { return false; } }
             protected internal virtual bool IsPending { get { return false; } }
             protected internal virtual bool IsNew { get { return false; } }
@@ -613,6 +622,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                         return new ApprovedPersonRequest(personRequest);
                     case 3:
                         return new NewPersonRequest(personRequest);
+					case 4:
+						return new AutoDeniedPersonRequest(personRequest);
                 }
                 throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
             }
@@ -645,6 +656,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return Resources.Denied; }
             }
         }
+
+		private class AutoDeniedPersonRequest : PersonRequestState
+		{
+			public AutoDeniedPersonRequest(PersonRequest personRequest)
+				: base(personRequest, 4)
+			{
+			}
+
+			protected internal override bool IsDenied { get { return true; } }
+			protected internal override bool IsAutoDenied { get { return true; } }
+			protected internal override string StatusText
+			{
+				get { return Resources.Denied; }
+			}
+		}
 
         private class PendingPersonRequest : PersonRequestState
         {
@@ -685,7 +711,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
             protected internal override void Deny()
             {
-                _personRequest.MoveToDenied();
+				_personRequest.MoveToDenied(true);
             }
 
             protected internal override void MakePending()

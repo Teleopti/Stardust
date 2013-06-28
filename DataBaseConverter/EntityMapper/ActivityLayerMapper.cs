@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// <summary>
     /// Maps an old activity layer
     /// </summary>
-    public class ActivityLayerMapper : Mapper<ActivityLayer, global::Domain.ActivityLayer>
+    public class ActivityLayerMapper : Mapper<ILayer<IActivity>, global::Domain.ActivityLayer>
     {
         private readonly DateTime _date;
         private readonly ActivityLayerBelongsTo _typeOfLayer;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public override ActivityLayer Map(global::Domain.ActivityLayer oldEntity)
+				public override ILayer<IActivity> Map(global::Domain.ActivityLayer oldEntity)
         {
             IMultiplicatorDefinitionSet definitionSet = null;
             DateTimePeriodMapper dtpMap = new DateTimePeriodMapper(TimeZone,_date);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             if (newAct == null) return null;
             
             DateTimePeriod newPeriod = dtpMap.Map(oldEntity.Period);
-            ActivityLayer returnLayer = null;
+						ILayer<IActivity> returnLayer = null;
             switch (_typeOfLayer)
             {
                 case ActivityLayerBelongsTo.MainShift:
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                     break;
                 case ActivityLayerBelongsTo.PersonalShift:
                     if (!_layerContainsOvertime.IsSatisfiedBy(oldEntity))
-                        returnLayer = new PersonalShiftActivityLayer(newAct, newPeriod);
+                        returnLayer = new PersonalShiftLayer(newAct, newPeriod);
                     break;
                 case ActivityLayerBelongsTo.WorkShift:
                     if (!_layerContainsOvertime.IsSatisfiedBy(oldEntity))

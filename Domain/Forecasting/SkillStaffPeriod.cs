@@ -362,7 +362,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             var parent = SkillDay;
             
             //Never over 100%, if demand = 0 then 100 if Email etc
-            if (parent != null && parent.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony && parent.Skill.SkillType.ForecastSource!=ForecastSource.Retail)
+            if (parent != null && parent.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony 
+				&& parent.Skill.SkillType.ForecastSource!=ForecastSource.Retail
+				&& parent.Skill.SkillType.ForecastSource!=ForecastSource.Chat)
             {
                 if (Payload.ForecastedIncomingDemand == 0)
                 {
@@ -379,8 +381,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
+	            var tmpScheduled = ScheduledAgentsIncoming * SkillDay.Skill.MaxParallelTasks;
                 _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
-                                                   ScheduledAgentsIncoming * Payload.Efficiency.Value,
+												   tmpScheduled * Payload.Efficiency.Value,
                                                    Payload.ServiceAgreementData.ServiceLevel.Seconds,
                                                    Payload.TaskData.Tasks,
                                                    Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
@@ -465,6 +468,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
 				if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
 				{
+					var maxParallel = SkillDay.Skill.MaxParallelTasks;
 					traffic = _staffingCalculatorService.AgentsUseOccupancy(
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 					(int)Math.Round(Payload.ServiceAgreementData.ServiceLevel.Seconds),
@@ -472,7 +476,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
 					Period.ElapsedTime(),
 					minOcc,
-					maxOcc);
+					maxOcc,
+					maxParallel);
 				}
                 
             }
@@ -591,9 +596,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     isAvail = skillStaffPeriod.IsAvailable;
                 useShrinkage = skillStaffPeriod.Payload.UseShrinkage;
             }
-
+	        var skillDay = skillStaffPeriods[0].SkillDay;
             if (tasks == 0)
-                return new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues(), skillStaffPeriods[0].StaffingCalculatorService);
+            {
+	            var newPeriod = new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues(), skillStaffPeriods[0].StaffingCalculatorService);
+				newPeriod.SetSkillDay(skillDay);
+				return newPeriod;
+            }
 
             Task retTask = new Task(tasks,TimeSpan.FromSeconds(taskSeconds/tasks),TimeSpan.FromSeconds(afterTaskSeconds/tasks));
             ServiceLevel retLevel = new ServiceLevel(new Percent(servicePercent/tasks),serviceSeconds/tasks);
@@ -605,7 +614,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ret.IsAvailable = isAvail;
             ret.Payload.UseShrinkage = useShrinkage;
             ret.SetCalculatedResource65(resource);
-
+			ret.SetSkillDay(skillDay); 
             return ret;
         }
 

@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool TryModify(IList<IScheduleDay> scheduleParts, IScheduleTag scheduleTag);
 
         void UpdateRestriction();
+	    void UpdateOvertimeAvailability();
         void UpdateNoteFromEditor();
         void UpdatePublicNoteFromEditor();
         void UpdateFromEditor();
@@ -838,6 +839,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
             undoRedoContainer.CreateBatch("Saving restriction");
+
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
+
+            undoRedoContainer.CommitBatch();
+            LastUnsavedSchedulePart = null;
+        }
+		
+		public void UpdateOvertimeAvailability()
+        {
+            if (LastUnsavedSchedulePart == null) return;
+            IList<IScheduleDay> theParts =  new List<IScheduleDay> { LastUnsavedSchedulePart };
+
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+            undoRedoContainer.CreateBatch("Saving overtime availability");
 
             _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
 

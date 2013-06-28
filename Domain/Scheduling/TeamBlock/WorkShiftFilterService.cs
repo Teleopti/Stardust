@@ -112,10 +112,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
 	        shiftList = _personalShiftsShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
 
-	        if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
-	        {
-	            shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
-	        }
+
+	        shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
+
 	        return shiftList;
 	    }
 	}

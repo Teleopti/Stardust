@@ -9,6 +9,11 @@
 {
 	width: 483px;
 }
+
+.message-option {
+	width: 100%
+}
+
 .rtl .asmMessage-list
 {
     margin-right: 483px;
