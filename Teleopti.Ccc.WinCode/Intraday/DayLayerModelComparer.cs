@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				case "ScheduleStartDateTime":
 					return compareDateTime(dayLayerModelX.ScheduleStartDateTime, dayLayerModelY.ScheduleStartDateTime);
 			}
-
 			return 0;
 		}
 
@@ -73,9 +72,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 		private static int compareDateTime(DateTime xDateTime, DateTime yDateTime)
 		{
-			var xTimeSpan = new TimeSpan(xDateTime.Ticks);
-			var yTimeSpan = new TimeSpan(yDateTime.Ticks);
-			return xTimeSpan.TotalSeconds.CompareTo(yTimeSpan.TotalSeconds);
+			return (new TimeSpan(xDateTime.Ticks)).TotalSeconds
+			                                      .CompareTo((new TimeSpan(yDateTime.Ticks)).TotalSeconds);
 		}
 
 		private static int compareString(string xString, string yString)

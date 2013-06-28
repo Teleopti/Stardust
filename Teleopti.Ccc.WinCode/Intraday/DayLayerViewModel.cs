@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,15 +25,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly IRepositoryFactory _repositoryFactory;
         private IDispatcherWrapper _dispatcherWrapper;
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
-        private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
 	    private readonly DayLayerModelComparer _customComparer;
-
+	    private CollectionViewSource _collectionViewSource;
 		public ListCollectionView ModelEditable { get; private set; }
 
-		public ICollection<DayLayerModel> Models
-		{
-			get { return _models; }
-		}
+		public ICollection<DayLayerModel> Models { get; private set; }
 
 	    public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
         {
@@ -43,7 +40,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder = rtaStateHolder;
 			if (rtaStateHolder != null)
 				_rtaStateHolder.AgentstateUpdated += rtaStateHolderOnAgentstateUpdated;
-			ModelEditable = CollectionViewSource.GetDefaultView(Models) as ListCollectionView;
+			Models = new ObservableCollection<DayLayerModel>();
+		    _collectionViewSource = new CollectionViewSource {Source = Models};
+		    ModelEditable = _collectionViewSource.View as ListCollectionView;
+
 		    
 			if (ModelEditable == null) return;
 		    _customComparer = new DayLayerModelComparer();
@@ -129,7 +129,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		    {
 			    var agentState = getActualAgentState(dayLayerModel);
 			    if (agentState == null) continue;
+				ModelEditable.EditItem(dayLayerModel);
 			    dayLayerModel.EnteredCurrentState = agentState.StateStart;
+				ModelEditable.CommitEdit();
 			    if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
 			    
 				ModelEditable.EditItem(dayLayerModel);
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var agentState = customEventArgs.Value;
 			var dayLayerModel = Models.FirstOrDefault(m => m.Person.Id == agentState.PersonId);
 			if (dayLayerModel == null) return;
-			_dispatcherWrapper.BeginInvoke(new Action(() => updateAgentState(dayLayerModel, agentState)));
+			ModelEditable.Dispatcher.BeginInvoke(new Action(() => updateAgentState(dayLayerModel, agentState)));
 		}
 
 		private void updateAgentState(DayLayerModel dayLayerModel, IActualAgentState agentState)
@@ -218,6 +220,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             _rtaStateHolder = null;
             _dispatcherWrapper = null;
+	        _collectionViewSource = null;
+	        ModelEditable = null;
+	        Models = null;
         }
     }
 }

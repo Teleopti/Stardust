@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private int _colorValue = 16777215;
         private double _staffingEffect;
         private DateTime _alarmStart;
-
-	    private DayLayerModel _transactionCopy;
-	    private bool _isInEditMode;
+		private bool _isInEditMode;
 
         public DayLayerModel(IPerson person, DateTimePeriod period, ITeam team,
                              LayerViewModelCollection layerViewModelCollection,
@@ -245,46 +243,16 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 		public void BeginEdit()
 		{
-			_transactionCopy = new DayLayerModel(_person, _period, _team, _layerViewModelCollection, _commonNameDescriptionSetting)
-				{
-					AlarmDescription = _alarmDescription,
-					AlarmStart = _alarmStart,
-					ColorValue = _colorValue,
-					CurrentActivityDescription = _currentActivityDescription,
-					CurrentStateDescription = _currentStateDescription,
-					EnteredCurrentState = _enteredCurrentState,
-					IsPinned = _isPinned,
-					NextActivityDescription = _nextActivityDescription,
-					NextActivityStartDateTime = _nextActivityStartDateTime,
-					ScheduleStartDateTime = _scheduleStartDateTime,
-					StaffingEffect = _staffingEffect
-				};
 			IsInEditMode = true;
 		}
 
 		public void EndEdit()
 		{
-			_transactionCopy = null;
 			IsInEditMode = false;
 		}
 
 		public void CancelEdit()
 		{
-			if (_transactionCopy != null)
-			{
-				AlarmDescription = _transactionCopy.AlarmDescription;
-				AlarmStart = _transactionCopy.AlarmStart;
-				ColorValue = _transactionCopy.ColorValue;
-				CurrentActivityDescription = _transactionCopy.CurrentActivityDescription;
-				CurrentStateDescription = _transactionCopy.CurrentStateDescription;
-				EnteredCurrentState = _transactionCopy.EnteredCurrentState;
-				IsPinned = _transactionCopy.IsPinned;
-				NextActivityDescription = _transactionCopy.NextActivityDescription;
-				NextActivityStartDateTime = _transactionCopy.NextActivityStartDateTime;
-				ScheduleStartDateTime = _transactionCopy.ScheduleStartDateTime;
-				StaffingEffect = _transactionCopy.StaffingEffect;
-				_transactionCopy = null;
-			}
 			IsInEditMode = false;
 		}
     }
