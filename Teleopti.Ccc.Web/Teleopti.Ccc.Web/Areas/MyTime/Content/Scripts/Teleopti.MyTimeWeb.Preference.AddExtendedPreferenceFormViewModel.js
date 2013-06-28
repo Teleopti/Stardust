@@ -28,16 +28,37 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ActivityPreferenceId = ko.observable();
 	this.ActivityMinimumTime = ko.observable();
 	this.ActivityMaximumTime = ko.observable();
-
+	
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.NewTemplateName = ko.observable('');
 
 	this.IsTimeInputEnabled = ko.observable();
-
+    
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
 	});
+    
+	this.EarliestEndTimeNextDayClass = ko.computed(function () {
+	    return self.EarliestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+	this.LatestEndTimeNextDayClass = ko.computed(function () {
+	    return self.LatestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+    
+	this.EarliestEndTimeNextDayToggleEnabled = ko.computed(function() {
+	    return self.EarliestEndTime() !== undefined && self.EarliestEndTime() !== '';
+	});
+	this.LatestEndTimeNextDayToggleEnabled = ko.computed(function () {
+	    return self.LatestEndTime() !== undefined && self.LatestEndTime() !== '';
+	});
+    
+	this.LatestEndTimeNextDayToggle = function () {
+	    self.LatestEndTimeNextDay(!self.LatestEndTimeNextDay());
+	};
+	this.EarliestEndTimeNextDayToggle = function () {
+	    self.EarliestEndTimeNextDay(!self.EarliestEndTimeNextDay());
+	};
 
 	_initPreferenceString();
 

@@ -120,9 +120,9 @@ ko.bindingHandlers.timepicker = {
     },
     update: function(element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
-        if (typeof value === 'function') {
-            return;
-        }
+        if (typeof value === 'function') return;
+        if (value === undefined) value = '';
+            
         $(element).timepicker("setTime", value);
     }
 };
