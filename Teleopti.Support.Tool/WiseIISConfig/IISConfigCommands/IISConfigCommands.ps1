@@ -1,3 +1,5 @@
+Import-Module Carbon
+
 function Load-SnapIn {
     param(
         $ModuleName
@@ -223,7 +225,8 @@ function destroy-WorkingFolder{
         $workingFolder
     )
 	if (Test-Path "$workingFolder") {
-		& rmdir "$workingFolder"
+		remove-item "$workingFolder\*" -recurse
+		remove-item "$workingFolder\"
 	}
 }
 
@@ -332,7 +335,6 @@ function Create-LocalGroup
 
 function Stop-TeleoptiCCC
 {
-    $dir = Split-Path $MyInvocation.ScriptName
     $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StopSystem.bat"
     
     [string]$ErrorMessage = "Stop system failed!"
@@ -344,7 +346,6 @@ function Stop-TeleoptiCCC
 
 function Start-TeleoptiCCC
 {
-    $dir = Split-Path $MyInvocation.ScriptName
     $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StartSystem.bat"
     
     [string]$ErrorMessage = "Start system failed!"
@@ -354,11 +355,10 @@ function Start-TeleoptiCCC
     }
 }
 
-
 function Check-ServiceIsRunning{
 	param(
 		$ServiceName
-		)
+ 	)
     $arrService = Get-Service -Name $ServiceName
     if ($arrService.Status -eq "Running") {
     	return $True
@@ -366,4 +366,32 @@ function Check-ServiceIsRunning{
     else {
 	return $False
     }
+}
+
+function Start-MyService{
+	param($ServiceName)
+	$arrService = Get-Service -Name $ServiceName
+	if ($arrService.Status -ne "Running"){
+		Start-Service $ServiceName
+	}
+}
+
+function Stop-MyService{
+	param($ServiceName)
+	$arrService = Get-Service -Name $ServiceName
+	if ($arrService.Status -ne "Stopped"){
+		Stop-Service $ServiceName
+	}
+}
+
+function stop-AppPool{
+    param($PoolName)
+            Invoke-AppCmd Stop Apppool "$PoolName"
+			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:false
+}
+
+function start-AppPool{
+    param($PoolName)
+            Invoke-AppCmd Start Apppool "$PoolName"
+			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:true
 }
