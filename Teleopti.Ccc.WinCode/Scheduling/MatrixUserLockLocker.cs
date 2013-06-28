@@ -25,16 +25,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 var currentPerson = matrix.Person;
 
-                IList<DateOnly> dates = new List<DateOnly>();
+	            bool personIncluded = scheduleDays.Any(scheduleDay => scheduleDay.Person.Equals(currentPerson));
 
-                foreach (var scheduleDay in scheduleDays)
-                {
-                    if (scheduleDay.Person.Equals(currentPerson))
-                        dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                }
-
-				setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
-				if(dates.Count > 0)
+	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
+				if(personIncluded)
 #pragma warning disable 612,618
 					matrix.SelectedPeriod = selectedPeriod;
 #pragma warning restore 612,618

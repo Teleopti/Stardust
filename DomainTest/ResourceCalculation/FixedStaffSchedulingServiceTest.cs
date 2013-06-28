@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -124,8 +123,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					_effectiveRestriction).Repeat.Any();
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-            //Expect.Call(person.Equals(person)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(person2.Equals(person)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
             
 			_mocks.ReplayAll();
 
@@ -174,7 +171,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-		    Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
 
             _schedulingOptions.UseShiftCategoryLimitations = false;
@@ -186,38 +182,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, _schedulingOptions, true, false, _rollbackService);
 			Assert.IsNotNull(_schedulingService.FinderResults);
 			_mocks.VerifyAll();
-		}
-
-		[Test]
-		public void VerifyFindDates()
-		{
-			var date1 = new DateOnly(2009, 2, 2);
-			var date2 = new DateOnly(2009, 2, 3);
-			var date3 = new DateOnly(2009, 2, 4);
-			var date4 = new DateOnly(2009, 2, 5);
-
-			var part1 = _mocks.StrictMock<IScheduleDay>();
-			var part2 = _mocks.StrictMock<IScheduleDay>();
-			var part3 = _mocks.StrictMock<IScheduleDay>();
-			var part4 = _mocks.StrictMock<IScheduleDay>();
-			IList<IScheduleDay> parts = new List<IScheduleDay> { part1, part2, part3, part4 };
-            
-			using (_mocks.Record())
-			{
-				Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date1, _timeZoneInfo)).Repeat.AtLeastOnce();
-				Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date2, _timeZoneInfo)).Repeat.AtLeastOnce();
-				Expect.Call(part3.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date3, _timeZoneInfo)).Repeat.AtLeastOnce();
-				Expect.Call(part4.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date4, _timeZoneInfo)).Repeat.AtLeastOnce();
-			}
-			using (_mocks.Playback())
-			{
-				var lst = _schedulingService.GetAllDates(parts);
-				Assert.AreEqual(4, lst.Count);
-				Assert.AreEqual(new DateOnly(date1), lst[0]);
-				Assert.AreEqual(new DateOnly(date2), lst[1]);
-				Assert.AreEqual(new DateOnly(date3), lst[2]);
-				Assert.AreEqual(new DateOnly(date4), lst[3]);
-			}
 		}
 
 		[Test]

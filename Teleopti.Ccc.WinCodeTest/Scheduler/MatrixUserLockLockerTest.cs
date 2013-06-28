@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IList<IScheduleDay> _scheduleDays;
         private IGridlockManager _gridlockManager;
         private IPerson _person;
-        private IDateOnlyAsDateTimePeriod _datePeriod;
         private DateOnly _dateOnly;
         private ReadOnlyCollection<IScheduleDayPro> _effectiveDays;
         private GridlockDictionary _gridlockDictionary;
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _gridlockDictionary = new GridlockDictionary();
             _gridlockDictionary.Add("key", _gridLock);
             _gridlockManager = _mockRepository.StrictMock<IGridlockManager>();
-            _datePeriod = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
             _target = new MatrixUserLockLocker(_gridlockManager);
         }
 
@@ -53,8 +50,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_scheduleMatrix.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay1.Person).Return(_person);
                 Expect.Call(_person.Equals(_person)).Return(true);
-                Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_datePeriod);
-                Expect.Call(_datePeriod.DateOnly).Return(_dateOnly);
                 Expect.Call(_scheduleMatrix.EffectivePeriodDays).Return(_effectiveDays);
                 Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
                 Expect.Call(_gridlockManager.Gridlocks(_person, _dateOnly)).Return(_gridlockDictionary);
@@ -79,8 +74,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_scheduleMatrix.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay1.Person).Return(_person);
                 Expect.Call(_person.Equals(_person)).Return(true);
-                Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_datePeriod);
-                Expect.Call(_datePeriod.DateOnly).Return(_dateOnly);
                 Expect.Call(_scheduleMatrix.EffectivePeriodDays).Return(_effectiveDays);
                 Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 				Expect.Call(() => _scheduleMatrix.UnlockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
@@ -103,16 +96,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateOnly2 = new DateOnly(2011, 1, 2);
 			_scheduleMatrixList = new List<IScheduleMatrixPro> { _scheduleMatrix };
 			_scheduleDays = new List<IScheduleDay> { _scheduleDay1, scheduleDay2 };
-			var datePeriod2 = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
 
 			Expect.Call(_scheduleMatrix.Person).Return(_person).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleDay1.Person).Return(_person);
 			Expect.Call(_person.Equals(_person)).Return(true).Repeat.AtLeastOnce();
-			Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_datePeriod);
-			Expect.Call(scheduleDay2.Person).Return(_person);
-			Expect.Call(scheduleDay2.DateOnlyAsPeriod).Return(datePeriod2);
-			Expect.Call(_datePeriod.DateOnly).Return(_dateOnly);
-			Expect.Call(datePeriod2.DateOnly).Return(new DateOnly(2011,1,2));
 			Expect.Call(_scheduleMatrix.EffectivePeriodDays).Return(_effectiveDays);
 			Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 			Expect.Call(() => _scheduleMatrix.UnlockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));

@@ -81,11 +81,16 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				useOccupancyAdjustment,
 				schedulingOptions.ConsiderShortBreaks);
 
-			var dates = GetAllDates(selectedParts);
+			var personDateDictionary = (from p in selectedParts
+			                            group p.DateOnlyAsPeriod.DateOnly by p.Person
+			                            into g
+			                            select new {g.Key, Values = g.ToList()}).ToDictionary(k => k.Key, v => v.Values);
+
+			var dates = GetAllDates(personDateDictionary);
+			var initialPersons = personDateDictionary.Keys;
 			foreach (DateOnly date in dates)
 			{
-			    DateOnly theDate = date;
-                var persons = GetAllPersons(selectedParts);
+				var persons = initialPersons.ToList();
 				IPerson person = GetRandomPerson(persons.ToArray());
 			    
 				while (person != null)
@@ -103,31 +108,27 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
                         if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
                         {
+	                        if (personDateDictionary[person].Contains(date))
+	                        {
+		                        var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
+			                        schedulePart, schedulingOptions);
 
+		                        bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
+		                                                                                              schedulingOptions,
+		                                                                                              effectiveRestriction,
+		                                                                                              resourceCalculateDelayer,
+		                                                                                              null, rollbackService);
 
-                            var thePerson = person;
-                            var exists = selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));
+		                        result = result && schedulePersonOnDayResult;
+		                        if (!result && breakIfPersonCannotSchedule)
+			                        return false;
 
-                            if (exists != null)
-                            {
-                                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
-                                schedulePart, schedulingOptions);
-
-                            bool schedulePersonOnDayResult =
-								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
-
-                                result = result && schedulePersonOnDayResult;
-                                if (!result && breakIfPersonCannotSchedule)
-                                    return false;
-
-                                var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
-                                OnDayScheduled(eventArgs);
-                                if (eventArgs.Cancel) return result;
-                            }
-
+		                        var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
+		                        OnDayScheduled(eventArgs);
+		                        if (eventArgs.Cancel) return result;
+	                        }
                         }
                     }
-                        
 
 					persons.Remove(person);
 					person = GetRandomPerson(persons.ToArray());
@@ -149,18 +150,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 ret = persons[index];
             }
             return ret;
-
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public virtual ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts)
-        {
-            var ret = new HashSet<IPerson>();
-            foreach (var part in selectedParts)
-            {
-                ret.Add(part.Person);
-            }
-            return ret;
         }
 
 		public bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod schedulePeriod, DateOnly dateOnly)
@@ -176,14 +165,16 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public virtual IList<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
+        public virtual IList<DateOnly> GetAllDates(Dictionary<IPerson, List<DateOnly>> selectedParts)
         {
             var ret = new List<DateOnly>();
-            foreach (IScheduleDay part in selectedParts)
+            foreach (var dateCollection in selectedParts.Values)
             {
-                var dateOnly = part.DateOnlyAsPeriod.DateOnly;
-                if (!ret.Contains(part.DateOnlyAsPeriod.DateOnly))
-                    ret.Add(dateOnly);
+				foreach (var dateOnly in dateCollection)
+	            {
+					if (!ret.Contains(dateOnly))
+						ret.Add(dateOnly);
+	            }
             }
             ret.Sort(new DateSorter());
             return ret;
@@ -212,7 +203,5 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				return x.Date.CompareTo(y.Date);
 			}
 		}
-
-    	
     }
 }
