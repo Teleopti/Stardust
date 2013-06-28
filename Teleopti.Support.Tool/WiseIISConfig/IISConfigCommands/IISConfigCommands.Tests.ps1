@@ -24,6 +24,12 @@ $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
 $displayName = "Teleopti CCC Server, version 7"
 $workingFolder = "c:\temp\PesterTest"
+$username = "tfsintegration"
+$domain = "toptinet"
+$password = "m8kemew0rk"
+$secstr = New-Object -TypeName System.Security.SecureString
+$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -117,7 +123,8 @@ function Test-InstallationSQLLogin {
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp | Should be $True
 		}
 	}
 }
@@ -139,10 +146,10 @@ function Test-SitesAndServicesOk {
 		}
         
 		It "should stop the SDK" {
-            stop-AppPool -PoolName "Teleopti ASP.NET v4.0"
+			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
             
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
 		}
         
         #add Lic
@@ -150,9 +157,10 @@ function Test-SitesAndServicesOk {
 
         #start system
 		It "should start SDK" {
-            start-AppPool -PoolName "Teleopti ASP.NET v4.0"
+			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp | Should be $True
 		}
 		
 		#something goes wrong with 32 vs. 64 bit implementation of management tools or IIS runtime
@@ -197,7 +205,7 @@ function Add-CccLicenseToDemo
 }
 
 #Main
-TearDown
-Setup-PreReqs
-Test-InstallationSQLLogin
+#TearDown
+#Setup-PreReqs
+#Test-InstallationSQLLogin
 Test-SitesAndServicesOk

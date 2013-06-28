@@ -241,11 +241,13 @@ function create-WorkingFolder{
 
 function Check-HttpStatus {     
 	param(
-	[string] $url
+	[string] $url,
+    [System.Net.NetworkCredential]$credentials = $null
 	)
 
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
-	$req.Method = "HEAD"
+    $req.Credentials = $credentials;
+	$req.Method = "GET"
 
 	[net.httpWebResponse] $res = $req.getResponse()
 
