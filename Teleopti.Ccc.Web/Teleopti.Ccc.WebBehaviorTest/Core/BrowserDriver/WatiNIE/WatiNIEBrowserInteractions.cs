@@ -98,11 +98,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			//writer(tryOperation(() => Browser.Current.Text));
 		}
 
-		public void WaitUntilEnabled(string selector)
-		{
-			_browser.Element(Find.BySelector(selector)).WaitUntil<Element>(e=>e.Enabled);
-		}
-
 		public void DumpUrl(Action<string> writer)
 		{
 			writer(succeedOrIgnore(() => Browser.Current.Url));

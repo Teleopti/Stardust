@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertElementsAreVisible(string.Format(".request-edit:nth-child({0})", position));
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".request-edit:nth-child({0})", position));
 		}
 
 		[Then(@"I should see the add text request form")]
