@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
 			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, deserializer))
 			{
-				var result = target.iCal("Main", person.Id.Value);
+				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
+				var result = target.Index(id);
 				result.Content.Should().Contain("DTSTART:20130708T063000Z");
 				result.Content.Should().Contain("DTEND:20130708T083000Z");
 			}
@@ -76,7 +78,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>()))
 			{
-				var result = target.iCal("Main", Guid.NewGuid());
+				var id = StringEncryption.Encrypt("Main" + "/" + Guid.NewGuid().ToString());
+				var result = target.Index(id);
 				result.Should().Be.Null();
 			}
 		}
@@ -108,7 +111,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>()))
 			{
-				var result = target.iCal("Main", person.Id.Value);
+				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
+				var result = target.Index(id);
 				result.Should().Be.Null();
 			}
 		}
