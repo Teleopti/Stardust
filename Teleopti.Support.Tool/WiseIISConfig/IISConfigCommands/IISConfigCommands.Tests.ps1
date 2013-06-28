@@ -5,11 +5,12 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 ##============
 #how to debug pester tests
 ##============
+#0 run this file from command line (to get pester): C:\data\main\ccnet\pester\runAllTests.bat
 #1 launch Windows Powershell ISE
 #2 open all .ps1 file of interest *.ps1 + *Tests.ps1
 #3 set a break point ("F9") in *.Tests.ps1 file
 #4 from the "command line" in ISE:
-#    Import-Module "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
+#    Import-Module "C:\data\main\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
 #    Invoke-Pester "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
 #5 step step ("F10")
 ##============
@@ -22,6 +23,7 @@ $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
 $displayName = "Teleopti CCC Server, version 7"
+$workingFolder = "c:\temp\PesterTest"
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -47,18 +49,29 @@ function TearDown {
 			$computerName=(get-childitem -path env:computername).Value
 			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
 		}
+		
+		It "Should destroy working folder" {
+			destroy-WorkingFolder -workingFolder "$workingFolder"
+			Test-Path "$workingFolder" | Should Be $False
+		}
 	}
 }
 
 function Setup-PreReqs {
-	Describe "Copy and Unzip the latest .zip file into local MSI"{  
+	Describe "Copy and Unzip the latest .zip file into local MSI"{
+
+		It "Should destroy working folder" {
+			create-WorkingFolder -workingFolder "$workingFolder"
+			Test-Path "$workingFolder" | Should Be $True
+		}
+		
 		It "should copy latest .zip-file from build server"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			Test-Path $zipFile | Should Be $True
 		}
 
 		It "should unzip file into MSI"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			$zipFile = Get-Item $zipFile
 
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
@@ -91,7 +104,7 @@ function Test-InstallationSQLLogin {
 	Describe "Installation test - SQL DB Login"{  
 
 		It "should install latest MSI from Hebe"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			$zipFile = Get-Item $zipFile
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
 

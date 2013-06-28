@@ -204,8 +204,11 @@ function UnZip-File(){
 } 
 
 function Copy-ZippedMsi{
+    param(
+        $workingFolder
+    )
     $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder='c:\temp'
+    $destFolder=$workingFolder
 
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
@@ -215,6 +218,23 @@ function Copy-ZippedMsi{
     return @("$destFolder\$zipFileName")
 }
 
+function destroy-WorkingFolder{
+    param(
+        $workingFolder
+    )
+	if (Test-Path "$workingFolder") {
+		& rmdir "$workingFolder"
+	}
+}
+
+function create-WorkingFolder{
+    param(
+        $workingFolder
+    )
+	if (!(Test-Path "$workingFolder")) {
+		& mkdir "$workingFolder"
+	}
+}
 
 function Check-HttpStatus {     
 	param(
@@ -254,8 +274,11 @@ function Install-TeleoptiCCCServer
 }
 
 function Copy-ZippedMsi{
+    param(
+        $workingFolder
+    )
     $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder='c:\temp'
+    $destFolder=$workingFolder
 
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
