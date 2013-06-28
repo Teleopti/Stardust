@@ -205,7 +205,7 @@ function Add-CccLicenseToDemo
 }
 
 #Main
-#TearDown
-#Setup-PreReqs
-#Test-InstallationSQLLogin
+TearDown
+Setup-PreReqs
+Test-InstallationSQLLogin
 Test-SitesAndServicesOk
