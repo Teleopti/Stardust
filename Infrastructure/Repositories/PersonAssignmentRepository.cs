@@ -80,14 +80,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private IEnumerable<ICriteria> personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
 	        var assWithMain = Session.CreateCriteria(typeof (PersonAssignment), "ass")
-	                                 .SetFetchMode("MainShiftActivityLayers", FetchMode.Join);
+	                                 .SetFetchMode("MainLayers", FetchMode.Join);
 
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                    .SetFetchMode("PersonalShiftCollection", FetchMode.Join);
-
-            var persWithLayers = Session.CreateCriteria(typeof(PersonalShift))
-                        .CreateAlias("Parent", "ass")
-                        .SetFetchMode("LayerCollection", FetchMode.Join);
+										.SetFetchMode("PersonalLayers", FetchMode.Join);
 
             var assWithOvertime = Session.CreateCriteria(typeof(PersonAssignment), "ass")
                     .SetFetchMode("OvertimeShiftCollection", FetchMode.Join);
@@ -96,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .CreateAlias("Parent", "ass")
                         .SetFetchMode("LayerCollection", FetchMode.Join);
 
-            var ret = new[] { assWithMain, assWithPers, persWithLayers, assWithOvertime, overWithLayers };
+            var ret = new[] { assWithMain, assWithPers, assWithOvertime, overWithLayers };
             ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
             ret.ForEach(addBuClauseToNonRootQuery);
             return ret;
@@ -130,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IPersonAssignment ass = Session.CreateCriteria(typeof(PersonAssignment))
                         .SetFetchMode("PersonalShiftCollection", FetchMode.Join)
                         .SetFetchMode("PersonalShiftCollection.LayerCollection", FetchMode.Join)
-                        .SetFetchMode("MainShiftActivityLayers", FetchMode.Join)
+                        .SetFetchMode("MainLayers", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection", FetchMode.Join)
                         .SetFetchMode("OvertimeShiftCollection.LayerCollection", FetchMode.Join)
                         .Add(Restrictions.Eq("Id", id))

@@ -37,18 +37,21 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
         private void InitializeComponent()
         {
 			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Wizard");
-			this.buttonFinish = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNext = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonBack = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.splitContainerHorizontal = new System.Windows.Forms.SplitContainer();
 			this.splitContainerPages = new System.Windows.Forms.SplitContainer();
 			this.treeViewPages = new System.Windows.Forms.TreeView();
 			this.splitContainerVertical = new System.Windows.Forms.SplitContainer();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.labelHeading = new System.Windows.Forms.Label();
-			this.splitContainerHorizontal = new System.Windows.Forms.SplitContainer();
 			this.tableLayoutPanelButtonsRtl = new System.Windows.Forms.TableLayoutPanel();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.buttonBack = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonFinish = new Syncfusion.Windows.Forms.ButtonAdv();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).BeginInit();
+			this.splitContainerHorizontal.Panel1.SuspendLayout();
+			this.splitContainerHorizontal.Panel2.SuspendLayout();
+			this.splitContainerHorizontal.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).BeginInit();
 			this.splitContainerPages.Panel1.SuspendLayout();
 			this.splitContainerPages.Panel2.SuspendLayout();
@@ -58,32 +61,14 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.splitContainerVertical.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
 			this.gradientPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).BeginInit();
-			this.splitContainerHorizontal.Panel1.SuspendLayout();
-			this.splitContainerHorizontal.Panel2.SuspendLayout();
-			this.splitContainerHorizontal.SuspendLayout();
 			this.tableLayoutPanelButtonsRtl.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// buttonFinish
-			// 
-			this.buttonFinish.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonFinish.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonFinish.Location = new System.Drawing.Point(525, 7);
-			this.buttonFinish.Name = "buttonFinish";
-			this.buttonFinish.Size = new System.Drawing.Size(99, 23);
-			this.buttonFinish.TabIndex = 7;
-			this.buttonFinish.Text = "xxFinishAmpersand";
-			this.buttonFinish.UseVisualStyle = true;
-			this.buttonFinish.UseVisualStyleBackColor = true;
-			this.buttonFinish.Click += new System.EventHandler(this.buttonFinish_Click);
 			// 
 			// buttonNext
 			// 
 			this.buttonNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonNext.Location = new System.Drawing.Point(408, 7);
+			this.buttonNext.Location = new System.Drawing.Point(404, 5);
 			this.buttonNext.Name = "buttonNext";
 			this.buttonNext.Size = new System.Drawing.Size(99, 23);
 			this.buttonNext.TabIndex = 6;
@@ -92,25 +77,12 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonNext.UseVisualStyleBackColor = true;
 			this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
 			// 
-			// buttonBack
-			// 
-			this.buttonBack.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonBack.Location = new System.Drawing.Point(291, 7);
-			this.buttonBack.Name = "buttonBack";
-			this.buttonBack.Size = new System.Drawing.Size(99, 23);
-			this.buttonBack.TabIndex = 5;
-			this.buttonBack.Text = "xxBackAmpersandArrow";
-			this.buttonBack.UseVisualStyle = true;
-			this.buttonBack.UseVisualStyleBackColor = true;
-			this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
-			// 
 			// buttonCancel
 			// 
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(642, 7);
+			this.buttonCancel.Location = new System.Drawing.Point(638, 5);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
 			this.buttonCancel.TabIndex = 8;
@@ -118,6 +90,28 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonCancel.UseVisualStyle = true;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+			// 
+			// splitContainerHorizontal
+			// 
+			this.splitContainerHorizontal.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainerHorizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.splitContainerHorizontal.IsSplitterFixed = true;
+			this.splitContainerHorizontal.Location = new System.Drawing.Point(0, 0);
+			this.splitContainerHorizontal.Name = "splitContainerHorizontal";
+			this.splitContainerHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainerHorizontal.Panel1
+			// 
+			this.splitContainerHorizontal.Panel1.Controls.Add(this.splitContainerPages);
+			// 
+			// splitContainerHorizontal.Panel2
+			// 
+			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
+			this.splitContainerHorizontal.Size = new System.Drawing.Size(740, 474);
+			this.splitContainerHorizontal.SplitterDistance = 440;
+			this.splitContainerHorizontal.SplitterWidth = 1;
+			this.splitContainerHorizontal.TabIndex = 7;
+			this.splitContainerHorizontal.TabStop = false;
 			// 
 			// splitContainerPages
 			// 
@@ -135,8 +129,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerPages.Panel2
 			// 
 			this.splitContainerPages.Panel2.Controls.Add(this.splitContainerVertical);
-			this.splitContainerPages.Size = new System.Drawing.Size(744, 430);
-			this.splitContainerPages.SplitterDistance = 179;
+			this.splitContainerPages.Size = new System.Drawing.Size(740, 440);
+			this.splitContainerPages.SplitterDistance = 178;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
 			this.splitContainerPages.TabStop = false;
@@ -156,7 +150,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
             treeNode1});
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(155, 406);
+			this.treeViewPages.Size = new System.Drawing.Size(154, 416);
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
 			this.treeViewPages.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewPages_BeforeCollapse);
@@ -174,15 +168,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerVertical.Panel1
 			// 
 			this.splitContainerVertical.Panel1.Controls.Add(this.gradientPanel1);
-			this.splitContainerVertical.Panel1MinSize = 50;
-			this.splitContainerVertical.Size = new System.Drawing.Size(564, 430);
-			this.splitContainerVertical.SplitterDistance = 55;
+			this.splitContainerVertical.Panel1MinSize = 40;
+			this.splitContainerVertical.Size = new System.Drawing.Size(561, 440);
+			this.splitContainerVertical.SplitterDistance = 40;
 			this.splitContainerVertical.SplitterWidth = 1;
 			this.splitContainerVertical.TabIndex = 0;
 			// 
 			// gradientPanel1
 			// 
-			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.White, System.Drawing.Color.LightSkyBlue);
+			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.White, System.Drawing.Color.LightSkyBlue);
 			this.gradientPanel1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.gradientPanel1.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -190,7 +184,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(564, 55);
+			this.gradientPanel1.Size = new System.Drawing.Size(561, 40);
 			this.gradientPanel1.TabIndex = 0;
 			// 
 			// labelHeading
@@ -198,33 +192,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.labelHeading.AutoSize = true;
 			this.labelHeading.BackColor = System.Drawing.Color.Transparent;
 			this.labelHeading.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelHeading.Location = new System.Drawing.Point(3, 10);
+			this.labelHeading.Location = new System.Drawing.Point(3, 5);
 			this.labelHeading.Name = "labelHeading";
 			this.labelHeading.Size = new System.Drawing.Size(101, 25);
 			this.labelHeading.TabIndex = 0;
 			this.labelHeading.Text = "xxHeading";
-			// 
-			// splitContainerHorizontal
-			// 
-			this.splitContainerHorizontal.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainerHorizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.splitContainerHorizontal.IsSplitterFixed = true;
-			this.splitContainerHorizontal.Location = new System.Drawing.Point(6, 39);
-			this.splitContainerHorizontal.Name = "splitContainerHorizontal";
-			this.splitContainerHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainerHorizontal.Panel1
-			// 
-			this.splitContainerHorizontal.Panel1.Controls.Add(this.splitContainerPages);
-			// 
-			// splitContainerHorizontal.Panel2
-			// 
-			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
-			this.splitContainerHorizontal.Size = new System.Drawing.Size(744, 468);
-			this.splitContainerHorizontal.SplitterDistance = 430;
-			this.splitContainerHorizontal.SplitterWidth = 1;
-			this.splitContainerHorizontal.TabIndex = 7;
-			this.splitContainerHorizontal.TabStop = false;
 			// 
 			// tableLayoutPanelButtonsRtl
 			// 
@@ -242,30 +214,34 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(744, 37);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(740, 33);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 9;
 			// 
-			// ribbonControlAdv1
+			// buttonBack
 			// 
-			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlAdv1.MenuButtonText = "";
-			this.ribbonControlAdv1.MenuButtonVisible = false;
-			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
-			this.ribbonControlAdv1.MinimumSize = new System.Drawing.Size(0, 38);
-			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.buttonBack.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.buttonBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonBack.Location = new System.Drawing.Point(287, 5);
+			this.buttonBack.Name = "buttonBack";
+			this.buttonBack.Size = new System.Drawing.Size(99, 23);
+			this.buttonBack.TabIndex = 5;
+			this.buttonBack.Text = "xxBackAmpersandArrow";
+			this.buttonBack.UseVisualStyle = true;
+			this.buttonBack.UseVisualStyleBackColor = true;
+			this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
 			// 
-			// ribbonControlAdv1.OfficeMenu
+			// buttonFinish
 			// 
-			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-			this.ribbonControlAdv1.QuickPanelVisible = false;
-			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(754, 38);
-			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
-			this.ribbonControlAdv1.TabIndex = 8;
-			this.ribbonControlAdv1.Text = "yyribbonControlAdv1";
+			this.buttonFinish.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.buttonFinish.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonFinish.Location = new System.Drawing.Point(521, 5);
+			this.buttonFinish.Name = "buttonFinish";
+			this.buttonFinish.Size = new System.Drawing.Size(99, 23);
+			this.buttonFinish.TabIndex = 7;
+			this.buttonFinish.Text = "xxFinishAmpersand";
+			this.buttonFinish.UseVisualStyle = true;
+			this.buttonFinish.UseVisualStyleBackColor = true;
+			this.buttonFinish.Click += new System.EventHandler(this.buttonFinish_Click);
 			// 
 			// WizardNoRoot
 			// 
@@ -273,8 +249,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(756, 513);
-			this.Controls.Add(this.ribbonControlAdv1);
+			this.ClientSize = new System.Drawing.Size(740, 474);
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.MaximizeBox = false;
@@ -282,10 +257,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(756, 513);
 			this.Name = "WizardNoRoot";
+			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxWizard";
 			this.Load += new System.EventHandler(this.PropertyPageWizard_Load);
 			this.Shown += new System.EventHandler(this.Wizard_Shown);
+			this.splitContainerHorizontal.Panel1.ResumeLayout(false);
+			this.splitContainerHorizontal.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).EndInit();
+			this.splitContainerHorizontal.ResumeLayout(false);
 			this.splitContainerPages.Panel1.ResumeLayout(false);
 			this.splitContainerPages.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).EndInit();
@@ -296,12 +276,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
 			this.gradientPanel1.ResumeLayout(false);
 			this.gradientPanel1.PerformLayout();
-			this.splitContainerHorizontal.Panel1.ResumeLayout(false);
-			this.splitContainerHorizontal.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).EndInit();
-			this.splitContainerHorizontal.ResumeLayout(false);
 			this.tableLayoutPanelButtonsRtl.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -315,8 +290,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
         private System.Windows.Forms.SplitContainer splitContainerPages;
         private System.Windows.Forms.SplitContainer splitContainerHorizontal;
         private System.Windows.Forms.TreeView treeViewPages;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelButtonsRtl;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelButtonsRtl;
         private System.Windows.Forms.SplitContainer splitContainerVertical;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
         private System.Windows.Forms.Label labelHeading;

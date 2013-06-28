@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IShiftCategory _shiftCategory;
 		private IPersonMeeting _personMeeting;
 		private IPersonAssignment _personAssignment;
-		private IPersonalShift _personalShift1;
-		private IPersonalShift _personalShift2;
 		private EditorActivityLayer _mainShiftLayer;
 		private EditorActivityLayer _mainShiftLayerNotInWorkTime;
 		private EditorActivityLayer _mainShiftLayerNoOverwrite;
@@ -41,8 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[SetUp]
 		public void Setup()
 		{
-			_personalShift1 = new PersonalShift();
-			_personalShift2 = new PersonalShift();
 			_scenario = new Scenario("scenario");
 			_person = new Person();
 			_meetingPerson = new MeetingPerson(_person, false);
@@ -82,12 +78,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnTrueWhenWorkTimeAndContractTimeAreUnchangedWhenAddingPersonalShift()
 		{
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
-			var shiftLayer2 = new PersonalShiftActivityLayer(_activity, _mainDateTimePeriod);
-			_personalShift1.LayerCollection.Add(shiftLayer1);
-			_personalShift2.LayerCollection.Add(shiftLayer2);
-			_personAssignment.AddPersonalShift(_personalShift1);
-			_personAssignment.AddPersonalShift(_personalShift2);
+			_personAssignment.AddPersonalLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
+			_personAssignment.AddPersonalLayer(_activity, _mainDateTimePeriod);
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {_personAssignment});
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
 
@@ -111,9 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var periodOutside = new DateTimePeriod(_mainDateTimePeriod.StartDateTime.AddDays(-1), _mainDateTimePeriod.EndDateTime.AddDays(-1));
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, periodOutside);
-			_personalShift1.LayerCollection.Add(shiftLayer);
-			_personAssignment.AddPersonalShift(_personalShift1);
+			_personAssignment.AddPersonalLayer(_personalActivity, periodOutside);
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
 
@@ -137,9 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_personalActivity.InWorkTime = true;
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
-			_personalShift1.LayerCollection.Add(shiftLayer);
-			_personAssignment.AddPersonalShift(_personalShift1);
+			_personAssignment.AddPersonalLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
 
@@ -165,9 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_personalActivity.InContractTime = false;
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
-			_personalShift1.LayerCollection.Add(shiftLayer);
-			_personAssignment.AddPersonalShift(_personalShift1);
+			_personAssignment.AddPersonalLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
 
@@ -189,12 +175,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseWhenActivityDoNotAllowOverwriteWhenAddingPersonalShift()
 		{
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
-			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNoOverwrite);
-			var shiftLayer2 = new PersonalShiftActivityLayer(_activity, _mainDateTimePeriod);
-			_personalShift1.LayerCollection.Add(shiftLayer1);
-			_personalShift2.LayerCollection.Add(shiftLayer2);
-			_personAssignment.AddPersonalShift(_personalShift1);
-			_personAssignment.AddPersonalShift(_personalShift2);
+			_personAssignment.AddPersonalLayer(_personalActivity, _mainDateTimePeriodNoOverwrite);
+			_personAssignment.AddPersonalLayer(_activity, _mainDateTimePeriod);
+
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
 
@@ -212,13 +195,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var periodBefore = new DateTimePeriod(_mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-2), _mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-1));
 			var periodAfter = new DateTimePeriod(_mainDateTimePeriodNoOverwrite.EndDateTime.AddHours(1), _mainDateTimePeriodNoOverwrite.EndDateTime.AddHours(2));
-			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, periodBefore);
-			var shiftLayer2 = new PersonalShiftActivityLayer(_personalActivity, periodAfter);
 
-			_personalShift1.LayerCollection.Add(shiftLayer1);
-			_personalShift2.LayerCollection.Add(shiftLayer2);
-			_personAssignment.AddPersonalShift(_personalShift1);
-			_personAssignment.AddPersonalShift(_personalShift2);
+			_personAssignment.AddPersonalLayer(_personalActivity, periodBefore);
+			_personAssignment.AddPersonalLayer(_personalActivity, periodAfter);
+
 
 			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
 			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);

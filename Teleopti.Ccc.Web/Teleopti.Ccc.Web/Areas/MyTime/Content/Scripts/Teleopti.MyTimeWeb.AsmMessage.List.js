@@ -19,9 +19,23 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		var self = this;
 
 		self.asmMessageList = ko.observableArray();
-		self.chosenMessage = ko.observable();
-		self.chosenMessageId = ko.observable();
-		self.shouldShowMessage = ko.observable(false);
+	    self.asmMessageColumnList = ko.computed(function() {
+	        var list = [];
+	        var items = self.asmMessageList();
+	        var index = 0;
+	        ko.utils.arrayForEach(items, function (i) {
+	            if (index % 2 == 0) {
+	                list.push({ Items: [i] });
+	            } else {
+	                list[list.length-1].Items.push(i);
+	            }
+	            index++;
+	        });
+	        return list;
+	    });
+		self.shouldShowMessage = ko.computed(function() {
+		    return self.asmMessageList().length == 0;
+		});
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
 			$.each(dataList, function (position, element) {
@@ -30,34 +44,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 			self.asmMessageList($.merge(self.asmMessageList(), asmMessageItems));
 		};
-
-		self.chosenMessageId.subscribe(function () {
-			var match;
-			ko.utils.arrayForEach(self.asmMessageList(), function (item) {
-				item.isSelected(false);
-				if (item.messageId() === self.chosenMessageId()) {
-					item.isSelected(true);
-					match = item;
-
-				}
-			});
-
-			self.chosenMessage(match);
-		});
-
-		self.chosenMessage.subscribe(function () {
-			if (self.chosenMessage() == null) {
-				Teleopti.MyTimeWeb.AsmMessageDetail.HideEditSection();
-			}
-		});
-
-		self.asmMessageList.subscribe(function () {
-			if (self.asmMessageList().length == 0)
-				self.shouldShowMessage(true);
-			else {
-				self.shouldShowMessage(false);
-			}
-		});
 	}
 
 	function asmMessageItemViewModel(item) {
@@ -65,6 +51,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
 		self.listMessage = ko.observable(item.Message.substring(0, 50) + '...');
+	    self.errorMessage = ko.observable();
 		self.date = ko.observable(item.Date);
 		self.sender = ko.observable(item.Sender);
 		self.messageId = ko.observable(item.MessageId);
@@ -84,10 +71,11 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		}));
 		self.isRead.subscribe(function () {
 			vm.asmMessageList.remove(self);
-			vm.chosenMessage(null);
 		});
 		self.confirmReadMessage = function (data, event) {
-			if (self.selectedReply() == undefined) self.selectedReply(self.replyOptions[0].text());
+		    if (self.selectedReply() == undefined && self.replyOptions.length > 0)
+		        self.selectedReply(self.replyOptions[0].text());
+		    
 			self.isSending(true);
 			_replyToMessage(self);
 		};
@@ -111,6 +99,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 			self.dialogueMessages(dialogueMessageArray);
 		};
+
+	    self.toggleSelected = function() {
+	        self.isSelected(!self.isSelected());
+	    };
 	}
 
 	var dialogueMessageViewModel = function (dialogueMessage) {
@@ -123,10 +115,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	var replyOptionViewModel = function (replyOption, parent) {
 		var self = this;
 		self.text = ko.observable(replyOption);
-		self.selected = ko.observable();
-		self.selected.subscribe(function () {
+		self.select = function () {
 			parent.selectedReply(self.text());
-		});
+		};
 	};
 
 	function _addNewMessageAtTop(messageItem) {
@@ -142,23 +133,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			} else {
 				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));
 			}
-			$('.asmMessage-list li')
-				.first()
-				.click(function () {
-					vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-					_showAsmMessage($(this));
-				})
-				.hover(function () {
-					$(this).find('.asmMessage-arrow-right').animate({
-						opacity: 1.0
-					}, 300);
-				},
-					function () {
-						$(this).find('.asmMessage-arrow-right').animate({
-							opacity: 0.1
-						}, 600);
-					})
-				.find('.asmMessage-arrow-right').css({ opacity: 0.1 });
 		}
 	};
 
@@ -179,13 +153,14 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);
 				_noMoreToLoad();
+				messageItem.isSending(false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				_noMoreToLoad();
 				if (jqXHR.status == 400) {
 					alert(jqXHR.responseText);
 					var data = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(data);
+					_displayValidationError(data, messageItem);
 					messageItem.isSending(false);
 					return;
 				}
@@ -195,9 +170,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 	}
 
-	function _displayValidationError(data) {
+	function _displayValidationError(data, messageItem) {
 		var message = data.Errors.join('</br>');
-		$('#AsmMessage-detail-error').html(message || '');
+		messageItem.errorMessage(message || '');
 	}
 
 	function _initScrollPaging() {
@@ -229,16 +204,13 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			return list.messageId() == messageId;
 		});
 		if (result.length == 1) {
-			if (vm.chosenMessageId() == messageId) {
-				vm.chosenMessage(null);
-			}
 			var messageIndex = $.inArray(result[0], vm.asmMessageList());
 			vm.asmMessageList.splice(messageIndex, 1);
 		}
 	}
 
 	function _loadAPage() {
-		var skip = $('#AsmMessages-list li:not(.template)').length;
+		var skip = $('#AsmMessages-list .span6').length;
 		var take = 20;
 		ajax.Ajax({
 			url: "Message/Messages",
@@ -257,7 +229,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				} else {
 					_moreToLoad();
 				}
-				_initListClick();
 			},
 			error: function () {
 			}
@@ -265,62 +236,22 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	}
 
 	function _hasMoreToLoad() {
-		return $('.asmMessage-list .arrow-down').is(':visible');
+		return $('.arrow-down').is(':visible');
 	}
 
 	function _loading() {
-		$('.asmMessage-list .arrow-down').hide();
-		$('.asmMessage-list .loading-gradient').show();
+		$('.arrow-down').hide();
+		$('.loading-gradient').show();
 	}
 
 	function _noMoreToLoad() {
-		$('.asmMessage-list .arrow-down').hide();
-		$('.asmMessage-list .loading-gradient').hide();
+		$('.arrow-down').hide();
+		$('.loading-gradient').hide();
 	}
 
 	function _moreToLoad() {
-		$('.asmMessage-list .arrow-down').show();
-		$('.asmMessage-list .loading-gradient').hide();
-	}
-
-	function _initListClick() {
-		$('#AsmMessages-list li')
-			.unbind('click')
-            .click(function () {
-            	vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-            	_showAsmMessage($(this));
-            })
-            .hover(function () {
-            	$(this).find('.asmMessage-arrow-right').animate({
-            		opacity: 1.0
-            	}, 100);
-            	$(this).animate({
-            		width: '+=20'
-            	}, 100);
-            },
-        	function () {
-        		$(this).find('.asmMessage-arrow-right').animate({
-        			opacity: 0.1
-        		}, 300);
-        		$(this).animate({
-        			width: '-=20'
-        		}, 300);
-        	})
-            .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
-            ;
-	}
-
-	function _showAsmMessage(listItem) {
-		var bindListItemClick = function _bindClick() {
-			listItem.bind('click', function () {
-				vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-				_showAsmMessage($(this));
-			});
-		};
-
-		listItem.unbind('click');
-		Teleopti.MyTimeWeb.AsmMessageDetail.FadeEditSection(bindListItemClick);
-		Teleopti.MyTimeWeb.AsmMessageDetail.ShowAsmMessage(listItem.position().top - 30);
+		$('.arrow-down').show();
+		$('.loading-gradient').hide();
 	}
 
 	return {
@@ -338,7 +269,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		},
 		DeleteMessage: function (messageId) {
 			_deleteMessage(messageId);
-
 		}
 	};
 

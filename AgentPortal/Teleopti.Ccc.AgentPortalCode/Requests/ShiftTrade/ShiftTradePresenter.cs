@@ -130,8 +130,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 return;
             }
             bool bothAreSamePerson = _loggedOnPerson.Id == _model.PersonRequestDto.Person.Id;
-            bool requestStatusIsPending = _model.PersonRequestDto.RequestStatus == RequestStatusDto.Pending || (_model.PersonRequestDto.RequestStatus == RequestStatusDto.New && bothAreSamePerson);
-            bool okToDelete = _model.PersonRequestDto.CanDelete && bothAreSamePerson && (_model.PersonRequestDto.RequestStatus != RequestStatusDto.New);
+            bool requestStatusIsPending = _model.PersonRequestDto.RequestStatus == RequestStatusDto.Pending 
+				|| (_model.PersonRequestDto.RequestStatus == RequestStatusDto.New && bothAreSamePerson);
+            bool okToDelete = _model.PersonRequestDto.CanDelete 
+				&& bothAreSamePerson 
+				&& (_model.PersonRequestDto.RequestStatus != RequestStatusDto.New);
             checkMainButtonSet(!requestStatusIsPending);
             if (requestStatusIsPending)
             {

@@ -39,13 +39,14 @@
             this.checkBoxDayOffs = new System.Windows.Forms.CheckBox();
             this.checkBoxAbsences = new System.Windows.Forms.CheckBox();
             this.checkBoxAssignments = new System.Windows.Forms.CheckBox();
+            this.checkBoxOvertimeAvailability = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBoxStudentAvailability
             // 
             this.checkBoxStudentAvailability.AutoSize = true;
-            this.checkBoxStudentAvailability.Location = new System.Drawing.Point(12, 182);
+            this.checkBoxStudentAvailability.Location = new System.Drawing.Point(12, 205);
             this.checkBoxStudentAvailability.Name = "checkBoxStudentAvailability";
             this.checkBoxStudentAvailability.Size = new System.Drawing.Size(122, 17);
             this.checkBoxStudentAvailability.TabIndex = 7;
@@ -56,7 +57,7 @@
             // checkBoxPreferences
             // 
             this.checkBoxPreferences.AutoSize = true;
-            this.checkBoxPreferences.Location = new System.Drawing.Point(12, 159);
+            this.checkBoxPreferences.Location = new System.Drawing.Point(12, 182);
             this.checkBoxPreferences.Name = "checkBoxPreferences";
             this.checkBoxPreferences.Size = new System.Drawing.Size(93, 17);
             this.checkBoxPreferences.TabIndex = 6;
@@ -78,7 +79,7 @@
             // buttonAdv2
             // 
             this.buttonAdv2.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdv2.Location = new System.Drawing.Point(197, 225);
+            this.buttonAdv2.Location = new System.Drawing.Point(197, 235);
             this.buttonAdv2.Name = "buttonAdv2";
             this.buttonAdv2.Size = new System.Drawing.Size(75, 23);
             this.buttonAdv2.TabIndex = 9;
@@ -89,7 +90,7 @@
             // buttonAdv1
             // 
             this.buttonAdv1.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdv1.Location = new System.Drawing.Point(116, 225);
+            this.buttonAdv1.Location = new System.Drawing.Point(116, 235);
             this.buttonAdv1.Name = "buttonAdv1";
             this.buttonAdv1.Size = new System.Drawing.Size(75, 23);
             this.buttonAdv1.TabIndex = 8;
@@ -100,7 +101,10 @@
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
+            this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
             // ribbonControlAdv1.OfficeMenu
@@ -108,6 +112,7 @@
             this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
+            this.ribbonControlAdv1.SelectedTab = null;
             this.ribbonControlAdv1.Size = new System.Drawing.Size(290, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
             this.ribbonControlAdv1.TabIndex = 28;
@@ -157,11 +162,23 @@
             this.checkBoxAssignments.UseVisualStyleBackColor = true;
             this.checkBoxAssignments.CheckedChanged += new System.EventHandler(this.checkBoxAssignments_CheckedChanged);
             // 
+            // checkBoxOvertimeAvailability
+            // 
+            this.checkBoxOvertimeAvailability.AutoSize = true;
+            this.checkBoxOvertimeAvailability.Location = new System.Drawing.Point(12, 159);
+            this.checkBoxOvertimeAvailability.Name = "checkBoxOvertimeAvailability";
+            this.checkBoxOvertimeAvailability.Size = new System.Drawing.Size(127, 17);
+            this.checkBoxOvertimeAvailability.TabIndex = 29;
+            this.checkBoxOvertimeAvailability.Text = "xxOvertimeAvailability";
+            this.checkBoxOvertimeAvailability.UseVisualStyleBackColor = true;
+            this.checkBoxOvertimeAvailability.CheckedChanged += new System.EventHandler(this.checkBoxOvertimeAvailability_CheckedChanged);
+            // 
             // FormClipboardSpecial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.ClientSize = new System.Drawing.Size(292, 274);
+            this.Controls.Add(this.checkBoxOvertimeAvailability);
             this.Controls.Add(this.checkBoxStudentAvailability);
             this.Controls.Add(this.checkBoxPreferences);
             this.Controls.Add(this.checkBoxOvertime);
@@ -196,5 +213,6 @@
         private System.Windows.Forms.CheckBox checkBoxOvertime;
         private System.Windows.Forms.CheckBox checkBoxPreferences;
         private System.Windows.Forms.CheckBox checkBoxStudentAvailability;
+        private System.Windows.Forms.CheckBox checkBoxOvertimeAvailability;
     }
 }

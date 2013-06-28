@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		public void ShouldHaveCorrectConvertersForDbManager()
 		{
 			AgentDayConverters.ForDbManager().Select(x => x.GetType())
-			                  .Should().Have.SameValuesAs(typeof (PersonAssignmentDateSetter), typeof (PersonAssignmentAuditDateSetter));
+			                  .Should().Have.SameValuesAs(typeof (PersonAssignmentDateSetter));
 		}
 
 		[Test]

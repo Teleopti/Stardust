@@ -130,11 +130,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             return retobj;
         }
 
-        public IVisualLayerFactory CreateVisualLayerFactory()
-        {
-            return new VisualLayerFactory();
-        }
-
 		public override int GetHashCode()
 		{
 			return Person.GetHashCode() ^ BelongsToMeeting.GetHashCode() ^ Period.GetHashCode();

@@ -73,6 +73,7 @@
 			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.timerRefresh = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
 			this.tabControlAgentInfo.SuspendLayout();
 			this.tabPageAdvSchedulePeriod.SuspendLayout();
@@ -410,6 +411,11 @@
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
 			// 
+			// timerRefresh
+			// 
+			this.timerRefresh.Interval = 20000;
+			this.timerRefresh.Tick += new System.EventHandler(this.timerRefreshTick);
+			// 
 			// FormAgentInfo
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -470,6 +476,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeader13;
 		private System.Windows.Forms.ColumnHeader columnHeader9;
 		private System.Windows.Forms.ColumnHeader columnHeader10;
+		private System.Windows.Forms.Timer timerRefresh;
         
 	}
 }

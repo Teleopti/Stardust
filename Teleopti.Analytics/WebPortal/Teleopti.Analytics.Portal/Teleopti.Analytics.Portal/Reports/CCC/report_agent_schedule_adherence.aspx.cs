@@ -847,7 +847,12 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 						intervalToolTip.EndInterval = previousIntervalId;
 						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
-						_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
+						
+						if (_intervalToolTipDictionary.ContainsKey(previousPersonId))
+							foreach (var tooltip in intervalToolTipList)
+								_intervalToolTipDictionary[previousPersonId].Add(tooltip);
+						else
+							_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 					}
 
 					intervalToolTipList = new List<IntervalToolTip>();
@@ -894,7 +899,12 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				intervalToolTip.EndInterval = previousIntervalId;
 				intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 				intervalToolTipList.Add(intervalToolTip);
-				_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
+
+				if (_intervalToolTipDictionary.ContainsKey(previousPersonId))
+					foreach (var tooltip in intervalToolTipList)
+						_intervalToolTipDictionary[previousPersonId].Add(tooltip);
+				else
+					_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 			}
 
 			_timeLineEndInterval += 1;

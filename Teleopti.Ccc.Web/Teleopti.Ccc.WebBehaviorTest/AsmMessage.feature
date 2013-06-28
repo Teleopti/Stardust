@@ -70,9 +70,8 @@ Scenario: Open unread message
 	| Message	| Text in message	|	
 	When I am viewing messages
 	And I click on the message at position '1' in the list
-	Then I should see the message details form with
+	Then I should see the message details form with on the message at position '1' in the list
 	| Field		| Value				|
-	| Title		| New message		|
 	| Message	| Text in message	|	
 
 Scenario: Confirm message is read
@@ -82,11 +81,11 @@ Scenario: Confirm message is read
 	| Title         | New message	 |
 	When I am viewing messages
 	And I click on the message at position '1' in the list
-	When I click the confirm button
+	When I click the confirm button on the message at position '1' in the list
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
-Scenario: Confirm message is read after enetering a textreply
+Scenario: Confirm message is read after entering a textreply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field					| Value				|
@@ -96,7 +95,7 @@ Scenario: Confirm message is read after enetering a textreply
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	And I enter the text reply 'some text....'
-	And I click the confirm button
+	And I click the confirm button on the message at position '1' in the list
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
@@ -129,7 +128,7 @@ Scenario: Open unread message where text reply is allowed
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see the message details form with an editable text box
+	Then I should see the message details form with an editable text box on the message at position '1' in the list
 
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
@@ -142,7 +141,7 @@ Scenario: See reply dialogue in message text
 	| Senders reply			| It´s a deal!				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see this conversation
+	Then I should see this conversation on the message at position '1' in the list
 	| Messages					|
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|
@@ -156,23 +155,25 @@ Scenario: Do not allow empty reply
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then the send button should be disabled
+	Then the send button should be disabled on the message at position '1' in the list
  
 Scenario: Show replyoptions for message with multiple options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field					| Value				|
-	| Title					| New message		|
-	| Message				| Text in message	|
-	| Text reply allowed	| False				|
-	| ReplyOption1			| Yes				|
-	| ReplyOption2			| No				|
+	| Field					| Value					|
+	| Title					| New message			|
+	| Message				| Text in message		|
+	| Text reply allowed	| False					|
+	| ReplyOption1			| Yes					|
+	| ReplyOption2			| No					|
+	| ReplyOption3			| A longer replyoption	|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see radiobuttons with 
-	| Captions	|
-	| Yes		|
-	| No		|
+	Then I should see radiobuttons on the message at position '1' in the list with 
+	| Captions				|
+	| Yes					|
+	| No					|
+	| A longer replyoption	|
 
 Scenario: Confirm message with multiple replyoptions
 Given I have the role 'Full access to mytime'
@@ -185,8 +186,8 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption3 | Defenitly not			|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'Probably not'
-	And I click the confirm button
+	And I click the radiobutton with caption 'Probably not' on the message at position '1' in the list
+	And I click the confirm button on the message at position '1' in the list
 	Then I should not see any messages
 
 Scenario: Enable confirmbutton when user has selected a replyoption
@@ -200,8 +201,8 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'No'
-	Then the send button should be enabled
+	And I click the radiobutton with caption 'No' on the message at position '1' in the list
+	Then the send button should be enabled on the message at position '1' in the list
  
 Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
 Given I have the role 'Full access to mytime'
@@ -214,7 +215,7 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then the send button should be disabled
+	Then the send button should be disabled on the message at position '1' in the list
 
 Scenario: User can only select one replyoption
 Given I have the role 'Full access to mytime'
@@ -227,9 +228,9 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'No'
-	And I click the radiobutton with caption 'Yes'
-	Then the radiobutton with caption 'No' should not be checked
+	And I click the radiobutton with caption 'No' on the message at position '1' in the list
+	And I click the radiobutton with caption 'Yes' on the message at position '1' in the list
+	Then the radiobutton with caption 'No' should not be checked on the message at position '1' in the list
 
 Scenario: Do not show replyoptions if there is only one option
 Given I have the role 'Full access to mytime'
@@ -241,8 +242,8 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption1			| Ok					|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should not see any options
-	And the send button should be enabled
+	Then I should not see any options on the message at position '1' in the list
+	And the send button should be enabled on the message at position '1' in the list
 
 Scenario: User do not have to write textreply if she selects one of the replyoptions
 Given I have the role 'Full access to mytime'
@@ -256,8 +257,8 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption3			| Third				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'Second'
-	Then the send button should be enabled
+	And I click the radiobutton with caption 'Second' on the message at position '1' in the list
+	Then the send button should be enabled on the message at position '1' in the list
 
 Scenario: Message should be removed from message list when deleted by sender
 	Given I have the role 'Full access to mytime'

@@ -256,6 +256,7 @@
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\EtlReadModelRepositoryTest.cs" />
+    <Compile Include="Repositories\OvertimeAvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelStorageTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />

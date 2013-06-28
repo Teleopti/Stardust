@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -46,8 +48,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                                     IScenario scenario)
         {
             IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
-            ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
-            ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+					ass.AddPersonalLayer(activity, period);
+	        ass.SetMainShiftLayers(new [] {new MainShiftLayer(activity, period)}, category);
             return ass;
         }
 
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
 	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
             var ass = new PersonAssignment(agent, scenario, date);
-					ass.SetMainShiftLayers(new[]{new MainShiftActivityLayerNew(activity, period)}, category);
+					ass.SetMainShiftLayers(new[]{new MainShiftLayer(activity, period)}, category);
             return ass;
         }
 
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                         IScenario scenario)
         {
 					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
-            ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
+					ass.AddPersonalLayer(activity, period);
             return ass;
         }
 
@@ -193,13 +195,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
 
             // activity layers
-            var alPerson1Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson1Phone);
-						var alPerson1Break = new MainShiftActivityLayerNew(container.ContainedActivities["Break"], prdPerson1Break);
-						var alPerson1Office = new MainShiftActivityLayerNew(container.ContainedActivities["Office"], prdPerson1Office);
-						var alPerson2Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson2Phone);
-						var alPerson3Lunch = new MainShiftActivityLayerNew(container.ContainedActivities["Lunch"], prdPerson3Lunch);
-						var alPerson4Phone = new MainShiftActivityLayerNew(container.ContainedActivities["Phone"], prdPerson4Phone);
-						var alPerson4Office = new MainShiftActivityLayerNew(container.ContainedActivities["Office"], prdPerson4Office);
+            var alPerson1Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson1Phone);
+						var alPerson1Break = new MainShiftLayer(container.ContainedActivities["Break"], prdPerson1Break);
+						var alPerson1Office = new MainShiftLayer(container.ContainedActivities["Office"], prdPerson1Office);
+						var alPerson2Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson2Phone);
+						var alPerson3Lunch = new MainShiftLayer(container.ContainedActivities["Lunch"], prdPerson3Lunch);
+						var alPerson4Phone = new MainShiftLayer(container.ContainedActivities["Phone"], prdPerson4Phone);
+						var alPerson4Office = new MainShiftLayer(container.ContainedActivities["Office"], prdPerson4Office);
 
             // main shifts
 					assignment1.SetMainShiftLayers(new[]
@@ -324,6 +326,50 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             container.ContainedSkills.Add(skOfficeB.Name, skOfficeB);
         }
 
+	    public static IPersonAssignment CreateAssignmentWithThreeMainshiftLayers()
+	    {
+		    var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+		    var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+		    ret.SetMainShiftLayers(
+			    new[]
+				    {
+					    new MainShiftLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1))),
+					    new MainShiftLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2))),
+					    new MainShiftLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)))
+				    },
+			    new ShiftCategory("test"));
+		    return ret;
+	    }
+
+			public static IPersonAssignment CreateAssignmentWithThreePersonalLayers()
+			{
+				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+				var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+				ret.AddPersonalLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
+				ret.AddPersonalLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
+				ret.AddPersonalLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
+				return ret;
+			}
+
+			public static IPersonAssignment CreateAssignmentWithThreeOvertimeLayers()
+			{
+				var p = new Person();
+				var contract = new Contract("sdf");
+				var multi = new MultiplicatorDefinitionSet("sdfsdf", MultiplicatorType.Overtime);
+				contract.AddMultiplicatorDefinitionSetCollection(multi);
+				p.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
+				                                   new PersonContract(contract, new PartTimePercentage("d"),
+				                                                      new ContractSchedule("d")), new Team()));
+				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+				var ret = new PersonAssignment(p, new Scenario("d"), new DateOnly(2000, 1, 1));
+				var act = new Activity("overtime");
+				var overtimeShift = new OvertimeShift();
+				ret.AddOvertimeShift(overtimeShift);
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi));
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi));
+				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi));
+				return ret;
+			}
     }
 
     /// <summary>

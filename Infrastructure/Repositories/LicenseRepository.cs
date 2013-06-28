@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -90,5 +94,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return false;
             }
         }
+
+		public IList<ActiveAgent> GetActiveAgents()
+		{
+			const string sql = @"select b.Name BusinessUnit, FirstName, LastName, Email, EmploymentNumber, MIN(StartDate) StartDate, p.TerminalDate LeavingDate from Person p
+INNER JOIN PersonPeriod pp ON pp.Parent=p.Id and pp.StartDate<GETDATE()
+INNER JOIN Contract c ON pp.Contract = c.Id
+INNER JOIN BusinessUnit b ON c.BusinessUnit = b.Id
+where (p.TerminalDate is null or p.TerminalDate>=GETDATE())
+and p.IsDeleted = 0 
+and p.id in(SELECT distinct Person from PersonAssignment pa inner join Scenario s ON pa.Scenario = s.Id
+where s.DefaultScenario = 1)
+GROUP BY b.Name, FirstName, LastName, Email, EmploymentNumber, p.TerminalDate
+ORDER BY LastName, FirstName";
+
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{ 
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(ActiveAgent)))
+				.SetReadOnly(true)
+				.List<ActiveAgent>();
+			}
+		}
     }
+
+	
 }

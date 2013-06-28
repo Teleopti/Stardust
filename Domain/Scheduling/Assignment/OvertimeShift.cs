@@ -17,28 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		}
 
-		public virtual IProjectionService ProjectionService()
-		{
-			var proj = new VisualLayerProjectionService(null);
-			proj.Add(this);
-			return proj;
-		}
-
-		public virtual bool HasProjection
-		{
-			get
-			{
-				return (LayerCollection.Count > 0);
-			}
-		}
-
 		public virtual object Clone()
 		{
-			var retObj = EntityClone();
-			return retObj;
+			return EntityClone();
 		}
 
-		public virtual IShift NoneEntityClone()
+		public virtual IOvertimeShift NoneEntityClone()
 		{
 			var retObj = (OvertimeShift)MemberwiseClone();
 			retObj.SetId(null);
@@ -51,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retObj;
 		}
 
-		public virtual IShift EntityClone()
+		public virtual IOvertimeShift EntityClone()
 		{
 			var retObj = (OvertimeShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
@@ -96,11 +80,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public virtual IEnumerable<IOvertimeShiftActivityLayer> LayerCollectionWithDefinitionSet()
         {
             return LayerCollection.Cast<IOvertimeShiftActivityLayer>();
-        }
-
-        public virtual IVisualLayerFactory CreateVisualLayerFactory()
-        {
-            return new VisualLayerOvertimeFactory();
         }
     }
 }

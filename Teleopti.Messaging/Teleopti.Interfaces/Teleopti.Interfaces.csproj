@@ -124,7 +124,10 @@
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
-    <Compile Include="Domain\IMainShiftActivityLayerNew.cs" />
+    <Compile Include="Domain\IMainShiftLayer.cs" />
+    <Compile Include="Domain\IMoveLayerVertical.cs" />
+    <Compile Include="Domain\IPersonalShiftLayer.cs" />
+	<Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -165,7 +168,6 @@
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
     <Compile Include="Domain\IJobResultDetail.cs" />
-    <Compile Include="Domain\IProjectableLayerCollectionOwner.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
@@ -346,7 +348,6 @@
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
-    <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
     <Compile Include="Domain\DayOff.cs">
       <SubType>Code</SubType>
@@ -467,8 +468,6 @@
     <Compile Include="Domain\ISwapDetail.cs" />
     <Compile Include="Domain\ISystemSetting.cs" />
     <Compile Include="Domain\ITemplateReference.cs" />
-    <Compile Include="Domain\IPersonalShiftActivityLayer.cs" />
-    <Compile Include="Domain\IMainShiftActivityLayer.cs" />
     <Compile Include="Domain\DateHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -585,7 +584,6 @@
     <Compile Include="Domain\IUndoRedoContainer.cs" />
     <Compile Include="Domain\IVersioned.cs" />
     <Compile Include="Domain\IAggregateSkill.cs" />
-    <Compile Include="Domain\IVisualLayerFactoryFactory.cs" />
     <Compile Include="Domain\IVisualLayerFactory.cs" />
     <Compile Include="Domain\IWorkloadDay.cs" />
     <Compile Include="Domain\IWorkloadDayBase.cs" />
@@ -650,7 +648,6 @@
     </Compile>
     <Compile Include="Domain\ILayerSorter.cs" />
     <Compile Include="Domain\ILoadAggregateById.cs" />
-    <Compile Include="Domain\IMainShift.cs" />
     <Compile Include="Domain\IMeetingPerson.cs" />
     <Compile Include="Domain\InParameter.cs">
       <SubType>Code</SubType>
@@ -665,7 +662,6 @@
     <Compile Include="Domain\IPermissionInformation.cs" />
     <Compile Include="Domain\IPerson.cs" />
     <Compile Include="Domain\IPersonAbsence.cs" />
-    <Compile Include="Domain\IPersonalShift.cs" />
     <Compile Include="Domain\IPersonAssignment.cs" />
     <Compile Include="Domain\IPersonAssignmentRepository.cs" />
     <Compile Include="Domain\IPersonContract.cs" />
@@ -709,9 +705,6 @@
     </Compile>
     <Compile Include="Domain\ISchedulePeriod.cs" />
     <Compile Include="Domain\IServiceLevel.cs" />
-    <Compile Include="Domain\IShift.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IShiftCategory.cs" />
     <Compile Include="Domain\ISite.cs" />
     <Compile Include="Domain\ISkill.cs" />

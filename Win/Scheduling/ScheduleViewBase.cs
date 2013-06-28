@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var personAssignments = scheduleRange.PersonAssignmentCollection();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalShiftCollection.Count > 0)
+                if (personAssignment.PersonalLayers.Any())
                 {
                     Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
                     Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
@@ -983,6 +983,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 if(scheduleRange.SignificantPart() != SchedulePartView.None)
                     schedulesForDelete.Add(scheduleRange);
+            }
+
+            return schedulesForDelete;
+        }
+
+        public IList<IScheduleDay> DeleteList<T>(ClipHandler<T> clipHandler,DeleteOption deleteOption )
+        {
+            IList<IScheduleDay> schedulesForDelete = new List<IScheduleDay>();
+
+            foreach (Clip<T> clip in clipHandler.ClipList)
+            {
+                int row = clipHandler.AnchorRow + clip.RowOffset;
+                int col = clipHandler.AnchorColumn + clip.ColOffset;
+
+                IScheduleDay scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
+
+                if (deleteOption.OvertimeAvailability)
+                    schedulesForDelete.Add(scheduleRange);
+                else if (scheduleRange.SignificantPart() != SchedulePartView.None )
+                    schedulesForDelete.Add(scheduleRange);
+                 
+
             }
 
             return schedulesForDelete;

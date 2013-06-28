@@ -51,17 +51,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 6, 0, 0, DateTimeKind.Utc));
 	        _testPersonAssignment.SetMainShiftLayers(
-		        new[] {new MainShiftActivityLayerNew(ActivityFactory.CreateActivity("Phone"), period1)},
+		        new[] {new MainShiftLayer(ActivityFactory.CreateActivity("Phone"), period1)},
 		        new ShiftCategory("myCategory"));
 
-            PersonalShift ps1 = new PersonalShift();
             DateTimePeriod period2 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 11, 3, 0, 0, DateTimeKind.Utc));
-            PersonalShiftActivityLayer layer2 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Möte"), period2);
 
-            ps1.LayerCollection.Add(layer2);
-            _testPersonAssignment.AddPersonalShift(ps1);
+						_testPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("Möte"), period2);
 
             return _testPersonAssignment;
         }

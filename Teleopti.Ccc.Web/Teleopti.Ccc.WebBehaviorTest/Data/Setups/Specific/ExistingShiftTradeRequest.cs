@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public DateTime? DateFrom { get; set; }
 		public bool Pending { get; set; }
 		public bool Approved { get; set; }
+		public bool AutoDenied { get; set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
@@ -56,6 +57,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			{
 				PersonRequest.ForcePending();
 				PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			}
+
+			if (AutoDenied)
+			{
+				PersonRequest.Deny(sender, "denyReason", new PersonRequestAuthorizationCheckerForTest());
 			}
 			requestRepository.Add(PersonRequest);
 		}

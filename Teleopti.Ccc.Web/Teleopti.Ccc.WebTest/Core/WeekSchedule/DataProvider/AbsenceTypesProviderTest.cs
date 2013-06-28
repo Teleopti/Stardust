@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 {
 	[TestFixture]
-	class AbsenceTypesProviderTest
+	public class AbsenceTypesProviderTest
 	{
 		[Test]
 		public void ShouldReturnAbsenceTypes()

@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Domain.Common
     {
         private Description _description;
         private EmploymentType _employmentType;
-        private WorkTimeDirective _workTimeDirective;
-        private WorkTime _workTime;
+        private WorkTimeDirective _workTimeDirective = WorkTimeDirective.DefaultWorkTimeDirective;
+        private WorkTime _workTime = WorkTime.DefaultWorkTime;
         private readonly IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection = new List<IMultiplicatorDefinitionSet>();
         private bool _isDeleted;
         private TimeSpan _positivePeriodWorkTimeTolerance;
@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-                if (_workTimeDirective == new WorkTimeDirective())
-                    return WorkTimeDirective.DefaultWorkTimeDirective;
                 return _workTimeDirective;
             }
             set { _workTimeDirective = value; }
@@ -82,8 +80,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-                if (_workTime == new WorkTime())
-                    return WorkTime.DefaultWorkTime;
                 return _workTime;
             }
             set { _workTime = value; }

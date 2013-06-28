@@ -48,7 +48,7 @@ INNER JOIN Stage.stg_schedule_updated_personLocal dp
 				(stg.schedule_date	>= dp.valid_from_date_local)
 
 			AND
-				(stg.schedule_date < dp.valid_to_date_local)
+				(stg.schedule_date <= dp.valid_to_date_local)
 		)
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
@@ -58,6 +58,7 @@ INNER JOIN mart.fact_schedule fs
  	AND ds.scenario_id = fs.scenario_id
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 	ON dd.shift_startdate_id = fs.shift_startdate_id 
+	AND dd.person_id = fs.person_id
 WHERE stg.business_unit_code = @business_unit_code
 
 --insert new and updated

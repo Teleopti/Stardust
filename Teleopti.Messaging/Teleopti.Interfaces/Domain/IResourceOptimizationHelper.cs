@@ -45,13 +45,5 @@ namespace Teleopti.Interfaces.Domain
     	ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(
     		ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills,
     		DateTimePeriod keyPeriod);
-
-        /// <summary>
-        /// Adds the resources to non blend and max seat.
-        /// </summary>
-        /// <param name="mainShift">The main shift.</param>
-        /// <param name="person">The person.</param>
-        /// <param name="dateOnly">The date only.</param>
-        void AddResourcesToNonBlendAndMaxSeat(IMainShift mainShift, IPerson person, DateOnly dateOnly);
     }
 }

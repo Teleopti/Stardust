@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
                             Math.Round(
                                 _calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
                                                                              _averageHandlingTime, _periodLength,
-                                                                             _minOcc, _maxOcc), 3));
+                                                                             _minOcc, _maxOcc,1), 3));
         }
 
         [Test]
@@ -97,13 +97,13 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             TimeSpan periodLength = TimeSpan.FromMinutes(15);
             double result1 = _calculatorService.AgentsUseOccupancy(0.8, 20, 3,
-                                                                  (periodLength.TotalSeconds/6) + 1, periodLength, 0, 1);
+                                                                  (periodLength.TotalSeconds/6) + 1, periodLength, 0, 1,1);
 
             double result2 = _calculatorService.AgentsUseOccupancy(0.8, 20, 3,
-                                                                  (periodLength.TotalSeconds / 6), periodLength, 0, 1);
+                                                                  (periodLength.TotalSeconds / 6), periodLength, 0, 1,1);
 
             double result3 = _calculatorService.AgentsUseOccupancy(0.8, 20, 3,
-                                                                  (periodLength.TotalSeconds / 6) - 1, periodLength, 0, 1);
+                                                                  (periodLength.TotalSeconds / 6) - 1, periodLength, 0, 1,1);
             
             Assert.AreEqual(result1, result2, 0.01);
             Assert.AreEqual(result2, result3, 0.01); //Failed at first difference was almost 1 agent
@@ -157,6 +157,18 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			Assert.AreEqual(4056.904d, Math.Round(_calculatorService.TeleoptiAgents(_sla, 20, 1000, 3601, _periodLength), 3));
 			Assert.AreEqual(224.621d, Math.Round(_calculatorService.TeleoptiAgents(0.6, 120, 500, 400, _periodLength), 3));
 		}
-       
+
+		[Test]
+		public void ShouldDivideAgentsWithParallelTasks()
+		{
+			var expected =  Math.Round(6.142 /3,3);
+
+			var result = Math.Round(_calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
+																		_averageHandlingTime, _periodLength,
+																		_minOcc, _maxOcc, 3), 3);
+
+			Assert.That(result,Is.EqualTo(expected));
+
+		}
     }
 }

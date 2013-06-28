@@ -4,18 +4,30 @@
 Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 	var self = this;
-	self.Id = ko.observable();
+	self.EntityId = ko.observable();
 	self.Subject = ko.observable();
-	self.MessageText = ko.observable();
+	self.Message = ko.observable();
 	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
+    self.DateFrom = ko.observable(moment().startOf('day'));
+    self.DateTo = ko.observable(moment().startOf('day'));
+    self.TimeFrom = ko.observable();
+    self.TimeTo = ko.observable();
+    self.AbsenceId = ko.observable();
+    self.DenyReason = ko.observable();
 	self.Template = ko.observable("shifttrade-request-detail-template");
 	self.IsTradeCreatedByMe = ko.observable(false);
 	self.ajax = ajax;
 	self.From = ko.observable("");
 	self.To = ko.observable("");
 	self.CanApproveAndDeny = ko.observable(true);
+	self.IsSelected = ko.observable(false);
+	self.IsEditable = ko.observable();
+	self.IsNewInProgress = ko.observable(false);
+	self.ToggleSelected = function () {
+	    self.IsSelected(!self.IsSelected());
+	};
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
@@ -56,7 +68,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	
     self.loadSwapDetails = function () {
 		self.ajax.Ajax({
-			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
+		    url: "Requests/ShiftTradeRequestSwapDetails/" + self.EntityId(),
 			dataType: "json",
 			type: "GET",
 			success: function (data) {
@@ -98,8 +110,8 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
         var self = this;
         self.showInfo(!data.IsPending);
 		self.Subject(data.Subject);
-		self.MessageText(data.Text);
-		self.Id(data.Id);
+		self.Message(data.Text);
+		self.EntityId(data.Id);
 		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);

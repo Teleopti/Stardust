@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Threading;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
@@ -20,7 +15,7 @@ using Teleopti.Interfaces.Messages.Requests;
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture]
-	internal class AbsenceRequestPersisterTest
+	public class AbsenceRequestPersisterTest
 	{
 		[Test]
 		public void ShouldAddAbsenceRequest()

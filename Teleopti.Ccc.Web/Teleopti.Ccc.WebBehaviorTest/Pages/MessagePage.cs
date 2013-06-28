@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -10,35 +8,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 	{
 		public Div FriendlyMessage
 		{
-			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
+			get { return Document.Div(Find.BySelector(".bdd-show-message")); }
 		}
 
-		public ListItemCollection MessageListItems
+		public DivCollection MessageBodyDivs
 		{
-			get { return Document.ListItems.Filter(QuicklyFind.ByClass("asmMessage-item")); }
+			get { return Document.Divs.Filter(Find.BySelector(".bdd-asm-message-body")); }
 		}
 
-		public Div MessageDetailSection
+		public Button ConfirmButton(int messagePositionInList)
 		{
-			get { return Document.Div(QuicklyFind.ByClass("asmMessage-edit-section")); }
+			return MessageDetailSection(messagePositionInList).Button(Find.BySelector(".bdd-asm-message-confirm-button"));
 		}
 
-		[FindBy(Id = "AsmMessage-detail-title")]
-		public Label Title { get; set; }
+		public Div MessageDetailSection(int messagePositionInList)
+		{
+			return Document.Divs.Filter(Find.BySelector(".bdd-asm-message-detail"))[messagePositionInList - 1];
+		}
 
-		[FindBy(Id = "AsmMessage-detail-message")]
-		public Label Message { get; set; }
+		public Label Message(int messagePositionInList)
+		{
+			return MessageDetailSection(messagePositionInList).Label(Find.BySelector(".bdd-asm-message-detail-message"));
+		}
 
-		[FindBy(Id = "AsmMessage-detail-reply")]
-		public TextField Reply { get; set; }
+		public TextField Reply(int messagePositionInList)
+		{
+			return ReplyOptionsDiv(messagePositionInList).TextField(Find.First());
+		}
 
-		[FindBy(Id = "AsmMessage-detail-dialogueMessages")]
-		public Div DialogueMessages { get; set; }
+		public Div DialogueMessages(int messagePositionInList)
+		{
+			return MessageDetailSection(messagePositionInList).Div(Find.BySelector(".bdd-asm-message-detail-dialogue"));
+		}
 
-		[FindBy(Id = "AsmMessage-detail-ok-button")]
 		public Button OkButton { get; set; }
 
-		[FindBy(Id = "AsmMessage-detail-replyOption")]
-		public Div ReplyOptions { get; set; }
+		public Div ReplyOptionsDiv(int messagePositionInList)
+		{
+			return MessageDetailSection(messagePositionInList).Div(Find.BySelector(".bdd-asm-message-detail-reply"));
+		}
 	}
 }

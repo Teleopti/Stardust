@@ -99,5 +99,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _options.StudentAvailability = true;
             Assert.AreEqual(true, _options.StudentAvailability);
         }
+
+        [Test]
+        public void VerifyOvertimeAvailability()
+        {
+            Assert.AreEqual(false, _options.OvertimeAvailability);
+            _options.OvertimeAvailability  = true;
+            Assert.AreEqual(true, _options.OvertimeAvailability );
+        }
     }
 }

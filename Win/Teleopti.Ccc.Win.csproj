@@ -805,6 +805,12 @@
     <Compile Include="Intraday\Reforecast\SelectWorkload.Designer.cs">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\ActiveAgents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\ActiveAgents.Designer.cs">
+      <DependentUpon>ActiveAgents.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\Legal.cs">
       <SubType>Form</SubType>
@@ -989,7 +995,6 @@
     <Compile Include="Common\Controls\DateSelection\DateTimePickerAdvExtension.cs" />
     <Compile Include="Common\Controls\IntervalLengthItem.cs" />
     <Compile Include="Common\Configuration\TreeFamily.cs" />
-    <Compile Include="Common\IAlarmControlView.cs" />
     <Compile Include="Common\Interop\MultipleElementHost.cs" />
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />
@@ -1262,6 +1267,12 @@
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
+      <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
@@ -2615,6 +2626,9 @@
     <EmbeddedResource Include="Intraday\Reforecast\SelectWorkload.resx">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main\ActiveAgents.resx">
+      <DependentUpon>ActiveAgents.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main\Legal.resx">
       <DependentUpon>Legal.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2794,6 +2808,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatchingNew.resx">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityView.resx">
+      <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>

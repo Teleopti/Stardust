@@ -46,7 +46,7 @@ ON
 				(stg.restriction_date	>= dp.valid_from_date)
 
 			AND
-				(stg.restriction_date < dp.valid_to_date)
+				(stg.restriction_date <= dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.restriction_date
