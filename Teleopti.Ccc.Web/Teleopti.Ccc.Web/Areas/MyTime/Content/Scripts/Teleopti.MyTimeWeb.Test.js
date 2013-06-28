@@ -24,13 +24,14 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	}
 
 	function _popTestMessages() {
-		var messages = _messages;
-		_messages = [];
+		var messages = "";
 		var page = $('#page');
-		for (var i = 0; i < messages.length; i++) {
-			var message = messages[i];
-			page.append(message + "</ br>");
+		for (var i = 0; i < _messages.length; i++) {
+		    var message = _messages[i];
+		    page.append(message + "</ br>");
+		    messages = messages + message;
 		}
+	    _messages = [];
 		return messages;
 	}
 
