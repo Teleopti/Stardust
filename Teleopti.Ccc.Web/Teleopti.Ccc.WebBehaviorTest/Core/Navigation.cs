@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay(),new OverrideNotifyBehavior());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -125,13 +125,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoAvailability()
 		{
-			GoToWaitForCompleted("MyTime#Availability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+			GoToWaitForCompleted("MyTime#Availability/Index", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
@@ -139,14 +139,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Availability/Index/{0}/{1}/{2}",
 			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				 new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+				 new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
 		public static void GotoPreference()
 		{
 			GoToWaitForCompleted("MyTime#Preference/Index", 
-				new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
@@ -154,31 +154,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRegionalSettings()
 		{
-			GoToWaitForCompleted("MyTime#Settings/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoToWaitForCompleted("MyTime#Settings/Index", new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
 		public static void GotoPasswordPage()
 		{
-			GoToWaitForCompleted("MyTime#Settings/Password", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+			GoToWaitForCompleted("MyTime#Settings/Password", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
 		}
 
 		public static void GotoRequests()
 		{
-			GoToWaitForCompleted("MyTime#Requests/Index", new BustCache(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoToWaitForCompleted("MyTime#Requests/Index", new BustCache(), new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GotoTeamSchedule()
 		{
-			GoToWaitForCompleted("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoToWaitForCompleted("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
-				, new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+				, new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	    public static void GotoMessagePage()
         {
-			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay());
+			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout());
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
@@ -316,33 +316,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			_timeoutScope.Dispose();
 			_timeoutScope = null;
 		}
-	}
-
-	public class WaitForLoadingOverlay : IGoToInterceptor
-	{
-		public void Before(GotoArgs args)
-		{
-			//WaitUntilLoadingOverlayIsHidden();
-		}
-
-		public void After(GotoArgs args)
-		{
-			//WaitUntilLoadingOverlayIsHidden();
-		}
-
-		private static void WaitUntilLoadingOverlayIsHidden()
-		{
-			//using (Browser.TimeoutScope(TimeSpan.FromSeconds(3)))
-			//{
-			//	Browser.Interactions.AssertExists("#loading");
-			//	Browser.Interactions.AssertExists("#loading:hidden");
-			//}
-
-			//var loading = Browser.Current.Div("loading");
-			//if (!loading.Exists) return;
-			//loading.WaitUntilHidden();
-		}
-
 	}
 
 	public class OverrideNotifyBehavior : IGoToInterceptor
