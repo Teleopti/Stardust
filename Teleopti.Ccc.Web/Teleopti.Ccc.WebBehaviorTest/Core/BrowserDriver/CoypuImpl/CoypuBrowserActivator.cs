@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
+			// todo: clear the cache!
 			var configuration = new SessionConfiguration
 				{
 					AppHost = "about:blank",
