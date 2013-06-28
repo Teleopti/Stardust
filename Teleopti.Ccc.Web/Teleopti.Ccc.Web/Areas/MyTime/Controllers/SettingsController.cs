@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -107,10 +108,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return Json(string.Empty);
 			var requestUrl = Request.Url.OriginalString;
 			var dataSourceName = _currentDataSource.CurrentName();
+			var userId = _loggedOnUser.CurrentUser().Id.Value;
+			var uniqueValue = dataSourceName + "/" + userId;
+			var encryptedUniqueValue = StringEncryption.Encrypt(uniqueValue);
+
 			var url =
 				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) +
-				"Share/" + dataSourceName + "/" +
-				_loggedOnUser.CurrentUser().Id.Value;
+				"ShareCalendar?id=" + Url.Encode(encryptedUniqueValue);
+				
 			return Json(url);
 		}
 	}

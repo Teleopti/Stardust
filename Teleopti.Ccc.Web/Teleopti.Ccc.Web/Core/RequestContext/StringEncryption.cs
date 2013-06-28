@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
+﻿using System.Web.Security;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
-	public class StringEncryption
+	public static class StringEncryption
 	{
 
-	public string Encrypt(string stringToEncrypt)
-    {
-        FormsAuthenticationTicket tk = new FormsAuthenticationTicket(stringToEncrypt, false, 600);
-        // returns encrypted string
-        return FormsAuthentication.Encrypt(tk); 
-    }
+		public static string Encrypt(string stringToEncrypt)
+		{
 
+			return Encryption.EncryptStringToBase64(stringToEncrypt, EncryptionConstants.Image1, EncryptionConstants.Image2);
+		}
 
-	public string Decrypt(string encryptedString)
-    {
-        FormsAuthenticationTicket tk= FormsAuthentication.Decrypt(encryptedString);
-        return tk.Name;
-    }
+		public static string Decrypt(string encryptedString)
+		{
+			return Encryption.DecryptStringFromBase64(encryptedString, EncryptionConstants.Image1, EncryptionConstants.Image2);
+		}
+	}
 }

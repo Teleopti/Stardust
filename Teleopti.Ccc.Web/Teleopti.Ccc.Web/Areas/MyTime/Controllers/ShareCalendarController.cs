@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -27,8 +28,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
-		public ContentResult iCal(string dataSourceName, Guid publishedId)
+		public ContentResult Index(string id)
 		{
+			if(string.IsNullOrEmpty(id))
+				return null;
+			string dataSourceNameAndPersonId = StringEncryption.Decrypt(id);
+			int pos = dataSourceNameAndPersonId.LastIndexOf("/", StringComparison.Ordinal);
+			var dataSourceName = dataSourceNameAndPersonId.Substring(0, pos);
+			var personId = dataSourceNameAndPersonId.Substring(pos + 1);
+			var publishedId = new Guid(personId);
+
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(dataSourceName);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -39,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					return null;
 				var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
 				var calendarLinkSettings = personalSettingDataRepository.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person,
-				                                                                          new CalendarLinkSettings());
+																						  new CalendarLinkSettings());
 				if (!calendarLinkSettings.IsActive)
 					return null;
 				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
@@ -71,5 +80,51 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return Content(serializer.SerializeToString(iCal), "text/plain");
 			}
 		}
+
+		//[HttpGet]
+		//public ContentResult iCal(string dataSourceName, Guid publishedId)
+		//{
+		//	var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(dataSourceName);
+
+		//	using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+		//	{
+		//		var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+		//		var person = personRepository.Get(publishedId);
+		//		if (person == null)
+		//			return null;
+		//		var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
+		//		var calendarLinkSettings = personalSettingDataRepository.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person,
+		//																				  new CalendarLinkSettings());
+		//		if (!calendarLinkSettings.IsActive)
+		//			return null;
+		//		var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
+		//		var scheduleDays = personScheduleDayReadModelFinder.ForPerson(DateOnly.Today.AddDays(-60),
+		//																   DateOnly.Today.AddDays(180), publishedId);
+		//		if (scheduleDays == null || scheduleDays.IsEmpty())
+		//			return null;
+
+		//		var iCal = new iCalendar { ProductID = "Teleopti" };
+
+		//		foreach (var scheduleDay in scheduleDays)
+		//		{
+		//			dynamic shift = _deserializer.DeserializeObject(scheduleDay.Shift);
+		//			if (shift == null)
+		//				continue;
+		//			var layers = shift.Projection as IEnumerable<dynamic>;
+		//			foreach (var layer in layers)
+		//			{
+		//				var evt = iCal.Create<Event>();
+
+		//				evt.Start = new iCalDateTime(layer.Start);
+		//				evt.End = new iCalDateTime(layer.End);
+		//				evt.Summary = layer.Title;
+		//			}
+		//		}
+
+		//		var serializer = new iCalendarSerializer();
+
+		//		return Content(serializer.SerializeToString(iCal), "text/plain");
+		//	}
+		//}
 	}
 }

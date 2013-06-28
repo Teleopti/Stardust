@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void IndexShouldReturnView()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				var res = target.Index();
 				res.ViewName.Should().Be.EqualTo("RegionalSettingsPartial");
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void CulturesShouldReturnViewModel()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				var viewModel = new SettingsViewModel();
 				var person = new Person();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void PassWordShouldReturnCorrectView()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				var res = target.Password();
 				res.ViewName.Should().Be.EqualTo("PasswordPartial");
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				target.UpdateCulture(1034);
 			}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				target.UpdateCulture(-1);
 			}
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				target.UpdateUiCulture(1034);
 			}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				target.UpdateUiCulture(-1);
 			}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo {IsSuccessful = true});
-			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				var result=target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"}).Data as IChangePasswordResultInfo;
 				Assert.IsTrue(result.IsSuccessful);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo { IsSuccessful = false });
-			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null))
+			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
 			{
 				var context = new FakeHttpContext("/");
 				context.SetResponse(response);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			const string dataName = "TestRepsitory";
 			currentDatasource.Stub(x => x.CurrentName()).Return(dataName);
 			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
-			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource))
+			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
 			{
 				var context = new FakeHttpContext("/");
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			const string dataName = "TestRepsitory";
 			currentDatasource.Stub(x => x.CurrentName()).Return(dataName);
 			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
-			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource))
+			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
 			{
 				var context = new FakeHttpContext("/");
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
