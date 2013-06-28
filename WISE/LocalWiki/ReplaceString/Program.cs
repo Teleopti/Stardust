@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -22,86 +17,107 @@ namespace ReplaceString
         const string teleopti9 = "load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;printable=1&amp;skin=vector&amp;%252A";
         const string teleopti10 = "load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;%252A";
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             // get list of files
+            int appStatus = 0;
             string path = args[0];
             string[] regExps = { "F01%253A[A-Za-z0-9]*\\+[A-Za-z0-9]*", "F02%253A[A-Za-z0-9]*\\+[A-Za-z0-9]*"};
             string[] files = Directory.GetFiles(path);
             string[] directories = Directory.GetDirectories(path);
 
-            //iterate each regular exp in each file
-            foreach (var text in regExps)
+            try
             {
-                foreach (var file in files)
+                //iterate each regular exp in each file
+                foreach (var text in regExps)
                 {
-                    ReplaceInFile(file, text);
-                }
-            }
-
-            // replace file name if it contains + sign
-            foreach (var file in files)
-            {
-                if (file.Contains("+"))
-                {
-                    var newfile = file.Replace("+", "_");
-                    File.Move(file, newfile);
-                }
-
-                //need to do replace load script file with teleopti names.
-                if (file.Contains("load.php"))
-                {
-                    var index = file.LastIndexOf("\\");
-
-                    if (index != -1)
-                    {
-                        var fileName = file.Substring(index + 1, file.Length - index - 1);
-
-                        if (fileName =="load.php@debug=false&lang=en&modules=mediawiki.legacy.commonPrint,shared%7Cskins.vector&only=styles&printable=1&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti1.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=mediawiki.legacy.commonPrint,shared%7Cskins.vector&only=styles&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti2.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=site&only=scripts&printable=1&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti3.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=site&only=scripts&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti4.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=site&only=styles&printable=1&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti5.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=site&only=styles&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti6.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=skins.vector&only=scripts&printable=1&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti7.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=skins.vector&only=scripts&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti8.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=startup&only=scripts&printable=1&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti9.css");
-                        else if (fileName == "load.php@debug=false&lang=en&modules=startup&only=scripts&skin=vector&%2A")
-                            File.Move(file, path + "\\" + "teleopti10.css");
-                    }
-                }
-            }
-
-            // replace + with _ and load php script in translation files also
-            foreach (var text in regExps)
-            {
-                foreach (var directory in directories)
-                {
-                    foreach (var file in Directory.GetFiles(directory))
+                    foreach (var file in files)
                     {
                         ReplaceInFile(file, text);
                     }
                 }
-            }
 
-            // rename directory name if it contains + sign
-            foreach (var directory in directories)
-            {
-                if (directory.Contains("+"))
+                // replace file name if it contains + sign
+                foreach (var file in files)
                 {
-                    var newDir = directory.Replace("+", "_");
-                    Directory.Move(directory, newDir);
+                    if (file.Contains("+"))
+                    {
+                        var newfile = file.Replace("+", "_");
+                        File.Move(file, newfile);
+                    }
+
+                    //need to do replace load script file with teleopti names.
+                    if (file.Contains("load.php"))
+                    {
+                        var index = file.LastIndexOf("\\");
+
+                        if (index != -1)
+                        {
+                            var fileName = file.Substring(index + 1, file.Length - index - 1);
+
+                            if (fileName ==
+                                "load.php@debug=false&lang=en&modules=mediawiki.legacy.commonPrint,shared%7Cskins.vector&only=styles&printable=1&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti1.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=mediawiki.legacy.commonPrint,shared%7Cskins.vector&only=styles&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti2.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=site&only=scripts&printable=1&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti3.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=site&only=scripts&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti4.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=site&only=styles&printable=1&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti5.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=site&only=styles&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti6.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=skins.vector&only=scripts&printable=1&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti7.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=skins.vector&only=scripts&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti8.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=startup&only=scripts&printable=1&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti9.css");
+                            else if (fileName ==
+                                     "load.php@debug=false&lang=en&modules=startup&only=scripts&skin=vector&%2A")
+                                File.Move(file, path + "\\" + "teleopti10.css");
+                        }
+                    }
+                }
+
+                // replace + with _ and load php script in translation files also
+                foreach (var text in regExps)
+                {
+                    foreach (var directory in directories)
+                    {
+                        foreach (var file in Directory.GetFiles(directory))
+                        {
+                            ReplaceInFile(file, text);
+                        }
+                    }
+                }
+
+                // rename directory name if it contains + sign
+                foreach (var directory in directories)
+                {
+                    if (directory.Contains("+"))
+                    {
+                        var newDir = directory.Replace("+", "_");
+                        Directory.Move(directory, newDir);
+                    }
                 }
             }
+            catch (Exception exp)
+            {
+                appStatus = 4;
+                return appStatus;
+            }
+
+            return appStatus;
 
         }
 
