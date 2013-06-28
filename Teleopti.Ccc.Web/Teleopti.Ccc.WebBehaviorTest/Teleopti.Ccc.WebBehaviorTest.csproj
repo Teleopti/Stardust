@@ -88,6 +88,7 @@
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
