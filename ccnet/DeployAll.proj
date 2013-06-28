@@ -61,8 +61,6 @@
 	<ItemGroup>
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
-		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
-		<AsCmdProj Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -89,8 +87,15 @@
 	</Target>
 
 	<Target Name="CompileExtraApps">
+	<ItemGroup>
+		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
+		<AsCmdProj Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
+		<localWikiReplaceString Include="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString.sln" />	
+	</ItemGroup>		
+	
 		<MSBuild Projects="@(PreReqTool)" Properties="Configuration=Release" Targets="Build" />
 		<MSBuild Projects="@(AsCmdProj)" Properties="Configuration=Release" Targets="Build" />
+		<MSBuild Projects="@(localWikiReplaceString)" Properties="Configuration=Release" Targets="Build" />
 	</Target>
 
 	<Target Name="CleanUpUnwantedFiles">
@@ -172,8 +177,11 @@
   </Target>
   
  
-	<Target Name="BuildLocalWiki">
+	<Target Name="BuildLocalWiki" DependsOnTargets="CompileExtraApps">
 		<Message Text="Buliding local wiki ... " />
+		
+		<Copy 	SourceFiles="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString\bin\$(Configuration)\ReplaceString.exe"
+				DestinationFiles="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString.exe"/>
 	
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat&quot;" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
