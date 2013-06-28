@@ -26,6 +26,6 @@ echo "%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%
 "%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%\%zipFileName%"
 
 :: Deploy virtual directory to IIS
-%SYSTEMROOT%\system32\inetsrv\APPCMD add vdir /app.name:"Default Web Site/" /path:/TeleoptiCCC/LocalWiki /physicalPath:"%INSTALLPATH%TeleoptiCCC\LocalWiki\"
+%SYSTEMROOT%\system32\inetsrv\APPCMD add vdir /app.name:"Default Web Site/" /path:/TeleoptiCCC/LocalWiki /physicalPath:"%INSTALLPATH%TeleoptiCCC\LocalWiki"
 
 PAUSE
