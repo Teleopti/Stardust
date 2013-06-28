@@ -6,7 +6,9 @@ SET Dependencies=\\hebe\Installation\Dependencies\localWiki
 SET Deployment=\\hebe\Installation\localWiki\latest
 SET
 SET WorkingFolder=C:\temp\localWiki
-SET WebSite=www.goodellgroup.com
+SET WebURL=http://wiki.teleopti.com/TeleoptiCCC
+SET OutputFolder=wiki.teleopti.com\TeleoptiCCC
+
 ::all good so far
 SET /A ERRORLEV=0
 COLOR A
@@ -32,23 +34,25 @@ copy "%Dependencies%\wget.exe" "%WorkingFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::crawle the website and export to working folder
-ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
-"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "http://%WebSite%/tutorial/chapter4.html"
+ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
+"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 SET /A wgetError=%ERRORLEVEL%
 IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
 ::add special web.config to the folder
-copy "%ROOTDIR%\web.config" "%WorkingFolder%\%WebSite%\"
+echo copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
+copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
+PAUSE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::replace strings and URLs
-echo "%ROOTDIR%\ReplaceString.exe" "%WorkingFolder%\%WebSite%"
-"%ROOTDIR%\ReplaceString.exe" "%WorkingFolder%\%WebSite%"
+echo "%Dependencies%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
+"%Dependencies%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
 SET /A replaceError=%ERRORLEVEL%
 IF %replaceError% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 
 ::zip static web files into the deployment folder
-"%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%WebSite%\*"
+"%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%OutputFolder%\*"
 SET /A zipError=%ERRORLEVEL%
 IF %zipError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
