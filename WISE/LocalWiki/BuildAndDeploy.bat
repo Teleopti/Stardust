@@ -3,8 +3,8 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 SET Dependencies=\\hebe\Installation\Dependencies\localWiki
-SET Deployment=\\hebe\Installation\localWiki\latest
-SET
+SET Deployment=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki\Latest
+
 SET WorkingFolder=C:\temp\localWiki
 SET WebURL=http://wiki.teleopti.com/TeleoptiCCC
 SET OutputFolder=wiki.teleopti.com\TeleoptiCCC
@@ -17,9 +17,10 @@ cls
 ::prepare an archive folder
 For /f "tokens=1-2 delims=/:" %%a in ("%TIME%") do (set mytime=%%a%%b)
 For /f "tokens=1-4 delims=-" %%a in ("%date%") do (set mydate=%%a%%b%%c)
-set DeploymentArchive=\\hebe\Installation\localWiki\archive\%mydate%_%mytime%
+set DeploymentArchive=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki\Archive\%mydate%_%mytime%
 
 ::archive previous wiki
+if not exist "%Deployment%" mkdir "%Deployment%"
 if exist "%DeploymentArchive%" rmdir "%DeploymentArchive%" /S /Q
 mkdir "%DeploymentArchive%"
 move "%Deployment%\*.*" "%DeploymentArchive%"
@@ -33,6 +34,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 copy "%Dependencies%\wget.exe" "%WorkingFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+copy "%ROOTDIR%\ReplaceString\bin\Release\ReplaceString.exe" "%WorkingFolder%\"
+
 ::crawle the website and export to working folder
 ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
@@ -42,16 +45,17 @@ IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 ::add special web.config to the folder
 echo copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
 copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
-PAUSE
+
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::replace strings and URLs
-echo "%Dependencies%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
-"%Dependencies%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
+echo "%WorkingFolder%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
+"%WorkingFolder%\ReplaceString.exe" "%WorkingFolder%\%OutputFolder%"
 SET /A replaceError=%ERRORLEVEL%
 IF %replaceError% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 
 ::zip static web files into the deployment folder
+ECHO "%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%OutputFolder%\*"
 "%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%OutputFolder%\*"
 SET /A zipError=%ERRORLEVEL%
 IF %zipError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
