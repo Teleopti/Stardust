@@ -13,11 +13,11 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.IsTemplateDetailsVisible = ko.observable(true);
 
 	this.PreferenceId = ko.observable();
-	this.EarliestStartTimeInternal = ko.observable();
-	this.LatestStartTimeInternal = ko.observable();
-	this.EarliestEndTimeInternal = ko.observable();
+	this.EarliestStartTime = ko.observable();
+	this.LatestStartTime = ko.observable();
+	this.EarliestEndTime = ko.observable();
 	this.EarliestEndTimeNextDay = ko.observable();
-	this.LatestEndTimeInternal = ko.observable();
+	this.LatestEndTime = ko.observable();
 	this.LatestEndTimeNextDay = ko.observable();
 	this.MinimumWorkTime = ko.observable();
 	this.MaximumWorkTime = ko.observable();
@@ -28,40 +28,37 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ActivityPreferenceId = ko.observable();
 	this.ActivityMinimumTime = ko.observable();
 	this.ActivityMaximumTime = ko.observable();
-    
-	this.EarliestStartTimeIsEnabled = ko.observable(false);
-	this.LatestStartTimeIsEnabled = ko.observable(false);
-    
-	this.EarliestEndTimeIsEnabled = ko.observable(false);
-	this.LatestEndTimeIsEnabled = ko.observable(false);
-
+	
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.NewTemplateName = ko.observable('');
 
 	this.IsTimeInputEnabled = ko.observable();
-
-    this.EarliestStartTime = ko.computed(function() {
-        if (!self.EarliestStartTimeIsEnabled()) return undefined;
-        return self.EarliestStartTimeInternal();
-    });
-    this.LatestStartTime = ko.computed(function () {
-        if (!self.LatestStartTimeIsEnabled()) return undefined;
-        return self.LatestStartTimeInternal();
-    });
     
-    this.EarliestEndTime = ko.computed(function () {
-        if (!self.EarliestEndTimeIsEnabled()) return undefined;
-        return self.EarliestEndTimeInternal();
-    });
-    this.LatestEndTime = ko.computed(function () {
-        if (!self.LatestEndTimeIsEnabled()) return undefined;
-        return self.LatestEndTimeInternal();
-    });
-
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
 	});
+    
+	this.EarliestEndTimeNextDayClass = ko.computed(function () {
+	    return self.EarliestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+	this.LatestEndTimeNextDayClass = ko.computed(function () {
+	    return self.LatestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+    
+	this.EarliestEndTimeNextDayToggleEnabled = ko.computed(function() {
+	    return self.EarliestEndTime() !== undefined && self.EarliestEndTime() !== '';
+	});
+	this.LatestEndTimeNextDayToggleEnabled = ko.computed(function () {
+	    return self.LatestEndTime() !== undefined && self.LatestEndTime() !== '';
+	});
+    
+	this.LatestEndTimeNextDayToggle = function () {
+	    self.LatestEndTimeNextDay(!self.LatestEndTimeNextDay());
+	};
+	this.EarliestEndTimeNextDayToggle = function () {
+	    self.EarliestEndTimeNextDay(!self.EarliestEndTimeNextDay());
+	};
 
 	_initPreferenceString();
 
@@ -106,10 +103,10 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 				self.PreferenceId('');
 			else
 				self.PreferenceId(newValue.PreferenceId);
-			self.EarliestStartTimeInternal(newValue.EarliestStartTime);
-			self.LatestStartTimeInternal(newValue.LatestStartTime);
-			self.EarliestEndTimeInternal(newValue.EarliestEndTime);
-			self.LatestEndTimeInternal(newValue.LatestEndTime);
+			self.EarliestStartTime(newValue.EarliestStartTime);
+			self.LatestStartTime(newValue.LatestStartTime);
+			self.EarliestEndTime(newValue.EarliestEndTime);
+			self.LatestEndTime(newValue.LatestEndTime);
 			self.EarliestEndTimeNextDay(newValue.EarliestEndTimeNextDay);
 			self.LatestEndTimeNextDay(newValue.LatestEndTimeNextDay);
 			self.MinimumWorkTime(newValue.MinimumWorkTime);
@@ -132,10 +129,10 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.IsTimeInputEnabled.subscribe(function (newValue) {
 		if (!newValue) {
 			self.ActivityPreferenceId('');
-			self.EarliestStartTimeInternal(undefined);
-			self.LatestStartTimeInternal(undefined);
-			self.EarliestEndTimeInternal(undefined);
-			self.LatestEndTimeInternal(undefined);
+			self.EarliestStartTime(undefined);
+			self.LatestStartTime(undefined);
+			self.EarliestEndTime(undefined);
+			self.LatestEndTime(undefined);
 			self.EarliestEndTimeNextDay(false);
 			self.LatestEndTimeNextDay(false);
 			self.MinimumWorkTime(undefined);

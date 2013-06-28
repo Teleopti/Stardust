@@ -158,23 +158,3 @@ ko.bindingHandlers.button = {
         $(element).button("option", "disabled", disabled);
     }
 };
-
-ko.bindingHandlers.buttonToggle = {
-    init: function (element, valueAccessor) {
-        $(element).click(function () {
-            var value = valueAccessor();
-            value(!value()); // toggle the value.. this calls update:
-        });
-
-    },
-    update: function (element, valueAccessor) {
-        // update the button toggle based on the boolean value...
-        var value = valueAccessor();
-        if (value()) {
-            $(element).addClass('active');
-        } else {
-            $(element).removeClass('active');
-        }
-
-    }
-};
