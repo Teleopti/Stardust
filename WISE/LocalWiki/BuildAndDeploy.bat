@@ -41,6 +41,12 @@ IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 copy "%ROOTDIR%\web.config" "%WorkingFolder%\%WebSite%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+::replace strings and URLs
+echo "%ROOTDIR%\ReplaceString.exe" "%WorkingFolder%\%WebSite%"
+"%ROOTDIR%\ReplaceString.exe" "%WorkingFolder%\%WebSite%"
+SET /A replaceError=%ERRORLEVEL%
+IF %replaceError% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
+
 ::zip static web files into the deployment folder
 "%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%.zip" "%WorkingFolder%\%WebSite%\*"
 SET /A zipError=%ERRORLEVEL%
@@ -66,6 +72,7 @@ IF %ERRORLEV% NEQ 0 ECHO Errors found!
 IF %ERRORLEV% EQU 1 ECHO Generall file or folder error, please run batch file manually to find out what goes wrong!
 IF %ERRORLEV% EQU 2 ECHO wget.exe failed with error level: %wgetError%
 IF %ERRORLEV% EQU 3 ECHO 7za.exe failed with error level: %7zaError%
+IF %ERRORLEV% EQU 4 ECHO ReplaceString.exe failed with error level: %replaceError%
 ECHO.
 ECHO --------
 GOTO :Finish
