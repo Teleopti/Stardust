@@ -181,9 +181,6 @@
 	<Target Name="BuildLocalWiki" DependsOnTargets="CompileExtraApps">
 		<Message Text="Buliding local wiki ... " />
 		
-		<Copy 	SourceFiles="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString\bin\$(Configuration)\ReplaceString.exe"
-				DestinationFiles="$(Dependencies)\LocalWiki\ReplaceString.exe"/>
-	
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat&quot;" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
