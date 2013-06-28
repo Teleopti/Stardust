@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	public static class Browser
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
-		private static readonly IBrowserActivator BrowserActivator = new WatiNSingleBrowserIEActivator();
+		private static readonly IBrowserActivator BrowserActivator = new CoypuBrowserActivator();
 
 		public static IE Current
 		{
