@@ -1282,6 +1282,12 @@
     <Compile Include="Scheduling\FindMatchingNew.Designer.cs">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\OvertimePreferencesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\OvertimePreferencesDialog.Designer.cs">
+      <DependentUpon>OvertimePreferencesDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\LockExecuter.cs" />
     <Compile Include="Scheduling\OverViewDrawAbsence.cs" />
     <Compile Include="Scheduling\OverViewDrawAbsenceDayOff.cs" />
@@ -2811,6 +2817,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityView.resx">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\OvertimePreferencesDialog.resx">
+      <DependentUpon>OvertimePreferencesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>

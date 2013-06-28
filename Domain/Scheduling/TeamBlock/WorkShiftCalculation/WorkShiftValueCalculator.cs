@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			int resolution = 15;
 			foreach (KeyValuePair<TimeSpan, ISkillIntervalData> pair in staffPeriods)
 			{
-				resolution = (int)((pair.Value.Period.EndDateTime - pair.Value.Period.StartDateTime).TotalMinutes);
+				resolution = (int)(pair.Value.Resolution().TotalMinutes);
 				break;
 			}
 			return resolution;

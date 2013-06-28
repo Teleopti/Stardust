@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,7 +34,12 @@ namespace Teleopti.Ccc.WinCode.Presentation
 
             using (_unitOfWorkfactory.CreateAndOpenUnitOfWork())
             {
-                foreach (var person in _scheduleHistoryRepository.RevisionPeople())
+	            var sortedPersonByFirstNameLastName =
+		            _scheduleHistoryRepository.RevisionPeople()
+											.OrderBy(p => p.Name.FirstName)
+											.ThenBy(p => p.Name.LastName)
+											.ToList();
+				foreach (var person in sortedPersonByFirstNameLastName)
                 {
                     _revisionList.Add(new ReportUserSelectorAuditingModel(person));
                 }

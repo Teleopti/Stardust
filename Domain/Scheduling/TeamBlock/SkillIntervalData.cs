@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		double? MaximumHeads { get; set; }
         double? MinimumHeads { get; set; }
 		double CurrentDemand { get; set; }
+		TimeSpan Resolution();
 	}
 
 	public class SkillIntervalData : ISkillIntervalData
@@ -40,5 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public double? MinimumHeads { get; set; }
 
 		public double CurrentDemand { get; set; }
+
+		public TimeSpan Resolution()
+		{
+			return Period.EndDateTime.Subtract(Period.StartDateTime);
+		}
 	}
 }
