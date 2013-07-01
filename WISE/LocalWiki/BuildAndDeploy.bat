@@ -42,6 +42,10 @@ ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*He
 SET /A wgetError=%ERRORLEVEL%
 IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
+:: remove index.php files because they are of no use.
+echo cmd /C "%WorkingFolder:~0,2% & CD "%WorkingFolder%" & del index.php* /S"
+cmd /C "%WorkingFolder:~0,2% & CD "%WorkingFolder%" & del index.php* /S"
+
 ::add special web.config to the folder
 echo copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
 copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
