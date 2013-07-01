@@ -597,6 +597,7 @@ CREATE TABLE [Auditing].[ShiftLayer_AUD](
 	[Maximum] datetime NULL,
 	[OrderIndex] int NULL,
 	[Payload] uniqueidentifier NULL,
+	[LayerType] tinyint NULL,
 	[DefinitionSet] uniqueidentifier NULL,
 	[Parent] uniqueidentifier NULL,
  CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
