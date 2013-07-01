@@ -84,21 +84,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 	 inner join Auditing.PersonAssignment_AUD pa_aud
 	 on al.Parent = pa_aud.Id
 
-	--overtimeshift
-	insert into Auditing.OvertimeShift_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[OrderIndex]
-		,[Parent])
-	 select os.Id,
-		rev,
-		0
-		,os.OrderIndex
-		,os.Parent
-	 from dbo.OvertimeShift os
-	 inner join Auditing.PersonAssignment_AUD pa_aud
-	 on os.Parent = pa_aud.Id
-	
 	--overtimeshift activity layer
 	insert into Auditing.OvertimeShiftActivityLayer_AUD ([Id]
 		,[REV]
@@ -119,8 +104,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		al.DefinitionSet,
 		al.Parent
 	 from dbo.OvertimeShiftActivityLayer al
-	 inner join Auditing.OvertimeShift_AUD os_aud
-	 on al.Parent = os_aud.Id
+	 inner join Auditing.PersonAssignment_AUD pa_aud
+	 on al.Parent = pa_aud.Id
 	 
 	 --personalshiftactivitylayer
 	 insert into Auditing.PersonalShiftActivityLayer_AUD ([Id]
