@@ -78,6 +78,14 @@ namespace Teleopti.Ccc.UserTexts {
             }
         }
         
+		/// <summary>
+        /// Looks up a localized string similar to Abandoned chats.
+        /// </summary>
+        public static string AbandonedChats {
+            get {
+                return ResourceManager.GetString("AbandonedChats", resourceCulture);
+            }
+        }
         /// <summary>
         ///   Looks up a localized string similar to Abandoned calls.
         /// </summary>

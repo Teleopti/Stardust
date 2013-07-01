@@ -97,8 +97,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly.AddDays(1),
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(secondDay);
-			    Expect.Call(_openHoursToRestrictionConverter.Convert(_teamBlockInfo.TeamInfo.GroupPerson, _teamBlockInfo.BlockInfo.BlockPeriod.DayCollection()))
-			          .Return(openHoursRestriction);
 			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
 		    }
@@ -132,10 +130,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
 			                             new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
 			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-		    var secondDay =
-			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(13)),
-			                             new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(18)),
-			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
 		    var scheduleRestriction =
 			    new EffectiveRestriction(new StartTimeLimitation(),
@@ -152,7 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    IGroupPerson groupPerson = new GroupPerson(new List<IPerson> {_person1}, _dateOnly, "Hej", Guid.NewGuid());
 		    IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> {matrixList};
 		    ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
-		    var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+		 	var blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
+			var blockInfo = new BlockInfo(blockPeriod);
 		    var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_schedulingOptions.UseTeamBlockPerOption = true;
@@ -165,9 +160,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly,
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(firstDay);
-			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
-																	 new List<DateOnly> { _dateOnly }))
-			          .Return(openHoursRestriction);
 			    Expect.Call(_scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(blockPeriod.DayCollection(), matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
 			    Expect.Call(_suggestedShiftRestrictionExtractor.ExtractForOneBlock(shift, _schedulingOptions)).Return(shiftRestriction);
@@ -179,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    using (_mocks.Playback())
 		    {
 			    var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11.5), TimeSpan.FromHours(12)),
-			                                          new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(17.5)),
+			                                          new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
 			                                          new WorkTimeLimitation(), null, null, null,
 			                                          new List<IActivityRestriction>()) {CommonMainShift = mainShift};
 
@@ -205,10 +197,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                             new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
 			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
-		    var openHoursRestriction =
-			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-			                             new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
-			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 		    var scheduleRestriction =
 			    new EffectiveRestriction(new StartTimeLimitation(),
 			                             new EndTimeLimitation(),
@@ -238,9 +226,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly,
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(firstDay);
-			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
-																	 new List<DateOnly> { _dateOnly }))
-			          .Return(openHoursRestriction);
 			    Expect.Call(_scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(blockPeriod.DayCollection(), matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
 				Expect.Call(_scheduleRestrictionExtractor.ExtractForOneTeamOneDay(_dateOnly, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
@@ -255,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    using (_mocks.Playback())
 		    {
 			    var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11.5), TimeSpan.FromHours(12)),
-			                                          new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(17.5)),
+			                                          new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
 			                                          new WorkTimeLimitation(), null, null, null,
 			                                          new List<IActivityRestriction>()) {CommonMainShift = mainShift};
 
@@ -376,16 +361,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(13)),
 										 new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(18)),
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var openHoursRestriction =
-				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-										 new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
-										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
 			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
 			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
-			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			using (_mocks.Record())
 			{
@@ -400,9 +380,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
 						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
 					  .Return(secondDay);
-				Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
-																	 blockInfo.BlockPeriod.DayCollection()))
-					  .Return(openHoursRestriction);
 				Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 					  .Return(null);
 			}
@@ -423,10 +400,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
 										 new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var openHoursRestriction =
-				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
-										 new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
-										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
 			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
@@ -444,9 +417,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly,
 						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
 					  .Return(firstDay);
-				Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
-																	 new List<DateOnly> { _dateOnly }))
-			          .Return(openHoursRestriction);
 				Expect.Call(_scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(blockPeriod.DayCollection(), matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 					  .Return(null);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod);
@@ -496,24 +466,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 		    var shift = _mocks.StrictMock<IShiftProjectionCache>();
 		    _schedulingOptions.UseTeamBlockSameStartTime = true;
+	        var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 		    using (_mocks.Record())
 		    {
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-			    Expect.Call(
-				    _effectiveRestrictionCreator.GetEffectiveRestriction(
-					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly,
-					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
-			          .Return(firstDay);
 			    Expect.Call(
 				    _effectiveRestrictionCreator.GetEffectiveRestriction(
 					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly.AddDays(1),
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(secondDay);
 
-			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo))
+				Expect.Call(_scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(dateList, matrixList, _schedulingOptions, _timeZoneInfo))
 			          .IgnoreArguments()
 			          .Return(scheduleRestriction);
-			    Expect.Call(_suggestedShiftRestrictionExtractor.Extract(shift, _schedulingOptions)).Return(null);
+				Expect.Call(_suggestedShiftRestrictionExtractor.ExtractForOneBlock(shift, _schedulingOptions)).Return(null);
+			    Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod);
+			    Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+			    Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
 		    }
 
 		    using (_mocks.Playback())

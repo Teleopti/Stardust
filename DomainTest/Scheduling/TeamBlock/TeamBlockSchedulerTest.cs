@@ -381,7 +381,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                                                           _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay.IsScheduled()).Return(false);
                 Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { PersonFactory.CreatePerson("test1") }));
-
+				Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData))
+					.Return(restriction)
+					.Repeat.AtLeastOnce();
 
                 IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
                 DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);

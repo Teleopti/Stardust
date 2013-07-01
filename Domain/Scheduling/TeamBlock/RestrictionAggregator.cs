@@ -82,12 +82,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                                                                           scheduleDictionary);
 		    if (restriction == null)
 			    return null;
-		    var openHoursRestriction = _openHoursToRestrictionConverter.Convert(teamBlockInfo.TeamInfo.GroupPerson,
-		                                                                        new List<DateOnly> {dateOnly});
-
-		    restriction = restriction.Combine(openHoursRestriction);
-		    if (restriction == null)
-			    return null;
 
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 		    var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod);
