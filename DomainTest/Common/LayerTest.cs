@@ -4,8 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -67,12 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var actL = new FakeLayerClass(fakeActivity, per);
 			actL.SetParent(null);
 		}
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(ActivityLayer)));
-        }
-
 
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
