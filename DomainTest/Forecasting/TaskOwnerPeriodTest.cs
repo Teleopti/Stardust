@@ -1390,11 +1390,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp,
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
-
+			period1.SetSkillDay(skillDay1);
+			
             ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)),
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
-
+			period2.SetSkillDay(skillDay2);
             SkillDayCalculator calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay1, skillDay2 }, new DateOnlyPeriod());
             target = new TaskOwnerPeriod(currentDate,calculator.SkillDays.OfType<ITaskOwner>(),TaskOwnerPeriodType.Other);
 
@@ -1434,11 +1435,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp,
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
-
+			period1.SetSkillDay(skillDay1);
             ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)),
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
-
+			period2.SetSkillDay(skillDay2);
             target = new TaskOwnerPeriod(currentDate, calculator.SkillDays.OfType<ITaskOwner>(), TaskOwnerPeriodType.Other);
 
             var newPeriod1 = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { period1 });

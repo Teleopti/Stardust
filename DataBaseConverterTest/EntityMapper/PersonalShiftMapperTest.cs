@@ -1,10 +1,9 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.DatabaseConverterTest.Helpers;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 {
@@ -37,9 +36,9 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             global::Domain.FillupShift oldShift = agdFactory.FillUpShift();
 
             PersonalShiftMapper msMap = new PersonalShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
-            PersonalShift newShift = msMap.Map(oldShift);
+            var newShift = msMap.Map(oldShift);
 
-            Assert.AreEqual(3, newShift.LayerCollection.Count);
+            Assert.AreEqual(3, newShift.Count());
         }
 
         protected override int NumberOfPropertiesToConvert

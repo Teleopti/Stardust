@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Rows.HeaderCount = 0;
 
             TextManager manager = new TextManager(_skillType);
-            if (_skillType.ForecastSource != ForecastSource.InboundTelephony)
+			if (_skillType.ForecastSource != ForecastSource.InboundTelephony && _skillType.ForecastSource != ForecastSource.Chat) 
             {
                 if (!IsChildSkill)
                 {

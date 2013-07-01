@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class WorkShift : IWorkShift
+	public class WorkShift : IWorkShift
     {
 
         private readonly IShiftCategory _shiftCategory;
@@ -47,11 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual object Clone()
 		{
-			var retObj = EntityClone();
-			return retObj;
+			return EntityClone();
 		}
 
-		public virtual IShift NoneEntityClone()
+		public virtual IWorkShift NoneEntityClone()
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return retObj;
 		}
 
-		public virtual IShift EntityClone()
+		public virtual IWorkShift EntityClone()
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();

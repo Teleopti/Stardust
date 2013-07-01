@@ -995,7 +995,6 @@
     <Compile Include="Common\Controls\DateSelection\DateTimePickerAdvExtension.cs" />
     <Compile Include="Common\Controls\IntervalLengthItem.cs" />
     <Compile Include="Common\Configuration\TreeFamily.cs" />
-    <Compile Include="Common\IAlarmControlView.cs" />
     <Compile Include="Common\Interop\MultipleElementHost.cs" />
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />
@@ -1268,6 +1267,12 @@
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
+      <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
@@ -1276,6 +1281,12 @@
     </Compile>
     <Compile Include="Scheduling\FindMatchingNew.Designer.cs">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\OvertimePreferencesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\OvertimePreferencesDialog.Designer.cs">
+      <DependentUpon>OvertimePreferencesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\LockExecuter.cs" />
     <Compile Include="Scheduling\OverViewDrawAbsence.cs" />
@@ -2803,6 +2814,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FindMatchingNew.resx">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentOvertimeAvailabilityView.resx">
+      <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\OvertimePreferencesDialog.resx">
+      <DependentUpon>OvertimePreferencesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>

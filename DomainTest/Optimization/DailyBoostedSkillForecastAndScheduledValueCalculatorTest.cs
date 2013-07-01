@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaff.SkillPersonData).Return(new SkillPersonData(2, 3)).Repeat.AtLeastOnce();
                 Expect.Call(virtualSkill.IsVirtual).Return(true);
                 Expect.Call(virtualSkill.AggregateSkills).Return(new ReadOnlyCollection<ISkill>(_skillList));
-                Expect.Call(_skillStaffPeriod1.Parent).Return(skillDay).Repeat.AtLeastOnce();
+                Expect.Call(_skillStaffPeriod1.SkillDay).Return(skillDay).Repeat.AtLeastOnce();
                 Expect.Call(skillDay.Skill).Return(_skill1).Repeat.AtLeastOnce();
             }
             double ret;

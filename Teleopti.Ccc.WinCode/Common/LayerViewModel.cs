@@ -40,9 +40,6 @@ namespace Teleopti.Ccc.WinCode.Common
 			IsProjectionLayer = isProjectionLayer;
 		}
 
-
-		#region properties
-
 		protected ILayerViewModelObserver ParentObservingCollection
 		{
 			get { return _parentObservingCollection; }
@@ -170,8 +167,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		public abstract string LayerDescription { get; }
 
 
-		#endregion
-
 		public bool CanDelete()
 		{
 			return IsMovePermitted();
@@ -251,10 +246,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		protected virtual void Replace()
 		{
-			
 		}
 
-		#region vertical sorting
 		/// <summary>
 		/// Gets the order index base, decides where in the collection different types should appear
 		/// </summary>
@@ -277,10 +270,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				DeleteLayer();
 			}
 		}
-
-		#endregion
-
-		#region move
 
 		public abstract bool IsMovePermitted();
 
@@ -339,7 +328,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		public abstract bool CanMoveUp { get; }
 		public abstract bool CanMoveDown { get; }
 
-		#endregion
 
 		public virtual IPayload Payload
 		{

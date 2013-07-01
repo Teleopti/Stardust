@@ -11468,9 +11468,25 @@ Reduce the complexity to use these shifts.</value>
     <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
     <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
   </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Max Parallel Tasks:</value>
+    <comment>used in Chat skills</comment>
+  </data>
   <data name="ViewActiveAgents" xml:space="preserve">
     <value>View active agents</value>
     <comment>permission</comment>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Abandoned chats</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Answered chats</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Average chats</value>
   </data>
   <data name="RequestStatusDtoAutodenied" xml:space="preserve">
     <value>Denied</value>
@@ -11479,5 +11495,55 @@ Reduce the complexity to use these shifts.</value>
   <data name="LocalTime" xml:space="preserve">
     <value>Local time</value>
     <comment>Agents local time</comment>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Overtime Availability...</value>
+    <comment>Add overtime availability on a day</comment>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Calculated chats</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Campaign chats %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Overtime Availability</value>
+    <comment>Caption for the dialog to add overtime availability</comment>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Previously saved overtime availability:</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Deviation chats:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Forecasted chats</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index chats</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Offered chats</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Original offered chats</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Total chats</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Validated chats</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Campaign chat time %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Total chat time</value>
   </data>
 </root>

@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
 
 				var activity = _activityRepository.Load(command.ActivityId);
-				var personalShiftActivityLayer = new PersonalShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
-				scheduleDay.CreateAndAddPersonalActivity(personalShiftActivityLayer);
+				scheduleDay.CreateAndAddPersonalActivity(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 
 			    _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);

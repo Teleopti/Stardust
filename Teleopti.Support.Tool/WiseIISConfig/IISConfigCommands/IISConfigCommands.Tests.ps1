@@ -5,12 +5,13 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 ##============
 #how to debug pester tests
 ##============
+#0 run this file from command line (to get pester): C:\data\main\ccnet\pester\runAllTests.bat
 #1 launch Windows Powershell ISE
 #2 open all .ps1 file of interest *.ps1 + *Tests.ps1
 #3 set a break point ("F9") in *.Tests.ps1 file
 #4 from the "command line" in ISE:
-#    Import-Module "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
-#    Invoke-Pester "C:\Program Files (x86)\Jenkins\jobs\Simple compile\workspace\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
+#    Import-Module "C:\data\main\ccnet\pester\Pester.2.0.3\tools\Pester.psm1"
+#    Invoke-Pester "C:\data\main\Teleopti.Support.Tool\WiseIISConfig\IISConfigCommands\"
 #5 step step ("F10")
 ##============
 
@@ -22,6 +23,13 @@ $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
 $displayName = "Teleopti CCC Server, version 7"
+$workingFolder = "c:\temp\PesterTest"
+$username = "tfsintegration"
+$domain = "toptinet"
+$password = "m8kemew0rk"
+$secstr = New-Object -TypeName System.Security.SecureString
+$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -47,18 +55,29 @@ function TearDown {
 			$computerName=(get-childitem -path env:computername).Value
 			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
 		}
+		
+		It "Should destroy working folder" {
+			destroy-WorkingFolder -workingFolder "$workingFolder"
+			Test-Path "$workingFolder" | Should Be $False
+		}
 	}
 }
 
 function Setup-PreReqs {
-	Describe "Copy and Unzip the latest .zip file into local MSI"{  
+	Describe "Copy and Unzip the latest .zip file into local MSI"{
+
+		It "Should create working folder" {
+			create-WorkingFolder -workingFolder "$workingFolder"
+			Test-Path "$workingFolder" | Should Be $True
+		}
+		
 		It "should copy latest .zip-file from build server"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			Test-Path $zipFile | Should Be $True
 		}
 
 		It "should unzip file into MSI"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			$zipFile = Get-Item $zipFile
 
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
@@ -91,7 +110,7 @@ function Test-InstallationSQLLogin {
 	Describe "Installation test - SQL DB Login"{  
 
 		It "should install latest MSI from Hebe"{
-			$zipFile = Copy-ZippedMsi
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
 			$zipFile = Get-Item $zipFile
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
 
@@ -104,28 +123,44 @@ function Test-InstallationSQLLogin {
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp | Should be $True
 		}
-
-		It "should stop system" {
-			Stop-TeleoptiCCC
-			
-			Check-ServiceIsRunning "TeleoptiETLService" | Should Be $False
-			Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $False
-			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should Throw
-		}
-	
 	}
 }
 
 function Test-SitesAndServicesOk {
 	Describe "Run common test on services and web site config"{
 
-		It "should start system" {
-			Start-TeleoptiCCC
+        #stop system
+    	It "should stop ETL Service" {
+        $serviceName="TeleoptiETLService"
+        Stop-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $False
+		}
+
+		It "should stop Service Bus" {
+        $serviceName="TeleoptiServiceBus"
+        Stop-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $False
+		}
+        
+		It "should stop the SDK" {
+			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
+            
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"}  | Should be $True
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
+		}
+        
+        #add Lic
+        Add-CccLicenseToDemo
+
+        #start system
+		It "should start SDK" {
+			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
+			$computerName=(get-childitem -path env:computername).Value
+			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp | Should be $True
 		}
 		
 		#something goes wrong with 32 vs. 64 bit implementation of management tools or IIS runtime
@@ -138,7 +173,7 @@ function Test-SitesAndServicesOk {
 			# $enabled = Get-Authentication "/TeleoptiCCC/SDK" "anonymousAuthentication"
 			# $enabled | Should Be "False"
 		# }
-		
+
 		It "Nhib file should exist and contain SQL Auth connection string" {
 			$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
 			$computerName=(get-childitem -path env:computername).Value
@@ -148,11 +183,15 @@ function Test-SitesAndServicesOk {
 		}
 		
 		It "should have a ETL Service running" {
-		Check-ServiceIsRunning "TeleoptiETLService" | Should Be $True
+        $serviceName="TeleoptiETLService"
+        Start-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $True
 		}
 
 		It "should have a Service Bus running" {
-		Check-ServiceIsRunning "TeleoptiServiceBus" | Should Be $True
+        $serviceName="TeleoptiServiceBus"
+        Start-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $True
 		}
 	}
 }
@@ -169,5 +208,4 @@ function Add-CccLicenseToDemo
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin
-Add-CccLicenseToDemo
 Test-SitesAndServicesOk

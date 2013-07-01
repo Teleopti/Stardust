@@ -50,6 +50,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection();
 
+		/// <summary>
+		/// Get a list of cloned overtime availabilities
+		/// </summary>
+		ReadOnlyCollection<IOvertimeAvailability> OvertimeAvailablityCollection();
+
         /// <summary>
         /// Gets a list of cloned person restrictions.
         /// 
@@ -218,8 +223,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Creates and adds personal activity
         /// </summary>
-        /// <param name="layer"></param>
-        void CreateAndAddPersonalActivity(IPersonalShiftActivityLayer layer);
+        void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period);
 
         /// <summary>
         /// Creates the and add note.
@@ -293,6 +297,11 @@ namespace Teleopti.Interfaces.Domain
         /// Delete student availability restriction
         /// </summary>
         void DeleteStudentAvailabilityRestriction();
+		
+		/// <summary>
+        /// Delete overtime availability
+        /// </summary>
+        void DeleteOvertimeAvailability();
 
         /// <summary>
         /// Removes the empty assignments.

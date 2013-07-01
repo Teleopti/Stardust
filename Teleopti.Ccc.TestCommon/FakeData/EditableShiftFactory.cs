@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return shift;
 		}
 
-		/// <summary>
-		/// Creates a shift with default category
-		/// </summary>
-		/// <returns></returns>
-		public static IEditableShift CreateEditorShiftWithDefaultCategory()
-		{
-			ShiftCategory category = new ShiftCategory("Morning");
-			var shift = new EditableShift(category);
-			return shift;
-		}
 
 		/// <summary>
 		/// Creates the main shift.

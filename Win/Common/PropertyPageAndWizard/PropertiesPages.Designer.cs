@@ -36,7 +36,6 @@
 			this.splitContainerHorizontal = new System.Windows.Forms.SplitContainer();
 			this.tableLayoutPanelButtonsRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).BeginInit();
 			this.splitContainerPages.Panel1.SuspendLayout();
 			this.splitContainerPages.SuspendLayout();
@@ -45,7 +44,6 @@
 			this.splitContainerHorizontal.Panel2.SuspendLayout();
 			this.splitContainerHorizontal.SuspendLayout();
 			this.tableLayoutPanelButtonsRtl.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// treeViewPages
@@ -61,7 +59,7 @@
             treeNode1});
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(148, 396);
+			this.treeViewPages.Size = new System.Drawing.Size(146, 405);
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
 			this.treeViewPages.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPages_AfterSelect);
@@ -78,8 +76,8 @@
 			this.splitContainerPages.Panel1.Controls.Add(this.treeViewPages);
 			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12);
 			this.splitContainerPages.Panel1MinSize = 120;
-			this.splitContainerPages.Size = new System.Drawing.Size(627, 420);
-			this.splitContainerPages.SplitterDistance = 172;
+			this.splitContainerPages.Size = new System.Drawing.Size(623, 429);
+			this.splitContainerPages.SplitterDistance = 170;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
 			this.splitContainerPages.TabStop = false;
@@ -88,7 +86,7 @@
 			// 
 			this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonOK.Location = new System.Drawing.Point(412, 6);
+			this.buttonOK.Location = new System.Drawing.Point(408, 5);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(99, 23);
 			this.buttonOK.TabIndex = 2;
@@ -102,7 +100,7 @@
 			this.splitContainerHorizontal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerHorizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainerHorizontal.IsSplitterFixed = true;
-			this.splitContainerHorizontal.Location = new System.Drawing.Point(6, 39);
+			this.splitContainerHorizontal.Location = new System.Drawing.Point(0, 0);
 			this.splitContainerHorizontal.Name = "splitContainerHorizontal";
 			this.splitContainerHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -113,8 +111,8 @@
 			// splitContainerHorizontal.Panel2
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
-			this.splitContainerHorizontal.Size = new System.Drawing.Size(627, 457);
-			this.splitContainerHorizontal.SplitterDistance = 420;
+			this.splitContainerHorizontal.Size = new System.Drawing.Size(623, 463);
+			this.splitContainerHorizontal.SplitterDistance = 429;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 8;
 			this.splitContainerHorizontal.TabStop = false;
@@ -131,7 +129,7 @@
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 36);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(623, 33);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 4;
 			// 
 			// buttonCancel
@@ -139,7 +137,7 @@
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(525, 6);
+			this.buttonCancel.Location = new System.Drawing.Point(521, 5);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
 			this.buttonCancel.TabIndex = 3;
@@ -147,34 +145,12 @@
 			this.buttonCancel.UseVisualStyle = true;
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			// 
-			// ribbonControlAdv1
-			// 
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlAdv1.MenuButtonText = "";
-			this.ribbonControlAdv1.MenuButtonVisible = false;
-			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
-			this.ribbonControlAdv1.MinimumSize = new System.Drawing.Size(0, 38);
-			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
-			// 
-			// ribbonControlAdv1.OfficeMenu
-			// 
-			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-			this.ribbonControlAdv1.QuickPanelVisible = false;
-			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(637, 38);
-			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
-			this.ribbonControlAdv1.TabIndex = 9;
-			this.ribbonControlAdv1.Text = "yyribbonControlAdv1";
-			// 
 			// PropertiesPages
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 502);
-			this.Controls.Add(this.ribbonControlAdv1);
+			this.ClientSize = new System.Drawing.Size(623, 463);
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -183,6 +159,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(639, 502);
 			this.Name = "PropertiesPages";
+			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxProperties";
 			this.Load += new System.EventHandler(this.PropertiesPages_Load);
@@ -194,7 +171,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).EndInit();
 			this.splitContainerHorizontal.ResumeLayout(false);
 			this.tableLayoutPanelButtonsRtl.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -205,8 +181,7 @@
         private System.Windows.Forms.SplitContainer splitContainerPages;
         private Syncfusion.Windows.Forms.ButtonAdv buttonOK;
         private System.Windows.Forms.SplitContainer splitContainerHorizontal;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonCancel;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonCancel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelButtonsRtl;
 
     }

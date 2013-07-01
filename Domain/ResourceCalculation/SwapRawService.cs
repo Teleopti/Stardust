@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						continue;
 				}
 				
+				
+
 				var tempDayOneHasSwapData = copyData(selectionOne[i], tempDayOne);
 				var tempDayTwoHasSwapData = copyData(selectionTwo[i], tempDayTwo);
 			
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				else if (tempDayOneHasSwapData)
 				{
+					selectionOne[i].DeleteOvertime();
 					selectionOne[i].Merge(selectionOne[i], true);
 					schedulePartModifyAndRollbackService.Modify(selectionOne[i]);	
 				}
@@ -74,6 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (tempDayOneHasSwapData)
 				{
+					selectionTwo[i].DeleteOvertime();
 					selectionTwo[i].Merge(tempDayOne, false);
 					schedulePartModifyAndRollbackService.Modify(selectionTwo[i]);
 				}
@@ -89,11 +93,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var hasSwapData = false;
 
-			if (scheduleDay == null)
-				throw new ArgumentNullException("scheduleDay");
-
-			if (tempDay == null)
-				throw new ArgumentNullException("tempDay");
+			InParameter.NotNull("scheduleDay", scheduleDay);
+			InParameter.NotNull("tempDay", tempDay);
 
 			if (scheduleDay.PersonAssignmentCollection().Any())
 			{

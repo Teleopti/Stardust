@@ -4,7 +4,8 @@
 @{
 	Layout = null;
 }
-
+<!-- temporary fix for loading bootrapper after jqueryUI until that PBI is fixed -->
+<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
 <div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
     <div class="alert alert-block bdd-show-message" data-bind="visible: shouldShowMessage">
         @Resources.NoMessagesFound
