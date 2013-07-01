@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
-		public virtual int OrderIndex
+		public override int OrderIndex
 		{
 			get
 			{
