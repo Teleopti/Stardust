@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_target.BeginEdit();
 			_target.NextActivityDescription = "NewValue";
 			_target.CancelEdit();
-			_target.NextActivityDescription.Should().Be.EqualTo("OldValue");
+			_target.IsInEditMode.Should().Be.False();
 		}
 	}
 }
