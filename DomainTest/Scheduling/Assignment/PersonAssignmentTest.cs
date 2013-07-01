@@ -112,28 +112,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyAddAndRemoveOvertimeShift()
-		{
-			Assert.AreEqual(0, target.OvertimeShiftCollection.Count);
-			IOvertimeShift overtimeShift = new OvertimeShift();
-			target.AddOvertimeShift(overtimeShift);
-			Assert.AreEqual(1, target.OvertimeShiftCollection.Count);
-			target.RemoveOvertimeShift(overtimeShift);
-			Assert.AreEqual(0, target.OvertimeShiftCollection.Count);
-		}
-
-		[Test]
-		public void VerifyReferenceBackToAssignmentWorksFromOvertimeShift()
+		public void VerifyReferenceBackToAssignmentWorksFromOvertimeLayer()
 		{
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
-			OvertimeShift overtimeShift = new OvertimeShift();
-			OvertimeShiftActivityLayer actLay = new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			target.AddOvertimeShift(overtimeShift);
-			overtimeShift.LayerCollection.Add(actLay);
-			Assert.AreSame(target, overtimeShift.Parent);
-			Assert.AreSame(target, ((IAggregateEntity)actLay).Root());
-			Assert.AreSame(target, ((IAggregateEntity)overtimeShift).Root());
+			target.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			var layer = target.OvertimeLayers.Single();
+			Assert.AreSame(target, layer.Parent);
+			Assert.AreSame(target, layer.Root());
 		}
 
 

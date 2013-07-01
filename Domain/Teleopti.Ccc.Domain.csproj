@@ -762,8 +762,6 @@
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartService.cs" />
     <Compile Include="Scheduling\Assignment\FilterLayerNoOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizer.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShift.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\RemoveLayerFromSchedule.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
@@ -1691,9 +1689,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\TimeLayer\MultiplicatorDefinition.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShift.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftActivityLayer.hbm.xml" />

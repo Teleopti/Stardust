@@ -404,10 +404,6 @@
     <Compile Include="Domain\IOptionalColumn.cs" />
     <Compile Include="Domain\IOptionalColumnValue.cs" />
     <Compile Include="Domain\IOriginator.cs" />
-    <Compile Include="Domain\IOvertimeShift.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />

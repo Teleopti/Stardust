@@ -633,8 +633,6 @@
     <Compile Include="Scheduling\Assignment\FilterLayerBaseTest.cs" />
     <Compile Include="Scheduling\Assignment\ModifyEventArgsTest.cs" />
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizerTest.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayerTest.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitionsTest.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitationTest.cs" />

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		public static readonly DateTimePeriod UndefinedPeriod = new DateTimePeriod(1800,1,1,1800,1,2);
 
-		private IList<IOvertimeShift> _overtimeShiftCollection;
 		private IList<IMainShiftLayer> _mainLayers;
 		private IList<IPersonalShiftLayer> _personalLayers;
 		private IList<IOvertimeShiftLayer> _overtimeLayers;
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
-			_overtimeShiftCollection = new List<IOvertimeShift>();
 			_mainLayers = new List<IMainShiftLayer>();
 			_personalLayers = new List<IPersonalShiftLayer>();
 			_overtimeLayers = new List<IOvertimeShiftLayer>();
@@ -61,9 +58,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(personalLayer.Period, mergedPeriod);
 			}
-			foreach (IOvertimeShift overtimeShift in _overtimeShiftCollection)
+			foreach (var overtimeLayer in OvertimeLayers)
 			{
-				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeShift.LayerCollection.Period(), mergedPeriod);
+				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeLayer.Period, mergedPeriod);
 			}
 			if (!mergedPeriod.HasValue)
 			{
@@ -156,22 +153,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			set { _zorder = value; }
 		}
 
-		public virtual ReadOnlyCollection<IOvertimeShift> OvertimeShiftCollection
-		{
-			get { return new ReadOnlyCollection<IOvertimeShift>(_overtimeShiftCollection); }
-		}
-
-		public virtual void AddOvertimeShift(IOvertimeShift overtimeShift)
-		{
-			overtimeShift.SetParent(this);
-			_overtimeShiftCollection.Add(overtimeShift);
-		}
-
-		public virtual void RemoveOvertimeShift(IOvertimeShift overtimeShift)
-		{
-			_overtimeShiftCollection.Remove(overtimeShift);
-		}
-
 		public virtual void ScheduleChanged(string dataSource)
 		{
 			AddEvent(new ScheduleChangedEvent
@@ -230,7 +211,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#endregion
 
-		#region IProjection<Activity> Members
 
 		public virtual IProjectionService ProjectionService()
 		{
@@ -238,13 +218,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasProjection)
 			{
 				proj.Add(MainLayers, new VisualLayerFactory());
-				var validPeriods = new List<DateTimePeriod>(MainLayers.PeriodBlocks());
-				foreach (var overtimeShift in _overtimeShiftCollection)
+				var validPeriods = new HashSet<DateTimePeriod>(MainLayers.PeriodBlocks());
+				foreach (var overtimeLayer in OvertimeLayers)
 				{
-					var overTimePeriod = overtimeShift.LayerCollection.Period();
-					proj.Add(overtimeShift.LayerCollection, new VisualLayerOvertimeFactory());
-					if (overTimePeriod.HasValue)
-						validPeriods.Add(overTimePeriod.Value);
+					var overTimePeriod = overtimeLayer.Period;
+					proj.Add(overtimeLayer, new VisualLayerOvertimeFactory());
+					validPeriods.Add(overTimePeriod);
 				}
 				foreach (var personalLayer in PersonalLayers)
 				{
@@ -262,10 +241,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				return MainLayers.Any() || _overtimeShiftCollection.Count > 0;
+				return MainLayers.Any() || OvertimeLayers.Any();
 			}
 		}
-		#endregion
 
 		#region ICloneableEntity<PersonAssignment> Members
 
@@ -288,9 +266,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
 			retobj._mainLayers = new List<IMainShiftLayer>();
 			retobj._personalLayers = new List<IPersonalShiftLayer>();
+			retobj._overtimeLayers = new List<IOvertimeShiftLayer>();
 			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -301,9 +279,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				newLayer.SetParent(retobj);
 				retobj._personalLayers.Add(newLayer);
 			}
-			foreach (var overtimeShift in _overtimeShiftCollection)
+			foreach (IOvertimeShiftLayer newLayer in _overtimeLayers.Select(layer => layer.NoneEntityClone()))
 			{
-				retobj.AddOvertimeShift(overtimeShift.NoneEntityClone());
+				newLayer.SetParent(retobj);
+				retobj._overtimeLayers.Add(newLayer);
 			}
 
 			return retobj;
@@ -312,7 +291,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IPersonAssignment EntityClone()
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
-			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
+			retobj._overtimeLayers = new List<IOvertimeShiftLayer>();
 			retobj._mainLayers = new List<IMainShiftLayer>();
 			retobj._personalLayers = new List<IPersonalShiftLayer>();
 			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.EntityClone()))
@@ -325,11 +304,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				newLayer.SetParent(retobj);
 				retobj._personalLayers.Add(newLayer);
 			}
-			foreach (var overtimeShift in _overtimeShiftCollection)
+			foreach (IOvertimeShiftLayer newLayer in _overtimeLayers.Select(layer => layer.EntityClone()))
 			{
-				retobj.AddOvertimeShift(overtimeShift.EntityClone());
+				newLayer.SetParent(retobj);
+				retobj._overtimeLayers.Add(newLayer);
 			}
-
 
 			return retobj;
 		}
