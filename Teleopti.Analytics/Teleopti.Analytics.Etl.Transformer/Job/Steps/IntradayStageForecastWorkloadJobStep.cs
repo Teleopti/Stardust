@@ -30,7 +30,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Forecast", period);
 			_jobParameters.StateHolder.SetThisTime(lastTime, "Forecast");
 
-
+	        if (lastTime.ThisTime <= lastTime.LastTime)
+		        return 0;
 
 			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
             {
