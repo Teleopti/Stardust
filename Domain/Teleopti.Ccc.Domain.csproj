@@ -545,7 +545,7 @@
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
-    <Compile Include="Scheduling\Assignment\PersistedActivityLayer.cs" />
+    <Compile Include="Scheduling\Assignment\MeetingLayer.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
