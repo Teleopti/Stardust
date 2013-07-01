@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersistedActivityLayer : ActivityLayer, IPersistedLayer<IActivity>
+	public class PersistedActivityLayer : ActivityLayer, IAggregateEntity
 	{
 		private Guid? _id;
 		private IEntity _parent;
