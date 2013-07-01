@@ -15,10 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IExportToAnotherScenario
 	{
 		public static readonly DateTimePeriod UndefinedPeriod = new DateTimePeriod(1800,1,1,1800,1,2);
-
-		private IList<IMainShiftLayer> _mainLayers;
-		private IList<IPersonalShiftLayer> _personalLayers;
-		private IList<IOvertimeShiftLayer> _overtimeLayers;
+		private IList<IShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
@@ -31,9 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
-			_mainLayers = new List<IMainShiftLayer>();
-			_personalLayers = new List<IPersonalShiftLayer>();
-			_overtimeLayers = new List<IOvertimeShiftLayer>();
+			_shiftLayers = new List<IShiftLayer>();
 		}
 
 		protected PersonAssignment()
@@ -96,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				if (!_mainLayers.Any())
+				if (!MainLayers.Any())
 					return null;
 
 				return _shiftCategory;
@@ -106,17 +101,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IEnumerable<IMainShiftLayer> MainLayers
 		{
-			get { return _mainLayers; }
+			get { return _shiftLayers.OfType<IMainShiftLayer>(); }
 		}
 
 		public virtual IEnumerable<IPersonalShiftLayer> PersonalLayers
 		{
-			get { return _personalLayers; }
+			get { return _shiftLayers.OfType<IPersonalShiftLayer>(); }
 		}
 
 		public virtual IEnumerable<IOvertimeShiftLayer> OvertimeLayers
 		{
-			get { return _overtimeLayers; }
+			get { return _shiftLayers.OfType<IOvertimeShiftLayer>(); }
 		}
 
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
@@ -131,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			activityLayers.ForEach(layer =>
 			{
 				layer.SetParent(this);
-				_mainLayers.Add(layer);
+				_shiftLayers.Add(layer);
 			});
 			ShiftCategory = shiftCategory;
 		}
@@ -168,36 +163,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool RemoveLayer(IMainShiftLayer layer)
 		{
-			return _mainLayers.Remove(layer);
+			return _shiftLayers.Remove(layer);
 		}
 
 		public virtual bool RemoveLayer(IPersonalShiftLayer layer)
 		{
-			return _personalLayers.Remove(layer);
+			return _shiftLayers.Remove(layer);
 		}
 
 		public virtual bool RemoveLayer(IOvertimeShiftLayer layer)
 		{
-			return _overtimeLayers.Remove(layer);
+			return _shiftLayers.Remove(layer);
 		}
 
 		public virtual void ClearPersonalLayers()
 		{
-			_personalLayers.Clear();
+			//todo: do smarter
+			foreach (var layer in _shiftLayers.OfType<IPersonalShiftLayer>())
+			{
+				_shiftLayers.Remove(layer);
+			}
 		}
 
 		public virtual void ClearMainLayers()
 		{
-			_mainLayers.Clear();
+			//todo: do smarter
+			foreach (var layer in _shiftLayers.OfType<IMainShiftLayer>())
+			{
+				_shiftLayers.Remove(layer);
+			}
 		}
 
 		public virtual void ClearOvertimeLayers()
 		{
-			_overtimeLayers.Clear();
+			//todo: do smarter
+			foreach (var layer in _shiftLayers.OfType<IOvertimeShiftLayer>())
+			{
+				_shiftLayers.Remove(layer);
+			}
 		}
-
-
-		#region IRestrictionChecker Members
 
 		public virtual void CheckRestrictions()
 		{
@@ -208,9 +212,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get { return PersonAssignmentRestrictionSet.CurrentPersonAssignmentRestrictionSet; }
 		}
-
-		#endregion
-
 
 		public virtual IProjectionService ProjectionService()
 		{
@@ -266,23 +267,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._mainLayers = new List<IMainShiftLayer>();
-			retobj._personalLayers = new List<IPersonalShiftLayer>();
-			retobj._overtimeLayers = new List<IOvertimeShiftLayer>();
-			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.NoneEntityClone()))
+			retobj._shiftLayers = new List<IShiftLayer>();
+			//todo: no need to cast here when interfaces are correct
+			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._mainLayers.Add(newLayer);
-			}
-			foreach (IPersonalShiftLayer newLayer in _personalLayers.Select(layer => layer.NoneEntityClone()))
-			{
-				newLayer.SetParent(retobj);
-				retobj._personalLayers.Add(newLayer);
-			}
-			foreach (IOvertimeShiftLayer newLayer in _overtimeLayers.Select(layer => layer.NoneEntityClone()))
-			{
-				newLayer.SetParent(retobj);
-				retobj._overtimeLayers.Add(newLayer);
+				retobj._shiftLayers.Add(newLayer);
 			}
 
 			return retobj;
@@ -291,23 +281,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IPersonAssignment EntityClone()
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
-			retobj._overtimeLayers = new List<IOvertimeShiftLayer>();
-			retobj._mainLayers = new List<IMainShiftLayer>();
-			retobj._personalLayers = new List<IPersonalShiftLayer>();
-			foreach (IMainShiftLayer newLayer in _mainLayers.Select(layer => layer.EntityClone()))
+			retobj._shiftLayers = new List<IShiftLayer>();
+			//todo: no need to cast here when interfaces are correct
+			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._mainLayers.Add(newLayer);
-			}
-			foreach (IPersonalShiftLayer newLayer in _personalLayers.Select(layer => layer.EntityClone()))
-			{
-				newLayer.SetParent(retobj);
-				retobj._personalLayers.Add(newLayer);
-			}
-			foreach (IOvertimeShiftLayer newLayer in _overtimeLayers.Select(layer => layer.EntityClone()))
-			{
-				newLayer.SetParent(retobj);
-				retobj._overtimeLayers.Add(newLayer);
+				retobj._shiftLayers.Add(newLayer);
 			}
 
 			return retobj;
@@ -324,14 +303,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
-			_personalLayers.Add(layer);
+			_shiftLayers.Add(layer);
 		}
 
 		public virtual void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
-			_overtimeLayers.Add(layer);
+			_shiftLayers.Add(layer);
 		}
 	}
 }

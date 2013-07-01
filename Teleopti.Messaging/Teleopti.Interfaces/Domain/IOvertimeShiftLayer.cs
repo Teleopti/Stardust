@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public interface IOvertimeShiftLayer : IAggregateEntity, ILayer<IActivity>
+	public interface IOvertimeShiftLayer : IShiftLayer
 	{
 		IMultiplicatorDefinitionSet DefinitionSet { get; }
 	}

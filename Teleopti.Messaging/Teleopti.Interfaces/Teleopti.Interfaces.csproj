@@ -320,6 +320,7 @@
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftLayer.cs" />
     <Compile Include="Domain\IShiftLengthDecider.cs" />
     <Compile Include="Domain\IShiftProjectionCache.cs" />
     <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
