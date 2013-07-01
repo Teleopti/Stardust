@@ -4070,6 +4070,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripButtonRequestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 			toolStripButtonOptions.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
 		}
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
@@ -4728,7 +4729,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			toolStripButtonDayView.Tag = ZoomLevel.Level1;
 			toolStripButtonWeekView.Tag = ZoomLevel.Level2;
-            toolStripButtonFilterAgents.Tag = ZoomLevel.Level3;
+            toolStripButtonFilterAgentsOld.Tag = ZoomLevel.Level3;
 			toolStripButtonPeriodView.Tag = ZoomLevel.Level4;
 			toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
 			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
@@ -4825,7 +4826,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 
 			//TODO: Please come up with a better solution!
-			Point pointToScreen = toolStripExScheduleViews.PointToScreen(
+			Point pointToScreen = toolStripExFilter.PointToScreen(
 				new Point(toolStripButtonFilterAgents.Bounds.X + 63, toolStripButtonFilterAgents.Bounds.Y +
 				toolStripButtonFilterAgents.Height));
 			scheduleFilterView.Location = pointToScreen;
@@ -4834,7 +4835,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (scheduleFilterView.ShowDialog() == DialogResult.OK)
 			{
 				_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
-				toolStripButtonFilterAgents.Checked = scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
+
+				//toolStripButtonFilterAgents.Checked = scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
+				toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 				if (_scheduleView != null)
 				{
@@ -7140,6 +7143,52 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
 			_scheduleView.Presenter.UpdateOvertimeAvailability();
 			enableSave();
+		}
+
+		private void toolStripButtonFilterOvertimeAvailability_Click(object sender, EventArgs e)
+		{
+			if (toolStripButtonFilterOvertimeAvailability.Checked)
+			{
+				toolStripButtonFilterOvertimeAvailability.Checked = false;
+			
+				_schedulerState.ResetFilteredPersonsOvertimeAvailability();
+				reloadFilteredPeople();
+				return;
+			}
+			var defaultDate = _scheduleView.SelectedDateLocal();
+			using (var view = new FilterOvertimeAvailabilityView(defaultDate, _schedulerState))
+			{
+				if (view.ShowDialog() == DialogResult.OK)
+				{
+					toolStripButtonFilterOvertimeAvailability.Checked = true;
+					reloadFilteredPeople();
+				}
+			}
+		}
+
+		private void reloadFilteredPeople()
+		{
+			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
+
+			if (_scheduleView != null)
+			{
+				if (_scheduleView.Presenter.SortCommand == null || _scheduleView.Presenter.SortCommand is NoSortCommand)
+					_scheduleView.Presenter.ApplyGridSort();
+				else
+					_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
+
+				_grid.Refresh();
+				GridHelper.GridlockWriteProtected(_grid, LockManager);
+				_grid.Refresh();
+			}
+			if (_requestView != null)
+				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
+			drawSkillGrid();
+		}
+
+		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
+		{
+			//preparation for future pbi
 		}
 
 	}

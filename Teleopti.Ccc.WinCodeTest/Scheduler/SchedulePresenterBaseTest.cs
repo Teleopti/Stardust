@@ -254,10 +254,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false).Repeat.Any();
 
             _mocks.ReplayAll();
-            _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
-            _schedulerState.FilteredPersonDictionary.Add(person3.Id.Value, person3);
-            _schedulerState.FilteredPersonDictionary.Add(person2.Id.Value, person2);
-            _schedulerState.FilteredPersonDictionary.Add(person4.Id.Value, person4);
+			//_schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+			//_schedulerState.FilteredPersonDictionary.Add(person3.Id.Value, person3);
+			//_schedulerState.FilteredPersonDictionary.Add(person2.Id.Value, person2);
+			//_schedulerState.FilteredPersonDictionary.Add(person4.Id.Value, person4);
+
+			_schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
+			_schedulerState.FilteredAgentsDictionary.Add(person3.Id.Value, person3);
+			_schedulerState.FilteredAgentsDictionary.Add(person2.Id.Value, person2);
+			_schedulerState.FilteredAgentsDictionary.Add(person4.Id.Value, person4);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
             _target.SortColumn((int)ColumnType.RowHeaderColumn);
@@ -462,7 +467,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
-            _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+            //_schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+			_schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
             GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(0, 0, new GridStyleInfo());
@@ -541,7 +547,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
-            if (person1.Id != null) _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+			//if (person1.Id != null) _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+            if (person1.Id != null) _schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
             var eventArgs = new GridQueryCellInfoEventArgs(2, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
@@ -587,7 +594,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
-            _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+            //_schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
+			_schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
             GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(0, 2, new GridStyleInfo());

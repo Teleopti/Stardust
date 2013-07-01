@@ -408,8 +408,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_mocks.ReplayAll();
 
-		    Enumerable.Range(0, 101)
-		              .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+			//Enumerable.Range(0, 101)
+			//		  .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+
+			Enumerable.Range(0, 101)
+					 .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
+
 		    _schedulerStateHolder.RequestedPeriod =
 		        new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
 		                                           TimeZoneInfo.Utc);
@@ -465,7 +469,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private void CreateRtaStateHolderExpectation()
 		{
 			Expect.Call(_rtaStateHolder.Initialize);
-			_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.Empty, _persons.First());
+			//_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.Empty, _persons.First());
+			_schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.Empty, _persons.First());
 			Expect.Call(_target.SchedulerStateHolder).IgnoreArguments().Return(_schedulerStateHolder);
 			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
 				.IgnoreArguments();
