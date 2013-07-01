@@ -104,11 +104,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
         }
 
-        private void addLayersToOvertimeShift(IOvertimeShift overtimeShift, IEnumerable<OvertimeLayerDto> layerDtos)
-        {
-            _overtimeShiftLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(overtimeShift.LayerCollection.Add);
-        }
-
         private MainShiftDto CreateMainShiftDto(IEnumerable<IMainShiftLayer> mainShiftLayers, IShiftCategory shiftCategory, IPerson shiftOwner)
         {
             var retDto = new MainShiftDto
