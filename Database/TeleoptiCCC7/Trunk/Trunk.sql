@@ -589,7 +589,7 @@ REFERENCES [dbo].[Person] ([Id])
 ALTER TABLE [Auditing].[Revision] CHECK CONSTRAINT [FK_Revision_Person]
 GO
 
-CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
+CREATE TABLE [Auditing].[ShiftLayer_AUD](
 	[Id] uniqueidentifier NOT NULL,
 	[REV] bigint NOT NULL,
 	[REVTYPE] tinyint NOT NULL,
@@ -597,30 +597,7 @@ CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
 	[Maximum] datetime NULL,
 	[OrderIndex] int NULL,
 	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_MainShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_MainShiftActivityLayer_REV]
-GO
-
-
-CREATE TABLE [Auditing].[OvertimeShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
+	[LayerType] tinyint NULL,
 	[DefinitionSet] uniqueidentifier NULL,
 	[Parent] uniqueidentifier NULL,
  CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
@@ -630,34 +607,11 @@ CREATE TABLE [Auditing].[OvertimeShiftActivityLayer_AUD](
 )
 )
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
+ALTER TABLE [Auditing].[ShiftLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
 REFERENCES [Auditing].[Revision] ([Id])
 ON DELETE CASCADE
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
-GO
-
-CREATE TABLE [Auditing].[PersonalShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_PersonalShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_REV]
-
+ALTER TABLE [Auditing].[ShiftLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
 GO
 
 CREATE TABLE [Auditing].[PersonAssignment_AUD](
@@ -906,7 +860,7 @@ SELECT
 	[Minimum]	= o.[Minimum],
 	[Maximum]	= o.[Maximum],
 	[Parent]	= o.[Parent] ,
-	[OrderIndex]= o.[OrderIndex] + s.OrderIndex,
+	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
 	[LayerType]	= 2,
 	[DefinitionSet] = o.DefinitionSet
 FROM dbo.OvertimeShiftActivityLayer o
@@ -925,7 +879,7 @@ SELECT
 	[Minimum]	= p.[Minimum],
 	[Maximum]	= p.[Maximum],
 	[Parent]	= p.[Parent] ,
-	[OrderIndex]= p.[OrderIndex] + s.OrderIndex,
+	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
 	[LayerType]	= 3,
 	[DefinitionSet] = NULL
 FROM dbo.PersonalShiftActivityLayer p
