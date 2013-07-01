@@ -796,6 +796,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var foundPersonAssignment = findPersonAssignmentToConnectOvertimeTo(period) ??
                                             new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 	            foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
+							Add(foundPersonAssignment);
             }
         }
 

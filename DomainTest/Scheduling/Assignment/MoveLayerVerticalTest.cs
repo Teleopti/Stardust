@@ -36,7 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
-			ass.OvertimeLayers.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
+			//new instances - cant check for equality
+			var res = ass.OvertimeLayers.ToArray();
+			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
+			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
+			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
 		}
 
 		[Test]
@@ -81,7 +85,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
-			ass.OvertimeLayers.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
+			//new instances - cant check for equality
+			var res = ass.OvertimeLayers.ToArray();
+			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
+			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
+			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
 		}
 
 		[Test]

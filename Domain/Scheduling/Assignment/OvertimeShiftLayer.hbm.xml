@@ -3,7 +3,7 @@
 									 assembly="Teleopti.Ccc.Domain"
 									 namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
 									 default-access="field.camelcase-underscore">
-	<class name="OvertimeShiftActivityLayer">
+	<class name="OvertimeShiftLayer" table="OvertimeShiftActivityLayer">
 		<id name="Id"
 			 access="nosetter.camelcase-underscore"
 						type="guid"
@@ -12,11 +12,11 @@
 		</id>
 
 		<many-to-one class="Teleopti.Ccc.Domain.Scheduling.Activity"
-								 name="Payload"
-								 not-null="true"
-								 foreign-key="FK_OvertimeShiftActivityLayer_Activity"
-								 />
-		<component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+						name="Payload"
+						not-null="true"
+						foreign-key="FK_OvertimeShiftActivityLayer_Activity"
+						access="property"/>
+		<component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces" access="property">
 			<component name="period" access="field">
 				<property name="Minimum"
 						not-null="true"
@@ -27,18 +27,17 @@
 			</component>
 		</component>
 		<many-to-one name="DefinitionSet"
-								 class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet"
-								 not-null="true"
-								 foreign-key="FK_OvertimeShiftActivityLayer_DefinitionSet" />
+								class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet"
+								not-null="true"
+								foreign-key="FK_OvertimeShiftActivityLayer_DefinitionSet" 
+								access="property"/>
 		<many-to-one name="Parent"
-								 class="OvertimeShift"
+								 class="PersonAssignment"
 								 not-null ="true" 
-								 foreign-key="FK_OvertimeShiftActivityLayer_OvertimeShift"/>
+								 foreign-key="FK_OvertimeShiftActivityLayer_PersonAssignment"/>
 		<property name="OrderIndex"
 							access="readonly"
 							not-null ="true" />
 	</class>
-
-
 </hibernate-mapping>
 

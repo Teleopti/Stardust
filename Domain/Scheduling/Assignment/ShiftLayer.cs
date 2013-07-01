@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public abstract  class ShiftLayer : AggregateEntity
+	public abstract class ShiftLayer : AggregateEntity
 	{
 		protected ShiftLayer(IActivity activity, DateTimePeriod period)
 		{

@@ -1691,7 +1691,7 @@
     <EmbeddedResource Include="Scheduling\TimeLayer\MultiplicatorDefinition.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftActivityLayer.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common\General.hbm.xml" />

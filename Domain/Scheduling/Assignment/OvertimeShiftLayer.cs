@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
-		public virtual IMultiplicatorDefinitionSet DefinitionSet { get; private set; }
+		public virtual IMultiplicatorDefinitionSet DefinitionSet { get; protected set; }
 
 		public virtual int OrderIndex
 		{

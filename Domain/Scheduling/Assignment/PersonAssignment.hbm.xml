@@ -58,12 +58,12 @@
 			<one-to-many class="PersonalShiftLayer"/>
 		</list>
 
-		<list name="OvertimeShiftCollection"
-				cascade="all-delete-orphan"
-				inverse="true">
-			<key column="Parent" />
-			<index type="Byte" column="OrderIndex" />
-			<one-to-many class="OvertimeShift"/>
+		<list name="OvertimeLayers"
+			cascade="all-delete-orphan"
+			inverse="true">
+			<key column="Parent" on-delete="cascade" />
+			<index type="Byte" column ="OrderIndex" />
+			<one-to-many class="OvertimeShiftLayer"/>
 		</list>
 
 		<many-to-one name="Person"

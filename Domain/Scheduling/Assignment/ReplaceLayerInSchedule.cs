@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						ass.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 					}
+					return;
 				}
 			}
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
