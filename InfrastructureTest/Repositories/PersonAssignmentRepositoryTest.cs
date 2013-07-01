@@ -96,11 +96,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.SetMainShiftLayers(new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
-
-						IOvertimeShift ot = new OvertimeShift();
-            ass.AddOvertimeShift(ot);
-            ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
-            return ass;
+	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+	        return ass;
         }
 
         protected override void VerifyAggregateGraphProperties(IPersonAssignment loadedAggregateFromDatabase)

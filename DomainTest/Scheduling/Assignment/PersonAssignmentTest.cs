@@ -444,11 +444,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			var act = new Activity("sdf");
-			var ot = new OvertimeShift();
-			target.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act,
-									new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-									defSet));
+			target.AddOvertimeLayer(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
 			target.SetMainShiftLayers(new[] { new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6))}, new ShiftCategory("d"));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());

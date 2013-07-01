@@ -85,14 +85,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
 										.SetFetchMode("PersonalLayers", FetchMode.Join);
 
-            var assWithOvertime = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                    .SetFetchMode("OvertimeShiftCollection", FetchMode.Join);
+            var overWithLayers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
+                        .SetFetchMode("OvertimeLayers", FetchMode.Join);
 
-            var overWithLayers = Session.CreateCriteria(typeof(OvertimeShift))
-                        .CreateAlias("Parent", "ass")
-                        .SetFetchMode("LayerCollection", FetchMode.Join);
-
-            var ret = new[] { assWithMain, assWithPers, assWithOvertime, overWithLayers };
+            var ret = new[] { assWithMain, assWithPers, overWithLayers };
             ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
             ret.ForEach(addBuClauseToNonRootQuery);
             return ret;

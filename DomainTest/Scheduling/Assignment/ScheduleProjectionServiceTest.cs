@@ -475,9 +475,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
+			ass.AddOvertimeLayer(new Activity("d"), createPeriod(10, 12), def);
 
 			Assert.AreEqual(TimeSpan.Zero, ass.ProjectionService().CreateProjection().ContractTime());
 		}
@@ -488,9 +486,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
+			ass.AddOvertimeLayer(new Activity("d"), createPeriod(10, 12), def);
 			scheduleDay.Add(ass);
 			IPersonAbsence abs = createPersonAbsence(100, createPeriod(0, 24));
 			abs.Layer.Payload.InContractTime = true;
@@ -513,9 +509,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			personContract.Contract.AddMultiplicatorDefinitionSetCollection(set);
 			scheduleDay.Person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), personContract, new Team()));
 			var pa = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			var ot = new OvertimeShift();
-			pa.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), set));
+			pa.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), set);
 			var abs = new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), period));
 
 			scheduleDay.Add(pa);
@@ -531,9 +525,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(new Activity("d"), createPeriod(10, 12), def));
+			ass.AddOvertimeLayer(new Activity("d"), createPeriod(10, 12), def);
 			scheduleDay.Add(ass);
 			IPersonMeeting meeting = CreatePersonMeeting(createPeriod(10, 12));
 			scheduleDay.Add(meeting);
