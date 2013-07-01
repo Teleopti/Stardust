@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeleteOvertimeShouldGenerateOneStatement()
 		{
-			target.RemoveOvertimeShift(target.OvertimeShiftCollection[0]);
+			target.RemoveLayer(target.OvertimeLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
