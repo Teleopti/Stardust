@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -177,6 +176,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 							new MainShiftLayer(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2))
 						}, sCat);
 						ass.AddPersonalLayer(act, new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
+					ass.MainLayers.Single().SetId(Guid.NewGuid());
 					ass.PersonalLayers.Single().SetId(Guid.NewGuid());
 
             PersonAssignmentDto dto = target.DomainEntityToDto(ass);
