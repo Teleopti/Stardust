@@ -576,8 +576,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
-                                _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].
-                                    OvertimeShiftCollection.Count);
+                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].OvertimeLayers.Count());
             }
 			_mocks.VerifyAll();
 		}

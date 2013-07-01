@@ -30,14 +30,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var overtimeShift = ass.OvertimeShiftCollection.Single();
-			var orgLayers = new List<IOvertimeShiftActivityLayer>(overtimeShift.LayerCollectionWithDefinitionSet());
+			var orgLayers = ass.OvertimeLayers.ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
-			ass.OvertimeShiftCollection.Single().LayerCollection.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
+			ass.OvertimeLayers.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
 		}
 
 		[Test]
@@ -76,14 +75,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var overtimeShift = ass.OvertimeShiftCollection.Single();
-			var orgLayers = new List<IOvertimeShiftActivityLayer>(overtimeShift.LayerCollectionWithDefinitionSet());
+			var orgLayers = ass.OvertimeLayers.ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
-			ass.OvertimeShiftCollection.Single().LayerCollection.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
+			ass.OvertimeLayers.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
 		}
 
 		[Test]

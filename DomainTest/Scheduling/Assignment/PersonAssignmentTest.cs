@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -409,32 +410,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.ZOrder = zOrder;
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			IOvertimeShift overtime = new OvertimeShift();
-			overtime.SetId(Guid.NewGuid());
 
-			target.AddOvertimeShift(overtime);
+			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			target.PersonalLayers.Single().SetId(Guid.NewGuid());
+			target.OvertimeLayers.Single().SetId(Guid.NewGuid());
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
 			Assert.AreEqual(target.PersonalLayers.Single().Id, pAss.PersonalLayers.Single().Id);
+			Assert.AreEqual(target.OvertimeLayers.Single().Id, pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
-			Assert.AreEqual(target.OvertimeShiftCollection[0].Id, pAss.OvertimeShiftCollection[0].Id);
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
+			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
+			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 		}
 

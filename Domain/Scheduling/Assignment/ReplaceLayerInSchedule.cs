@@ -45,17 +45,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					return;
 				}
 
-				foreach (var overtimeShift in ass.OvertimeShiftCollection)
+				var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
+				if (layerAsOvertime != null)
 				{
-					foreach (IOvertimeShiftActivityLayer layer in overtimeShift.LayerCollection)
+					var overtimeLayers = ass.OvertimeLayers.ToList();
+					var indexOfLayer = layerAsOvertime.OrderIndex;
+					overtimeLayers.RemoveAt(indexOfLayer);
+					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
+					ass.ClearOvertimeLayers();
+					foreach (var overtimeLayer in overtimeLayers)
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							overtimeShift.LayerCollection.Remove(layer);
-							overtimeShift.LayerCollection.Insert(indexOfLayer, new OvertimeShiftActivityLayer(newActivity, newPeriod, layer.DefinitionSet));
-							return;
-						}
+						ass.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 					}
 				}
 			}

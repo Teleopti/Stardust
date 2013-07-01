@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].OvertimeLayers.Count());
                 // because the overtime will be deleted, no person assignment will be left for _scheduleDayOnePersonOne
 				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignmentCollection().Count());
 			}	

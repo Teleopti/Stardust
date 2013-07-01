@@ -404,8 +404,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].OvertimeShiftCollection[0].LayerCollection[0].Period);
+			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].OvertimeLayers.Single().Period);
 			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
 		}
 
@@ -1641,13 +1640,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(start, end);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
  
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeLayers.Count());
 			_target.DeleteOvertime();
 			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeLayers.Count());
 			_target.DeleteOvertime();
 			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
 		}
@@ -1749,10 +1748,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			PersonFactory.AddDefinitionSetToPerson(person2, definitionSet);
 			((ExtractedSchedule)destination).MergeOvertime(source);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection()[0].OvertimeShiftCollection[0].LayerCollection.Count);
-			Assert.AreEqual(start.Hour, destination.PersonAssignmentCollection()[0].OvertimeShiftCollection[0].LayerCollection[0].Period.StartDateTime.Hour);
-			Assert.AreEqual(end.Hour, destination.PersonAssignmentCollection()[0].OvertimeShiftCollection[0].LayerCollection[0].Period.EndDateTime.Hour);
+			Assert.AreEqual(start.Hour, destination.PersonAssignmentCollection()[0].OvertimeLayers.Single().Period.StartDateTime.Hour);
+			Assert.AreEqual(end.Hour, destination.PersonAssignmentCollection()[0].OvertimeLayers.Single().Period.EndDateTime.Hour);
  
 		}
 
@@ -1918,7 +1915,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				   part.PersonDayOffCollection().Count == 1 &&
 				   part.PersonAbsenceCollection().Count == 1 &&
 				   part.PersonAssignmentCollection()[0].PersonalLayers.Count() == 1 &&
-				   part.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count == 1 &&
+				   part.PersonAssignmentCollection()[0].OvertimeLayers.Count() == 1 &&
 				   part.PersonRestrictionCollection().Count == 2;
 		}
 
@@ -1936,7 +1933,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if (options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ShiftCategory != null)
 				retValue = false;
 
-			if (options.Overtime && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count > 0)
+			if (options.Overtime && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeLayers.Any())
 				retValue = false;
 
 			if (options.PersonalShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].PersonalLayers.Any())
@@ -1978,7 +1975,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				(!options.MainShift && part.PersonAssignmentCollection().Count == 0))
 				retValue = false;
 
-			if ((!options.Overtime && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count == 0) ||
+			if ((!options.Overtime && part.PersonAssignmentCollection().Count > 0 && !part.PersonAssignmentCollection()[0].OvertimeLayers.Any()) ||
 				(!options.Overtime && part.PersonAssignmentCollection().Count == 0))
 				retValue = false;
 

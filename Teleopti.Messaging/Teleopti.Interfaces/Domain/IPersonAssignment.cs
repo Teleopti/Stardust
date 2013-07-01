@@ -35,6 +35,8 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         void ClearMainLayers();
 
+	    void ClearOvertimeLayers();
+
         /// <summary>
         /// Gets or sets the ZOrder for PersonAssignment, used in gui.
         /// </summary>
@@ -87,6 +89,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    bool RemoveLayer(IMainShiftLayer layer);
 	    bool RemoveLayer(IPersonalShiftLayer layer);
+	    bool RemoveLayer(IOvertimeShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
     }

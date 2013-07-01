@@ -195,6 +195,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _personalLayers.Remove(layer);
 		}
 
+		public virtual bool RemoveLayer(IOvertimeShiftLayer layer)
+		{
+			return _overtimeLayers.Remove(layer);
+		}
+
 		public virtual void ClearPersonalLayers()
 		{
 			_personalLayers.Clear();
@@ -203,6 +208,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void ClearMainLayers()
 		{
 			_mainLayers.Clear();
+		}
+
+		public virtual void ClearOvertimeLayers()
+		{
+			_overtimeLayers.Clear();
 		}
 
 

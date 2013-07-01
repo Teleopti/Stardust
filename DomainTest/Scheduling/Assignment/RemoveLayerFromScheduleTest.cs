@@ -54,13 +54,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddOvertime().CreatePart();
 
-						IPersonAssignment assignmnet = schedulePart.AssignmentHighZOrder();
-            IOvertimeShift firstOvertimeShift = assignmnet.OvertimeShiftCollection.First();
-            var firstOverTimeLayer = firstOvertimeShift.LayerCollection.First();
+						var assignment = schedulePart.AssignmentHighZOrder();
+            var firstOverTimeLayer = assignment.OvertimeLayers.First();
 
-            Assert.IsTrue(assignmnet.OvertimeShiftCollection.First().LayerCollection.Contains(firstOverTimeLayer), "Verify contains the overtime");
+            Assert.IsTrue(assignment.OvertimeLayers.Contains(firstOverTimeLayer), "Verify contains the overtime");
 						target.Remove(schedulePart, firstOverTimeLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().OvertimeShiftCollection.Count, "The OvertimeLayer  should have been removed");
+						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().OvertimeLayers.Count(), "The OvertimeLayer  should have been removed");
         }
 
     }

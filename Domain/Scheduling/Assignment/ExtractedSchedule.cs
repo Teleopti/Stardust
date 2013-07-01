@@ -548,20 +548,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void DeleteOvertime()
         {
-            IList<IOvertimeShift> overtimeShiftsToRemoveList = new List<IOvertimeShift>();
             IList<IPersonAssignment> personAssToRemoveList = new List<IPersonAssignment>();
 
             foreach (IPersonAssignment assignment in PersonAssignmentCollection())
             {
-                foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
-                {
-                    overtimeShiftsToRemoveList.Add(overtimeShift);
-                }
-
-                foreach (IOvertimeShift overTime in overtimeShiftsToRemoveList)
-                {
-                    assignment.RemoveOvertimeShift(overTime);
-                }
+							assignment.ClearOvertimeLayers();
 
 								if (!assignment.PersonalLayers.Any() && assignment.ShiftCategory == null)
                     personAssToRemoveList.Add(assignment);
@@ -833,16 +824,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 foreach (var personAss in source.PersonAssignmentCollection())
                 {
-                    foreach (var overtime in personAss.OvertimeShiftCollection)
-                    {
-                        foreach (IOvertimeShiftActivityLayer layer in overtime.LayerCollection)
-                        {
-                            if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-                            {
-																CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-                            }
-                        }
-                    }
+	                foreach (var layer in personAss.OvertimeLayers)
+	                {
+										if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+										{
+											CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+										}
+	                }
                 }
             }
         }
