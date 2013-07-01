@@ -216,8 +216,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var customEventArgs = new CustomEventArgs<IActualAgentState>(actualAgentState);
 			person.SetId(guid);
 
-			daylayerModel.NextActivityDescription = "Old Next Activity";
-			daylayerModel.AlarmDescription = "Old Alarm Name";
+			daylayerModel.NextActivityDescription = "New Next Activity";
+			daylayerModel.AlarmDescription = "New Alarm Name";
 			target.Models.Add(daylayerModel);
 			rtaStateHolder.Raise(r => r.AgentstateUpdated += null, this, customEventArgs);
 
