@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(2); //delete overtimeshift + overtimeshiftlayer
+				.Should().Be.EqualTo(1); //delete overtimeshift layer
 		}
 
 		[Test]
@@ -55,9 +54,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Delete(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete pers assignment, ot,  (no layers)
+				.Should().Be.EqualTo(1); //delete pers assignment, (no layers - cascading)
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(5); //delete pers assignment, ot, otlayer, mslayer, pslayer
+				.Should().Be.EqualTo(4); //delete pers assignment, otlayer, mslayer, pslayer
 		}
 
 
