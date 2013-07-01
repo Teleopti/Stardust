@@ -58,15 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
             	foreach (var personAssignment in personAssignmentCollection)
             	{
-            		var overtimeShifts = personAssignment.OvertimeShiftCollection.ToList();
-            		foreach (var overtimeShift in overtimeShifts)
-            		{
-            			cancelOvertime(overtimeShift, dateTimePeriod);
-						if (overtimeShift.LayerCollection.Count==0)
-						{
-							personAssignment.RemoveOvertimeShift(overtimeShift);
-						}
-            		}
+								cancelOvertime(personAssignment, dateTimePeriod);
             	}
 
                 _saveSchedulePartService.Save(scheduleDay, rules);
@@ -84,26 +76,25 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     		return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
     	}
 
-    	private static void cancelOvertime(IOvertimeShift overtimeShift, DateTimePeriod period)
-		{
-			var layers = overtimeShift.LayerCollection.ToList();
-    		foreach (IOvertimeShiftActivityLayer layer in layers)
+			private static void cancelOvertime(IPersonAssignment personAssignment, DateTimePeriod period)
 			{
-				var layerPeriod = layer.Period;
-				if (!layerPeriod.Intersect(period)) continue;
-
-				overtimeShift.LayerCollection.Remove(layer);
-
-				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
-				foreach (var dateTimePeriod in newPeriods)
+				var layers = personAssignment.OvertimeLayers;
+				foreach (var layer in layers)
 				{
-					if (dateTimePeriod.ElapsedTime()>TimeSpan.Zero)
+					var layerPeriod = layer.Period;
+					if (!layerPeriod.Intersect(period)) continue;
+
+					personAssignment.RemoveLayer(layer);
+
+					var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
+					foreach (var dateTimePeriod in newPeriods)
 					{
-						var newLayer = new OvertimeShiftActivityLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
-						overtimeShift.LayerCollection.Add(newLayer);
+						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
+						{
+							personAssignment.AddOvertimeLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
+						}
 					}
 				}
 			}
-    	}
     }
 }
