@@ -114,24 +114,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             cloneLayer = (FakeLayerClass)orgLayer.NoneEntityClone();
 			Assert.That(cloneLayer, Is.Not.Null);
         }
-        /// <summary>
-        /// Verifies the order index works.
-        /// TODO: more test here when insert, delete and so on exists
-        /// </summary>
-        [Test]
-        public void VerifyOrderIndexWorks()
-        {
-
-						var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
-						var shift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
-																																			new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-																																			defSet,
-																																			new PersonAssignment(new Person(), new Scenario("d"),
-																																													 new DateOnly(2000, 1, 1)));
-						var layer2 = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1), defSet);
-						shift.LayerCollection.Add(layer2);
-						Assert.AreEqual(1, layer2.OrderIndex);
-				}
 
         [Test]
         public void CanSetProperties()

@@ -25,26 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
         }
 
         /// <summary>
-        /// Verifies the parent works.
-        /// </summary>
-        [Test]
-        public void VerifyParentWorksWhenLayerIsAdded()
-        {
-	        var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
-	        var dummyShift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
-	                                                                  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-	                                                                  defSet,
-	                                                                  new PersonAssignment(new Person(), new Scenario("d"),
-	                                                                                       new DateOnly(2000, 1, 1)));
-            var actLay =
-                new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
-                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1),
-																												defSet);
-            dummyShift.LayerCollection.Add(actLay);
-            Assert.AreSame(dummyShift, actLay.Parent);
-        }
-
-        /// <summary>
         /// Verifies that null cannot be added to list.
         /// </summary>
         [Test]
