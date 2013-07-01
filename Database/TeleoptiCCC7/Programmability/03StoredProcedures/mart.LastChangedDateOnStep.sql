@@ -59,8 +59,11 @@ WHERE bu.id=@buId
 --Get the time for last update on this particular object; updated after last ETL run
 IF @stepName = 'Forecast'
 BEGIN
+	DECLARE @scenarioId uniqueidentifier
+	SELECT @scenarioId = ID FROM Scenario WHERE BusinessUnit =  @buId AND DefaultScenario = 1
 	SELECT @thisTime = MAX(UpdatedOn) FROM SkillDay WHERE UpdatedOn >= @lastTime
 	AND UpdatedOn BETWEEN @start AND @end
+	AND Scenario = @scenarioId
 END
 IF @stepName = 'Preferences'
 BEGIN
