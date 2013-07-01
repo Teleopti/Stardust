@@ -859,7 +859,7 @@ SELECT
 	[Minimum]	= o.[Minimum],
 	[Maximum]	= o.[Maximum],
 	[Parent]	= o.[Parent] ,
-	[OrderIndex]= o.[OrderIndex] + s.OrderIndex,
+	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
 	[LayerType]	= 2,
 	[DefinitionSet] = o.DefinitionSet
 FROM dbo.OvertimeShiftActivityLayer o
@@ -878,7 +878,7 @@ SELECT
 	[Minimum]	= p.[Minimum],
 	[Maximum]	= p.[Maximum],
 	[Parent]	= p.[Parent] ,
-	[OrderIndex]= p.[OrderIndex] + s.OrderIndex,
+	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
 	[LayerType]	= 3,
 	[DefinitionSet] = NULL
 FROM dbo.PersonalShiftActivityLayer p
