@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
@@ -297,7 +298,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
                     case SchedulePartView.DayOff:
                 		var assignments = part.PersonAssignmentCollection();
-                        if (assignments.Count > 0 && assignments[0].OvertimeShiftCollection.Count > 0 && details == ScheduleReportDetail.All)
+                        if (assignments.Count > 0 && assignments[0].OvertimeLayers.Any() && details == ScheduleReportDetail.All)
                         {
                             schedule = new PdfScheduleDayOffOvertime(_scheduleColumnWidth,
                                                                  part, part.PersonDayOffCollection()[0],

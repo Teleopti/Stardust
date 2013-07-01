@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public bool HasOvertimeShift()
         {
             IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
-            if(assignmentToCheck != null) return assignmentToCheck.OvertimeShiftCollection.Count > 0;
+            if(assignmentToCheck != null) return assignmentToCheck.OvertimeLayers.Any();
             return false;
         }
 

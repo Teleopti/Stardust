@@ -1,4 +1,3 @@
-using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IOvertimeShiftActivityLayer _layer;
+	    private readonly IOvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 	    private readonly IMoveLayerVertical _moveLayerVertical;
 	    private IOvertimeShift _overtimeShift;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
             : base(observer, layer, assignment, eventAggregator, moveLayerVertical)
         {
 	        _layer = layer;

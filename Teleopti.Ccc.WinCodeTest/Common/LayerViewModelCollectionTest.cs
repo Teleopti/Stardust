@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
 	        var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
-			var overtime = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period, multi);
+			var overtime = new OvertimeShiftLayer(ActivityFactory.CreateActivity("activity"), period, multi);
 	        var personal = new PersonalShiftLayer(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
