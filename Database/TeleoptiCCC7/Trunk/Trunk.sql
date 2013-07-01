@@ -849,3 +849,96 @@ GO
 UPDATE Skill SET MaxParallelTasks = 1
 ALTER TABLE Skill ALTER COLUMN MaxParallelTasks int not null
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-07-01
+--Desc: PBI #21978 - merging all shiftLayer tables into one
+----------------  
+CREATE TABLE [dbo].[ShiftLayer](
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
+	[LayerType] tinyint NOT NULL,
+	[DefinitionSet] uniqueidentifier NULL
+ CONSTRAINT [PK_ShiftLayer] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH NOCHECK ADD  CONSTRAINT [FK_ShiftLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_Activity]
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+ON DELETE CASCADE
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_PersonAssignment]
+
+GO
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= Id,
+	[payLoad]	= [payLoad],
+	[Minimum]	= [Minimum],
+	[Maximum]	= [Maximum],
+	[Parent]	= [Parent],
+	[OrderIndex]= [OrderIndex],
+	[LayerType]	= 1,
+	[DefinitionSet] = NULL
+FROM dbo.MainShiftActivityLayer
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= o.[Id],
+	[payLoad]	= o.[payLoad],
+	[Minimum]	= o.[Minimum],
+	[Maximum]	= o.[Maximum],
+	[Parent]	= o.[Parent] ,
+	[OrderIndex]= o.[OrderIndex] + s.OrderIndex,
+	[LayerType]	= 2,
+	[DefinitionSet] = o.DefinitionSet
+FROM dbo.OvertimeShiftActivityLayer o
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = o.Parent
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= p.[Id],
+	[payLoad]	= p.[payLoad],
+	[Minimum]	= p.[Minimum],
+	[Maximum]	= p.[Maximum],
+	[Parent]	= p.[Parent] ,
+	[OrderIndex]= p.[OrderIndex] + s.OrderIndex,
+	[LayerType]	= 3,
+	[DefinitionSet] = NULL
+FROM dbo.PersonalShiftActivityLayer p
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = p.Parent
+GO
+
+DROP TABLE dbo.MainShiftActivityLayer
+DROP TABLE dbo.OvertimeShiftActivityLayer
+DROP TABLE dbo.PersonalShiftActivityLayer
+GO
