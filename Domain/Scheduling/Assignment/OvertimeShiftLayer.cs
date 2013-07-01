@@ -16,16 +16,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		public virtual IMultiplicatorDefinitionSet DefinitionSet { get; protected set; }
-
-		public override int OrderIndex
-		{
-			get
-			{
-				var ass = Parent as IPersonAssignment;
-				if (ass == null)
-					return -1;
-				return ass.OvertimeLayers.ToList().IndexOf(this);
-			}
-		}
 	}
 }

@@ -12,16 +12,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected MainShiftLayer()
 		{
 		}
-
-		public override int OrderIndex
-		{
-			get
-			{
-				var ass = Parent as IPersonAssignment;
-				if (ass == null)
-					return -1;
-				return ass.MainLayers.ToList().IndexOf(this);
-			}
-		}
 	}
 }

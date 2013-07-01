@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _shiftLayers.OfType<IOvertimeShiftLayer>(); }
 		}
 
+		public virtual IEnumerable<IShiftLayer> ShiftLayers
+		{
+			get { return _shiftLayers; }
+		}
+
 		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
 		{
 			//todo: make sure not reusing layer from another assignment...

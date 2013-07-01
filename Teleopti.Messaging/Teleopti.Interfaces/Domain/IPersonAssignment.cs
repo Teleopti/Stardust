@@ -50,8 +50,9 @@ namespace Teleopti.Interfaces.Domain
 	    IEnumerable<IMainShiftLayer> MainLayers { get; }
 			IEnumerable<IPersonalShiftLayer> PersonalLayers { get; }
 	    IEnumerable<IOvertimeShiftLayer> OvertimeLayers { get; }
+	    IEnumerable<IShiftLayer> ShiftLayers { get; }
 
-		/// <summary>
+	    /// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
 		void ScheduleChanged(string dataSource);

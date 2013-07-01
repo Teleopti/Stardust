@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -12,17 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		protected PersonalShiftLayer()
 		{
-		}
-
-		public override int OrderIndex
-		{
-			get
-			{
-				var ass = Parent as IPersonAssignment;
-				if (ass == null)
-					return -1;
-				return ass.PersonalLayers.ToList().IndexOf(this);
-			}
 		}
 	}
 }

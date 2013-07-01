@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -73,7 +74,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private ICriteria personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
 	        var assCriteria = Session.CreateCriteria(typeof (PersonAssignment), "ass")
-	                                 .SetFetchMode("_shiftLayers", FetchMode.Join);
+	                                 .SetFetchMode("ShiftLayers", FetchMode.Join)
+																	 .SetResultTransformer(Transformers.DistinctRootEntity);
 					addScenarioAndFilterClauses(assCriteria, scenario, period);
 					addBuClauseToNonRootQuery(assCriteria);
             return assCriteria;
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IPersonAssignment LoadAggregate(Guid id)
         {
             IPersonAssignment ass = Session.CreateCriteria(typeof(PersonAssignment))
-												.SetFetchMode("_shiftLayers", FetchMode.Join)
+												.SetFetchMode("ShiftLayers", FetchMode.Join)
                         .Add(Restrictions.Eq("Id", id))
                         .UniqueResult<IPersonAssignment>();
             if (ass != null)

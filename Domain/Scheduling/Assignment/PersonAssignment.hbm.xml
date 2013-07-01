@@ -48,7 +48,7 @@
 				access="field">
 			<key column="Parent" on-delete ="cascade" />
 			<index type="Byte" column="OrderIndex" />
-			<one-to-many class="MainShiftLayer"/>
+			<one-to-many class="ShiftLayer"/>
 		</list>
 
 		<many-to-one name="Person"
