@@ -143,12 +143,14 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
         {
             var text = LanguageResourceHelper.TranslateEnumValue(_personRequestDto.RequestStatus);
 
-            if (_personRequestDto.RequestStatus == RequestStatusDto.New && LoggedOnPerson.Id != _personRequestDto.Person.Id)
+            if (_personRequestDto.RequestStatus == RequestStatusDto.New 
+				&& LoggedOnPerson.Id != _personRequestDto.Person.Id)
             {
                 return new StatusDisplay(text, _personRequestDto.RequestStatus);
             }
 
-            if (_personRequestDto.RequestStatus != RequestStatusDto.Denied && _personRequestDto.RequestStatus != RequestStatusDto.Approved)
+            if (_personRequestDto.RequestStatus != RequestStatusDto.Denied 
+				&& _personRequestDto.RequestStatus != RequestStatusDto.Approved)
             {
                 var requestDto = _personRequestDto.Request as ShiftTradeRequestDto;
                 if (requestDto != null)
@@ -192,10 +194,10 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
         public string DisplayText { get; set; }
         public RequestStatusDto RequestStatus { get; set; }
 
-        public StatusDisplay(string displayText, RequestStatusDto staus)
+        public StatusDisplay(string displayText, RequestStatusDto status)
         {
             DisplayText = displayText;
-            RequestStatus = staus;
+            RequestStatus = status;
         }
         public override string ToString()
         {

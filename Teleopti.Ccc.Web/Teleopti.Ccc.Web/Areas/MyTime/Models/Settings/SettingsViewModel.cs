@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 
 	public class CultureViewModel
 	{
-		public int LCID { get; set; }
-		public string DisplayName { get; set; }
+		public int id { get; set; }
+		public string text { get; set; }
 	}
 }

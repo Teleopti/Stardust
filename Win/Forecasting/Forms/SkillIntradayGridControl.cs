@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             base.CreateGridRows(); //Creates list and add headers
 
-            if (Owner.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+			if (Owner.SkillType.ForecastSource != ForecastSource.InboundTelephony && Owner.SkillType.ForecastSource != ForecastSource.Chat)
                 NonTelephonyRows();
             else
                 TelephonyRows();
@@ -68,10 +68,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void TelephonyRows()
         {
+			var manager = GetManager(Owner);
             var gridRow = new SkillStaffPeriodGridRow(_rowManagerSkillStaffPeriod,
                                                                           "NumericReadOnlyCell",
                                                                           "Payload.TaskData.Tasks",
-                                                                          UserTexts.Resources.TotalCalls)
+																		  manager.WordDictionary["TotalTasks"])
                           	{
                           		ChartSeriesSettings = ConfigureSetting("TotalTasks")
                           	};
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             gridRow = new SkillStaffPeriodGridRow(_rowManagerSkillStaffPeriod, "TimeSpanTotalSecondsReadOnlyCell",
                                                   "Payload.TaskData.AverageTaskTime",
-                                                  UserTexts.Resources.TotalTalkTime)
+												  manager.WordDictionary["TotalAverageTaskTime"])
                       	{
                       		ChartSeriesSettings = ConfigureSetting("TotalAverageTaskTime")
                       	};
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             gridRow = new SkillStaffPeriodGridRow(_rowManagerSkillStaffPeriod, "TimeSpanTotalSecondsReadOnlyCell",
                                                   "Payload.TaskData.AverageAfterTaskTime",
-                                                  UserTexts.Resources.TotalACW);
+												  manager.WordDictionary["TotalAverageAfterTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalAverageAfterTaskTime");
             GridRows.Add(_rowManagerSkillStaffPeriod.AddRow(gridRow));
 

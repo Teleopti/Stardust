@@ -69,6 +69,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var modelsToShow = RequestPresenter.FilterAdapters(allModels, filterWords);
 			_source = RequestPresenter.FilterAdapters(modelsToShow, filterWords);
 			_model.ShowOnly(_source);
+	        foreach (var model in allModels)
+		        model.IsSelected = false;
+			_model.SelectedModels.Clear();
+
         }
 
 		public void FilterPersons(IEnumerable<Guid> persons)

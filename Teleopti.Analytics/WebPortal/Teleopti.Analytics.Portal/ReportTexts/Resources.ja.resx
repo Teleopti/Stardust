@@ -1,0 +1,985 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>折り畳む</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>展開する</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>無効な値が入力されました:</value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>何も入力されていません:</value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>放棄呼</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>放棄率</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>エージェント</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>応答呼</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>サービスレベル外呼数</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>サービスレベル内呼数</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>日付</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>日付:</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>日付　from:</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>日付　to:</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>総計</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>インターバル</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>インターバル:</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>スケジュール時間</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>サービスレベル (%)</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>サイト名:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>スキル名:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>チーム:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>ワークロード:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>レポートの表示</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>インターバル from:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>インターバル to:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>期間の種類:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>欠勤率 (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>遵守率 (%)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>スケジュール時間内応答呼（時間）</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>平均アフターコールワーク時間</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>平均処理時間</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>平均通話時間</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>レディネス (%)</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>実値</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>KPI</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>前の期間</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>ターゲット</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>チーム実値</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>トレンド</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>ログインに失敗しました。再度ログインしてください。</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>ユーザー名:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>新しいパスワード</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>パスワードが必要です。</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>パスワード:</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>このユーザーを記憶</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>ユーザー名が必要です。</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>レポートの表示</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>シナリオ:</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>放棄呼(短通話除く）（%）</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>放棄率 (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>応答率 (%)</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>平均応答速度 (秒)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>平均放棄時間 (秒)</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>日付期間:</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>最長遅延（キュー、放棄）</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>最長遅延（キュー、応答）</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>期間</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>放棄呼と応答速度</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>放棄までの時間</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>総計:</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>パーセント</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>アフターコールワーク　実値</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>平均通話時間　実値</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>アフターコールワーク（ACW）</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>平均通話時間（ATT）</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>算出呼量</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>通話</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>アフターコールワーク　予測値</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>平均通話時間　予測値</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>予測呼量</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>の数</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>ワークロード　予測値対実値</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>レディ状態エージェント</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>予定エージェント</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>相対差異 (%)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>時間（時：分）　予測値</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>着信呼</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>着信呼/レディ状態エージェント</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>着信呼/レディ状態の予定エージェント</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>時間　予測値対予定値</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>サービスレベルとレディ状態エージェント</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>予定レディ時間</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>予定エージェント対レディ状態エージェント</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>スムーズ率 (%)</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>平日/スキル</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>エージェントカテゴリ:</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>エージェントカテゴリの種類:</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>エージェント:</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>エージェントの評価指標</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>遵守率 (%)</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>エージェント/日付</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>応答呼/予定レディ時間</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>稼働率 (%)</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>レディネス (%)</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>レディ時間</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>遵守率の計算:</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>着信呼/エージェント</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>サービスレベル</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>サービスレベルの計算:</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>ソート方法:</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>レディ時間/予定レディ時間 (%)</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>レディ状態の予定エージェント</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>逸脱 (分)</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>遵守率/インターバル (%)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>逸脱/インターバル (分)</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>キュー:</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>キューの統計値</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>サービスレベル内の放棄</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>ショートコールの放棄</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>処理時間</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>応答速度</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>通話時間</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>転送呼</value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>キュー</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>タイムゾーン:</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>キューにおける放棄呼の最長遅延時間</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>キューにおける応答呼の最長遅延時間</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>放棄までの時間 (秒)</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>自動呼分配ログイン</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>エージェントキューの統計値</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>エージェントの統計値</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>管理時間</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>直接着信呼</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>直接着信呼の通話時間</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>直接発信呼</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>直接発信呼の通話時間</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>アイドルタイム</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>ログイン時間</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>非レディ時間</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>日付/インターバル</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>否認されました</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>着信呼のオーバーフロー</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>発信呼のオーバーフロー</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>シュリンケージを含む予測時間（時:分）</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>予定時間（時:分）</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>標準偏差</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>週:</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>エージェント当たりの予定時間</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>予定欠勤時間（時:分）</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>予定残業時間（時:分）</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>欠勤:</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>活動:</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>予測時間（時:分）</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>予定時間（時:分）</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>予測時間（シュリンケージ）（時:分）</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>シュリンケージを含む相対差異 (%)</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>1日当たりのシフトカテゴリ</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>シフトカテゴリ:</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>エージェント当たりのシフトカテゴリと全日欠勤</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>休暇:</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>活動当たりの予定時間</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>チームの評価指標</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>チーム/日付</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>応答呼/レディ時間</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>契約不在時間（時:分）</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>契約時間（時:分）</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>有給時間（時:分）</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>勤務時間（時:分）</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>承認されたプリファレンス</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>承認されたプリファレンス (%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>否認されたプリファレンス</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>要求されたプリファレンス</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>プリファレンスカテゴリ</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>1日当たりのプリファレンス</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>エージェント当たりのプリファレンス</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>インターバルおよびチーム当たりの予定エージェント</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>改善</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>処理時間/有給時間 (%)</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>金曜日</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>月曜日</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>土曜日</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>日曜日</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>木曜日</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>火曜日</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>水曜日</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>4月</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>8月</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>12月</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>2月</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>1月</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>7月</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>6月</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>3月</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>5月</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>11月</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>10月</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>9月</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>エージェントのスコアカード</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>有給時間（時:分）</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>勤務時間（時:分）</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>エージェント当たりの欠勤時間</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>全休</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>一部休</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>ユーザーの認証に失敗しました。</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>WebアプリケーションにてWindowsによる認証を使用している場合、クライアント側ではアプリケーションによる認証を行うことができません。</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>アプリケーションのログインを使用してください。</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>考えられるソリューション</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>権限の設定がETLサービスと正しく同期されていることを確認してください。</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>クライアントを終了してWindowsによる認証を使用するか、システム管理者に依頼してフォームに対するWeb認証方式を変更してください。</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>技術情報</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>不明なエラー</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>欠勤</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>活動</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>遵守率</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>全て</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼/応答呼</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼と放棄呼/着信呼</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>サービスレベルしきい値内の応答呼/着信呼</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>休暇</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>拡張プリファレンス</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>名</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>金曜日</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>30分</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>姓</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>月曜日</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>未定義</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>レディ時間対契約予定時間</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>レディ時間対予定レディ時間</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>レディ時間対予定時間（シフト開始前後の時間を含む）</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>シフトカテゴリ</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>シフト開始時刻</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>日曜日</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>木曜日</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>火曜日</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>水曜日</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>週</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>平日</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>エージェント:</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>利用可能なスコアカードはありません</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>欠勤当たりの欠勤時間</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>業務階層</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>契約</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>契約
+スケジュール</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>メモ</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>パートタイム比率</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>シフトバッグ</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>グループページ:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>グループ:</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>スキル</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>エージェント当たりの予定残業時間</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>残業:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>残業の種類:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>平均アフターコールワーク (秒)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>平均処理時間 (秒)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>平均通話時間 (秒)</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>エージェントキューの評価指標</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>エージェント当たりの活動時間</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>残業時間（時:分）</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>シフト終了時刻</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>シフトカテゴリおよび全休</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>欠勤</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>シフト交代</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>テキスト</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>エージェント当たりの要求</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>承認</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>否認</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>保留</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>要求の種類:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>状態:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>状態</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>要求日</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>種類</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>適用日</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>要求期間</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>今すぐリダイレクト</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>セッションが切断されました</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>一定時間操作が行われなかったため、セッションが切断されました。ログオンページに再度リダイレクトされます。</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>エージェント当たりの遵守率</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>1日当たりの遵守率</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>活動当たりの予定エージェント</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>トータル</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>サインアウト</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>日付（シフト開始）:</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>開始日（シフト開始）:</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>終了日（シフト開始）:</value>
+  </data>
+</root>

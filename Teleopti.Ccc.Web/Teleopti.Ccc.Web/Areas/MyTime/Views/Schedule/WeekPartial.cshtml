@@ -5,29 +5,43 @@
 	Layout = null;
 }
 <script>
-	$(function () {
-		Teleopti.MyTimeWeb.Schedule.SetupViewModel({
-			xRequests: '@Resources.XRequests',
-			subjectColon: '@Resources.SubjectColon',
-			locationColon: '@Resources.LocationColon',
+    $(function () {
+        Teleopti.MyTimeWeb.Schedule.SetupViewModel({
+            xRequests: '@Resources.XRequests',
+            subjectColon: '@Resources.SubjectColon',
+            locationColon: '@Resources.LocationColon',
 			descriptionColon: '@Resources.DescriptionColon',
 			chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
 			fair: '@Resources.Fair',
 			poor: '@Resources.Poor',
 			good: '@Resources.Good'
-		});
-		Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
-	});
+        });
+        Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
+    });
 </script>
-<div id="ScheduleWeek-body" class="body-weekview clearfix" data-bind="attr: {'data-mytime-periodselection' : periodSelection}">
+<div class="navbar">
+    <div class="navbar-inner">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn" data-bind="click: previousWeek"><i class="icon-arrow-left"></i></button>
+                <input data-bind="value: displayDate" type="text" class="span2 date-picker-width" readonly="readonly"/>
+                <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
+                <button class="btn" data-bind="click: nextWeek"><i class="icon-arrow-right"></i></button>
+            </div>
+        </form>
+        <ul class="nav">
+            <li><a href="#" class="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+        </ul>
+    </div>
+</div>
+<div>
 	<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
 	<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
-	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
+	<div class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
 			<div class="week-schedule-time-indicator-small absolute">
 			</div>
 			<!-- ko foreach: timeLines -->
-
 			<div class="weekview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
 			</div>
 			<!-- /ko -->
@@ -54,15 +68,15 @@
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-			    <div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, attr: {title :  holidayChanceText()}">
-					  <div>
-						<div class="small-circle" data-bind="animateBackground: holidayChanceColor()">
-						    <div class="small-radial-circle"></div>
+				<div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, attr: {title :  holidayChanceText()}">
+					<div>
+						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
+							<div class="small-radial-circle"></div>
 						</div>
-			        </div> 
-			    </div>
+					</div> 
+				</div>
 				<!-- ko if: hasNote -->
-				<div class="icon comment-day ir tooltip floatright" data-bind="attr: {'tooltip-text': noteMessage}">
+				<div class="icon comment-day ir floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>
 				<!-- /ko -->
 				<div id="add-request-cell" data-bind="css:{'add-request-space show-request': textRequestPermission}">
@@ -72,7 +86,7 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute tooltip" data-bind="attr: {'tooltip-title': title, 'tooltip-text' : tooltipText}, style:{backgroundColor : color, color: textColor, 'height' :  heightPx, top: topPx, 'width' : '131px'}">
+				<div class="week-schedule-layer absolute" data-bind="attr: {'tooltip-title': title, 'tooltip-text' : tooltipText}, style:{backgroundColor : color, color: textColor, 'height' :  heightPx, top: topPx, 'width' : '131px'}">
 					<!-- ko if: hasMeeting -->
 					<div class="icon meeting floatright">
 					</div>

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Data;
+using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
     {
         private EditLayerViewModel _target;
         private ILayerViewModel _layerViewModel;
-        private ILayer _layer;
+        private IMainShiftLayer _layer;
         private IActivity _activity;
         private DateTimePeriod _period;
         private TesterForCommandModels _commandTester;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _commandTester = new TesterForCommandModels();
             _activity = new Activity("test");
             _period = new DateTimePeriod(2001,1,1,2001,1,2);
-            _layer = new MainShiftActivityLayer(_activity, _period);
+            _layer = new MainShiftLayer(_activity, _period);
             _layerViewModel = new ModelForTest(_layer);
             _target = new EditLayerViewModel();
         }
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             Assert.AreEqual(0,payloads.Filters.Count);
             _target.Layer = _layerViewModel;
             Assert.AreEqual(1, payloads.Filters.Count);
-            Assert.AreEqual(payloads.Filters[0],_layerViewModel.Layer.Payload.GetType());
+            Assert.AreEqual(payloads.Filters[0],_layerViewModel.Payload.GetType());
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _target.SelectablePayloads.Add(_activity);
             _target.SelectablePayloads.Add(anotherActivity);
 
-            _layerViewModel.Layer.Payload = anotherActivity;
+            _layerViewModel.Payload = anotherActivity;
             _target.Layer = _layerViewModel;
             
             //Check the view
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             CollectionViewSource.GetDefaultView(_target.SelectablePayloads).MoveCurrentTo(anotherActivity);
             TesterForCommandModels models = new TesterForCommandModels();
             models.ExecuteCommandModel(_target.UpdateLayerCommand);
-            Assert.AreEqual(_layerViewModel.Layer.Payload,anotherActivity);
+            Assert.AreEqual(_layerViewModel.Payload,anotherActivity);
 
         }
 
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             CollectionViewSource.GetDefaultView(_target.SelectablePayloads).MoveCurrentTo(activity);
             _commandTester.ExecuteCommandModel(_target.ChangePayloadCommand);
 
-            Assert.AreEqual(_target.Layer.Layer.Payload,activity);
+            Assert.AreEqual(_target.Layer.Payload,activity);
         }
 
         [Test]
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(ILayer layer) : base(layer,null)
+            public ModelForTest(IMainShiftLayer layer) : base(null, layer, null,new EventAggregator(), new MoveLayerVertical())
             {
                 MovePermitted = true;
             }

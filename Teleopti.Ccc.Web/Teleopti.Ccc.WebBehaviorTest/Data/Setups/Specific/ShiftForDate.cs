@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -49,16 +50,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
-			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory));
+			var msLayers = new List<IMainShiftLayer>();
+			msLayers.Add(new MainShiftLayer(TestData.ActivityPhone, _assignmentPeriod));
 
 			// add lunch
 			if (_withLunch)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
-#pragma warning disable 612,618
-				assignment.ToMainShift().LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
-#pragma warning restore 612,618
+				msLayers.Add(new MainShiftLayer(TestData.ActivityLunch, lunchPeriod));
 			}
+
+			assignment.SetMainShiftLayers(msLayers, ShiftCategory);
+
 
 			assignmentRepository.Add(assignment);
 		}

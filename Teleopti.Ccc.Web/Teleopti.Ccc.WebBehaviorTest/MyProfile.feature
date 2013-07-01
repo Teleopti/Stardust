@@ -7,6 +7,7 @@
 		be able to change language
 		be able to change my password
 
+
 Scenario: See my profile
 	Given I am an agent
 	When I view my regional settings
@@ -30,9 +31,9 @@ Scenario: Change my language
 Scenario: Change my password
 	Given I am an agent
 	When I view my password
-	And I change my password
+	And I change my password to 'newP@ssw0rd'
 	And I sign out
-	And I sign in using my new password
+	And I sign in using my new password 'newP@ssw0rd'
 	Then I should be signed in
 
 Scenario: Incorrect current password when changing password

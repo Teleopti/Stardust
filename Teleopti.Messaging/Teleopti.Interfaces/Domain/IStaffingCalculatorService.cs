@@ -33,23 +33,25 @@ namespace Teleopti.Interfaces.Domain
         double AgentsFromUtilization(double theUtilization, double theCallsPerHour, double averageHandlingTime,
                                      TimeSpan periodLength);
 
-        /// <summary>
-        /// Agentses the use occupancy.
-        /// </summary>
-        /// <param name="sla">The sla.</param>
-        /// <param name="serviceTime">The service time.</param>
-        /// <param name="calls">The calls.</param>
-        /// <param name="averageHandlingTime">The avg HT.</param>
-        /// <param name="periodLength">Length of the period.</param>
-        /// <param name="minOccupancy">The min occ.</param>
-        /// <param name="maxOccupancy">The max occ.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-10
-        /// </remarks>
-        double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime,
-                                  TimeSpan periodLength, double minOccupancy, double maxOccupancy);
+	    /// <summary>
+	    /// Agentses the use occupancy.
+	    /// </summary>
+	    /// <param name="sla">The sla.</param>
+	    /// <param name="serviceTime">The service time.</param>
+	    /// <param name="calls">The calls.</param>
+	    /// <param name="averageHandlingTime">The avg HT.</param>
+	    /// <param name="periodLength">Length of the period.</param>
+	    /// <param name="minOccupancy">The min occ.</param>
+	    /// <param name="maxOccupancy">The max occ.</param>
+	    /// <param name="maxParallelTasks">only != 1 on chats</param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: micke
+	    /// Created date: 2008-01-10
+	    /// </remarks>
+	    double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime,
+                                TimeSpan periodLength, double minOccupancy, double maxOccupancy,
+								int maxParallelTasks);
 
         /// <summary>
         /// Services the level achived.

@@ -5,6 +5,7 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         {
             var builder = new ContainerBuilder();
 
-				var mbCacheModule = new MbCacheModule(null);
+				var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
@@ -169,8 +170,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             registerSdkFactories(builder);
 
             builder.RegisterType<LicenseCache>().As<ILicenseCache>();
-            builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<IMainShiftActivityLayer>>().InstancePerLifetimeScope();
-            builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<IPersonalShiftActivityLayer>>().InstancePerLifetimeScope();
+            builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<IMainShiftLayer>>().InstancePerLifetimeScope();
+            builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<IPersonalShiftLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
             builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 

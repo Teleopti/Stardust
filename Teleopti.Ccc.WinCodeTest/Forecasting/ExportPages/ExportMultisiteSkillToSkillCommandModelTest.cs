@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Interfaces.Domain;
 
@@ -36,9 +37,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             var multisiteSkillSelectionModel = new MultisiteSkillSelectionModel();
             
             multisiteSkillSelectionModel.MultisiteSkillModel = new MultisiteSkillModel(multisiteSkillGuid);
-            IChildSkill source = new ChildSkill("source", "desc", Color.Beige, 15, null);
+			IChildSkill source = new ChildSkill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             source.SetId(sourceSkillGuid);
-            ISkill selected = new Skill("source", "desc", Color.Beige, 15, null);
+			ISkill selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             selected.SetId(targetSkillGuid);
             var childSkillMappingModel = new ChildSkillMappingModel(sourceSkillGuid.GetValueOrDefault(),
                                                                     selected.Id.GetValueOrDefault(),

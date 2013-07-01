@@ -1,6 +1,7 @@
 using System.Data;
 using Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter
@@ -340,5 +341,14 @@ namespace Teleopti.Ccc.DatabaseConverter
         /// Created date: 2011-02-08
         /// </remarks>
         public ObjectPairCollection<global::Domain.AgentDay, IStudentAvailabilityDay> StudentAvailabilityDay { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Overtime availability.
+        /// </summary>
+        /// <value>The overtime availability.</value>
+        /// <remarks>
+        /// Created by: Asad m
+        /// </remarks>
+        public ObjectPairCollection<global::Domain.AgentDay, IOvertimeAvailability> OvertimeAvailability { get; set; }
     }
 }

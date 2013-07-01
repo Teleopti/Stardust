@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.Envers;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -52,12 +52,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
-		public void ShouldFindRevisionForDeletedAssignment()
+		public void ShouldFindRevisionForModifiedAssignment()
 		{
 			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				Repository.Remove(PersonAssignment);
+				uow.Reassociate(PersonAssignment);
+				var layers = new List<IMainShiftLayer>(PersonAssignment.MainLayers);
+				layers.Add((IMainShiftLayer) layers[0].NoneEntityClone());
+				PersonAssignment.SetMainShiftLayers(layers, PersonAssignment.ShiftCategory);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -68,13 +71,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
-		public void ShouldFindRevisionForModifiedAbsence()
+		public void ShouldFindRevisionForDeletedAbsence()
 		{
 			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(PersonAbsence);
-				PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
+				Repository.Remove(PersonAbsence);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -221,15 +223,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(PersonAbsence);
-				PersonAbsence.Layer.MoveLayer(TimeSpan.FromHours(1));
+				var nu = DateTime.UtcNow.Date;
+				var newAbsence = new PersonAbsence(Agent, Scenario,
+				                                   new AbsenceLayer(PersonAbsence.Layer.Payload,
+				                                                    new DateTimePeriod(nu.AddDays(3), nu.AddDays(4))));
+				Repository.Add(newAbsence);
 				uow.PersistAll();
 			}
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				target.FindRevisions(Agent, new DateOnly(Today), 1)
-					.Should().Have.SameSequenceAs(new Revision { Id = revisionNumberAfterOneUnitTestModification });
+					.Should().Have.SameSequenceAs(new Revision { Id = revisionNumberAtSetupStart });
 			}
 		}
 

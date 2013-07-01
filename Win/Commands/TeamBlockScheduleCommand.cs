@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly IBlockSteadyStateValidator _blockSteadyStateValidator;
+		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
@@ -63,7 +64,8 @@ namespace Teleopti.Ccc.Win.Commands
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
 			IBlockSteadyStateValidator blockSteadyStateValidator,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
+			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -83,6 +85,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_blockSteadyStateValidator = blockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
+			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -186,7 +189,8 @@ namespace Teleopti.Ccc.Win.Commands
 									   _restrictionAggregator,
 									   _workShiftFilterService, 
 									   teamScheduling,
-									   _workShiftSelector);
+									   _workShiftSelector,
+									   _openHoursToEffectiveRestrictionConverter);
 
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,

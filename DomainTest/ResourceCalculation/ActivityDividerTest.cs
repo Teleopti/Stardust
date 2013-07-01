@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _testContainer = PersonAssignmentFactory.CreatePersonAssignmentListForActivityDividerTest();
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_testContainer.ContainedSkills);
             _target = new ActivityDivider();
+			
         }
 
         [Test]

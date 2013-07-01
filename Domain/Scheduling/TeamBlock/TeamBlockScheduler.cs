@@ -20,19 +20,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private bool _cancelMe;
 
 		public TeamBlockScheduler(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 			IRestrictionAggregator restrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			ITeamScheduling teamScheduling,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter)
 		{
 			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_restrictionAggregator = restrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
 			_workShiftSelector = workShiftSelector;
+			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -183,6 +186,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (teamBlockInfo == null) return null;
             
             var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+		    if (restriction == null)
+			    return null;
+
+			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
+		    var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+		    restriction = restriction.Combine(openHourRestriction);
 
             // (should we cover for max seats here?) 
             var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
@@ -190,7 +199,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (shifts == null || shifts.Count <= 0)
                 return null;
 
-            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 
             var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                          schedulingOptions

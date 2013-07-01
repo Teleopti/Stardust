@@ -1,5 +1,6 @@
 ﻿using System;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Messages.Denormalize;
 

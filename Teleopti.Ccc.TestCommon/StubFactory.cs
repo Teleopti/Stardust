@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -15,30 +16,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class StubFactory
 	{
-		public IBusinessUnit BusinessUnitStub(string name)
-		{
-			var id = Guid.NewGuid();
-			var businessUnit = MockRepository.GenerateStub<IBusinessUnit>();
-			businessUnit.Stub(x => x.Id).Return(id);
-			businessUnit.Name = name;
-			return businessUnit;
-		}
-
-		public IPerson PersonStub()
-		{
-			var id = Guid.NewGuid();
-			var person = MockRepository.GenerateStub<IPerson>();
-			person.Stub(x => x.Id).Return(id);
-			return person;
-		}
-
-		public IDataSource DataSourceStub(string name)
-		{
-			var dataSource = MockRepository.GenerateStub<IDataSource>();
-			dataSource.Stub(x => x.DataSourceName).Return(name);
-			return dataSource;
-		}
-
 		public IScheduleDay ScheduleDayStub()
 		{
 			return ScheduleDayStub(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
@@ -90,10 +67,6 @@ namespace Teleopti.Ccc.TestCommon
 			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, new[] { personAbsence }, null);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonMeeting personMeeting)
-		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, null, null, new[] {personMeeting}, null);
-		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
 		{
@@ -190,8 +163,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IAbsenceLayer AbsenceLayerStub(IAbsence absence)
 		{
-			var absenceLayer = MockRepository.GenerateStub<IAbsenceLayer>();
-			absenceLayer.Payload = absence;
+			var absenceLayer = MockRepository.GenerateMock<IAbsenceLayer>();
+			absenceLayer.Expect(x => x.Payload).Return(absence);
 			return absenceLayer;
 		}
 
@@ -230,34 +203,10 @@ namespace Teleopti.Ccc.TestCommon
 		public IPersonAssignment PersonAssignmentPersonalShiftStub()
 		{
 			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
-			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
-				new ReadOnlyCollection<IPersonalShift>(new[] {personalShift}));
+			personAssignment.Stub(x => x.PersonalLayers).Return(Enumerable.Empty<IPersonalShiftLayer>());
 			return personAssignment;
 		}
 
-		public IPersonAssignment PersonAssignmentPersonalShiftStub(IPersonalShiftActivityLayer activity)
-		{
-			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
-			var layers = new LayerCollection<IActivity> {activity};
-			personalShift.Stub(x => x.LayerCollection).Return(layers);
-			personAssignment.Stub(x => x.Person).Return(new Person());
-			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
-				new ReadOnlyCollection<IPersonalShift>(new[] { personalShift }));
-			return personAssignment;
-		}
-
-		public IPersonAssignment PersonAssignmentOvertimeStub()
-		{
-			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			var overtimeShift = MockRepository.GenerateStub<IOvertimeShift>();
-			personAssignment.Stub(x => x.OvertimeShiftCollection).Return(
-				new ReadOnlyCollection<IOvertimeShift>(new[] { overtimeShift }));
-			return personAssignment;
-		}
-
-		public IShiftCategory ShiftCategoryStub() { return ShiftCategoryStub(Color.Black); }
 
 		public IShiftCategory ShiftCategoryStub(Color color)
 		{
@@ -306,14 +255,11 @@ namespace Teleopti.Ccc.TestCommon
 					});
 		}
 
-		public IVisualLayer VisualLayerStub() { return VisualLayerStub(Color.Transparent); }
-
 		public IVisualLayer VisualLayerStub(Color displayColor)
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayColor()).Return(displayColor);
-			visualLayer.Stub(x => x.Period).PropertyBehavior();
-			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
+			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			return visualLayer;
 		}
 
@@ -321,8 +267,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayDescription()).Return(new Description(activtyName));
-			visualLayer.Stub(x => x.Period).PropertyBehavior();
-			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
+			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			return visualLayer;
 		}
 

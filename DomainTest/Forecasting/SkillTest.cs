@@ -705,5 +705,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			ISkill maxSeatSkill = SkillFactory.CreateSiteSkill("poff");
 			target.AddAggregateSkill(maxSeatSkill);
 		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ShouldThrowIfMaxParallelTasksIsZero()
+		{
+			target.MaxParallelTasks = 0;
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void ShouldThrowIfMaxParallelTasksIsBiggerThanHundred()
+		{
+			target.MaxParallelTasks = 101;
+		}
     }
 }

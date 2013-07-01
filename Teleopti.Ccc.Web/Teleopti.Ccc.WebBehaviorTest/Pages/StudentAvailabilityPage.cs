@@ -5,13 +5,9 @@ using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class StudentAvailabilityPage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
+	public class StudentAvailabilityPage : CalendarCellsPage, IDateRangeSelector
 	{
-		[FindBy(Id = "Availability-edit-button")]
-		public Button EditButton;
-		[FindBy(Id = "Availability-delete-button")]
-		public Button DeleteButton { get; set; }
-
+		
 		[FindBy(Id = "qtip-edit-student-availability")]
 		public Div EditStudentAvailabilityPanel;
 		[FindBy(Id = "Student-availability-start-time")]
@@ -37,12 +33,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#AvailabilityDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".navbar-inner .icon-arrow-right");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#AvailabilityDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".navbar-inner .icon-arrow-left");
 		}
 
 	}

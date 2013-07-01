@@ -1,14 +1,10 @@
 using System;
 using System.Linq;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -71,6 +67,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAvailability(date);
+		}
+
+		[When(@"I am viewing the performance view")]
+		public void WhenIAmViewingThePerformanceView()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToPerformanceTool();
 		}
 
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
@@ -166,8 +169,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
-
-
 
 
 

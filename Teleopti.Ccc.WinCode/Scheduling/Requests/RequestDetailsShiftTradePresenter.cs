@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		private readonly IDictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>> _projectionCache =
 			new Dictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>>();
-		private DateTime _currentDate;
 		private IList<DateTimePeriod> _currentPeriods;
 		private IList<ContactPersonViewModel> _participantList;
 		private ReadOnlyCollection<IShiftTradeSwapDetail> _shiftTradeSwapDetails;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void Initialize()
 		{
-			_currentDate = TimeZoneHelper.ConvertFromUtc(_personRequestViewModel.PersonRequest.RequestedDate);
 			var shiftTradeRequest = _personRequestViewModel.PersonRequest.Request as IShiftTradeRequest;
 			if(shiftTradeRequest != null)
 				_shiftTradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
@@ -126,7 +124,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 				{
 					if ((j + 1) < periodList.Count)
 					{
-						if (periodList[j + 1].AdjacentTo(periodList[j]))
+						if (periodList[j + 1].Period.AdjacentTo(periodList[j].Period))
 						{
 							periodListWithAdjacentLayers.Add(periodList[j + 1]);
 						}
@@ -156,13 +154,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		public ReadOnlyCollection<ContactPersonViewModel> ParticipantList
 		{
 			get{return _participantList != null ? new ReadOnlyCollection<ContactPersonViewModel>(_participantList) : null;}
-		}
-
-		public DateTime CurrentDate
-		{
-			get {
-				return _currentDate;
-			}
 		}
 
 		private static DateTimePeriod GetMergedPeriod(IEnumerable<IVisualLayer> visualLayers)

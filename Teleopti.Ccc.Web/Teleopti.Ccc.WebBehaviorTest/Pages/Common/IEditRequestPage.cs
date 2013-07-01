@@ -5,13 +5,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	public interface IEditRequestPage
 	{
 		Span AddRequestDropDown { get; }
-		Link AddShiftTradeRequestMenuItem { get; }
 		Link AddTextRequestMenuItem { get; }
-		Link AddAbsenceRequestMenuItem { get; }
 		Div RequestDetailSection { get; }
 		Span TextRequestTab { get; }
 		Span AbsenceRequestTab { get; }
-		Div AbsenceTypesElement { get; }
 		TextField AbsenceTypesTextField { get; }
 		SelectList AbsenceTypesSelectList { get; }
 		CheckBox FulldayCheck { get; }

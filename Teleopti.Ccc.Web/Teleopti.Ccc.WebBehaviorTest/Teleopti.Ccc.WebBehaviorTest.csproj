@@ -87,6 +87,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
+    <Compile Include="PerformanceTool\PerformanceView.feature.cs">
+      <DependentUpon>PerformanceView.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -134,11 +140,7 @@
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs">
-      <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PreferenceTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
@@ -367,7 +369,6 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
@@ -393,7 +394,6 @@
     </Compile>
     <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
@@ -488,7 +488,6 @@
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
-    <Compile Include="Pages\Common\IDeleteButton.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
     <Compile Include="Core\Extensions\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
@@ -581,6 +580,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="PerformanceTool\PerformanceView.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RemoveAbsence.feature.cs</LastGenOutput>

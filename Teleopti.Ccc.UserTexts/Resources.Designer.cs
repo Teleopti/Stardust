@@ -970,6 +970,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Overtime Availability....
+        /// </summary>
+        public static string AddOvertimeAvailabilityThreeDots {
+            get {
+                return ResourceManager.GetString("AddOvertimeAvailabilityThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Part-time percentage definition.
         /// </summary>
         public static string AddPartTimePercentage {
@@ -1907,6 +1916,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answered chats.
+        /// </summary>
+        public static string AnsweredChats {
+            get {
+                return ResourceManager.GetString("AnsweredChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answered contacts.
         /// </summary>
         public static string AnsweredContacts {
@@ -2667,6 +2685,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average chats.
+        /// </summary>
+        public static string AverageChats {
+            get {
+                return ResourceManager.GetString("AverageChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average Customers.
         /// </summary>
         public static string AverageCustomers {
@@ -3306,6 +3333,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculated chats.
+        /// </summary>
+        public static string CalculatedChats {
+            get {
+                return ResourceManager.GetString("CalculatedChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculated customers.
         /// </summary>
         public static string CalculatedCustomers {
@@ -3446,6 +3482,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignCallsPercentSign {
             get {
                 return ResourceManager.GetString("CampaignCallsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign chats %.
+        /// </summary>
+        public static string CampaignChatsPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignChatsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign chat time %.
+        /// </summary>
+        public static string CampaignChatTimePercentSign {
+            get {
+                return ResourceManager.GetString("CampaignChatTimePercentSign", resourceCulture);
             }
         }
         
@@ -3954,6 +4008,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ChartViews {
             get {
                 return ResourceManager.GetString("ChartViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chat.
+        /// </summary>
+        public static string Chat {
+            get {
+                return ResourceManager.GetString("Chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chats.
+        /// </summary>
+        public static string Chats {
+            get {
+                return ResourceManager.GetString("Chats", resourceCulture);
             }
         }
         
@@ -6511,6 +6583,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deviation chats:.
+        /// </summary>
+        public static string DeviationChatsColon {
+            get {
+                return ResourceManager.GetString("DeviationChatsColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deviation customers:.
         /// </summary>
         public static string DeviationCustomersColon {
@@ -8663,6 +8744,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecasted chats.
+        /// </summary>
+        public static string ForecastedChats {
+            get {
+                return ResourceManager.GetString("ForecastedChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecasted customers.
         /// </summary>
         public static string ForecastedCustomers {
@@ -9978,6 +10068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Index chats.
+        /// </summary>
+        public static string IndexChats {
+            get {
+                return ResourceManager.GetString("IndexChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index customers.
         /// </summary>
         public static string IndexCustomers {
@@ -11175,6 +11274,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local time.
+        /// </summary>
+        public static string LocalTime {
+            get {
+                return ResourceManager.GetString("LocalTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string Location {
@@ -12054,6 +12162,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MaxMoveDayPerPersonPerIteration {
             get {
                 return ResourceManager.GetString("MaxMoveDayPerPersonPerIteration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Parallel Tasks:.
+        /// </summary>
+        public static string MaxParallelTasks {
+            get {
+                return ResourceManager.GetString("MaxParallelTasks", resourceCulture);
             }
         }
         
@@ -14869,6 +14986,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Offered chats.
+        /// </summary>
+        public static string OfferedChats {
+            get {
+                return ResourceManager.GetString("OfferedChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customers.
         /// </summary>
         public static string OfferedCustomers {
@@ -15536,6 +15662,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original offered chats.
+        /// </summary>
+        public static string OriginalOfferedChats {
+            get {
+                return ResourceManager.GetString("OriginalOfferedChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original customers.
         /// </summary>
         public static string OriginalOfferedCustomers {
@@ -15739,6 +15874,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Overtime {
             get {
                 return ResourceManager.GetString("Overtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overtime Availability.
+        /// </summary>
+        public static string OvertimeAvailability {
+            get {
+                return ResourceManager.GetString("OvertimeAvailability", resourceCulture);
             }
         }
         
@@ -17117,6 +17261,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previously saved overtime availability:.
+        /// </summary>
+        public static string PreviousSavedOvertimeAvailabilityColon {
+            get {
+                return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
@@ -17994,7 +18147,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not send request for the requested period this time..
         /// </summary>
         public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
             get {
@@ -18003,7 +18156,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Workflow Control Set defined!.
+        ///   Looks up a localized string similar to Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}..
+        /// </summary>
+        public static string RequestDenyReasonNoPeriod {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonNoPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No workflow control set defined..
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {
             get {
@@ -18021,7 +18183,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
+        ///   Looks up a localized string similar to Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}..
         /// </summary>
         public static string RequestDenyReasonPeriodOpenAfterSendRequest {
             get {
@@ -18179,6 +18341,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestStatusDtoApproved {
             get {
                 return ResourceManager.GetString("RequestStatusDtoApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denied.
+        /// </summary>
+        public static string RequestStatusDtoAutodenied {
+            get {
+                return ResourceManager.GetString("RequestStatusDtoAutodenied", resourceCulture);
             }
         }
         
@@ -18467,6 +18638,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportAgentStatistics {
             get {
                 return ResourceManager.GetString("ResReportAgentStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Availability Per Agent.
+        /// </summary>
+        public static string ResReportAvailabilityPerAgent {
+            get {
+                return ResourceManager.GetString("ResReportAvailabilityPerAgent", resourceCulture);
             }
         }
         
@@ -19047,7 +19227,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Same shift.
+        ///   Looks up a localized string similar to Same Shift.
         /// </summary>
         public static string SameShift {
             get {
@@ -21550,6 +21730,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chat.
+        /// </summary>
+        public static string SkillTypeChat {
+            get {
+                return ResourceManager.GetString("SkillTypeChat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E-mail.
         /// </summary>
         public static string SkillTypeEmail {
@@ -23559,6 +23748,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total chats.
+        /// </summary>
+        public static string TotalChats {
+            get {
+                return ResourceManager.GetString("TotalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total chat time.
+        /// </summary>
+        public static string TotalChatTime {
+            get {
+                return ResourceManager.GetString("TotalChatTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total:.
         /// </summary>
         public static string TotalColon {
@@ -24549,6 +24756,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validated chats.
+        /// </summary>
+        public static string ValidatedChats {
+            get {
+                return ResourceManager.GetString("ValidatedChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validated customers.
         /// </summary>
         public static string ValidatedCustomers {
@@ -24662,6 +24878,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View active agents.
+        /// </summary>
+        public static string ViewActiveAgents {
+            get {
+                return ResourceManager.GetString("ViewActiveAgents", resourceCulture);
             }
         }
         

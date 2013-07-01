@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -8,14 +9,13 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
-		private static readonly string newPassword = TestData.CommonPassword + "newP@ssw0rd";
-
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoPasswordPage();
 		}
 
-		[When(@"I change my password")]
-		public void WhenIChangeMyPassword()
+		[When(@"I change my password to '(.*)'")]
+		public void WhenIChangeMyPassword(string newPassword)
 		{
 			var page = Browser.Current.Page<PasswordPage>();
 			page.Password.Value = newPassword;
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = newPassword;
-			page.PasswordValidation.Value = newPassword;
+			page.Password.Value = "newP@ssw0rd";
+			page.PasswordValidation.Value = "newP@ssw0rd";
 			page.OldPassword.Value = TestData.CommonPassword + "fel";
 			Browser.Current.Eval("$('input#password').keyup();");
 			page.ConfirmButton.EventualClick();
@@ -75,36 +75,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIAmChangingPasswordUsingIncorrectConfirmPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = newPassword;
-			page.PasswordValidation.Value = newPassword + "fel";
+			page.Password.Value = "newP@ssw0rd";
+			page.PasswordValidation.Value = "newP@ssw0rd" +"fel";
 			page.OldPassword.Value = TestData.CommonPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
 		}
-
-		[When(@"I sign in using my new password")]
-		public void WhenISignInUsingMyNewPassword()
-		{
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			var signInpage = Browser.Current.Page<SignInPage>();
-			signInpage.SelectApplicationTestDataSource();
-			signInpage.SignInApplication(userName, newPassword);
-		}
-
 
 		[Then(@"I should see my culture")]
 		public void ThenIShouldSeeMyCulture()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureUiSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]
@@ -131,12 +119,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ChangeUiCulture(UserTexts.Resources.BrowserDefault);
 		}
 
-		[Then(@"I should see US date format")]
+		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			Navigation.GotoTeamSchedule();
-			var page = Browser.Current.Page<TeamSchedulePage>();
-			EventualAssert.That(() => page.DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
+			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
+			                                                DateTime.Today.ToShortDateString()));
 		}
 
 
@@ -177,20 +165,34 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void ChangeCulture(string culture)
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureSelect.Select(culture);
+
+			IOpenTheCulturePicker();
+			Select2Box.SelectItemByText("Culture-Picker", culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
 		}
 
 		private static void ChangeUiCulture(string culture)
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureUiSelect.Select(culture);
+
+			IOpenTheCultureUiPicker();
+			Select2Box.SelectItemByText("CultureUi-Picker", culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
+		}
+
+		private static void IOpenTheCultureUiPicker()
+		{
+			Select2Box.OpenWhenOptionsAreLoaded("CultureUi-Picker");
+		}
+
+		private static void IOpenTheCulturePicker()
+		{
+			Select2Box.OpenWhenOptionsAreLoaded("Culture-Picker");
 		}
 
 	}

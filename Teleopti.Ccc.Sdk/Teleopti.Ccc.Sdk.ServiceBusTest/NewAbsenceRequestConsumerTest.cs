@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -59,8 +58,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
     	private IScheduleRange _scheduleRange;
         private IValidatedRequest _validatedRequest;
+        private ILoadSchedulesForRequestWithoutResourceCalculation _loaderWithoutResourceCalculation;
 
-    	[SetUp]
+        [SetUp]
         public void Setup()
         {
             _mockRepository = new MockRepository();
@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             
             _alreadyAbsentSpecification = _mockRepository.DynamicMock<IAlreadyAbsentSpecification>();
             _loader = _mockRepository.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
+            _loaderWithoutResourceCalculation = _mockRepository.DynamicMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
             _budgetGroupAllowanceSpecification = _mockRepository.StrictMock<IBudgetGroupAllowanceSpecification>();
     	    _budgetGroupAllowanceCalculator = _mockRepository.DynamicMock<IBudgetGroupAllowanceCalculator>();
     	    _budgetGroupHeadCountSpecification = _mockRepository.DynamicMock<IBudgetGroupHeadCountSpecification>();
@@ -90,13 +91,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.Any();
             _target = new NewAbsenceRequestConsumer(_scheduleRepository, _personAbsenceAccountProvider,
                                                     _scenarioRepository, _personRequestRepository,
-                                                    _schedulingResultStateHolder, _merger,
-                                                    _factory, _scheduleDictionarySaver,
-                                                    _scheduleIsInvalidSpecification, _authorization,
-													_scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, 
-                                                    _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _alreadyAbsentSpecification, 
-                                                    _budgetGroupAllowanceCalculator, _budgetGroupHeadCountSpecification
-                                                    );
+                                                    _schedulingResultStateHolder, _merger, _factory,
+                                                    _scheduleDictionarySaver, _scheduleIsInvalidSpecification,
+                                                    _authorization, _scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, 
+                                                    _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _loaderWithoutResourceCalculation, _alreadyAbsentSpecification, 
+                                                    _budgetGroupAllowanceCalculator, _budgetGroupHeadCountSpecification);
         }
 
         private void CreateServices()
@@ -201,8 +200,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
-            
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson>{_person});
+
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -220,7 +219,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 PrepareUnitOfWork(true);
                 PrepareAbsenceRequest();
 				ExpectLoadOfSchedules();
-				ExpectPersistOfDictionary();
 				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _person)).Return(
                     new List<IBusinessRuleResponse>());
                 Expect.Call(_personAbsenceAccountProvider.Find(_person)).Return(personAccountCollection);
@@ -235,16 +233,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
                     IgnoreArguments().
                     Return(periodList);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
+                Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(
                     processAbsenceRequest);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null,null, null, null))
-                    .IgnoreArguments().Return(validatorList);
+                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
-                Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
 
-                processAbsenceRequest.Process(null, _absenceRequest, _authorization, validatorList);
+                Expect.Call(()=>processAbsenceRequest.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList)).IgnoreArguments();
                 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             }
@@ -263,7 +258,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -296,20 +291,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
                     IgnoreArguments().
                     Return(periodList);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-                    processAbsenceRequest);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null, null))
-                    .IgnoreArguments().Return(validatorList);
+                Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
-                Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
-                Expect.Call(absenceRequestValidator.Validate(_absenceRequest)).Return(_validatedRequest);  //true;
+                Expect.Call(absenceRequestValidator.Validate(_absenceRequest, new RequiredForHandlingAbsenceRequest())).IgnoreArguments().Return(_validatedRequest);
                 Expect.Call(_absenceRequest.Parent).Return(_personRequest);
                 Expect.Call(_personRequest.Pending);
 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
-                ExpectPersistOfDictionary();
             }
             using (_mockRepository.Playback())
             {
@@ -322,11 +312,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			SetupAuthorizationAndDataSource();
 
-			IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
+			IProcessAbsenceRequest processAbsenceRequest = new GrantAbsenceRequest();
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -357,21 +347,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
 					IgnoreArguments().
 					Return(periodList);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-					processAbsenceRequest);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null, null))
-					.IgnoreArguments().Return(validatorList);
+				Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
 				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
 					_requestApprovalService);
-				Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
-				Expect.Call(absenceRequestValidator.Validate(_absenceRequest)).Return(_validatedRequest); //true;
 				Expect.Call(_absenceRequest.Parent).Return(_personRequest);
-				Expect.Call(_personRequest.Pending);
 				Expect.Call(_alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest)).Return(true);
-				Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
 				ExpectLoadOfSchedules();
-				ExpectPersistOfDictionary();
 			}
 			using (_mockRepository.Playback())
 			{
@@ -388,7 +370,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -419,19 +401,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
 					IgnoreArguments().
 					Return(periodList);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-					processAbsenceRequest);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null, null))
-					.IgnoreArguments().Return(validatorList);
+				Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
 
-				processAbsenceRequest.Process(null, _absenceRequest, _authorization, validatorList);
+			    Expect.Call(
+			        () =>
+			        processAbsenceRequest.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(),
+			                                      new RequiredForHandlingAbsenceRequest(), validatorList)).IgnoreArguments();
 
 				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
 					_requestApprovalService);
 				Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
-				Expect.Call(_personRequest.IsApproved).Return(true);
-				Expect.Call(_alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest)).Return(true);
+			    Expect.Call(_personRequest.IsApproved).Return(true).Repeat.Twice();
+				Expect.Call(_alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest)).Return(false);
 				ExpectLoadOfSchedules();
 				ExpectPersistOfDictionary();
 				Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scheduleRange, _dateOnlyPeriod));
@@ -452,7 +434,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-			_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
 			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
 			var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -483,20 +465,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
 					IgnoreArguments().
 					Return(periodList);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-					processAbsenceRequest);
-				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null, null))
-					.IgnoreArguments().Return(validatorList);
+				Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
 				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
 					_requestApprovalService);
-				Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
 				Expect.Call(_absenceRequest.Parent).Return(_personRequest);
-				//Expect.Call(()=>_personRequest.Deny(null, "RequestDenyReasonAlreadyAbsent", _authorization));
 				Expect.Call(_alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest)).Return(true);
-				Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
 				ExpectLoadOfSchedules();
-				ExpectPersistOfDictionary();
 			}
 			using (_mockRepository.Playback())
 			{
@@ -513,7 +488,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
 
-            _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
             var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
 
             var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
@@ -546,19 +521,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
                     IgnoreArguments().
                     Return(periodList);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-                    processAbsenceRequest);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null, null))
-                    .IgnoreArguments().Return(validatorList);
+                Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
                 
-                processAbsenceRequest.Process(null, _absenceRequest, _authorization, validatorList);
+                Expect.Call(()=>processAbsenceRequest.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList)).IgnoreArguments();
 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
 				Expect.Call(_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes)).Throw(new ValidationException());
+                Expect.Call(_personRequest.IsApproved).Return(true);
             }
             using (_mockRepository.Playback())
             {
@@ -589,7 +562,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				ExpectPersistOfDictionary();
 				ExpectLoadOfSchedules();
 
-                _loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> {_person});
+                _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
                 Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _person)).Return(
                     new List<IBusinessRuleResponse>());
 
@@ -605,17 +578,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
                     IgnoreArguments().
                     Return(periodList);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
-                    processAbsenceRequest);
-                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null, null))
-                    .IgnoreArguments().Return(validatorList);
+                Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
 
-                processAbsenceRequest.Process(null, _absenceRequest, _authorization, validatorList);
-
+                Expect.Call(()=>processAbsenceRequest.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList)).IgnoreArguments();
+                Expect.Call(_personRequest.IsApproved).Return(true).Repeat.Twice();
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
+                Expect.Call(_unitOfWork.PersistAll()).Return(null);
+                Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scheduleRange, _dateOnlyPeriod));
             }
             using (_mockRepository.Playback())
             {
@@ -641,22 +613,53 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         }
 
         [Test]
-        public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()
+        public void ShouldStillDenyIfScheduleIsInvalid()
         {
             SetupAuthorizationAndDataSource();
-            
-            _person.WorkflowControlSet = null;
-            
+
+            IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
+            IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
+            IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
+
+            _loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+            var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
+
+            var absenceRequestOpenDatePeriod = _mockRepository.StrictMock<IAbsenceRequestOpenPeriod>();
+            var openAbsenceRequestPeriodExtractor = _mockRepository.StrictMock<IOpenAbsenceRequestPeriodExtractor>();
+            var openAbsenceRequestPeriodProjection = _mockRepository.StrictMock<IOpenAbsenceRequestPeriodProjection>();
+            var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
+            IPersonAbsenceAccount personAbsenceAccount = new PersonAbsenceAccount(_person, _absence);
+            var personAbsenceAccountList = new List<IPersonAbsenceAccount>
+                                               {
+                                                   personAbsenceAccount
+                                               };
+
             using (_mockRepository.Record())
             {
                 PrepareUnitOfWork(true);
                 PrepareAbsenceRequest();
-				ExpectPersistOfDictionary();
-				ExpectLoadOfSchedules();
+                ExpectLoadOfSchedules();
+                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _person)).Return(
+                    new List<IBusinessRuleResponse>());
+                Expect.Call(_personAbsenceAccountProvider.Find(_person)).Return(personAccountCollection);
+                Expect.Call(personAccountCollection.GetEnumerator()).Return(personAbsenceAccountList.GetEnumerator()).
+                    Repeat.Any();
+                Expect.Call(personAccountCollection.Find(_absence)).Return(personAbsenceAccount);
+                Expect.Call(_merger.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+                Expect.Call(_workflowControlSet.GetExtractorForAbsence(_absence)).Return(
+                    openAbsenceRequestPeriodExtractor);
+                openAbsenceRequestPeriodExtractor.ViewpointDate = DateOnly.Today;
+                Expect.Call(openAbsenceRequestPeriodExtractor.Projection).Return(openAbsenceRequestPeriodProjection);
+                Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
+                    IgnoreArguments().
+                    Return(periodList);
+                Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(
+                    processAbsenceRequest);
+                Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
+                Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
+                    _requestApprovalService);
 
-            	_loader.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> {_person});
-                Expect.Call(_absenceRequest.Parent).Return(_personRequest);
-                //_personRequest.Deny(null, "RequestDenyReasonNoWorkflow", _authorization);
+                Expect.Call(() => processAbsenceRequest.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList)).IgnoreArguments();
 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             }
@@ -667,7 +670,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         }
 
         [Test]
-        public void ShouldStillDenyIfScheduleIsInvalid()
+        public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()
         {
             SetupAuthorizationAndDataSource();
 
@@ -677,15 +680,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             {
                 PrepareUnitOfWork(true);
                 PrepareAbsenceRequest();
-				ExpectPersistOfDictionary();
 				ExpectLoadOfSchedules();
 
-                _loader.Execute(_scenario,  _period.ChangeStartTime(TimeSpan.FromDays(-1)),
-                                                                    new List<IPerson> { _person });
                 Expect.Call(_absenceRequest.Parent).Return(_personRequest);
-                //_personRequest.Deny(null, "RequestDenyReasonNoWorkflow", _authorization);
-
-                Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
             }
             using (_mockRepository.Playback())
             {

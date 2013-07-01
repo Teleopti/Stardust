@@ -76,13 +76,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			if (schedulePart.PersonAssignmentCollection().Count > 0)
 			{
-				foreach (IPersonalShift personalShift in schedulePart.PersonAssignmentCollection()[0].PersonalShiftCollection)
+				foreach (var layer in schedulePart.PersonAssignmentCollection()[0].PersonalLayers)
 				{
-					if (!period.HasValue && personalShift.LayerCollection.Period().HasValue)
-						period = personalShift.LayerCollection.Period().Value;
-					if (personalShift.LayerCollection.Period().HasValue)
-						if (period != null)
-							period = period.Value.MaximumPeriod(personalShift.LayerCollection.Period().Value);
+					if (!period.HasValue)
+						period = layer.Period;
+					else
+						period = period.Value.MaximumPeriod(layer.Period);
 				}
 			}
 			return period;

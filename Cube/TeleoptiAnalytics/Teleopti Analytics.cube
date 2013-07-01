@@ -315,7 +315,7 @@
             </layoutobject>
             <shape groupshapeid="0" groupnode="0" />
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="-25394" top="20849" logicalid="217" controlid="23" masterid="0" hint1="0" hint2="0" width="164468" height="1134" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="-25394" top="21184" logicalid="217" controlid="23" masterid="0" hint1="0" hint2="0" width="164468" height="1915" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -328,11 +328,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="10" destid="22" sourceattachpoint="11" destattachpoint="24" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="10" destid="22" sourceattachpoint="11" destattachpoint="30" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="-25094" y="21583" />
               <point x="56840" y="21583" />
-              <point x="56840" y="21149" />
-              <point x="138774" y="21149" />
+              <point x="56840" y="22799" />
+              <point x="138774" y="22799" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="-25394" top="20299" logicalid="218" controlid="24" masterid="0" hint1="0" hint2="0" width="164468" height="1684" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -556,7 +556,7 @@
             </layoutobject>
             <shape groupshapeid="0" groupnode="0" />
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="172142" top="16456" logicalid="235" controlid="41" masterid="0" hint1="0" hint2="0" width="3723" height="34310" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="172142" top="16456" logicalid="235" controlid="41" masterid="0" hint1="0" hint2="0" width="3723" height="34860" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -569,9 +569,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="40" sourceattachpoint="20" destattachpoint="13" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="175565" y="50366" />
-              <point x="174004" y="50366" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="40" sourceattachpoint="22" destattachpoint="13" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="175565" y="50916" />
+              <point x="174004" y="50916" />
               <point x="174004" y="16756" />
               <point x="172442" y="16756" />
             </connector>
@@ -1231,7 +1231,7 @@
               <point x="56080" y="40286" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="58003" top="44136" logicalid="273" controlid="79" masterid="0" hint1="0" hint2="0" width="117862" height="6080" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="58003" top="44136" logicalid="273" controlid="79" masterid="0" hint1="0" hint2="0" width="117862" height="6630" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -1244,9 +1244,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="74" sourceattachpoint="18" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="175565" y="49816" />
-              <point x="116934" y="49816" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="74" sourceattachpoint="20" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="175565" y="50366" />
+              <point x="116934" y="50366" />
               <point x="116934" y="44436" />
               <point x="58303" y="44436" />
             </connector>
@@ -1776,8 +1776,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="110" destid="111" sourceattachpoint="12" destattachpoint="1" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="-6237" y="2620" />
-              <point x="-6237" y="808" />
-              <point x="-6268" y="808" />
+              <point x="-6237" y="1416" />
+              <point x="-6268" y="1416" />
               <point x="-6268" y="212" />
             </connector>
           </ddscontrol>
@@ -1796,8 +1796,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="111" sourceattachpoint="16" destattachpoint="23" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="80598" y="63315" />
-              <point x="42323" y="63315" />
-              <point x="42323" y="-263" />
+              <point x="39002" y="63315" />
+              <point x="39002" y="-263" />
               <point x="-2594" y="-263" />
             </connector>
           </ddscontrol>
@@ -1827,8 +1827,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="110" destid="114" sourceattachpoint="17" destattachpoint="18" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="-5704" y="3470" />
-              <point x="-2852" y="3470" />
-              <point x="-2852" y="2480" />
+              <point x="257" y="3470" />
+              <point x="257" y="2480" />
               <point x="6218" y="2480" />
             </connector>
           </ddscontrol>
@@ -1847,8 +1847,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="114" sourceattachpoint="10" destattachpoint="19" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="80598" y="61665" />
-              <point x="41953" y="61665" />
-              <point x="41953" y="2480" />
+              <point x="45062" y="61665" />
+              <point x="45062" y="2480" />
               <point x="9525" y="2480" />
             </connector>
           </ddscontrol>
@@ -1863,7 +1863,7 @@
             </layoutobject>
             <shape groupshapeid="0" groupnode="0" />
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="-6004" top="2521" logicalid="312" controlid="118" masterid="0" hint1="0" hint2="0" width="12522" height="4345" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="-6004" top="3621" logicalid="312" controlid="118" masterid="0" hint1="0" hint2="0" width="12522" height="3245" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -1876,10 +1876,10 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="110" destid="117" sourceattachpoint="15" destattachpoint="18" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="-5704" y="2920" />
-              <point x="-2852" y="2920" />
-              <point x="-2852" y="6566" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="110" destid="117" sourceattachpoint="19" destattachpoint="18" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="-5704" y="4020" />
+              <point x="257" y="4020" />
+              <point x="257" y="6566" />
               <point x="6218" y="6566" />
             </connector>
           </ddscontrol>
@@ -1898,8 +1898,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="117" sourceattachpoint="10" destattachpoint="19" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="80598" y="61665" />
-              <point x="41953" y="61665" />
-              <point x="41953" y="6566" />
+              <point x="45062" y="61665" />
+              <point x="45062" y="6566" />
               <point x="9525" y="6566" />
             </connector>
           </ddscontrol>
@@ -2003,7 +2003,7 @@
               <point x="3387" y="11411" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="3087" top="12761" logicalid="319" controlid="125" masterid="0" hint1="0" hint2="0" width="172778" height="36905" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3087" top="12761" logicalid="319" controlid="125" masterid="0" hint1="0" hint2="0" width="172778" height="37455" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2016,9 +2016,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="109" sourceattachpoint="16" destattachpoint="31" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="175565" y="49266" />
-              <point x="89476" y="49266" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="109" sourceattachpoint="18" destattachpoint="31" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="175565" y="49816" />
+              <point x="89476" y="49816" />
               <point x="89476" y="13061" />
               <point x="3387" y="13061" />
             </connector>
@@ -2183,7 +2183,7 @@
               <point x="5880" y="86377" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="9770" top="23847" logicalid="328" controlid="134" masterid="0" hint1="0" hint2="0" width="86277" height="65330" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="9770" top="23297" logicalid="328" controlid="134" masterid="0" hint1="0" hint2="0" width="86277" height="65880" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2196,9 +2196,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="8" destid="93" sourceattachpoint="28" destattachpoint="27" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="95747" y="24246" />
-              <point x="52909" y="24246" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="8" destid="93" sourceattachpoint="26" destattachpoint="27" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="95747" y="23696" />
+              <point x="52909" y="23696" />
               <point x="52909" y="88877" />
               <point x="10070" y="88877" />
             </connector>
@@ -2263,7 +2263,7 @@
               <point x="4990" y="88877" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="9770" top="51908" logicalid="332" controlid="138" masterid="0" hint1="0" hint2="0" width="37543" height="35619" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="9770" top="51358" logicalid="332" controlid="138" masterid="0" hint1="0" hint2="0" width="37543" height="36169" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2276,9 +2276,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="96" destid="93" sourceattachpoint="30" destattachpoint="21" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="47013" y="52307" />
-              <point x="28542" y="52307" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="96" destid="93" sourceattachpoint="28" destattachpoint="21" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="47013" y="51757" />
+              <point x="28542" y="51757" />
               <point x="28542" y="87227" />
               <point x="10070" y="87227" />
             </connector>
@@ -2459,7 +2459,7 @@
               <point x="182410" y="48716" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="52816" logicalid="342" controlid="148" masterid="0" hint1="0" hint2="0" width="98972" height="9249" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="52266" logicalid="342" controlid="148" masterid="0" hint1="0" hint2="0" width="98972" height="9799" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2472,11 +2472,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="58" sourceattachpoint="11" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="58" sourceattachpoint="11" destattachpoint="32" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="84038" y="61665" />
               <point x="133224" y="61665" />
-              <point x="133224" y="53116" />
-              <point x="182410" y="53116" />
+              <point x="133224" y="52566" />
+              <point x="182410" y="52566" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="83579" top="-22620" logicalid="343" controlid="149" masterid="0" hint1="0" hint2="0" width="99131" height="71636" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -2595,7 +2595,7 @@
               <point x="23681" y="70408" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="23381" top="24397" logicalid="349" controlid="155" masterid="0" hint1="0" hint2="0" width="72666" height="47411" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="23381" top="23847" logicalid="349" controlid="155" masterid="0" hint1="0" hint2="0" width="72666" height="47961" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2608,9 +2608,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="8" destid="25" sourceattachpoint="30" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="95747" y="24796" />
-              <point x="59714" y="24796" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="8" destid="25" sourceattachpoint="28" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="95747" y="24246" />
+              <point x="59714" y="24246" />
               <point x="59714" y="71508" />
               <point x="23681" y="71508" />
             </connector>
@@ -2853,7 +2853,7 @@
               <point x="82058" y="50626" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="78948" top="37139" logicalid="362" controlid="168" masterid="0" hint1="0" hint2="0" width="10255" height="11036" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="78948" top="36589" logicalid="362" controlid="168" masterid="0" hint1="0" hint2="0" width="10255" height="11586" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2866,9 +2866,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="59" destid="29" sourceattachpoint="27" destattachpoint="14" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="79248" y="37538" />
-              <point x="84075" y="37538" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="59" destid="29" sourceattachpoint="25" destattachpoint="14" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="79248" y="36988" />
+              <point x="84075" y="36988" />
               <point x="84075" y="47875" />
               <point x="88903" y="47875" />
             </connector>
@@ -2913,7 +2913,7 @@
               <point x="138774" y="22799" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21399" logicalid="365" controlid="171" masterid="0" hint1="0" hint2="0" width="55336" height="42866" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21949" logicalid="365" controlid="171" masterid="0" hint1="0" hint2="0" width="55336" height="42316" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2926,11 +2926,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="19" destattachpoint="26" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="19" destattachpoint="28" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="84038" y="63865" />
               <point x="111406" y="63865" />
-              <point x="111406" y="21699" />
-              <point x="138774" y="21699" />
+              <point x="111406" y="22249" />
+              <point x="138774" y="22249" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="142919" top="17820" logicalid="366" controlid="172" masterid="0" hint1="0" hint2="0" width="3000" height="879" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -2953,7 +2953,7 @@
               <point x="143219" y="18399" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21949" logicalid="367" controlid="173" masterid="0" hint1="0" hint2="0" width="55336" height="42866" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="20849" logicalid="367" controlid="173" masterid="0" hint1="0" hint2="0" width="55336" height="43966" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2966,11 +2966,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="21" destattachpoint="28" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="21" destattachpoint="24" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="84038" y="64415" />
               <point x="111406" y="64415" />
-              <point x="111406" y="22249" />
-              <point x="138774" y="22249" />
+              <point x="111406" y="21149" />
+              <point x="138774" y="21149" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="83579" top="-24270" logicalid="368" controlid="174" masterid="0" hint1="0" hint2="0" width="55495" height="42969" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -3393,6 +3393,77 @@
               <point x="111457" y="15699" />
             </connector>
           </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="fact_hourly_availability" left="0" top="0" logicalid="390" controlid="196" masterid="0" hint1="0" hint2="0" width="3545" height="4842" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="00080000d90d0000ea120000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="mart_fact_hourly_availability" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3245" top="4321" logicalid="391" controlid="197" masterid="0" hint1="0" hint2="0" width="172620" height="45345" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK_fact_hourly_availability_dim_person]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="196" sourceattachpoint="16" destattachpoint="31" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="175565" y="49266" />
+              <point x="89555" y="49266" />
+              <point x="89555" y="4621" />
+              <point x="3545" y="4621" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3245" top="3771" logicalid="392" controlid="198" masterid="0" hint1="0" hint2="0" width="77653" height="58294" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK_fact_hourly_availability_dim_date]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="196" sourceattachpoint="10" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="80598" y="61665" />
+              <point x="42072" y="61665" />
+              <point x="42072" y="4071" />
+              <point x="3545" y="4071" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3245" top="3221" logicalid="393" controlid="199" masterid="0" hint1="0" hint2="0" width="92802" height="17575" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK_fact_hourly_availability_dim_scenario]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="8" destid="196" sourceattachpoint="14" destattachpoint="27" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="95747" y="20396" />
+              <point x="49646" y="20396" />
+              <point x="49646" y="3521" />
+              <point x="3545" y="3521" />
+            </connector>
+          </ddscontrol>
         </dds>
       </Value>
     </Annotation>
@@ -3410,7 +3481,7 @@
     </Annotation>
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
-      <Value>19251</Value>
+      <Value>18868</Value>
     </Annotation>
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
@@ -4353,6 +4424,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="6810c312-e93c-4384-b7b3-41ac7ca49fd6">
       <ID>Fact Agent Queue</ID>
@@ -4523,6 +4595,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="5c196689-64ee-48c5-b1e4-b1a958c65460">
       <ID>Fact Queue</ID>
@@ -4782,6 +4855,7 @@
           <MeasureGroupID>Bridge Queue Workload</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="4764eb22-70ed-44d8-9666-0b6fa97ed423">
       <ID>Vfact Agents Ready</ID>
@@ -4895,6 +4969,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="86990995-f9f5-4170-ab0c-c6be2f8257a1">
       <ID>Fact Schedule</ID>
@@ -5217,6 +5292,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="311803db-529a-4bb0-ba62-bdd72b5344a9">
       <ID>Vfact Schedule</ID>
@@ -5367,6 +5443,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="f0cc0f04-e660-4623-8dd4-ef8423fedd4c">
       <ID>v Fact Schedule Day Count Absence</ID>
@@ -5569,6 +5646,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="549e6a5e-c427-48a0-b534-ba3aaa257495">
       <ID>v Fact Scheudule Day Count Shift Category</ID>
@@ -5753,6 +5831,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="d9fedb8d-3658-4b61-bcf4-9768bb0869ce">
       <ID>v Fact Schedule Day Count Day Off</ID>
@@ -5937,6 +6016,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="4af9f822-80b7-442f-99bc-a69c5f47f97f">
       <ID>Fact Schedule Preference</ID>
@@ -6190,6 +6270,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="def146f8-c2c2-4cc0-8dea-6d54ef75b9d7">
       <ID>Fact Schedule Deviation</ID>
@@ -6399,6 +6480,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="7f0a9d91-1501-46e4-a714-da85bcbc8057">
       <ID>Fact Schedule Forecast Skill</ID>
@@ -6571,6 +6653,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="42321bc0-78f2-4f74-947f-87786c89b8ba">
       <ID>Fact Forecast Workload</ID>
@@ -6867,6 +6950,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="39ad3011-b1c8-4926-8a1f-fbf526688b6d">
       <ID>Fact Kpi Targets Team</ID>
@@ -7024,6 +7108,7 @@
           <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="09ab7fe9-2d54-4091-ab48-f7a74a4f6582">
       <ID>Vfact Kpi Targets Team</ID>
@@ -7350,6 +7435,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="0881368f-4628-4942-b8c5-9c09d0bf7da4">
       <ID>Scorecard Kpi</ID>
@@ -7413,6 +7499,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="7fbec2da-af01-490a-ae82-4287fc5f47da">
       <ID>Vfact Shift Start</ID>
@@ -7560,6 +7647,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="90a02a7c-32bd-47c7-a757-74a5ab3d7855">
       <ID>v Bridge Agent Skill</ID>
@@ -7623,6 +7711,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="38c1e138-6f0e-4f5a-9d01-2230b08f5a15">
       <ID>Bridge Queue Workload</ID>
@@ -7722,6 +7811,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="6f8a8872-b18c-4c4d-99b7-6d2b1142d081">
       <ID>Bridge Acd Login Person</ID>
@@ -7851,6 +7941,7 @@
           <MeasureGroupID>Bridge Time Zone</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="1cc4a8e0-ec0c-4cf4-9bae-1e450cee8740">
       <ID>Bridge Time Zone</ID>
@@ -7968,6 +8059,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="8a5bc46e-db78-4c58-a996-160809c1901c">
       <ID>Bridge Group Page Person</ID>
@@ -8042,6 +8134,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="0d6e56e2-d351-484d-9573-f56a06025450">
       <ID>Fact Request</ID>
@@ -8257,6 +8350,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="b1233275-b263-412a-b8f5-be742661250b">
       <ID>Fact Requested Days</ID>
@@ -8411,6 +8505,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="9756a537-ae9b-440d-9453-714a68d13ee5">
       <ID>Fact Quality Percentage</ID>
@@ -8524,6 +8619,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="807ff9c9-8a5d-405b-b889-1f16ae4eb571">
       <ID>Fact Quality Grades</ID>
@@ -8637,6 +8733,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="be02bf17-9ec7-47d8-9b85-77f7c381360b">
       <ID>Fact Quality Points</ID>
@@ -8750,6 +8847,159 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
+    </MeasureGroup>
+    <MeasureGroup dwd:design-time-name="99610025-564a-40c8-bd89-1ccdf5ced059">
+      <ID>Fact Hourly Availability</ID>
+      <Name>Hourly Availability</Name>
+      <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+      <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+      <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+      <State>Unprocessed</State>
+      <Measures>
+        <Measure dwd:design-time-name="a7acc3cd-f949-49b8-9c67-df97712b9060">
+          <ID>Available Time M</ID>
+          <Name>Available Time m</Name>
+          <Source dwd:design-time-name="73865e3d-7745-4c99-998b-1f7a282a731e">
+            <DataType>Integer</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="5ddf857e-a4fc-4e3f-aa27-1a3bd680a8c1">
+              <TableID>mart_fact_hourly_availability</TableID>
+              <ColumnID>available_time_m</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="6c4e188d-e1f7-4dd7-afb7-53e896f6f0fd">
+          <ID>Available Days</ID>
+          <Name>Available Days</Name>
+          <Source dwd:design-time-name="6c832ce0-5b86-45f5-9f5b-0248638068a5">
+            <DataType>Integer</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="a871ce50-34d4-40d4-b417-bfdbd2bec358">
+              <TableID>mart_fact_hourly_availability</TableID>
+              <ColumnID>available_days</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="9bb5d57a-3cdb-43b0-a4bd-7454b536b452">
+          <ID>Scheduled Time M - Fact Hourly Availability</ID>
+          <Name>Scheduled Time Hourly m</Name>
+          <Source dwd:design-time-name="24e80db9-4d5c-44cc-952d-c58c2a10e32e">
+            <DataType>Integer</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="71465e5a-0283-4638-a439-56f60f1ffc13">
+              <TableID>mart_fact_hourly_availability</TableID>
+              <ColumnID>scheduled_time_m</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="60ba67ae-569e-4009-8294-43a5935aacd7">
+          <ID>Scheduled Days</ID>
+          <Name>Scheduled Days</Name>
+          <Source dwd:design-time-name="5d574af5-40b3-4a24-84b8-0dbf14b824ee">
+            <DataType>Integer</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="aba46275-5d72-41d0-bcf5-50148097f1d8">
+              <TableID>mart_fact_hourly_availability</TableID>
+              <ColumnID>scheduled_days</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode>
+      <ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="7d689fcb-aa4b-45a6-bce2-850f507c86c7">
+          <CubeDimensionID>Person</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="8b66ce14-06dd-4600-b62b-65ee440ad72d">
+              <AttributeID>Dim Person</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="496637f7-9625-4dc3-8a1c-0461c0192ec9">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="4e8aea60-d6b1-4cf8-8f91-d0fe65151f49">
+                    <TableID>mart_fact_hourly_availability</TableID>
+                    <ColumnID>person_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="f2b8c8ba-cdda-46e4-b1b5-bd7ab2a6575b">
+          <CubeDimensionID>Local Date</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="1032f175-759c-4531-a59a-780f8ca5cd1f">
+              <AttributeID>Dim Date</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="54c9c995-c8d8-4286-ba68-2f3fdb718d7b">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="c6e0a5f9-e969-4455-ae0a-46c47e9547b8">
+                    <TableID>mart_fact_hourly_availability</TableID>
+                    <ColumnID>date_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="4e508ed0-b569-4c4d-8fc3-27fe418b96e4">
+          <CubeDimensionID>Scenario</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="3e8db956-aaff-433c-9f59-84041c6a7d67">
+              <AttributeID>Dim Scenario</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="bc9971a3-68e7-400e-bb7e-8eeba7fafa7e">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="fac61d88-f6af-4e72-84b3-cc07ca69844d">
+                    <TableID>mart_fact_hourly_availability</TableID>
+                    <ColumnID>scenario_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="ManyToManyMeasureGroupDimension" dwd:design-time-name="2eb0fbdb-4199-4860-8468-5ad6452ea779">
+          <CubeDimensionID>Skill 1</CubeDimensionID>
+          <MeasureGroupID>v Bridge Agent Skill</MeasureGroupID>
+        </Dimension>
+        <Dimension xsi:type="ReferenceMeasureGroupDimension" dwd:design-time-name="49011d92-3b23-488a-a04f-cd2729117045">
+          <CubeDimensionID>Team</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="1a0e9d75-c0f2-4632-8589-fb830a8d09b6">
+              <AttributeID>Team Name</AttributeID>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+          <IntermediateCubeDimensionID>Person</IntermediateCubeDimensionID>
+          <IntermediateGranularityAttributeID>Team Name</IntermediateGranularityAttributeID>
+          <Materialization>Regular</Materialization>
+          <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="0b04ec82-6789-4d92-8dd5-96b0b1b27d07">
+          <CubeDimensionID>Business Unit</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="5f2629c0-c7f9-4137-bd71-30503707cdca">
+              <AttributeID>Dim Business Unit</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="5df21cae-78f3-432c-a474-a0cd9e71dfd7">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="9517a91d-96a4-46c5-abbc-5f22e464b134">
+                    <TableID>mart_fact_hourly_availability</TableID>
+                    <ColumnID>business_unit_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="ManyToManyMeasureGroupDimension" dwd:design-time-name="654d56bc-ce4e-427d-9604-26909f7d7e58">
+          <CubeDimensionID>Group Page Person</CubeDimensionID>
+          <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
+        </Dimension>
+      </Dimensions>
+      <Partitions />
     </MeasureGroup>
   </MeasureGroups>
   <Source dwd:design-time-name="03f1b68d-a933-4051-8eb1-b7a364c7da4a">
@@ -8776,7 +9026,7 @@ VISIBLE = 0;
 CREATE MEMBER CURRENTCUBE.[Measures].[Requested Time h]
  AS [Measures].[Requested Time m]/60, 
 FORMAT_STRING = "#,##0.0", 
-VISIBLE = 1  ;        
+VISIBLE = 1;        
 CREATE MEMBER CURRENTCUBE.[Measures].[Point Evaluations]
  AS [Measures].[Point Evaluation Raw], 
 VISIBLE = 1;           
@@ -9196,330 +9446,357 @@ CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy After Call Work]
  AS [Measures].[Forecasted After Call Work S]/[Measures].[After Call Work s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [After Call Work s] }, 
-VISIBLE = 1; </Text>
+VISIBLE = 1; 
+CREATE MEMBER CURRENTCUBE.[Measures].[Available Time h]
+ AS [Measures].[Available Time m]/60, 
+FORMAT_STRING = "#,##0.0", 
+VISIBLE = 1  ; 
+CREATE MEMBER CURRENTCUBE.[Measures].[Scheduled Time Hourly h]
+ AS [Measures].[Scheduled Time Hourly m]/60, 
+FORMAT_STRING = "#,##0.0", 
+VISIBLE = 1  ; 
+CREATE MEMBER CURRENTCUBE.[Measures].[Hourly Availability Utilization %]
+ AS [Measures].[Scheduled Time Hourly m]/[Measures].[Available Time m], 
+FORMAT_STRING = "Percent", 
+VISIBLE = 1  ; </Text>
         </Command>
       </Commands>
       <CalculationProperties>
-        <CalculationProperty dwd:design-time-name="91c6ab86-741a-4db4-a526-bd771988344d">
+        <CalculationProperty dwd:design-time-name="50a6003b-f1ff-4e5d-9c84-16e2812a898a">
           <CalculationReference>[MEASURES].[Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c1f11d77-71f4-46b6-9452-afb3868574df">
+        <CalculationProperty dwd:design-time-name="c67190f5-5a90-4fba-9e49-54ca2deafec0">
           <CalculationReference>[MEASURES].[Forecasted Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="6f26a432-6513-43b0-8208-dc191b32d2cb">
+        <CalculationProperty dwd:design-time-name="b0f7e400-77c3-47be-b23b-23366badd631">
           <CalculationReference>[MEASURES].[Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="421f1c98-8be7-4a4e-94fb-498864396a13">
+        <CalculationProperty dwd:design-time-name="9d2da61a-d89e-41e7-ad7e-4e7e6375d3b9">
           <CalculationReference>[MEASURES].[Average Answered Calls per Scheduled Phone Hour]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ff13bccd-3763-48ca-a5de-48ce659fc65e">
+        <CalculationProperty dwd:design-time-name="23646958-f676-4313-a669-f625b3503343">
           <CalculationReference>[MEASURES].[Forecasted Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0c5fdba2-3661-4fb0-8b7f-0584e36748fb">
+        <CalculationProperty dwd:design-time-name="bc2b8b38-6333-4a38-a150-c928fb7ec7fc">
           <CalculationReference>[MEASURES].[Forecasted Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="56902836-011e-4ab1-937f-ea3a894806f6">
+        <CalculationProperty dwd:design-time-name="b66a035e-dd25-4a57-9cc4-5c392a47099d">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Talk time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="26868190-bcbf-457c-b996-ea0195bcc6e0">
+        <CalculationProperty dwd:design-time-name="82f0d809-5d12-4e30-a773-86223c503690">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average After Call Work s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a0a81f78-25dd-445e-841d-938dc072327e">
+        <CalculationProperty dwd:design-time-name="a827bc2a-9552-4b33-af8d-310a102321f1">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Handle Time s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1a2c05f8-513e-4aa1-bdd0-5a8f48f31bb3">
+        <CalculationProperty dwd:design-time-name="3d3a8e19-11de-48e4-a96a-ea35c00d586b">
           <CalculationReference>[MEASURES].[Answer Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="3fd97a17-315d-4a86-99e8-56a203df7d7a">
+        <CalculationProperty dwd:design-time-name="dd6f9124-1086-47fa-bd1f-0a7fb5e73c3d">
           <CalculationReference>[MEASURES].[Absenteeism]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="f5e594b2-821f-4031-9fbb-794d95803499">
+        <CalculationProperty dwd:design-time-name="68dc6523-9604-4a4f-abc0-34c369e684bf">
           <CalculationReference>[MEASURES].[Service Level]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="f4eeeeaf-1d0c-445e-a8e3-cfc3697887a8">
+        <CalculationProperty dwd:design-time-name="a31b3d3d-1643-43d8-bfa1-890e8735eac0">
           <CalculationReference>[MEASURES].[Abandon Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ee9e9f2e-bfff-4ea2-acbe-bef3994cfc3f">
+        <CalculationProperty dwd:design-time-name="47ffa016-cade-478e-a944-b8dfd2d898cd">
           <CalculationReference>[MEASURES].[Occupancy]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="28ddfddf-fa86-4476-9cb6-5043f6b022b4">
+        <CalculationProperty dwd:design-time-name="66791804-af72-4cbf-be15-a2f50e886f4c">
           <CalculationReference>[MEASURES].[AHT Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1bb25eee-e8b0-41ea-a4e5-5a59f665583c">
+        <CalculationProperty dwd:design-time-name="0b9dd344-aee9-4aa6-acdc-32c80d0003d9">
           <CalculationReference>[MEASURES].[ASA Average Speed of Answer s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="fe280e5e-71c3-4e41-9024-212722671bff">
+        <CalculationProperty dwd:design-time-name="40cf21d3-080c-4d6d-8e06-bc4a882bb9d7">
           <CalculationReference>[MEASURES].[Average Time to Abandon s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="27ad328c-794a-47c0-a8b6-df1c1ca705f4">
+        <CalculationProperty dwd:design-time-name="a0e15f49-2c44-4a41-b89d-91f89ff58e94">
           <CalculationReference>[MEASURES].[Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c179982e-189d-47bb-b912-13d5fdbddb8b">
+        <CalculationProperty dwd:design-time-name="2139f916-3d6c-45c5-98ba-2c898bc33105">
           <CalculationReference>[MEASURES].[Forecasted Time excl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="da67acd5-991c-4fa5-bcb5-697ba15bb79c">
+        <CalculationProperty dwd:design-time-name="bcdc2b83-57bd-41e5-a90d-1dbf33af4cc8">
           <CalculationReference>[MEASURES].[Forecasted Time incl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1f5255fa-c540-42b5-ad97-f7defafac690">
+        <CalculationProperty dwd:design-time-name="c3965749-d3ad-48d4-b9d9-929d284392ed">
           <CalculationReference>[MEASURES].[Scheduled Time Skill h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="18d1f560-07da-4f6e-8386-5e27f499bba1">
+        <CalculationProperty dwd:design-time-name="44a46616-363a-4554-9876-a2cdf3cd8528">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Relative Difference]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9eddd7b1-6294-494c-bd63-cecc6bbe8ec6">
+        <CalculationProperty dwd:design-time-name="14aa52ad-d7b2-4bc3-ad1e-887d33623ea3">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Standard Deviation]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="935d06df-26b0-43fd-8f82-500cc3a08cd3">
+        <CalculationProperty dwd:design-time-name="684ff518-2ac3-49a4-9fb8-22a191d3f478">
           <CalculationReference>[MEASURES].[ATT Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="eeaee1a4-4030-4322-b135-34a24b3e8c97">
+        <CalculationProperty dwd:design-time-name="fd1f6e2f-2a6a-4615-a518-5e121c1c7db4">
           <CalculationReference>[MEASURES].[Forecast Accuracy Talk Time]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="14a0d6a2-4454-4858-9b8a-489d53a5dee7">
+        <CalculationProperty dwd:design-time-name="87cb4145-8022-4cd6-bea5-8a71fa2741ad">
           <CalculationReference>[MEASURES].[Forecast Accuracy After Call Work]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c0ea345a-fb3c-4c55-94b9-7b4091cba1e2">
+        <CalculationProperty dwd:design-time-name="18c406a2-ee39-4675-bc34-7bc61474901a">
           <CalculationReference>[MEASURES].[Agents Ready FTE]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Vfact Agents Ready</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cf6d800f-f89c-4bcf-86bb-a0833dc129d7">
+        <CalculationProperty dwd:design-time-name="6c75fe31-2964-45e2-abe3-acf4b4cba0b0">
           <CalculationReference>[MEASURES].[Preference Fulfillment %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="248e9110-6760-4e69-ae70-154efa49cea4">
+        <CalculationProperty dwd:design-time-name="68e88bc7-d609-4bd1-91ea-9d1967aad41a">
           <CalculationReference>[MEASURES].[Preferences Unfulfilled %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="021a2444-0b5e-4216-891d-145d9d3cc232">
+        <CalculationProperty dwd:design-time-name="a54c75b7-ccf7-4485-aa7c-9d526e1a1373">
           <CalculationReference>[MEASURES].[Scheduled Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="69986248-b7fd-444e-80af-dc7d46a4e3b2">
+        <CalculationProperty dwd:design-time-name="1f495aa2-3654-4e42-bb63-9b201624769a">
           <CalculationReference>[MEASURES].[Scheduled Contract Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ec8375f0-000c-4e03-8efe-2b9b472863d9">
+        <CalculationProperty dwd:design-time-name="ab087b3d-f907-4ca4-9903-135af1ec54dc">
           <CalculationReference>[MEASURES].[Scheduled Work Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="14f4ace8-479c-401b-8e60-758c5e41a1b7">
+        <CalculationProperty dwd:design-time-name="a67fa9a9-8931-4cba-9cbf-59dfe8019231">
           <CalculationReference>[MEASURES].[Scheduled Contract Absence Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="423b8b17-ea29-4076-8d2a-eb6ef3994f46">
+        <CalculationProperty dwd:design-time-name="4b06523c-e36b-4378-9ab2-c94c0e6fb959">
           <CalculationReference>[MEASURES].[Scheduled Over Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1e684444-92a6-46f4-93c9-d8ee77205113">
+        <CalculationProperty dwd:design-time-name="ea1887ec-9b6f-4f35-8a6c-d2f05ad210df">
           <CalculationReference>[MEASURES].[Scheduled Ready Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="dc3260f4-7649-49a7-ade2-93a2c6e340b9">
+        <CalculationProperty dwd:design-time-name="f65a26b1-e298-40e8-b054-e18f78c6ec25">
           <CalculationReference>[MEASURES].[Scheduled Paid Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e8f03503-7464-405e-baf6-dfe7677bd3a4">
+        <CalculationProperty dwd:design-time-name="125b770f-74d3-48b2-b086-b09c777ce008">
           <CalculationReference>[MEASURES].[Adherence1]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e6220607-549b-4b47-bd0a-131e3c3f2bc1">
+        <CalculationProperty dwd:design-time-name="d03209e1-cdc1-4263-aaed-8da1eefd5ccb">
           <CalculationReference>[Measures].[Logged In Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ae593682-f6b1-4013-bc66-568704e8ed38">
+        <CalculationProperty dwd:design-time-name="0d8317f7-4931-432c-9b2c-0326c20adab3">
           <CalculationReference>[Measures].[Adherance %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="bcd9ecdc-0397-42e7-bca9-57ee0f1a7440">
+        <CalculationProperty dwd:design-time-name="b8325d86-fe15-476a-9789-ef8d94f58935">
           <CalculationReference>[Measures].[Absent]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e66fb2bd-4f33-41c9-a2b6-b0baa000e8fb">
+        <CalculationProperty dwd:design-time-name="b91fe1d7-85a7-4333-bec3-63a5119bef6e">
           <CalculationReference>[Measures].[Readiness]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0c1eefde-2969-4e10-84d7-cef7983011fe">
+        <CalculationProperty dwd:design-time-name="97c7b342-e459-4563-bda3-9f3d1da1e90e">
           <CalculationReference>[MEASURES].[KPI Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <Description></Description>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="8fd10435-7081-4e47-a805-79da935abb94">
+        <CalculationProperty dwd:design-time-name="5b4a75f4-7678-4f06-aac2-91191674e24e">
           <CalculationReference>[MEASURES].[Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="db8fa4fb-5e28-4bd1-9f72-3787dc693305">
+        <CalculationProperty dwd:design-time-name="5ad8a184-eccc-48e6-b20a-af6423c99a95">
           <CalculationReference>[Measures].[Deviation Schedule Ready m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="29f6395b-bc8b-47f7-917c-d201d6f83a0e">
+        <CalculationProperty dwd:design-time-name="18a30d87-bafe-43c3-895f-f81b2f95c4fb">
           <CalculationReference>[Measures].[Deviation Schedule m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0242e418-e635-4e5e-8534-6360c3cc70e0">
+        <CalculationProperty dwd:design-time-name="43d345e7-d3a0-4b5f-aa2a-9108695eea06">
           <CalculationReference>[Measures].[Deviation Contract m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ca28cc8d-149f-4ec5-b421-cce9c661215c">
+        <CalculationProperty dwd:design-time-name="12b6be86-8a07-482f-9537-56211ea1167f">
           <CalculationReference>[Measures].[Scheduled Contract Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="719aedd2-2c72-4653-8817-447ed33cb24c">
+        <CalculationProperty dwd:design-time-name="6311eff7-88fa-4208-8ebd-c39b8454a121">
           <CalculationReference>[Measures].[Scheduled Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="5b5dad6e-9aeb-4de4-8233-3417f1e62ab4">
+        <CalculationProperty dwd:design-time-name="c55de59d-709f-4c85-8eaf-de968abd8f3c">
           <CalculationReference>[Measures].[Scheduled Contract Time m decimal]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0f0d3d0f-463c-47d2-936a-ea3d3622db65">
+        <CalculationProperty dwd:design-time-name="95071825-b7a2-48b3-91d5-231a41a48c2e">
           <CalculationReference>[Measures].[Calc Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c491dfe9-e77e-49ff-a385-04cf60b56c2f">
+        <CalculationProperty dwd:design-time-name="f5fd0fd2-481b-4bef-b720-485cc6dac2e6">
           <CalculationReference>[Measures].[Calculated Member2]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="8f9dc0f0-f20b-4a5b-b767-ef48168d82cc">
+        <CalculationProperty dwd:design-time-name="dd17ba16-2dcc-45dd-9c90-9b9cf7eb4027">
           <CalculationReference>[Measures].[Calc New Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="743dd95a-5bc6-4c0e-9f73-b38226a584f5">
+        <CalculationProperty dwd:design-time-name="152e084e-c2e5-49b7-a76e-5585e38adbb9">
           <CalculationReference>[Measures].[Calc Deviation time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="43f40450-bbaa-4033-9b82-64e06bd5c94a">
+        <CalculationProperty dwd:design-time-name="2171f903-f6b2-4c37-8176-5fcc12af0f93">
           <CalculationReference>[Measures].[Final Adherence Value]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e8641436-9f61-4fe6-9a0b-a20f95f8e8f9">
+        <CalculationProperty dwd:design-time-name="135de987-f289-4485-b3c4-a02f2344e437">
           <CalculationReference>[Measures].[Point Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="00eca4ab-5ad5-414f-8846-ea42ad1d8971">
+        <CalculationProperty dwd:design-time-name="3becb8ba-a07a-41cb-ac3a-46984513043a">
           <CalculationReference>[Measures].[Grade Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e7407128-708c-47af-9e91-95370928647f">
+        <CalculationProperty dwd:design-time-name="ce031856-cf73-49d4-9972-f58922693c20">
           <CalculationReference>[Measures].[Percentage Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="13f7dd99-7d81-4fd8-9b91-ff25c47719e2">
+        <CalculationProperty dwd:design-time-name="897afa10-add4-4f69-833f-010c7c2a7874">
           <CalculationReference>[Measures].[Percentage Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="92476983-d7e4-4c3a-b9fc-6f87bce7fdc6">
+        <CalculationProperty dwd:design-time-name="3f345ab5-39f0-4715-b666-94d13b9a81db">
           <CalculationReference>[Measures].[Point Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d5516c1c-5a7d-4b5d-9aa1-a18c7d67bca0">
+        <CalculationProperty dwd:design-time-name="50f49010-d392-443d-83b7-5f4ebc02f715">
           <CalculationReference>[Measures].[Grade Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="2d25e8ff-90c2-4704-907a-b0a8e2e7ae21">
+        <CalculationProperty dwd:design-time-name="c05011c8-c4fd-4d4a-8027-7897c6bebc87">
           <CalculationReference>[Measures].[Actual Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="7f049c82-4f98-41b5-a543-d0e2caf72c09">
+        <CalculationProperty dwd:design-time-name="37d8983a-ea5d-46e6-996e-d1af9cd4a873">
           <CalculationReference>[Measures].[Requested time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Request</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="39b9b81b-83b6-46a5-9ee7-d84bc1a34d39">
+        <CalculationProperty dwd:design-time-name="f88aedc2-d666-4266-b77b-fb6ba11ea418">
           <CalculationReference>[Measures].[Request Starttime x]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Request</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="6aad6fd0-e527-48f2-bad7-20c5f27ef715">
+        <CalculationProperty dwd:design-time-name="3d838b29-b424-4301-976d-b646ba8fdf86">
           <CalculationReference>[Measures].[Requested time hhmm]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Request</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="1db52d1b-29a6-4f82-908e-086e958c7381">
+          <CalculationReference>[Measures].[Available Time h]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Hourly Availability</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="f82f3c51-956b-465d-986e-668d817b1536">
+          <CalculationReference>[Measures].[Scheduled Time Hourly h]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Hourly Availability</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="08241797-cf6e-4f26-9756-77a656a3658c">
+          <CalculationReference>[Measures].[Hourly Availability Utilization %]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Hourly Availability</AssociatedMeasureGroupID>
         </CalculationProperty>
       </CalculationProperties>
     </MdxScript>

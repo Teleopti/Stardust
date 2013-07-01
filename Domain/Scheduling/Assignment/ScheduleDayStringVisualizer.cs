@@ -17,23 +17,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonMeeting> meetings = scheduleDay.PersonMeetingCollection();
             if (asses.Count > 0 || meetings.Count > 0)
             {
-                foreach (IPersonAssignment pa in asses)
-                {
-                    foreach (PersonalShift ps in pa.PersonalShiftCollection)
-                    {
-                        sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-                        foreach (ActivityLayer layer in ps.LayerCollection)
-                        {
-                            sb.AppendLine();
-                            sb.Append("    ");
-                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name); 
-                            sb.Append(": ");
-                            sb.Append(ToLocalStartEndTimeString(layer.Period, timeZoneInfo, cultureInfo));
-                        }
-                    }
-                }
+	            foreach (var pa in asses)
+	            {
+		            sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
+		            foreach (var personalLayer in pa.PersonalLayers)
+		            {
+			            sb.AppendLine();
+			            sb.Append("    ");
+			            sb.Append(
+				            personalLayer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+			            sb.Append(": ");
+			            sb.Append(ToLocalStartEndTimeString(personalLayer.Period, timeZoneInfo, cultureInfo));
+		            }
+	            }
 
-                foreach (IPersonMeeting personMeeting in meetings)
+	            foreach (IPersonMeeting personMeeting in meetings)
                 {
                     if (sb.Length > 0) sb.AppendLine();
                     sb.AppendFormat(" - {0}: ", UserTexts.Resources.Meeting);

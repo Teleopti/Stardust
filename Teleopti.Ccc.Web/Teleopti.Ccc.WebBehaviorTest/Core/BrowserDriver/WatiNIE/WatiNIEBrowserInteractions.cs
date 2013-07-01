@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public object Javascript(string javascript)
 		{
-			return browserOperation(() => _browser.Eval(javascript), "Failed to execute javascript " + javascript);
+			return browserOperation(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), "Failed to execute javascript " + javascript);
 		}
 
 		public void GoToWaitForCompleted(string uri)
@@ -51,9 +51,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			browserAssert(() => _browser.Eval(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			browserAssert(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
+		//public void AssertIsSatisfiedBy(string selector, Func<string,bool> verifyText)
+		//{
+		//	var element = _browser.Element(Find.BySelector(selector));
+		//	var elementText = element.Text;
+		//	var parsedText = DateTime.Parse(elementText);
+		//	var result = verifyText(elementText);
+
+		//	EventualAssert.That(() => verifyText(_browser.Element(Find.BySelector(selector)).Text), Is.True);
+		//}
 		public void AssertExists(string selector)
 		{
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
@@ -87,6 +96,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			writer(succeedOrIgnore(() => Browser.Current.Html));
 			//writer(" Text: ");
 			//writer(tryOperation(() => Browser.Current.Text));
+		}
+
+		public void WaitUntilEnabled(string selector)
+		{
+			_browser.Element(Find.BySelector(selector)).WaitUntil<Element>(e=>e.Enabled);
+		}
+
+		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
+		{
+			_browser.RunScript("document.driverScriptResult = String( function(){" + javascript + "}() );");
+			return _browser.NativeDocument.GetPropertyValue("driverScriptResult");
 		}
 
 		private static string succeedOrIgnore(Func<string> operation)
@@ -140,6 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		}
 	}
 
+	[Serializable()]
 	public class BrowserInteractionException : Exception
 	{
 		public BrowserInteractionException(string message, Exception innerException)

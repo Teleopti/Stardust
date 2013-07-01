@@ -56,7 +56,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			    foreach (var selectedPerson in selectedPersons)
 			    {
-                    allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
+				    var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+				    if (teamInfo != null)
+					    allTeamInfoListOnStartDate.Add(teamInfo);
 			    }
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))

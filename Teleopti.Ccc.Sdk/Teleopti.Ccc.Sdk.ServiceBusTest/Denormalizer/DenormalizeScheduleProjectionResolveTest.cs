@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleProjectionHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
+			builder.RegisterType<ScheduleProjectionReadOnlyUpdater>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();

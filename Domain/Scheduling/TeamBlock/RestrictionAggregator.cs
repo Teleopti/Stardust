@@ -16,20 +16,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-	    private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToRestrictionConverter;
 	    private readonly IScheduleRestrictionExtractor _scheduleRestrictionExtractor;
 	    private readonly ISuggestedShiftRestrictionExtractor _suggestedShiftRestrictionExtractor;
 
 	    public RestrictionAggregator(
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             ISchedulingResultStateHolder schedulingResultStateHolder,
-			IOpenHoursToEffectiveRestrictionConverter openHoursToRestrictionConverter,
 			IScheduleRestrictionExtractor scheduleRestrictionExtractor,
 			ISuggestedShiftRestrictionExtractor suggestedShiftRestrictionExtractor)
         {
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _schedulingResultStateHolder = schedulingResultStateHolder;
-		    _openHoursToRestrictionConverter = openHoursToRestrictionConverter;
 		    _scheduleRestrictionExtractor = scheduleRestrictionExtractor;
 		    _suggestedShiftRestrictionExtractor = suggestedShiftRestrictionExtractor;
         }
@@ -60,11 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    if (effectiveRestriction == null)
 				    return null;
 		    }
-
-		    var openHoursRestriction = _openHoursToRestrictionConverter.Convert(groupPerson, dateOnlyList);
-
-		    if (effectiveRestriction != null && openHoursRestriction != null)
-			    effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
 
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 		    var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,

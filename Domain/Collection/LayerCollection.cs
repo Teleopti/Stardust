@@ -30,17 +30,11 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-			var owner = _owner as IEntity;
-			if(owner != null)
-				item.SetParent(owner);
-        }
-
-	    public void MoveAllLayers(TimeSpan time)
-        {
-            foreach (var layer in Items)
-            {
-                layer.MoveLayer(time);
-            }
+	        var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);						
+					}
         }
 
         public DateTimePeriod? Period()
@@ -89,7 +83,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void Insert(int index, ILayer<T> item)
         {
-            Items.Insert(index, item);
+					var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					if (itemAsPersistedLayer != null)
+					{
+						itemAsPersistedLayer.SetParent((IEntity)_owner);
+					}
+           Items.Insert(index, item);
         }
 
         public void MoveUpLayer(ILayer<T> layer)

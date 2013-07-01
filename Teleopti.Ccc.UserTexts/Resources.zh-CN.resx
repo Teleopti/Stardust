@@ -4064,7 +4064,7 @@ Periods</comment>
     <comment>RolesView</comment>
   </data>
   <data name="RollingPeriod" xml:space="preserve">
-    <value>滚动阶段</value>
+    <value>滚动时期</value>
     <comment>Rolling period</comment>
   </data>
   <data name="RootGroup" xml:space="preserve">
@@ -4349,7 +4349,7 @@ Periods</comment>
     <comment>Select your list of rule sets</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>非常缺员</value>
+    <value>严重缺员</value>
     <comment>Critical understaffing</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
@@ -6609,9 +6609,6 @@ Periods</comment>
   <data name="MinDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
     <value>每周最少休息日必须比最大值小或者等同</value>
   </data>
-  <data name="UseStudentAvailability" xml:space="preserve">
-    <value>使用可工作的学生</value>
-  </data>
   <data name="Alarms" xml:space="preserve">
     <value>警报</value>
   </data>
@@ -7911,7 +7908,7 @@ Teleopti R&amp;D</value>
     <value>增加时段从－到</value>
   </data>
   <data name="AddRollingPeriod" xml:space="preserve">
-    <value>增加循环时段</value>
+    <value>添加滚动时期</value>
   </data>
   <data name="DaysOffBackToLegalState" xml:space="preserve">
     <value>休息日返回合法状态</value>
@@ -9245,7 +9242,7 @@ Teleopti R&amp;D</value>
     <value>不能被排班的坐席天数 {0} 天.</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
-    <value>完成的偏好</value>
+    <value>偏好的满足</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>缺席申请 {0} 已被申请。</value>
@@ -9260,7 +9257,7 @@ Teleopti R&amp;D</value>
     <value>您的偏好共有 {0} 个休息日。</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
-    <value>完成的轮转</value>
+    <value>轮转的满足</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>申请历史记录</value>
@@ -9326,7 +9323,7 @@ Teleopti R&amp;D</value>
     <value>组织</value>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
-    <value>已经履行的必须拥有班次</value>
+    <value>必须有的满足</value>
   </data>
   <data name="YourPreferencesCanResultXHours" xml:space="preserve">
     <value>您的偏好一共是 {0} 个小时。</value>
@@ -9473,7 +9470,7 @@ Teleopti R&amp;D</value>
     <value>申请津贴</value>
   </data>
   <data name="AvailabilityFulfillment" xml:space="preserve">
-    <value>履行的可用量</value>
+    <value>可用的满足</value>
   </data>
   <data name="DuplicateDaysOffValidationError" xml:space="preserve">
     <value>在 {0} 有重复休息日</value>
@@ -9752,7 +9749,7 @@ Teleopti R&amp;D</value>
     <value>您没有权限访问Web门户网站。</value>
   </data>
   <data name="NotWorking" xml:space="preserve">
-    <value>不工作。</value>
+    <value>不工作</value>
   </data>
   <data name="MobileReports" xml:space="preserve">
     <value>手机报告</value>

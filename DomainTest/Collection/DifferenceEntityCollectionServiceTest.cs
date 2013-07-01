@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                                              new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             IList<IPersonAbsence> org = new List<IPersonAbsence> { absOrg1, absOrg2 };
             IList<IPersonAbsence> current = new List<IPersonAbsence> { absOrg2New, absNew };
-            absOrg2New.Layer.MoveLayer(new TimeSpan(3));
 
             IDifferenceCollection<IPersonAbsence> res = target.Difference(org, current);
             Assert.AreEqual(3, res.Count());

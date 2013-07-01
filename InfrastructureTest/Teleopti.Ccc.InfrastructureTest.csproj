@@ -152,6 +152,7 @@
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\EtlReadModelRepositoryTest.cs" />
+    <Compile Include="Repositories\OvertimeAvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelStorageTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />

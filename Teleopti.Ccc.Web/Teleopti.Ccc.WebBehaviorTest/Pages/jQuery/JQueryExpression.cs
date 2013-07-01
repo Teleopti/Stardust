@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 		public string Eval()
 		{
 			_expression.Append(";");
+			_expression.Insert(0, "return ");
 			return Core.Browser.Interactions.Javascript(_expression.ToString()) as string;
 		}
 

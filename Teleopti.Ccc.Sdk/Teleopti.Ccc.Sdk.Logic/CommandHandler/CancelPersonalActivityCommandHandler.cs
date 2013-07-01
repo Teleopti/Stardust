@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -57,15 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				foreach (var personAssignment in personAssignmentCollection)
 				{
-					var personalShifts = personAssignment.PersonalShiftCollection.ToList();
-					foreach (var personalShift in personalShifts)
-					{
-						cancelPersonalActivity(personalShift, dateTimePeriod);
-						if (personalShift.LayerCollection.Count == 0)
-						{
-							personAssignment.RemovePersonalShift(personalShift);
-						}
-					}
+					cancelPersonalActivity(personAssignment, dateTimePeriod);
 				}
 
 				_saveSchedulePartService.Save(scheduleDay, rules);
@@ -83,24 +76,22 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
 		}
 
-		private static void cancelPersonalActivity(IPersonalShift personalShift, DateTimePeriod period)
+		private static void cancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			var layers = personalShift.LayerCollection.ToList();
-			foreach (IPersonalShiftActivityLayer layer in layers)
+			var layers = personAssignment.PersonalLayers.ToList();
+			foreach (IPersonalShiftLayer layer in layers)
 			{
 				var layerPeriod = layer.Period;
 				if (!layerPeriod.Intersect(period)) continue;
 
-				personalShift.LayerCollection.Remove(layer);
+				personAssignment.RemoveLayer(layer);
 
 				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
 				foreach (var dateTimePeriod in newPeriods)
 				{
 					if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 					{
-						var newLayer = layer.NoneEntityClone();
-						newLayer.Period = dateTimePeriod;
-						personalShift.LayerCollection.Add(newLayer);
+						personAssignment.AddPersonalLayer(layer.Payload, dateTimePeriod);
 					}
 				}
 			}

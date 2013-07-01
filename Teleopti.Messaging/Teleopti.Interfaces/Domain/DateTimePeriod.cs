@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -204,33 +205,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Returns the common period shared by this and param DateTimePeriod.
-        /// </summary>
-        /// <param name="periodToValidate">The period.</param>
-        /// <returns>
-        /// </returns>
-        public DateTimePeriod SharedPeriod(DateTimePeriod periodToValidate)
-        {
-
-            if (!ContainsPart(periodToValidate))
-                throw new ArgumentOutOfRangeException("periodToValidate", "This operation can not be performed on the supplied DateTimePeriod.");
-
-            DateTime start, end;
-
-            if (periodToValidate.StartDateTime >= StartDateTime)
-                start = periodToValidate.StartDateTime;
-            else
-                start = StartDateTime;
-
-            if (periodToValidate.EndDateTime <= EndDateTime)
-                end = periodToValidate.EndDateTime;
-            else
-                end = EndDateTime;
-
-            return new DateTimePeriod(start, end, false);
-        }
-
-        /// <summary>
         /// Returns if any part of the param DateTimePeriod is contained. 
         /// </summary>
         /// <param name="containsPeriod">The period.</param>
@@ -246,35 +220,6 @@ namespace Teleopti.Interfaces.Domain
                 return true;
 
             return false;
-        }
-
-        /// <summary>
-        /// Determines whether the specified period contains part.
-        /// </summary>
-        /// <param name="containsPeriod">The period.</param>
-        /// <param name="includeStartAndEnd">if set to <c>true</c> [include start and end].</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified period contains part; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-12
-        /// </remarks>
-        public bool ContainsPart(DateTimePeriod containsPeriod, bool includeStartAndEnd)
-        {
-            if (!includeStartAndEnd)
-            {
-                if (containsPeriod.StartDateTime == containsPeriod.EndDateTime ||
-                    containsPeriod.ElapsedTime().TotalMinutes <= 1d)
-                {
-                    return Contains(containsPeriod);
-                }
-
-                containsPeriod = containsPeriod.ChangeStartTime(new TimeSpan(1L));
-                containsPeriod = containsPeriod.ChangeEndTime(new TimeSpan(-1L));
-            }
-
-            return ContainsPart(containsPeriod);
         }
 
         /// <summary>
@@ -373,50 +318,6 @@ namespace Teleopti.Interfaces.Domain
                 collectionToReturn.Add(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDateTime,
                                                                                             currentEndDateTime));
                 currentDateTime = currentEndDateTime;
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
-        /// The local days affected.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> LocalDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.LocalStartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.LocalStartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.LocalEndDateTime.AddTicks(-1L).Date))
-                    collectionToReturn.Add(wholeDay.LocalEndDateTime.AddTicks(-1L).Date);
-            }
-            return collectionToReturn;
-        }
-
-        /// <summary>
-        /// The days affected in UTC.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTime> UtcDaysAffected()
-        {
-            IList<DateTimePeriod> wholeDayCollection = WholeDayCollection();
-            IList<DateTime> collectionToReturn = new List<DateTime>();
-            foreach (DateTimePeriod wholeDay in wholeDayCollection)
-            {
-                if (!collectionToReturn.Contains(wholeDay.StartDateTime.Date))
-                    collectionToReturn.Add(wholeDay.StartDateTime.Date);
-                if (!collectionToReturn.Contains(wholeDay.EndDateTime.Date))
-                    collectionToReturn.Add(wholeDay.EndDateTime.Date);
             }
             return collectionToReturn;
         }
@@ -621,15 +522,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="intersectPeriod">The period.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 4.12.2007
-        /// The method is very similar to the SharedPeriod method. The differences are the following:
-        /// - If the two period does not have common part, the Intersection method will return a null value, while SharedPeriod will
-        /// throw an exception.
-        /// - If one period end time equals the other period start time, then the Intersect will return a null value, while SharedPeriod
-        /// will return a DateTimePeriod where the start and the end time are equal. 
-        /// </remarks>
         public DateTimePeriod? Intersection(DateTimePeriod intersectPeriod)
         {
             if (!Intersect(intersectPeriod))
@@ -637,10 +529,10 @@ namespace Teleopti.Interfaces.Domain
 
             DateTime intersectStart = intersectPeriod.StartDateTime;
             DateTime intersectEnd = intersectPeriod.EndDateTime;
-            DateTime start = this.period.Minimum;
+            DateTime start = period.Minimum;
             if (intersectStart > start)
                 start = intersectStart;
-            DateTime end = this.period.Maximum;
+            DateTime end = period.Maximum;
             if (intersectEnd < end)
                 end = intersectEnd;
             return new DateTimePeriod(start, end, false);
@@ -651,82 +543,9 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="adjacentPeriod">The period.</param>
         /// <returns></returns>
-        public bool Adjacent(DateTimePeriod adjacentPeriod)
+        public bool AdjacentTo(DateTimePeriod adjacentPeriod)
         {
             return (StartDateTime == adjacentPeriod.EndDateTime || EndDateTime == adjacentPeriod.StartDateTime);
-        }
-
-        /// <summary>
-        /// Returns whether the specified periods are adjacent within a specified offset. That is the gap, or the intersect between the
-        /// first period end date and the others period start date is within the offset. As an example, if period A ends at 22:30 and 
-        /// period B starts at 23:00, they are Adjacent if the offset is more than 30 minutes. Also adjacent, if period B starts at 22:00.
-        /// </summary>
-        /// <param name="adjacentPeriod">The period.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
-        public bool Adjacent(DateTimePeriod adjacentPeriod, TimeSpan offset)
-        {
-            return (StartDateTime.Subtract(adjacentPeriod.EndDateTime).Duration() <= offset || EndDateTime.Subtract(adjacentPeriod.StartDateTime).Duration() <= offset);
-        }
-
-        //public IList<DateTimePeriod> Union(IList<DateTimePeriod> periodList)
-        //{
-        //    return null;
-        //}
- 
-        /// <summary>
-        /// Gets the time period representing the union of the two periods.
-        /// If the periods does not intersect or adjacent then null is returned
-        /// </summary>
-        /// <param name="unionPeriod">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 2008-05-16
-        /// </remarks>
-        public DateTimePeriod? Union(DateTimePeriod unionPeriod)
-        {
-            if (Intersect(unionPeriod) || Adjacent(unionPeriod))
-            {
-                DateTime start = earliest(StartDateTime, unionPeriod.StartDateTime);
-                DateTime end = latest(EndDateTime, unionPeriod.EndDateTime);
-                return new DateTimePeriod(start, end, false);
-            }
-            return null;
-        }
-
-
-        /// <summary>
-        /// Gets the time period representing the union of the two periods.
-        /// If the periods does not intersect or adjacent withing the offset, then null is returned
-        /// </summary>
-        /// <param name="unionPeriod">The period.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 2008-05-16
-        /// </remarks>
-        public DateTimePeriod? Union(DateTimePeriod unionPeriod, TimeSpan offset)
-        {
-            if (Intersect(unionPeriod) || Adjacent(unionPeriod, offset))
-            {
-                DateTime start = earliest(StartDateTime, unionPeriod.StartDateTime);
-                DateTime end = latest(EndDateTime, unionPeriod.EndDateTime);
-                return new DateTimePeriod(start, end, false);
-            }
-            return null;
-        }
-
-
-        private static DateTime earliest(DateTime first, DateTime second)
-        {
-            return first <= second ? first : second;
-        }
-
-        private static DateTime latest(DateTime first, DateTime second)
-        {
-            return first >= second ? first : second;
         }
 
         /// <summary>
@@ -823,26 +642,6 @@ namespace Teleopti.Interfaces.Domain
         	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
         }
 
-    	/// <summary>
-        /// Gets a new period starting the first day of the week
-        /// ending the last day of week
-        /// (in sweden: startdate will back to nearest monday, enddate will be forward to closest sunday)
-        /// </summary>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-14
-        /// </remarks>
-        /// <param name="timeZoneInfo"></param>
-        public DateTimePeriod WholeWeek(CultureInfo culture, TimeZoneInfo timeZoneInfo)
-        {
-            DateTime startdate = DateHelper.GetFirstDateInWeek(StartDateTimeLocal(timeZoneInfo), culture);
-            DateTime endDate = DateHelper.GetLastDateInWeek(EndDateTimeLocal(timeZoneInfo), culture).AddDays(1);
-            return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(startdate),
-                                      timeZoneInfo.SafeConvertTimeToUtc(endDate), false);
-        }
-
         /// <summary>
         /// Get the maximum period.
         /// A new DateTimePeriod is returned with the lowest
@@ -911,35 +710,23 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Merges two lists of DataTimePeriods into one.
+        /// Merges a list lists of DataTimePeriods into one.
         /// </summary>
-        /// <param name="list1">The list1.</param>
-        /// <param name="list2">The list2.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: micke, algorithm by Tamas
         /// Created date: 2009-01-26
         /// </remarks>
-        public static IList<DateTimePeriod> MergeLists(IList<DateTimePeriod> list1, IList<DateTimePeriod> list2)
+        public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
-            IList<DateTimePeriod> ret = new List<DateTimePeriod>();
-
-            if(list1.Count == 0)
-                return list2;
-
-            if(list2.Count == 0)
-                return list1;
+	        if (!periods.Any())
+		        return Enumerable.Empty<DateTimePeriod>();
+            var ret = new List<DateTimePeriod>();
 
             List<DateTime> startTimes = new List<DateTime>();
             List<DateTime> endTimes = new List<DateTime>();
 
-            foreach (var dateTimePeriod in list1)
-            {
-                startTimes.Add(dateTimePeriod.StartDateTime);
-                endTimes.Add(dateTimePeriod.EndDateTime);
-            }
-
-            foreach (var dateTimePeriod in list2)
+            foreach (var dateTimePeriod in periods)
             {
                 startTimes.Add(dateTimePeriod.StartDateTime);
                 endTimes.Add(dateTimePeriod.EndDateTime);
@@ -994,21 +781,6 @@ namespace Teleopti.Interfaces.Domain
                 timePeriods.Add(rightTimePeriod);
             }
             return timePeriods;
-        }
-
-        /// <summary>
-        /// Returns the elapsed time TotalDays rounded to an integer.
-        /// </summary>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-02-17    
-        /// /// </remarks>
-        public double RoundedDaysCount()
-        {
-            TimeSpan elapsedTime = period.Maximum - period.Minimum;
-            return Math.Round(elapsedTime.TotalDays);
         }
     }
 }

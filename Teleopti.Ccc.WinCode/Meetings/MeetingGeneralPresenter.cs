@@ -75,12 +75,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public void SetEndTime(TimeSpan endTime)
         {
+			if (updateFlag) return;
             _model.EndTime = endTime;
             _view.SetEndTime(_model.EndTime);
         }
 
         public void SetStartTime(TimeSpan startTime)
         {
+			if (updateFlag) return;
             _model.StartTime = startTime;
 			_view.SetEndTime(_model.EndTime);
         }
@@ -100,8 +102,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _view.SetParticipants(_model.Participants);
         }
 
+
+		private bool updateFlag;
 		public void UpdateView()
 		{
+			updateFlag = true;
 			_view.DescriptionFocus();
 			_view.SetOrganizer(_model.Organizer);
 			_view.SetParticipants(_model.Participants);
@@ -117,6 +122,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			_view.SetSubject(_model.GetSubject(new NoFormatting()));
 			_view.SetLocation(_model.GetLocation(new NoFormatting()));
 			_view.SetDescription(_model.GetDescription(new NoFormatting()));
+			updateFlag = false;
 		}
 
 	    public void CancelAllLoads()

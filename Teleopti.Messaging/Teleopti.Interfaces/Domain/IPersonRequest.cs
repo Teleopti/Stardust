@@ -94,6 +94,12 @@ namespace Teleopti.Interfaces.Domain
         /// <value><c>true</c> if this instance is denied; otherwise, <c>false</c>.</value>
         bool IsDenied { get; }
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is auto denied by system rules.
+		/// </summary>
+		/// <value><c>true</c> if this instance is auto denied; otherwise, <c>false</c>.</value>
+		bool IsAutoDenied { get; }
+
         /// <summary>
         /// Gets a value indicating whether this instance is approved.
         /// </summary>

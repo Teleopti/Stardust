@@ -49,22 +49,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target = new AbsenceLayer(target.Payload, target.Period.MovePeriod(TimeSpan.FromSeconds(4)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void ShouldNotAllowToMoveLayersBySeconds()
-        {
-            target.MoveLayer(TimeSpan.FromSeconds(4));
-        }
-
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void ShouldNotAllowToChangeStartTimeOfLayersBySeconds()
-        {
-            target.ChangeLayerPeriodStart(TimeSpan.FromSeconds(-4));
-        }
-
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void ShouldNotAllowToChangeEndTimeOfLayersBySeconds()
-        {
-            target.ChangeLayerPeriodEnd(TimeSpan.FromSeconds(4));
-        }
     }
 }

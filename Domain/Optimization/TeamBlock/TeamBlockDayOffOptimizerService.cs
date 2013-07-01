@@ -98,7 +98,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+				if (teamInfo != null)
+					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 
 			// find a random selected TeamInfo/matrix
@@ -150,35 +152,38 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 				bool anySuccess = false;
-				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
+
+				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
-					rollbackService.ClearModificationCollection();
-					var success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
-					             selectedPeriod, selectedPersons, allPersonMatrixList);
-
-					double currentPeriodValue =
-					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
-					if (currentPeriodValue >= previousPeriodValue || !success)
+					foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 					{
-						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-						currentPeriodValue =
-						_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-					}
-					else
-					{
-						anySuccess = true;
-					}
-					previousPeriodValue = currentPeriodValue;
+						rollbackService.ClearModificationCollection();
+						var success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+						                           selectedPeriod, selectedPersons, allPersonMatrixList);
 
-					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-					                 currentTeamInfoCounter.ToString("####") + ") " +
-					                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
-					                 ")");
-					if (_cancelMe)
-						break;
+						double currentPeriodValue =
+							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+						if (currentPeriodValue >= previousPeriodValue || !success)
+						{
+							_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+							currentPeriodValue =
+								_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						}
+						else
+						{
+							anySuccess = true;
+						}
+						previousPeriodValue = currentPeriodValue;
+
+						OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+						                 currentTeamInfoCounter.ToString("####") + ") " +
+						                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
+						                 ")");
+						if (_cancelMe)
+							break;
+					}
 				}
-
 				if (!anySuccess)
 				{
 					teamInfosToRemove.Add(teamInfo);
@@ -261,6 +266,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                                                                                             .BlockFinderTypeForAdvanceScheduling, 
 																							singleAgentTeam,
 																							allPersonMatrixList);
+				if (teamBlockInfo == null) continue;
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 

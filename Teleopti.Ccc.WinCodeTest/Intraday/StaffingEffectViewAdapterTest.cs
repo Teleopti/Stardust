@@ -2,9 +2,12 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Practices.Composite.Events;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _team = _mocks.DynamicMock<ITeam>();
 
             _model = new DayLayerModel(_person, _period, _team,
-                                          new WinCode.Common.LayerViewModelCollection(), null);
+										  new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), null);
             _dayLayerViewAdapter = new DayLayerViewModel(_rtaStateHolder, null, null, null, new TestDispatcher());
             _dayLayerViewAdapter.Models.Add(_model);
 

@@ -10968,7 +10968,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Var god välj minst ett av alternativen "Samma skiftkategori", "Samma starttid" eller "Samma skift" vid blockoptimering. </value>
   </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
-    <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skifteditor, använd klipp ut och klistra in i stället.</value>
+    <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skiftredigeraren. Använd klipp ut och klistra in istället.</value>
     <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
@@ -10997,5 +10997,28 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="Improved" xml:space="preserve">
     <value>Förbättrat</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Mottagaren har svarat på ditt tidigare meddelande. Uppdatera fönstret för att se svaret. Ditt meddelande kommer inte att skickas.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Tillgänglighet per agent</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Nekad</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Nekad</value>
+    <comment>Translation for enum status Autodenied for requests</comment>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Din frånvaroförfrågan har avslagits. Några dagar i den aktuella perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar gällande följande period: {0}.</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Visa aktiva agenter</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Lokal tid</value>
   </data>
 </root>

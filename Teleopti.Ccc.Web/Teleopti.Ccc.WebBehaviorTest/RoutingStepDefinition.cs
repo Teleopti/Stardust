@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -14,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see MyTime")]
 		public void ThenIShouldSeeMyTime()
 		{
-			EventualAssert.That(() => Pages.Pages.WeekSchedulePage.DatePicker.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.WeekSchedulePage.InnerBody.Exists, Is.True);
 		}
 
 		[Then(@"I should see Mobile Reports")]

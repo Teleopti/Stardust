@@ -201,18 +201,19 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnRtaAlarm()
 		{
+			var rtaStateGroupLight = new RtaStateGroupLight
+				{
+					PlatformTypeId = _platformTypeId,
+					StateCode = _stateCode,
+					BusinessUnitId = _businessUnitId,
+					StateGroupId = _stateGroupId
+				};
 			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
 				{
 					{
 						_stateCode, new List<RtaStateGroupLight>
 							{
-								new RtaStateGroupLight
-									{
-										PlatformTypeId = _platformTypeId,
-										StateCode = _stateCode,
-										BusinessUnitId = _businessUnitId,
-										StateGroupId = _stateGroupId
-									}
+								rtaStateGroupLight
 							}
 					}
 				};
@@ -220,7 +221,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, rtaStateGroupLight);
 			_mock.VerifyAll();
 			Assert.That(result, Is.EqualTo(_rtaAlarmLight));
 		}
@@ -232,7 +233,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, _businessUnitId);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, _businessUnitId, new RtaStateGroupLight());
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}
@@ -253,7 +254,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, new RtaStateGroupLight());
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}

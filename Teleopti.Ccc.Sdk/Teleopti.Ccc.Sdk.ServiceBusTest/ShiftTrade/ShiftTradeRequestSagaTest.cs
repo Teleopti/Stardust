@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private IRequestFactory requestFactory;
         private IScheduleDictionarySaver scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
-    	private ILoadSchedulingStateHolderForResourceCalculation loader;
+    	private ILoadSchedulesForRequestWithoutResourceCalculation loader;
 
     	[SetUp]
         public void Setup()
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             schedulingResultState = new SchedulingResultStateHolder();
             schedulingResultState.Schedules = mocker.DynamicMock<IScheduleDictionary>();
             unitOfWork = mocker.StrictMock<IUnitOfWork>();
-            loader = mocker.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
+            loader = mocker.DynamicMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
             
             target = new ShiftTradeRequestSaga(schedulingResultState, validator, requestFactory, scenarioRepository, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver, loader);
         }

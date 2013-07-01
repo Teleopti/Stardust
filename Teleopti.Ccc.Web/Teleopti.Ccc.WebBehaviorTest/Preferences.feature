@@ -112,10 +112,8 @@ Scenario: Delete multiple standard preference
 	And I have 2 existing standard preference
 	And I am viewing preferences
 	When I select 2 editable day with standard preference
-	And I click the delete button
+	And I click the delete preference button
 	Then I should no longer see the 2 standard preferences in the calendar
-
-
 
 
 Scenario: Can not edit preference without workflow control set
@@ -148,5 +146,6 @@ Scenario: Default to first virtual schedule period overlapping open preference p
 	And I have a workflow control set with preference periods open next month
 	When I view preferences
 	Then I should see the first virtual schedule period overlapping open preference period
+
 
 

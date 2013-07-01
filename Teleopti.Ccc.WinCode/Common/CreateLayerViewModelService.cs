@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -8,13 +9,12 @@ namespace Teleopti.Ccc.WinCode.Common
     public class CreateLayerViewModelService : ICreateLayerViewModelService
     {
 
-        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, IEventAggregator eventAggregator, TimeSpan interval)
+        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, TimeSpan interval)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, eventAggregator);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, eventAggregator);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, eventAggregator);
-            ((LayerViewModel)visualLayerViewModel).IsProjectionLayer = true;
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
 
             visualLayerViewModel.Interval = interval;
             return visualLayerViewModel;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)
                     {
-                        var viewModel = createViewModelFromVisualLayer(visualLayer, eventAggregator, interval);
+                        var viewModel = createViewModelFromVisualLayer(visualLayer, interval);
                         viewModel.SchedulePart = scheduleDay;
                         retList.Add(viewModel);
                     }
@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.WinCode.Common
             return retList;
         }
 
-        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, IEventAggregator eventAggregator, TimeSpan interval)
+        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, TimeSpan interval)
         {
             IList<ILayerViewModel> projectionViewModels = new List<ILayerViewModel>();
             if (projectionSource != null)
             {
                 foreach (IVisualLayer visualLayer in projectionSource.ProjectionService().CreateProjection())
                 {
-                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, eventAggregator, interval));
+                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, interval));
                 }
             }
             return projectionViewModels;
@@ -61,36 +61,26 @@ namespace Teleopti.Ccc.WinCode.Common
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
             IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
+	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-#pragma warning disable 612,618
-	            var ms = assignment.ToMainShift();
-#pragma warning restore 612,618
-                if (ms != null)
-                {
-                    foreach (ILayer<IActivity> layer in ms.LayerCollection)
-                    {
-                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, ms, eventAggregator));
-                    }
-                }
+	            foreach (var layer in assignment.MainLayers)
+	            {
+		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
+	            }
 
                 foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
                 {
                     foreach (
-                        IOvertimeShiftActivityLayer layer in overtimeShift.LayerCollectionWithDefinitionSet())
+                        var layer in overtimeShift.LayerCollectionWithDefinitionSet())
                     {
-                        layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, eventAggregator));
+											layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
                     }
                 }
-
-                foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                {
-                    foreach (ILayer<IActivity> layer in shift.LayerCollection)
-                    {
-                        layerViewModels.Add(new PersonalShiftLayerViewModel(observer, layer, shift, eventAggregator));
-                    }
-                }
-
+	            foreach (var personalLayer in assignment.PersonalLayers)
+	            {
+		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
+	            }
             }
 			// bug 14478 show meetings even if there is no assignment
 			foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())

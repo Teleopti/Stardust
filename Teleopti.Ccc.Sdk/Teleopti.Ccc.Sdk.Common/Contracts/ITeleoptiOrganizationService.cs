@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
 namespace Teleopti.Ccc.Sdk.Common.Contracts
@@ -329,5 +330,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <returns></returns>
 		[OperationContract]
 		ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Sets work time on a person's schedule period belonging to a date.
+		/// </summary>
+		/// <param name="setSchedulePeriodWorktimeOverrideCommandDto"></param>
+		/// <returns></returns>
+		[OperationContract]
+		CommandResultDto SetSchedulePeriodWorktimeOverride(SetSchedulePeriodWorktimeOverrideCommandDto setSchedulePeriodWorktimeOverrideCommandDto);
     }
 }

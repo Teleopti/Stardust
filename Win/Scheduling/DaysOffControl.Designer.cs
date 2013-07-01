@@ -128,9 +128,9 @@
 			this.timeSpanTextBoxTargetLength.AllowNegativeValues = false;
 			this.timeSpanTextBoxTargetLength.DefaultInterpretAsMinutes = false;
 			resources.ApplyResources(this.timeSpanTextBoxTargetLength, "timeSpanTextBoxTargetLength");
-			this.timeSpanTextBoxTargetLength.MaximumValue = System.TimeSpan.Parse("1.12:00:00");
+			this.timeSpanTextBoxTargetLength.MaximumValue = System.TimeSpan.Parse("1.21:00:00");
 			this.timeSpanTextBoxTargetLength.Name = "timeSpanTextBoxTargetLength";
-			this.timeSpanTextBoxTargetLength.TimeSpanBoxHeight = 24;
+			this.timeSpanTextBoxTargetLength.TimeSpanBoxHeight = 21;
 			this.timeSpanTextBoxTargetLength.TimeSpanBoxWidth = 60;
 			// 
 			// timeSpanTextBoxFlexibility
@@ -141,7 +141,7 @@
 			resources.ApplyResources(this.timeSpanTextBoxFlexibility, "timeSpanTextBoxFlexibility");
 			this.timeSpanTextBoxFlexibility.MaximumValue = System.TimeSpan.Parse("15:00:00");
 			this.timeSpanTextBoxFlexibility.Name = "timeSpanTextBoxFlexibility";
-			this.timeSpanTextBoxFlexibility.TimeSpanBoxHeight = 24;
+			this.timeSpanTextBoxFlexibility.TimeSpanBoxHeight = 21;
 			this.timeSpanTextBoxFlexibility.TimeSpanBoxWidth = 33;
 			// 
 			// timeSpanTextBoxAnchor
@@ -152,7 +152,7 @@
 			resources.ApplyResources(this.timeSpanTextBoxAnchor, "timeSpanTextBoxAnchor");
 			this.timeSpanTextBoxAnchor.MaximumValue = System.TimeSpan.Parse("23:59:00");
 			this.timeSpanTextBoxAnchor.Name = "timeSpanTextBoxAnchor";
-			this.timeSpanTextBoxAnchor.TimeSpanBoxHeight = 24;
+			this.timeSpanTextBoxAnchor.TimeSpanBoxHeight = 21;
 			this.timeSpanTextBoxAnchor.TimeSpanBoxWidth = 60;
 			// 
 			// tableLayoutPanelControlContainer

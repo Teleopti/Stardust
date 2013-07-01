@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -41,10 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
-            Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
-            actL2.Payload = actL.Payload;
 
             Assert.AreEqual(actL.Payload, actL2.Payload);
         }
@@ -75,22 +74,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-        [Test]
-        public void VerifyPayloadSetter()
-        {
-            DateTimePeriod per =
-                new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-            FakeLayerClass actL = new FakeLayerClass(fakeActivity, per);
-
-            ILayer castedLayer = actL;
-
-            IActivity act = new Activity("sdf");
-            castedLayer.Payload = act;
-            Assert.AreSame(act, castedLayer.Payload);
-        }
-
-
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
         /// </summary>
@@ -99,33 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void PayloadMustNotBeSetToNull()
         {
             new FakeLayerClass(null, new DateTimePeriod());
-        }
-
-        /// <summary>
-        /// Verifies the adjacent method.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-30
-        /// </remarks>
-        [Test]
-        public void VerifyAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            ILayer<IActivity> layer2001 = new ActivityLayer(fakeActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1));
-            ILayer<IActivity> layer2002 = new ActivityLayer(fakeActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-
-            Assert.IsTrue(layer2000.AdjacentTo(layer2001));
-            Assert.IsTrue(layer2002.AdjacentTo(layer2001));
-            Assert.IsFalse(layer2002.AdjacentTo(layer2000));
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyNotNullToAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            layer2000.AdjacentTo(null);
         }
 
         /// <summary>
@@ -165,42 +121,17 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOrderIndexWorks()
         {
-	        var shift = PersonalShiftFactory.CreatePersonalShift(fakeActivity, new DateTimePeriod());
-			shift.LayerCollection.Clear();
-            var layer1 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
-			var layer2 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
 
-            shift.LayerCollection.Add(layer1);
-            shift.LayerCollection.Add(layer2);
-            Assert.AreEqual(0, layer1.OrderIndex);
-            Assert.AreEqual(1, layer2.OrderIndex);
-            
-            
-
-        }
-
-        /// <summary>
-        /// Verifies that a new correct DateTimePeriod (end time) is created on specific layer
-        /// </summary>
-        [Test]
-        public void CanChangePeriodEndTimeAccordingToTimeSpan()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.ChangeLayerPeriodEnd(new TimeSpan(0, 1, 0, 0));
-
-            Assert.AreEqual(layer.Period.StartDateTime, expectedLayer.Period.StartDateTime);
-            Assert.AreEqual(layer.Period.EndDateTime, expectedLayer.Period.EndDateTime);
-        }
+						var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
+						var shift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
+																																			new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+																																			defSet,
+																																			new PersonAssignment(new Person(), new Scenario("d"),
+																																													 new DateOnly(2000, 1, 1)));
+						var layer2 = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1), defSet);
+						shift.LayerCollection.Add(layer2);
+						Assert.AreEqual(1, layer2.OrderIndex);
+				}
 
         [Test]
         public void CanSetProperties()
@@ -209,94 +140,12 @@ namespace Teleopti.Ccc.DomainTest.Common
                 new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
                                    new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
             ActivityLayer layer = new ActivityLayer(fakeActivity, period);
-            Activity activity = ActivityFactory.CreateActivity("sdf");
             period= new DateTimePeriod(2000,1,1,2002,1,1);
             layer.Period = period;
-            layer.Payload = activity;
-
-            Assert.AreSame(activity, layer.Payload);
             Assert.AreEqual(period, layer.Period);
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotSetNullAsPayload()
-        {
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(fakeActivity, period);
-            layer.Payload = null;
-        }
-
-        /// <summary>
-        /// Verifies that a new correct DateTimePeriod (start time) is created on specific layer
-        /// </summary>
-        [Test]
-        public void CanChangePeriodStartTimeAccordingToTimeSpan()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 15, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.ChangeLayerPeriodStart(new TimeSpan(0, -1, 0, 0));
-
-            Assert.AreEqual(layer.Period.StartDateTime, expectedLayer.Period.StartDateTime);
-            Assert.AreEqual(layer.Period.EndDateTime, expectedLayer.Period.EndDateTime);
-        }
-
-        /// <summary>
-        /// Verifies that the layer is moved forward in time
-        /// </summary>
-        [Test]
-        public void CanMoveLayerForward()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 19, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.MoveLayer(new TimeSpan(0, 2, 0, 0));
-
-            Assert.AreEqual(expectedLayer.Period.StartDateTime, layer.Period.StartDateTime);
-            Assert.AreEqual(expectedLayer.Period.EndDateTime, layer.Period.EndDateTime);
-        }
-
-        /// <summary>
-        /// Verifies that the layer is moved backwards in time
-        /// </summary>
-        [Test]
-        public void CanMoveLayerBackwards()
-        {
-            Activity act = ActivityFactory.CreateActivity("Telefon");
-            DateTimePeriod period =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
-            ActivityLayer layer = new ActivityLayer(act, period);
-
-            DateTimePeriod expectedPeriod =
-                new DateTimePeriod(new DateTime(2001, 1, 1, 14, 00, 0, DateTimeKind.Utc),
-                                   new DateTime(2001, 1, 1, 15, 00, 0, DateTimeKind.Utc));
-            ActivityLayer expectedLayer = new ActivityLayer(act, expectedPeriod);
-
-            layer.MoveLayer(new TimeSpan(0, -2, 0, 0));
-
-            Assert.AreEqual(expectedLayer.Period.StartDateTime, layer.Period.StartDateTime);
-            Assert.AreEqual(expectedLayer.Period.EndDateTime, layer.Period.EndDateTime);
-        }
+       
 
         private class FakeLayerClass : Layer<IActivity>
         {

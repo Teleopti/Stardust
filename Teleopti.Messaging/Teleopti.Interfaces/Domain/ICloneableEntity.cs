@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Domain
     /// Interface for Entities with generic cloning with or without IEntity.Id set.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICloneableEntity<T> : ICloneable
+    public interface ICloneableEntity<out T> : ICloneable
     {
 
         /// <summary>

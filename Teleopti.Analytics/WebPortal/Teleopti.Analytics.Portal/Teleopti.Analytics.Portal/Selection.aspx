@@ -46,14 +46,17 @@
 					<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">
 					</Analytics:Selector>
 				</div>
-				<div style="text-align: center;padding-bottom: 30px;padding-top: 10px">
+				<div style="text-align: center;padding-top: 10px;height:60px">
 					<asp:ImageButton  OnClick="ButtonShow_Click" ID="buttonShow" SkinID="Show" ToolTip='' 
 						runat="server" />
 					<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>
 				</div>
 			</asp:Panel>
 		</div>
-		<iframe  runat="server" id="ViewerFrame" name="ViewerFrame" style="display:none;" src="" width="100%"  allowtransparency="true" ></iframe>
+		<div>
+			<iframe  runat="server" id="ViewerFrame" name="ViewerFrame" style="display:none" src="" width="100%"  allowtransparency="true" ></iframe>
+		</div>
+		
     </form>
 </body>
 </html>

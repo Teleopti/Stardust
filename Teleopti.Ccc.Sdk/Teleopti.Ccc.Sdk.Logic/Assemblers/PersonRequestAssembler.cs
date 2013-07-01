@@ -46,7 +46,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personRequestDto.Id = entity.Id;
             personRequestDto.Message = entity.GetMessage(new NormalizeText());
             personRequestDto.Subject = entity.GetSubject(new NormalizeText());
-            personRequestDto.RequestStatus = (RequestStatusDto)PersonRequest.GetUnderlyingStateId(entity);
+
+			int statusId = PersonRequest.GetUnderlyingStateId(entity);
+	        if (statusId == 4) statusId = 1;
+			personRequestDto.RequestStatus = (RequestStatusDto)statusId;
+
             personRequestDto.RequestedDate = entity.RequestedDate;
             personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value) : DateTime.MinValue;
             personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value) : DateTime.MinValue;
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                     shiftTradeRequestDto.ShiftTradeSwapDetails.Add(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail));
                 }
                 personRequestDto.Request = shiftTradeRequestDto;
-                if (shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.OkByMe) //Maybe this should be moved to domain?
+                if (isNotWaitingForInitiator(shiftTradeRequestDto))
                 {
                     personRequestDto.CanDelete = false;
                 }
@@ -82,6 +86,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
             
             return personRequestDto;
+        }
+
+        private static bool isNotWaitingForInitiator(ShiftTradeRequestDto shiftTradeRequestDto)
+        {
+            return shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.OkByMe && 
+                   shiftTradeRequestDto.ShiftTradeStatus != ShiftTradeStatusDto.Referred;
         }
 
         public override IPersonRequest DtoToDomainEntity(PersonRequestDto dto)

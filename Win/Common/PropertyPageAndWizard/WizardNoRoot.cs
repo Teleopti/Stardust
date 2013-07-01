@@ -11,7 +11,7 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 {
 
-    public partial class WizardNoRoot<T> : BaseRibbonForm where T : class
+    public partial class WizardNoRoot<T> : BaseDialogForm where T : class
     {
         private readonly IAbstractPropertyPagesNoRoot<T> _propertyPages;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();

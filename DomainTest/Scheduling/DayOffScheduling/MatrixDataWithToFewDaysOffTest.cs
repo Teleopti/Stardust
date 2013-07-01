@@ -51,15 +51,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
+		public void ShouldNotReturnMatrixDataIfNotEnoughDaysOffButHasCorrectNumberOfDaysOffDueToFlexibilityWhenFixedDayWorkTime()
+		{
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			var contract = _mocks.StrictMock<IContract>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrixData.Matrix).Return(_matrix).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.Contract).Return(contract);
+				Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
+				int targetDaysOff;
+				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay> { scheduleDay1, scheduleDay2 };
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(true).OutRef(3, dayOffsNow);
+			}
+			using (_mocks.Playback())
+			{
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				Assert.AreEqual(0, result.Count);
+			}
+		}
+
+		[Test]
 		public void ShouldReturnMatrixDataIfNotEnoughDaysOffEvenWithFlexibilityOnDaysOff()
 		{
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			var contract = _mocks.StrictMock<IContract>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_matrixData.Matrix).Return(_matrix);
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_matrixData.Matrix).Return(_matrix).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.Contract).Return(contract);
+				Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 				int targetDaysOff;
 				//int dayOffsNow;
 				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay> { scheduleDay1, scheduleDay2 };
@@ -78,11 +105,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
+			var contract = _mocks.StrictMock<IContract>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_matrixData.Matrix).Return(_matrix);
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_matrixData.Matrix).Return(_matrix).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.Contract).Return(contract);
+				Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 				int targetDaysOff;
 				//int dayOffsNow;
 				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay> {scheduleDay1, scheduleDay2, scheduleDay3};

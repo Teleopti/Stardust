@@ -33,6 +33,16 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         	                                          DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
         	function.IsPreliminary = false;
             EnabledApplicationFunctions.Add(function);
+
+			function = ApplicationFunction.FindByPath(allApplicationFunctions,
+													  DefinedRaptorApplicationFunctionPaths.IntradayReForecasting);
+			function.IsPreliminary = false;
+			EnabledApplicationFunctions.Add(function);
+
+			function = ApplicationFunction.FindByPath(allApplicationFunctions,
+													  DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			function.IsPreliminary = false;
+			EnabledApplicationFunctions.Add(function);
         }
     }
 }

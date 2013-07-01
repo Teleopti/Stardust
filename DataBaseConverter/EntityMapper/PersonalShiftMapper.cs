@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// <summary>
     /// Maps a PersonalShift.
     /// </summary>
-    public class PersonalShiftMapper : Mapper<PersonalShift, global::Domain.FillupShift>
+    public class PersonalShiftMapper : Mapper<IEnumerable<ILayer<IActivity>>, global::Domain.FillupShift>
     {
         private readonly DateTime _date;
 
@@ -36,15 +36,15 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public override PersonalShift Map(global::Domain.FillupShift oldEntity)
+				public override IEnumerable<ILayer<IActivity>> Map(global::Domain.FillupShift oldEntity)
         {
-            PersonalShift retShift = new PersonalShift();
+            var retShift = new List<ILayer<IActivity>>();
             ActivityLayerMapper actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.PersonalShift, _date, TimeZone);
             foreach (global::Domain.ActivityLayer actLayer in oldEntity.ProjectedLayers())
             {
-                IActivityLayer newActLayer = actLayerMapper.Map(actLayer);
+                var newActLayer = actLayerMapper.Map(actLayer);
                 if (newActLayer != null)
-                    retShift.LayerCollection.Add(newActLayer);
+                    retShift.Add(newActLayer);
             }
             return retShift;
         }

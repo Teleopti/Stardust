@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 	{
 
 		[Test]
-		public void ShouldRouteTeamArea()
+		public void ShouldRouteAnywhereArea()
 		{
 			var routes = new RouteCollection();
 			var target = new AnywhereAreaRegistration();
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		}
 
 		[Test]
-		public void ShouldRouteMyTimeAuthenticationToStartArea()
+		public void ShouldRouteAnywhereAuthenticationToStartArea()
 		{
 			var routes = new RouteCollection();
 			var target = new AnywhereAreaRegistration();

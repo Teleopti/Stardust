@@ -28,6 +28,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             int weekCount = _workShiftRangeCalculator.WeekCount(matrix);
             for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
             {
+				bool skipThisWeek = false;
+				if (weekIndex == 0 || weekIndex == weekCount - 1)
+					skipThisWeek = skipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
+
+				if(skipThisWeek)
+					continue;
+
                 while (!_workShiftRangeCalculator.IsWeekInLegalState(weekIndex, matrix, schedulingOptions))
                 {
                     IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix, rollbackService);
@@ -63,5 +70,43 @@ namespace Teleopti.Ccc.Domain.Optimization
     	{
 			get {return _removedSchedules; }
     	}
+
+		private static bool skipWeekCheck(IScheduleMatrixPro matrix, DateOnly dateToCheck)
+		{
+			var contract = matrix.SchedulePeriod.Contract;
+			var weekPeriod = DateHelper.GetWeekPeriod(dateToCheck, matrix.Person.FirstDayOfWeek);
+			IPersonPeriod period = matrix.Person.Period(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
+
+			if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1)))
+			{
+				IPersonPeriod previousPeriod = matrix.Person.PreviousPeriod(period);
+				if (previousPeriod != null)
+				{
+					if (contract.WorkTimeDirective.MaxTimePerWeek != previousPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
+						return true;
+				}
+
+				IVirtualSchedulePeriod schedulePeriod =
+					matrix.Person.VirtualSchedulePeriod(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1));
+				if (!schedulePeriod.IsValid)
+					return true;
+			}
+			if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1)))
+			{
+				IPersonPeriod nextPeriod = matrix.Person.NextPeriod(period);
+				if (nextPeriod != null)
+				{
+					if (contract.WorkTimeDirective.MaxTimePerWeek != nextPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		private static DateOnly firstDateInWeekIndex(int weekIndex, IScheduleMatrixPro matrix)
+		{
+			return matrix.FullWeeksPeriodDays[weekIndex * 7].Day;
+		}
     }
 }

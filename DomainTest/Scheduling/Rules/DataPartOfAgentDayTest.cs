@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			 var scheduleOk = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
 
 			 var pa = new PersonAssignment(scheduleOk.Person, scheduleOk.Scenario, new DateOnly(2000, 1, 1));
-			 var mainShift = new MainShift(new ShiftCategory("sd"));
+			 var mainShift = new EditableShift(new ShiftCategory("sd"));
 			 var start = new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc);
 			 var end = new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc);
-			 mainShift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("d"), new DateTimePeriod(start, end)));
-			 pa.SetMainShift(mainShift);
+			 mainShift.LayerCollection.Add(new EditorActivityLayer(new Activity("d"), new DateTimePeriod(start, end)));
+			 new EditableShiftMapper().SetMainShiftLayers(pa, mainShift);
 			 scheduleOk.Add(pa);
 
 			 new DataPartOfAgentDay()
@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			var mainShift = new MainShift(new ShiftCategory("sd"));
-			mainShift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("d"), assignmentPeriod));
-			pa.SetMainShift(mainShift);
+			var mainShift = new EditableShift(new ShiftCategory("sd"));
+			mainShift.LayerCollection.Add(new EditorActivityLayer(new Activity("d"), assignmentPeriod));
+			new EditableShiftMapper().SetMainShiftLayers(pa, mainShift);
 			scheduleDataTooEarly.Add(pa);
 
 			new DataPartOfAgentDay()
@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			var mainShift = new MainShift(new ShiftCategory("sd"));
-			mainShift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("d"), assignmentPeriod));
-			pa.SetMainShift(mainShift);
+			var mainShift = new EditableShift(new ShiftCategory("sd"));
+			mainShift.LayerCollection.Add(new EditorActivityLayer(new Activity("d"), assignmentPeriod));
+			new EditableShiftMapper().SetMainShiftLayers(pa, mainShift);
 			scheduleDataTooEarly.Add(pa);
 
 			new DataPartOfAgentDay()
@@ -99,9 +99,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			var mainShift = new MainShift(new ShiftCategory("sd"));
-			mainShift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("d"), assignmentPeriod));
-			pa.SetMainShift(mainShift);
+			var mainShift = new EditableShift(new ShiftCategory("sd"));
+			mainShift.LayerCollection.Add(new EditorActivityLayer(new Activity("d"), assignmentPeriod));
+			new EditableShiftMapper().SetMainShiftLayers(pa, mainShift);
 			var pa2 = pa.EntityClone();
 			scheduleDataTooEarly.Add(pa2);
 

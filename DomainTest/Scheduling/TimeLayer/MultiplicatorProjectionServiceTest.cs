@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -217,16 +215,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             var projection = CreateVisualLayerCollection(_layerPeriods, _layerWithMultiplicatorPeriods, _definitionSet);
             _target = new MultiplicatorProjectionService(_schedulePart, _dateOnly);
 
-            foreach (IVisualLayer layer in projection)
-            {
-                layer.Payload =
-                    new MeetingPayload(new Meeting(_person, new List<IMeetingPerson>(), "subj", "loc", "desc", _activity,
-                                                   null));
-            }
-
             using (_mocker.Record())
             {
-                //Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
@@ -473,7 +463,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 _baseDateTime.AddHours(7));
             var part = partFactory.CreatePart();
             part.CreateAndAddActivity(
-                new MainShiftActivityLayer(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9))),
+                new MainShiftLayer(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9))),
                 ShiftCategoryFactory.CreateShiftCategory("test"));
             part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(_activity, basePeriod,
                                                                      _definitionSet));

@@ -14,7 +14,7 @@ ko.bindingHandlers.animateBackground = {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
 		var fadeDuration = allBindings.fadeDuration || 1500;
 		var valueUnwrapped = ko.utils.unwrapObservable(value);
-		$(element).stop().animate({ backgroundColor: valueUnwrapped}, fadeDuration);
+		$(element).stop().animate({ backgroundColor: valueUnwrapped }, fadeDuration);
 	}
 };
 
@@ -108,38 +108,43 @@ ko.bindingHandlers.increaseWidthIf = {
 	}
 };
 
-ko.bindingHandlers.datepicker = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
-		//initialize datepicker with some optional options
-		var options = allBindingsAccessor().datepickerOptions || { showAnim: 'slideDown' };
-		$(element).datepicker(options);
+ko.bindingHandlers.timepicker = {
+    init: function(element, valueAccessor, allBindingsAccessor) {
+        var options = allBindingsAccessor().timepickerOptions || {};
+        $(element).timepicker(options);
+        
+        ko.utils.registerEventHandler(element, "changeTime.timepicker", function (e) {
+            var observable = valueAccessor();
+            observable(e.time.value);
+        });
+    },
+    update: function(element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (typeof value === 'function') {
+            return;
+        }
+        $(element).timepicker("setTime", value);
+    }
+};
 
-		//handle the field changing
-		ko.utils.registerEventHandler(element, "change", function () {
-			var observable = valueAccessor();
-			observable(moment($(element).datepicker("getDate")));
-			$(element).blur();
-		});
+ko.bindingHandlers.select2 = {
+    init: function (element, valueAccessor) {
+        var options = valueAccessor();
+        var observable = options.value;
+        // kinda strange, but we have to use the original select's event because select2 doesnt provide its own events
+        $(element).on('change', function() {
+            observable($(element).val());
+        });
+        $(element).select2(options);
 
-		//handle the field keydown for enter key
-		ko.utils.registerEventHandler(element, "keydown", function (key) {
-			if (key.keyCode == 13) {
-				var observable = valueAccessor();
-				observable(moment($(element).datepicker("getDate")));
-				$(element).blur();
-			}
-		});
-
-		//handle disposal (if KO removes by the template binding)
-		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-			$(element).datepicker("destroy");
-		});
-
-	},
-	update: function (element, valueAccessor) {
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		$(element).datepicker("setDate", new Date(value));
-	}
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $(element).select2('destroy');
+        });
+    },
+    update: function (element, valueAccessor) {
+        var observable = valueAccessor().value;
+        $(element).select2("val", observable());
+    }
 };
 
 ko.bindingHandlers.button = {

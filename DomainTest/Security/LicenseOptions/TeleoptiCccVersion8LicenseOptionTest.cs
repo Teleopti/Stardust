@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 
 			functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
         	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.Anywhere);
+        	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting);
+	        functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
         }
     }
 }

@@ -46,13 +46,6 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             return ret;
         }
 
-        //public bool IsWeekInLegalState(int weekIndex,IScheduleMatrixPro matrix)
-        //{
-        //    IDictionary<DateOnly, MinMax<TimeSpan>> dic = PossibleMinMaxWorkShiftLengths(matrix); // = new Dictionary<DateOnly, MinMax<TimeSpan>>();
-        //    bool ret = _weekCalculator.IsInLegalState(weekIndex, dic, matrix);
-        //    return ret;
-        //}
-
         public bool IsWeekInLegalState(DateOnly dateInWeek, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             DateOnly startDate = matrix.FullWeeksPeriodDays[0].Day;
