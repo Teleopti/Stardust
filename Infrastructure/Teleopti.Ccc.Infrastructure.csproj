@@ -462,6 +462,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\PolicyForPassword.xml" />
+    <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_Sw_Forecasts.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_En_St.txt" />
