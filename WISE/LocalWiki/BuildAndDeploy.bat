@@ -72,6 +72,10 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 copy "%ROOTDIR%\UninstallWiki.bat" "%Deployment%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+::add read me.txt to the folder
+echo copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+
 ::clean up
 rmdir "%WorkingFolder%" /S /Q
 GOTO :Finish
