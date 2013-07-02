@@ -58,7 +58,7 @@ BEGIN
 		
 	--remove obsolete PA Ids
 	DELETE FROM dbo.PersonAssignment
-	WHERE Id IN (SELECT mergeUs FROM #mergeUs WHERE KeepMe<>MergeUs)
+	WHERE Id IN (SELECT mergeUs FROM #mergeUs WHERE KeepMe<>MergeUs);
 
 	--fix messed up OrderIndex for the duplicates
 	WITH Dubplicates AS
