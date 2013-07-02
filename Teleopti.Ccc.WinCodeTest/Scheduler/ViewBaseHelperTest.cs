@@ -1019,7 +1019,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsenceBeginsAndEndsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodBeginsAndEndsToday);
 
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            ISchedulePart schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
+            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
 
             Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceEndsToday, schedulePart, visualLayerCollectionActivity));
             Assert.AreEqual(DisplayMode.BeginsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsToday, schedulePart, visualLayerCollectionActivity));
