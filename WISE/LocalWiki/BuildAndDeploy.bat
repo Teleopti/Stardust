@@ -31,8 +31,28 @@ if not exist "%WorkingFolder%" mkdir "%WorkingFolder%"
 ::copy needed tools to working folder
 copy "%Dependencies%\7za.exe" "%WorkingFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+
 copy "%Dependencies%\wget.exe" "%WorkingFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+
+::deploy needed files for local setup of wiki
+copy "%Dependencies%\7za.exe" "%Deployment%\"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+
+copy "%ROOTDIR%\InstallWiki.bat" "%Deployment%\"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+
+copy "%ROOTDIR%\UninstallWiki.bat" "%Deployment%\"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
+
+::add read me.txt to the folder
+echo copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+
+::starting
+echo Start time: %date% %time% > "%Deployment%\export.log"
+echo wiki export via wget.exe at computer: %COMPUTERNAME%, user is: %USERDOMAIN%\%USERNAME% >> "%Deployment%\export.log"
+echo please wait ...  >> "%Deployment%\export.log"
 
 copy "%ROOTDIR%\ReplaceString\bin\Release\ReplaceString.exe" "%WorkingFolder%\"
 
@@ -64,17 +84,8 @@ ECHO "%WorkingFolder%\7za.exe" a "%Deployment%\TeleoptiCCCWiki_%mydate%_%mytime%
 SET /A zipError=%ERRORLEVEL%
 IF %zipError% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
-::deploy needed files for local setup of wiki
-copy "%Dependencies%\7za.exe" "%Deployment%\"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
-copy "%ROOTDIR%\InstallWiki.bat" "%Deployment%\"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
-copy "%ROOTDIR%\UninstallWiki.bat" "%Deployment%\"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
-
-::add read me.txt to the folder
-echo copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
-copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+::done
+del "%Deployment%\export.log"
 
 ::clean up
 rmdir "%WorkingFolder%" /S /Q
@@ -96,4 +107,4 @@ GOTO :Finish
 :Finish
 ::Exit with errorlevel to MsBuild
 ECHO ErrorLevel is: %ERRORLEV%
-exit %ERRORLEV%
+::exit %ERRORLEV%
