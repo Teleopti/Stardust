@@ -820,7 +820,7 @@ CREATE TABLE [dbo].[ShiftLayer](
 	[DefinitionSet] uniqueidentifier NULL
  CONSTRAINT [PK_ShiftLayer] PRIMARY KEY CLUSTERED 
 (
-	[Parent] ASC
+	[Id] ASC
 )
 )
 
