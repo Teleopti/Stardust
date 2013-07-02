@@ -112,16 +112,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void VerifyTotalDateTimePeriodWithNoItems()
-        {
-            IScheduleDay part = new SchedulePartFactoryForDomain().CreatePart();
-            target.AddFromSchedulePart(part);
-            Assert.AreEqual(part.Period, target.TotalDateTimePeriod(true));
-            Assert.AreEqual(part.Period, target.TotalDateTimePeriod(false));
-            mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyCanSupplyNullAsSchedulePart()
         {
             target.AddFromSchedulePart(null);
@@ -508,6 +498,56 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.IsTrue(view.CurrentItem as LayerGroupViewModel<AbsenceLayerViewModel> != null, "Absence");
 
         }
+
+		[Test]
+		public void TotalDateTimePeriod_WhenIncludeAbsenceIsFalse_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
+		{
+			IScheduleDay part = _partFactory
+			 .AddAbsence()
+			 .AddMainShiftLayer()
+			 .CreatePart();
+			target.AddFromSchedulePart(part);
+
+			var expectedStart = part.PersonAssignmentCollection().Min(p => p.Period.StartDateTime);
+			var expectedEnd = part.PersonAssignmentCollection().Max(p => p.Period.EndDateTime);
+			var totalPeriod = target.TotalDateTimePeriod(false);
+
+			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
+			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
+		}
+
+		[Test]
+		public void TotalDateTimePeriod_WhenIncludeAbsenceIsTrue_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
+		{
+			IScheduleDay part = _partFactory
+			 .AddAbsence()
+			 .AddMainShiftLayer()
+			 .CreatePart();
+			target.AddFromSchedulePart(part);
+
+			var allPeriods =
+				part.PersonAssignmentCollection()
+					.Select(p => p.Period)
+					.Union(part.PersonAbsenceCollection().Select(p => p.Period))
+					.ToList();
+
+			var expectedStart = allPeriods.Min(p => p.StartDateTime);
+			var expectedEnd = allPeriods.Max(p => p.EndDateTime);
+
+			var totalPeriod = target.TotalDateTimePeriod(true);
+
+			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
+			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
+		}
+
+		[Test]
+		public void TotalDateTimePeriod_WhenNoLayers_ShouldBeEqualToThePartsPeriod()
+		{
+			IScheduleDay part = new SchedulePartFactoryForDomain().CreatePart();
+			target.AddFromSchedulePart(part);
+			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(true));
+			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(false));
+		}
 
 
         #region helpers
