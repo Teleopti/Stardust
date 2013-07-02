@@ -13,37 +13,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	public class PersonAssignmentCascadeDeleteTest : DatabaseTest
 	{
+		/// PersonAssignment
+		///   0: PersonalLayer
+		///   1: MainLayer
+		///   2: OvertimeLayer
+
 		private IPersonAssignment target;
 
 		[Test]
-		public void DeleteOvertimeShouldGenerateOneStatement()
+		public void DeleteOvertimeShouldGenerateCorrectNumberOfStatements()
 		{
 			target.RemoveLayer(target.OvertimeLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
+				.Should().Be.EqualTo(2); //delete overtime layer + update personassignment  (no index changes)
 			Session.SessionFactory.Statistics.EntityDeleteCount
 				.Should().Be.EqualTo(1); //delete overtimeshift layer
 		}
 
 		[Test]
-		public void DeleteMainShiftShouldGenerateOneStatement()
+		public void DeleteMainShouldGenerateCorrectNumberOfStatements()
 		{
 			target.ClearMainLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete layer + update personassignment
+				.Should().Be.EqualTo(3); //delete mainshift layer + update personassignment + update overtime index
 			Session.SessionFactory.Statistics.EntityDeleteCount
 				.Should().Be.EqualTo(1); //delete mainshiftlayer
 		}
 
 		[Test]
-		public void DeletePersonalShiftShouldGenerateOneStatement()
+		public void DeletePersonalShouldGenerateCorrectNumberOfStatements()
 		{
 			target.RemoveLayer(target.PersonalLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
+				.Should().Be.EqualTo(4); //delete overtime layer + update personassignment + update main index + update overtime index
 			Session.SessionFactory.Statistics.EntityDeleteCount
 				.Should().Be.EqualTo(1); //delete personalshiftlayer
 		}
