@@ -166,17 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 		}
 
-		public virtual bool RemoveLayer(IMainShiftLayer layer)
-		{
-			return _shiftLayers.Remove(layer);
-		}
-
-		public virtual bool RemoveLayer(IPersonalShiftLayer layer)
-		{
-			return _shiftLayers.Remove(layer);
-		}
-
-		public virtual bool RemoveLayer(IOvertimeShiftLayer layer)
+		public virtual bool RemoveLayer(IShiftLayer layer)
 		{
 			return _shiftLayers.Remove(layer);
 		}

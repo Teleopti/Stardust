@@ -57,9 +57,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		void ScheduleChanged(string dataSource);
 
-	    bool RemoveLayer(IMainShiftLayer layer);
-	    bool RemoveLayer(IPersonalShiftLayer layer);
-	    bool RemoveLayer(IOvertimeShiftLayer layer);
+		bool RemoveLayer(IShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
     }
