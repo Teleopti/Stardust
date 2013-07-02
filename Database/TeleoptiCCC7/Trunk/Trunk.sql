@@ -600,7 +600,7 @@ CREATE TABLE [Auditing].[ShiftLayer_AUD](
 	[LayerType] tinyint NULL,
 	[DefinitionSet] uniqueidentifier NULL,
 	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ShiftLayer_AUD] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC,
 	[REV] ASC
