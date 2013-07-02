@@ -30,18 +30,18 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Forecast", period);
 			_jobParameters.StateHolder.SetThisTime(lastTime, "Forecast");
 
-	        if (lastTime.ThisTime <= lastTime.LastTime)
-		        return 0;
+	        if (lastTime.ThisTime > lastTime.LastTime)
+	        {
+				foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
+				{
+					//Get data from Raptor
+					var skills = _jobParameters.StateHolder.SkillCollection;
+					var rootList = _jobParameters.StateHolder.GetSkillDaysCollection(period, skills, scenario);
 
-			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
-            {
-                //Get data from Raptor
-                var skills = _jobParameters.StateHolder.SkillCollection;
-                var rootList = _jobParameters.StateHolder.GetSkillDaysCollection(period, skills, scenario);
-
-                var raptorTransformer = new ForecastWorkloadTransformer(_jobParameters.IntervalsPerDay, DateTime.Now);
-                raptorTransformer.Transform(rootList, BulkInsertDataTable1);
-            }
+					var raptorTransformer = new ForecastWorkloadTransformer(_jobParameters.IntervalsPerDay, DateTime.Now);
+					raptorTransformer.Transform(rootList, BulkInsertDataTable1);
+				}
+	        }
 
             //Truncate staging table & Bulk insert data to staging database
             return _jobParameters.Helper.Repository.PersistForecastWorkload(BulkInsertDataTable1);
