@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactForecastWorkloadJobStep(jobParameters));
-			Add(new FactScheduleDeviationJobStep(jobParameters));
+			Add(new FactScheduleDeviationJobStep(jobParameters,true));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters,true));
 			Add(new FactRequestedDaysJobStep(jobParameters,true));
