@@ -1425,7 +1425,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsScheduleDayOnVerifyAddOvertimeTheNewWay()
         {
             Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
-            Expect.Call(() => _day1.CreateAndAddOvertime(null)).IgnoreArguments();
+            Expect.Call(() => _day1.CreateAndAddOvertime(null, new DateTimePeriod(), null)).IgnoreArguments();
         }
 
         private void ExpectCallsDialogOnVerifyAddOvertimeTheNewWay(DateTimePeriod period)

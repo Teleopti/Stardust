@@ -244,12 +244,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Creates and adds overtime.
         /// </summary>
-        /// <param name="overtimeShiftActivityLayer">The overtime shift activity layer.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-02-06
-        /// </remarks>
-        void CreateAndAddOvertime(IOvertimeShiftActivityLayer overtimeShiftActivityLayer);
+				void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet);
 
         /// <summary>
         /// Adds or replaces the mainShift in the PersonAssignment returned by AssignmenHighZOrder.

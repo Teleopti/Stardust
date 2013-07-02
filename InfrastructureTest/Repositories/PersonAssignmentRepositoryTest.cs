@@ -96,11 +96,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.SetMainShiftLayers(new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
-
-						IOvertimeShift ot = new OvertimeShift();
-            ass.AddOvertimeShift(ot);
-            ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
-            return ass;
+	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+	        return ass;
         }
 
         protected override void VerifyAggregateGraphProperties(IPersonAssignment loadedAggregateFromDatabase)
@@ -108,8 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
             Assert.AreEqual(org.PersonalLayers.Count(), loadedAggregateFromDatabase.PersonalLayers.Count());
-            Assert.AreEqual(org.OvertimeShiftCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection.Count);
-            Assert.AreEqual(org.OvertimeShiftCollection[0].LayerCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection[0].LayerCollection.Count);
+            Assert.AreEqual(org.OvertimeLayers.Count(), loadedAggregateFromDatabase.OvertimeLayers.Count());
         }
 
 			[Test]
@@ -120,12 +116,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection[0].LayerCollection));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
 
         [Test]
@@ -162,8 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddOvertimeShift(new OvertimeShift());
-            agAssValid.OvertimeShiftCollection[0].LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet));
+            agAssValid.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
                 _dummyActivity,
@@ -193,9 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.IsTrue(retList.Contains(agAssValid));
             Assert.AreEqual(1, retList.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].OvertimeShiftCollection[0].LayerCollection));
+						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
         }
 
         [Test]

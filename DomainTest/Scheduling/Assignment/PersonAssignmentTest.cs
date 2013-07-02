@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -111,28 +112,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyAddAndRemoveOvertimeShift()
-		{
-			Assert.AreEqual(0, target.OvertimeShiftCollection.Count);
-			IOvertimeShift overtimeShift = new OvertimeShift();
-			target.AddOvertimeShift(overtimeShift);
-			Assert.AreEqual(1, target.OvertimeShiftCollection.Count);
-			target.RemoveOvertimeShift(overtimeShift);
-			Assert.AreEqual(0, target.OvertimeShiftCollection.Count);
-		}
-
-		[Test]
-		public void VerifyReferenceBackToAssignmentWorksFromOvertimeShift()
+		public void VerifyReferenceBackToAssignmentWorksFromOvertimeLayer()
 		{
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
-			OvertimeShift overtimeShift = new OvertimeShift();
-			OvertimeShiftActivityLayer actLay = new OvertimeShiftActivityLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			target.AddOvertimeShift(overtimeShift);
-			overtimeShift.LayerCollection.Add(actLay);
-			Assert.AreSame(target, overtimeShift.Parent);
-			Assert.AreSame(target, ((IAggregateEntity)actLay).Root());
-			Assert.AreSame(target, ((IAggregateEntity)overtimeShift).Root());
+			target.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			var layer = target.OvertimeLayers.Single();
+			Assert.AreSame(target, layer.Parent);
+			Assert.AreSame(target, layer.Root());
 		}
 
 
@@ -409,32 +396,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.ZOrder = zOrder;
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			IOvertimeShift overtime = new OvertimeShift();
-			overtime.SetId(Guid.NewGuid());
 
-			target.AddOvertimeShift(overtime);
+			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			target.PersonalLayers.Single().SetId(Guid.NewGuid());
+			target.OvertimeLayers.Single().SetId(Guid.NewGuid());
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
 			Assert.AreEqual(target.PersonalLayers.Single().Id, pAss.PersonalLayers.Single().Id);
+			Assert.AreEqual(target.OvertimeLayers.Single().Id, pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
-			Assert.AreEqual(target.OvertimeShiftCollection[0].Id, pAss.OvertimeShiftCollection[0].Id);
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
+			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
+			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(zOrder, target.ZOrder);
 		}
 
@@ -444,11 +430,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			var act = new Activity("sdf");
-			var ot = new OvertimeShift();
-			target.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act,
-									new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-									defSet));
+			target.AddOvertimeLayer(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
 			target.SetMainShiftLayers(new[] { new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6))}, new ShiftCategory("d"));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());

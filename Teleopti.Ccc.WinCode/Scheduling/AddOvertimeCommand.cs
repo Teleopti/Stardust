@@ -104,11 +104,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (IScheduleDay part in ScheduleParts)
             {
-                   
-                IOvertimeShiftActivityLayer overtimeShiftActivityLayer = new OvertimeShiftActivityLayer(activity, period,
-                                                                                                        definitionSet);
-
-                part.CreateAndAddOvertime(overtimeShiftActivityLayer);
+								part.CreateAndAddOvertime(activity, period, definitionSet);
             }
 
 

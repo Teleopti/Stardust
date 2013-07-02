@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             var newMultiplicatorSet = new MultiplicatorDefinitionSet("multplic", MultiplicatorType.Overtime);
            IPersonPeriod period = _part.Person.Period(new DateOnly(CurrentPeriod.StartDateTime));
            period.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(newMultiplicatorSet);
-           _part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("overtime"), CurrentPeriod, newMultiplicatorSet));
+           _part.CreateAndAddOvertime(ActivityFactory.CreateActivity("overtime"), CurrentPeriod, newMultiplicatorSet);
             return this;
         }
 

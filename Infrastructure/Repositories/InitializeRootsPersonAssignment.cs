@@ -29,9 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                        from pl in a.PersonalLayers
                                        select pl.Payload).Distinct();
             var overTimeActivities = (from a in _personAssignments
-                                      from o in a.OvertimeShiftCollection
-                                      from al in o.LayerCollection
-                                      select al.Payload).Distinct();
+                                      from ol in a.OvertimeLayers
+                                      select ol.Payload).Distinct();
             mainShiftActivities.ForEach(LazyLoadingManager.Initialize);
             persShiftActivities.ForEach(LazyLoadingManager.Initialize);
             overTimeActivities.ForEach(LazyLoadingManager.Initialize);
@@ -39,12 +38,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             foreach (var personAss in _personAssignments)
             {
-                foreach (var overtime in personAss.OvertimeShiftCollection)
+                foreach (var overtime in personAss.OvertimeLayers)
                 {
-                    foreach (IOvertimeShiftActivityLayer layer in overtime.LayerCollection)
-                    {
-                          LazyLoadingManager.Initialize(layer.DefinitionSet);   
-                    }
+                    LazyLoadingManager.Initialize(overtime.DefinitionSet);   
                 }
             }
 

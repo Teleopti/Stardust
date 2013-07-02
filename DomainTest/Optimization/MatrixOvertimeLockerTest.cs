@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -34,16 +36,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>{_scheduleDayPro};
             var unlockedDays = new ReadOnlyCollection<IScheduleDayPro>(unlockedList);   
             var personAssignment = _mockRepository.StrictMock<IPersonAssignment>(); 
-            var overtimeShift = _mockRepository.StrictMock<IOvertimeShift>();
-            IList<IOvertimeShift> overtimeList = new List<IOvertimeShift>{overtimeShift};
-            var overtimeShifts = new ReadOnlyCollection<IOvertimeShift>(overtimeList);
             var dateOnly = new DateOnly(2010,1,1);
            
             using(_mockRepository.Record())
             {
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlockedDays).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.OvertimeShiftCollection).Return(overtimeShifts).Repeat.AtLeastOnce();
+                Expect.Call(personAssignment.OvertimeLayers).Return(new[]{new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(2010,1,1,2010,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())}).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(() => _scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly))).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();

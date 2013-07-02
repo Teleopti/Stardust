@@ -354,7 +354,8 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
- 	<Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
+    <Compile Include="Scheduling\Assignment\OvertimeShiftLayerTest.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVerticalTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftLayerTest.cs" />
@@ -632,8 +633,6 @@
     <Compile Include="Scheduling\Assignment\FilterLayerBaseTest.cs" />
     <Compile Include="Scheduling\Assignment\ModifyEventArgsTest.cs" />
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizerTest.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayerTest.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftTest.cs" />
     <Compile Include="Scheduling\Assignment\RemoveLayerFromScheduleTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitionsTest.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitationTest.cs" />

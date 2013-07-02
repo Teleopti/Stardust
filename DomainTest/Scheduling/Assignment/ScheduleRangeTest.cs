@@ -568,16 +568,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("def", MultiplicatorType.Overtime);
                 PersonFactory.AddDefinitionSetToPerson(_person, defSet);
-                IOvertimeShift ot = new OvertimeShift();
 								IPersonAssignment ass = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-                ass.AddOvertimeShift(ot);
-                ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"),
-                                                                      new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet));
+                ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
-                                _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].
-                                    OvertimeShiftCollection.Count);
+                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].OvertimeLayers.Count());
             }
 			_mocks.VerifyAll();
 		}

@@ -278,15 +278,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				OvertimeShiftFactory.CreateOvertimeShift(new Activity("activity"), dateTimePeriod2, definitionSet, _scheduleDayOnePersonOne.PersonAssignmentCollection()[0]);
+				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1);
+				_scheduleDayOnePersonOne.Add(ass);
+				ass.AddOvertimeLayer(new Activity("activity"), dateTimePeriod2, definitionSet);
 			
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollection()[0].OvertimeLayers.Count());
                 // because the overtime will be deleted, no person assignment will be left for _scheduleDayOnePersonOne
 				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignmentCollection().Count());
 			}	

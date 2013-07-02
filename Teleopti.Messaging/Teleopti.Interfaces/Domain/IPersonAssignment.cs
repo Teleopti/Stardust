@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -35,20 +34,12 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         void ClearMainLayers();
 
+	    void ClearOvertimeLayers();
+
         /// <summary>
         /// Gets or sets the ZOrder for PersonAssignment, used in gui.
         /// </summary>
         DateTime ZOrder{get; set;}
-
-        /// <summary>
-        /// Gets the over time shift collection.
-        /// </summary>
-        /// <value>The over time shift collection.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-02-05
-        /// </remarks>
-        ReadOnlyCollection<IOvertimeShift> OvertimeShiftCollection { get; }
 
 			/// <summary>
 			/// The date
@@ -58,34 +49,16 @@ namespace Teleopti.Interfaces.Domain
 	    IShiftCategory ShiftCategory { get; }
 	    IEnumerable<IMainShiftLayer> MainLayers { get; }
 			IEnumerable<IPersonalShiftLayer> PersonalLayers { get; }
+	    IEnumerable<IOvertimeShiftLayer> OvertimeLayers { get; }
+	    IEnumerable<IShiftLayer> ShiftLayers { get; }
 
 	    /// <summary>
-        /// Adds the over time shift.
-        /// </summary>
-        /// <param name="overtimeShift">The over time shift.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-02-05
-        /// </remarks>
-        void AddOvertimeShift(IOvertimeShift overtimeShift);
-
-        /// <summary>
-        /// Removes the over time shift.
-        /// </summary>
-        /// <param name="overtimeShift">The over time shift.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-02-05
-        /// </remarks>
-        void RemoveOvertimeShift(IOvertimeShift overtimeShift);
-
-		/// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
 		void ScheduleChanged(string dataSource);
 
-	    bool RemoveLayer(IMainShiftLayer layer);
-	    bool RemoveLayer(IPersonalShiftLayer layer);
+		bool RemoveLayer(IShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);
+	    void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
     }
 }
