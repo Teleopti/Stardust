@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.NewTemplateName = ko.observable('');
 
-	this.IsTimeInputEnabled = ko.observable();
+	//this.IsTimeInputEnabled = ko.observable();
     
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
@@ -126,19 +126,19 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		}
 	});
 
-	this.IsTimeInputEnabled.subscribe(function (newValue) {
-		if (!newValue) {
-			self.ActivityPreferenceId('');
-			self.EarliestStartTime(undefined);
-			self.LatestStartTime(undefined);
-			self.EarliestEndTime(undefined);
-			self.LatestEndTime(undefined);
-			self.EarliestEndTimeNextDay(false);
-			self.LatestEndTimeNextDay(false);
-			self.MinimumWorkTime(undefined);
-			self.MaximumWorkTime(undefined);
-		}
-	});
+	//this.IsTimeInputEnabled.subscribe(function (newValue) {
+	//	if (!newValue) {
+	//		self.ActivityPreferenceId('');
+	//		self.EarliestStartTime(undefined);
+	//		self.LatestStartTime(undefined);
+	//		self.EarliestEndTime(undefined);
+	//		self.LatestEndTime(undefined);
+	//		self.EarliestEndTimeNextDay(false);
+	//		self.LatestEndTimeNextDay(false);
+	//		self.MinimumWorkTime(undefined);
+	//		self.MaximumWorkTime(undefined);
+	//	}
+	//});
 
 	this.EnableActivityTimeEditing.subscribe(function (newValue) {
 		if (!newValue) {
@@ -151,10 +151,11 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		}
 	});
 
-	this.FormatExtendedActivityOption = function (option) {
+	this.FormatPreferencesOption = function (option) {
 	    var optionElement = $(option.element);
 	    var activityColor = optionElement.data('color');
 
+	    if (option.id === '-') return '<hr>';
 	    if (option.text.length === 0) return option.text;
 	    
 	    return '<span class="pull-left" style="padding-left: 16px;margin-right: 5px;border-radius: 4px;background-color: ' + activityColor + '">&nbsp;</span>' + option.text;
