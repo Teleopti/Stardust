@@ -130,6 +130,9 @@ ko.bindingHandlers.timepicker = {
 ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor) {
         var options = valueAccessor();
+        options['escapeMarkup'] = function (m) { return m; };
+        options['width'] = 'resolve';
+        
         var observable = options.value;
         // kinda strange, but we have to use the original select's event because select2 doesnt provide its own events
         $(element).on('change', function() {

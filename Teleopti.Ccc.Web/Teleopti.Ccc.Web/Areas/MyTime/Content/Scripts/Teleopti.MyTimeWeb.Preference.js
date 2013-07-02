@@ -203,7 +203,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				style: {
 					def: false,
-					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow preference-ui-tooltip',
+					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow preference-ui-tooltip qtip-bootstrap',
 					tip: {
 						corner: "top left"
 					}

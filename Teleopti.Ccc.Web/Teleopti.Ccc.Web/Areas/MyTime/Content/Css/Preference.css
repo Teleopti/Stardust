@@ -176,6 +176,15 @@ div.qtip-content {
 }
 
 #qtip-add-extended {
-	min-width: 400px;
-	max-width: 400px;
+	min-width: 420px;
+	max-width: 420px;
+}
+
+.select2-result-label hr {
+	clear: both;
+	margin: 0 0 0 0;
+}
+
+.select2-item-height li hr {
+	height: 5px;
 }
