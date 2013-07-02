@@ -818,9 +818,9 @@ CREATE TABLE [dbo].[ShiftLayer](
 	[OrderIndex] int NOT NULL,
 	[LayerType] tinyint NOT NULL,
 	[DefinitionSet] uniqueidentifier NULL
- CONSTRAINT [PK_ShiftLayer] PRIMARY KEY NONCLUSTERED 
+ CONSTRAINT [PK_ShiftLayer] PRIMARY KEY CLUSTERED 
 (
-	[Id] ASC
+	[Parent] ASC
 )
 )
 
