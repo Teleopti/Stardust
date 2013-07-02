@@ -17,9 +17,11 @@ AS
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'UQ_PersonAssignment_Person_Date_Scenario')
 BEGIN
 
-	--merge any duplicates
+	--temp tables
 	CREATE TABLE #mergeUs (KeepMe uniqueidentifier, MergeUs uniqueidentifier)
 	CREATE TABLE #PersonAssignment (Id uniqueidentifier, Person uniqueidentifier,[Date] datetime,Scenario uniqueidentifier)
+
+	--find duplicates, Id = NULL for now
 	INSERT INTO #PersonAssignment
 	SELECT
 		NULL,[Person],[Date],[Scenario]
@@ -27,7 +29,7 @@ BEGIN
 	GROUP BY [Person],[Date],[Scenario]
 	HAVING COUNT(*) > 1
 
-	--Pick Id to keep	
+	--Set any Id = "the one to keep"
 	UPDATE tmp
 	SET tmp.Id = pa.Id -- will give a random Id
 	FROM #PersonAssignment tmp
@@ -36,9 +38,11 @@ BEGIN
 		AND pa.[Date]	= tmp.[Date]
 		AND pa.Scenario	= tmp.Scenario
 
-	--Get Ids to merge
+	--Get other Ids, the to merge
 	INSERT INTO #mergeUs
-	SELECT tmp.Id,pa.Id
+	SELECT
+		tmp.Id, --the one to keep
+		pa.Id	--the ones to dump + the one to keep
 	FROM [dbo].[PersonAssignment] pa
 	INNER JOIN #PersonAssignment tmp
 		ON  pa.Person	= tmp.Person
@@ -56,8 +60,21 @@ BEGIN
 	DELETE FROM dbo.PersonAssignment
 	WHERE Id IN (SELECT mergeUs FROM #mergeUs WHERE KeepMe<>MergeUs)
 
-	--fix messed up OrderIndex
-	-- .... ToDo
+	--fix messed up OrderIndex for the duplicates
+	WITH Dubplicates AS
+	(
+		SELECT sl.Id, ROW_NUMBER() OVER(PARTITION BY sl.Parent ORDER BY LayerType,sl.Minimum) -1 as newOrderIndex
+		FROM #PersonAssignment tmp
+		INNER JOIN dbo.PersonAssignment pa
+			ON pa.Id = tmp.Id
+		INNER JOIN dbo.ShiftLayer sl
+			ON sl.Parent = pa.Id
+	)
+	UPDATE sl
+	SET OrderIndex = d.newOrderIndex
+	FROM dbo.ShiftLayer sl
+	INNER JOIN Dubplicates d
+	ON sl.Id = d.Id;
 
 	--And finally add Unique constraint
 	ALTER TABLE [dbo].[PersonAssignment] ADD  CONSTRAINT [UQ_PersonAssignment_Person_Date_Scenario] UNIQUE NONCLUSTERED 
