@@ -116,11 +116,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeLayers));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
 
         [Test]
@@ -187,9 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.IsTrue(retList.Contains(agAssValid));
             Assert.AreEqual(1, retList.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].OvertimeLayers));
+						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
         }
 
         [Test]
