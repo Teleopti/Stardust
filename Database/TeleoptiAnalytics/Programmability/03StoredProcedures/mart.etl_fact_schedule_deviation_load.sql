@@ -31,7 +31,9 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 AS
 
 --Execute one delayed jobs, if any
-if (@is_delayed_job=0)
+if (@is_delayed_job=0
+	and (select count(*) from mart.etl_job_delayed)>0
+	)
 EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load'
 
 
