@@ -99,7 +99,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                                                             .UseMinimumPersons,
 	                                                                                         schedulingOptions
 	                                                                                             .UseMaximumPersons);
-				_teamScheduling.DayScheduled += OnDayScheduled;
+			    if (bestShiftProjectionCache == null) continue;
+                _teamScheduling.DayScheduled += OnDayScheduled;
                 _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod);
 				_teamScheduling.DayScheduled -= OnDayScheduled;
 	        }
