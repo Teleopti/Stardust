@@ -817,11 +817,15 @@ CREATE TABLE [dbo].[ShiftLayer](
 	[Parent] uniqueidentifier NOT NULL,
 	[OrderIndex] int NOT NULL,
 	[LayerType] tinyint NOT NULL,
-	[DefinitionSet] uniqueidentifier NULL
- CONSTRAINT [PK_ShiftLayer] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
+	[DefinitionSet] uniqueidentifier NULL,
+	CONSTRAINT [PK_ShiftLayer] PRIMARY KEY NONCLUSTERED 	
+	(	
+		[Id] ASC
+	)	
 )
+CREATE CLUSTERED INDEX [CIX_ShiftLayer_Parent] ON [dbo].[ShiftLayer]
+(
+            [Parent] ASC
 )
 
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
