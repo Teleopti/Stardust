@@ -183,29 +183,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void ClearPersonalLayers()
 		{
-			//todo: do smarter
-			foreach (var layer in _shiftLayers.OfType<IPersonalShiftLayer>())
-			{
-				_shiftLayers.Remove(layer);
-			}
+			_shiftLayers.OfType<IPersonalShiftLayer>()
+									.ToArray()
+									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearMainLayers()
 		{
-			//todo: do smarter
-			foreach (var layer in _shiftLayers.OfType<IMainShiftLayer>())
-			{
-				_shiftLayers.Remove(layer);
-			}
+			_shiftLayers.OfType<IMainShiftLayer>()
+									.ToArray()
+									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearOvertimeLayers()
 		{
-			//todo: do smarter
-			foreach (var layer in _shiftLayers.OfType<IOvertimeShiftLayer>())
-			{
-				_shiftLayers.Remove(layer);
-			}
+			_shiftLayers.OfType<IOvertimeShiftLayer>()
+									.ToArray()
+									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void CheckRestrictions()
