@@ -40,7 +40,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobHelper = new JobHelper(_repository, null, null);
 			jobParameters.Helper = jobHelper;
 
-			_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null)).Constraints(
+			_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(
+																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything()
@@ -64,10 +65,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			
 
 			var expectedPeriod = extractExpectedPeriod(_jobCategoryDates.AllDatePeriodCollection[0]);
-			_repository.Expect(x => x.FillScheduleDeviationDataMart(expectedPeriod, RaptorTransformerHelper.CurrentBusinessUnit, _timeZone)).Constraints(
+			_repository.Expect(x => x.FillScheduleDeviationDataMart(expectedPeriod, RaptorTransformerHelper.CurrentBusinessUnit, _timeZone, false)).Constraints(
 																	Rhino.Mocks.Constraints.Is.Equal(expectedPeriod),
 																	Rhino.Mocks.Constraints.Is.Matching<IBusinessUnit>(b => b.Id == RaptorTransformerHelper.CurrentBusinessUnit.Id),
-																	Rhino.Mocks.Constraints.Is.Matching<TimeZoneInfo>(t => t.Id == _timeZone.Id)
+																	Rhino.Mocks.Constraints.Is.Matching<TimeZoneInfo>(t => t.Id == _timeZone.Id),
+																	Rhino.Mocks.Constraints.Is.Equal(false)
 																	).Return(0);
 
 			var target = new FactScheduleDeviationJobStep(CreateJobParameter());
@@ -97,7 +99,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobHelper = new JobHelper(_repository, null, null);
 			jobParameters.Helper = jobHelper;
 
-			_repository.AssertWasNotCalled(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null), x=> x.IgnoreArguments());
+			_repository.AssertWasNotCalled(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false), x=> x.IgnoreArguments());
 
 			var target = new FactScheduleDeviationJobStep(jobParameters);
 			var result = target.Run(new List<IJobStep>(), null, null, false);
