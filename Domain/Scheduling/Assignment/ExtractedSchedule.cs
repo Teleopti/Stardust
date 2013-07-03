@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             Clear<IPublicNote>();
         }
 
-        public void MergePreferenceRestriction(ISchedulePart source)
+	    private void MergePreferenceRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
@@ -359,13 +359,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
 	        foreach (var assignment in PersonAssignmentCollection())
 	        {
-		        if (!assignment.PersonalLayers.Any() && assignment.OvertimeShiftCollection.Count == 0 &&
-		            assignment.ShiftCategory == null)
+		        if (!assignment.PersonalLayers.Any() && !assignment.OvertimeLayers.Any() && assignment.ShiftCategory == null)
 			        Remove(assignment);
 	        }
         }
 
-        public void MergeStudentAvailabilityRestriction(ISchedulePart source)
+	    private void MergeStudentAvailabilityRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
@@ -549,20 +548,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void DeleteOvertime()
         {
-            IList<IOvertimeShift> overtimeShiftsToRemoveList = new List<IOvertimeShift>();
             IList<IPersonAssignment> personAssToRemoveList = new List<IPersonAssignment>();
 
             foreach (IPersonAssignment assignment in PersonAssignmentCollection())
             {
-                foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
-                {
-                    overtimeShiftsToRemoveList.Add(overtimeShift);
-                }
-
-                foreach (IOvertimeShift overTime in overtimeShiftsToRemoveList)
-                {
-                    assignment.RemoveOvertimeShift(overTime);
-                }
+							assignment.ClearOvertimeLayers();
 
 								if (!assignment.PersonalLayers.Any() && assignment.ShiftCategory == null)
                     personAssToRemoveList.Add(assignment);
@@ -792,43 +782,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        Add(personAbsence);
         }
 
-        private bool canCreateAndAddOvertime(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
+        private bool canCreateAndAddOvertime(DateTimePeriod overtimePeriod)
         {
-            var periodContainsOvertimeTime = Period.Contains(overtimeShiftActivityLayer.Period.StartDateTime);
-            var canFindPossiblePersonAssignment = findPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer) != null;
+					var periodContainsOvertimeTime = Period.Contains(overtimePeriod.StartDateTime);
+					var canFindPossiblePersonAssignment = findPersonAssignmentToConnectOvertimeTo(overtimePeriod) != null;
             return periodContainsOvertimeTime || canFindPossiblePersonAssignment;
         }
        
-        public void CreateAndAddOvertime(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
+        public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
-            if (canCreateAndAddOvertime(overtimeShiftActivityLayer))
+            if (canCreateAndAddOvertime(period))
             {
-                var foundPersonAssignment = findPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer);
-                if(foundPersonAssignment==null)
-                    foundPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-
-                var overtimeShift = new OvertimeShift();
-                foundPersonAssignment.AddOvertimeShift(overtimeShift);
-                overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
-                Add(foundPersonAssignment);
+                var foundPersonAssignment = findPersonAssignmentToConnectOvertimeTo(period) ??
+                                            new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+	            foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
+							Add(foundPersonAssignment);
             }
         }
 
-        private IPersonAssignment findPersonAssignmentToConnectOvertimeTo(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
+        private IPersonAssignment findPersonAssignmentToConnectOvertimeTo(DateTimePeriod overtimePeriod)
         {
             var personAssignments = from personAssignment in PersonAssignmentCollection()
-                                    where overtimeCanBeConnectedToPersonAssignment(personAssignment, overtimeShiftActivityLayer)
+																		where overtimeCanBeConnectedToPersonAssignment(personAssignment, overtimePeriod)
                                     select personAssignment;
             return personAssignments.FirstOrDefault();
         }
 
-        private static bool overtimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
+				private static bool overtimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, DateTimePeriod overtimePeriod)
         {
-            return personAssignment.Period.AdjacentTo(overtimeShiftActivityLayer.Period) ||
-                   personAssignment.Period.Intersect(overtimeShiftActivityLayer.Period);
+					return personAssignment.Period.AdjacentTo(overtimePeriod) ||
+									 personAssignment.Period.Intersect(overtimePeriod);
         }
 
-        public void MergeOvertime(ISchedulePart source)
+				public void MergeOvertime(IScheduleDay source)
         {
             var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
@@ -839,18 +825,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 foreach (var personAss in source.PersonAssignmentCollection())
                 {
-                    foreach (var overtime in personAss.OvertimeShiftCollection)
-                    {
-                        foreach (IOvertimeShiftActivityLayer layer in overtime.LayerCollection)
-                        {
-                            if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-                            {
-                                var clonedLayer = new OvertimeShiftActivityLayer(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-                                CreateAndAddOvertime(clonedLayer);
-
-                            }
-                        }
-                    }
+	                foreach (var layer in personAss.OvertimeLayers)
+	                {
+										if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+										{
+											CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+										}
+	                }
                 }
             }
         }

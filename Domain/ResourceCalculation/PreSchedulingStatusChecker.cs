@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _schedulePart.Person; }
         }
 
-        public static bool CheckAssignments(ISchedulePart schedulePart)
+				public static bool CheckAssignments(IScheduleDay schedulePart)
         {
             //no assignment is ok
             var personAssignmentCollection = schedulePart.PersonAssignmentCollection();

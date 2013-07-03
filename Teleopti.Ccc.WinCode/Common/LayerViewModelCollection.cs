@@ -204,25 +204,26 @@ namespace Teleopti.Ccc.WinCode.Common
             layers.ForEach(Add);
         }
 
-        public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
-        {
-            IEnumerable<ILayerViewModel> listToCheck;
+		public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
+		{
+			if (this.IsEmpty()) return _part.Period;
+			var periods = from l in this
+						  select new
+						  {
+							  Start = l.Period.StartDateTime,
+							  End = l.Period.EndDateTime,
+							  IsAbsence = l is AbsenceLayerViewModel
+						  };
 
-            if (includeAbsence)
-            {
-                listToCheck = this.Where(
-                    v => v.Period.LocalStartDateTime.Date >= _part.Period.LocalStartDateTime.Date &&
-                         v.Period.LocalEndDateTime.Date <= _part.Period.LocalEndDateTime.Date);
-            }
-            else
-            {
-                listToCheck = this.Where(v => !(v is AbsenceLayerViewModel));
-            }
-            if (listToCheck.Count() == 0) return _part.Period;
+			if (includeAbsence)
+			{
+				var periodsIncludeAbsence = periods.ToList();
+				return new DateTimePeriod(periodsIncludeAbsence.Min(p => p.Start), periodsIncludeAbsence.Max(p => p.End));
+			}
 
-            return new DateTimePeriod(listToCheck.Min(l => l.Period.StartDateTime),
-                                      listToCheck.Max(l => l.Period.EndDateTime));
-        }
+			var periodsExcludeAbsence = periods.Where(p => !p.IsAbsence).ToList();
+			return new DateTimePeriod(periodsExcludeAbsence.Min(p => p.Start), periodsExcludeAbsence.Max(p => p.End));
+		}
 
         public void MoveAllLayers(ILayerViewModel sender, TimeSpan timeSpanToMove)
         {

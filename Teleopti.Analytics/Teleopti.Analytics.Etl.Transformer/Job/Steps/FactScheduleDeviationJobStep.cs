@@ -9,9 +9,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
 	public class FactScheduleDeviationJobStep : JobStepBase
 	{
-		public FactScheduleDeviationJobStep(IJobParameters jobParameters)
+		private readonly bool _isIntraday;
+
+		public FactScheduleDeviationJobStep(IJobParameters jobParameters, bool isIntraday = false)
 			: base(jobParameters)
 		{
+			_isIntraday = isIntraday;
 			Name = "fact_schedule_deviation";
 			JobCategory = JobCategoryType.AgentStatistics;
 		}
@@ -47,7 +50,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 				affectedRows += _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(period,
 																							   RaptorTransformerHelper.CurrentBusinessUnit, 
-																							   _jobParameters.DefaultTimeZone);
+																							   _jobParameters.DefaultTimeZone,
+																							   _isIntraday);
 				Result.RowsAffected = affectedRows;
 			}
 

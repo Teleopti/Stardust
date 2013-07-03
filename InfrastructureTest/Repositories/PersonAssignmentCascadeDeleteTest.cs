@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,37 +13,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	public class PersonAssignmentCascadeDeleteTest : DatabaseTest
 	{
+		/// PersonAssignment
+		///   0: PersonalLayer
+		///   1: MainLayer
+		///   2: OvertimeLayer
+
 		private IPersonAssignment target;
 
 		[Test]
-		public void DeleteOvertimeShouldGenerateOneStatement()
+		public void DeleteOvertimeShouldGenerateCorrectNumberOfStatements()
 		{
-			target.RemoveOvertimeShift(target.OvertimeShiftCollection[0]);
+			target.RemoveLayer(target.OvertimeLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
+				.Should().Be.EqualTo(2); //delete overtime layer + update personassignment  (no index changes)
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(2); //delete overtimeshift + overtimeshiftlayer
+				.Should().Be.EqualTo(1); //delete overtimeshift layer
 		}
 
 		[Test]
-		public void DeleteMainShiftShouldGenerateOneStatement()
+		public void DeleteMainShouldGenerateCorrectNumberOfStatements()
 		{
 			target.ClearMainLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete layer + update personassignment
+				.Should().Be.EqualTo(3); //delete mainshift layer + update personassignment + update overtime index
 			Session.SessionFactory.Statistics.EntityDeleteCount
 				.Should().Be.EqualTo(1); //delete mainshiftlayer
 		}
 
 		[Test]
-		public void DeletePersonalShiftShouldGenerateOneStatement()
+		public void DeletePersonalShouldGenerateCorrectNumberOfStatements()
 		{
 			target.RemoveLayer(target.PersonalLayers.First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete overtime (no layer) + update personassignment
+				.Should().Be.EqualTo(4); //delete overtime layer + update personassignment + update main index + update overtime index
 			Session.SessionFactory.Statistics.EntityDeleteCount
 				.Should().Be.EqualTo(1); //delete personalshiftlayer
 		}
@@ -55,9 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Delete(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(2); //delete pers assignment, ot,  (no layers)
+				.Should().Be.EqualTo(1); //delete pers assignment, (no layers - cascading)
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(5); //delete pers assignment, ot, otlayer, mslayer, pslayer
+				.Should().Be.EqualTo(4); //delete pers assignment, otlayer, mslayer, pslayer
 		}
 
 
@@ -97,9 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 										new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 										dummyCat,
 										dummyScenario);
-			var otShift = new OvertimeShift();
-			target.AddOvertimeShift(otShift);
-			otShift.LayerCollection.Add(new OvertimeShiftActivityLayer(dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), definitionSet));
+			target.AddOvertimeLayer(dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), definitionSet);
 			Session.Save(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.Clear();

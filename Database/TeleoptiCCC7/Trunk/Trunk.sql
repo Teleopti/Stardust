@@ -482,6 +482,69 @@ EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer_new]', N'PersonalShiftActivit
 EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer].[PK_PersonalShiftActivityLayer_new]', N'PK_PersonalShiftActivityLayer', N'INDEX'
 GO
 
+--2) [dbo].[OvertimeShiftActivityLayer] 
+
+--drop FKs
+ALTER TABLE [dbo].[OvertimeShift] DROP CONSTRAINT [FK_OvertimeShift_PersonAssignment]
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_OvertimeShift]
+GO
+
+--Create new layer table
+CREATE TABLE [dbo].[OvertimeShiftActivityLayer_new](
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[DefinitionSet] uniqueidentifier NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
+ CONSTRAINT [PK_OvertimeShiftActivityLayer_new] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE CLUSTERED INDEX [CIX_OvertimeShiftActivityLayer] ON [dbo].[OvertimeShiftActivityLayer_new]
+(
+	[Parent] ASC
+)
+GO
+
+--move data
+INSERT INTO [dbo].[OvertimeShiftActivityLayer_new] (Id, payLoad, Minimum, Maximum, DefinitionSet, Parent, OrderIndex)
+select
+L2.Id,
+L2.payLoad,
+L2.Minimum,
+L2.Maximum,
+L2.DefinitionSet,
+L1.Parent,
+NewOrderIndex = ROW_NUMBER() OVER(PARTITION BY L0.Id ORDER BY L1.OrderIndex,L2.OrderIndex) -1
+from  dbo.PersonAssignment L0
+inner join dbo.OvertimeShift L1
+	on L0.Id = L1.Parent
+inner join dbo.OvertimeShiftActivityLayer L2
+	on L1.Id = L2.Parent
+GO
+
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+ON DELETE CASCADE
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_PersonAssignment]
+
+DROP TABLE OvertimeShiftActivityLayer
+DROP TABLE OvertimeShift
+GO
+
+EXEC sp_rename N'[dbo].[OvertimeShiftActivityLayer_new]', N'OvertimeShiftActivityLayer', N'OBJECT'
+EXEC sp_rename N'[dbo].[OvertimeShiftActivityLayer].[PK_OvertimeShiftActivityLayer_new]', N'PK_OvertimeShiftActivityLayer', N'INDEX'
+GO
+
 ----------------  
 --Name: David J
 --Date: 2013-06-24
@@ -526,7 +589,7 @@ REFERENCES [dbo].[Person] ([Id])
 ALTER TABLE [Auditing].[Revision] CHECK CONSTRAINT [FK_Revision_Person]
 GO
 
-CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
+CREATE TABLE [Auditing].[ShiftLayer_AUD](
 	[Id] uniqueidentifier NOT NULL,
 	[REV] bigint NOT NULL,
 	[REVTYPE] tinyint NOT NULL,
@@ -534,67 +597,21 @@ CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
 	[Maximum] datetime NULL,
 	[OrderIndex] int NULL,
 	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_MainShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_MainShiftActivityLayer_REV]
-GO
-
-
-CREATE TABLE [Auditing].[OvertimeShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
+	[LayerType] tinyint NULL,
 	[DefinitionSet] uniqueidentifier NULL,
 	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ShiftLayer_AUD] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC,
 	[REV] ASC
 )
 )
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
+ALTER TABLE [Auditing].[ShiftLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
 REFERENCES [Auditing].[Revision] ([Id])
 ON DELETE CASCADE
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
-GO
-
-CREATE TABLE [Auditing].[PersonalShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_PersonalShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_REV]
-
+ALTER TABLE [Auditing].[ShiftLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
 GO
 
 CREATE TABLE [Auditing].[PersonAssignment_AUD](
@@ -680,26 +697,6 @@ ON DELETE CASCADE
 ALTER TABLE [Auditing].[PersonDayOff_AUD] CHECK CONSTRAINT [FK_PersonDayOff_REV]
 GO
 
-
-CREATE TABLE [Auditing].[OvertimeShift_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[OrderIndex] int NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_OvertimeShift_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-ALTER TABLE [Auditing].[OvertimeShift_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShift_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[OvertimeShift_AUD] CHECK CONSTRAINT [FK_OvertimeShift_REV]
-
-GO
 ----------------  
 --Name: Asad Mirza
 --Date: 2013-06-10
@@ -805,4 +802,101 @@ ADD MaxParallelTasks int NULL
 GO
 UPDATE Skill SET MaxParallelTasks = 1
 ALTER TABLE Skill ALTER COLUMN MaxParallelTasks int not null
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-07-01
+--Desc: PBI #21978 - merging all shiftLayer tables into one
+----------------  
+CREATE TABLE [dbo].[ShiftLayer](
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
+	[LayerType] tinyint NOT NULL,
+	[DefinitionSet] uniqueidentifier NULL,
+	CONSTRAINT [PK_ShiftLayer] PRIMARY KEY NONCLUSTERED 	
+	(	
+		[Id] ASC
+	)	
+)
+CREATE CLUSTERED INDEX [CIX_ShiftLayer_Parent] ON [dbo].[ShiftLayer]
+(
+            [Parent] ASC
+)
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH NOCHECK ADD  CONSTRAINT [FK_ShiftLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_Activity]
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+ON DELETE CASCADE
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_PersonAssignment]
+
+GO
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= Id,
+	[payLoad]	= [payLoad],
+	[Minimum]	= [Minimum],
+	[Maximum]	= [Maximum],
+	[Parent]	= [Parent],
+	[OrderIndex]= [OrderIndex],
+	[LayerType]	= 1,
+	[DefinitionSet] = NULL
+FROM dbo.MainShiftActivityLayer
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= o.[Id],
+	[payLoad]	= o.[payLoad],
+	[Minimum]	= o.[Minimum],
+	[Maximum]	= o.[Maximum],
+	[Parent]	= o.[Parent] ,
+	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
+	[LayerType]	= 2,
+	[DefinitionSet] = o.DefinitionSet
+FROM dbo.OvertimeShiftActivityLayer o
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = o.Parent
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= p.[Id],
+	[payLoad]	= p.[payLoad],
+	[Minimum]	= p.[Minimum],
+	[Maximum]	= p.[Maximum],
+	[Parent]	= p.[Parent] ,
+	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
+	[LayerType]	= 3,
+	[DefinitionSet] = NULL
+FROM dbo.PersonalShiftActivityLayer p
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = p.Parent
+GO
+
+DROP TABLE dbo.MainShiftActivityLayer
+DROP TABLE dbo.OvertimeShiftActivityLayer
+DROP TABLE dbo.PersonalShiftActivityLayer
 GO

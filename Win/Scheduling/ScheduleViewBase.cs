@@ -622,7 +622,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var personAssignments = scheduleRange.PersonAssignmentCollection();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.OvertimeShiftCollection.Count > 0)
+                if (personAssignment.OvertimeLayers.Any())
                 {
                     Size s = new Size(6, 6);
                     Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);

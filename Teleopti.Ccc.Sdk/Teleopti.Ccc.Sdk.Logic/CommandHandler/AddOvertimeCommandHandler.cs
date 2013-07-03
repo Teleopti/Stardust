@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 var activity = _activityRepository.Load(command.ActivityId);
                 var overtimeDefinition = _multiplicatorDefinitionSetRepository.Load(command.OvertimeDefinitionSetId);
-                var overtimeLayer = new OvertimeShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
-                scheduleDay.CreateAndAddOvertime(overtimeLayer);
+								scheduleDay.CreateAndAddOvertime(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 
                 _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);

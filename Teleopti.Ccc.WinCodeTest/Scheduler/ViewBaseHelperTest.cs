@@ -364,12 +364,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 						var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario, new DateOnly(2008, 1, 1));
             IActivity activity = ActivityFactory.CreateActivity("Overtime activity");
-            var overtimeShift = new OvertimeShift();
-            IOvertimeShiftActivityLayer layer =
-                new OvertimeShiftActivityLayer(activity, period,
-                                               multiplicatorDefinitionSet);
-            personAssignment.AddOvertimeShift(overtimeShift);
-            overtimeShift.LayerCollection.Add(layer);
+						personAssignment.AddOvertimeLayer(activity, period, multiplicatorDefinitionSet);
 
             var part = _scheduleRange.ScheduledDay(new DateOnly(2008, 1, 1));
             part.Add(personAssignment);
@@ -1024,7 +1019,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsenceBeginsAndEndsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodBeginsAndEndsToday);
 
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            ISchedulePart schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
+            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
 
             Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceEndsToday, schedulePart, visualLayerCollectionActivity));
             Assert.AreEqual(DisplayMode.BeginsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsToday, schedulePart, visualLayerCollectionActivity));

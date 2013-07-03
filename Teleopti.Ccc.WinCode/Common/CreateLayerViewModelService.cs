@@ -69,14 +69,11 @@ namespace Teleopti.Ccc.WinCode.Common
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-                foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
-                {
-                    foreach (
-                        var layer in overtimeShift.LayerCollectionWithDefinitionSet())
-                    {
-											layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
-                    }
-                }
+	            foreach (var layer in assignment.OvertimeLayers)
+	            {
+								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
+	            }
+
 	            foreach (var personalLayer in assignment.PersonalLayers)
 	            {
 		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));

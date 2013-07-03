@@ -491,10 +491,11 @@
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVertical.cs" />
+    <Compile Include="Scheduling\Assignment\OvertimeShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
-	<Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
@@ -541,7 +542,7 @@
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
-    <Compile Include="Scheduling\Assignment\PersistedActivityLayer.cs" />
+    <Compile Include="Scheduling\Assignment\MeetingLayer.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
@@ -755,8 +756,6 @@
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartService.cs" />
     <Compile Include="Scheduling\Assignment\FilterLayerNoOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\NextPeriodOptimizer.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShift.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\RemoveLayerFromSchedule.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
@@ -1687,10 +1686,7 @@
     <EmbeddedResource Include="Scheduling\TimeLayer\MultiplicatorDefinition.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShift.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftActivityLayer.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common\General.hbm.xml" />
@@ -1851,6 +1847,9 @@
     <EmbeddedResource Include="Scheduling\Restriction\OvertimeAvailability.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
