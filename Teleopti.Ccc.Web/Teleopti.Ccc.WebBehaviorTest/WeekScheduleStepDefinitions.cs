@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -61,10 +62,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
 		}
 
-		[Then(@"I should see the meeting details with subject '(.*)' on date '(.*)'")]
-		public void ThenIShouldSeeTheMeetingDetailsOnDate(string subject, DateTime date)
+		[When(@"I hover layer '(.*)' on '(.*)'")]
+		public void WhenIHoverLayerOn(int layer, DateTime date)
 		{
-			EventualAssert.That(() => _page.DayLayerTooltipElement(date, subject).Exists, Is.True);
+			DivCollection layers = _page.DayLayers(date);
+			layers[layer-1].FireEvent("mouseenter");
+			layers[layer-1].FireEvent("mouseover");
 		}
 
 		[Then(@"I should see the meeting details with description '(.*)' on date '(.*)'")]
@@ -102,15 +105,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			DivCollection layers = _page.DayLayers(date);
 
-			EventualAssert.That(() => layers[0].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[0][1]));
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("16px"));
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("190px"));
 
-			EventualAssert.That(() => layers[1].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[1][1]));
 			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Top"), Is.EqualTo("207px"));
 			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Height"), Is.EqualTo("62px"));
 
-			EventualAssert.That(() => layers[2].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[2][1]));
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("270px"));
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("381px"));
 		}

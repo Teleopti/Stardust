@@ -127,6 +127,20 @@ ko.bindingHandlers.timepicker = {
     }
 };
 
+ko.bindingHandlers.tooltip = {
+	update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+		var $element, options, tooltip;
+		options = ko.utils.unwrapObservable(valueAccessor());
+		$element = $(element);
+		tooltip = $element.data('tooltip');
+		if (tooltip) {
+			$.extend(tooltip.options, options);
+		} else {
+			$element.tooltip(options);
+		}
+	}
+};
+
 ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor) {
         var options = valueAccessor();
