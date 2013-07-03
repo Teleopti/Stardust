@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Common
 			return _current;
 		} }
 
-		private readonly string _http;
+        private readonly string _http;
 		private readonly string _httpOnline;
 		private readonly string _divider;
 		private readonly string _prefix;
@@ -26,13 +26,12 @@ namespace Teleopti.Ccc.Win.Common
 		private readonly string _suffixOnline  = string.Empty;
 		private const HelpType _helpType = HelpType.Http;
 		private readonly string _helpLang = string.Empty;
-
-  
+	    
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
 		private HelpHelper()
 		{
 			//Read help settings from config file
-			string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
+            string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
 			if (!string.IsNullOrEmpty(helpUrl)) _http = helpUrl;
 			string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
 			if (!string.IsNullOrEmpty(helpPrefix)) _prefix = helpPrefix;
@@ -69,14 +68,15 @@ namespace Teleopti.Ccc.Win.Common
 			Help.ShowHelp(null, GetOnlineUrl(formName, control));
 		}
 
-		private string GetUrl(string formName, IHelpContext control)
-		{
-			var topic = GetTopic(formName, control);
-			topic = HttpUtility.UrlEncode(topic);
-			return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
-		}
+	    private string GetUrl(string formName, IHelpContext control)
+	    {
+	        var topic = GetTopic(formName, control);
+	        //if (!_staticHelp) topic = HttpUtility.UrlEncode(topic);
+            return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
+	        
+	    }
 
-		private string GetOnlineUrl(string formName, IHelpContext control)
+	    private string GetOnlineUrl(string formName, IHelpContext control)
 		{
 			var topic = GetTopicUrlOnline(formName, control);
 			topic = HttpUtility.UrlEncode(topic);
