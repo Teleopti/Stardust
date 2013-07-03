@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static bool copyData(IScheduleDay scheduleDay, ISchedulePart tempDay)
+		private static bool copyData(IScheduleDay scheduleDay, IScheduleDay tempDay)
 		{
 			var hasSwapData = false;
 

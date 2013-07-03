@@ -267,7 +267,6 @@
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePart.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />

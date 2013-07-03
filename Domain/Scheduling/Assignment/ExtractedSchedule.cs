@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             Clear<IPublicNote>();
         }
 
-        public void MergePreferenceRestriction(ISchedulePart source)
+	    private void MergePreferenceRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        }
         }
 
-        public void MergeStudentAvailabilityRestriction(ISchedulePart source)
+	    private void MergeStudentAvailabilityRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
@@ -814,7 +814,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									 personAssignment.Period.Intersect(overtimePeriod);
         }
 
-        public void MergeOvertime(ISchedulePart source)
+				public void MergeOvertime(IScheduleDay source)
         {
             var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));

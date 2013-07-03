@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Remove lock on schedule
         /// </summary>
         /// <param name="schedulePart"></param>
-        void RemoveLock(ISchedulePart schedulePart);
+				void RemoveLock(IScheduleDay schedulePart);
 
         /// <summary>
         /// Remove lock on list of schedules
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="schedulePart"></param>
         /// <returns></returns>
-        GridlockDictionary Gridlocks(ISchedulePart schedulePart);
+				GridlockDictionary Gridlocks(IScheduleDay schedulePart);
 
         /// <summary>
         /// Clear all locks
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Remove lock on schedule
         /// </summary>
         /// <param name="schedulePart"></param>
-        public void RemoveLock(ISchedulePart schedulePart)
+				public void RemoveLock(IScheduleDay schedulePart)
         {
             RemoveLock(schedulePart.Person, new DateOnly(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone)));//, schedulePart.Period);
         }
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="schedulePart"></param>
         /// <returns></returns>
-        public GridlockDictionary Gridlocks(ISchedulePart schedulePart)
+				public GridlockDictionary Gridlocks(IScheduleDay schedulePart)
         {
             return Gridlocks(schedulePart.Person, new DateOnly(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone)));
         }

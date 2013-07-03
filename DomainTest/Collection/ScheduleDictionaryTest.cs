@@ -1270,8 +1270,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-                    ISchedulePart part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
                     Assert.AreEqual(1, part.PersonMeetingCollection().Count);
                     Assert.AreEqual(1, part2.PersonMeetingCollection().Count);
                     Assert.IsTrue(eventFired);
@@ -1310,8 +1310,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-                    ISchedulePart part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
                     Assert.AreEqual(0, part.PersonMeetingCollection().Count);
                     Assert.AreEqual(0, part2.PersonMeetingCollection().Count);
                     Assert.IsFalse(eventFired);
@@ -1346,7 +1346,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
                     Assert.AreEqual(0, part.PersonMeetingCollection().Count);
                     Assert.IsFalse(eventFired);
                 }

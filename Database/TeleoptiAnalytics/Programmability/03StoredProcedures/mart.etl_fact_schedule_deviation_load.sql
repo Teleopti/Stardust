@@ -26,12 +26,15 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
 @business_unit_code uniqueidentifier,
-@isIntraday bit,
+@isIntraday bit = 0,
 @is_delayed_job bit = 0
 AS
 
 --Execute one delayed jobs, if any
-if (@is_delayed_job=0)
+if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_delayed_job=1
+	and @isIntraday=0 --only run if Nightly
+	and (select count(*) from mart.etl_job_delayed)>0 --only run if we accutally have delayed batches to execute
+	)
 EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load'
 
 
