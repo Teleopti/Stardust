@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Globalization;
 using System.Text;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
@@ -70,14 +72,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                             DateTimePeriod period)
         {
             if (sources.Count == 0) return new List<IStatisticTask>();
-
-            string queueList = buildStringQueueList(sources);
             
+            ICollection<IStatisticTask> statisticTasks = new Collection<IStatisticTask>();
+
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
-                IQuery query = createQuery(uow, period, queueList);
-                query.SetTimeout(1200);
-                return query.List<IStatisticTask>();
+                foreach (var source in sources.Batch(500))
+                {
+                    string queueList = buildStringQueueList(source);
+                    IQuery query = createQuery(uow, period, queueList);
+                    query.SetTimeout(1200);
+
+                    foreach (var item in query.List<IStatisticTask>())
+                    {
+                        statisticTasks.Add(item);
+                    }
+               }
+
+               return statisticTasks;
             }
         }
 
