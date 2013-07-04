@@ -755,6 +755,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return 0;
 	    }
 
+	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
+	    {
+			return new LastChangedReadModel();
+	    }
+
 	    public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new EtlReadModelRepository(UnitOfWork);
 			var bu = new BusinessUnit("name");
 			bu.SetId(Guid.NewGuid());
-			var model = _target.LastChangedDate(bu, "Shedules");
+			var model = _target.LastChangedDate(bu, "Shedules", new DateTimePeriod(2000,1,1,2001,1,1));
 			Assert.That(model,Is.Not.Null);
 		}
 

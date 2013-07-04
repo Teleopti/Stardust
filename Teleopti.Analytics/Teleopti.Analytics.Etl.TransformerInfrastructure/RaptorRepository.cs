@@ -326,6 +326,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+				return rep.LastChangedDate(currentBusinessUnit, stepName, period);
+			}
+		}
+
 		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
 			var parameterList = new List<SqlParameter>
@@ -731,11 +740,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
-				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
-				return rep.LastChangedDate(currentBusinessUnit, stepName);
-			}
+			return LastChangedDate(currentBusinessUnit, stepName, new DateTimePeriod(2000, 1, 1, 2100, 1, 1));
 		}
 
 		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
