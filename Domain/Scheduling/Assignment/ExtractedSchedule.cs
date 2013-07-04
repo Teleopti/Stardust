@@ -754,37 +754,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             var personAbsence = new PersonAbsence(Person, Scenario, layer) {LastChange = DateTime.UtcNow};
 	        Add(personAbsence);
         }
-
-        private bool canCreateAndAddOvertime(DateTimePeriod overtimePeriod)
-        {
-					var periodContainsOvertimeTime = Period.Contains(overtimePeriod.StartDateTime);
-					var canFindPossiblePersonAssignment = findPersonAssignmentToConnectOvertimeTo(overtimePeriod) != null;
-            return periodContainsOvertimeTime || canFindPossiblePersonAssignment;
-        }
        
         public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
-            if (canCreateAndAddOvertime(period))
-            {
-                var foundPersonAssignment = findPersonAssignmentToConnectOvertimeTo(period) ??
-                                            new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-	            foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
-							Add(foundPersonAssignment);
-            }
-        }
-
-        private IPersonAssignment findPersonAssignmentToConnectOvertimeTo(DateTimePeriod overtimePeriod)
-        {
-            var personAssignments = from personAssignment in PersonAssignmentCollection()
-																		where overtimeCanBeConnectedToPersonAssignment(personAssignment, overtimePeriod)
-                                    select personAssignment;
-            return personAssignments.FirstOrDefault();
-        }
-
-				private static bool overtimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, DateTimePeriod overtimePeriod)
-        {
-					return personAssignment.Period.AdjacentTo(overtimePeriod) ||
-									 personAssignment.Period.Intersect(overtimePeriod);
+						//todo: rk - not sure about this.. 
+						var foundPersonAssignment = AssignmentHighZOrder();
+						if (foundPersonAssignment == null)
+						{
+							var newAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+							newAss.AddOvertimeLayer(activity, period, definitionSet);
+							Add(newAss);
+						}
+						else
+						{
+							foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
+						}
         }
 
 				public void MergeOvertime(IScheduleDay source)

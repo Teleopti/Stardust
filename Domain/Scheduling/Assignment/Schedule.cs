@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private List<IBusinessRuleResponse> _businessRuleResponseCollection;
         private readonly IScheduleDictionary _owner;
         private readonly IScheduleParameters _parameters;
-        private List<IScheduleData> _scheduleDataCollection;
+        private HashSet<IScheduleData> _scheduleDataCollection;
 
         private readonly object lockObject = new object();
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _owner = owner;
             _parameters = parameters;
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            _scheduleDataCollection = new List<IScheduleData>();
+            _scheduleDataCollection = new HashSet<IScheduleData>();
         }
 
         public IScheduleDictionary Owner
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                                         new PublishedScheduleData(data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
             }
-            filteredData.ForEach(retObj._scheduleDataCollection.Add);
+            filteredData.ForEach(x => retObj._scheduleDataCollection.Add(x));
             BusinessRuleResponseInternalCollection.Where(rule => rule.Period.Contains(period.StartDateTime)).ForEach(retObj.BusinessRuleResponseInternalCollection.Add);
             return retObj;
         }
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Schedule clone = (Schedule)MemberwiseClone();
             clone._businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            clone._scheduleDataCollection = new List<IScheduleData>();
-            ScheduleDataInternalCollection().ForEach(clone._scheduleDataCollection.Add);
+            clone._scheduleDataCollection = new HashSet<IScheduleData>();
+            ScheduleDataInternalCollection().ForEach(x => clone._scheduleDataCollection.Add(x));
             _businessRuleResponseCollection.ForEach(clone.BusinessRuleResponseInternalCollection.Add);
             CloneDerived(clone);
 
