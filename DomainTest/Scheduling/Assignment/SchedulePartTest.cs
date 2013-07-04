@@ -163,9 +163,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyProjectionsAreSorted()
 		{
 			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,1,1));
-			part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, createPeriod(TimeSpan.FromHours(4))));
-			part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, createPeriod(TimeSpan.FromHours(1))));
-			part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, createPeriod(TimeSpan.FromHours(9))));
+			var ass = new PersonAssignment(parameters.Person, parameters.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetMainShiftLayers(new []
+				{
+					new MainShiftLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(4))), 
+					new MainShiftLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(1))), 
+					new MainShiftLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(9)))
+				}, new ShiftCategory("sdf"));
+			part.Add(ass);
 
 			Assert.AreEqual(new DateTimePeriod(new DateTime(2000, 1, 1, 1, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc)), part.ProjectionService().CreateProjection().Period());
 		}

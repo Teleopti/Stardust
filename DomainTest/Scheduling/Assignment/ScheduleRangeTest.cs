@@ -978,9 +978,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAssignment> pAsses = new List<IPersonAssignment>();
                 pAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
                 pAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
-                IList<IPersonAssignment> pConflictAsses = new List<IPersonAssignment>();
-                pConflictAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
-                pConflictAsses.Add(createPersonAssignment(new DateTimePeriod(1999, 12, 31, 2000, 1, 2)));
                 IList<IPersonAbsence> pAbses = new List<IPersonAbsence>();
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 2, 2000, 2, 3)));
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 4, 2000, 2, 5)));
@@ -991,13 +988,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
                 _target.AddRange(pAsses);
-                _target.AddRange(pConflictAsses);
                 _target.AddRange(pAbses);
                 _target.AddRange(dayOffs);
                 _target.AddRange(personMeetings);
                 Assert.AreEqual(2, _target.PersonAbsences.Count);
                 Assert.AreEqual(2, _target.PersonAssignments.Count);
-                //Assert.AreEqual(2, _target.PersonConflictAssignments.Count);
                 Assert.AreEqual(2, _target.PersonDayOffs.Count);
                 Assert.AreEqual(2, _target.PersonMeetings.Count);
             }
