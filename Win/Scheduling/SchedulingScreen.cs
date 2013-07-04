@@ -2075,16 +2075,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		private void toolStripMenuItemShowNextAssignment_Click(object sender, EventArgs e) //used by context
-		{
-			//remove me!
-		}
-
-		private void toolStripMenuItemShowAssignmentBefore_Click(object sender, EventArgs e) //used by context
-		{
-			//remove me!
-		}
-
 		#endregion
 
 		#region Context menu events
@@ -2098,8 +2088,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemMeetingOrganizer.Enabled = toolStripMenuItemEditMeeting.Enabled = isPermittedToViewMeeting();
 
 			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
-
-			//ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
 
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
