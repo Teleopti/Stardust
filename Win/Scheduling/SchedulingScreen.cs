@@ -2075,21 +2075,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		#region Next assignment
-
 		private void toolStripMenuItemShowNextAssignment_Click(object sender, EventArgs e) //used by context
 		{
 			//remove me!
-			getAssignmentZOrder(false, true);
 		}
 
 		private void toolStripMenuItemShowAssignmentBefore_Click(object sender, EventArgs e) //used by context
 		{
 			//remove me!
-			getAssignmentZOrder(true, true);
 		}
-
-		#endregion //assignment
 
 		#endregion
 
@@ -2099,16 +2093,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView == null)
 				e.Cancel = true;
-
-			if (getAssignmentZOrder(true, false) != null)
-				toolStripMenuItemShowAssignmentBefore.Enabled = true;
-			else
-				toolStripMenuItemShowAssignmentBefore.Enabled = false;
-
-			if (getAssignmentZOrder(false, false) != null)
-				toolStripMenuItemNextAssignment.Enabled = true;
-			else
-				toolStripMenuItemNextAssignment.Enabled = false;
 
 			ToolStripMenuItemCreateMeeting.Enabled = toolStripMenuItemDeleteMeeting.Enabled = toolStripMenuItemRemoveParticipant.Enabled = isPermittedToEditMeeting();
 			toolStripMenuItemMeetingOrganizer.Enabled = toolStripMenuItemEditMeeting.Enabled = isPermittedToViewMeeting();
@@ -5578,49 +5562,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//position _grid
 			control.Dock = DockStyle.Left;
 			control.Width = width;
-		}
-
-		private IPersonAssignment getAssignmentZOrder(bool before, bool move)
-		{
-			//should go away!
-			if (_scheduleView != null)
-			{
-				IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
-				foreach (IScheduleDay schedule in selectedSchedules)
-				{
-					IPersonAssignment highZOrder = schedule.AssignmentHighZOrder();
-					IPersonAssignment newHighZOrder = null;
-
-					var personAssignments = schedule.PersonAssignmentCollection();
-					if (personAssignments.Count > 1)
-					{
-						int num = 0;
-						foreach (IPersonAssignment pa in personAssignments)
-						{
-							if (highZOrder == null)
-							{
-								newHighZOrder = pa;
-								break;
-							}
-							if (before)
-								newHighZOrder = getAssignmentZOrderBefore(highZOrder, pa, num, personAssignments);
-							else
-								newHighZOrder = getAssignmentZOrderNext(highZOrder, pa, num, personAssignments);
-
-							if (newHighZOrder != null)
-								break;
-							num++;
-						}
-					}
-					if (newHighZOrder != null && move)
-					{
-						//newHighZOrder.ZOrder = DateTime.Now;
-						_scheduleView.Presenter.ModifySchedulePart(new List<IScheduleDay> { schedule });
-					}
-					return newHighZOrder;
-				}
-			}
-			return null;
 		}
 
 		private static IPersonAssignment getAssignmentZOrderBefore(IPersonAssignment highZOrder, IPersonAssignment pa, int num, IList<IPersonAssignment> personAssignments)
