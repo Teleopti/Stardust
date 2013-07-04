@@ -625,26 +625,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return new DateTimePeriod(start, end);
 		}
 
-		[Test]
-		public void VerifyPersonAssignmentDateTimeSortOrder()
-		{
-			fullPermission(true);
-			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                IPersonAssignment pAssOk = createPersonAssignment(createPeriod(5, 20));
-                IPersonAssignment pAssOk2 = createPersonAssignment(createPeriod(3, 4));
-                _target.Add(pAssOk);
-                _target.Add(pAssOk2);
-
-                IList<IPersonAssignment> res =
-                    _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection();
-                Assert.AreEqual(2, res.Count);
-								Assert.AreEqual(pAssOk2.MainLayers.First().Period, res[0].MainLayers.First().Period);
-								Assert.AreEqual(pAssOk.MainLayers.First().Period, res[1].MainLayers.First().Period);
-            }
-			_mocks.VerifyAll();
-		}
 
 		[Test]
 		public void VerifyProperties()
