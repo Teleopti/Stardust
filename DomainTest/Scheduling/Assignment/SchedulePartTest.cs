@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyAddMainShiftTwiceShouldMakePersonAssignmentCollectionThrow()
+		public void TwoPersonAssignmentsOnOneDayShouldThrow()
 		{
 			_target.Clear<IPersistableScheduleData>();
 
@@ -573,10 +573,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreatePersonAssignment(_target.Person, _target.Scenario);
 			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift1);
-			_target.Add(personAssignment);
-
+			
 			Assert.Throws<InvalidOperationException>(() =>
-			                                         _target.PersonAssignmentCollection());
+			                                         _target.Add(personAssignment));
 		}
 
 		[Test]
