@@ -552,8 +552,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanGetMaximumPeriodForMeetings()
         {
-            _personAssignments.Add(_personAssignment);
-
             var resultPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
                                 new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
@@ -563,8 +561,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers).Return(Enumerable.Empty<IPersonalShiftLayer>()).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
@@ -594,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
 	            Expect.Call(_personAssignment.PersonalLayers)
 	                  .Return(new []
 		                  {
@@ -625,14 +622,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
             var meetings = GetMeetings();
-            _personAssignments.Add(_personAssignment);
-
 
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period), 
@@ -936,7 +930,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var meeting = _mocks.StrictMock<IPersonMeeting>();
             var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAssignments = new List<IPersonAssignment> {_personAssignment};
+					_personAssignments.Add(_personAssignment);
 
             var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var phone = ActivityFactory.CreateActivity("phone");
@@ -956,8 +950,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)
@@ -1009,8 +1003,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)

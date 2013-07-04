@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private DateTimePeriod rangePeriod;
 		private IPersonAbsence abs;
 		private IPersonAssignment ass1;
-		private IPersonAssignment ass2;
 		private IPersonAssignment ass3;
 		private IPersonDayOff pDayOff;
 		private IPersonMeeting _personMeeting;
@@ -78,8 +77,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
 																	  parameters.Period);
-			ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
-																				  parameters.Period);
 
 			IMeeting meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description",
 				ActivityFactory.CreateActivity("activity"), parameters.Scenario);
@@ -91,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			_target.Add(_personMeeting);
 			_target.Add(ass1);
-			_target.Add(ass2);
 			_target.Add(_note);
 
 			DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
@@ -102,6 +98,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 										dayOff, new DateOnly(parameters.Period.StartDateTime.Date));
 
 			_target.Add(pDayOff);
+		}
+
+		[Test]
+		public void ShouldThrowIfTryingToAddMultipleAssignments()
+		{
+			Assert.Throws<ArgumentException>(() => 
+				_target.Add(new PersonAssignment(_target.Person, _target.Scenario, _target.DateOnlyAsPeriod.DateOnly))
+			);
 		}
 
 		[Test]
@@ -172,12 +176,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 												new DateTime(2000, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 
 			ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period11);
-			ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period22);
 			ass3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period33);
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			_target.Add(ass1);
-			_target.Add(ass2);
 			_target.Add(ass3);
 
 			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
@@ -551,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyAddMainShiftWithZOrder()
+		public void VerifyAddMainShiftTwiceShouldMakePersonAssignmentCollectionThrow()
 		{
 			_target.Clear<IPersistableScheduleData>();
 
@@ -573,18 +575,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift1);
 			_target.Add(personAssignment);
 
-			Assert.AreEqual(2, _target.PersonAssignmentCollection().Count);
-			Assert.AreEqual("test", _target.PersonAssignmentCollection()[0].ShiftCategory.Description.Name);
-			Assert.AreEqual("test1", _target.PersonAssignmentCollection()[1].ShiftCategory.Description.Name);
-			Assert.AreEqual("test", _target.AssignmentHighZOrder().ShiftCategory.Description.Name);
-
-			var mainShift3 = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("ff"), period,
-																	ShiftCategoryFactory.CreateShiftCategory("pp"));
-
-			_target.AddMainShift(mainShift3);
-			Assert.AreEqual(mainShift3.ShiftCategory.Description.Name, _target.AssignmentHighZOrder().ShiftCategory.Description.Name);
-			Assert.AreEqual(2, _target.PersonAssignmentCollection().Count);
+			Assert.Throws<InvalidOperationException>(() =>
+			                                         _target.PersonAssignmentCollection());
 		}
+
 		[Test]
 		public void ToStringShouldReturnEmptyString()
 		{
@@ -1752,7 +1746,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,3,1));
 			IActivity activity = ActivityFactory.CreateActivity("Personal");
-			IActivity activityMain = ActivityFactory.CreateActivity("Phone");
 			DateTimePeriod personalShiftPeriod = new DateTimePeriod(new DateTime(2000, 3, 1, 9, 0, 0, DateTimeKind.Utc), new DateTime(2000, 3, 1, 10, 0, 0, DateTimeKind.Utc));
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
 																										   parameters.Person,
@@ -1763,7 +1756,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																											personalShiftPeriod.MovePeriod(new TimeSpan(4, 0, 0)),
 																											scenario);
 			DateTimePeriod mainPeriodCoverOne = new DateTimePeriod(new DateTime(2000, 3, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 3, 1, 12, 0, 0, DateTimeKind.Utc));
-			IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("Day");
 			part.Add(personAssignment);
 			part.Add(personAssignment2);
 

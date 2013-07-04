@@ -339,7 +339,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public DateTimePeriod? GetMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
         {
-            if (schedulePart.PersonMeetingCollection().Count == 0 && schedulePart.PersonAssignmentCollection().Count == 0)
+					var ass = schedulePart.AssignmentHighZOrder();
+            if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
             {
                 return null;
             }
@@ -354,7 +355,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 period = period.Value.MaximumPeriod(personMeeting.Period);
             }
 
-	        var ass = schedulePart.AssignmentHighZOrder();
             if (ass!=null)
             {
                 foreach (var personalLayer in ass.PersonalLayers)

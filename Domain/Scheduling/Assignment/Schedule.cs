@@ -93,11 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 lock(lockObject)
                 {
-                    _scheduleDataCollection.Add(scheduleData);
-
-                    var pAss = scheduleData as IPersonAssignment;
-                    if (pAss != null)
-                        mightMoveAssignmentToConflictList(sortedAssignmentCollection(), pAss);
+									_scheduleDataCollection.Add(scheduleData);
 
                 	var preferenceDay = scheduleData as IPreferenceDay;
 					if (preferenceDay != null)
@@ -134,34 +130,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (checkData(assignment))
                         _scheduleDataCollection.Add(assignment);
                 }                
-            }
-            var assignmentCollection = sortedAssignmentCollection();
-            for (var i = assignmentCollection.Count - 1; i >= 0; i--)
-            {
-                mightMoveAssignmentToConflictList(assignmentCollection, assignmentCollection[i]);
-            }
-        }
-
-        private List<IPersonAssignment> sortedAssignmentCollection()
-        {
-            var assignmentCollection = new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>());
-            assignmentCollection.Sort(new PersonAssignmentByDateSorter());
-            return assignmentCollection;
-        }
-
-        private void mightMoveAssignmentToConflictList(IList<IPersonAssignment> assignmentCollection, IPersonAssignment personAssignment)
-        {
-            var newIndex = assignmentCollection.IndexOf(personAssignment);
-            if (assignmentCollection.Count > 1)
-            {
-                DateTimePeriod assPer = personAssignment.Period;
-                if ((newIndex > 0 && assPer.StartDateTime < assignmentCollection[newIndex - 1].Period.EndDateTime) ||
-                    (newIndex < assignmentCollection.Count - 1 && assPer.EndDateTime > assignmentCollection[newIndex + 1].Period.StartDateTime))
-                {
-                    _scheduleDataCollection.Remove(personAssignment);
-                    assignmentCollection.Remove(personAssignment);
-                    _personAssignmentConflictCollection.Add(personAssignment);
-                }
             }
         }
 
@@ -298,6 +266,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private bool checkData(IScheduleData scheduleData)
         {
             InParameter.NotNull("scheduleData", scheduleData);
+						if (scheduleData is IPersonAssignment && ScheduleDataInternalCollection().OfType<IPersonAssignment>().Any())
+							throw new ArgumentException("Cannot add multiple assignments on one schedule day.");
             if(!scheduleData.Person.Equals(Person))
                 throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect person.");
             if (!scheduleData.BelongsToScenario(Scenario))
