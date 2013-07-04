@@ -690,7 +690,6 @@
     <Compile Include="Scheduling\Rules\NewMaxOneDayOffRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRuleTest.cs" />
-    <Compile Include="Scheduling\Rules\NewOverlappingAssignmentRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewShiftCategoryLimitationRuleTest.cs" />
     <Compile Include="Scheduling\Rules\OpenHoursRuleTest.cs" />

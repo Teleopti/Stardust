@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private List<IBusinessRuleResponse> _businessRuleResponseCollection;
         private readonly IScheduleDictionary _owner;
         private readonly IScheduleParameters _parameters;
-        private List<IPersonAssignment> _personAssignmentConflictCollection;
         private List<IScheduleData> _scheduleDataCollection;
 
         private readonly object lockObject = new object();
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             InParameter.NotNull("owner", owner);
             _owner = owner;
             _parameters = parameters;
-            _personAssignmentConflictCollection = new List<IPersonAssignment>();
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
             _scheduleDataCollection = new List<IScheduleData>();
         }
@@ -58,13 +56,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             get { return _businessRuleResponseCollection; }
         }
 
-        /// <summary>
-        /// Gets the conflicting assignment collection sorted by StartDateTime.
-        /// </summary>
-        protected IList<IPersonAssignment> PersonAssignmentConflictInternalCollection
-        {
-            get { return _personAssignmentConflictCollection; }
-        }
 
         protected IEnumerable<IScheduleData> ScheduleDataInternalCollection()
         {
@@ -133,39 +124,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        private void mightMoveAssignmentBackFromConflictList(IPersonAssignment ass)
-        {
-            if (_personAssignmentConflictCollection.Count > 0)
-            {
-                IPersonAssignment conflict=null;
-                foreach (var assConflict in PersonAssignmentConflictInternalCollection)
-                {
-                    if(assConflict.Period.Intersect(ass.Period))
-                    {
-                        conflict = assConflict;
-                        break;
-                    }
-                }
-                if(conflict!=null)
-                {
-                    _personAssignmentConflictCollection.Remove(conflict);
-                    Add(conflict);
-                }
-            }
-        }
-
         public virtual void Remove(IScheduleData persistableScheduleData)
         {
             lock(lockObject)
             {
-                var wasRemoved = _scheduleDataCollection.Remove(persistableScheduleData);
-
-                var pAss = persistableScheduleData as IPersonAssignment;
-                if (pAss != null)
-                {
-                    if(!_personAssignmentConflictCollection.Remove(pAss) && wasRemoved)
-                        mightMoveAssignmentBackFromConflictList(pAss);
-                }
+                _scheduleDataCollection.Remove(persistableScheduleData);
             }
         }
 
@@ -209,7 +172,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected IScheduleDay ScheduleDay(IDateOnlyAsDateTimePeriod dateAndDateTime, bool includeUnpublished, IEnumerable<DateOnlyPeriod> availableDatePeriods)
         {
             IEnumerable<IScheduleData> filteredData;
-            IEnumerable<IPersonAssignment> filteredConflicts;
             var period = dateAndDateTime.Period();
             //this will probably slow things down - fix later
 
@@ -225,13 +187,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 filteredData = (from data in ScheduleDataInternalCollection()
                                 where data.BelongsToPeriod(dateAndDateTime)
                                 select (IScheduleData)data.Clone()).ToList();
-                filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
-// ReSharper disable ImplicitlyCapturedClosure
-									 // tamasb: note that we can ignore the R# warning here as both usages of schedulePublishedSpecification come   
-									 // one after other quick, so the existance of schedulePublishedSpecification is not long
-                                     where conflict.BelongsToPeriod(dateAndDateTime)
-// ReSharper restore ImplicitlyCapturedClosure
-                                     select conflict.EntityClone());
             }
             else
             {
@@ -248,18 +203,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
                                         new PublishedScheduleData(data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
-                filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
-                                     where
-                                         conflict.BelongsToPeriod(dateAndDateTime) &&
-									(schedulePublishedSpecification.IsSatisfiedBy(
-										new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
-										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
-										new PublishedScheduleData(conflict, agentTimeZone)))
-                                     select conflict.EntityClone());
             }
             filteredData.ForEach(retObj._scheduleDataCollection.Add);
             BusinessRuleResponseInternalCollection.Where(rule => rule.Period.Contains(period.StartDateTime)).ForEach(retObj.BusinessRuleResponseInternalCollection.Add);
-            filteredConflicts.ForEach(retObj.PersonAssignmentConflictInternalCollection.Add);
             return retObj;
         }
 
@@ -305,10 +251,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Schedule clone = (Schedule)MemberwiseClone();
             clone._businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            clone._personAssignmentConflictCollection = new List<IPersonAssignment>();
             clone._scheduleDataCollection = new List<IScheduleData>();
             ScheduleDataInternalCollection().ForEach(clone._scheduleDataCollection.Add);
-            _personAssignmentConflictCollection.ForEach(clone.PersonAssignmentConflictInternalCollection.Add);
             _businessRuleResponseCollection.ForEach(clone.BusinessRuleResponseInternalCollection.Add);
             CloneDerived(clone);
 

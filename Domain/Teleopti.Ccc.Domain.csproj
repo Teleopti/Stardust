@@ -835,7 +835,6 @@
     <Compile Include="Scheduling\Rules\NewMaxOneDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRule.cs" />
-    <Compile Include="Scheduling\Rules\NewOverlappingAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRule.cs" />
     <Compile Include="Scheduling\Rules\NewShiftCategoryLimitationRule.cs" />
     <Compile Include="Scheduling\Rules\OpenHoursRule.cs" />

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var rulesForDelete = NewBusinessRuleCollection.AllForDelete(new SchedulingResultStateHolder());
 			foreach (INewBusinessRule rule in rulesForDelete)
 			{
-				if (rule is NewOverlappingAssignmentRule || rule is DataPartOfAgentDay)
+				if (rule is DataPartOfAgentDay)
 					Assert.IsTrue(rule.ForDelete);
 				else
 					Assert.IsFalse(rule.ForDelete);

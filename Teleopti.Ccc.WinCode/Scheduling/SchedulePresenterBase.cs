@@ -705,7 +705,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 schedulePart.Clear<IPersonAbsence>();
                 schedulePart.Clear<IPersonAssignment>();
-                schedulePart.PersonAssignmentConflictCollection.Clear();
                 schedulePart.Clear<IPersonDayOff>();
                 schedulePart.BusinessRuleResponseCollection.Clear();
             }

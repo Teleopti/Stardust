@@ -196,19 +196,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return retList;
         }
 
-        public IList<IPersonAssignment> PersonAssignmentConflictCollection
-        {
-            get
-            {
-                return PersonAssignmentConflictInternalCollection;
-            }
-        }
 
         public ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection()
         {
             //todo - when only ScheduleDay, no need to sort this one
             var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
-            //retList.Sort(new PersonDayOffByDateSorter());
             return new ReadOnlyCollection<IPersonDayOff>(retList);
         }
 

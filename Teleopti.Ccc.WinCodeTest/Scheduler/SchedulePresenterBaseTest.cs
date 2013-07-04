@@ -520,8 +520,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
-            Expect.Call(schedulePart.PersonAssignmentConflictCollection).Return(
-                new List<IPersonAssignment>()).Repeat.AtLeastOnce();
+						//Expect.Call(schedulePart.PersonAssignmentConflictCollection).Return(
+						//		new List<IPersonAssignment>()).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAbsenceCollection()).Return(

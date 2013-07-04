@@ -196,16 +196,6 @@ namespace Teleopti.Interfaces.Domain
 				IEnumerable<IRestrictionBase> RestrictionCollection();
 
 				/// <summary>
-				/// Gets a list of cloned conflicted person assignments.
-				/// </summary>
-				/// <returns></returns>
-				/// <remarks>
-				/// Created by: rogerkr
-				/// Created date: 2008-05-23
-				/// </remarks>
-				IList<IPersonAssignment> PersonAssignmentConflictCollection { get; }
-
-				/// <summary>
 				/// Gets a list of notes.
 				/// </summary>
 				/// <returns></returns>
