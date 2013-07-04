@@ -651,8 +651,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollection()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(_personAssignments));
+                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment);
             }
 
             using (_mocks.Playback())

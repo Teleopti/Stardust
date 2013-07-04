@@ -48,29 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 		}
 
-
-		[Test]
-		public void PersonAssignmentConflictsShouldBePartOfDifferenceSinceSnapshot()
-		{
-			using (_mocks.Record())
-			{
-				fullPermission(true);
-			}
-			using (_mocks.Playback())
-			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
-				{
-					var ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-					var ass2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-					_target.Add(ass1);
-					_target.Add(ass2);
-
-					_target.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()).Count()
-						.Should().Be.EqualTo(2);
-				}
-			}
-		}
-
 		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
 		public void VerifyExtractAllDataRegardingTimeZones()
 		{
@@ -1040,14 +1017,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IPersonAssignment pAss = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                         _parameters.Scenario);
                 pAss.AddPersonalLayer(activity,_parameters.Period);
-                IPersonAssignment pAss2 = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
-                                                                                         _parameters.Scenario);
-                pAss2.AddPersonalLayer(activity, _parameters.Period);
 
                 _target.Add(new PersonAbsence(_parameters.Person, _parameters.Scenario,
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));
                 _target.Add(pAss);
-                _target.Add(pAss2);
 
                 IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
                 dOff.Anchor = TimeSpan.Zero;

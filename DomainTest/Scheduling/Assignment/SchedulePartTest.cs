@@ -161,36 +161,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyGetAssignmentHighZOrder()
-		{
-			DateTimePeriod period11 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-												new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc));
-
-			DateTimePeriod period22 = new DateTimePeriod(new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc),
-												new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
-
-			DateTimePeriod period33 = new DateTimePeriod(new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc),
-												new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc));
-
-			DateTimePeriod period44 = new DateTimePeriod(new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc),
-												new DateTime(2000, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-
-			ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period11);
-			ass3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period33);
-
-			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			_target.Add(ass1);
-			_target.Add(ass3);
-
-			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
-
-			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("activity"), period44, ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
-			_target.AddMainShift(mainShift);
-
-			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
-		}
-
-		[Test]
 		public void VerifyProjectionsAreSorted()
 		{
 			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,1,1));
@@ -573,8 +543,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreatePersonAssignment(_target.Person, _target.Scenario);
 			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift1);
-			
-			Assert.Throws<InvalidOperationException>(() =>
+
+			Assert.Throws<ArgumentException>(() =>
 			                                         _target.Add(personAssignment));
 		}
 
