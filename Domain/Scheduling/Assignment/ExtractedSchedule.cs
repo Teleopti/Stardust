@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
     	public IPersonAssignment AssignmentHighZOrder()
     	{
-    		return PersonAssignmentCollection().SingleOrDefault();
+				return ScheduleDataInternalCollection().OfType<IPersonAssignment>().SingleOrDefault();
         }
 
         public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()
@@ -154,15 +154,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return excludeDataOutsideDayOrShift(org, sorter);
 		}
 
+			//will be deleted!
         public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection()
         {
-            var retList =
-                new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>());
-            retList.Sort(new PersonAssignmentByDateSorter());
-            return new ReadOnlyCollection<IPersonAssignment>(retList);
+	        var currentAssignment = AssignmentHighZOrder();
+	        return currentAssignment == null ? 
+						new List<IPersonAssignment>().AsReadOnly() : 
+						new List<IPersonAssignment> {currentAssignment}.AsReadOnly();
         }
 
-        public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
+	    public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
         {
             // temporärt så länge båda finns
             var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
