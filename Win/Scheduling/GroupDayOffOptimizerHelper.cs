@@ -480,14 +480,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 														 new ScheduleTagSetter(
 															 schedulingOptions.TagToUseOnScheduling));
 			var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-
+			var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
 			ITeamBlockScheduler teamBlockScheduler =
 				new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 									   _container.Resolve<IRestrictionAggregator>(),
 									   _container.Resolve<IWorkShiftFilterService>(), 
 									   teamScheduling,
 									   _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
+									   teamBlockCleaner,
+									   schedulePartModifyAndRollbackService);
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -520,7 +522,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
-					_container.Resolve<ITeamBlockClearer>(),
+					teamBlockCleaner,
 					teamBlockRestrictionOverLimitValidator
 					);
 
@@ -556,13 +558,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                          new ScheduleTagSetter(
                                                              schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-
+			var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
             ITeamBlockScheduler teamBlockScheduler =
                 new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                        _container.Resolve<IRestrictionAggregator>(),
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
                                        _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
+									   teamBlockCleaner,
+									   schedulePartModifyAndRollbackService);
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -576,7 +580,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
-					_container.Resolve<ITeamBlockClearer>(),
+					teamBlockCleaner,
 					_container.Resolve<IStandardDeviationSumCalculator>()
                     );
 
