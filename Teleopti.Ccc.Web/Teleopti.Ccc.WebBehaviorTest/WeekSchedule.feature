@@ -103,25 +103,6 @@ Scenario: Do not show unpublished schedule for part of week
 	Then I should see a shift on date '2012-08-28'
 	And I should not see a shift on date '2012-08-29'
 	
-Scenario: View meeting
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-28 8:00  |
-	| EndTime               | 2012-08-28 17:00 |
-	| Shift category		| Day	           |
-	And I have a meeting scheduled
-	| Field                 | Value						|
-	| StartTime             | 2012-08-28 9:00			|
-	| EndTime               | 2012-08-28 10:00		|
-	| Subject               | Meeting subject			|
-	| Location              | Meeting location		|
-	| Description           | Meeting description	|
-	When I view my week schedule for date '2012-08-28'
-	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
-	And I should see the meeting details with description 'Meeting description' on date '2012-08-28'
-	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
