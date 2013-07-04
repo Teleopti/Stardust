@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (!VerifySelectedSchedule(ScheduleParts)) return;
             if (ScheduleParts.Count > 0)
             {
-                personAssignment = ScheduleParts[0].PersonAssignmentCollection().FirstOrDefault();
+                personAssignment = ScheduleParts[0].AssignmentHighZOrder();
             } 
             if (personAssignment != null)
             {

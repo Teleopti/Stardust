@@ -354,9 +354,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 period = period.Value.MaximumPeriod(personMeeting.Period);
             }
 
-            if (schedulePart.PersonAssignmentCollection().Count > 0)
+	        var ass = schedulePart.AssignmentHighZOrder();
+            if (ass!=null)
             {
-                foreach (var personalLayer in schedulePart.PersonAssignmentCollection()[0].PersonalLayers)
+                foreach (var personalLayer in ass.PersonalLayers)
                 {
                     if (!period.HasValue)
                         period = personalLayer.Period;

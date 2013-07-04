@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		private static DateTimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
-			if (schedulePart.PersonMeetingCollection().Count == 0 && schedulePart.PersonAssignmentCollection().Count == 0)
+			var ass = schedulePart.AssignmentHighZOrder();
+			if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
 			{
 				return null;
 			}
@@ -74,9 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				period = period.Value.MaximumPeriod(personMeeting.Period);
 			}
 
-			if (schedulePart.PersonAssignmentCollection().Count > 0)
+			if (ass!=null)
 			{
-				foreach (var layer in schedulePart.PersonAssignmentCollection()[0].PersonalLayers)
+				foreach (var layer in ass.PersonalLayers)
 				{
 					if (!period.HasValue)
 						period = layer.Period;

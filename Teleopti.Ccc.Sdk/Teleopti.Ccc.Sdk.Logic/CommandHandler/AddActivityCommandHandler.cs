@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
                 
                 IShiftCategory shiftCategory;
-                var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
+                var personAssignment = scheduleDay.AssignmentHighZOrder();
                 if (personAssignment != null)
                 {
                     shiftCategory = personAssignment.ShiftCategory;

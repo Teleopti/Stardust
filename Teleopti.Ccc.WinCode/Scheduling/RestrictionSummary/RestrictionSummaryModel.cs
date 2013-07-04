@@ -291,14 +291,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                                                                               new WorkTimeLimitation(), null, null, null,
                                                                               new List<IActivityRestriction>());
             totalRestriction = GetMainShiftTotalRestriction(schedulePart, totalRestriction);
-
+	        var assignment = schedulePart.AssignmentHighZOrder();
             cellData.HasShift = true;
             cellData.DisplayName =
-                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.Description.Name;
+                assignment.ShiftCategory.Description.Name;
             cellData.DisplayShortName =
-                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.Description.ShortName;
+								assignment.ShiftCategory.Description.ShortName;
             cellData.DisplayColor =
-                schedulePart.PersonAssignmentCollection()[0].ShiftCategory.DisplayColor;
+								assignment.ShiftCategory.DisplayColor;
             cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), CurrentCultureInfo());
             cellData.StartEndScheduledShift = projection.Period().Value.TimePeriod(_schedulerState.TimeZoneInfo).ToShortTimeString(CurrentCultureInfo());
             return totalRestriction;
