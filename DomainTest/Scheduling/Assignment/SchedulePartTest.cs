@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private DateTimePeriod rangePeriod;
 		private IPersonAbsence abs;
 		private IPersonAssignment ass1;
-		private IPersonAssignment ass3;
 		private IPersonDayOff pDayOff;
 		private IPersonMeeting _personMeeting;
 		private IPerson person1;

@@ -1397,7 +1397,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyAddOvertimeTheNewWay()
         {
-            var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
             _multiplicatorDefinitionSets.Add(_definitionSet);
             _day1 = _mocks.StrictMock<IScheduleDay>();
 
@@ -1424,7 +1423,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
         private void ExpectCallsScheduleDayOnVerifyAddOvertimeTheNewWay()
         {
-            Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
+            Expect.Call(_day1.AssignmentHighZOrder()).Return(_ass).Repeat.AtLeastOnce();
+						Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly());
             Expect.Call(() => _day1.CreateAndAddOvertime(null, new DateTimePeriod(), null)).IgnoreArguments();
         }
 
@@ -1499,9 +1499,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
-            Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly());
+            Expect.Call(schedulePart.AssignmentHighZOrder()).Return(ass);
             Expect.Call(ass.Period).Return(period);
-            //Expect.Call(_editableShiftMapper.CreateEditorShift(ass)).Return(mainShift).Repeat.Twice();
 			Expect.Call(ass.MainLayers).Return(new List<IMainShiftLayer>());
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
@@ -1520,15 +1519,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), (TimeZoneInfo.Local));
             var person = _mocks.StrictMock<IPerson>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
-            var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
             var period = DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date,DateTimeKind.Utc), 0);
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly());
+            Expect.Call(schedulePart.AssignmentHighZOrder()).Return(ass);
             Expect.Call(ass.Period).Return(period);
 			Expect.Call(ass.MainLayers).Return(new List<IMainShiftLayer>());
-            //Expect.Call(_editableShiftMapper.CreateEditorShift(ass)).Return(mainShift).Repeat.Twice();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.Person).Return(person);
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
