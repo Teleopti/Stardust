@@ -221,7 +221,7 @@
     <comment>Activity position</comment>
   </data>
   <data name="ActivityTimeLimiterGrid" xml:space="preserve">
-    <value>活动时间限制网格</value>
+    <value>活动局限</value>
     <comment>Help-QS parameter for the activity time limiter grid view</comment>
   </data>
   <data name="Actual" xml:space="preserve">
@@ -1257,7 +1257,7 @@
     <comment>Cut day off menu item</comment>
   </data>
   <data name="CutLimitation" xml:space="preserve">
-    <value>剪切限制</value>
+    <value>剪切局限</value>
     <comment>Cut Limitation</comment>
   </data>
   <data name="CutPersonalShift" xml:space="preserve">
@@ -1393,11 +1393,11 @@
     <comment>Default name to be appeared in the tree in the shift creator module</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
-    <value>缺省情景</value>
+    <value>默认场景</value>
     <comment>Default Scenario</comment>
   </data>
   <data name="DefaultScenarioColon" xml:space="preserve">
-    <value>缺省情景：</value>
+    <value>默认情景：</value>
     <comment>Default Scenario Colon</comment>
   </data>
   <data name="DefaultStateGroup" xml:space="preserve">
@@ -1441,7 +1441,7 @@
     <comment>Delete Day Off</comment>
   </data>
   <data name="DeleteLimitation" xml:space="preserve">
-    <value>删除限制</value>
+    <value>删除局限</value>
     <comment>Delete Limitation</comment>
   </data>
   <data name="DeleteOptionalColumn" xml:space="preserve">
@@ -2324,7 +2324,7 @@
     <comment>Interval length (h:mm):</comment>
   </data>
   <data name="Intraday" xml:space="preserve">
-    <value>当天管理模块</value>
+    <value>当日管理</value>
     <comment>Intraday</comment>
   </data>
   <data name="InvalidAgentName" xml:space="preserve">
@@ -2482,7 +2482,7 @@
     <comment>Limit</comment>
   </data>
   <data name="Limitations" xml:space="preserve">
-    <value>限制</value>
+    <value>局限</value>
     <comment>Limitations</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -2988,7 +2988,7 @@
     <comment>New Group Page Name</comment>
   </data>
   <data name="NewLimitation" xml:space="preserve">
-    <value>新建限制</value>
+    <value>新建局限</value>
     <comment>New Limitation</comment>
   </data>
   <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
@@ -3536,7 +3536,7 @@
     <comment>Paste Day Off menu item</comment>
   </data>
   <data name="PasteLimitation" xml:space="preserve">
-    <value>粘贴限制</value>
+    <value>粘贴局限</value>
     <comment>Paste Limitation</comment>
   </data>
   <data name="PasteNew" xml:space="preserve">
@@ -4217,7 +4217,7 @@ Periods</comment>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="Scheduling" xml:space="preserve">
-    <value>进行排班</value>
+    <value>排班</value>
     <comment>Scheduling</comment>
   </data>
   <data name="SchedulingScreen" xml:space="preserve">
@@ -5372,7 +5372,7 @@ Periods</comment>
     <comment>Day</comment>
   </data>
   <data name="WorkingIntervalIntraday" xml:space="preserve">
-    <value>当天管理模块</value>
+    <value>当日管理</value>
     <comment>Intraday</comment>
   </data>
   <data name="WorkingIntervalMonth" xml:space="preserve">
@@ -5494,14 +5494,14 @@ Periods</comment>
     <comment>New Report</comment>
   </data>
   <data name="PerformanceManager" xml:space="preserve">
-    <value>绩效管理工具</value>
+    <value>绩效管理</value>
     <comment>Performance Manager</comment>
   </data>
   <data name="YourChangesWillBeDiscarded" xml:space="preserve">
     <value>您的改变会被放弃。</value>
   </data>
   <data name="SelectRotationColon" xml:space="preserve">
-    <value>选择轮班：</value>
+    <value>选择循环：</value>
   </data>
   <data name="EmployeeNumber" xml:space="preserve">
     <value>员工编号</value>
@@ -5579,7 +5579,7 @@ Periods</comment>
     <value>您确定要删除 '{0}' 可用性？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
-    <value>您确定想要删除 ‘{0}’ 轮班？</value>
+    <value>您确定想要删除 ‘{0}’ 循环？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
     <value>您确定想要删除 '{0}' 情景？</value>
@@ -5762,6 +5762,9 @@ Periods</comment>
   <data name="TimeTypeWeeksSingular" xml:space="preserve">
     <value>周</value>
   </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>学生可用性</value>
+  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>请为不同的组合输入值</value>
   </data>
@@ -5785,6 +5788,9 @@ Periods</comment>
   </data>
   <data name="Budgeting" xml:space="preserve">
     <value>做预算</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>学生可用性</value>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>新建计划分组</value>
@@ -6060,7 +6066,7 @@ Periods</comment>
     <value>根据业务原则不能找到有效的时段</value>
   </data>
   <data name="FilterOnContractTimeLimitations" xml:space="preserve">
-    <value>根据合同时间限制筛选</value>
+    <value>根据合同时间局限筛选</value>
   </data>
   <data name="FilterOnMaxStartTimeOnRestriction" xml:space="preserve">
     <value>根据限制的最长工作时间筛选</value>
@@ -6069,7 +6075,7 @@ Periods</comment>
     <value>根据限制的最小结束时间筛选</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitations" xml:space="preserve">
-    <value>根据个人时间段的限制筛选</value>
+    <value>根据个人时间段的局限筛选</value>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
     <value>没有班次能够满足合同时间</value>
@@ -6087,7 +6093,7 @@ Periods</comment>
     <value>这一天是座席代表偏好的休息日</value>
   </data>
   <data name="ThisDayIsADayOffInARotation" xml:space="preserve">
-    <value>这一天在一个轮班中的休息日</value>
+    <value>这一天在一个循环中的休息日</value>
   </data>
   <data name="GetsShiftListToStartWith" xml:space="preserve">
     <value>获得从这个时间开始的班次列表</value>
@@ -6102,7 +6108,7 @@ Periods</comment>
     <value>没有偏好为{0}</value>
   </data>
   <data name="NoRotationDefinedFor" xml:space="preserve">
-    <value>没有轮班定义{0}</value>
+    <value>没有循环定义{0}</value>
   </data>
   <data name="NoRuleSetBagDefined" xml:space="preserve">
     <value>没有规则集包设定</value>
@@ -6227,6 +6233,9 @@ Periods</comment>
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>增加偏好限制</value>
   </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>增加可工作学生</value>
+  </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>乘数</value>
   </data>
@@ -6234,7 +6243,7 @@ Periods</comment>
     <value>没有输入名称</value>
   </data>
   <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
-    <value>根据合同时间限制筛选 (班次在合同时间{0}和{1}之间 )</value>
+    <value>根据合同时间局限筛选 (班次在合同时间{0}和{1}之间 )</value>
   </data>
   <data name="ACW" xml:space="preserve">
     <value>电话后工作时间</value>
@@ -6246,7 +6255,7 @@ Periods</comment>
     <value>登录失败！无效的用户名或密码。</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
-    <value>根据个人时间段限制筛选 (班次在时间段：{0}－{1} )</value>
+    <value>根据个人时间段局限筛选 (班次在时间段：{0}－{1} )</value>
   </data>
   <data name="DefaultDefinitionSetName" xml:space="preserve">
     <value>定义集</value>
@@ -6279,7 +6288,7 @@ Periods</comment>
     <value>公平值</value>
   </data>
   <data name="FreeSlots" xml:space="preserve">
-    <value>自由的时间间隙</value>
+    <value>自由的时间间</value>
   </data>
   <data name="SchedulePeriod" xml:space="preserve">
     <value>排班的时间段</value>
@@ -6339,10 +6348,10 @@ Periods</comment>
     <value>员工类型</value>
   </data>
   <data name="EndTimeLimitation" xml:space="preserve">
-    <value>结束时间限制</value>
+    <value>结束时间局限</value>
   </data>
   <data name="EndTimeLimitations" xml:space="preserve">
-    <value>结束时间限制</value>
+    <value>结束时间局限</value>
   </data>
   <data name="PersonPeriod" xml:space="preserve">
     <value>个人时间段</value>
@@ -6351,10 +6360,10 @@ Periods</comment>
     <value>个人技能</value>
   </data>
   <data name="StartTimeLimitation" xml:space="preserve">
-    <value>开始时间限制</value>
+    <value>开始时间局限</value>
   </data>
   <data name="StartTimeLimitations" xml:space="preserve">
-    <value>开始时间限制</value>
+    <value>开始时间局限</value>
   </data>
   <data name="NewDefinitionSet" xml:space="preserve">
     <value>新建定义集</value>
@@ -6469,7 +6478,7 @@ Periods</comment>
     <value>选择规则集</value>
   </data>
   <data name="WorkTimeLimitation" xml:space="preserve">
-    <value>工作时间限制</value>
+    <value>工作时间局限</value>
   </data>
   <data name="NoScenario" xml:space="preserve">
     <value>没有情景</value>
@@ -6529,7 +6538,7 @@ Periods</comment>
     <value>正在加载预测数据…</value>
   </data>
   <data name="PayrollIntegration" xml:space="preserve">
-    <value>工资表集成</value>
+    <value>工资表合并</value>
   </data>
   <data name="PersonSelection" xml:space="preserve">
     <value>人员选择</value>
@@ -6609,6 +6618,9 @@ Periods</comment>
   <data name="MinDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
     <value>每周最少休息日必须比最大值小或者等同</value>
   </data>
+  <data name="UseStudentAvailability" xml:space="preserve">
+    <value>使用可工作的学生</value>
+  </data>
   <data name="Alarms" xml:space="preserve">
     <value>警报</value>
   </data>
@@ -6628,7 +6640,7 @@ Periods</comment>
     <value>座席代表记分卡</value>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
-    <value>根据工作时间的限制筛选 (班次在合同时间{0}和{1}之间 )</value>
+    <value>根据工作时间的局限筛选 (班次在合同时间{0}和{1}之间 )</value>
   </data>
   <data name="Excluded" xml:space="preserve">
     <value>不包括</value>
@@ -6667,7 +6679,7 @@ Periods</comment>
     <value>Teleopti CCC：人员</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC：当日管理模块</value>
+    <value>Teleopti CCC：当日管理</value>
   </data>
   <data name="OperatorLimiterGreaterThen" xml:space="preserve">
     <value>大于</value>
@@ -6916,7 +6928,7 @@ Periods</comment>
     <value>站点管理员</value>
   </data>
   <data name="BuiltInTeamLeaderRole" xml:space="preserve">
-    <value>组领导</value>
+    <value>组</value>
   </data>
   <data name="GroupPageDeleteQuestionCaption" xml:space="preserve">
     <value>确认分组页删除</value>
@@ -7512,7 +7524,7 @@ Teleopti R&amp;D</value>
     <value>未验证</value>
   </data>
   <data name="NoSchedulePeriodIsSelected" xml:space="preserve">
-    <value>未选择排班时段</value>
+    <value>未选择排班阶段</value>
   </data>
   <data name="AddNewDefinitionSet" xml:space="preserve">
     <value>增加新规则组</value>
@@ -7545,13 +7557,13 @@ Teleopti R&amp;D</value>
     <value>按周</value>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>班次类型限制</value>
+    <value>班次类型局限</value>
   </data>
   <data name="ResetLayout" xml:space="preserve">
     <value>重设布局</value>
   </data>
   <data name="UseShiftCategoryRestrictions" xml:space="preserve">
-    <value>使用班次类型限制</value>
+    <value>使用班次类型局限</value>
   </data>
   <data name="InputError" xml:space="preserve">
     <value>输入错误</value>
@@ -7620,7 +7632,7 @@ Teleopti R&amp;D</value>
     <value>使用批次排班</value>
   </data>
   <data name="UsePreferencesMustHavesOnly" xml:space="preserve">
-    <value>适用偏好仅必须有</value>
+    <value>使用偏好仅必须有</value>
   </data>
   <data name="Left" xml:space="preserve">
     <value>剩余</value>
@@ -8115,7 +8127,7 @@ Teleopti R&amp;D</value>
     <value>本周包含太多的班次类型{0}</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage2" xml:space="preserve">
-    <value>本时段包含太多的班次类型 {0}</value>
+    <value>本阶段包含太多的班次类型 {0}</value>
   </data>
   <data name="AvoidColon" xml:space="preserve">
     <value>避免：</value>
@@ -8426,6 +8438,9 @@ Teleopti R&amp;D</value>
   <data name="StaffEmployed" xml:space="preserve">
     <value>员工人数</value>
   </data>
+  <data name="StudentHours" xml:space="preserve">
+    <value>学生小时数</value>
+  </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>增加效率缩减</value>
   </data>
@@ -8517,7 +8532,7 @@ Teleopti R&amp;D</value>
     <value>用户</value>
   </data>
   <data name="OptimizingIntraday" xml:space="preserve">
-    <value>当天优化</value>
+    <value>当日优化</value>
   </data>
   <data name="AddDate" xml:space="preserve">
     <value>增加日期</value>
@@ -8571,9 +8586,20 @@ Teleopti R&amp;D</value>
     <value>下一天：</value>
     <comment>Next day:</comment>
   </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>您所设置的学生可工作时段没有匹配的班次。</value>
+    <comment>No shifts available for this student availability.</comment>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>学生可用时期</value>
+    <comment>Student availability period</comment>
+  </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>您至少需要工作 {0} 小时。您现在的可工作时间在 {1} 到 {2} 小时之间。</value>
     <comment>You should work at least 30:00h. You are now available for between 20:00h and 40:00h.</comment>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>开放学生可工作</value>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>您所选择的时段不应当超过{0}。</value>
@@ -8809,8 +8835,11 @@ Teleopti R&amp;D</value>
   <data name="LockRestrictions" xml:space="preserve">
     <value>锁定限制</value>
   </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>锁定学生可用性</value>
+  </data>
   <data name="LockRotations" xml:space="preserve">
-    <value>锁定轮班</value>
+    <value>锁定循环</value>
   </data>
   <data name="BusinessUnitRequired" xml:space="preserve">
     <value>需要的业务单位</value>
@@ -8879,7 +8908,7 @@ Teleopti R&amp;D</value>
     <value>所有已经发生的缺勤</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
-    <value>缺少工作量控制设定</value>
+    <value>缺少工作流控制设置</value>
   </data>
   <data name="JobCategory" xml:space="preserve">
     <value>工作类别</value>
@@ -9257,7 +9286,7 @@ Teleopti R&amp;D</value>
     <value>您的偏好共有 {0} 个休息日。</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
-    <value>轮转的满足</value>
+    <value>循环的满足</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>申请历史记录</value>
@@ -9312,6 +9341,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NoTeamsAvailable" xml:space="preserve">
     <value>没有可用的组</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>学生可用的满足</value>
   </data>
   <data name="PersonFinderFieldContract" xml:space="preserve">
     <value>合同</value>
@@ -9552,6 +9584,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ShiftSelection" xml:space="preserve">
     <value>选中班次</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>学生可用性</value>
   </data>
   <data name="Teams" xml:space="preserve">
     <value>组</value>
