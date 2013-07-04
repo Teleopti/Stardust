@@ -413,10 +413,12 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </table>
             </div>
 							
-            <div class="mt10 floatleft">
-                <div id="Template-save">
-                    <span>[</span><span class="collapse-sign" data-bind="text: IsSaveAsNewTemplate()?'-':'+'"></span><span>]</span>
-                    <label class="ml5">
+            <div class="pull-left">
+                <div class="form-inline">
+                    <button class="btn btn-mini" data-toggle="button" data-bind="click: IsSaveAsNewTemplateToggle">
+                        <i class="icon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
+                    </button>
+                    <label data-bind="click: IsSaveAsNewTemplateToggle">
                         @Resources.SaveAsTemplate
                     </label>
                 </div>

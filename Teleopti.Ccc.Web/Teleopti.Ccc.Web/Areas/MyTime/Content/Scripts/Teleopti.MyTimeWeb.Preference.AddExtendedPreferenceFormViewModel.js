@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.NewTemplateName = ko.observable('');
 
 	//this.IsTimeInputEnabled = ko.observable();
-    
+
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
@@ -59,6 +59,13 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.EarliestEndTimeNextDayToggle = function () {
 	    self.EarliestEndTimeNextDay(!self.EarliestEndTimeNextDay());
 	};
+    
+	this.IsSaveAsNewTemplateToggle = function () {
+	    self.IsSaveAsNewTemplate(!self.IsSaveAsNewTemplate());
+	};
+	this.IsSaveAsNewTemplateClass = ko.computed(function () {
+	    return self.IsSaveAsNewTemplate() ? 'icon-minus-sign' : undefined;
+	});
 
 	_initPreferenceString();
 
