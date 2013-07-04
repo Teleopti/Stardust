@@ -403,7 +403,6 @@
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactoryTest.cs" />
     <Compile Include="Scheduling\Assignment\PeriodOffsetCalculatorTest.cs" />
-    <Compile Include="Scheduling\Assignment\PersonAssignmentByDateSorterTest.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMidnightSplitterMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionServiceTest.cs" />

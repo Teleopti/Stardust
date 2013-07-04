@@ -1240,7 +1240,6 @@
     <Compile Include="Scheduling\AbsenceSorter.cs" />
     <Compile Include="Scheduling\Assignment\IScheduleEventListener.cs" />
     <Compile Include="Scheduling\Rules\NightlyRestRule.cs" />
-    <Compile Include="Scheduling\Assignment\PersonAssignmentByDateSorter.cs" />
     <Compile Include="Scheduling\Assignment\Schedule.cs" />
     <Compile Include="Scheduling\Assignment\ExtractedSchedule.cs" />
     <Compile Include="Scheduling\Assignment\SchedulerRangeToLoadCalculator.cs" />
