@@ -139,7 +139,7 @@
     <value>Analyse du Niveau de Service</value>
   </data>
   <data name="AbandonedCalls" xml:space="preserve">
-    <value>Appels Abandonnés</value>
+    <value>Appels abandonnés</value>
   </data>
   <data name="Absence" xml:space="preserve">
     <value>Absences</value>
@@ -280,7 +280,7 @@
     <value>Moyenne Temps de travail post-appel</value>
   </data>
   <data name="AverageCalls" xml:space="preserve">
-    <value>Moyenne Appels</value>
+    <value>Moyenne appels</value>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
     <value>Durée de communication moyenne</value>
@@ -304,7 +304,7 @@
     <value>Entre:</value>
   </data>
   <data name="CalculatedCalls" xml:space="preserve">
-    <value>Appels Calculés</value>
+    <value>Appels calculés</value>
   </data>
   <data name="Calls" xml:space="preserve">
     <value>Appels</value>
@@ -982,7 +982,7 @@
     <value>Voulez-vous créer un Volume?</value>
   </data>
   <data name="Queue" xml:space="preserve">
-    <value>File d'attente</value>
+    <value>Flux</value>
   </data>
   <data name="Queues" xml:space="preserve">
     <value>Flux</value>
@@ -5710,7 +5710,7 @@
     <value>Annuler tout</value>
   </data>
   <data name="StudentAvailability" xml:space="preserve">
-    <value>Disponibilité étudiant</value>
+    <value>Disponibilité Horaire</value>
   </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Entrer les valeurs pour les différentes combinaisons</value>
@@ -5731,7 +5731,7 @@
     <value>Budgétisation</value>
   </data>
   <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Disponibilté étudiant</value>
+    <value>Disponibilté Horaire</value>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>Nouveau groupe de planning</value>
@@ -5899,7 +5899,7 @@
     <value>Copyright:</value>
   </data>
   <data name="UseStudentAvailability" xml:space="preserve">
-    <value>Utiliser Disponibilté étudiant</value>
+    <value>Utiliser Disponibilté Horaire</value>
   </data>
   <data name="StateGroups" xml:space="preserve">
     <value>Groupes de Statuts</value>
@@ -6031,7 +6031,7 @@
     <value>Personnaliser Barre d'Outils Accès Rapide</value>
   </data>
   <data name="ImportQueueFromFile" xml:space="preserve">
-    <value>Importer File du fichier</value>
+    <value>Importer Flux du fichier</value>
   </data>
   <data name="EnableReportingColon" xml:space="preserve">
     <value>Activer reporting:</value>
@@ -6328,7 +6328,7 @@
     <value>Personnel salarié</value>
   </data>
   <data name="StudentHours" xml:space="preserve">
-    <value>Heures étudiant</value>
+    <value>Heures horaires</value>
   </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Ajouter réduction d'efficience</value>
@@ -6472,13 +6472,13 @@
     <value>{0} jusque {1}</value>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Période disponibilté étudiant</value>
+    <value>Période disponibilté horaire</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métriques File Agent</value>
   </data>
   <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Ouvrir disponibilté étudiant</value>
+    <value>Ouvrir disponibilté horaire</value>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>Période sélectionnée ne devrait pas être plus longue que {0}.</value>
@@ -6490,7 +6490,7 @@
     <value>Communication légale</value>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Bloquer disponibilités étudiant</value>
+    <value>Bloquer Disponibilités Horaires</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Contrôle de flux d'activités manquant</value>
@@ -6556,7 +6556,7 @@
     <value>Le Jour libre à {0} est en conflit avec l'activité avant et après le Jour Libre.</value>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Aucun horaire disponible pour cette disponibilté d'étudiant.</value>
+    <value>Aucun horaire disponible pour cette disponibilté.</value>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Vous devez travailler au moins {0} heures. Vous êtes disponible maintenant entre {1} et {2}heures. </value>
@@ -8060,7 +8060,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Horaires pour horaires flexibles</value>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Disponibilités Etudiant</value>
+    <value>Disponibilités horaires</value>
   </data>
   <data name="Teams" xml:space="preserve">
     <value>Equipes</value>
@@ -8189,7 +8189,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Rotations remplies</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Disponibilités Etudiant remplies</value>
+    <value>Disponibilités Horaires Remplies</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Calcule ressources tous les:</value>
@@ -8300,7 +8300,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Sélectionner une date et un scénario</value>
   </data>
   <data name="SelectFileDestination" xml:space="preserve">
-    <value>Sélectionner destination de fichier</value>
+    <value>Sélectionner destination du fichier</value>
   </data>
   <data name="SelectSkill" xml:space="preserve">
     <value>Sélectionner compétence</value>
@@ -8756,5 +8756,161 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="SelectedAbsences" xml:space="preserve">
     <value>Absences sélectionnées</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Temps Non Ready</value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Voir Toutes les Pages de Groupe</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Traitement...</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Messages ({0})</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Nombre de Têtes Groupe Budget</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Nombre de Têtes</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Il n'y a pas assez de permission pour le jour:</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Ajouter Absence journée entière</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Date de fin invalide</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Résolution (minutes)</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Equipe d'Agent simple</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Même Shift</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Merci de sélectionner au moins une des options "Même catégorie horaire", "Même horaire de début" ou "Même Horaire" dans l'Optimization par Block.</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Confirmer suppression</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Il n'est pas permis de déplacer un horaire travaillé sur un autre jour depuis l'éditeur d'horaires, utiliser couper/coller à la place.</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Chance d'avoir la demande d'absence validée:</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Ajouter Préférence...</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Ajouter Disponibilité Horaire...</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Moyenne</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Forte</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Faible</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Collecte les données...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Amélioré</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Le destinataire a répondu à votre message précédent. Rafraîchissez la fenêtre pour voir la réponse. Votre message ne sera pas envoyé.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Disponibilité Par Agent</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Votre demande d'Absence a été refusée. Certains jours de la période demandée ne sont pas ouverts pour les demandes. Vous pouvez envoyer des demandes pour la période suivante: {0}.</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Agents Planifiés et Réels</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Aucune personne trouvée pour cet utilisateur</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Maximum Tâches Parallèles</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Voir agent actifs</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Chats abandonnés</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Chats répondus</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Moyenne Chats</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Refusée</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Heure locale</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Ajouter disponibilité heures supplémentaires...</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Chats calculés</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Chats campagne %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Disponibilité Heures supplémentaires</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Disponibilité heures supplémentaires précédemment sauvée</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Déviation chats:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Chats prévus</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index chats</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Chats offers</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Chats originaux offerts</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Chats totaux</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Chats validés</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Temps chat campagne %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Total temps chat</value>
   </data>
 </root>
