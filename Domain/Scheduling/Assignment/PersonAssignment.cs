@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IList<IShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
-		private DateTime _zorder;
 		private IShiftCategory _shiftCategory;
 
 
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Date = date;
 			_person = agent;
 			_scenario = scenario;
-			_zorder = DateTime.MinValue;
 			_shiftLayers = new List<IShiftLayer>();
 		}
 
@@ -145,12 +142,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IScenario Scenario
 		{
 			get { return _scenario; }
-		}
-
-		public virtual DateTime ZOrder
-		{
-			get { return _zorder; }
-			set { _zorder = value; }
 		}
 
 		public virtual void ScheduleChanged(string dataSource)

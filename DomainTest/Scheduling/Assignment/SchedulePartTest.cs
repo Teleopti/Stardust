@@ -186,12 +186,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.AddMainShift(mainShift);
 
 			Assert.AreEqual(ass1, _target.AssignmentHighZOrder());
-
-			ass1.ZOrder = new DateTime(1);
-			ass2.ZOrder = new DateTime(3);
-			ass3.ZOrder = new DateTime(2);
-
-			Assert.AreEqual(ass2, _target.AssignmentHighZOrder());
 		}
 
 		[Test]
@@ -1593,32 +1587,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic,
 														   parameters.Person,new DateOnly(2000, 1, 1));
 			Assert.AreEqual(SchedulePartView.None, part.SignificantPart());
-		}
-
-		[Test]
-		public void SignificantPartShouldUseHighestZOrder()
-		{
-			IPerson person = PersonFactory.CreatePerson();
-			IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001,1,1));
-
-			IPersonAssignment assNo = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"),
-																								person,
-																								new DateTimePeriod(new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 2, 2, 0, DateTimeKind.Utc)),
-																								scenario);
-			IPersonAssignment assYes =
-				PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(ActivityFactory.CreateActivity("d"),
-																						person,
-																						new DateTimePeriod(new DateTime(2001, 1, 1, 3, 1, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 4, 2, 0, DateTimeKind.Utc)),
-																						ShiftCategoryFactory.CreateShiftCategory("sdfsdf"),
-																						scenario);
-
-			part.Add(assNo);
-			part.Add(assYes);
-
-			assYes.ZOrder = new DateTime(2000, 1, 1);
-			assNo.ZOrder = new DateTime(1900, 1, 1);
-
-			Assert.AreEqual(SchedulePartView.MainShift, part.SignificantPart());
 		}
 
 		#endregion

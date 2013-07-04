@@ -91,28 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     	}
 
     	public IPersonAssignment AssignmentHighZOrder()
-        {
-            IPersonAssignment ret = null;
-
-            IList<IPersonAssignment> assColl = PersonAssignmentCollection();
-
-            if (assColl.Count > 0)
-            {
-                ret = assColl[0];
-
-                foreach (IPersonAssignment pa in assColl)
-                {
-                    if (pa.ZOrder > ret.ZOrder)
-                    {
-                        ret = pa;
-                    }
-                }
-            }
-
-            if(ret != null && ret.ZOrder == DateTime.MinValue)
-                ret.ZOrder = DateTime.Now;
-
-            return ret;
+    	{
+    		return PersonAssignmentCollection().SingleOrDefault();
         }
 
         public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()

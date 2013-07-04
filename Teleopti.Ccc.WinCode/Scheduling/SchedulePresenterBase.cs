@@ -490,8 +490,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, localDate.Date, true, false, daySchedule);
-                    //set zorder
-                    SetAssignmentZorder(daySchedule);
                 }
             }
         }
@@ -515,20 +513,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         internal static bool IsInsidePersonPeriod(IScheduleDay schedulePart)
         {
             return (schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly) != null);
-        }
-
-        //To ensure that visible assignment is still on top if we change other assignments on that day
-        internal static void SetAssignmentZorder(IScheduleDay part)
-        {
-            //check if we have set the zorder on any assignment
-            var personAssignments = part.PersonAssignmentCollection();
-            IPersonAssignment assignmentWithZOrderSet = personAssignments.FirstOrDefault(pa => pa.ZOrder != DateTime.MinValue);
-
-            //if we havent set zorder we set first to have highest zorder
-            IPersonAssignment firstPersonAssignment = personAssignments.FirstOrDefault();
-            if (assignmentWithZOrderSet == null && firstPersonAssignment != null)
-                firstPersonAssignment.ZOrder = DateTime.MinValue.AddTicks(1);
-
         }
 
         /// <summary>

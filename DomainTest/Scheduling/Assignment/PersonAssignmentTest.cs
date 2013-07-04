@@ -73,9 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNull(target.UpdatedOn);
 			Assert.IsNull(target.Version);
 			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
-			DateTime date = DateTime.Now;
-			target.ZOrder = date;
-			Assert.AreEqual(date, target.ZOrder);
 		}
 
 
@@ -393,7 +390,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			DateTime zOrder = new DateTime(2000,1,1);
 			target.SetId(Guid.NewGuid());
-			target.ZOrder = zOrder;
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
 
@@ -407,21 +403,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(target.PersonalLayers.Single().Id, pAss.PersonalLayers.Single().Id);
 			Assert.AreEqual(target.OvertimeLayers.Single().Id, pAss.OvertimeLayers.Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
 			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers.Single().Id);
 			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
 		}
 
 		[Test]

@@ -2079,11 +2079,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemShowNextAssignment_Click(object sender, EventArgs e) //used by context
 		{
+			//remove me!
 			getAssignmentZOrder(false, true);
 		}
 
 		private void toolStripMenuItemShowAssignmentBefore_Click(object sender, EventArgs e) //used by context
 		{
+			//remove me!
 			getAssignmentZOrder(true, true);
 		}
 
@@ -5580,6 +5582,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private IPersonAssignment getAssignmentZOrder(bool before, bool move)
 		{
+			//should go away!
 			if (_scheduleView != null)
 			{
 				IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
@@ -5611,7 +5614,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					}
 					if (newHighZOrder != null && move)
 					{
-						newHighZOrder.ZOrder = DateTime.Now;
+						//newHighZOrder.ZOrder = DateTime.Now;
 						_scheduleView.Presenter.ModifySchedulePart(new List<IScheduleDay> { schedule });
 					}
 					return newHighZOrder;

@@ -36,11 +36,6 @@ namespace Teleopti.Interfaces.Domain
 
 	    void ClearOvertimeLayers();
 
-        /// <summary>
-        /// Gets or sets the ZOrder for PersonAssignment, used in gui.
-        /// </summary>
-        DateTime ZOrder{get; set;}
-
 			/// <summary>
 			/// The date
 			/// </summary>
