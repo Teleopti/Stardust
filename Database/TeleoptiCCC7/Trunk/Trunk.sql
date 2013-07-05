@@ -900,3 +900,7 @@ DROP TABLE dbo.MainShiftActivityLayer
 DROP TABLE dbo.OvertimeShiftActivityLayer
 DROP TABLE dbo.PersonalShiftActivityLayer
 GO
+
+------
+-- dummy change to force a new db schema when running test
+------
