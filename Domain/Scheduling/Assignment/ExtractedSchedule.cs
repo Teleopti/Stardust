@@ -763,7 +763,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void CreateAndAddActivity(IMainShiftLayer layer, IShiftCategory shiftCategory)
+				public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
@@ -772,13 +772,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
+					var newLayer = new MainShiftLayer(activity, period);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
+				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
 				{
 					if (personAssignment.ShiftCategory == null)
 					{
-						personAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
+						personAssignment.SetMainShiftLayers(new[] {newLayer}, shiftCategory);
 					}
 					else
 					{
@@ -786,7 +787,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						//rk: Micke and I have talked about this... 
 						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
 						var oldLayers = personAssignment.MainLayers().ToList();
-						oldLayers.Add(layer);
+						oldLayers.Add(newLayer);
 						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}
 					return;
@@ -797,7 +798,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-	        newPersonAssignment.SetMainShiftLayers(new[] {layer}, shiftCategory);
+			newPersonAssignment.SetMainShiftLayers(new[] { newLayer }, shiftCategory);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);

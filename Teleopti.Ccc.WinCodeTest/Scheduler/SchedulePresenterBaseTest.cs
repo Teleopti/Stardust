@@ -1266,7 +1266,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
                     _schedulerState.TimeZoneInfo)).IgnoreArguments().Return(dialog);
 
-            Expect.Call(() => scheduleDay.CreateAndAddActivity(null, shiftCategory)).IgnoreArguments().Repeat.Once();
+            Expect.Call(() => scheduleDay.CreateAndAddActivity(null, new DateTimePeriod(),  shiftCategory)).IgnoreArguments().Repeat.Once();
             Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { pa }));
             Expect.Call(scheduleDay.Period).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
             Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
@@ -1589,7 +1589,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedulePartDayOne.Period).Return(defaultPeriod).Repeat.Twice();
                 Expect.Call(schedulePartDayOne.SignificantPart()).Return(SchedulePartView.None);
                 AddActivityDialogExpectations(dialog, defaultPeriod);
-                Expect.Call(() => schedulePartDayOne.CreateAndAddActivity(null, null)).IgnoreArguments();
+                Expect.Call(() => schedulePartDayOne.CreateAndAddActivity(null, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(schedulePartDayOne.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment })).Repeat.Twice();
                 Expect.Call(personAssignment.CheckRestrictions).Repeat.Twice();
                 AddActivityViewBaseExpectations(schedulePartDayOne, schedulePartDayTwo, defaultPeriod, dialog, person);

@@ -317,9 +317,7 @@ namespace Teleopti.Interfaces.Domain
 				/// <summary>
 				/// Creates and adds activity
 				/// </summary>
-				/// <param name="layer"></param>
-				/// <param name="shiftCategory"></param>
-				void CreateAndAddActivity(IMainShiftLayer layer, IShiftCategory shiftCategory);
+				void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory);
 
 				/// <summary>
 				/// Creates and adds personal activity

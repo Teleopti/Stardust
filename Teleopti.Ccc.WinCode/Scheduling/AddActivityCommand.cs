@@ -72,9 +72,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (IScheduleDay part in filteredScheduleParts)
 			{
-				var mainShiftActivityLayer = new MainShiftLayer(activity, period);
-
-				part.CreateAndAddActivity(mainShiftActivityLayer, shiftCategory);
+				part.CreateAndAddActivity(activity, period, shiftCategory);
 
 				foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
 					assignment.CheckRestrictions();
