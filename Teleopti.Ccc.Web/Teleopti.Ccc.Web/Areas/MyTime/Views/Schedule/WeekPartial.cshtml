@@ -25,7 +25,7 @@
             <div class="input-append input-prepend">
                 <button class="btn" data-bind="click: previousWeek"><i class="icon-arrow-left"></i></button>
                 <input data-bind="value: displayDate" type="text" class="span2 date-picker-width" readonly="readonly"/>
-                <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
+                <button class="btn" data-bind="datepicker_SetDefaults: selectedDate"><i class="icon-th"></i></button>
                 <button class="btn" data-bind="click: nextWeek"><i class="icon-arrow-right"></i></button>
             </div>
         </form>
@@ -86,7 +86,7 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute" data-bind="attr: {'tooltip-title': title, 'tooltip-text' : tooltipText}, style:{backgroundColor : color, color: textColor, 'height' :  heightPx, top: topPx, 'width' : '131px'}">
+				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': '131px' }">
 					<!-- ko if: hasMeeting -->
 					<div class="icon meeting floatright">
 					</div>

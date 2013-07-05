@@ -229,5 +229,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		int PersistAvailability(DataTable dataTable);
 	    int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 	    int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario);
+	    ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period);
     }
 }

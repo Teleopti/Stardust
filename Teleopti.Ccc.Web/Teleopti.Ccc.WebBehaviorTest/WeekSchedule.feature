@@ -103,25 +103,6 @@ Scenario: Do not show unpublished schedule for part of week
 	Then I should see a shift on date '2012-08-28'
 	And I should not see a shift on date '2012-08-29'
 	
-Scenario: View meeting
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-28 8:00  |
-	| EndTime               | 2012-08-28 17:00 |
-	| Shift category		| Day	           |
-	And I have a meeting scheduled
-	| Field                 | Value						|
-	| StartTime             | 2012-08-28 9:00			|
-	| EndTime               | 2012-08-28 10:00		|
-	| Subject               | Meeting subject			|
-	| Location              | Meeting location		|
-	| Description           | Meeting description	|
-	When I view my week schedule for date '2012-08-28'
-	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
-	And I should see the meeting details with description 'Meeting description' on date '2012-08-28'
-	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -190,6 +171,14 @@ Scenario: Show timeline with no schedule
 	| start timeline			| 0:00  |
 	| end timeline				| 23:59 |
 	| number of timeline labels	| 25    |
+
+@ignore
+Scenario: Show calender according to the users culture
+	Given I have the role 'Full access to mytime'
+	And I am swedish
+	When I view my week schedule for date '2013-10-03'
+	And I open the weekschedule date-picker
+	Then I should see 'Mo' as the first day in the calender
 
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'

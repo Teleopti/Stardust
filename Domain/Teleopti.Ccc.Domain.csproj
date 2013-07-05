@@ -300,10 +300,6 @@
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
-    <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
@@ -332,7 +328,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
-    <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateService.cs" />
@@ -490,6 +485,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
@@ -501,6 +497,7 @@
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingService.cs" />
@@ -693,10 +690,8 @@
     <Compile Include="Optimization\SchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Optimization\SchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
-    <Compile Include="Optimization\BetweenDayOffBlockFinder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
-    <Compile Include="Optimization\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationChecker.cs" />
     <Compile Include="Optimization\UniqueSchedulePartExtractor.cs">
       <SubType>Code</SubType>
@@ -736,7 +731,6 @@
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
     <Compile Include="ResourceCalculation\BestBlockShiftCategoryFinder.cs" />
     <Compile Include="ResourceCalculation\BlockFinderResult.cs" />
-    <Compile Include="ResourceCalculation\BlockSchedulingService.cs" />
     <Compile Include="ResourceCalculation\BlockSchedulingWorkShiftFinderService.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
@@ -921,6 +915,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilterService.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRestrictionsShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\BusinessRulesShiftFilter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonActivityFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonMainShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ContractTimeShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftCategoriesShiftFilter.cs" />

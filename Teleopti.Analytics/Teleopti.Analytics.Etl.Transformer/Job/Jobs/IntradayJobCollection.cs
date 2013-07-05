@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new IntradayStageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
-			Add(new StageForecastWorkloadJobStep(jobParameters));
+			Add(new IntradayStageForecastWorkloadJobStep(jobParameters));
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
@@ -80,7 +80,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
-			Add(new FactForecastWorkloadJobStep(jobParameters));
+			Add(new FactForecastWorkloadJobStep(jobParameters, true));
 			Add(new FactScheduleDeviationJobStep(jobParameters,true));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters,true));

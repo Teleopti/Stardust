@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<AbsencePreferenceScheduler>().As<IAbsencePreferenceScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffScheduler>().As<IDayOffScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>().As<IScheduleDayAvailableForDayOffSpecification>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleDaysAvailableForDayOffSpecification>().As<IScheduleDaysAvailableForDayOffSpecification>().InstancePerLifetimeScope();
 
             builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
@@ -101,7 +102,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<AdvanceDaysOffSchedulingService>().As<IAdvanceDaysOffSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().InstancePerLifetimeScope();
             builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().InstancePerLifetimeScope();
-            builder.RegisterType<BlockSchedulingService>().As<IBlockSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<SkillDayPeriodIntervalDataGenerator>().As<ISkillDayPeriodIntervalDataGenerator>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().InstancePerLifetimeScope();
             builder.RegisterType<SkillIntervalDataSkillFactorApplier>().As<ISkillIntervalDataSkillFactorApplier>().InstancePerLifetimeScope();
@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<DeleteSchedulePartService>().As<IDeleteSchedulePartService>().InstancePerLifetimeScope();
             builder.RegisterType<DeleteAndResourceCalculateService >().As<IDeleteAndResourceCalculateService >().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
-            builder.RegisterType<BlockFinderFactory>().As<IBlockFinderFactory>().InstancePerLifetimeScope();
             builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<RestrictionAggregator>().As<IRestrictionAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<OpenHoursToEffectiveRestrictionConverter>().As<IOpenHoursToEffectiveRestrictionConverter>().InstancePerLifetimeScope();
@@ -134,8 +133,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
             builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>().As<IWorkShiftBackToLegalStateBitArrayCreator>().InstancePerDependency();
-            //builder.RegisterType<WorkShiftBackToLegalStateServicePro>().As<IWorkShiftBackToLegalStateServicePro>().InstancePerLifetimeScope();
-            //need some refactoring in ctor
 
             builder.RegisterType<ScheduleMatrixLockableBitArrayConverter>().As<IScheduleMatrixLockableBitArrayConverter>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().InstancePerLifetimeScope();
@@ -163,8 +160,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
 			
-
-            builder.RegisterType<BlockOptimizerBlockCleaner>().As<IBlockOptimizerBlockCleaner>().InstancePerLifetimeScope();
             builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulerGroupPagesProvider>().As<ISchedulerGroupPagesProvider>().InstancePerLifetimeScope();
@@ -243,6 +238,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
+			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
@@ -291,6 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>();
 		    builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>();
 		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
+			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
 	    }
     }
 }

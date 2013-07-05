@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 			if (shiftList == null) return null;
 			bool usingTeamBlockAndSameShift = schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShift;
 			if (schedulingOptions.WorkShiftLengthHintOption != WorkShiftLengthHintOption.AverageWorkTime &&
-				!usingTeamBlockAndSameShift)
+			    !usingTeamBlockAndSameShift)
 				return shiftList;
 
 			if (!schedulingOptions.UseAverageShiftLengths && !usingTeamBlockAndSameShift)
@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				resultingTimes.Add(shiftProjectionCache.WorkShiftProjectionContractTime);
 			}
 			//hämta önskad skiftlängd
-			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions);
+			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix,
+			                                                                       schedulingOptions);
 			//välj närmaste från listan
 			IList<TimeSpan> resultingList = new List<TimeSpan>(resultingTimes);
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 
 				resultingList.RemoveAt(selectedIndex);
 			}
-			
+
 			return new List<IShiftProjectionCache>();
 		}
 	}

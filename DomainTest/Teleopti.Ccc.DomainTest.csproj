@@ -223,15 +223,10 @@
     <Compile Include="Helper\StringExtensionsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
-    <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
-    <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
@@ -351,10 +346,10 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
-    <Compile Include="Scheduling\Assignment\OvertimeShiftLayerTest.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVerticalTest.cs" />
@@ -362,6 +357,7 @@
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
@@ -564,10 +560,8 @@
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixBitArrayConverterTest.cs" />
     <Compile Include="Optimization\SchedulePeriodLegalStateValidatorTest.cs" />
-    <Compile Include="Optimization\BetweenDayOffBlockFinderTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceBuilderTest.cs" />
     <Compile Include="Optimization\SchedulePeriodBackToLegalStateServiceProTest.cs" />
-    <Compile Include="Optimization\SchedulePeriodBlockFinderTest.cs" />
     <Compile Include="Optimization\SchedulePeriodDayOffBackToLegalStateByBrutalForceServiceTest.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationCheckerTest.cs" />
     <Compile Include="Optimization\UniqueSchedulePartExtractorTest.cs">
@@ -771,6 +765,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilterServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRestrictionsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\BusinessRulesShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonActivityFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonMainShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ContractTimeShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftCategoriesShiftFilterTest.cs" />
