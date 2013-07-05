@@ -89,6 +89,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => request.InnerHtml, Is.StringContaining(requestCount.ToString()));
 		}
 
+		[When(@"I open the weekschedule date-picker")]
+		public void WhenIOpenTheWeekscheduleDate_Picker()
+		{
+			Browser.Interactions.Click(".iconn-th");
+		}
+
+		[Then(@"I should see '(.*)' as the first day in the calender")]
+		public void ThenIShouldSeeAsTheFirstDayInTheCalender(string day)
+		{
+			Browser.Interactions.AssertContains(".dow:nth-child(1)",day);
+		}
+
+
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{

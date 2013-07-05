@@ -86,6 +86,7 @@ ko.bindingHandlers.fadeInIf = {
 	}
 };
 
+//Increases the elements width (default by 20px) if the bound value is true
 ko.bindingHandlers.increaseWidthIf = {
 	update: function (element, valueAccessor, allBindingsAccessor) {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
@@ -127,6 +128,7 @@ ko.bindingHandlers.timepicker = {
     }
 };
 
+//Sets the tooltip (using bootstrapper) to the bound text
 ko.bindingHandlers.tooltip = {
 	update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 		var $element, options, tooltip;
@@ -172,3 +174,23 @@ ko.bindingHandlers.button = {
         $(element).button("option", "disabled", disabled);
     }
 };
+
+
+//wraps the datepickerbinding and sets the datepickeroptions
+ko.bindingHandlers.datepicker_SetDefaults = {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				console.log(data.WeekStart);
+				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
+				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
+			}
+		});
+	}
+};
+

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult Cultures()
 		{
-			var test = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
-			return Json(test, JsonRequestBehavior.AllowGet);
+			var settings = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
+			return Json(settings, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

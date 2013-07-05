@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Globalization;
+using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -45,9 +46,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult FetchData2()
+		{
+			return Json(new {Name="Remove me"}, JsonRequestBehavior.AllowGet);
+		}
+
 		public ActionResult Index()
 		{
 			return RedirectToAction("Week");
 		}
 	}
+
+	public  class UserInfoController : Controller
+	{
+		private readonly IUserCulture _userCulture;
+
+		public UserInfoController(IUserCulture userCulture)
+		{
+			_userCulture = userCulture;
+		}
+
+		[HttpGet]
+		public JsonResult Culture()
+		{
+			return Json(new { WeekStart = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek }, JsonRequestBehavior.AllowGet);
+		}
+
+	}
+
 }
