@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.IsTrue(1 == _target.PersonAssignmentCollection().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.IsTrue(2 == _target.PersonAssignmentCollection().Count);
+			_target.AssignmentHighZOrder().OvertimeLayers.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -1437,13 +1437,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(personAbsenceSource);
 			source.Add(personAssignmentSource);
 
-			//create personassignment with no mainshift
-			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
-			//add personal layer to assignment
-			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period3);
-			//add assignment to source
-			source.Add(newPersonAssignment);
-
 			IMultiplicatorDefinitionSet definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);
 			IActivity activity = ActivityFactory.CreateActivity("activity");
@@ -1646,23 +1639,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
 		}
 
-        [Test]
-        public void VerifyDeleteMainShiftConflictingShifts()
-        {
-            SetupForMergeTests();
-
-			//remove personal stuff
-			personAssignmentSource.ClearPersonalLayers();
-
-			//add conflicting shifts
-			source.Add(personAssignmentSource);
-			source.Add((IScheduleData)(personAssignmentSource.Clone()));
-			
-			source.DeleteMainShift(source);
-
-			//shift from conflict list should not "pop" back into assignment collection here.
-			Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
-		}
 
 		[Test]
 		public void VerifyMergeOvertime()
