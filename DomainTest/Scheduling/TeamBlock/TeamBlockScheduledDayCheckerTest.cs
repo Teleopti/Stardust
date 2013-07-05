@@ -202,5 +202,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var dateOnly = new DateOnly(2013, 04, 10);
             Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(null, dateOnly));
         }
+
+		  [Test]
+		  public void ShouldReturnTrueIfDatesAreScheduledForSelectedTeamMember()
+		  {
+			  IPerson person1 = PersonFactory.CreatePerson("test1");
+			  IPerson person2 = PersonFactory.CreatePerson("test2");
+			  var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			  var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			  var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
+			  var groupPerson = _mocks.StrictMock<IGroupPerson>();
+			  var matrixes = new List<IScheduleMatrixPro> { _matrix1, _matrix2 };
+			  var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			  var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			  IBlockInfo blockInfo = new BlockInfo(period);
+			  ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			  var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			  var dateOnly = new DateOnly(2013, 04, 10);
+			  var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
+			  var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			  using (_mocks.Record())
+			  {
+				  Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
+				  Expect.Call(schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+				  Expect.Call(_matrix2.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
+
+				  Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
+				  Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
+
+				  Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.Twice();
+				  Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
+				  Expect.Call(scheduleDictionary[person2]).Return(_scheduleRange).Repeat.Twice();
+				  Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay1);
+				  Expect.Call(_scheduleRange.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
+				  Expect.Call(scheduleDay1.IsScheduled()).Return(true);
+				  Expect.Call(scheduleDay2.IsScheduled()).Return(true);
+			  }
+			  Assert.IsTrue(TeamBlockScheduledDayChecker.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, new List<IPerson> { person2 }));
+		  }
     }
 }
