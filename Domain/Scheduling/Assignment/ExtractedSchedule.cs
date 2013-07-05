@@ -773,26 +773,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return;
 
 					var newLayer = new MainShiftLayer(activity, period);
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollectionDoNotUse())
-			{
-				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
+					var ass = PersonAssignment();
+					if (ass != null && 
+						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
-					if (personAssignment.ShiftCategory == null)
+					if (ass.ShiftCategory == null)
 					{
-						personAssignment.SetMainShiftLayers(new[] {newLayer}, shiftCategory);
+						ass.SetMainShiftLayers(new[] { newLayer }, shiftCategory);
 					}
 					else
 					{
 						//introduce AddLayer on PersonAssignment instead?
 						//rk: Micke and I have talked about this... 
 						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
-						var oldLayers = personAssignment.MainLayers().ToList();
+						var oldLayers = ass.MainLayers().ToList();
 						oldLayers.Add(newLayer);
-						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
+						ass.SetMainShiftLayers(oldLayers, shiftCategory);
 					}
 					return;
 				}
-			}
 
 			Clear<IPersonDayOff>();
 

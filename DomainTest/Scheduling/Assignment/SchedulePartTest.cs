@@ -108,6 +108,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void CanAddTwoLayersWithHoleInBetween()
+		{
+			var start = new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc);
+			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(start));
+			var act = new Activity("sdf");
+			target.CreateAndAddActivity(act, new DateTimePeriod(start, start.AddHours(1)), new ShiftCategory("sdf"));
+			target.CreateAndAddActivity(act, new DateTimePeriod(start.AddHours(4), start.AddHours(5)), new ShiftCategory("sdf"));
+			target.PersonAssignment().MainLayers().Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
 		public void VerifyClone()
 		{
 			IScheduleDay clone = (IScheduleDay)_target.Clone();
