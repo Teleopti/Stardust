@@ -344,8 +344,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainLayers.First(), assignment, null, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainLayers.Last(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainLayers().First(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainLayers().Last(), assignment, null, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null, null, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null,null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainLayers.Single();
+			var theLayer = part.AssignmentHighZOrder().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 	        removeService.Expect(r => r.Remove(part, theLayer));
@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainLayers.Single();
+			var theLayer = part.AssignmentHighZOrder().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 			var newPayload = ActivityFactory.CreateActivity("new");

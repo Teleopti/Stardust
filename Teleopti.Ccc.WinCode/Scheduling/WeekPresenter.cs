@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     break;
                 case SchedulePartView.PersonalShift:
                     var layer = (from personAssignment in schedulePart.PersonAssignmentCollection()
-                                          from l in personAssignment.PersonalLayers
+                                          from l in personAssignment.PersonalLayers()
                                           select l).FirstOrDefault();
                     if (layer != null)
                     {

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 		      var ass = schedulePart.AssignmentHighZOrder();
 
-            var firstLayer = ass.MainLayers.Single();
-            Assert.IsTrue(ass.MainLayers.Contains(firstLayer),"Verify contains the layer");
+            var firstLayer = ass.MainLayers().Single();
+            Assert.IsTrue(ass.MainLayers().Contains(firstLayer),"Verify contains the layer");
 						target.Remove(schedulePart, firstLayer);
 						Assert.AreEqual(0, schedulePart.PersonAssignmentCollection().Count);
         }
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddPersonalLayer().CreatePart();
            
-            var firstPersonalLayer = schedulePart.AssignmentHighZOrder().PersonalLayers.First();
+            var firstPersonalLayer = schedulePart.AssignmentHighZOrder().PersonalLayers().First();
 
 						target.Remove(schedulePart, firstPersonalLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalLayers.Count());
+						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalLayers().Count());
         }
 
         [Test]
@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddOvertime().CreatePart();
 
 						var assignment = schedulePart.AssignmentHighZOrder();
-            var firstOverTimeLayer = assignment.OvertimeLayers.First();
+            var firstOverTimeLayer = assignment.OvertimeLayers().First();
 
-            Assert.IsTrue(assignment.OvertimeLayers.Contains(firstOverTimeLayer), "Verify contains the overtime");
+            Assert.IsTrue(assignment.OvertimeLayers().Contains(firstOverTimeLayer), "Verify contains the overtime");
 						target.Remove(schedulePart, firstOverTimeLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().OvertimeLayers.Count(), "The OvertimeLayer  should have been removed");
+						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().OvertimeLayers().Count(), "The OvertimeLayer  should have been removed");
         }
 
     }

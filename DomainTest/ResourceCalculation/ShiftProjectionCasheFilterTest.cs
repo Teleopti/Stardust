@@ -560,7 +560,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalLayers).Return(Enumerable.Empty<IPersonalShiftLayer>()).Repeat.AtLeastOnce();
+                Expect.Call(_personAssignment.PersonalLayers()).Return(Enumerable.Empty<IPersonalShiftLayer>()).Repeat.AtLeastOnce();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
             }
 
@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
-	            Expect.Call(_personAssignment.PersonalLayers)
+	            Expect.Call(_personAssignment.PersonalLayers())
 	                  .Return(new []
 		                  {
 			                  new PersonalShiftLayer(new Activity("sdf"), period), 
@@ -627,7 +627,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalLayers).Return(new[]
+                Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period), 
 		                new PersonalShiftLayer(new Activity("d"), period2)
@@ -837,7 +837,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, GetLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
-						Expect.Call(_personAssignment.PersonalLayers).Return(GetPersonalLayers(currentDate)).Repeat.AtLeastOnce();
+						Expect.Call(_personAssignment.PersonalLayers()).Return(GetPersonalLayers(currentDate)).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var retShifts = _target.FilterOnNotOverWritableActivities(shifts,_part,  _finderResult);
             retShifts.Count.Should().Be.EqualTo(0);
@@ -951,7 +951,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalLayers).Return(new[]
+                Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)
 	                }).Repeat.AtLeastOnce();
@@ -1004,7 +1004,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalLayers).Return(new[]
+                Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)
 	                }).Repeat.AtLeastOnce();

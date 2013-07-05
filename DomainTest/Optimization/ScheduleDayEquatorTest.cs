@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IPersonAssignment personAssingment = current.PersonAssignmentCollection()[0];
 	        var category = personAssingment.ShiftCategory;
-            Assert.AreEqual(2, personAssingment.MainLayers.Count());
+            Assert.AreEqual(2, personAssingment.MainLayers().Count());
 
             // change order
             ILayer<IActivity> activity1 = current.GetEditorShift().LayerCollection[0];
@@ -417,10 +417,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var id1 = Guid.NewGuid();
 			var id2 = Guid.NewGuid();
-			scheduleDay1.PersonAssignmentCollection()[0].MainLayers.First().Payload.SetId(id1);
-			scheduleDay2.PersonAssignmentCollection()[0].MainLayers.First().Payload.SetId(id1);
-			scheduleDay1.PersonAssignmentCollection()[0].MainLayers.Last().Payload.SetId(id2);
-			scheduleDay2.PersonAssignmentCollection()[0].MainLayers.Last().Payload.SetId(id2);
+			scheduleDay1.PersonAssignmentCollection()[0].MainLayers().First().Payload.SetId(id1);
+			scheduleDay2.PersonAssignmentCollection()[0].MainLayers().First().Payload.SetId(id1);
+			scheduleDay1.PersonAssignmentCollection()[0].MainLayers().Last().Payload.SetId(id2);
+			scheduleDay2.PersonAssignmentCollection()[0].MainLayers().Last().Payload.SetId(id2);
 		}
     }
 }

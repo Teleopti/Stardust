@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
 	        foreach (var assignment in PersonAssignmentCollection())
 	        {
-		        if (!assignment.PersonalLayers.Any() && !assignment.OvertimeLayers.Any() && assignment.ShiftCategory == null)
+		        if (!assignment.PersonalLayers().Any() && !assignment.OvertimeLayers().Any() && assignment.ShiftCategory == null)
 			        Remove(assignment);
 	        }
         }
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
 							assignment.ClearOvertimeLayers();
 
-								if (!assignment.PersonalLayers.Any() && assignment.ShiftCategory == null)
+								if (!assignment.PersonalLayers().Any() && assignment.ShiftCategory == null)
                     personAssToRemoveList.Add(assignment);
             }
 
@@ -676,7 +676,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
 				
-		        foreach (var personalLayer in sourceAss.PersonalLayers)
+		        foreach (var personalLayer in sourceAss.PersonalLayers())
 		        {
 					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
 			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 foreach (var personAss in source.PersonAssignmentCollection())
                 {
-	                foreach (var layer in personAss.OvertimeLayers)
+	                foreach (var layer in personAss.OvertimeLayers())
 	                {
 										if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
 										{
@@ -785,7 +785,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						//introduce AddLayer on PersonAssignment instead?
 						//rk: Micke and I have talked about this... 
 						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
-						var oldLayers = personAssignment.MainLayers.ToList();
+						var oldLayers = personAssignment.MainLayers().ToList();
 						oldLayers.Add(layer);
 						personAssignment.SetMainShiftLayers(oldLayers, shiftCategory);
 					}

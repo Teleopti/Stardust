@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers;
+			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers();
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers;
+			var newLayerCollection = scheduleDay.AssignmentHighZOrder().MainLayers();
 			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.First();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
@@ -72,11 +72,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddPersonalLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().PersonalLayers;
+			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().PersonalLayers();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.AssignmentHighZOrder().PersonalLayers;
+			var newLayerCollection = scheduleDay.AssignmentHighZOrder().PersonalLayers();
 			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.Single();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
@@ -90,19 +90,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddOvertime().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().OvertimeLayers.ToList();
+			var orgLayerCollection = scheduleDay.AssignmentHighZOrder().OvertimeLayers().ToList();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.AssignmentHighZOrder().OvertimeLayers;
+			var newLayerCollection = scheduleDay.AssignmentHighZOrder().OvertimeLayers();
 			orgLayerCollection.Count.Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.Single();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
 			newLayer.Period.Should().Be.EqualTo(newPeriod);
 			newLayer.DefinitionSet.Should()
 			        .Be.SameInstanceAs(
-				        scheduleDay.AssignmentHighZOrder()
-				                   .OvertimeLayers
+				        scheduleDay.AssignmentHighZOrder().OvertimeLayers()
 				                   .Single()
 				                   .DefinitionSet);
 		}

@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			        sb.Append("  ");
 			        sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
 
-			        foreach (var layer in pa.PersonalLayers)
+			        foreach (var layer in pa.PersonalLayers())
 			        {
 				        sb.AppendLine();
 				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);

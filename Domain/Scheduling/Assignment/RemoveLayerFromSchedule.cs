@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 								{
 									if (assignment.RemoveLayer(msActivityLayer))
 									{
-										if (!assignment.MainLayers.Any())
+										if (!assignment.MainLayers().Any())
 										{
 											//rk - why is this here!?
 											part.DeleteMainShift(part);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layer in personalShift
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
-	                foreach (var personalLayer in assignment.PersonalLayers)
+	                foreach (var personalLayer in assignment.PersonalLayers())
 	                {
 		                if (layer.Equals(personalLayer))
 		                {
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layer in overtime
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
-	                foreach (var overtimeLayer in assignment.OvertimeLayers)
+	                foreach (var overtimeLayer in assignment.OvertimeLayers())
 	                {
 		                if (layer.Equals(overtimeLayer))
 		                {

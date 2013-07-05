@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Common
                     IPersonAssignment personAssignment = source.AssignmentHighZOrder();
                     if (personAssignment != null)
                     {
-	                    foreach (var personalLayer in personAssignment.PersonalLayers)
+	                    foreach (var personalLayer in personAssignment.PersonalLayers())
 	                    {
 		                    personAssignmentNoMainShift.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
 	                    }
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
-                    if (personAssignmentNoMainShift.PersonalLayers.Any())
+                    if (personAssignmentNoMainShift.PersonalLayers().Any())
                     {
                         tempPart.Add(personAssignmentNoMainShift);
                         destination.Merge(tempPart, false);

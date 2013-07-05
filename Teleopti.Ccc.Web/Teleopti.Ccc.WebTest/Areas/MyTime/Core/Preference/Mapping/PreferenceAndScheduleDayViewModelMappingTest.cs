@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
-			personAssignment.Stub(x => x.PersonalLayers).Return(new List<IPersonalShiftLayer>{activityLayer});
+			personAssignment.Stub(x => x.PersonalLayers()).Return(new List<IPersonalShiftLayer>{activityLayer});
 			var assignments = new ReadOnlyCollection<IPersonAssignment>(new[] { personAssignment });
 			scheduleDay.Stub(x => x.PersonAssignmentCollection()).Return(assignments);
 

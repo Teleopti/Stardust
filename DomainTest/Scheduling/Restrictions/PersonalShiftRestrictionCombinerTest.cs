@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
 			_scheduleDay.Stub(x=>x.Person)
 				.Return(person);
-			personAssignment.Stub(x=>x.PersonalLayers)
+			personAssignment.Stub(x=>x.PersonalLayers())
 				.Return(new []{new PersonalShiftLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()) });
 
 

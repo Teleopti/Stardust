@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(null);
-				Expect.Call(_personAssignmentTo.PersonalLayers).Return(new[]
+				Expect.Call(_personAssignmentTo.PersonalLayers()).Return(new[]
 					{
 						new PersonalShiftLayer(new Activity("d"), _periodTo.Value) 
 					});
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
-				Expect.Call(_personAssignmentFrom.PersonalLayers).Return(new[]
+				Expect.Call(_personAssignmentFrom.PersonalLayers()).Return(new[]
 					{
 						new PersonalShiftLayer(new Activity("d"), _periodTo.Value)
 					});

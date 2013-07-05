@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	            foreach (var pa in asses)
 	            {
 		            sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-		            foreach (var personalLayer in pa.PersonalLayers)
+		            foreach (var personalLayer in pa.PersonalLayers())
 		            {
 			            sb.AppendLine();
 			            sb.Append("    ");

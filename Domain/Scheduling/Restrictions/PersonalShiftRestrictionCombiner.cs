@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
 			var periods = from a in assignments
-			              from l in a.PersonalLayers
+			              from l in a.PersonalLayers()
 			              select l.Period
 				;
 

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 {
                     var personAssignment = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder();
 
-                    if (personAssignment != null && personAssignment.PersonalLayers.Any())
+                    if (personAssignment != null && personAssignment.PersonalLayers().Any())
                     {
                         matrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
                     }

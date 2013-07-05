@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			if (ass!=null)
 			{
-				foreach (var layer in ass.PersonalLayers)
+				foreach (var layer in ass.PersonalLayers())
 				{
 					if (!period.HasValue)
 						period = layer.Period;

@@ -410,8 +410,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-										Assert.AreEqual(ass1.MainLayers.First().Period,
-																		day1.PersonAssignmentCollection()[0].MainLayers.First().Period);
+										Assert.AreEqual(ass1.MainLayers().First().Period,
+																		day1.PersonAssignmentCollection()[0].MainLayers().First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
@@ -532,7 +532,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
-                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].OvertimeLayers.Count());
+                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].OvertimeLayers().Count());
             }
 			_mocks.VerifyAll();
 		}
