@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -161,23 +163,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 _dummyAgent,
                 new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
                 notToFindScenario);
-            IPersonAssignment agAssInvalid2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 3, 0, 0, 0, DateTimeKind.Utc)),
-                _dummyCategory,
-                notToFindScenario);
-            IPersonAssignment agAssInvalid3 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2007, 1, 2, 2007, 1, 3),
-                notToFindScenario);
 
             PersistAndRemoveFromUnitOfWork(notToFindScenario);
             PersistAndRemoveFromUnitOfWork(agAssValid);
             PersistAndRemoveFromUnitOfWork(agAssInvalid);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid3);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid2);
             /////////////////////////////////////////////////////////////////////////////////
 
             IList<IPersonAssignment> retList = new List<IPersonAssignment>(_rep.Find(searchPeriod, _dummyScenario));
@@ -238,17 +227,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 _dummyAgent,
                 new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
                 notToFindScenario);
-            IPersonAssignment agAssInvalid2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 3, 0, 0, 0, DateTimeKind.Utc)),
-                _dummyCategory,
-                notToFindScenario);
-            IPersonAssignment agAssInvalid3 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2007, 1, 2, 2007, 1, 3),
-                notToFindScenario);
 
             //Assignments of _dummyAgent2 
             IPersonAssignment agAssInvalid4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -262,8 +240,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(notToFindScenario);
             PersistAndRemoveFromUnitOfWork(agAssValid);
             PersistAndRemoveFromUnitOfWork(agAssInvalid);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid3);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid2);
             PersistAndRemoveFromUnitOfWork(agAssInvalid4);
 
             #endregion
@@ -355,6 +331,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
             Assert.IsNotNull(personAssignmentRepository);
         }
+
+			[Test]
+				public override void VerifyIncorrectBusinessUnitIsNotReadable()
+				{
+					var correct = CreateAggregateWithCorrectBusinessUnit();
+					PersistAndRemoveFromUnitOfWork(correct);
+
+						MockRepository newMock = new MockRepository();
+						IState newStateMock = newMock.StrictMock<IState>();
+						BusinessUnit buTemp = new BusinessUnit("dummy");
+						PersistAndRemoveFromUnitOfWork(buTemp);
+						StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, newStateMock);
+						var inCorrect = new PersonAssignment(correct.Person, correct.Scenario, new DateOnly(1900,1,1));
+						PersistAndRemoveFromUnitOfWork(inCorrect);
+
+						var retList = _rep.LoadAll();
+						Assert.IsTrue(retList.All(r => r.BusinessUnit.Equals(r.BusinessUnit)));
+				}
 
         protected override Repository<IPersonAssignment> TestRepository(IUnitOfWork unitOfWork)
         {
