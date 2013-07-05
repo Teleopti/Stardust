@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
+		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private bool _cancelMe;
 
 		public TeamBlockScheduler(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
@@ -28,7 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IWorkShiftFilterService workShiftFilterService,
 			ITeamScheduling teamScheduling,
 			IWorkShiftSelector workShiftSelector,
-			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter)
+			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
+			ITeamBlockClearer teamBlockClearer, 
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_restrictionAggregator = restrictionAggregator;
@@ -36,40 +40,90 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamScheduling = teamScheduling;
 			_workShiftSelector = workShiftSelector;
 			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
+			_teamBlockClearer = teamBlockClearer;
+			_rollbackService = rollbackService;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-        
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
-        {
-            if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
-			var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
-                                                                                       schedulingOptions);
-            if (suggestedShiftProjectionCache == null) 
-				return false; 
+		{
+			if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
+			if (schedulingOptions.UseTeamBlockSameShiftCategory)
+			{
+				return scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+			}
+			return scheduleOnce(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+		}
 
-            //need to refactor the code alot i dont like these ifs probably split it into classes
-            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+		private bool scheduleOnce(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+		{
+			var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+																					   schedulingOptions);
+			if (suggestedShiftProjectionCache == null)
+				return false;
+			//need to refactor the code alot i dont like these ifs probably split it into classes
+			foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
 				if (_cancelMe)
 					break;
-                if (!selectedPeriod.DayCollection().Contains(day)) 
+				if (!selectedPeriod.DayCollection().Contains(day))
 					continue;
-                if (schedulingOptions.UseTeamBlockSameShift)
-                {
+				if (schedulingOptions.UseTeamBlockSameShift)
+				{
 					scheduleSelectedBlockForSameShift(teamBlockInfo, selectedPersons, day,
 													  suggestedShiftProjectionCache, selectedPeriod);
-                }
-                else
-                {
-                    if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache,selectedPeriod)) 
-						return false;    
-                }
-            }
-            return true;
-        }
+				}
+				else
+				{
+					if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache, selectedPeriod))
+						return false;
+				}
+			}
+			return true;
+		}
+
+		private bool scheduleAttempts(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+		{
+			var teamBlockIsFullyScheduled = false;
+			while (!teamBlockIsFullyScheduled)
+			{
+				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+				                                                                           schedulingOptions);
+				if (suggestedShiftProjectionCache == null)
+					return false;
+				foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+				{
+					if (_cancelMe)
+						break;
+					if (!selectedPeriod.DayCollection().Contains(day))
+						continue;
+					if (schedulingOptions.UseTeamBlockSameShift)
+					{
+						scheduleSelectedBlockForSameShift(teamBlockInfo, selectedPersons, day,
+						                                  suggestedShiftProjectionCache, selectedPeriod);
+					}
+					else
+					{
+						scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache,
+						                      selectedPeriod);
+					}
+				}
+				if (TeamBlockScheduledDayChecker.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, selectedPersons))
+					teamBlockIsFullyScheduled = true;
+				else
+				{
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, _rollbackService, teamBlockInfo);
+					var shiftCategoryToBeBlocked = suggestedShiftProjectionCache.TheWorkShift.ShiftCategory;
+					if (!schedulingOptions.NotAllowedShiftCategories.Contains(shiftCategoryToBeBlocked))
+						schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
+				}
+			}
+			schedulingOptions.NotAllowedShiftCategories.Clear();
+			return true;
+		}
 
 	    private bool scheduleSelectedBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, DateOnly day, IShiftProjectionCache suggestedShiftProjectionCache, DateOnlyPeriod selectedPeriod)
 	    {
