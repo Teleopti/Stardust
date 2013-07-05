@@ -378,13 +378,6 @@ namespace Teleopti.Interfaces.Domain
 				void DeleteOvertime();
 
 				/// <summary>
-				/// If two ore more personal shift are covered by a mainshift
-				/// they should be merged ino one assignment.
-				/// </summary>
-				void MergePersonalShiftsToOneAssignment(DateTimePeriod mainShiftPeriod);
-
-
-				/// <summary>
 				/// Delete preference restriction
 				/// </summary>
 				void DeletePreferenceRestriction();

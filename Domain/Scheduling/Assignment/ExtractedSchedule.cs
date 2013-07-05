@@ -535,34 +535,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 Remove(pAss);
         }
 
-        public void MergePersonalShiftsToOneAssignment(DateTimePeriod mainShiftPeriod)
-        {
-            var currentAss = AssignmentHighZOrder();
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
-            IList<IPersonAssignment> assignmentsToDelete = new List<IPersonAssignment>();
-            ((List<IPersonAssignment>)assignments).AddRange(PersonAssignmentCollection());
-
-            foreach (var assignment in assignments)
-            {
-                if (currentAss == null || assignment == currentAss)
-                    continue;
-                var layersToMove = new List<IPersonalShiftLayer>();
-                foreach (var layer in assignment.PersonalLayers)
-                {
-					if (mainShiftPeriod.ContainsPart(layer.Period) || mainShiftPeriod.AdjacentTo(layer.Period))
-						layersToMove.Add(layer);
-                }
-                foreach (var layer in layersToMove)
-                {
-	                assignment.RemoveLayer(layer);
-                    currentAss.AddPersonalLayer(layer.Payload, layer.Period);
-                    if (!assignmentsToDelete.Contains(assignment))
-                        assignmentsToDelete.Add(assignment);
-                }
-            }
-            RemoveEmptyAssignments();
-        }
-
 		public void DeleteMainShift(IScheduleDay source)
 		{
 			IPersonAssignment highAss = AssignmentHighZOrder();
@@ -580,7 +552,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
         {
 			var sourceMainShift = source.GetEditorShift();
@@ -620,7 +591,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             else
             {
-				MergePersonalShiftsToOneAssignment(sourceShiftPeriod);
                 IPersonAssignment destAss = AssignmentHighZOrder();
 				new EditableShiftMapper().SetMainShiftLayers(destAss, workingCopyOfMainShift);
             }
@@ -802,7 +772,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
-			MergePersonalShiftsToOneAssignment(layer.Period);
 			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.AdjacentTo(layer.Period))
@@ -872,7 +841,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public void AddMainShift(IEditableShift mainShift)
         {
             IPersonAssignment currentAss = AssignmentHighZOrder();
-            MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
             if (currentAss == null)
             {
                 currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);

@@ -1665,57 +1665,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyCanMergePersonalShiftToSameAssignmentIfScheduled()
-		{
-			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,3,1));
-			IActivity activity = ActivityFactory.CreateActivity("Personal");
-			IActivity activityMain = ActivityFactory.CreateActivity("Phone");
-			DateTimePeriod personalShiftPeriod = new DateTimePeriod(new DateTime(2000,3,1, 9,0,0, DateTimeKind.Utc), new DateTime(2000,3,1, 10,0,0, DateTimeKind.Utc));
-			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
-																										   parameters.Person,
-																										   personalShiftPeriod,
-																										   scenario);
-			IPersonAssignment personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
-																											parameters.Person,
-																											personalShiftPeriod.MovePeriod(new TimeSpan(4, 0, 0)),
-																											scenario);
-			DateTimePeriod mainPeriodCoverBoth = new DateTimePeriod(new DateTime(2000,3,1, 7,0,0, DateTimeKind.Utc), new DateTime(2000,3,1, 18,0,0, DateTimeKind.Utc));
-			IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("Day");
-			var mainShift = EditableShiftFactory.CreateEditorShift(activityMain, mainPeriodCoverBoth, category);
-			part.Add(personAssignment);
-			part.Add(personAssignment2);
-
-			Assert.AreEqual(2, part.PersonAssignmentCollection().Count);
-			part.MergePersonalShiftsToOneAssignment(mainShift.LayerCollection.Period().Value);
-			Assert.AreEqual(1, part.PersonAssignmentCollection().Count);
-			Assert.AreEqual(2, part.PersonAssignmentCollection()[0].PersonalLayers.Count());
-		}
-		[Test]
-		public void VerifyDoesNotMergePersonalShiftToSameAssignmentIfMainShiftDoesNotCover()
-		{
-			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,3,1));
-			IActivity activity = ActivityFactory.CreateActivity("Personal");
-			DateTimePeriod personalShiftPeriod = new DateTimePeriod(new DateTime(2000, 3, 1, 9, 0, 0, DateTimeKind.Utc), new DateTime(2000, 3, 1, 10, 0, 0, DateTimeKind.Utc));
-			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
-																										   parameters.Person,
-																										   personalShiftPeriod,
-																										   scenario);
-			IPersonAssignment personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
-																											parameters.Person,
-																											personalShiftPeriod.MovePeriod(new TimeSpan(4, 0, 0)),
-																											scenario);
-			DateTimePeriod mainPeriodCoverOne = new DateTimePeriod(new DateTime(2000, 3, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 3, 1, 12, 0, 0, DateTimeKind.Utc));
-			part.Add(personAssignment);
-			part.Add(personAssignment2);
-
-			Assert.AreEqual(2, part.PersonAssignmentCollection().Count);
-			part.MergePersonalShiftsToOneAssignment(mainPeriodCoverOne);
-			Assert.AreEqual(2, part.PersonAssignmentCollection().Count);
-			Assert.AreEqual(1, part.PersonAssignmentCollection()[0].PersonalLayers.Count());
-			Assert.AreEqual(1, part.PersonAssignmentCollection()[1].PersonalLayers.Count());
-		}
-
-		[Test]
 		public void VerifyRemoveOptions()
 		{
 			DeleteOption options = new DeleteOption();
