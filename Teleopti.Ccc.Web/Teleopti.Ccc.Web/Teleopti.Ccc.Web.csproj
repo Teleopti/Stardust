@@ -207,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserInfoController.cs" />
     <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />

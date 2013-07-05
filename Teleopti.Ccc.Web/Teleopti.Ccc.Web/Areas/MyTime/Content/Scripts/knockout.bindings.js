@@ -186,7 +186,6 @@ ko.bindingHandlers.datepicker_SetDefaults = {
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {
-				console.log(data.WeekStart);
 				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
 				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
 			}

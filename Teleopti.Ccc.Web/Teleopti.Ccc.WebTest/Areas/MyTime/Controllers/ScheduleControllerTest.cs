@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Globalization;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -73,24 +72,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.Week() as ViewResult;
 				result.Model.Should().Be.SameInstanceAs(model);
 			}
-		}
-	}
-
-	[TestFixture]
-	public class UserInfoControllerTest
-	{
-		[Test]
-		public void Culture_WhenUsersCultureHasMondayAsFirstDay_ShouldSetWeekStartTo1()
-		{
-			var cultureStub = MockRepository.GenerateStub<IUserCulture>();
-			cultureStub.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var target = new UserInfoController(cultureStub);
-			
-			var result = target.Culture();
-			dynamic content = result.Data;
-
-			Assert.That((object)content.WeekStart,Is.EqualTo(1));
-			Assert.That(result,Is.Not.Null);
 		}
 	}
 }

@@ -172,8 +172,10 @@ Scenario: Show timeline with no schedule
 	| end timeline				| 23:59 |
 	| number of timeline labels	| 25    |
 
+@ignore
 Scenario: Show calender according to the users culture
-	Given I am swedish
+	Given I have the role 'Full access to mytime'
+	And I am swedish
 	When I view my week schedule for date '2013-10-03'
 	And I open the weekschedule date-picker
 	Then I should see 'Mo' as the first day in the calender
