@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the weekschedule date-picker")]
 		public void WhenIOpenTheWeekscheduleDate_Picker()
 		{
+			Browser.Interactions.WaitUntilEnabled(".icon-th");
 			Browser.Interactions.Click(".icon-th");
 		}
 
