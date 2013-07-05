@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{
-				IPersonAssignment pa = part.AssignmentHighZOrder();
+				IPersonAssignment pa = part.PersonAssignment();
 				defaultPeriod = pa.Period;
 			}
 

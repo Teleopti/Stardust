@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 				part.Add(newPersonAbsence);
             }
 
-	        var ass = part.AssignmentHighZOrder();
+	        var ass = part.PersonAssignment();
 			if(ass != null) part.Remove(ass);
 	
             return part;

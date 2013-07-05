@@ -485,7 +485,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.IsTrue(1 == _target.PersonAssignmentCollection().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			_target.AssignmentHighZOrder().OvertimeLayers().Count().Should().Be.EqualTo(1);
+			_target.PersonAssignment().OvertimeLayers().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test1"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			_target.AddMainShift(mainShift);
-			Assert.AreEqual(mainShift.ShiftCategory.Description.Name, _target.AssignmentHighZOrder().ShiftCategory.Description.Name);
+			Assert.AreEqual(mainShift.ShiftCategory.Description.Name, _target.PersonAssignment().ShiftCategory.Description.Name);
 			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
 		}
 

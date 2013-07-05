@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
             IVisualLayerCollection projection = schedulePart.ProjectionService().CreateProjection();
             DateTime start = projection.Period().Value.StartDateTimeLocal(timeZoneInfo);
             DateTime end = projection.Period().Value.EndDateTimeLocal(timeZoneInfo);
-            IShiftCategory category = schedulePart.AssignmentHighZOrder().ShiftCategory;
+            IShiftCategory category = schedulePart.PersonAssignment().ShiftCategory;
 
 
             Height = render(top, start, category.Description.Name, end, projection.ContractTime(),

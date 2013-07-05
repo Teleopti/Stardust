@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		private static DateTimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
-			var ass = schedulePart.AssignmentHighZOrder();
+			var ass = schedulePart.PersonAssignment();
 			if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
 			{
 				return null;

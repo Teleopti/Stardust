@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	      {
 		      var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
-		      var ass = schedulePart.AssignmentHighZOrder();
+		      var ass = schedulePart.PersonAssignment();
 
             var firstLayer = ass.MainLayers().Single();
             Assert.IsTrue(ass.MainLayers().Contains(firstLayer),"Verify contains the layer");
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddPersonalLayer().CreatePart();
            
-            var firstPersonalLayer = schedulePart.AssignmentHighZOrder().PersonalLayers().First();
+            var firstPersonalLayer = schedulePart.PersonAssignment().PersonalLayers().First();
 
 						target.Remove(schedulePart, firstPersonalLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().PersonalLayers().Count());
+						Assert.AreEqual(0, schedulePart.PersonAssignment().PersonalLayers().Count());
         }
 
         [Test]
@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					var target = new RemoveLayerFromSchedule();
             var schedulePart = new SchedulePartFactoryForDomain().AddMainShiftLayer().AddOvertime().CreatePart();
 
-						var assignment = schedulePart.AssignmentHighZOrder();
+						var assignment = schedulePart.PersonAssignment();
             var firstOverTimeLayer = assignment.OvertimeLayers().First();
 
             Assert.IsTrue(assignment.OvertimeLayers().Contains(firstOverTimeLayer), "Verify contains the overtime");
 						target.Remove(schedulePart, firstOverTimeLayer);
-						Assert.AreEqual(0, schedulePart.AssignmentHighZOrder().OvertimeLayers().Count(), "The OvertimeLayer  should have been removed");
+						Assert.AreEqual(0, schedulePart.PersonAssignment().OvertimeLayers().Count(), "The OvertimeLayer  should have been removed");
         }
 
     }

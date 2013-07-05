@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         if (significantPart == SchedulePartView.MainShift)
                         {
-                            IPersonAssignment pa = scheduleDay.AssignmentHighZOrder();
+                            IPersonAssignment pa = scheduleDay.PersonAssignment();
 
                             if (pa != null)
                             {

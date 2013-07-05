@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			foreach (var shiftTradeSwapDetail in obj)
 			{
-				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.AssignmentHighZOrder();
+				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment();
 				if (personAssignmentFrom == null)
 					continue;
 				var mainShiftFrom = shiftTradeSwapDetail.SchedulePartFrom.GetEditorShift();
 				
-				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.AssignmentHighZOrder();
+				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.PersonAssignment();
 				if (personAssignmentTo == null) continue;
 				var mainShiftTo = shiftTradeSwapDetail.SchedulePartTo.GetEditorShift();
 

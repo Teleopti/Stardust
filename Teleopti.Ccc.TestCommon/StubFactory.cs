@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			if (personAssignment != null)
 			{
-				scheduleDay.Stub(x => scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				scheduleDay.Stub(x => scheduleDay.PersonAssignment()).Return(personAssignment);
 			}
 			if (personAbsences != null)
 			{

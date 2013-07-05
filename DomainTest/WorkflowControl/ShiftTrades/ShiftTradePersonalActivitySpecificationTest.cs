@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
+				Expect.Call(_scheduleDayFrom.PersonAssignment()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
 				Expect.Call(_layerCollectionFrom.Period()).Return(_periodFrom);
 
-				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
+				Expect.Call(_scheduleDayTo.PersonAssignment()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentTo.PersonalLayers()).Return(new[]
 					{
@@ -94,12 +94,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
+				Expect.Call(_scheduleDayTo.PersonAssignment()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 				Expect.Call(_layerCollectionTo.Period()).Return(_periodFrom);
 
-				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
+				Expect.Call(_scheduleDayFrom.PersonAssignment()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentFrom.PersonalLayers()).Return(new[]
 					{

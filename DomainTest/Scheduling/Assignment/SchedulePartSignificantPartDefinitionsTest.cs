@@ -193,9 +193,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithMainShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithoutMainShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(null);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithMainShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithoutMainShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(null);
             }
 
             using (_mocker.Playback())
@@ -236,9 +236,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithPersonalShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithoutPersonalShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(null);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithPersonalShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithoutPersonalShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(null);
             }
 
             using (_mocker.Playback())
@@ -259,9 +259,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithOvertimeShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithoutOvertimeShift);
-                Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(null);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithOvertimeShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithoutOvertimeShift);
+                Expect.Call(_mockedPart.PersonAssignment()).Return(null);
             }
 
             using (_mocker.Playback())
@@ -324,8 +324,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocker.Record())
 			{
-				Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithMainShift);
-				Expect.Call(_mockedPart.AssignmentHighZOrder()).Return(personAssignmentWithoutMainShift);
+				Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithMainShift);
+				Expect.Call(_mockedPart.PersonAssignment()).Return(personAssignmentWithoutMainShift);
 				Expect.Call(_mockedPart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
 				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.GetEnumerator()).Return(new List<IVisualLayer> { visualLayer }.GetEnumerator()).Repeat.AtLeastOnce();

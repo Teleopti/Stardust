@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 	            Expect.Call(_personAssignment.PersonalLayers()).Return(new List<IPersonalShiftLayer>());
 
                 Expect.Call(_scheduleDayPro2.DaySchedulePart())
                     .Return(_scheduleDay2);
-                Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 								Expect.Call(_personAssignment.PersonalLayers()).Return(new List<IPersonalShiftLayer> {MockRepository.GenerateMock<IPersonalShiftLayer>()});
                 Expect.Call(_scheduleDayPro2.Day)
                     .Return(new DateOnly(lockDate))
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.AssignmentHighZOrder())
+                Expect.Call(_scheduleDay1.PersonAssignment())
                     .Return(null).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())

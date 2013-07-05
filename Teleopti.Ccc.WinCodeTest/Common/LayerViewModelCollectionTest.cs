@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainLayers().Single();
+			var theLayer = part.PersonAssignment().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 	        removeService.Expect(r => r.Remove(part, theLayer));
@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainLayers().Single();
+			var theLayer = part.PersonAssignment().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 			var newPayload = ActivityFactory.CreateActivity("new");

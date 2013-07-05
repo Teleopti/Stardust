@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-				Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(_part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments));
 				Expect.Call(_personAssignment.PersonalLayers()).Return(new []{new PersonalShiftLayer(new Activity("sdf"), period)}).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
-				Expect.Call(_part.AssignmentHighZOrder()).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

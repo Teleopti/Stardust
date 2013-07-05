@@ -1068,17 +1068,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var range = _mockRep.StrictMock<IScheduleRange>();
             using (_mockRep.Record())
             {
-                Expect.Call(_schedulePart1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart1.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart1.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart1.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulePart2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.PersonDayOffCollection()).Return(_personDayOffCollection).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulePart3.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart3.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 

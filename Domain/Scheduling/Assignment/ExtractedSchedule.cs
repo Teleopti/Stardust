@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    public IEditableShift GetEditorShift()
 	    {
-		    var personAssignment = AssignmentHighZOrder();
+		    var personAssignment = PersonAssignment();
 		    if (personAssignment == null)
 			    return null;
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     		        partView == SchedulePartView.ContractDayOff || partView == SchedulePartView.MainShift);
     	}
 
-    	public IPersonAssignment AssignmentHighZOrder()
+    	public IPersonAssignment PersonAssignment()
     	{
 				return ScheduleDataInternalCollection().OfType<IPersonAssignment>().SingleOrDefault();
         }
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			//will be deleted!
         public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection()
         {
-	        var currentAssignment = AssignmentHighZOrder();
+	        var currentAssignment = PersonAssignment();
 	        return currentAssignment == null ? 
 						new List<IPersonAssignment>().AsReadOnly() : 
 						new List<IPersonAssignment> {currentAssignment}.AsReadOnly();
@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (personAbsenceUpForDelete == null) continue;
 
                 IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
-                var assignment = AssignmentHighZOrder();
+                var assignment = PersonAssignment();
                 if (assignment != null && assignment.ShiftCategory != null)
                 {
                     if (assignment.Period != personAbsenceUpForDelete.Period)
@@ -537,7 +537,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteMainShift(IScheduleDay source)
 		{
-			IPersonAssignment highAss = AssignmentHighZOrder();
+			IPersonAssignment highAss = PersonAssignment();
 
 			if (highAss != null)
 				highAss.ClearMainLayers();
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             else
             {
-                IPersonAssignment destAss = AssignmentHighZOrder();
+                IPersonAssignment destAss = PersonAssignment();
 				new EditableShiftMapper().SetMainShiftLayers(destAss, workingCopyOfMainShift);
             }
 
@@ -653,7 +653,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void DeletePersonalStuff()
         {
-            IPersonAssignment ass = AssignmentHighZOrder();
+            IPersonAssignment ass = PersonAssignment();
             if (ass != null)
             {
                 ass.ClearPersonalLayers();
@@ -663,8 +663,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private void mergePersonalStuff(IScheduleDay source)
         {
-            IPersonAssignment sourceAss = source.AssignmentHighZOrder();
-            IPersonAssignment destAss = AssignmentHighZOrder();
+            IPersonAssignment sourceAss = source.PersonAssignment();
+            IPersonAssignment destAss = PersonAssignment();
 
 	        if (sourceAss != null)
 	        {
@@ -728,7 +728,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
 						//todo: rk - not sure about this.. 
-						var foundPersonAssignment = AssignmentHighZOrder();
+						var foundPersonAssignment = PersonAssignment();
 						if (foundPersonAssignment == null)
 						{
 							var newAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
@@ -841,7 +841,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void AddMainShift(IEditableShift mainShift)
         {
-            IPersonAssignment currentAss = AssignmentHighZOrder();
+            IPersonAssignment currentAss = PersonAssignment();
             if (currentAss == null)
             {
                 currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);

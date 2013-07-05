@@ -780,7 +780,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             string periodText = string.Empty;
             string timeText = string.Empty;
 
-            IPersonAssignment pa = schedulePart.AssignmentHighZOrder();
+            IPersonAssignment pa = schedulePart.PersonAssignment();
 
             if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
             {

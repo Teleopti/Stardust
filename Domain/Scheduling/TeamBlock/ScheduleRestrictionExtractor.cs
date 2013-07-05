@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{
-						var assignment = schedulePart.AssignmentHighZOrder();
+						var assignment = schedulePart.PersonAssignment();
 						if (assignment == null) continue;
 						var shiftCategory = assignment.ShiftCategory;
 						if (shiftCategory == null)

@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                                                                               new WorkTimeLimitation(), null, null, null,
                                                                               new List<IActivityRestriction>());
             totalRestriction = GetMainShiftTotalRestriction(schedulePart, totalRestriction);
-	        var assignment = schedulePart.AssignmentHighZOrder();
+	        var assignment = schedulePart.PersonAssignment();
             cellData.HasShift = true;
             cellData.DisplayName =
                 assignment.ShiftCategory.Description.Name;

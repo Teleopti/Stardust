@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (scheduleDay.PersonAssignmentCollection().Any())
 			{
-				var personAssignment = scheduleDay.AssignmentHighZOrder();
+				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment.ShiftCategory != null)
 				{
 					tempDay.AddMainShift(scheduleDay.GetEditorShift());

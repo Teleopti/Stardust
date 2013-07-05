@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Times(3);
+			Expect.Call(_scheduledDay.PersonAssignment()).Return(ass).Repeat.Times(3);
 			Expect.Call(ass.ShiftCategory).Return(_category1).Repeat.Times(3);
 			_mocks.ReplayAll();
 			var result = _target.AllPersonsHasSameOrNoneShiftCategoryScheduled(_scheduleDictionary, _persons, date);
@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			Expect.Call(_scheduledDayOtherCategory.SignificantPart()).Return(SchedulePartView.MainShift);
 
-			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Times(2);
-			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
+			Expect.Call(_scheduledDay.PersonAssignment()).Return(ass).Repeat.Times(2);
+			Expect.Call(_scheduledDayOtherCategory.PersonAssignment()).Return(assOther);
 
 			Expect.Call(ass.ShiftCategory).Return(_category1).Repeat.Times(2);
 			Expect.Call(assOther.ShiftCategory).Return(_category2);

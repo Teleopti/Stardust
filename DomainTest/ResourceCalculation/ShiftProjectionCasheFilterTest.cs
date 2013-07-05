@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(Enumerable.Empty<IPersonalShiftLayer>()).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 	            Expect.Call(_personAssignment.PersonalLayers())
 	                  .Return(new []
 		                  {
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period), 
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(null);
+                Expect.Call(_part.PersonAssignment()).Return(null);
             }
 
             using (_mocks.Playback())
@@ -949,7 +949,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
@@ -1002,7 +1002,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {

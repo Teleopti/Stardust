@@ -212,13 +212,11 @@ namespace Teleopti.Interfaces.Domain
 				/// </remarks>
 				ReadOnlyCollection<IPublicNote> PublicNoteCollection();
 
-
-
 				///<summary>
 				/// Returns the person assignment to use for view if more than one assignment 
 				/// can not be viewed at the time.
 				///</summary>
-				IPersonAssignment AssignmentHighZOrder();
+				IPersonAssignment PersonAssignment();
 
 				/// <summary>
 				/// Gets the business rule response collection.

@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Win.Common
                 if (options.PersonalShifts)
                 {
 									IPersonAssignment personAssignmentNoMainShift = new PersonAssignment(source.Person, source.Scenario, new DateOnly(2000, 1, 1));
-                    IPersonAssignment personAssignment = source.AssignmentHighZOrder();
+                    IPersonAssignment personAssignment = source.PersonAssignment();
                     if (personAssignment != null)
                     {
 	                    foreach (var personalLayer in personAssignment.PersonalLayers())

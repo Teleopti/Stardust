@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
-            IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
+            IPersonAssignment assignment = scheduleDay.PersonAssignment();
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {

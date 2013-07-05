@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, null, null, new List<IActivityRestriction>()));
 
-			var assignment = scheduleDay.AssignmentHighZOrder();
+			var assignment = scheduleDay.PersonAssignment();
 			preferenceCellData.HasShift = true;
 			preferenceCellData.DisplayName = assignment.ShiftCategory.Description.Name;
 			preferenceCellData.DisplayShortName = assignment.ShiftCategory.Description.ShortName;

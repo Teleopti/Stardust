@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             _part = part;
             DisplayColor = Color.LightBlue;
             Description = new Description("-");
-	        var ass = _part.AssignmentHighZOrder();
+	        var ass = _part.PersonAssignment();
             if (ass!=null)
             {
                 HasMainShift = true;

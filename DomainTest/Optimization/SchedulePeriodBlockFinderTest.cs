@@ -291,10 +291,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_schedulePartAbsence.IsScheduled()).Return(true).Repeat.Any();
 			Expect.Call(_schedulePartEarly.IsScheduled()).Return(true).Repeat.Any();
 			Expect.Call(_schedulePartLate.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_schedulePartEarly.AssignmentHighZOrder()).Return(earlyAssignment).Repeat.Any();
+            Expect.Call(_schedulePartEarly.PersonAssignment()).Return(earlyAssignment).Repeat.Any();
 			Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
             Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-            Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
+            Expect.Call(_schedulePartLate.PersonAssignment()).Return(lateAssignment).Repeat.Any();
 			Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
             Expect.Call(_matrix.Person).Return(person).Repeat.Any();
         }
