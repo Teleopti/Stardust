@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var meetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
 
 			Expect.Call(_part1.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
-			Expect.Call(_part1.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
+			Expect.Call(_part1.PersonAssignmentCollectionDoNotUse()).Return(assCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part1.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
 
 			Expect.Call(_part2.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
-			Expect.Call(_part2.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
+			Expect.Call(_part2.PersonAssignmentCollectionDoNotUse()).Return(assCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part2.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
 
 			_mocks.ReplayAll();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					});
 
 			Expect.Call(_part1.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
-			Expect.Call(_part1.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
+			Expect.Call(_part1.PersonAssignmentCollectionDoNotUse()).Return(assCollection).Repeat.AtLeastOnce();
 
 			_mocks.ReplayAll();
 			Assert.That(_target.IsSatisfiedBy(new List<IScheduleDay> { _part1, _part2 }), Is.False);

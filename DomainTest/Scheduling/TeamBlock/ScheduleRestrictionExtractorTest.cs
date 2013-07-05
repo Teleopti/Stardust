@@ -218,9 +218,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay2.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
 			}
 			using (_mocks.Playback())
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory);
 			}
 			using (_mocks.Playback())
