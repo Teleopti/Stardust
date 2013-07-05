@@ -77,19 +77,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyMultiplePersonAbsencesAndCorrectUnderlyingLayers()
 		{
-			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(2, 9));
-			ass1.MainLayers.First().Payload.Description = new Description("första");
-			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(11, 19));
-			ass2.MainLayers.First().Payload.Description = new Description("andra");
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(new Activity("första"), createPeriod(2, 9)), 
+					new MainShiftLayer(new Activity("andra"), createPeriod(11, 19))
+				}, new ShiftCategory("whatever"));
 			IPersonAbsence abs1 = createPersonAbsence(70, createPeriod(-1, 2)); //no
 			IPersonAbsence abs2 = createPersonAbsence(60, createPeriod(-50, 3));
-			IPersonAbsence abs3 = createPersonAbsence(50, createPeriod(10, 12));
-			IPersonAbsence abs4 = createPersonAbsence(40, createPeriod(10, 12));
+			IPersonAbsence abs3 = createPersonAbsence(50, createPeriod(10, 12)); //no
+			IPersonAbsence abs4 = createPersonAbsence(40, createPeriod(10, 12)); 
 			IPersonAbsence abs5 = createPersonAbsence(30, createPeriod(9, 11));
 			IPersonAbsence abs6 = createPersonAbsence(20, createPeriod(19, 50)); //no
 			IPersonAbsence abs7 = createPersonAbsence(10, createPeriod(8, 12));
-			scheduleDay.Add(ass1);
-			scheduleDay.Add(ass2);
+			scheduleDay.Add(ass);
 			scheduleDay.Add(abs1);
 			scheduleDay.Add(abs2);
 			scheduleDay.Add(abs3);
@@ -101,8 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var resWrapper = new List<IVisualLayer>(target.CreateProjection());
 			Assert.AreEqual(5, resWrapper.Count);
 			VisualLayer layer = (VisualLayer)resWrapper[0];
-			var actLayer1 = ass1.MainLayers.First();
-			var actLayer2 = ass2.MainLayers.First();
+			var actLayer1 = ass.MainLayers.First();
+			var actLayer2 = ass.MainLayers.Last();
 
 			Assert.AreEqual("60", layer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
 			Assert.AreEqual(createPeriod(2, 3), layer.Period);
