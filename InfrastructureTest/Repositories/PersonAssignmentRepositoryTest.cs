@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
-            Assert.AreEqual(org.PersonalLayers.Count(), loadedAggregateFromDatabase.PersonalLayers.Count());
-            Assert.AreEqual(org.OvertimeLayers.Count(), loadedAggregateFromDatabase.OvertimeLayers.Count());
+            Assert.AreEqual(org.PersonalLayers().Count(), loadedAggregateFromDatabase.PersonalLayers().Count());
+            Assert.AreEqual(org.OvertimeLayers().Count(), loadedAggregateFromDatabase.OvertimeLayers().Count());
         }
 
 			[Test]

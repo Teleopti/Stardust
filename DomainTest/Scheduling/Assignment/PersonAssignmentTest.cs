@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanCreateAssignmentAndPropertiesAreSet()
 		{
-			Assert.AreEqual(0, target.PersonalLayers.Count());
+			Assert.AreEqual(0, target.PersonalLayers().Count());
 			Assert.AreEqual(null, target.Id);
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
-			target.MainLayers.Should().Be.Empty();
+			target.MainLayers().Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
@@ -73,9 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNull(target.UpdatedOn);
 			Assert.IsNull(target.Version);
 			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
-			DateTime date = DateTime.Now;
-			target.ZOrder = date;
-			Assert.AreEqual(date, target.ZOrder);
 		}
 
 
@@ -87,9 +84,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
 			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
-			Assert.AreEqual(2, target.PersonalLayers.Count());
+			Assert.AreEqual(2, target.PersonalLayers().Count());
 			target.ClearPersonalLayers();
-			Assert.AreEqual(0, target.PersonalLayers.Count());
+			Assert.AreEqual(0, target.PersonalLayers().Count());
 		}
 
 
@@ -117,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			target.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			var layer = target.OvertimeLayers.Single();
+			var layer = target.OvertimeLayers().Single();
 			Assert.AreSame(target, layer.Parent);
 			Assert.AreSame(target, layer.Root());
 		}
@@ -130,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyReferenceBackToAssignmentWorksFromAPersonalLayer()
 		{
 			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-			target.PersonalLayers.Single().Parent.Should().Be.SameInstanceAs(target);
+			target.PersonalLayers().Single().Parent.Should().Be.SameInstanceAs(target);
 		}
 
 		[Test]
@@ -298,8 +295,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
-			target.MainLayers.Should().Be.Empty();
-			Assert.AreEqual(0, targetClone.PersonalLayers.Count());
+			target.MainLayers().Should().Be.Empty();
+			Assert.AreEqual(0, targetClone.PersonalLayers().Count());
 		}
 
 		[Test]
@@ -382,10 +379,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 
-			Assert.AreEqual(2, target.PersonalLayers.Count());
-			target.RemoveLayer(target.PersonalLayers.First());
+			Assert.AreEqual(2, target.PersonalLayers().Count());
+			target.RemoveLayer(target.PersonalLayers().First());
 
-			Assert.AreEqual(1, target.PersonalLayers.Count());
+			Assert.AreEqual(1, target.PersonalLayers().Count());
 		}
 
 		[Test]
@@ -393,35 +390,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			DateTime zOrder = new DateTime(2000,1,1);
 			target.SetId(Guid.NewGuid());
-			target.ZOrder = zOrder;
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
 
 			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.PersonalLayers.Single().SetId(Guid.NewGuid());
-			target.OvertimeLayers.Single().SetId(Guid.NewGuid());
+			target.PersonalLayers().Single().SetId(Guid.NewGuid());
+			target.OvertimeLayers().Single().SetId(Guid.NewGuid());
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
-			Assert.AreEqual(target.PersonalLayers.Single().Id, pAss.PersonalLayers.Single().Id);
-			Assert.AreEqual(target.OvertimeLayers.Single().Id, pAss.OvertimeLayers.Single().Id);
+			Assert.AreEqual(target.PersonalLayers().Single().Id, pAss.PersonalLayers().Single().Id);
+			Assert.AreEqual(target.OvertimeLayers().Single().Id, pAss.OvertimeLayers().Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
+			Assert.IsNull(pAss.PersonalLayers().Single().Id);
+			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalLayers.Single().Id);
-			Assert.IsNull(pAss.OvertimeLayers.Single().Id);
-			Assert.AreEqual(zOrder, target.ZOrder);
+			Assert.IsNull(pAss.PersonalLayers().Single().Id);
+			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
 		}
 
 		[Test]

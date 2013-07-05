@@ -593,7 +593,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void addMultipleAssignmentMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             //check if we have multiple assignments
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             if (personAssignments.Count > 1)
             {
                 //draw a marker to indicate we have multiple assignments
@@ -603,10 +603,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalLayers.Any())
+                if (personAssignment.PersonalLayers().Any())
                 {
                     Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
                     Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
@@ -619,10 +619,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addOvertimeMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.OvertimeLayers.Any())
+                if (personAssignment.OvertimeLayers().Any())
                 {
                     Size s = new Size(6, 6);
                     Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);

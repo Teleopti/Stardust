@@ -60,21 +60,21 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
-            IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
+            IPersonAssignment assignment = scheduleDay.PersonAssignment();
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-	            foreach (var layer in assignment.MainLayers)
+	            foreach (var layer in assignment.MainLayers())
 	            {
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-	            foreach (var layer in assignment.OvertimeLayers)
+	            foreach (var layer in assignment.OvertimeLayers())
 	            {
 								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-	            foreach (var personalLayer in assignment.PersonalLayers)
+	            foreach (var personalLayer in assignment.PersonalLayers())
 	            {
 		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
 	            }

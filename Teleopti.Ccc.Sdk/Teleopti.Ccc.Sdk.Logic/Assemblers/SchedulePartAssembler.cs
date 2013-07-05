@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (entity != null)
             {
                 fillProjection(part, entity);
-                fillPersonAssignment(part, entity.PersonAssignmentCollection());
+                fillPersonAssignment(part, entity.PersonAssignmentCollectionDoNotUse());
                 fillPersonAbsence(part, entity.PersonAbsenceCollection());
                 fillPersonDayOff(part, entity.PersonDayOffCollection());
                 fillPersonMeeting(part, entity.PersonMeetingCollection());

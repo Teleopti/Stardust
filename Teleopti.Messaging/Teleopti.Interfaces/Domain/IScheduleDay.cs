@@ -147,7 +147,7 @@ namespace Teleopti.Interfaces.Domain
 				/// Created by: rogerkr
 				/// Created date: 2008-05-23
 				/// </remarks>
-				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection();
+				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse();
 
 				/// <summary>
 				/// Gets a list of cloned person day offs.
@@ -196,16 +196,6 @@ namespace Teleopti.Interfaces.Domain
 				IEnumerable<IRestrictionBase> RestrictionCollection();
 
 				/// <summary>
-				/// Gets a list of cloned conflicted person assignments.
-				/// </summary>
-				/// <returns></returns>
-				/// <remarks>
-				/// Created by: rogerkr
-				/// Created date: 2008-05-23
-				/// </remarks>
-				IList<IPersonAssignment> PersonAssignmentConflictCollection { get; }
-
-				/// <summary>
 				/// Gets a list of notes.
 				/// </summary>
 				/// <returns></returns>
@@ -222,13 +212,11 @@ namespace Teleopti.Interfaces.Domain
 				/// </remarks>
 				ReadOnlyCollection<IPublicNote> PublicNoteCollection();
 
-
-
 				///<summary>
 				/// Returns the person assignment to use for view if more than one assignment 
 				/// can not be viewed at the time.
 				///</summary>
-				IPersonAssignment AssignmentHighZOrder();
+				IPersonAssignment PersonAssignment();
 
 				/// <summary>
 				/// Gets the business rule response collection.
@@ -327,9 +315,7 @@ namespace Teleopti.Interfaces.Domain
 				/// <summary>
 				/// Creates and adds activity
 				/// </summary>
-				/// <param name="layer"></param>
-				/// <param name="shiftCategory"></param>
-				void CreateAndAddActivity(IMainShiftLayer layer, IShiftCategory shiftCategory);
+				void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory);
 
 				/// <summary>
 				/// Creates and adds personal activity
@@ -386,13 +372,6 @@ namespace Teleopti.Interfaces.Domain
 				/// Delete overtime
 				/// </summary>
 				void DeleteOvertime();
-
-				/// <summary>
-				/// If two ore more personal shift are covered by a mainshift
-				/// they should be merged ino one assignment.
-				/// </summary>
-				void MergePersonalShiftsToOneAssignment(DateTimePeriod mainShiftPeriod);
-
 
 				/// <summary>
 				/// Delete preference restriction

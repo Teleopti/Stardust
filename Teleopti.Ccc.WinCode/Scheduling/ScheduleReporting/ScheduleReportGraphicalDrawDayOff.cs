@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         {
             if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff || _scheduleDay.PersonDayOffCollection().Count == 0) return null;
 
-            var overtime = (from p in _scheduleDay.PersonAssignmentCollection()
-                            where p.OvertimeLayers.Any()
+            var overtime = (from p in _scheduleDay.PersonAssignmentCollectionDoNotUse()
+                            where p.OvertimeLayers().Any()
                             select p).ToList();
 
 

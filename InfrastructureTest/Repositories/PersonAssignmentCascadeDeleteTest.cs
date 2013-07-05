@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeleteOvertimeShouldGenerateCorrectNumberOfStatements()
 		{
-			target.RemoveLayer(target.OvertimeLayers.First());
+			target.RemoveLayer(target.OvertimeLayers().First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(2); //delete overtime layer + update personassignment  (no index changes)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeletePersonalShouldGenerateCorrectNumberOfStatements()
 		{
-			target.RemoveLayer(target.PersonalLayers.First());
+			target.RemoveLayer(target.PersonalLayers().First());
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(4); //delete overtime layer + update personassignment + update main index + update overtime index

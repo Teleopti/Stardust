@@ -120,23 +120,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
 				public static string GetToolTipConflictingAssignments(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+					//todo: probably another type of conflict information here if schedules are overlapping
+						//StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> conflicts = cell.PersonAssignmentConflictCollection;
-            if (conflicts.Count > 0)
-            {
-                foreach (IPersonAssignment pa in conflicts)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-                    if(pa.ShiftCategory != null)
-                        sb.Append(pa.ShiftCategory.Description.Name);             //name
-                    sb.Append("  ");
-                    sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
-                }
-            }
+						//IList<IPersonAssignment> conflicts = cell.PersonAssignmentConflictCollection;
+						//if (conflicts.Count > 0)
+						//{
+						//		foreach (IPersonAssignment pa in conflicts)
+						//		{
+						//				if (sb.Length > 0) sb.AppendLine();
+						//				if(pa.ShiftCategory != null)
+						//						sb.Append(pa.ShiftCategory.Description.Name);             //name
+						//				sb.Append("  ");
+						//				sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
+						//		}
+						//}
 
-            if (sb.Length > 0)
-                return string.Format(CultureInfo.CurrentUICulture, "{0}{1}({2})",UserTexts.Resources.OverlappningShifts, Environment.NewLine, sb);
+						//if (sb.Length > 0)
+						//		return string.Format(CultureInfo.CurrentUICulture, "{0}{1}({2})",UserTexts.Resources.OverlappningShifts, Environment.NewLine, sb);
             return string.Empty;
         }
 
@@ -176,7 +177,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             var sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
 	        if (asses.Count > 0)
 	        {
 		        foreach (IPersonAssignment pa in asses)
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			        sb.Append("  ");
 			        sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
 
-			        foreach (var layer in pa.PersonalLayers)
+			        foreach (var layer in pa.PersonalLayers())
 			        {
 				        sb.AppendLine();
 				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
@@ -779,7 +780,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             string periodText = string.Empty;
             string timeText = string.Empty;
 
-            IPersonAssignment pa = schedulePart.AssignmentHighZOrder();
+            IPersonAssignment pa = schedulePart.PersonAssignment();
 
             if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
             {

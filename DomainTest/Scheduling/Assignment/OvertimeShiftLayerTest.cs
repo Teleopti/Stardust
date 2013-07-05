@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldKnowItsIndex()
 		{
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			ass.OvertimeLayers.Last().OrderIndex.Should().Be.EqualTo(2);
+			ass.OvertimeLayers().Last().OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
 }

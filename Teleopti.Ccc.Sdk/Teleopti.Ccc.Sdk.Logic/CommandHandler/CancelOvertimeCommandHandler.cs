@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
-                var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
+                var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
             	foreach (var personAssignment in personAssignmentCollection)
             	{
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 			private static void cancelOvertime(IPersonAssignment personAssignment, DateTimePeriod period)
 			{
-				var layers = personAssignment.OvertimeLayers.ToList();
+				var layers = personAssignment.OvertimeLayers().ToList();
 				foreach (var layer in layers)
 				{
 					var layerPeriod = layer.Period;

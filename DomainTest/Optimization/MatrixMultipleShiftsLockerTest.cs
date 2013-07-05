@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly1);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 				Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly2);
-				Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_singlePersonAssignment));
-				Expect.Call(_scheduleDay2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_multiplePersonAssignments));
+				Expect.Call(_scheduleDay1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_singlePersonAssignment));
+				Expect.Call(_scheduleDay2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_multiplePersonAssignments));
 				Expect.Call(() => _scheduleMatrix.LockPeriod( new DateOnlyPeriod(_dateOnly2, _dateOnly2)));	
 			}
 

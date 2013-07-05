@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var orgLayers = new List<IMainShiftLayer>(PersonAssignment.MainLayers);
+				var orgLayers = new List<IMainShiftLayer>(PersonAssignment.MainLayers());
 				orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
 				PersonAssignment.SetMainShiftLayers(orgLayers, PersonAssignment.ShiftCategory);
 				uow.Merge(PersonAssignment);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers.First().Payload, PersonAssignment.MainLayers.First().Period);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
 				PersonAssignment.ClearMainLayers();
 				uow.PersistAll();
 			}

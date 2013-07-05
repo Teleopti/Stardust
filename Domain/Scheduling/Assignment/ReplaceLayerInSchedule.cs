@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			foreach (var ass in scheduleDay.PersonAssignmentCollection())
+			foreach (var ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
 			{
-				foreach (var layer in ass.MainLayers)
+				foreach (var layer in ass.MainLayers())
 				{
 					if (layer.Equals(layerToRemove))
 					{
 						var indexOfLayer = layer.OrderIndex;
-						var newLayers = new List<IMainShiftLayer>(ass.MainLayers);
+						var newLayers = new List<IMainShiftLayer>(ass.MainLayers());
 						newLayers.Remove(layer);
 						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
 						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
 				if (layerAsPersonal != null)
 				{
-					var personalLayers = ass.PersonalLayers.ToList();
+					var personalLayers = ass.PersonalLayers().ToList();
 					var indexOfLayer = personalLayers.IndexOf(layerAsPersonal);
 					personalLayers.RemoveAt(indexOfLayer);
 					personalLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
 				if (layerAsOvertime != null)
 				{
-					var overtimeLayers = ass.OvertimeLayers.ToList();
+					var overtimeLayers = ass.OvertimeLayers().ToList();
 					var indexOfLayer = layerAsOvertime.OrderIndex;
 					overtimeLayers.RemoveAt(indexOfLayer);
 					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));

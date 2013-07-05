@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                 if (scheduleDay.SignificantPart() != SchedulePartView.MainShift)
                     continue;
 
-                IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
+                IPersonAssignment assignment = scheduleDay.PersonAssignment();
                 IShiftCategory shiftCategory = assignment.ShiftCategory;
 
                 if (!shiftDic.ContainsKey(shiftCategory))

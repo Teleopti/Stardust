@@ -177,9 +177,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay2.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
 			}
 			using (_mocks.Playback())
@@ -218,9 +218,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay2.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
 			}
 			using (_mocks.Playback())
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory);
 			}
 			using (_mocks.Playback())
@@ -296,9 +296,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment1);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment1);
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment2);
+				Expect.Call(scheduleDay2.PersonAssignment()).Return(personAssignment2);
 				Expect.Call(personAssignment1.ShiftCategory).Return(shiftCategory1);
 				Expect.Call(personAssignment2.ShiftCategory).Return(shiftCategory2);
 			}
@@ -692,7 +692,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
 				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(null);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(null);
 			}
 			using (_mocks.Playback())
 			{
@@ -721,7 +721,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
 				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment);
 				Expect.Call(personAssignment.ShiftCategory).Return(null);
 			}
 			using (_mocks.Playback())

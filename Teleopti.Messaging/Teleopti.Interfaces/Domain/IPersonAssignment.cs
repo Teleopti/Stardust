@@ -36,20 +36,15 @@ namespace Teleopti.Interfaces.Domain
 
 	    void ClearOvertimeLayers();
 
-        /// <summary>
-        /// Gets or sets the ZOrder for PersonAssignment, used in gui.
-        /// </summary>
-        DateTime ZOrder{get; set;}
-
 			/// <summary>
 			/// The date
 			/// </summary>
 	    DateOnly Date { get; }
 
 	    IShiftCategory ShiftCategory { get; }
-	    IEnumerable<IMainShiftLayer> MainLayers { get; }
-			IEnumerable<IPersonalShiftLayer> PersonalLayers { get; }
-	    IEnumerable<IOvertimeShiftLayer> OvertimeLayers { get; }
+	    IEnumerable<IMainShiftLayer> MainLayers();
+	    IEnumerable<IPersonalShiftLayer> PersonalLayers();
+	    IEnumerable<IOvertimeShiftLayer> OvertimeLayers();
 	    IEnumerable<IShiftLayer> ShiftLayers { get; }
 
 	    /// <summary>

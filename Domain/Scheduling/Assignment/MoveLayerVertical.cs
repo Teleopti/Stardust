@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var pLayer = layer as IPersonalShiftLayer;
 			if (pLayer != null)
 			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
 				var index = pLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index-1, pLayer);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var overLayer = layer as IOvertimeShiftLayer;
 			if (overLayer != null)
 			{
-				var oldLayers = personAssignment.OvertimeLayers.ToList();
+				var oldLayers = personAssignment.OvertimeLayers().ToList();
 				var index = overLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index - 1, overLayer);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var pLayer = layer as IPersonalShiftLayer;
 			if (pLayer != null)
 			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
 				var index = pLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index +1, pLayer);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var overLayer = layer as IOvertimeShiftLayer;
 			if (overLayer != null)
 			{
-				var oldLayers = personAssignment.OvertimeLayers.ToList();
+				var oldLayers = personAssignment.OvertimeLayers().ToList();
 				var index = overLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index + 1, overLayer);

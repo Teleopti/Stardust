@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool HasMainShift()
         {
-            IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
+            IPersonAssignment assignmentToCheck = _schedulePart.PersonAssignment();
             if (assignmentToCheck != null) return assignmentToCheck.ShiftCategory != null;
             return false;
         }
@@ -76,20 +76,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool HasAssignment()
         {
-            return _schedulePart.PersonAssignmentCollection().Count > 0;
+            return _schedulePart.PersonAssignmentCollectionDoNotUse().Count > 0;
         }
 
         public bool HasPersonalShift()
         {
-            IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
-            if (assignmentToCheck != null) return assignmentToCheck.PersonalLayers.Any();
+            IPersonAssignment assignmentToCheck = _schedulePart.PersonAssignment();
+            if (assignmentToCheck != null) return assignmentToCheck.PersonalLayers().Any();
             return false;
         }
 
         public bool HasOvertimeShift()
         {
-            IPersonAssignment assignmentToCheck = _schedulePart.AssignmentHighZOrder();
-            if(assignmentToCheck != null) return assignmentToCheck.OvertimeLayers.Any();
+            IPersonAssignment assignmentToCheck = _schedulePart.PersonAssignment();
+            if(assignmentToCheck != null) return assignmentToCheck.OvertimeLayers().Any();
             return false;
         }
 
