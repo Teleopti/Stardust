@@ -94,7 +94,7 @@
 
 			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Date}" 
-                                             Width="*"
+                                             Width="Auto"
                                              SortMemberPath="RequestedDate" 
                                              Binding="{Binding Path=RequestedDate, Mode=OneWay}">
             </Controls:DataGridTextColumn>
