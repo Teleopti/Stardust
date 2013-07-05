@@ -764,7 +764,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
             foreach (IScheduleDay part in scheduleParts)
             {
-                foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }
@@ -877,7 +877,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             try
             {
-                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }

@@ -593,7 +593,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void addMultipleAssignmentMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             //check if we have multiple assignments
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             if (personAssignments.Count > 1)
             {
                 //draw a marker to indicate we have multiple assignments
@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
                 if (personAssignment.PersonalLayers().Any())
@@ -619,7 +619,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addOvertimeMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
                 if (personAssignment.OvertimeLayers().Any())

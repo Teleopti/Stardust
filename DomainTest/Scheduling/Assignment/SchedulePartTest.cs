@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IScheduleDay clone = (IScheduleDay)_target.Clone();
 			Assert.AreEqual(_target.PersonAbsenceCollection().Count, clone.PersonAbsenceCollection().Count);
-			Assert.AreEqual(_target.PersonAssignmentCollection().Count, clone.PersonAssignmentCollection().Count);
+			Assert.AreEqual(_target.PersonAssignmentCollectionDoNotUse().Count, clone.PersonAssignmentCollectionDoNotUse().Count);
 			Assert.AreEqual(_target.PersonDayOffCollection().Count, clone.PersonDayOffCollection().Count);
 			Assert.AreEqual(_target.PersonMeetingCollection().Count, clone.PersonMeetingCollection().Count);
 			Assert.AreEqual(_target.NoteCollection().Count, clone.NoteCollection().Count);
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(new Activity("sdf"), parameters.Person, parameters.Period, parameters.Scenario);
 			_target.Add(ass);
 			_target.RemoveEmptyAssignments();
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 			ass.RemoveLayer(ass.PersonalLayers().Single());
 			_target.RemoveEmptyAssignments();
-			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 
@@ -139,9 +139,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyProperties()
 		{
 			Assert.AreEqual(1, _target.PersonAbsenceCollection().Count);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 			Assert.AreEqual(1, _target.PersonDayOffCollection().Count);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 			Assert.AreEqual(1, _target.NoteCollection().Count);
 			Assert.IsFalse(_target.FullAccess);
 			Assert.IsFalse(_target.IsFullyPublished);
@@ -246,8 +246,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			_target.CreateAndAddActivity(activity, period, shiftCategory);
-			Assert.AreEqual(2, _target.PersonAssignmentCollection()[0].MainLayers().Count());
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].MainLayers().Last().Period);
+			Assert.AreEqual(2, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Count());
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Last().Period);
 		}
 
 		[Test]
@@ -261,11 +261,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 
 			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
-			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollectionDoNotUse()[0], mainShift);
 
 			_target.CreateAndAddActivity(activity, period, shiftCategory);
-			Assert.AreEqual(2, _target.PersonAssignmentCollection()[0].MainLayers().Count());
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].MainLayers().Last().Period);
+			Assert.AreEqual(2, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Count());
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Last().Period);
 		}
 
 		[Test]
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			_target.CreateAndAddActivity(activity, period, shiftCategory);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].MainLayers().Single().Period);
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Single().Period);
 		}
 
 		[Test]
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(assNoMainShift);
 
 			_target.CreateAndAddActivity(activity, period, shiftCategory);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].MainLayers().Single().Period);
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].MainLayers().Single().Period);
 		}
 
 		[Test]
@@ -309,8 +309,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(start, end);
 
 			_target.CreateAndAddPersonalActivity(activity, period);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].PersonalLayers().Count());
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].PersonalLayers().First().Period);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().First().Period);
 
 		}
 
@@ -324,10 +324,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
-			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollectionDoNotUse()[0], mainShift);
 
 			_target.CreateAndAddPersonalActivity(activity, period);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].PersonalLayers().Single().Period);
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Single().Period);
 		}
 
         [Test]
@@ -351,9 +351,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(personAssignment);
 	        _target.CreateAndAddPersonalActivity(activity2, periodPersonalShift);
 
-			Assert.AreEqual(1,_target.PersonAssignmentCollection().Count);
-			Assert.AreEqual(personAssignment,_target.PersonAssignmentCollection()[0]);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].PersonalLayers().Count());
+			Assert.AreEqual(1,_target.PersonAssignmentCollectionDoNotUse().Count);
+			Assert.AreEqual(personAssignment,_target.PersonAssignmentCollectionDoNotUse()[0]);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
 
 		}
 
@@ -368,10 +368,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].OvertimeLayers().Single().Period);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Single().Period);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 		[Test]
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(ass);
 
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreSame(ass, _target.PersonAssignmentCollection()[0]);
+			Assert.AreSame(ass, _target.PersonAssignmentCollectionDoNotUse()[0]);
 		}
 
 		[Test]
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(ass);
 
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreSame(ass, _target.PersonAssignmentCollection()[0]);
+			Assert.AreSame(ass, _target.PersonAssignmentCollectionDoNotUse()[0]);
 		}
 
 		[Test]
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(personAssignment);
 			_target.CreateAndAddOvertime(activity, overtimePeriod, definitionSet);
 
-			var targetLayer = _target.PersonAssignmentCollection().Single().OvertimeLayers().Single();
+			var targetLayer = _target.PersonAssignmentCollectionDoNotUse().Single().OvertimeLayers().Single();
 			targetLayer.Payload.Should().Be.SameInstanceAs(activity);
 			targetLayer.Period.Should().Be.EqualTo(overtimePeriod);
 			targetLayer.DefinitionSet.Should().Be.SameInstanceAs(definitionSet);
@@ -460,10 +460,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
 
-			Assert.IsTrue(1 == _target.PersonAssignmentCollection().Count);
+			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreSame(ass, _target.PersonAssignmentCollection()[0]);
-			Assert.IsTrue(1 == _target.PersonAssignmentCollection().Count);
+			Assert.AreSame(ass, _target.PersonAssignmentCollectionDoNotUse()[0]);
+			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 		[Test]
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
 
-			Assert.IsTrue(1 == _target.PersonAssignmentCollection().Count);
+			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			_target.PersonAssignment().OvertimeLayers().Count().Should().Be.EqualTo(1);
 		}
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Clear<IPersonAssignment>();
 
 			_target.CreateAndAddPersonalActivity(activity, period);
-			Assert.AreEqual(period, _target.PersonAssignmentCollection()[0].PersonalLayers().Single().Period);
+			Assert.AreEqual(period, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Single().Period);
 		}
 
 		[Test]
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			_target.AddMainShift(mainShift);
 			Assert.AreEqual(mainShift.ShiftCategory.Description.Name, _target.PersonAssignment().ShiftCategory.Description.Name);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 		[Test]
@@ -572,7 +572,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//check that destination is not affected
 			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 		[Test]
@@ -605,13 +605,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     destination.Merge(source, false);
                     Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
                     Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
-                    Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 
                     //verify that day off is pasted, absencense is splitted and assignment is removed
                     destination.Merge(source, false);
                     Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
                     Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-                    Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
                 }
             }
 		}
@@ -634,7 +634,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(authorization))
                 {
                     destination.Merge(source, false);
-                    Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
                 }
             }
 		}
@@ -953,7 +953,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				//assert that absences is pasted and nothing else changes
 				Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 				Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
-				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+				Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 			}
 		}
 
@@ -1015,7 +1015,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the absence is pasted and nothing else changes
 			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection().Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 		}
 
@@ -1117,7 +1117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 {
                     destination.Merge(source, false);
                     Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
-                    Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 
                     //with permissions
                     destination.Add(personDayOffDest);
@@ -1127,12 +1127,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     //assert absence is splitted
                     Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
                     //assert we still have 1 assignment
-                    Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
                     //assert destination have got the source period(Time)
                     Assert.AreEqual(
-                        source.PersonAssignmentCollection()[0].MainLayers().First().Period.TimePeriod(
+                        source.PersonAssignmentCollectionDoNotUse()[0].MainLayers().First().Period.TimePeriod(
                             TimeZoneHelper.CurrentSessionTimeZone),
-												destination.PersonAssignmentCollection()[0].MainLayers().First().Period.TimePeriod(
+												destination.PersonAssignmentCollectionDoNotUse()[0].MainLayers().First().Period.TimePeriod(
                             TimeZoneHelper.CurrentSessionTimeZone));
 
                     //clear assignments in destination
@@ -1140,7 +1140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     //merge
                     destination.Merge(source, false);
                     //assert a new assignment is created in destination
-                    Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
                     //assert dayoff is removed
                     Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
                 }
@@ -1172,9 +1172,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				destination.Merge(source, false);
 
 				//assert we still have 1 assignment in destination
-				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+				Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 				//assert the personal shift was added
-				Assert.AreEqual(2, destination.PersonAssignmentCollection()[0].PersonalLayers().Count());
+				Assert.AreEqual(2, destination.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
 
 				//clear assignments in destination
 				destination.Clear<IPersonAssignment>();
@@ -1182,7 +1182,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				destination.Merge(source, false);
 
 				//assert the personal shift was added and a new assignment was added
-				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+				Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 			}
 		}
 
@@ -1209,7 +1209,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the absence is splitted
 			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 			//merge
 			destination.Merge(destination, true);
@@ -1217,7 +1217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the main shift is removed
 			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.IsNull(destination.PersonAssignmentCollection()[0].ShiftCategory);
+			Assert.IsNull(destination.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
 
 			//merge
 			destination.Merge(destination, true);
@@ -1225,7 +1225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the day off is removed
 			Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.IsNull(destination.PersonAssignmentCollection()[0].ShiftCategory);
+			Assert.IsNull(destination.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
 
 			//merge
 			destination.Merge(destination, true);
@@ -1233,7 +1233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//assert the assignment is removed
 			Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
 			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 			//create assignment with no mainshift
 			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person2, scenario);
@@ -1247,7 +1247,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Merge(destination, true);
 
 			//assert personal shift + assignment is removed
-			Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 			var period = new DateTimePeriod(new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc),
 			   new DateTime(2000, 1, 2, 17, 0, 0, DateTimeKind.Utc));
@@ -1268,7 +1268,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			//assert personal shift is removed
 			Assert.AreEqual(1, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 
 			((ExtractedSchedule)destination).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
@@ -1562,15 +1562,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(start, end);
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
  
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeLayers().Count());
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Count());
 			_target.DeleteOvertime();
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(1, _target.PersonAssignmentCollection()[0].OvertimeLayers().Count());
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Count());
 			_target.DeleteOvertime();
-			Assert.AreEqual(0, _target.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 		[Test]
@@ -1590,14 +1590,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.CreateAndAddOvertime(activity, period, definitionSet);
 			source.DeleteMainShift(source);
 			source.DeletePersonalStuff();
-			Assert.IsNotEmpty(source.PersonAssignmentCollection());
+			Assert.IsNotEmpty(source.PersonAssignmentCollectionDoNotUse());
 			
 			//personal shift
 			SetupForMergeTests();
 			source.Add(personAssignmentSource);
 			source.DeleteMainShift(source);
 			source.DeletePersonalStuff();
-			Assert.IsEmpty(source.PersonAssignmentCollection());
+			Assert.IsEmpty(source.PersonAssignmentCollectionDoNotUse());
 		}
 
 		[Test]
@@ -1615,22 +1615,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//mainshift + personal shift
 			source.Add(personAssignmentSource);
 			source.DeleteMainShift(source);
-			Assert.IsNull(source.PersonAssignmentCollection()[0].ShiftCategory);
-			Assert.AreEqual(1, source.PersonAssignmentCollection()[0].PersonalLayers().Count());
+			Assert.IsNull(source.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
+			Assert.AreEqual(1, source.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
 
 			//mainshift + overtime shift
 			var options = new DeleteOption {PersonalShift = true};
 			((ExtractedSchedule)source).Remove(options);
 			source.CreateAndAddOvertime(activity, period, definitionSet);
 			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollection()[0], mainShift);
+			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollectionDoNotUse()[0], mainShift);
 			source.DeleteMainShift(source);
-            Assert.AreEqual(1, source.PersonAssignmentCollection().Count);
+            Assert.AreEqual(1, source.PersonAssignmentCollectionDoNotUse().Count);
 
 			//no mainshift and no overtime shift
 			source.DeleteOvertime();
 			source.DeleteMainShift(source);
-            Assert.AreEqual(0, source.PersonAssignmentCollection().Count);
+            Assert.AreEqual(0, source.PersonAssignmentCollectionDoNotUse().Count);
 		}
 
 
@@ -1647,14 +1647,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(start, end);
 
 			source.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
 			((ExtractedSchedule)destination).MergeOvertime(source);
-			Assert.AreEqual(0, destination.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
 
 			PersonFactory.AddDefinitionSetToPerson(person2, definitionSet);
 			((ExtractedSchedule)destination).MergeOvertime(source);
-			Assert.AreEqual(start.Hour, destination.PersonAssignmentCollection()[0].OvertimeLayers().Single().Period.StartDateTime.Hour);
-			Assert.AreEqual(end.Hour, destination.PersonAssignmentCollection()[0].OvertimeLayers().Single().Period.EndDateTime.Hour);
+			Assert.AreEqual(start.Hour, destination.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Single().Period.StartDateTime.Hour);
+			Assert.AreEqual(end.Hour, destination.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Single().Period.EndDateTime.Hour);
  
 		}
 
@@ -1763,11 +1763,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private static bool AssertAllStartDataForRemoveOptionsTestIsSet(IScheduleDay part)
 		{
-			return part.PersonAssignmentCollection().Count == 1 &&
+			return part.PersonAssignmentCollectionDoNotUse().Count == 1 &&
 				   part.PersonDayOffCollection().Count == 1 &&
 				   part.PersonAbsenceCollection().Count == 1 &&
-				   part.PersonAssignmentCollection()[0].PersonalLayers().Count() == 1 &&
-				   part.PersonAssignmentCollection()[0].OvertimeLayers().Count() == 1 &&
+				   part.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count() == 1 &&
+				   part.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Count() == 1 &&
 				   part.PersonRestrictionCollection().Count == 2;
 		}
 
@@ -1782,13 +1782,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if (options.DayOff && part.PersonDayOffCollection().Count > 0)
 				retValue = false;
 
-			if (options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ShiftCategory != null)
+			if (options.MainShift && part.PersonAssignmentCollectionDoNotUse().Count > 0 && part.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory != null)
 				retValue = false;
 
-			if (options.Overtime && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].OvertimeLayers().Any())
+			if (options.Overtime && part.PersonAssignmentCollectionDoNotUse().Count > 0 && part.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Any())
 				retValue = false;
 
-			if (options.PersonalShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].PersonalLayers().Any())
+			if (options.PersonalShift && part.PersonAssignmentCollectionDoNotUse().Count > 0 && part.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Any())
 				retValue = false;
 
 			if (options.Preference)
@@ -1823,16 +1823,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if (!options.DayOff && part.PersonDayOffCollection().Count == 0)
 				retValue = false;
 
-			if ((!options.MainShift && part.PersonAssignmentCollection().Count > 0 && part.PersonAssignmentCollection()[0].ShiftCategory == null) ||
-				(!options.MainShift && part.PersonAssignmentCollection().Count == 0))
+			if ((!options.MainShift && part.PersonAssignmentCollectionDoNotUse().Count > 0 && part.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory == null) ||
+				(!options.MainShift && part.PersonAssignmentCollectionDoNotUse().Count == 0))
 				retValue = false;
 
-			if ((!options.Overtime && part.PersonAssignmentCollection().Count > 0 && !part.PersonAssignmentCollection()[0].OvertimeLayers().Any()) ||
-				(!options.Overtime && part.PersonAssignmentCollection().Count == 0))
+			if ((!options.Overtime && part.PersonAssignmentCollectionDoNotUse().Count > 0 && !part.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Any()) ||
+				(!options.Overtime && part.PersonAssignmentCollectionDoNotUse().Count == 0))
 				retValue = false;
 
-			if ((!options.PersonalShift && part.PersonAssignmentCollection().Count > 0 && !part.PersonAssignmentCollection()[0].PersonalLayers().Any()) ||
-				(!options.PersonalShift && part.PersonAssignmentCollection().Count == 0))
+			if ((!options.PersonalShift && part.PersonAssignmentCollectionDoNotUse().Count > 0 && !part.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Any()) ||
+				(!options.PersonalShift && part.PersonAssignmentCollectionDoNotUse().Count == 0))
 				retValue = false;
 
 			if (!options.Preference)
@@ -1949,10 +1949,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CreateAndAddPersonalActivity(activity, dateTimePeriod1);
 			_target.CreateAndAddPersonalActivity(activity, dateTimePeriod2);
 
-			Assert.AreEqual(1, _target.PersonAssignmentCollection().Count);
-			Assert.AreEqual(2, _target.PersonAssignmentCollection()[0].PersonalLayers().Count());
-			Assert.AreEqual(dateTimePeriod1, _target.PersonAssignmentCollection()[0].PersonalLayers().First().Period);
-			Assert.AreEqual(dateTimePeriod2, _target.PersonAssignmentCollection()[0].PersonalLayers().Last().Period);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			Assert.AreEqual(2, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
+			Assert.AreEqual(dateTimePeriod1, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().First().Period);
+			Assert.AreEqual(dateTimePeriod2, _target.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Last().Period);
 		}
 	}
 }

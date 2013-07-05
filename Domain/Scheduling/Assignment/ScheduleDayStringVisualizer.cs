@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
             IList<IPersonMeeting> meetings = scheduleDay.PersonMeetingCollection();
             if (asses.Count > 0 || meetings.Count > 0)
             {

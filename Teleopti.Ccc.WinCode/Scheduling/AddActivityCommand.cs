@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				part.CreateAndAddActivity(activity, period, shiftCategory);
 
-				foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
+				foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
 					assignment.CheckRestrictions();
 
 			}

@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
             Expect.Call(day.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(day.PersonAssignmentCollection()).Return(
+            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAss})).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
             Expect.Call(day.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(day.PersonAssignmentCollection()).Return(
+            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss })).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);

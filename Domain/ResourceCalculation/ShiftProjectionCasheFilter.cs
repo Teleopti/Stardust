@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (period.HasValue)
             {
                 var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollection();
+                var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
                 int cntBefore = shiftList.Count;
                 IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
                 foreach (IShiftProjectionCache t in shiftList)
@@ -520,7 +520,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();
-            var personAssignments = part.PersonAssignmentCollection();
+            var personAssignments = part.PersonAssignmentCollectionDoNotUse();
             var cnt = shiftList.Count;
 
 	        if (meetings.Count == 0 && personAssignments.Count == 0)

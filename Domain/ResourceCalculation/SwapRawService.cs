@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			InParameter.NotNull("scheduleDay", scheduleDay);
 			InParameter.NotNull("tempDay", tempDay);
 
-			if (scheduleDay.PersonAssignmentCollection().Any())
+			if (scheduleDay.PersonAssignmentCollectionDoNotUse().Any())
 			{
 				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment.ShiftCategory != null)

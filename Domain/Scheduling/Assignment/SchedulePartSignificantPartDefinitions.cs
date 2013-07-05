@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool HasAssignment()
         {
-            return _schedulePart.PersonAssignmentCollection().Count > 0;
+            return _schedulePart.PersonAssignmentCollectionDoNotUse().Count > 0;
         }
 
         public bool HasPersonalShift()

@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.PersonalShifts, o => o.ResolveUsing(s =>
 					{
-						var assignments = s.PersonAssignmentCollection();
+						var assignments = s.PersonAssignmentCollectionDoNotUse();
 						if (assignments.Count > 0)
 						{
 							return (from personAssignment in assignments

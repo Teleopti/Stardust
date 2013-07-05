@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
             }
 
             bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
 	            Expect.Call(personAssignment.PersonalLayers())
 	                  .Return(new List<IPersonalShiftLayer>
 		                  {
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.ShiftCategory).Return(null);
                 Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
             }
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
 
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("dummy"));
                 Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
             }
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonDayOffCollection()).Return(readOnlyPersonDayOffs);
             }
 
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonDayOffCollection()).Return(readOnlyPersonDayOffs);
                 Expect.Call(_personPeriod.RuleSetBag).Return(null);
             }
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonDayOffCollection()).Return(readOnlyPersonDayOffs);
                 Expect.Call(_personPeriod.RuleSetBag).Return(ruleSetBag);
             }

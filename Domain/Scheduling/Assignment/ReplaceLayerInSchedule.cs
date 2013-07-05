@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			foreach (var ass in scheduleDay.PersonAssignmentCollection())
+			foreach (var ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
 			{
 				foreach (var layer in ass.MainLayers())
 				{

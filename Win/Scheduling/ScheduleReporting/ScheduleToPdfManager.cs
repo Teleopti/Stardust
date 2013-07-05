@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                         break;
 
                     case SchedulePartView.DayOff:
-                		var assignments = part.PersonAssignmentCollection();
+                		var assignments = part.PersonAssignmentCollectionDoNotUse();
                         if (assignments.Count > 0 && assignments[0].OvertimeLayers().Any() && details == ScheduleReportDetail.All)
                         {
                             schedule = new PdfScheduleDayOffOvertime(_scheduleColumnWidth,

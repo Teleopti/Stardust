@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				public static bool CheckAssignments(IScheduleDay schedulePart)
         {
             //no assignment is ok
-            var personAssignmentCollection = schedulePart.PersonAssignmentCollection();
+            var personAssignmentCollection = schedulePart.PersonAssignmentCollectionDoNotUse();
             if (personAssignmentCollection.Count == 0)
                 return true;
             //more than 1 is not ok

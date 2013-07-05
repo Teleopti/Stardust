@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 			//will be deleted!
-        public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection()
+        public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse()
         {
 	        var currentAssignment = PersonAssignment();
 	        return currentAssignment == null ? 
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void RemoveEmptyAssignments()
         {
-	        foreach (var assignment in PersonAssignmentCollection())
+	        foreach (var assignment in PersonAssignmentCollectionDoNotUse())
 	        {
 		        if (!assignment.PersonalLayers().Any() && !assignment.OvertimeLayers().Any() && assignment.ShiftCategory == null)
 			        Remove(assignment);
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
-            if (!PersonAssignmentCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+            if (!PersonAssignmentCollectionDoNotUse().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
             if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             IList<IPersonAssignment> personAssToRemoveList = new List<IPersonAssignment>();
 
-            foreach (IPersonAssignment assignment in PersonAssignmentCollection())
+            foreach (IPersonAssignment assignment in PersonAssignmentCollectionDoNotUse())
             {
 							assignment.ClearOvertimeLayers();
 
@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	
             DateTimePeriod period = source.Period.MovePeriod(periodOffset);
 
-            if (PersonAssignmentCollection().Count == 0)
+            if (PersonAssignmentCollectionDoNotUse().Count == 0)
             {
                 if (SignificantPart() == SchedulePartView.DayOff)
                 {
@@ -750,7 +750,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (period != null)
             {
-                foreach (var personAss in source.PersonAssignmentCollection())
+                foreach (var personAss in source.PersonAssignmentCollectionDoNotUse())
                 {
 	                foreach (var layer in personAss.OvertimeLayers())
 	                {
@@ -773,7 +773,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return;
 
 					var newLayer = new MainShiftLayer(activity, period);
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
+			foreach (IPersonAssignment personAssignment in PersonAssignmentCollectionDoNotUse())
 			{
 				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
 				{
@@ -806,9 +806,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
-			var closest = PersonAssignmentCollection().FirstOrDefault();
+			var closest = PersonAssignmentCollectionDoNotUse().FirstOrDefault();
 
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
+			foreach (IPersonAssignment personAssignment in PersonAssignmentCollectionDoNotUse())
 			{
 				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
 				{

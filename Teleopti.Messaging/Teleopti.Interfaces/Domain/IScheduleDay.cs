@@ -147,7 +147,7 @@ namespace Teleopti.Interfaces.Domain
 				/// Created by: rogerkr
 				/// Created date: 2008-05-23
 				/// </remarks>
-				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection();
+				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse();
 
 				/// <summary>
 				/// Gets a list of cloned person day offs.

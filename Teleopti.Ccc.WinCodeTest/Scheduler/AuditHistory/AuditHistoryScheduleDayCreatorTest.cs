@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
             }
 
-            Assert.AreEqual(0, result.PersonAssignmentCollection().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonAssignmentCollection().Count);
+            Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
+            Assert.AreEqual(1, _currentScheduleDay.PersonAssignmentCollectionDoNotUse().Count);
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, _newData);
             }
 
-            Assert.AreEqual(1, result.PersonAssignmentCollection().Count);
+            Assert.AreEqual(1, result.PersonAssignmentCollectionDoNotUse().Count);
         }
 
 		[Test]
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
 
 			var result = _target.Create(_currentScheduleDay, _newData);
-			Assert.AreEqual(0, result.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
 		}	
     }
 }

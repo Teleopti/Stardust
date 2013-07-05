@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             var sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
 	        if (asses.Count > 0)
 	        {
 		        foreach (IPersonAssignment pa in asses)

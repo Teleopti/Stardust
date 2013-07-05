@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (period.HasValue)
 			{
 				var meetings = schedulePart.PersonMeetingCollection();
-				var personalAssignments = schedulePart.PersonAssignmentCollection();
+				var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
 				int cntBefore = shiftList.Count;
 				IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
 				foreach (IShiftProjectionCache t in shiftList)

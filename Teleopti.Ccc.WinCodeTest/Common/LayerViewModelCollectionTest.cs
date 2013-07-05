@@ -517,8 +517,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			 .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var expectedStart = part.PersonAssignmentCollection().Min(p => p.Period.StartDateTime);
-			var expectedEnd = part.PersonAssignmentCollection().Max(p => p.Period.EndDateTime);
+			var expectedStart = part.PersonAssignmentCollectionDoNotUse().Min(p => p.Period.StartDateTime);
+			var expectedEnd = part.PersonAssignmentCollectionDoNotUse().Max(p => p.Period.EndDateTime);
 			var totalPeriod = target.TotalDateTimePeriod(false);
 
 			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			target.AddFromSchedulePart(part);
 
 			var allPeriods =
-				part.PersonAssignmentCollection()
+				part.PersonAssignmentCollectionDoNotUse()
 					.Select(p => p.Period)
 					.Union(part.PersonAbsenceCollection().Select(p => p.Period))
 					.ToList();

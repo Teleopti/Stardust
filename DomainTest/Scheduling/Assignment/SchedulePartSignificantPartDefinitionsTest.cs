@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-                Expect.Call(_mockedPart.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(personAssignments));
+                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(personAssignments));
             }
 
             using (_mocker.Playback())
