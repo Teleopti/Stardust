@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			if (day == null) return false;
 			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
 				return false;
-			return day.PersonAssignmentCollection()[0].ShiftCategory.Equals(shiftCategory);
+			return day.PersonAssignment().ShiftCategory.Equals(shiftCategory);
 		}
 
 		public bool DayHasDayOff(IScheduleDay day)

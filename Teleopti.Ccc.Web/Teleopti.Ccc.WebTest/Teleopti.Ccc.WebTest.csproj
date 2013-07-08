@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Controllers\UserInfoControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistrationTest.cs" />

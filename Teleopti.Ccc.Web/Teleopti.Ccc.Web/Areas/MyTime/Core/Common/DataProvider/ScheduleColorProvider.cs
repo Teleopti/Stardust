@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							  select l.DisplayColor();
 
 			IEnumerable<Color> personAssignmentColors = new List<Color>();
-			var assignments = scheduleDays.Select(x => x.AssignmentHighZOrder()).Where(x => x != null);
+			var assignments = scheduleDays.Select(x => x.PersonAssignment()).Where(x => x != null);
 			if (assignments.Any(x => x.ShiftCategory != null))
 			{
 				personAssignmentColors = from d in assignments

@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -57,7 +58,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamDayOffModifier teamDayOffModifier,
 			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
-			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator
+			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -219,8 +222,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService, allPersonMatrixList);
 			if (!success)
 				return false;
-
-			if (!_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
+			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
+										 removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
+			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(addedDaysOff, teamInfo);

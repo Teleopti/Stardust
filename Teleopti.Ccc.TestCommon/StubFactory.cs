@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			if (personAssignment != null)
 			{
-				scheduleDay.Stub(x => scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
+				scheduleDay.Stub(x => scheduleDay.PersonAssignment()).Return(personAssignment);
 			}
 			if (personAbsences != null)
 			{
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IPersonAssignment PersonAssignmentPersonalShiftStub()
 		{
 			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			personAssignment.Stub(x => x.PersonalLayers).Return(Enumerable.Empty<IPersonalShiftLayer>());
+			personAssignment.Stub(x => x.PersonalLayers()).Return(Enumerable.Empty<IPersonalShiftLayer>());
 			return personAssignment;
 		}
 

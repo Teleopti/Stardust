@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var startTime = DateTime.MaxValue;
 			var endTime = DateTime.MinValue;
-			var personAssignments = scheduleDay.PersonAssignmentCollection();
+			var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
 			foreach (var personAssignment in personAssignments)
 			{

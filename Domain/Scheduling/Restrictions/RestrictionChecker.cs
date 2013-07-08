@@ -462,7 +462,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState)
         {
-            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollection())
+            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollectionDoNotUse())
             {
 				IShiftCategory shiftCategory = assignment.ShiftCategory;
 				if (preference.ShiftCategory != null && shiftCategory == null)
@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private PermissionState checkRotationShiftCategory(IRotationRestriction preference, PermissionState permissionState)
         {
-            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollection())
+            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollectionDoNotUse())
             {
 				IShiftCategory shiftCategory = assignment.ShiftCategory;
 				if (preference.ShiftCategory != null && shiftCategory == null)

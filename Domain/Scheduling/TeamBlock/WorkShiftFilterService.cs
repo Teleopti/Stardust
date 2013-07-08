@@ -7,7 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		                                    IEffectiveRestriction effectiveRestriction,
+		                                    ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo,
+		                                    IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift,
+		                                    ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
@@ -27,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private readonly IShiftLengthDecider _shiftLengthDecider;
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
+		private readonly ICommonActivityFilter _commonActivityFilter;
 
 		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
@@ -42,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ITimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter,
 			IWorkTimeLimitationShiftFilter workTimeLimitationShiftFilter,
 			IShiftLengthDecider shiftLengthDecider,
-			IWorkShiftMinMaxCalculator minMaxCalculator)
+			IWorkShiftMinMaxCalculator minMaxCalculator,
+			ICommonActivityFilter commonActivityFilter)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -59,17 +67,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workTimeLimitationShiftFilter = workTimeLimitationShiftFilter;
 			_shiftLengthDecider = shiftLengthDecider;
 			_minMaxCalculator = minMaxCalculator;
+			_commonActivityFilter = commonActivityFilter;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo ,
-													IEffectiveRestriction effectiveRestriction,
-													ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+												   IEffectiveRestriction effectiveRestriction,
+												   ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
 			if (effectiveRestriction == null)
 				return null;
 			if (teamBlockInfo == null)
 				return null;
-		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
 			if (matrixList.Count == 0) return null;
 			var currentSchedulePeriod = groupPerson.GroupMembers[0].VirtualSchedulePeriod(dateOnly);
@@ -82,40 +91,75 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson.GroupMembers[0], false);
+			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson, false);
 			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList);
 			if (shiftList == null)
 				return null;
-		    return shiftList.Count == 0 ? null : shiftList;
+			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-	    private IList<IShiftProjectionCache> runFilters(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
-	                             ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<IShiftProjectionCache> shiftList,
-	                             IGroupPerson groupPerson, List<IScheduleMatrixPro> matrixList)
-	    {
-	        shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
-	        shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList,
-	                                                                                schedulingOptions
-	                                                                                    .MainShiftOptimizeActivitySpecification);
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly,IPerson person, ITeamBlockInfo teamBlockInfo,
+													IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift,
+													ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		{
+			if (effectiveRestriction == null)
+				return null;
+			if (teamBlockInfo == null)
+				return null;
+			var matrixList = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, new DateOnlyPeriod(dateOnly, dateOnly)).ToList();
+			if (matrixList.Count == 0) return null;
+			var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
+			if (!currentSchedulePeriod.IsValid)
+				return null;
+			if (schedulingOptions == null)
+				return null;
+			if (!_effectiveRestrictionShiftFilter.Filter(schedulingOptions, effectiveRestriction, finderResult))
+				return null;
+			if (schedulingOptions.ShiftCategory != null)
+				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-	        shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, finderResult);
-	        shiftList = _disallowedShiftCategoriesShiftFilter.Filter(schedulingOptions.NotAllowedShiftCategories, shiftList,
-	                                                                 finderResult);
-	        shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, groupPerson, shiftList, effectiveRestriction,
-	                                                            finderResult);
-	        shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, groupPerson, shiftList, effectiveRestriction,
-	                                                             finderResult);
-	        shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
+			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, person, false);
+			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList, suggestedShift);
+			if (shiftList == null)
+				return null;
+			return shiftList.Count == 0 ? null : shiftList;
+		}
 
-	        shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
-	        shiftList = _businessRulesShiftFilter.Filter(groupPerson, shiftList, dateOnly, finderResult);
-	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
-	        shiftList = _personalShiftsShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
+		private IList<IShiftProjectionCache> runFilters(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
+														ISchedulingOptions schedulingOptions,
+														IWorkShiftFinderResult finderResult,
+														IList<IShiftProjectionCache> shiftList,
+														IPerson person, IList<IScheduleMatrixPro> matrixList)
+		{
+			shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
+			shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
+			shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList,
+																					schedulingOptions
+																						.MainShiftOptimizeActivitySpecification);
 
+			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, finderResult);
+			shiftList = _disallowedShiftCategoriesShiftFilter.Filter(schedulingOptions.NotAllowedShiftCategories, shiftList,
+																	 finderResult);
+			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction,
+																finderResult);
+			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction,
+																 finderResult);
+			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
+			shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
+			shiftList = _personalShiftsShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
+			shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
 
-	        shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
+			return shiftList;
+		}
 
-	        return shiftList;
-	    }
+		private IList<IShiftProjectionCache> runFilters(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
+								 ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<IShiftProjectionCache> shiftList,
+								 IPerson person, IList<IScheduleMatrixPro> matrixList, IShiftProjectionCache suggestedShift)
+		{
+			shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);
+			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, suggestedShift);
+			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList);
+			return shiftList;
+		}
 	}
 }

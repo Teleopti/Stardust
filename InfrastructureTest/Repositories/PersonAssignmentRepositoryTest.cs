@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -96,20 +98,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.SetMainShiftLayers(new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
-
-						IOvertimeShift ot = new OvertimeShift();
-            ass.AddOvertimeShift(ot);
-            ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
-            return ass;
+	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+	        return ass;
         }
 
         protected override void VerifyAggregateGraphProperties(IPersonAssignment loadedAggregateFromDatabase)
         {
             IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
-            Assert.AreEqual(org.PersonalLayers.Count(), loadedAggregateFromDatabase.PersonalLayers.Count());
-            Assert.AreEqual(org.OvertimeShiftCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection.Count);
-            Assert.AreEqual(org.OvertimeShiftCollection[0].LayerCollection.Count, loadedAggregateFromDatabase.OvertimeShiftCollection[0].LayerCollection.Count);
+            Assert.AreEqual(org.PersonalLayers().Count(), loadedAggregateFromDatabase.PersonalLayers().Count());
+            Assert.AreEqual(org.OvertimeLayers().Count(), loadedAggregateFromDatabase.OvertimeLayers().Count());
         }
 
 			[Test]
@@ -120,12 +118,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalLayers));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection[0].LayerCollection));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
 
         [Test]
@@ -162,40 +156,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddOvertimeShift(new OvertimeShift());
-            agAssValid.OvertimeShiftCollection[0].LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet));
+            agAssValid.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
                 _dummyActivity,
                 _dummyAgent,
                 new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
                 notToFindScenario);
-            IPersonAssignment agAssInvalid2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 3, 0, 0, 0, DateTimeKind.Utc)),
-                _dummyCategory,
-                notToFindScenario);
-            IPersonAssignment agAssInvalid3 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2007, 1, 2, 2007, 1, 3),
-                notToFindScenario);
 
             PersistAndRemoveFromUnitOfWork(notToFindScenario);
             PersistAndRemoveFromUnitOfWork(agAssValid);
             PersistAndRemoveFromUnitOfWork(agAssInvalid);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid3);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid2);
             /////////////////////////////////////////////////////////////////////////////////
 
             IList<IPersonAssignment> retList = new List<IPersonAssignment>(_rep.Find(searchPeriod, _dummyScenario));
 
             Assert.IsTrue(retList.Contains(agAssValid));
             Assert.AreEqual(1, retList.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].OvertimeShiftCollection[0].LayerCollection));
+						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
         }
 
         [Test]
@@ -249,17 +227,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 _dummyAgent,
                 new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
                 notToFindScenario);
-            IPersonAssignment agAssInvalid2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 3, 0, 0, 0, DateTimeKind.Utc)),
-                _dummyCategory,
-                notToFindScenario);
-            IPersonAssignment agAssInvalid3 = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-                _dummyActivity,
-                _dummyAgent,
-                new DateTimePeriod(2007, 1, 2, 2007, 1, 3),
-                notToFindScenario);
 
             //Assignments of _dummyAgent2 
             IPersonAssignment agAssInvalid4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -273,8 +240,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(notToFindScenario);
             PersistAndRemoveFromUnitOfWork(agAssValid);
             PersistAndRemoveFromUnitOfWork(agAssInvalid);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid3);
-            PersistAndRemoveFromUnitOfWork(agAssInvalid2);
             PersistAndRemoveFromUnitOfWork(agAssInvalid4);
 
             #endregion
@@ -366,6 +331,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
             Assert.IsNotNull(personAssignmentRepository);
         }
+
+			[Test]
+				public override void VerifyIncorrectBusinessUnitIsNotReadable()
+				{
+					var correct = CreateAggregateWithCorrectBusinessUnit();
+					PersistAndRemoveFromUnitOfWork(correct);
+
+						MockRepository newMock = new MockRepository();
+						IState newStateMock = newMock.StrictMock<IState>();
+						BusinessUnit buTemp = new BusinessUnit("dummy");
+						PersistAndRemoveFromUnitOfWork(buTemp);
+						StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, newStateMock);
+						var inCorrect = new PersonAssignment(correct.Person, correct.Scenario, new DateOnly(1900,1,1));
+						PersistAndRemoveFromUnitOfWork(inCorrect);
+
+						var retList = _rep.LoadAll();
+						Assert.IsTrue(retList.All(r => r.BusinessUnit.Equals(r.BusinessUnit)));
+				}
 
         protected override Repository<IPersonAssignment> TestRepository(IUnitOfWork unitOfWork)
         {

@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Win.Common
             if (e.KeyCode == Keys.F1)
             {
                 if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
-                    ShowHelp(false);//Online
+                    ShowHelp(true);//Offline
                 else
-                    ShowHelp(true);
+                    ShowHelp(false); //Online
             }
             base.OnKeyDown(e);
         }

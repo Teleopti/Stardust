@@ -32,16 +32,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             //retList.AddRange(_selectedSchedules);
             IScheduleDay schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
             IScheduleDay schedulePart2 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-            if ((schedulePart1.PersonAssignmentCollection().Count == 0 || schedulePart2.PersonAssignmentCollection().Count == 0) &&
+            if ((schedulePart1.PersonAssignmentCollectionDoNotUse().Count == 0 || schedulePart2.PersonAssignmentCollectionDoNotUse().Count == 0) &&
                 (schedulePart1.PersonDayOffCollection().Count == 0 && schedulePart2.PersonDayOffCollection().Count == 0))
             {
-                if (schedulePart1.PersonAssignmentCollection().Count == 0)
+                if (schedulePart1.PersonAssignmentCollectionDoNotUse().Count == 0)
                 {
                     _selectedSchedules[1].Merge(schedulePart2, false);
                     _selectedSchedules[1].DeletePersonalStuff();
                     _selectedSchedules[0].DeleteMainShift(schedulePart2);
                 }
-                else if (schedulePart2.PersonAssignmentCollection().Count == 0)
+                else if (schedulePart2.PersonAssignmentCollectionDoNotUse().Count == 0)
                 {
                     _selectedSchedules[0].Merge(schedulePart1, false);
                     _selectedSchedules[0].DeletePersonalStuff();

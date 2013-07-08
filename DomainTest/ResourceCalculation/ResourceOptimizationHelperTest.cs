@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(scheduleDay.Person).Return(person);
 				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimeperiod);
 				Expect.Call(dateOnlyAsDateTimeperiod.DateOnly).Return(new DateOnly());
-				Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pa);
+				Expect.Call(scheduleDay.PersonAssignment()).Return(pa);
 				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly())).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>()).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.AtLeastOnce();

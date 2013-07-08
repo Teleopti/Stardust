@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockInfo _teamBlockInfo;
 		private List<IPerson> _selectedPersons;
 		private IVirtualSchedulePeriod _schedulePeriod;
+		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 			_dayOffTemplate = new DayOffTemplate(new Description("hej"));
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _dayOffOptimizationDecisionMakerFactory,
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamBlockSteadyStateValidator, _teamBlockClearer,
-			                                              _restrictionOverLimitValidator);
+														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker);
 		}
 
 		[Test]
@@ -126,6 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -151,7 +156,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				runOneMatrixMocks(false, false, false);
-				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);			
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -193,6 +200,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -227,6 +237,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

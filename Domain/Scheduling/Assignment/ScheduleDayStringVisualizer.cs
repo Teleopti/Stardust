@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
             IList<IPersonMeeting> meetings = scheduleDay.PersonMeetingCollection();
             if (asses.Count > 0 || meetings.Count > 0)
             {
 	            foreach (var pa in asses)
 	            {
 		            sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-		            foreach (var personalLayer in pa.PersonalLayers)
+		            foreach (var personalLayer in pa.PersonalLayers())
 		            {
 			            sb.AppendLine();
 			            sb.Append("    ");

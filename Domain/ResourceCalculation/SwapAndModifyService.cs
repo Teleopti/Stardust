@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IScheduleDay part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
                 IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> {part1, part2};
                 modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
-                foreach (IPersonAssignment assignment in part1.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in part1.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }
-                foreach (IPersonAssignment assignment in part2.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in part2.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }

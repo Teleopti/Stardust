@@ -16,6 +16,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var layerCanvasPixelWidth = 700;
 
 		self.now = null;
+		self.weekStart = ko.observable(1); 
 		self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days',-1));
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
@@ -199,12 +200,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (_hasPermission(elementToBind)) {
 		    if ((vm || '') == '') {
-		        vm = new shiftTradeViewModel(_saveNewShiftTrade);
-		        ko.applyBindings(vm, elementToBind);
+		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
+		    	ko.applyBindings(vm, elementToBind);
+
+			    _setWeekStart(vm);
 		    }
 		}
 	}
 
+
+	function _setWeekStart(vm) {
+		ajax.Ajax({
+			url: "UserInfo/ShiftTradeRequest",
+			dataType: "json",
+			type: 'GET',
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				vm.weekStart(data.WeekStart);
+			},
+			
+			error: function (jqXHR, textStatus, errorThrown) {
+				
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+	
 	function _hasPermission(element) {
 		return element!==undefined;
 	}

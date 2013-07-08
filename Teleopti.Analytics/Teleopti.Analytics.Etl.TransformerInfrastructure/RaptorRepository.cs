@@ -326,6 +326,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+				return rep.LastChangedDate(currentBusinessUnit, stepName, period);
+			}
+		}
+
 		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
 			var parameterList = new List<SqlParameter>
@@ -731,11 +740,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
-				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
-				return rep.LastChangedDate(currentBusinessUnit, stepName);
-			}
+			return LastChangedDate(currentBusinessUnit, stepName, new DateTimePeriod(2000, 1, 1, 2100, 1, 1));
 		}
 
 		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
@@ -1341,17 +1346,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone)
+		public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday)
 		{
 			//Convert time back to local time before sp call
 			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
 			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("start_date", startDate.Date),
+					new SqlParameter("end_date", endDate.Date),
+					new SqlParameter("business_unit_code", businessUnit.Id),
+					new SqlParameter("isIntraday", isIntraday)
+				};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_deviation_load",

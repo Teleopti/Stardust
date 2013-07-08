@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                     DateTime startDateTimeLocal;
                     DateTime endDateTimeLocal;
-                    foreach (IPersonAssignment ag in scheduleDay.PersonAssignmentCollection())
+                    foreach (IPersonAssignment ag in scheduleDay.PersonAssignmentCollectionDoNotUse())
                     {
                         //find earliest start
                         startDateTimeLocal = ag.Period.LocalStartDateTime;

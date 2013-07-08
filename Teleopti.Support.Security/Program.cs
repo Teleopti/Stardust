@@ -12,6 +12,7 @@ namespace Teleopti.Support.Security
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
+		private static readonly ICommandLineCommand RemoveDuplicateAssignments = new RemoveDuplicateAssignments();
 
 		static void Main(string[] args)
 		{
@@ -23,6 +24,7 @@ namespace Teleopti.Support.Security
 			else
 			{
 				setPersonAssignmentDate(commandLineArgument);
+				RemoveDuplicateAssignments.Execute(commandLineArgument);
 				ForecasterDateAdjustment.Execute(commandLineArgument);
 				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
 				PasswordEncryption.Execute(commandLineArgument);
