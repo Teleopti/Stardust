@@ -993,6 +993,7 @@
       <Link>customTimeoutSettings.config.notinuse</Link>
     </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
+    <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
