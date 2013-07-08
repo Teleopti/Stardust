@@ -4,8 +4,6 @@
 }
 
 <div>
-    <br/>
-    <div>
         <div>
             <div id="Request-shift-trade-detail-info" class="alert alert-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
 
@@ -16,7 +14,6 @@
                 <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
             </div>
             </div>
-        <br/>
 
         <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !showInfo()">
             <span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
@@ -37,11 +34,7 @@
             </div>
         </div>
 		
-    </div>	
-	
-    <br/>
 </div>
-<br/>
   <div  class="floatright" data-bind="visible: !IsTradeCreatedByMe()" >
         <button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
         <button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
