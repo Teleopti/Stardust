@@ -11,8 +11,8 @@
         <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
     </div>
     <div>
-        <span class="input-append">
-            <input class="request-edit-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat()}, enable: IsEditable" type="text" />
+        <span class="input-append" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
+            <input class="request-edit-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}, enable: IsEditable" type="text" />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="request-edit-timefrom input-append bootstrap-timepicker">
@@ -21,8 +21,8 @@
         </div>
     </div>
     <div>
-        <span class="request-edit-dateto input-append">
-            <input class="request-edit-date-to" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
+        <span class="request-edit-dateto input-append" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
+            <input class="request-edit-date-to" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart(), format: DateFormat()}, enable: IsEditable" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="request-edit-timeto input-append bootstrap-timepicker">
