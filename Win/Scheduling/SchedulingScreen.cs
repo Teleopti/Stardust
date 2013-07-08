@@ -184,6 +184,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISingleSkillDictionary _singleSkillDictionary;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		private DateTimePeriod _selectedPeriod;
+	    private bool isWindowLoaded = false;
 
 		#region enums
 		private enum ZoomLevel
@@ -7053,8 +7054,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (defaultRequest == null)
 			{
 				var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
-				allowanceView.Show(this);
-
+			    
+                if (!isWindowLoaded)
+                {
+                    allowanceView.Show(this);
+                    isWindowLoaded = true;
+                }
+                else
+                {
+                    isWindowLoaded = false;
+                }
 			}
 			else
 			{
@@ -7063,7 +7072,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (personPeriod != null)
 				{
 					var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
-					allowanceView.Show(this);
+
+                    if (!isWindowLoaded)
+                    {
+                        allowanceView.Show(this);
+                        isWindowLoaded = true;
+                    }
+                    else
+                    {
+                        isWindowLoaded = false;
+                    }
 				}
 			}
 		}
