@@ -5,7 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
-Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod) {
+Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, showMeridian, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod) {
 	var self = this;
 
 	this.AvailableTemplates = ko.observableArray();
@@ -32,7 +32,8 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.NewTemplateName = ko.observable('');
 	this.AddPreferenceFormVisible = ko.observable(false);
 	this.ValidationError = ko.observable();
-    this.IsTimeInputVisible = ko.observable(true);
+	this.IsTimeInputVisible = ko.observable(true);
+	this.ShowMeridian = ko.observable(showMeridian);
 
     this.IsTimeInputVisibleToggle = function() {
         self.IsTimeInputVisible(!self.IsTimeInputVisible());

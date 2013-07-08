@@ -65,13 +65,13 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td>
                         <div class="preference-start-time-min input-append bootstrap-timepicker" title="@Resources.EarliestStartTime">
-                            <input type="text" class="input-small" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
                     <td>
                         <div class="preference-start-time-max input-append bootstrap-timepicker" title="@Resources.LatestStartTime">
-                            <input type="text" class="input-small" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
@@ -82,7 +82,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td>
                         <div class="preference-end-time-min input-append bootstrap-timepicker" title="@Resources.EarliestEndTime">
-                            <input type="text" class="input-small" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                         <button class="preference-end-time-min-next-day btn btn-mini" data-toggle="button" data-bind="click: EarliestEndTimeNextDayToggle, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay">
@@ -91,7 +91,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td>
                         <div class="preference-end-time-max input-append bootstrap-timepicker" title="@Resources.LatestEndTime">
-                            <input type="text" class="input-small" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                         <button class="preference-end-time-max-next-day btn btn-mini" data-toggle="button" data-bind="click: LatestEndTimeNextDayToggle, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay">
@@ -147,13 +147,13 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td>
                         <div class="preference-activity-start-time-min input-append bootstrap-timepicker" title="@Resources.EarliestStartTime">
-                            <input type="text" class="input-small" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
                     <td>
                         <div class="preference-activity-start-time-max input-append bootstrap-timepicker" title="@Resources.LatestStartTime">
-                            <input type="text" class="input-small" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
@@ -164,13 +164,13 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td>
                         <div class="preference-activity-end-time-min input-append bootstrap-timepicker" title="@Resources.EarliestEndTime">
-                            <input type="text" class="input-small" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
                     <td>
                         <div class="preference-activity-end-time-max input-append bootstrap-timepicker" title="@Resources.LatestEndTime">
-                            <input type="text" class="input-small" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+                            <input type="text" class="input-small" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>

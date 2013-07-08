@@ -157,7 +157,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 
-		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax, _savePreferenceTemplate, _deletePreferenceTemplate, _setPreference);
+		//addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax, _checkMeridianForTimePicker(), _savePreferenceTemplate, _deletePreferenceTemplate, _setPreference);
+		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax, true, _savePreferenceTemplate, _deletePreferenceTemplate, _setPreference);
 		ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 		_loadAvailableTemplates();
 
@@ -185,6 +186,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
+
+    function _checkMeridianForTimePicker() {
+        return ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
+    }
 
 	function _activateSelectable() {
 		$('#Preference-body-inner').calendarselectable();
