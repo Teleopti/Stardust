@@ -83,6 +83,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				var templateToDelete = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == templateId; })[0];
 				addExtendedPreferenceFormViewModel.AvailableTemplates.remove(templateToDelete);
+			    addExtendedPreferenceFormViewModel.Reset();
 			}
 		});
 	}
