@@ -260,10 +260,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			personAssignment.AddPersonalLayer(activity, period2);
 
 
-			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalLayers.Last(), personAssignment, null, new MoveLayerVertical());
+			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalLayers().Last(), personAssignment, null, new MoveLayerVertical());
 			_target.MoveUp();
 
-			personAssignment.PersonalLayers.First().Period.Should().Be.EqualTo(period2);
+			personAssignment.PersonalLayers().First().Period.Should().Be.EqualTo(period2);
 					}
     }
 }

@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (part.SignificantPart() == SchedulePartView.MainShift)
             {
-                if (part.AssignmentHighZOrder().ShiftCategory.Equals(shiftCategory))
+                if (part.PersonAssignment().ShiftCategory.Equals(shiftCategory))
                     return true;
             }
 

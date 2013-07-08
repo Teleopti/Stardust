@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (_mocks.Record())
             {
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
-                Expect.Call(_schedulePart.PersonAssignmentCollection()).Return(
+                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(personAssignments)).Repeat.Twice();
             }
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (_mocks.Record())
             {
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.Overtime);
-                Expect.Call(_schedulePart.PersonAssignmentCollection()).Return(
+                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(personAssignments));
             }
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (_mocks.Record())
             {
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_schedulePart.PersonAssignmentCollection()).Return(
+                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(personAssignmentCollection1)).Repeat.Any();
             }
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (_mocks.Record())
             {
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_schedulePart.PersonAssignmentCollection()).Return(
+                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(personAssignmentCollection2)).Repeat.Any();
             }
 

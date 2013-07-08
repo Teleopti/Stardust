@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 foreach (var scheduleDayPro in matrixPro.UnlockedDays)
                 {
-                    var personAssignment = scheduleDayPro.DaySchedulePart().AssignmentHighZOrder();
+                    var personAssignment = scheduleDayPro.DaySchedulePart().PersonAssignment();
 
-                    if (personAssignment != null && personAssignment.PersonalLayers.Any())
+                    if (personAssignment != null && personAssignment.PersonalLayers().Any())
                     {
                         matrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
                     }

@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IEnumerable<IPersistableScheduleData> restriction = new List<IPersistableScheduleData>().ToArray();
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollection()).Return(
+            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(part.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollection()).Return(
+            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{assResult}));
             Expect.Call(part.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>{personAbsence}));
-            Expect.Call(part.PersonAssignmentCollection()).Return(
+            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(part.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollection()).Return(
+            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(part.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{personDayOff}));
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             PreferenceRestrictionDto preferenceRestrictionDto = new PreferenceRestrictionDto();
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollection()).Return(
+            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(part.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff }));
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             
             using (mocks.Record())
             {
-                Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new[] { scheduleDay.PersonAssignmentCollection()[0] })).Return(new[] { new PersonAssignmentDto() }).Repeat.AtLeastOnce();
+                Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new[] { scheduleDay.PersonAssignmentCollectionDoNotUse()[0] })).Return(new[] { new PersonAssignmentDto() }).Repeat.AtLeastOnce();
                 Expect.Call(absenceAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonAbsenceDto>()).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonMeetingDto>()).IgnoreArguments().Repeat.AtLeastOnce();
             }

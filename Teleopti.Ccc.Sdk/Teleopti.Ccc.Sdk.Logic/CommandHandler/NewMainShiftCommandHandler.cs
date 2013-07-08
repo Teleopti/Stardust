@@ -59,12 +59,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var shiftCategory = _shiftCategoryRepository.Load(command.ShiftCategoryId);
 	            var mainShiftLayers = _mainActivityLayerAssembler.DtosToDomainEntities(command.LayerCollection);
                
-				IPersonAssignment currentAss = scheduleDay.AssignmentHighZOrder();
-			//unsure about this...
-	            foreach (var period in mainShiftLayers.PeriodBlocks())
-	            {
-								scheduleDay.MergePersonalShiftsToOneAssignment(period); 
-	            }
+				IPersonAssignment currentAss = scheduleDay.PersonAssignment();
+
 				if (currentAss == null)
 				{
 					currentAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);

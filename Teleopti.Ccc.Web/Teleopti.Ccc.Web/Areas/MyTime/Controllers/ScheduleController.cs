@@ -45,6 +45,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult FetchData2()
+		{
+			return Json(new {Name="Remove me"}, JsonRequestBehavior.AllowGet);
+		}
+
 		public ActionResult Index()
 		{
 			return RedirectToAction("Week");

@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(part).Repeat.Twice();
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.Twice();
-				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone()).Return(part).Repeat.Twice();
                 part.DeleteMainShift(part);
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(part).Repeat.Twice();
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.Twice();
-            	Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+            	Expect.Call(part.PersonAssignment()).Return(_personAssignment);
             	Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone())
                     .Return(part).Repeat.AtLeastOnce();
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(part).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay9.DaySchedulePart())
                     .Return(part).Repeat.AtLeastOnce();
-				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
                 Expect.Call(part.Clone()).Return(part).Repeat.AtLeastOnce();
                 part.DeleteMainShift(part);
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.Twice();
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
-				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.Twice();
@@ -560,7 +560,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.Twice();
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
-				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.AtLeastOnce();
@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.Twice();
 				Expect.Call(scheduleDay9.DaySchedulePart())
 					.Return(part).Repeat.Twice();
-				Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment);
+				Expect.Call(part.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.ShiftCategory).Return(new ShiftCategory("s"));
 				Expect.Call(part.Clone())
 					.Return(part).Repeat.Twice();

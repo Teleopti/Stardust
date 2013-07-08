@@ -105,8 +105,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.xxContractTimeAscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.xxContractTimeDescToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItemNextAssignment = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemShowAssignmentBefore = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUnlock = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUnlockSelectionRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUnlockAllRM = new System.Windows.Forms.ToolStripMenuItem();
@@ -446,8 +444,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemViewPointTimeZone,
             this.toolStripMenuItemSortBy,
             this.toolStripSeparator1,
-            this.toolStripMenuItemNextAssignment,
-            this.toolStripMenuItemShowAssignmentBefore,
             this.toolStripMenuItemUnlock,
             this.toolStripMenuItemLock,
             this.toolStripMenuItemMeetingOrganizer,
@@ -740,23 +736,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.SetShortcut(this.toolStripSeparator1, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator1.Size = new System.Drawing.Size(295, 6);
-			// 
-			// toolStripMenuItemNextAssignment
-			// 
-			this.toolStripMenuItemNextAssignment.Name = "toolStripMenuItemNextAssignment";
-			this.SetShortcut(this.toolStripMenuItemNextAssignment, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemNextAssignment.Size = new System.Drawing.Size(298, 22);
-			this.toolStripMenuItemNextAssignment.Text = "xxShowNextShift";
-			this.toolStripMenuItemNextAssignment.Click += new System.EventHandler(this.toolStripMenuItemShowNextAssignment_Click);
-			// 
-			// toolStripMenuItemShowAssignmentBefore
-			// 
-			this.toolStripMenuItemShowAssignmentBefore.Name = "toolStripMenuItemShowAssignmentBefore";
-			this.SetShortcut(this.toolStripMenuItemShowAssignmentBefore, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemShowAssignmentBefore.Size = new System.Drawing.Size(298, 22);
-			this.toolStripMenuItemShowAssignmentBefore.Text = "xxShowPreviousShift";
-			this.toolStripMenuItemShowAssignmentBefore.Click += new System.EventHandler(this.toolStripMenuItemShowAssignmentBefore_Click);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(301, 6);
 			// 
 			// toolStripMenuItemUnlock
 			// 
@@ -3404,9 +3384,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemIntraday;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOccupancyAdjustment;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNextAssignment;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShowAssignmentBefore;
+				private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLock;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUnlock;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLockSelectionRM;

@@ -126,8 +126,9 @@
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
+    <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
-	<Compile Include="Domain\IOvertimeAvailability.cs" />
+    <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -266,7 +267,6 @@
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePart.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
@@ -282,7 +282,6 @@
     <Compile Include="Domain\IScheduleTagSetter.cs" />
     <Compile Include="Domain\ISchedulingObjectContainer.cs" />
     <Compile Include="Domain\IPersonSkillPeriodsDataHolderManager.cs" />
-    <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
@@ -319,6 +318,7 @@
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftLayer.cs" />
     <Compile Include="Domain\IShiftLengthDecider.cs" />
     <Compile Include="Domain\IShiftProjectionCache.cs" />
     <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
@@ -403,10 +403,6 @@
     <Compile Include="Domain\IOptionalColumn.cs" />
     <Compile Include="Domain\IOptionalColumnValue.cs" />
     <Compile Include="Domain\IOriginator.cs" />
-    <Compile Include="Domain\IOvertimeShift.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
         public ILayer<IActivity> ToLayer()
         {
-            return new PersistedActivityLayer(_belongsToMeeting.Activity, _period);
+            return new MeetingLayer(_belongsToMeeting.Activity, _period);
         }
 
         /// <summary>

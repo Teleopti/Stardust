@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                 Expect.Call(_scheduleRange.ScheduledDayCollection(_period))
                     .Return(_scheduleDays);
                 Expect.Call(_d1.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d1.AssignmentHighZOrder()).Return(assignment1);
+                Expect.Call(_d1.PersonAssignment()).Return(assignment1);
 
                 Expect.Call(_d2.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d2.AssignmentHighZOrder()).Return(assignment2);
+                Expect.Call(_d2.PersonAssignment()).Return(assignment2);
 
                 Expect.Call(_d3.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d3.AssignmentHighZOrder()).Return(assignment3);
+                Expect.Call(_d3.PersonAssignment()).Return(assignment3);
 
                 Expect.Call(_scheduleRange.FairnessPoints())
                     .Return(new FairnessValueResult())

@@ -175,11 +175,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         private void drawSchedule(Graphics g, Rectangle clientRectangle, IScheduleDay schedulePart, StringFormat format)
         {
-            IShiftCategory category = schedulePart.AssignmentHighZOrder().ShiftCategory;
+            IShiftCategory category = schedulePart.PersonAssignment().ShiftCategory;
 
             drawShiftCategory(clientRectangle, category, g, format);
 
-            IVisualLayerCollection visualLayers = schedulePart.AssignmentHighZOrder().ProjectionService().CreateProjection();
+            IVisualLayerCollection visualLayers = schedulePart.PersonAssignment().ProjectionService().CreateProjection();
             g.DrawImage(_startImage, clientRectangle.Left + 8, clientRectangle.Top + 18);
             g.DrawString(
                 visualLayers.Period().Value.StartDateTime.ToShortTimeString(),

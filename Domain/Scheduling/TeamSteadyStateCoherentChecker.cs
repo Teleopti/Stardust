@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 					{
-						if (!scheduleDay.AssignmentHighZOrder().Period.Equals(scheduleDaySource.AssignmentHighZOrder().Period))
+						if (!scheduleDay.PersonAssignment().Period.Equals(scheduleDaySource.PersonAssignment().Period))
 							return null;
 					}
 					else
