@@ -7043,6 +7043,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemViewAllowance_Click(object sender, EventArgs e)
 		{
+            isWindowLoaded = false;
 			showRequestAllowanceView();
 		}
 
@@ -7059,6 +7060,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     allowanceView.Show(this);
                     isWindowLoaded = true;
+                    allowanceView.FormClosed += allowanceView_FormClosed;
                 }
                 else
                 {
@@ -7077,6 +7079,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         allowanceView.Show(this);
                         isWindowLoaded = true;
+                        allowanceView.FormClosed += allowanceView_FormClosed;
                     }
                     else
                     {
@@ -7086,7 +7089,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
+	    private void allowanceView_FormClosed(object sender, FormClosedEventArgs e)
+	    {
+	        isWindowLoaded = false;
+	    }
+
+	    private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
 		{
             var id = Guid.Empty;
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
