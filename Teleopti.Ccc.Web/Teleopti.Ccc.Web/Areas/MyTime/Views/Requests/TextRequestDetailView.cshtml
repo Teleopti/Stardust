@@ -1,0 +1,39 @@
+﻿@using Teleopti.Ccc.UserTexts
+@{
+    Layout = null;
+}
+
+	<div class="request-denyreason alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
+    <div>
+        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+    </div>
+    <div>
+        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+    </div>
+    <div>
+        <span class="input-append">
+            <input class="request-edit-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat()}, enable: IsEditable" type="text" />
+            <span class="add-on"><i class="icon-th"></i></span>
+        </span>
+        <div class="request-edit-timefrom input-append bootstrap-timepicker">
+            <input type="text" class="input-small request-edit time-from" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
+    </div>
+    <div>
+        <span class="request-edit-dateto input-append">
+            <input class="request-edit-date-to" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
+            <span class="add-on"><i class="icon-th"></i></span>
+        </span>
+        <div class="request-edit-timeto input-append bootstrap-timepicker">
+            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
+    </div>
+    <label class="checkbox">
+        <input type="checkbox" class="request-edit-fullday" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
+    </label>
+    <div class="request-edit-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
+    <div class="clearfix" data-bind="if: IsEditable">
+        <button class="request-edit-update btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)	' : '@Html.AttributeEncode(Resources.SubmitRequest)	'"/>
+    </div>
