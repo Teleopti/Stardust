@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		private DateTimePeriod _selectedPeriod;
+	    private bool isWindowLoaded = false;
 
 		#region enums
 		private enum ZoomLevel
@@ -7044,6 +7045,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemViewAllowance_Click(object sender, EventArgs e)
 		{
+            isWindowLoaded = false;
 			showRequestAllowanceView();
 		}
 
@@ -7055,8 +7057,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (defaultRequest == null)
 			{
 				var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
-				allowanceView.Show(this);
-
+			    
+                if (!isWindowLoaded)
+                {
+                    allowanceView.Show(this);
+                    isWindowLoaded = true;
+                    allowanceView.FormClosed += allowanceView_FormClosed;
+                }
+                else
+                {
+                    isWindowLoaded = false;
+                }
 			}
 			else
 			{
@@ -7065,12 +7076,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (personPeriod != null)
 				{
 					var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
-					allowanceView.Show(this);
+
+                    if (!isWindowLoaded)
+                    {
+                        allowanceView.Show(this);
+                        isWindowLoaded = true;
+                        allowanceView.FormClosed += allowanceView_FormClosed;
+                    }
+                    else
+                    {
+                        isWindowLoaded = false;
+                    }
 				}
 			}
 		}
 
-		private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
+	    private void allowanceView_FormClosed(object sender, FormClosedEventArgs e)
+	    {
+	        isWindowLoaded = false;
+	    }
+
+	    private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
 		{
             var id = Guid.Empty;
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
