@@ -15,10 +15,10 @@
             </div>
             </div>
 	
+	<!-- todo, Henke remove all these br ifs!!!! but everything is hardcoded px-->
 	
 	<br  data-bind="visible: !showInfo()"/>
 	
-
 	<div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !showInfo()">
 		<span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
 			<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}, visible: showLabel"></span>
@@ -40,11 +40,17 @@
 			
 		</div>
 		
-	<br  data-bind="visible: !showInfo()"/>
+	<br data-bind="visible: !showInfo()"/>
+	<br data-bind="visible: !showInfo()"/>
 	
 </div>
+
+<br  data-bind="visible: !IsTradeCreatedByMe()"/>
+
   <div  class="floatright" data-bind="visible: !IsTradeCreatedByMe()" >
         <button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
         <button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
     </div>
 
+<br  data-bind="visible: !IsTradeCreatedByMe()"/>
+<br  data-bind="visible: !IsTradeCreatedByMe()"/>
