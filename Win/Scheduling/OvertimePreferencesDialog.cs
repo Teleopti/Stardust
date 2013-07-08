@@ -18,5 +18,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!DesignMode)
 				SetTexts();
 		}
+
+        private void savePersonalSettings()
+        {
+            //if (hasMissedloadingSettings()) return;
+            //_defaultGeneralSettings.MapFrom(_schedulingOptions);
+            //_defaultAdvancedSettings.MapFrom(_schedulingOptions);
+            //_defaultExtraSettings.MapFrom(_schedulingOptions);
+
+            //try
+            //{
+            //    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            //    {
+            //        new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "GeneralSettings", _defaultGeneralSettings);
+            //        uow.PersistAll();
+            //        new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "AdvancedSettings", _defaultAdvancedSettings);
+            //        uow.PersistAll();
+            //        new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "ExtraSetting", _defaultExtraSettings);
+            //        uow.PersistAll();
+            //    }
+            //}
+            //catch (DataSourceException)
+            //{
+            //}
+        }
+
+        //private bool hasMissedloadingSettings()
+        //{
+        //    return _defaultGeneralSettings == null ;
+        //}
+
+
+        //private OvertimePreferencesGeneralPersonalSetting _defaultOvertimeGeneralSettings;
 	}
 }

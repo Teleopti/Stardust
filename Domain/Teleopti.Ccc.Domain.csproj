@@ -498,7 +498,9 @@
     <Compile Include="Scheduling\Assignment\PersonalShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
-	<Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -1857,6 +1859,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
