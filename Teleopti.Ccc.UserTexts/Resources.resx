@@ -11553,4 +11553,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="TotalChatTime" xml:space="preserve">
     <value>Total chat time</value>
   </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filter Overtime Availability</value>
+  </data>
 </root>

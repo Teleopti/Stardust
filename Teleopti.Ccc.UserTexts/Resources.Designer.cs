@@ -78,20 +78,21 @@ namespace Teleopti.Ccc.UserTexts {
             }
         }
         
-		/// <summary>
-        /// Looks up a localized string similar to Abandoned chats.
-        /// </summary>
-        public static string AbandonedChats {
-            get {
-                return ResourceManager.GetString("AbandonedChats", resourceCulture);
-            }
-        }
         /// <summary>
         ///   Looks up a localized string similar to Abandoned calls.
         /// </summary>
         public static string AbandonedCalls {
             get {
                 return ResourceManager.GetString("AbandonedCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abandoned chats.
+        /// </summary>
+        public static string AbandonedChats {
+            get {
+                return ResourceManager.GetString("AbandonedChats", resourceCulture);
             }
         }
         
@@ -8486,6 +8487,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FilterOnWorkTimeLimitationsWithParams {
             get {
                 return ResourceManager.GetString("FilterOnWorkTimeLimitationsWithParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Overtime Availability.
+        /// </summary>
+        public static string FilterOvertimeAvailability {
+            get {
+                return ResourceManager.GetString("FilterOvertimeAvailability", resourceCulture);
             }
         }
         
@@ -18155,7 +18165,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your absence request has been denied. You can not send request for the requested period this time..
+        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
         /// </summary>
         public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
             get {
@@ -18191,7 +18201,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}..
+        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
         /// </summary>
         public static string RequestDenyReasonPeriodOpenAfterSendRequest {
             get {
