@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
     public class IntradayPresenterTest : IDisposable
     {
         private IntradayPresenter _target;
-        private readonly DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.AddDays(1).Date));
+        private readonly DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(2013, 1, 1), new DateOnly(2013, 1, 2));
         private readonly DateOnlyPeriod _periodNow = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
         private MockRepository _mocks;
         private IList<IPerson> _persons;
