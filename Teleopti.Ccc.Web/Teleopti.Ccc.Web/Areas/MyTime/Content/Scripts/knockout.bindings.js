@@ -175,7 +175,6 @@ ko.bindingHandlers.button = {
     }
 };
 
-
 //wraps the datepickerbinding and sets the datepickeroptions
 ko.bindingHandlers.mytimeDatePicker = {
 	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
@@ -196,4 +195,6 @@ ko.bindingHandlers.mytimeDatePicker = {
 		});
 	}
 };
+
+
 
