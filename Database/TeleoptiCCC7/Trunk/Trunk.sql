@@ -243,3 +243,12 @@ from dbo.PersonAbsence pa
 inner join #PersonAbsenceRemove t
 on pa.Id = t.Id
 GO
+
+----------------  
+--Name: CS
+--Date: 2013-07-09
+--Desc: Bug #24072 - Error occurs when you try to copy and paste skill changes in People
+---------------- 
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'UC_Parent_Skill')
+ALTER TABLE [dbo].[PersonSkill] DROP CONSTRAINT [UC_Parent_Skill]
+GO

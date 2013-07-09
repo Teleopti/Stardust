@@ -141,6 +141,19 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldNotAddingExistingSkill()
+		{
+			var skill = SkillFactory.CreateSkill("test skill");
+			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			((PersonSkill)personSkill).SetId(Guid.NewGuid());
+
+			_target.AddPersonSkill(personSkill);
+			_target.AddPersonSkill(personSkill);
+
+			Assert.AreEqual(1, _target.PersonSkillCollection.Count);
+		}
+
+		[Test]
 		public void VerifyNoPublicEmptyConstructor()
 		{
 			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_target.GetType()));

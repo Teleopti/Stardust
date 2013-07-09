@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -216,6 +217,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public virtual void AddPersonSkill(IPersonSkill personSkill)
 		{
 			InParameter.NotNull("personSkill", personSkill);
+
+			if (_personSkillCollection.Any(p => p.Skill.Equals(personSkill.Skill))) return;
+
 			personSkill.SetParent(this);
 			_personSkillCollection.Add(personSkill);
 		}
