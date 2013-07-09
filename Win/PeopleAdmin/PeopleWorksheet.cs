@@ -783,6 +783,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             if (type == typeof(SchedulePeriodGridView))
                 _gridConstructor.View.SetView(shiftCategoryLimitationView);
 
+			shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
+
             LoadTrackerDescriptions();
             _filteredPeopleHolder.ResetRolesViewAdapterCollection();
             _filteredPeopleHolder.ResetPersonSkillAdapterCollection();
