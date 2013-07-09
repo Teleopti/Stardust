@@ -10566,4 +10566,34 @@ Teleopti R&amp;D</value>
   <data name="TotalChatTime" xml:space="preserve">
     <value>Общее время чатов</value>
   </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Почасовая доступность</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Почасовая доступность</value>
+  </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>Добавить доступность</value>
+  </data>
+  <data name="StudentHours" xml:space="preserve">
+    <value>Часы студентов</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Нет доступных смен для этой доступности.</value>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>Период доступности</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Открыть почасовую доступность</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Заблокировать почасовую доступность</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Почасовые доступности</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Выполнение почасовой доступности</value>
+  </data>
 </root>
