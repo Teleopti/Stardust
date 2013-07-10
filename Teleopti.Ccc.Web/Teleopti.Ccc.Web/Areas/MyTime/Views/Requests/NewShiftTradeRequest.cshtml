@@ -10,9 +10,17 @@
 		@Resources.MissingWorkflowControlSet
 	</div>
 	<div data-bind="if : !missingWorkflowControlSet()" class="input-append input-prepend">
-		<button class="btn" data-bind="click : previousDate, enable: !IsLoading()"><i class="icon-arrow-left"></i></button>
+		<span class="add-on">
+			<i class="icon-arrow-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+		</span>
 		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-		<button class="btn" data-bind="click : nextDate, enable: !IsLoading()"><i class="icon-arrow-right"></i></button>
+		<span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+			<i class="icon-th" ></i>
+		</span>
+		<span class="add-on">
+			<i class="icon-arrow-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+			
+		</span>
 	</div>
 	
 	<div data-bind="text: selectedDate" class="hidden" id="selectedDate"></div>
