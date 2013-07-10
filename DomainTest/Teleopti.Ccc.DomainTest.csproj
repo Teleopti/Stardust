@@ -346,6 +346,10 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalDataDividerTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalDataTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
@@ -723,8 +727,8 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfoTest.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
-	<Compile Include="Scheduling\Overtime\OvertimePreferencesTest.cs" />
-	<Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferencesTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
@@ -749,7 +753,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillResolutionProviderTest.cs" />
+    <Compile Include="Scheduling\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />

@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
+namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[TestFixture]
 	public class SkillResolutionProviderTest
