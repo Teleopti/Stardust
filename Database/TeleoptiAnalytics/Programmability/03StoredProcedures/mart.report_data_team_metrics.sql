@@ -16,6 +16,7 @@ GO
 --				2010-12-22 General re-factor DJ. nothing much to do
 --				2012-01-09 Pass BU to ReportAgents ME
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--				2013-07-10 backed out of #23621
 -- =============================================
 --exec mart.report_data_team_metrics @date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'1',@team_set=N'5',@adherence_id=N'1',@time_zone_id=N'2',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id=11,@language_id=1053
 --exec mart.report_data_team_metrics @date_from='2010-12-13 00:00:00',@date_to='2010-12-17 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'-2',@team_set=N'4',@adherence_id=N'1',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=11,@language_id=1053
@@ -41,8 +42,7 @@ SET NOCOUNT ON;
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
-	acd_login_id int,
-	person_code uniqueidentifier
+	acd_login_id int
 	)
 
 CREATE TABLE  #rights_agents
@@ -103,11 +103,10 @@ SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_c
 --a) agent allowed = #rights_agents
 --b) selected = #agents
 INSERT INTO #person_acd_subSP
-SELECT a.right_id, acd.acd_login_id, person_code
+SELECT a.right_id, acd.acd_login_id
 FROM #rights_agents a
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
-LEFT JOIN [mart].[dim_person] p ON p.person_id = acd.person_id
 
 --Get needed dates and intervals from bridge time zone into temp table
 INSERT INTO #bridge_time_zone
