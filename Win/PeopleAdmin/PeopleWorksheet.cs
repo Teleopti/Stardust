@@ -316,6 +316,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             {
                 getPersonAccountAbsenceType();
             }
+
+			if (_gridConstructor.CurrentView == ViewType.GeneralView)
+			{
+				((GeneralGridView)view).ResetChangeLogonDataCheck();
+			}
         }
 
         private IAbsence getPersonAccountAbsenceType()
