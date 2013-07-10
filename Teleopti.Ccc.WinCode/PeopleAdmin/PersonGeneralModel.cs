@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
         }
 
-        private bool logonDataCanBeChanged()
+        public bool logonDataCanBeChanged()
         {
             if(!_rightsHaveBeenChecked)
             {
@@ -563,5 +563,10 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             }
             return _logonDataCanBeChanged;
         }
+
+		public void ResetLogonDataCheck()
+		{
+			_rightsHaveBeenChecked = false;
+		}
     }
 }

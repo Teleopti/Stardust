@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private IList<IPerson> _currentSelectedPersons;
 
+
 		public GeneralGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder)
 			: base(grid, filteredPeopleHolder)
 		{
@@ -217,7 +218,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 _applicationUserColumn = new EditableTextColumn<PersonGeneralModel>("ApplicationLogOnName", 50, Resources.ApplicationLogInName);
 			else 
                 _applicationUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("ApplicationLogOnName", Resources.ApplicationLogInName);
-            _applicationUserColumn.CellDisplayChanged += columnCellDisplayChanged;
+			_applicationUserColumn.CellDisplayChanged += applicationUsercolumnCellDisplayChanged;
 			_applicationUserColumn.CellChanged += applicationLogOnNameColumnCellChanged;
 			_gridColumns.Add(_applicationUserColumn);
 
@@ -297,6 +298,25 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			if (e.DataItem.CanBold)
 			{
 				e.QueryCellInfoEventArg.Style.Font.Bold = true;
+			}
+		}
+
+		private static void applicationUsercolumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonGeneralModel> e)
+		{
+			if (e.DataItem.CanBold)
+			{
+				e.QueryCellInfoEventArg.Style.Font.Bold = true;
+			}
+
+			if (!e.DataItem.logonDataCanBeChanged())
+			{
+				e.QueryCellInfoEventArg.Style.ReadOnly = true;
+				e.QueryCellInfoEventArg.Style.BackColor = Color.Silver;	
+			}
+			else
+			{
+				e.QueryCellInfoEventArg.Style.ReadOnly = false;
+				e.QueryCellInfoEventArg.Style.ResetBackColor();	
 			}
 		}
 
@@ -708,6 +728,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				optionalColumn.CellChanged += columnCellChanged;
 				optionalColumn.CellDisplayChanged += columnCellDisplayChanged;
 				_gridColumns.Add(optionalColumn);
+			}
+		}
+
+		public void ResetChangeLogonDataCheck()
+		{
+			foreach (var model in FilteredPeopleHolder.FilteredPeopleGridData)
+			{
+				model.ResetLogonDataCheck();	
 			}
 		}
 	}
