@@ -14,13 +14,14 @@ GO
 -- 2011-09-27 #16079, Division by Zero
 -- 2012-01-09 Passed BU to ReportAgents
 --	2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-07-10 backed out of #23621
 -- Description:	<IMPROVE report>
 -- =============================================
 -- Todo: remove scenario from input??
 -- Todo: Currently we get all skills, regardless of person/team. => we get to much queue stats!
 -- =============================================
--- exec mart.report_data_IMPROVE @scenario_id=N'0',@skill_set=N'2,7,3',@workload_set=N'4,8,9,2',@interval_type=N'4',@date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'1',@team_set=N'5',@adherence_id=N'1',@sl_calc_id=N'1',@time_zone_id=N'2',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id=3,@language_id=1053
--- exec mart.report_data_IMPROVE @scenario_id=N'3',@skill_set=N'-1,3,9,10,11,4,12,6',@workload_set=N'-1,2,7,8,9,3,10,4',@interval_type=N'4',@date_from='2013-05-03 00:00:00',@date_to='2013-05-31 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'-2',@team_set=N'19',@adherence_id=N'1',@sl_calc_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='7F918C26-4044-4F6B-B0AE-7D27625D052E',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
+--exec mart.report_data_IMPROVE @scenario_id=N'0',@skill_set=N'2,7,3',@workload_set=N'4,8,9,2',@interval_type=N'4',@date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'1',@team_set=N'5',@adherence_id=N'1',@sl_calc_id=N'1',@time_zone_id=N'2',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id=3,@language_id=1053
+
 CREATE PROCEDURE [mart].[report_data_IMPROVE]
 @scenario_id int,
 @skill_set nvarchar(max),
@@ -56,8 +57,7 @@ CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
-	acd_login_id int,
-	person_code uniqueidentifier
+	acd_login_id int
 	)
 			
 CREATE TABLE #pre_result(
@@ -177,11 +177,10 @@ SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_c
 --b) agent allowed = #rights_agents
 --c) selected = #agents
 INSERT INTO #person_acd_subSP
-SELECT a.right_id, acd.acd_login_id, person_code
+SELECT a.right_id, acd.acd_login_id
 FROM #rights_agents a
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
-LEFT JOIN [mart].[dim_person] p ON p.person_id = acd.person_id
 
 /*Split string of skill id:s*/
 INSERT INTO #skills
@@ -237,6 +236,7 @@ INNER JOIN #person_acd_subSP a
 	ON fs.person_id = a.person_id
 WHERE fs.schedule_date_id between @date_from_id and @date_to_id	
 AND fs.scenario_id=@scenario_id
+
 
 --This SP will insert Adherence data into table: #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
@@ -416,7 +416,7 @@ IF @interval_type=7
 	END
 	
 --Return data to report
-SELECT * FROM #result ORDER BY weekday_number, period
+SELECT * FROM #result ORDER BY weekday_number
 
 END
 
