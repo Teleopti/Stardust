@@ -32,6 +32,7 @@ GO
 --				2012-01-23 Change parameters @group_page_group_id and @team_id to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2013-04-04 #22960 - replaced mart.DimPersonLocalized(@date_from, @date_to)
+--				2013-07-10 backed out of #23621
 -- Description:	Agent Metrics Report
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_agent_schedule_result] 

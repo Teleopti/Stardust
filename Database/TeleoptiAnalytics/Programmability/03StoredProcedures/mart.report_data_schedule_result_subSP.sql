@@ -17,6 +17,7 @@ GO
 -- 2011-03-17	DJ		#14092
 -- 2011-04-12	DJ		#14477
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-07-10 backed out of #23621
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_schedule_result_subSP] 
 @date_from_id int,

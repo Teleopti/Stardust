@@ -14,6 +14,7 @@ GO
 -- 2011-09-27 #16079, Division by Zero
 -- 2012-01-09 Passed BU to ReportAgents
 --	2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-07-10 backed out of #23621
 -- Description:	<IMPROVE report>
 -- =============================================
 -- Todo: remove scenario from input??
