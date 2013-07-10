@@ -15,6 +15,7 @@ GO
 -- 2012-01-09 Passed BU to ReportAgents
 --	2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- 2013-07-10 backed out of #23621
+-- 2013-07-10 Fix #24119, same as #23621
 -- Description:	<IMPROVE report>
 -- =============================================
 -- Todo: remove scenario from input??
@@ -57,6 +58,7 @@ CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
+	person_code uniqueidentifier,
 	acd_login_id int
 	)
 			
@@ -172,13 +174,14 @@ IF @intervals_per_day > 0 SELECT @intervals_length_m = 1440/@intervals_per_day
 INSERT INTO #rights_agents
 SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code)
 
---Join the ResultSets above as:
---a) teams allowed = #rights_teams
---b) agent allowed = #rights_agents
---c) selected = #agents
 INSERT INTO #person_acd_subSP
-SELECT a.right_id, acd.acd_login_id
+SELECT
+	person_id	= a.right_id,
+	person_code	= p.person_code,
+	acd_login_id= acd.acd_login_id
 FROM #rights_agents a
+INNER JOIN mart.dim_person p
+	on p.person_id = a.right_id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
 
