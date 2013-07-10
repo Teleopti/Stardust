@@ -1,6 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 {
@@ -9,38 +13,83 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
     {
         
         private OvertimePreferencesGeneralPersonalSetting _target;
-        //private IOvertimeSchedulingOptions _schedulingOptions;
+        private IOvertimePreferences _overtimePrefernces ;
         private MockRepository _mocks;
-        //private IList<IScheduleTag> _scheduleTags;
-        //private IScheduleTag _scheduleTag;
-        //private Guid _guid;
+        private IList<IScheduleTag> _scheduleTags;
+        private IScheduleTag _scheduleTag;
+        private Guid _guid;
+        private IActivity _activity;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            //_schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-            //_scheduleTag = _mocks.StrictMock<IScheduleTag>();
-            
-            //_target = new SchedulingOptionsGeneralPersonalSetting();
-            //_guid = new Guid();
+            _overtimePrefernces = _mocks.StrictMock<IOvertimePreferences>();
+            //_overtimePrefernces = new OvertimePreferences();
+            _scheduleTag = _mocks.StrictMock<IScheduleTag>();
+            _activity = new Activity("test");
+            _target = new OvertimePreferencesGeneralPersonalSetting() ;
+            _guid = new Guid();
             //_schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         }
 
-        //[Test]
-        //public void ShouldMap()
-        //{
-        //    using(_mocks.Record())
-        //    {
-        //        Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(_scheduleTag);
-        //        Expect.Call(_scheduleTag.Id).Return(_guid);
-        //        MapFromExpectations();
+        [Test]
+        public void ShouldMap()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_overtimePrefernces.ScheduleTag).Return(_scheduleTag);
+                Expect.Call(_scheduleTag.Id).Return(_guid);
+                mapFromBoolExpectCalls();
+                Expect.Call(_overtimePrefernces.OvertimeFrom).Return(TimeSpan.FromHours(1));
+                Expect.Call(_overtimePrefernces.OvertimeTo).Return(TimeSpan.FromHours(2));
+                Expect.Call(_overtimePrefernces.SkillActivity).Return(_activity);
 
-        //        Expect.Call(_scheduleTag.Id).Return(_guid);
-        //        Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(_scheduleTag);
-        //        Expect.Call(() => _schedulingOptions.TagToUseOnScheduling = _scheduleTag);
-        //        MapToExpectations();
-        //    }
+                Expect.Call(_scheduleTag.Id).Return(_guid);
+                Expect.Call(_overtimePrefernces.ScheduleTag).Return(_scheduleTag);
+                Expect.Call(() => _overtimePrefernces.ScheduleTag = _scheduleTag);
+                Expect.Call(_overtimePrefernces.SkillActivity).Return(_activity);
+                mapToBoolExpectCalls();
+            }
+
+             using(_mocks.Playback())
+             {
+                 _scheduleTags = new List<IScheduleTag> { _scheduleTag };
+                 _target.MapFrom(_overtimePrefernces );
+                 _target.MapTo(_overtimePrefernces, _scheduleTags,new List<IActivity>());
+             } 
+        }
+
+        [Test]
+        public void ShouldMapWithScheduleTag()
+        {
+            _overtimePrefernces.ScheduleTag = _scheduleTag;
+
+            using (_mocks.Playback())
+            {
+                _scheduleTags = new List<IScheduleTag> { _scheduleTag };
+                _target.MapFrom(_overtimePrefernces);
+                _target.MapTo(_overtimePrefernces, _scheduleTags, new List<IActivity>());
+            }
+        }
+
+        private void mapFromBoolExpectCalls()
+        {
+            Expect.Call(_overtimePrefernces.DoNotBreakMaxWorkPerWeek).Return(true);
+            Expect.Call(_overtimePrefernces.DoNotBreakNightlyRest).Return(true);
+            Expect.Call(_overtimePrefernces.DoNotBreakWeeklyRest).Return(true);
+            Expect.Call(_overtimePrefernces.ExtendExistingShift).Return(false);
+            Expect.Call(_overtimePrefernces.OvertimeType).Return(_guid);
+        }
+
+        private void mapToBoolExpectCalls()
+        {
+            Expect.Call(_overtimePrefernces.DoNotBreakMaxWorkPerWeek).Return(true);
+            Expect.Call(_overtimePrefernces.DoNotBreakNightlyRest).Return(true);
+            Expect.Call(_overtimePrefernces.DoNotBreakWeeklyRest).Return(true);
+            Expect.Call(_overtimePrefernces.ExtendExistingShift).Return(false);
+            Expect.Call(_overtimePrefernces.OvertimeType).Return(_guid);
+        }
 
         //    using(_mocks.Playback())
         //    {
