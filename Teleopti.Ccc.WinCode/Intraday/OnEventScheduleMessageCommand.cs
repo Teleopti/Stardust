@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (Logger.IsInfoEnabled)
                 Logger.Info("Message broker - Removing " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
 
-			if (message.InterfaceType.IsAssignableFrom(typeof(IMeeting)))
+				if (message.InterfaceType.IsAssignableFrom(typeof(IMeetingChangedEntity)))
 			{
 				_schedulingResultLoader.SchedulerState.Schedules.DeleteMeetingFromBroker(message.DomainObjectId);
 			}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     _view.ReloadScheduleDayInEditor(person);
                     return;
                 }
-				if (message.InterfaceType.IsAssignableFrom(typeof(IMeeting)))
+					 if (message.InterfaceType.IsAssignableFrom(typeof(IMeetingChangedEntity)))
 				{
 					deleteOnEvent(message);
 					associateRootsForPersonAssignment(uow);

@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault() });
+			target.Execute(new EventMessage { InterfaceType = typeof(IMeetingChangedEntity), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			target.Execute(new EventMessage { InterfaceType = typeof(IMeeting), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update, ReferenceObjectId = _person.Id.GetValueOrDefault() });
+			target.Execute(new EventMessage { InterfaceType = typeof(IMeetingChangedEntity), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update, ReferenceObjectId = _person.Id.GetValueOrDefault() });
 
 			mocks.VerifyAll();
 		}
