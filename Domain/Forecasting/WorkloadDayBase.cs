@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-            	return _workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
-            	       _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail;
+                return _workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
+                       _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail;
             }
         }
 
@@ -210,11 +210,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             SortedList<DateTime, ITemplateTaskPeriod> oldValues = new SortedList<DateTime, ITemplateTaskPeriod>();
             foreach (var taskPeriod in OpenTaskPeriodList)
             {
-                oldValues.Add(taskPeriod.Period.StartDateTime,taskPeriod);
+                oldValues.Add(taskPeriod.Period.StartDateTime, taskPeriod);
             }
             SetOpenHours(openHourList);
             SplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_taskPeriodList));
-			Lock();
+            Lock();
             foreach (ITemplateTaskPeriod taskPeriod in _taskPeriodList)
             {
                 ITemplateTaskPeriod templateTaskPeriod;
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     ((double)value.Ticks / averageTaskTimeTicks),
                     value, _taskPeriodList,
                     TaskFieldToDistribute.AverageTaskTime,
-                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
+                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, value.Ticks);
                 _turnOffInternalRecalc = currentState;
 
                 _averageTaskTime = value;
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     ((double)value.Ticks / averageAfterTaskTimeTicks),
                     value, _taskPeriodList,
                     TaskFieldToDistribute.AverageAfterTaskTime,
-                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
+                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, value.Ticks);
                 _turnOffInternalRecalc = currentState;
 
                 _averageAfterTaskTime = value;
@@ -571,11 +571,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
-				if (!_isDirty)
-				{
-					_isDirty = true;
-					Parents.ForEach(p => p.SetDirty());
-				}
+                if (!_isDirty)
+                {
+                    _isDirty = true;
+                    Parents.ForEach(p => p.SetDirty());
+                }
             }
         }
 
@@ -590,12 +590,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = false;
             }
             else
-			{
-				if (!_isDirty)
-				{
-					_isDirty = true;
-					Parents.ForEach(p => p.SetDirty());
-				}
+            {
+                if (!_isDirty)
+                {
+                    _isDirty = true;
+                    Parents.ForEach(p => p.SetDirty());
+                }
             }
         }
 
@@ -668,12 +668,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (_initialized) OnAverageTaskTimesChanged();
             }
             else
-			{
-				if (!_isDirty)
-				{
-					_isDirty = true;
-					Parents.ForEach(p => p.SetDirty());
-				}
+            {
+                if (!_isDirty)
+                {
+                    _isDirty = true;
+                    Parents.ForEach(p => p.SetDirty());
+                }
             }
         }
 
@@ -710,12 +710,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = false;
             }
             else
-			{
-				if (!_isDirty)
-				{
-					_isDirty = true;
-					Parents.ForEach(p => p.SetDirty());
-				}
+            {
+                if (!_isDirty)
+                {
+                    _isDirty = true;
+                    Parents.ForEach(p => p.SetDirty());
+                }
             }
         }
 
@@ -747,12 +747,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
             }
             else
-			{
-				if (!_isDirty)
-				{
-					_isDirty = true;
-					Parents.ForEach(p => p.SetDirty());
-				}
+            {
+                if (!_isDirty)
+                {
+                    _isDirty = true;
+                    Parents.ForEach(p => p.SetDirty());
+                }
             }
         }
 
@@ -1120,9 +1120,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 bool currentState = _turnOffInternalRecalc;
                 _turnOffInternalRecalc = true;
                 _taskPeriodList.ForEach(t =>
-                    {
-                        t.CampaignTaskTime = value;
-                    });
+                {
+                    t.CampaignTaskTime = value;
+                });
                 _turnOffInternalRecalc = currentState;
 
                 _campaignTaskTime = value;
@@ -1315,31 +1315,31 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-		public virtual void SetTaskPeriodCollectionWithStatistics(IList<ITemplateTaskPeriod> list)
-		{
-			if (list != null &&
-				list.Count > 0 &&
-				_taskPeriodList.Count > 0)
-			{
-				var matchingItems = from tp in _taskPeriodList
-									from i in list
-									where tp.Period.StartDateTime == i.Period.StartDateTime
-									select new { OldItem = tp, NewItem = i };
+        public virtual void SetTaskPeriodCollectionWithStatistics(IList<ITemplateTaskPeriod> list)
+        {
+            if (list != null &&
+                list.Count > 0 &&
+                _taskPeriodList.Count > 0)
+            {
+                var matchingItems = from tp in _taskPeriodList
+                                    from i in list
+                                    where tp.Period.StartDateTime == i.Period.StartDateTime
+                                    select new { OldItem = tp, NewItem = i };
 
-				Lock();
-				foreach (var item in matchingItems)
-				{
-					item.OldItem.Tasks = item.NewItem.Tasks;
-					item.OldItem.AverageTaskTime = item.NewItem.AverageTaskTime;
-					item.OldItem.AverageAfterTaskTime = item.NewItem.AverageAfterTaskTime;
-					item.OldItem.CampaignTasks = item.NewItem.CampaignTasks;
-					item.OldItem.CampaignTaskTime = item.NewItem.CampaignTaskTime;
-					item.OldItem.CampaignAfterTaskTime = item.NewItem.CampaignAfterTaskTime;
-					item.OldItem.StatisticTask = item.NewItem.StatisticTask;
-				}
-				Release();
-			}
-		}
+                Lock();
+                foreach (var item in matchingItems)
+                {
+                    item.OldItem.Tasks = item.NewItem.Tasks;
+                    item.OldItem.AverageTaskTime = item.NewItem.AverageTaskTime;
+                    item.OldItem.AverageAfterTaskTime = item.NewItem.AverageAfterTaskTime;
+                    item.OldItem.CampaignTasks = item.NewItem.CampaignTasks;
+                    item.OldItem.CampaignTaskTime = item.NewItem.CampaignTaskTime;
+                    item.OldItem.CampaignAfterTaskTime = item.NewItem.CampaignAfterTaskTime;
+                    item.OldItem.StatisticTask = item.NewItem.StatisticTask;
+                }
+                Release();
+            }
+        }
 
         /// <summary>
         /// Merges the template task periods.
@@ -1351,67 +1351,67 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void MergeTemplateTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodList)
         {
-			innerMergeTemplateTaskPeriods(templateTaskPeriodList, day => day.Lock(), day => day.Release());
+            innerMergeTemplateTaskPeriods(templateTaskPeriodList, day => day.Lock(), day => day.Release());
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		protected void innerMergeTemplateTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodList, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
-    	{
-    		if (templateTaskPeriodList.Count == 0) return;
-    		if (!templateTaskPeriodList.All(i => Equals(i.Parent)))
-    		{
-    			throw new ArgumentException("All items in supplied list must have this entity as parent.", "templateTaskPeriodList");
-    		}
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        protected void innerMergeTemplateTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodList, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
+        {
+            if (templateTaskPeriodList.Count == 0) return;
+            if (!templateTaskPeriodList.All(i => Equals(i.Parent)))
+            {
+                throw new ArgumentException("All items in supplied list must have this entity as parent.", "templateTaskPeriodList");
+            }
 
-    		var currentUtcDate = TimeZoneHelper.ConvertToUtc(CurrentDate, _workload.Skill.TimeZone);
-    		//Create a list of valid date time periods
-    		var validPeriods = from o in _openHourList
-    		                   select new DateTimePeriod(
-    		                   	currentUtcDate.Add(o.StartTime),
-    		                   	currentUtcDate.Add(o.EndTime));
+            var currentUtcDate = TimeZoneHelper.ConvertToUtc(CurrentDate, _workload.Skill.TimeZone);
+            //Create a list of valid date time periods
+            var validPeriods = from o in _openHourList
+                               select new DateTimePeriod(
+                                currentUtcDate.Add(o.StartTime),
+                                currentUtcDate.Add(o.EndTime));
 
-    		//Loop through list and find containing items from list
-    		foreach (var period in validPeriods)
-    		{
-    			var currentTaskPeriodList = (from t in templateTaskPeriodList
-    			                             where period.Contains(t.Period.StartDateTime)
-    			                             orderby t.Period.StartDateTime ascending
-    			                             select t).ToList();
+            //Loop through list and find containing items from list
+            foreach (var period in validPeriods)
+            {
+                var currentTaskPeriodList = (from t in templateTaskPeriodList
+                                             where period.Contains(t.Period.StartDateTime)
+                                             orderby t.Period.StartDateTime ascending
+                                             select t).ToList();
 
-    			if (currentTaskPeriodList.Count == 0) continue;
+                if (currentTaskPeriodList.Count == 0) continue;
 
-    			TaskOwnerPeriod taskOwnerPeriod = new TaskOwnerPeriod(
-    				_currentDate,
-    				currentTaskPeriodList.OfType<ITaskOwner>().ToList(),
-    				TaskOwnerPeriodType.Other);
+                TaskOwnerPeriod taskOwnerPeriod = new TaskOwnerPeriod(
+                    _currentDate,
+                    currentTaskPeriodList.OfType<ITaskOwner>().ToList(),
+                    TaskOwnerPeriodType.Other);
 
-    			Task newTask = new Task(
-    				taskOwnerPeriod.Tasks,
-    				taskOwnerPeriod.AverageTaskTime,
-    				taskOwnerPeriod.AverageAfterTaskTime);
+                Task newTask = new Task(
+                    taskOwnerPeriod.Tasks,
+                    taskOwnerPeriod.AverageTaskTime,
+                    taskOwnerPeriod.AverageAfterTaskTime);
 
-    			Campaign newCampaign = new Campaign(
-    				taskOwnerPeriod.CampaignTasks,
-    				taskOwnerPeriod.CampaignTaskTime,
-    				taskOwnerPeriod.CampaignAfterTaskTime);
+                Campaign newCampaign = new Campaign(
+                    taskOwnerPeriod.CampaignTasks,
+                    taskOwnerPeriod.CampaignTaskTime,
+                    taskOwnerPeriod.CampaignAfterTaskTime);
 
-    			TemplateTaskPeriod newTaskPeriod = new TemplateTaskPeriod(
-    				newTask,
-    				newCampaign,
-    				new DateTimePeriod(
-    					currentTaskPeriodList.First().Period.StartDateTime,
-    					currentTaskPeriodList.Last().Period.EndDateTime));
+                TemplateTaskPeriod newTaskPeriod = new TemplateTaskPeriod(
+                    newTask,
+                    newCampaign,
+                    new DateTimePeriod(
+                        currentTaskPeriodList.First().Period.StartDateTime,
+                        currentTaskPeriodList.Last().Period.EndDateTime));
 
-    			lockAction(this);
-    			newTaskPeriod.SetParent(this);
-    			currentTaskPeriodList.ForEach(i => _taskPeriodList.Remove(i));
-    			_addTaskPeriod(newTaskPeriod);
-    			ResetStatistics();
-    			releaseAction(this);
-    		}
-    	}
+                lockAction(this);
+                newTaskPeriod.SetParent(this);
+                currentTaskPeriodList.ForEach(i => _taskPeriodList.Remove(i));
+                _addTaskPeriod(newTaskPeriod);
+                ResetStatistics();
+                releaseAction(this);
+            }
+        }
 
-    	/// <summary>
+        /// <summary>
         /// Splits the template task periods.
         /// </summary>
         /// <param name="list">The list.</param>
@@ -1421,61 +1421,61 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void SplitTemplateTaskPeriods(IList<ITemplateTaskPeriod> list)
         {
-        	innerSplitTemplateTaskPeriods(list, d => d.Lock(), d => d.Release());
+            innerSplitTemplateTaskPeriods(list, d => d.Lock(), d => d.Release());
         }
 
-    	protected void innerSplitTemplateTaskPeriods(IList<ITemplateTaskPeriod> list, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
-    	{
-    		if (list.Count == 0) return;
-    		if (!list.All(i => Equals(i.Parent)))
-    		{
-    			throw new ArgumentException("All items in supplied list must have this entity as parent.", "list");
-    		}
+        protected void innerSplitTemplateTaskPeriods(IList<ITemplateTaskPeriod> list, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
+        {
+            if (list.Count == 0) return;
+            if (!list.All(i => Equals(i.Parent)))
+            {
+                throw new ArgumentException("All items in supplied list must have this entity as parent.", "list");
+            }
 
-    		lockAction(this);
-    		TimeSpan resolutionAsTimeSpan = TimeSpan.FromMinutes(_workload.Skill.DefaultResolution);
-    		foreach (ITemplateTaskPeriod templateTaskPeriod in list)
-    		{
-    			if (_taskPeriodList.Contains(templateTaskPeriod))
-    			{
-    				IList<ITaskOwner> baseCollection = new List<ITaskOwner>();
+            lockAction(this);
+            TimeSpan resolutionAsTimeSpan = TimeSpan.FromMinutes(_workload.Skill.DefaultResolution);
+            foreach (ITemplateTaskPeriod templateTaskPeriod in list)
+            {
+                if (_taskPeriodList.Contains(templateTaskPeriod))
+                {
+                    IList<ITaskOwner> baseCollection = new List<ITaskOwner>();
 
-    				_taskPeriodList.Remove(templateTaskPeriod);
-    				for (DateTime t = templateTaskPeriod.Period.StartDateTime;
-    				     t < templateTaskPeriod.Period.EndDateTime;
-    				     t = t.Add(resolutionAsTimeSpan))
-    				{
-    					ITemplateTaskPeriod newTemplateTaskPeriod = new TemplateTaskPeriod(
-    						new Task(),
-    						new DateTimePeriod(t, t.Add(resolutionAsTimeSpan)));
-    					if (IsEmailWorkload || IsWithinOpenHours(newTemplateTaskPeriod))
-    					{
-    						baseCollection.Add(newTemplateTaskPeriod);
-    						newTemplateTaskPeriod.SetParent(this);
-    						_addTaskPeriod(newTemplateTaskPeriod);
-    					}
-    				}
+                    _taskPeriodList.Remove(templateTaskPeriod);
+                    for (DateTime t = templateTaskPeriod.Period.StartDateTime;
+                         t < templateTaskPeriod.Period.EndDateTime;
+                         t = t.Add(resolutionAsTimeSpan))
+                    {
+                        ITemplateTaskPeriod newTemplateTaskPeriod = new TemplateTaskPeriod(
+                            new Task(),
+                            new DateTimePeriod(t, t.Add(resolutionAsTimeSpan)));
+                        if (IsEmailWorkload || IsWithinOpenHours(newTemplateTaskPeriod))
+                        {
+                            baseCollection.Add(newTemplateTaskPeriod);
+                            newTemplateTaskPeriod.SetParent(this);
+                            _addTaskPeriod(newTemplateTaskPeriod);
+                        }
+                    }
 
-    				if (baseCollection.Count > 0)
-    				{
-    					TaskOwnerPeriod splittedTaskOwnerPeriod = new TaskOwnerPeriod(
-    						_currentDate,
-    						baseCollection,
-    						TaskOwnerPeriodType.Other);
-    					splittedTaskOwnerPeriod.Tasks = templateTaskPeriod.Tasks;
-    					splittedTaskOwnerPeriod.AverageTaskTime = templateTaskPeriod.AverageTaskTime;
-    					splittedTaskOwnerPeriod.AverageAfterTaskTime = templateTaskPeriod.AverageAfterTaskTime;
-    					splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
-    					splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
-    					splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
-    				}
-    			}
-    		}
-    		ResetStatistics();
-    		releaseAction(this);
-    	}
+                    if (baseCollection.Count > 0)
+                    {
+                        TaskOwnerPeriod splittedTaskOwnerPeriod = new TaskOwnerPeriod(
+                            _currentDate,
+                            baseCollection,
+                            TaskOwnerPeriodType.Other);
+                        splittedTaskOwnerPeriod.Tasks = templateTaskPeriod.Tasks;
+                        splittedTaskOwnerPeriod.AverageTaskTime = templateTaskPeriod.AverageTaskTime;
+                        splittedTaskOwnerPeriod.AverageAfterTaskTime = templateTaskPeriod.AverageAfterTaskTime;
+                        splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
+                        splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
+                        splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
+                    }
+                }
+            }
+            ResetStatistics();
+            releaseAction(this);
+        }
 
-    	/// <summary>
+        /// <summary>
         /// Resets the task owner.
         /// </summary>
         /// <remarks>
@@ -1562,10 +1562,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         protected void ResetStatistics()
         {
             if (_queueStatisticsProvider == null) return;
-        	var stat = new Statistic(null);
+            var stat = new Statistic(null);
             foreach (var taskPeriod in _taskPeriodList)
             {
-				stat.UpdateStatisticTask(_queueStatisticsProvider.GetStatisticsForPeriod(taskPeriod.Period),
+                stat.UpdateStatisticTask(_queueStatisticsProvider.GetStatisticsForPeriod(taskPeriod.Period),
                                               taskPeriod);
             }
             RecalculateDailyStatisticTasks();

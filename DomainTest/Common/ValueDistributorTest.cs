@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
             double percentage = 0.25d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(1.5d), targets[0].AverageTaskTime);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             }
 
             double percentage = 0.25d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageTaskTime);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             }
 
             double percentage = 0.25d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageAfterTaskTime);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
             double percentage = 0d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[0].AverageTaskTime);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
             double percentage = 0d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[0].AverageAfterTaskTime);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
             const double percentage = 0.25d;
-            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime);
+            ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime,TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageAfterTaskTime);
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             IList<Color> targets = new List<Color>();
             targets.Add(Color.White);
 
-            ValueDistributor.DistributeTaskTimes(0.19d, targets, TaskFieldToDistribute.AverageTaskTime);
+            ValueDistributor.DistributeTaskTimes(0.19d, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(1, targets.Count);
             Assert.AreEqual(Color.White, targets[0]);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
-            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(5), targets, TaskFieldToDistribute.AverageAfterTaskTime, DistributionType.Even);
+            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(5), targets, TaskFieldToDistribute.AverageAfterTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[0].AverageAfterTaskTime);
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
-            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(10), targets, TaskFieldToDistribute.AverageTaskTime, DistributionType.Even);
+            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(10), targets, TaskFieldToDistribute.AverageTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
             Assert.AreEqual(TimeSpan.FromSeconds(10d), targets[0].AverageTaskTime);
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyDistributeTaskTimesEvenDoesNotAcceptNegativeTime()
         {
-            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), TaskFieldToDistribute.AverageTaskTime, DistributionType.Even);
+            ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), TaskFieldToDistribute.AverageTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
         }
 
         /// <summary>
