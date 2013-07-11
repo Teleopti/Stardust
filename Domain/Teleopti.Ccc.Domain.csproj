@@ -294,6 +294,7 @@
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsDayOffPlannerPersonalSettings.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
