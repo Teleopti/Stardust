@@ -13,6 +13,7 @@ using System.Windows.Forms.Integration;
 using Autofac;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Win.Commands;
@@ -7159,12 +7160,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 if (_scheduleView.AllSelectedDates().Count == 0)
                     return;
-
-                _optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
-                _optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+                IOvertimePreferences overtimePreferences = new OvertimePreferences(); 
                 try
                 {
-                    using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(),15))
+                    using (var options = new OvertimePreferencesDialog(overtimePreferences,_schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), 15))
                     {
                         if (options.ShowDialog(this) == DialogResult.OK)
                         {

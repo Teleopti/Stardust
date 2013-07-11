@@ -11556,4 +11556,25 @@ Reduce the complexity to use these shifts.</value>
   <data name="FilterOvertimeAvailability" xml:space="preserve">
     <value>Filter Overtime Availability</value>
   </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Assignment options</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Overtime duration</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Schedule Overtime</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Schedule Overtime Options</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Skill activity</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Tag changes with:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Type of overtime</value>
+  </data>
 </root>

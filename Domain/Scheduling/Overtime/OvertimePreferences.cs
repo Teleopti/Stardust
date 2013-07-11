@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public bool ExtendExistingShift { get; set; }
         public IActivity SkillActivity { get; set; }
         public Guid OvertimeType { get; set; }
-        public TimeSpan OvertimeTo { get; set; }
-        public TimeSpan OvertimeFrom { get; set; }
+        public TimePeriod SelectedTimePeriod { get; set; }
         public bool DoNotBreakMaxWorkPerWeek { get; set; }
         public bool DoNotBreakNightlyRest { get; set; }
         public bool DoNotBreakWeeklyRest { get; set; }

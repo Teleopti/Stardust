@@ -6,17 +6,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
+    [Serializable]
     public  class OvertimePreferencesGeneralPersonalSetting : SettingValue
     {
         private Guid? _scheduleTagId;
-        private bool _extendExistingShifts;
+        private bool _extendExistingShifts = true;
         private Guid? _skillActivtyId;
         private Guid? _overtimeType;
-        private TimeSpan _overtimeFrom;
-        private TimeSpan _overtimeTo;
-        private bool _doNotBreakMaxSeatPerWeek;
-        private bool _doNotBreakNightlyRest;
-        private bool _doNotBreakWeeklyRest;
+        private TimePeriod _selectTimePeriod;
+        private bool _doNotBreakMaxSeatPerWeek = false;
+        private bool _doNotBreakNightlyRest = false;
+        private bool _doNotBreakWeeklyRest =  false;
 
         public void MapTo(IOvertimePreferences overtimePreferences , IList<IScheduleTag> scheduleTags,IList<IActivity> activityList )
         {
@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 overtimePreferences.SkillActivity  = null ;
 
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
-            overtimePreferences.OvertimeFrom = _overtimeFrom;
-            overtimePreferences.OvertimeTo = _overtimeTo;
+            overtimePreferences.SelectedTimePeriod = _selectTimePeriod;
             overtimePreferences.DoNotBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
             overtimePreferences.DoNotBreakNightlyRest = _doNotBreakNightlyRest;
             overtimePreferences.DoNotBreakWeeklyRest = _doNotBreakWeeklyRest;
@@ -50,10 +49,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _doNotBreakNightlyRest = overtimePreferences.DoNotBreakNightlyRest;
             _doNotBreakWeeklyRest = overtimePreferences.DoNotBreakWeeklyRest;
             _extendExistingShifts = overtimePreferences.ExtendExistingShift;
-            _overtimeFrom = overtimePreferences.OvertimeFrom;
-            _overtimeTo = overtimePreferences.OvertimeTo;
+            _selectTimePeriod = overtimePreferences.SelectedTimePeriod;
             _overtimeType = overtimePreferences.OvertimeType;
-            _scheduleTagId = overtimePreferences.ScheduleTag.Id ;
+            if(overtimePreferences.ScheduleTag != null)
+                _scheduleTagId = overtimePreferences.ScheduleTag.Id ;
             _skillActivtyId = overtimePreferences.SkillActivity.Id;
         }
     }

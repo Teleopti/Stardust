@@ -257,6 +257,7 @@
             this.buttonOK.TabIndex = 10;
             this.buttonOK.Text = "xxOk";
             this.buttonOK.UseVisualStyle = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -318,6 +319,7 @@
             this.MinimizeBox = false;
             this.Name = "OvertimePreferencesDialog";
             this.Text = "xxScheduleOvertimeOptions";
+            this.Load += new System.EventHandler(this.OvertimePreferencesDialog_Load);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutPanelMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).EndInit();

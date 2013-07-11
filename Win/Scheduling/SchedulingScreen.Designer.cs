@@ -185,6 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSplitButtonSchedule = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripMenuItemScheduleSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemScheduleHourlyEmployees = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemScheduleOvertime = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemReOptimize = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemBackToLegalState = new System.Windows.Forms.ToolStripMenuItem();
@@ -324,7 +325,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
             this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
-            this.xxScheduleOvertimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.contextMenuViews.SuspendLayout();
             this.contextMenuStripResultView.SuspendLayout();
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
             this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
             this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-            this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+            this.toolStripSpinningProgressControl1.TransitionSegment = 1;
             this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
             this.toolStripSpinningProgressControl1.Visible = false;
             // 
@@ -1586,7 +1586,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSplitButtonSchedule.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemScheduleSelected,
             this.ToolStripMenuItemScheduleHourlyEmployees,
-            this.xxScheduleOvertimeToolStripMenuItem,
+            this.toolStripMenuItemScheduleOvertime,
             this.toolStripMenuItemReOptimize,
             this.toolStripSeparator2,
             this.toolStripMenuItemBackToLegalState});
@@ -1616,6 +1616,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.ToolStripMenuItemScheduleHourlyEmployees.Size = new System.Drawing.Size(210, 22);
             this.ToolStripMenuItemScheduleHourlyEmployees.Text = "xxScheduleHourlyEmployees";
             this.ToolStripMenuItemScheduleHourlyEmployees.Click += new System.EventHandler(this.ToolStripMenuItemScheduleHourlyEmployees_Click);
+            // 
+            // toolStripMenuItemScheduleOvertime
+            // 
+            this.toolStripMenuItemScheduleOvertime.Name = "toolStripMenuItemScheduleOvertime";
+            this.SetShortcut(this.toolStripMenuItemScheduleOvertime, System.Windows.Forms.Keys.None);
+            this.toolStripMenuItemScheduleOvertime.Size = new System.Drawing.Size(210, 22);
+            this.toolStripMenuItemScheduleOvertime.Text = "xxScheduleOvertime";
+            this.toolStripMenuItemScheduleOvertime.Click += new System.EventHandler(this.xxScheduleOvertimeToolStripMenuItem_Click);
             // 
             // toolStripMenuItemReOptimize
             // 
@@ -3292,14 +3300,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
             this.toolStripComboBoxExFilterDays.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExFilterDays_SelectedIndexChanged);
             // 
-            // xxScheduleOvertimeToolStripMenuItem
-            // 
-            this.xxScheduleOvertimeToolStripMenuItem.Name = "xxScheduleOvertimeToolStripMenuItem";
-            this.SetShortcut(this.xxScheduleOvertimeToolStripMenuItem, System.Windows.Forms.Keys.None);
-            this.xxScheduleOvertimeToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.xxScheduleOvertimeToolStripMenuItem.Text = "xxScheduleOvertime";
-            this.xxScheduleOvertimeToolStripMenuItem.Click += new System.EventHandler(this.xxScheduleOvertimeToolStripMenuItem_Click);
-            // 
             // SchedulingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3630,7 +3630,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripButton toolStripButtonFilterAgents;
 		private ToolStripButton toolStripButtonFilterOvertimeAvailability;
 		private ToolStripButton toolStripButtonFilterStudentAvailability;
-        private ToolStripMenuItem xxScheduleOvertimeToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItemScheduleOvertime;
         
         
     }
