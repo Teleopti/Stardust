@@ -1038,12 +1038,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-			daysOffPreferences.UseDaysOffPerWeek = true;
-			daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 3);
-			daysOffPreferences.UseConsecutiveDaysOff = true;
-			daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
-			daysOffPreferences.UseConsecutiveWorkdays = true;
-			daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
 			using (
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", GetNonDeletedActivty()))
