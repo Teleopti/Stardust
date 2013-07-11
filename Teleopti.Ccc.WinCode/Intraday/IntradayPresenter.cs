@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     period.StartDateTime,
                                                     period.EndDateTime);
         	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
-        	                                         typeof (IMeeting));
+        	                                         typeof (IMeetingChangedEntity));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
                                                     period.StartDateTime,
