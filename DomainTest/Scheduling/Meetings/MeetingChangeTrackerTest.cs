@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			detail.Id.Value.Should().Be.EqualTo(meeting.Id.Value);
 			detail.MainRoot.Should().Be.EqualTo(participant);
 			detail.Period.Should().Be.EqualTo(meeting.MeetingPeriod(meeting.StartDate));
-			result.Status.Should().Be.EqualTo(DomainUpdateType.Delete);
+			result.Status.Should().Be.EqualTo(DomainUpdateType.Update);
 		}
 
 		[Test]
