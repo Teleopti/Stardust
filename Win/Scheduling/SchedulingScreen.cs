@@ -7151,6 +7151,38 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//preparation for future pbi
 		}
 
+        private void xxScheduleOvertimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_backgroundWorkerScheduling.IsBusy) return;
+
+            if (_scheduleView != null)
+            {
+                if (_scheduleView.AllSelectedDates().Count == 0)
+                    return;
+
+                _optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
+                _optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+                try
+                {
+                    using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(),15))
+                    {
+                        if (options.ShowDialog(this) == DialogResult.OK)
+                        {
+                            options.Refresh();
+                            //startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+                        }
+                    }
+                }
+                catch (DataSourceException dataSourceException)
+                {
+                    using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+                    {
+                        view.ShowDialog();
+                    }
+                }
+            }
+        }
+
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

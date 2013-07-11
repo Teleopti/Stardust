@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _overtimeType = overtimePreferences.OvertimeType;
             _scheduleTagId = overtimePreferences.ScheduleTag.Id ;
             _skillActivtyId = overtimePreferences.SkillActivity.Id;
-
-
         }
     }
 }
