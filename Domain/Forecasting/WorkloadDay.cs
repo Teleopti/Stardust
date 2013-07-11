@@ -159,6 +159,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
             TimeSpan templateAvgHandlingTime = templateHandlingTime;
             if (templateTasks > 0)
                 templateAvgHandlingTime = TimeSpan.FromSeconds(templateHandlingTime.TotalSeconds / templateTasks);
+            else
+            {
+                foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
+                {
+                    taskTimesAverageTalkTime += taskPeriod.AverageTaskTime.TotalSeconds;
+                }
+                templateAvgHandlingTime = TimeSpan.FromSeconds(taskTimesAverageTalkTime / workloadDayTemplate.TaskPeriodList.Count);
+            }
 
             double taskTimeFactor = 1;
             if (AverageTaskTime.TotalSeconds > 0 && templateAvgHandlingTime.TotalSeconds > 0)
@@ -181,10 +189,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             TimeSpan templateAveragegAfterTaskTime = templateAfterTaskTime;
             if (templateTasks > 0)
                 templateAveragegAfterTaskTime = TimeSpan.FromSeconds(templateAfterTaskTime.TotalSeconds / templateTasks);
+            else
+            {
+                foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
+                {
+                    taskTimesAverageAfterTalkTime += taskPeriod.AverageTaskTime.TotalSeconds;
+                }
+                templateAveragegAfterTaskTime = TimeSpan.FromSeconds(taskTimesAverageAfterTalkTime / workloadDayTemplate.TaskPeriodList.Count);
+            }
+
 
             double taskTimeFactor = 1;
             if (AverageAfterTaskTime.TotalSeconds > 0 && templateAveragegAfterTaskTime.TotalSeconds > 0)
                 taskTimeFactor = AverageAfterTaskTime.TotalSeconds / templateAveragegAfterTaskTime.TotalSeconds;
+           
             return taskTimeFactor;
         }
 
