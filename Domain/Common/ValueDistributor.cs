@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.Domain.Common
                 if (distributionType == DistributionType.ByPercent)
                 {
                     if (averageTaskTimeTicks == 0)
-                        averageTaskTimeTicks = (long)originalValue; //TimeSpan.FromSeconds(1).Ticks;
+                        averageTaskTimeTicks = (long)originalValue;  //TimeSpan.FromSeconds(1).Ticks;
+                    else
                     averageTaskTimeTicks = (long)(averageTaskTimeTicks * changeAsPercent);
                 }
                 else
