@@ -5,7 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
-Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, showMeridian, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod) {
+Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, showMeridian, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod, isShiftCategorySelectedAsStandardPreferenceMethod) {
 	var self = this;
 
 	this.AvailableTemplates = ko.observableArray();
@@ -32,15 +32,16 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.NewTemplateName = ko.observable('');
 	this.AddPreferenceFormVisible = ko.observable(false);
 	this.ValidationError = ko.observable();
-	this.IsTimeInputVisible = ko.observable(true);
+	this.IsPreferenceInputVisible = ko.observable(true);
 	this.ShowMeridian = ko.observable(showMeridian);
+    this.IsTimeInputVisible = ko.observable(true);
 
-    this.IsTimeInputVisibleToggle = function() {
-        self.IsTimeInputVisible(!self.IsTimeInputVisible());
+    this.IsPreferenceInputVisibleToggle = function() {
+        self.IsPreferenceInputVisible(!self.IsPreferenceInputVisible());
     };
 
-    this.IsTimeInputVisibleToggleCss = ko.computed(function() {
-        return !self.IsTimeInputVisible() ? 'icon-circle-arrow-down' : undefined;
+    this.IsPreferenceInputVisibleToggleCss = ko.computed(function() {
+        return !self.IsPreferenceInputVisible() ? 'icon-circle-arrow-down' : undefined;
     });
 
 	this.SelectedTemplateId = ko.computed({
@@ -86,11 +87,17 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    return self.LatestEndTimeNextDay() ? undefined : 'icon-white';
 	});
     
-	this.EarliestEndTimeNextDayToggleEnabled = ko.computed(function() {
-	    return self.EarliestEndTime() !== undefined && self.EarliestEndTime() !== '';
+	this.EarliestEndTimeNextDayToggleEnabled = ko.computed(function () {
+	    var isEnabled = self.EarliestEndTime() !== undefined && self.EarliestEndTime() !== '';
+	    if (!isEnabled)
+	        self.EarliestEndTimeNextDay(false);
+	    return isEnabled;
 	});
 	this.LatestEndTimeNextDayToggleEnabled = ko.computed(function () {
-	    return self.LatestEndTime() !== undefined && self.LatestEndTime() !== '';
+	    var isEnabled = self.LatestEndTime() !== undefined && self.LatestEndTime() !== '';
+	    if (!isEnabled)
+	        self.LatestEndTimeNextDay(false);
+	    return isEnabled;
 	});
     
 	this.LatestEndTimeNextDayToggle = function () {
@@ -121,6 +128,10 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.PreferenceString.subscribe(function (newValue) {
 			if (self.SelectedTemplateId()) {
 				self.SelectedTemplateId('');
+			}
+			self.IsTimeInputVisible(isShiftCategorySelectedAsStandardPreferenceMethod());
+			if (!self.IsTimeInputVisible()) {
+			    self.Reset();
 			}
 		});
 	}
@@ -191,7 +202,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	});
 
 	this.Reset = function () {
-	    self.PreferenceId('');
+	    if (self.IsTimeInputVisible()) {
+	        self.PreferenceId('');
+	    }
 	    self.EarliestStartTime(undefined);
 	    self.LatestStartTime(undefined);
 	    self.EarliestEndTime(undefined);
