@@ -243,6 +243,20 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void Check_WhenNotLogegdOn_ShouldNotProcessAgent()
+		{
+			_agentState1.IsLoggedOn = false;
+			makeAgentStateOnlyIncluededInFirstbatch();
+
+			_target.Check(_agentState1);
+			_target.Check(_endOfState1);
+			_target.Check(_agentState2);
+			_target.Check(_endOfState2);
+
+			Assert.That(_processedState, Is.Null);
+		}
+
+		[Test]
 		public void Check_WhenAlreadyLoggedOff_ShouldNotProcessAgent()
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
