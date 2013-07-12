@@ -38,7 +38,7 @@ Background:
 Scenario: View available templates 
 	Given I am viewing preferences
 	When I click the add extended preference button
-	And I click the templates select box
+	And I click to open the templates dropdown
 	Then I should see these available templates
 	| Value     |
 	| template1 |
@@ -64,15 +64,15 @@ Scenario: Create preference template
 	| End time minimum next day   | true  |
 	| End time maximum            | 20:30 |
 	| End time maximum next day   | true  |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 11:30 |
 	| Activity Start time maximum | 11:45 |
 	| Activity End time minimum   | 12:00 |
 	| Activity End time maximum   | 12:15 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I click Save as new template
 	And I input new template name 'test template'
 	And I click save template button
@@ -92,6 +92,7 @@ Scenario: Display preference template name
 Scenario: Delete preference template
 	Given I am viewing preferences
 	When I click the add extended preference button
-	And I click the templates select box
+	And I click to open the templates dropdown
+	And I select preference template with 'template1'
 	And I click delete button for 'template1'
 	Then I should not see 'template1' in templates list

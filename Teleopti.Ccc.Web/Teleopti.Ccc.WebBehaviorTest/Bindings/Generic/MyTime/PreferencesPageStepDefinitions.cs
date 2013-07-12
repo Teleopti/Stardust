@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			//Browser.Interactions.Javascript("$('#Preference-add-extended-button').mousedown();");
 			Browser.Interactions.Click("#Preference-add-extended-button");
 		}
 
@@ -270,8 +269,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeExtendedPreferenceFieldsFilledWith(Table table)
 		{
 			var inputs = table.CreateInstance<ExtendedPreferenceInput>();
-			if (inputs.PreferenceId != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectedText, Is.StringContaining(inputs.PreferenceId));
-			if (inputs.EarliestStartTime != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.TextField.Value, Is.StringContaining(inputs.EarliestStartTime));
+			if (inputs.PreferenceId != null)
+				Select2Box.AssertSelectedOptionText("Preference-Picker", inputs.PreferenceId);
+			
+			if (inputs.EarliestStartTime != null)
+				Browser.Interactions.AssertInputValueUsingJQuery(".preference-start-time-min", inputs.EarliestStartTime);
 		}
 
 		[Then(@"I should see extended preference with")]
@@ -360,53 +362,55 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select preference template with '(.*)'")]
 		public void WhenISelectPreferenceTemplateWith(string name)
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.SelectWait(name);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-template-list", name);
 		}
 
-		[When(@"I click the templates select box")]
-		public void WhenIClickTheTemplatesSelectBox()
+		[When(@"I click to open the templates dropdown")]
+		public void WhenIClickToOpenTheTemplatesDropdown()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
+			Browser.Interactions.Click(".preference-template-list");
 		}
 
 		[When(@"I click delete button for '(.*)'")]
 		public void WhenIClickDeleteButtonFor(string templateName)
 		{
-			Pages.Pages.PreferencePage.DeleteSpanForTemplate(templateName).EventualClick();
+			Browser.Interactions.Click(".preference-template-delete");
 		}
 
 		[When(@"I click Save as new template")]
 		public void WhenIClickSaveAsNewTemplate()
 		{
-			Pages.Pages.PreferencePage.TemplateSaveDiv.EventualClick();
+			Browser.Interactions.Click(".preference-toggle-save-template");
 		}
 
 
 		[When(@"I input new template name '(.*)'")]
 		public void WhenIInputNewTemplateName(string name)
 		{
-			var page = Pages.Pages.PreferencePage;
-			page.TemplateNameTextField.Value = name;
-			Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.TemplateNameTextField.Id + "').blur()");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Template-name-input", name);
 		}
 
 		[When(@"I click save template button")]
 		public void WhenIClickSaveTemplateButton()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceSaveTemplateButton.EventualClick();
+			Browser.Interactions.Click("#Preference-extended-save-template");
 		}
 
 		[Then(@"I should see these available templates")]
 		public void ThenIShouldSeeTheseAvailableTemplates(Table table)
 		{
 			var templates = table.CreateSet<SingleValue>();
-			templates.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
+			templates.ForEach(
+				preference =>
+				Browser.Interactions.AssertJavascriptResultContains(
+					string.Format("return $('.preference-template-list option:contains(\"{0}\")').length > 0;", preference.Value), "true"));
 		}
 
 		[Then(@"I should not see '(.*)' in templates list")]
 		public void ThenIShouldNotSeeInTemplatesList(string name)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.Not.StringContaining(name));
+			Browser.Interactions.AssertJavascriptResultContains(
+				string.Format("return $('.preference-template-list option:contains(\"{0}\")').length === 0;", name), "true");
 		}
 
 		

@@ -15,7 +15,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
 
 <span class="form-inline clearfix">
     <span>
-        <button class="btn btn-mini" data-toggle="button" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
+        <button class="preference-toggle-save-template btn btn-mini" data-toggle="button" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
             <i class="icon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
@@ -26,10 +26,10 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
         </span>
     </span>
     <span data-bind="visible: AvailableTemplates().length > 0">
-        <select data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
+        <select class="preference-template-list" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
             <option data-bind="text: Text, value: Value"></option>
         </select>
-        <button class="btn btn-mini" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
+        <button class="preference-template-delete btn btn-mini" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
             <i class="icon-remove-sign"></i>
         </button>
     </span>
