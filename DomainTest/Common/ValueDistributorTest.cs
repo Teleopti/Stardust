@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
-            Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageTaskTime);
-            Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[9].AverageTaskTime);
+            Assert.AreEqual(TimeSpan.FromSeconds(1), targets[0].AverageTaskTime);
+            Assert.AreEqual(TimeSpan.FromSeconds(1), targets[9].AverageTaskTime);
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
 
             Assert.AreEqual(10, targets.Count);
-            Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageAfterTaskTime);
-            Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[9].AverageAfterTaskTime);
+            Assert.AreEqual(TimeSpan.FromSeconds(1), targets[0].AverageAfterTaskTime);
+            Assert.AreEqual(TimeSpan.FromSeconds(1), targets[9].AverageAfterTaskTime);
         }
 
         /// <summary>
