@@ -121,9 +121,9 @@ ko.bindingHandlers.timepicker = {
 	},
 	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
-		if (typeof value === 'function') {
-			return;
-		}
+		if (typeof value === 'function') return;
+		if (value === undefined) value = '';
+            
 		$(element).timepicker("setTime", value);
 	}
 };
@@ -146,6 +146,9 @@ ko.bindingHandlers.tooltip = {
 ko.bindingHandlers.select2 = {
 	init: function (element, valueAccessor) {
 		var options = valueAccessor();
+        options['escapeMarkup'] = function (m) { return m; };
+        options['width'] = 'resolve';
+        
 		var observable = options.value;
 		// kinda strange, but we have to use the original select's event because select2 doesnt provide its own events
 		$(element).on('change', function () {

@@ -997,6 +997,7 @@
     <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -7,10 +7,12 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -28,19 +30,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Browser.Interactions.Javascript("$('#Preference-add-extended-button').mousedown();");
+			//Browser.Interactions.Javascript("$('#Preference-add-extended-button').mousedown();");
+			Browser.Interactions.Click("#Preference-add-extended-button");
 		}
 
 		[When(@"I click the apply extended preferences button")]
 		public void WhenIClickTheApplyButton()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceApplyButton.EventualClick();
+			Browser.Interactions.Click("#Preference-extended-apply");
 		}
 
 		[When(@"I click the reset extended preference button")]
 		public void WhenIClickTheResetExtendedPreferenceButton()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceResetButton.EventualClick();
+			Browser.Interactions.Click("#Preference-extended-reset");
 		}
 
 
@@ -143,33 +146,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the extended preference button")]
 		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
 		{
-			EventualAssert.That(()=>Pages.Pages.PreferencePage.ExtendedPreferenceButton.Exists, Is.False);
+			Browser.Interactions.AssertNotExists("#preference-split-button", "#Preference-add-extended-button");
 		}
 
-		[When(@"I click the extended preference select-box")]
-		public void WhenIClickTheExtendedPreferenceSelecBox()
+		[When(@"I click to open thee extended preference drop down list")]
+		public void WhenIClickToOpenTheeExtendedPreferenceDropDownList()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Open();
+			Select2Box.OpenWhenOptionsAreLoaded("Preference-Picker");
 		}
 
 		[Then(@"I should see these available preferences")]
 		public void ThenIShouldSeeTheseAvailablePreferences(Table table)
 		{
 			var preferences = table.CreateSet<SingleValue>();
-			preferences.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
+
+			preferences.ForEach(preference => Select2Box.AssertOptionExist("Preference-Picker", preference.Value));
 		}
 
-		[When(@"I click the extended preference activity select-box")]
-		public void WhenIClickTheExtendedPreferenceActivitySelecBox()
+		[When(@"I click to open thee extended activity drop down list")]
+		public void WhenIClickToOpenTheeExtendedActivityDropDownList()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Open();
+			Select2Box.OpenWhenOptionsAreLoaded("Preference-extended-activity-Picker");
 		}
 
 		[Then(@"I should see these available activities")]
 		public void ThenIShouldSeeTheseAvailableActivities(Table table)
 		{
 			var activities = table.CreateSet<SingleValue>();
-			activities.ForEach(activity => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Menu.Text, Is.StringContaining(activity.Value)));
+			activities.ForEach(activity => Select2Box.AssertOptionExist("Preference-extended-activity-Picker", activity.Value));
 		}
 
 		private class SingleValue
@@ -179,90 +183,87 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see add extended preferences panel with error 'Invalid time startTime'")]
 		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError()
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanel.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanelError.Text, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
+			Browser.Interactions.AssertExists(string.Format(".preference-error-panel:contains('{0}')", string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 		}
 
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
+			Browser.Interactions.AssertVisibleUsingJQuery("#Preference-add-extended-form"); //needed
+
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
-			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed(); //needed
-			
-			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectWait(fields.Preference);
+
+			if (fields.Preference != null)
+			{
+				Select2Box.OpenWhenOptionsAreLoaded("Preference-Picker");
+				Select2Box.SelectItemByText("Preference-Picker", fields.Preference);
+			}
 
 			if (fields.StartTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-start-time-min').timepicker('setTime', '{0}');", fields.StartTimeMinimum));
 			if (fields.StartTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Value = fields.StartTimeMaximum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-start-time-max').timepicker('setTime', '{0}');", fields.StartTimeMaximum));
 			if (fields.EndTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Value = fields.EndTimeMinimum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-end-time-min').timepicker('setTime', '{0}');", fields.EndTimeMinimum));
 			if (fields.EndTimeMinimumNextDay)
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Checked = true;
+				Browser.Interactions.Click(".preference-end-time-min-next-day");
 			if (fields.EndTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Value = fields.EndTimeMaximum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-end-time-max').timepicker('setTime', '{0}');", fields.EndTimeMaximum));
 			if (fields.EndTimeMaximumNextDay)
-				Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Checked = true;
+				Browser.Interactions.Click(".preference-end-time-max-next-day");
 			if (fields.WorkTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Value = fields.WorkTimeMinimum;
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-extended-work-time-min", fields.WorkTimeMinimum);
 			if (fields.WorkTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Value = fields.WorkTimeMaximum;
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-extended-work-time-max", fields.WorkTimeMaximum);
 
-			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectWait(fields.Activity);
+			if (fields.Activity != null)
+			{
+				Select2Box.OpenWhenOptionsAreLoaded("Preference-extended-activity-Picker");
+				Select2Box.SelectItemByText("Preference-extended-activity-Picker", fields.Activity);
+			}
+				
 			if (fields.ActivityStartTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Value = fields.ActivityStartTimeMinimum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-activity-start-time-min').timepicker('setTime', '{0}');", fields.ActivityStartTimeMinimum));
 			if (fields.ActivityStartTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Value = fields.ActivityStartTimeMaximum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-activity-start-time-max').timepicker('setTime', '{0}');", fields.ActivityStartTimeMaximum));
 			if (fields.ActivityEndTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Value = fields.ActivityEndTimeMinimum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-activity-end-time-min').timepicker('setTime', '{0}');", fields.ActivityEndTimeMinimum));
 			if (fields.ActivityEndTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Value = fields.ActivityEndTimeMaximum;
+				Browser.Interactions.Javascript(string.Format("$('.preference-activity-end-time-max').timepicker('setTime', '{0}');", fields.ActivityEndTimeMaximum));
 			if (fields.ActivityTimeMinimum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Value = fields.ActivityTimeMinimum;
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-activity-extended-work-time-min", fields.ActivityTimeMinimum);
 			if (fields.ActivityTimeMaximum != null)
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Value = fields.ActivityTimeMaximum;
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-activity-extended-work-time-max", fields.ActivityTimeMaximum);
 		}
 
-		[Then(@"I should not be able to edit time fields")]
-		public void ThenIShouldNotBeAbleToEditTimeFields()
+		[Then(@"I should not see the edit time fields")]
+		public void ThenIShouldNotSeeTheEditTimeFields()
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Enabled, Is.False);
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-start-time-min");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-start-time-max");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-end-time-min");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-end-time-min-next-day");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-end-time-max");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-end-time-max-next-day");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-extended-work-time-min");
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-extended-work-time-max");
 
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.Enabled, Is.False);
-			
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
+			Browser.Interactions.AssertNotExists("#Preference-Picker", ".preference-activity-section");
 		}
 
 		[Then(@"all the time fields should be reset")]
 		public void ThenAllTheTimeFieldsShouldBeReset()
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMaximum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMaximumNextDay.Checked, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceEndTimeMinimumNextDay.Checked, Is.False);
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-min').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-max').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-min').val() === '';", "true");
+			Browser.Interactions.AssertExists(".preference-end-time-min-next-day:not(:enabled):not(.active)");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-max').val() === '';", "true");
+			Browser.Interactions.AssertExists(".preference-end-time-max-next-day:not(:enabled):not(.active)");
+			Browser.Interactions.AssertExists(".preference-extended-work-time-min option:checked[value='']");
+			Browser.Interactions.AssertExists(".preference-extended-work-time-max option:checked[value='']");
 
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.TextField.Value, Is.Null);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.TextField.Value, Is.Null);
+			AssertExtendedActivityTimeFieldsAreReset();
 		}
 
 		[Then(@"I should see extended preference fields filled with")]
@@ -296,41 +297,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			if (fields.ActivityTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMaximum));
 		}
 
-		[Then(@"I should be able to edit activity minimum and maximum fields")]
-		public void ThenIShouldBeAbleToEditActivityMinimumAndMaximumFields()
+		private void AssertExtendedActivityTimeFieldsAreReset()
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.True);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.True);
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-min').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-max').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-min').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-max').val() === '';", "true");
+			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-min option:checked[value='']");
+			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-max option:checked[value='']");
 		}
 
-		[Then(@"I should not be able to edit activity minimum and maximum fields")]
-		public void ThenIShouldNotBeAbleToEditActivityMinimumAndMaximumFields()
+		[Then(@"I should see the activity minimum and maximum fields")]
+		public void ThenIShouldSeeTheActivityMinimumAndMaximumFields()
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.Enabled, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.Enabled, Is.False);
+			AssertExtendedActivityTimeFieldsAreReset();
 		}
 
-		[Then(@"I should see preference dropdown list selected to ""(.*)""")]
-		public void ThenIShouldSeePreferenceDropdownListSelectedTo(string selectedText)
+		[Then(@"I should not see the edit activity minimum and maximum fields")]
+		public void ThenIShouldNotSeeTheEditActivityMinimumAndMaximumFields()
 		{
-			EventualAssert.That(() =>
-				Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Button.OuterText, Is.EqualTo(selectedText));
+
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-min");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-max");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-end-time-min");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-end-time-max");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-extended-work-time-min");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-extended-work-time-max");
 		}
 
-
-		[Then(@"I should see activity dropdown list selected to ""(.*)""")]
-		public void ThenIShouldSeeActivityDropdownListSelected(string selectedText)
+		[Then(@"I should see nothing selected in the preference dropdown")]
+		public void ThenIShouldSeeNothingSelectedInThePreferenceDropdown()
 		{
-			EventualAssert.That(() => 
-				Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Button.OuterText, Is.EqualTo(selectedText));
+			Browser.Interactions.AssertExists("#Preference-Picker option:checked[value='']");
+		}
+
+		[Then(@"I should see nothing selected in the activity dropdown")]
+		public void ThenIShouldSeeNothingSelectedInTheActivityDropdown()
+		{
+			Browser.Interactions.AssertExists("#Preference-extended-activity-Picker option:checked[value='']");
 		}
 
 		[When(@"I click set must have button")]
