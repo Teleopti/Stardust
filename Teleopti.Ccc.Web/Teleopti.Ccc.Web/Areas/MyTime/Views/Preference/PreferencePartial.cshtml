@@ -5,14 +5,12 @@
 @{
 	Layout = null;
 }
-<!-- temporary fix for loading bootrapper after jqueryUI until that PBI is fixed -->
-<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
 <div class="navbar">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
                 <button class="btn" data-bind="click: previousPeriod"><i class="icon-arrow-left"></i></button>
-                <input data-bind="value: displayDate" type="text" class="span2" readonly="readonly"/>
+                <input data-bind="value: displayDate" type="text" class="span3 text-center" readonly="readonly"/>
                 <button class="btn" data-bind="mytimeDatePicker: selectedDate"><i class="icon-th"></i></button>
                 <button class="btn" data-bind="click: nextPeriod"><i class="icon-arrow-right"></i></button>
             </div>

@@ -20,8 +20,8 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
             <span id="Template-name-section">
-                <input id="Template-name-input" class="input-small" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
-                <button id="Preference-extended-save-template" class="btn btn-mini" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
+                <input id="Template-name-input" class="input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
+                <button id="Preference-extended-save-template" class="btn btn-mini btn-primary" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
             </span>
         </span>
     </span>
