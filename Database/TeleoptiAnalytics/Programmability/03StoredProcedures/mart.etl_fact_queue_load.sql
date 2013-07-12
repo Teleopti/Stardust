@@ -56,7 +56,7 @@ BEGIN
 
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
-	DECLARE @mindate as smalldatetime
+	DECLARE @UtcNow as smalldatetime
 	DECLARE @start_date_id	INT
 	DECLARE @end_date_id	INT
 	DECLARE @max_date smalldatetime
@@ -64,7 +64,7 @@ BEGIN
 	DECLARE @time_zone_id smallint
 
 	--init
-	SELECT @mindate=CAST('19000101' as smalldatetime)
+	SELECT @UtcNow=CAST(getutcdate() as smalldatetime)
 	SELECT 
 		@time_zone_id = ds.time_zone_id
 	FROM
@@ -160,7 +160,7 @@ BEGIN
 		datasource_id				= q.datasource_id, 
 		insert_date					= getdate(), 
 		update_date					= getdate(), 
-		datasource_update_date		= '''+ CAST(@mindate as nvarchar(20))+'''
+		datasource_update_date		= '''+ CAST(@UtcNow as nvarchar(20))+'''
 
 	FROM
 		(SELECT * FROM '+ 
