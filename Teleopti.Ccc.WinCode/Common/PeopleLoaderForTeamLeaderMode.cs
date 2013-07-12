@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
             foreach (IPerson person in peopleInOrg())
             {
-                if (person.TerminalDate == null || person.TerminalDate > _selectedEntitiesForPeriod.SelectedPeriod.StartDate)
+                if (person.TerminalDate == null || person.TerminalDate >= _selectedEntitiesForPeriod.SelectedPeriod.StartDate)
                 _schedulerStateHolder.AllPermittedPersons.Add(person);
             }
 
