@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillDay1 = _mocks.StrictMock<ISkillDay>();
 			_skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
-			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
 			_skill1 = SkillFactory.CreateSkill("1");
 			_skill2 = SkillFactory.CreateSkill("2");
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue,
