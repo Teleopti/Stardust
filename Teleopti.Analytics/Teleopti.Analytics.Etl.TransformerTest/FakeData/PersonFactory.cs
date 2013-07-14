@@ -19,7 +19,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             businessUnitGraph.SetId(Guid.NewGuid());
 
             //Add a scorecard to one of the teams
-            var scorecards = ScorecardFactory.CreateScorecardCollection();
+			var _updatedOnDateTime = DateTime.Now;
+            var scorecards = ScorecardFactory.CreateScorecardCollection(_updatedOnDateTime);
             businessUnitGraph.SiteCollection[0].TeamCollection[0].Scorecard = scorecards[0];
 
             //Agent with two periods

@@ -20,6 +20,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private readonly IList<ITemplateTaskPeriod> _templateTaskPeriodCollection = new List<ITemplateTaskPeriod>();
         private DateOnly _date = new DateOnly(2008, 2, 1);
         private readonly DateTime _insertDateTime = DateTime.Now;
+		private readonly DateTime _updatedOnDateTime = DateTime.Now;
         private ISkill _skill1;
         private ISkill _skill2;
         private ISkill _skill3;
@@ -44,10 +45,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _skill3.SetId(Guid.NewGuid());
 
             var period = new DateOnlyPeriod(_date, _date.AddDays(2));
-            
-            _skillDayCollection1 = ForecastFactory.CreateSkillDayCollection(period, _skill1);
-            _skillDayCollection2 = ForecastFactory.CreateSkillDayCollection(period, _skill2);
-            _skillDayCollection3 = ForecastFactory.CreateSkillDayCollection(period, _skill3);
+
+			_skillDayCollection1 = ForecastFactory.CreateSkillDayCollection(period, _skill1, _updatedOnDateTime);
+			_skillDayCollection2 = ForecastFactory.CreateSkillDayCollection(period, _skill2, _updatedOnDateTime);
+			_skillDayCollection3 = ForecastFactory.CreateSkillDayCollection(period, _skill3, _updatedOnDateTime);
 
             IWorkloadDay workloadDay1 = ForecastFactory.CreateWorkload(_date, _skill1);
             IWorkloadDay workloadDay2 = ForecastFactory.CreateWorkload(_date, _skill2);
@@ -191,6 +192,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);
+			Assert.AreEqual(_updatedOnDateTime, dataRow["datasource_update_date"]);
+			
         }
 
         [Test]
@@ -260,6 +263,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);
+			Assert.AreEqual(_updatedOnDateTime, dataRow["datasource_update_date"]);
         }
 
         [Test]
@@ -330,6 +334,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);
+			Assert.AreEqual(_updatedOnDateTime, dataRow["datasource_update_date"]);
         }
 
         [Test]
