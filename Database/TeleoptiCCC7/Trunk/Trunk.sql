@@ -281,3 +281,15 @@ from dbo.PersonAbsence pa
 inner join #PersonAbsenceRemove t
 on pa.Id = t.Id
 GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-07-15
+--Desc: Bug #24018 - Fix messed up default values for Contract
+---------------- 
+UPDATE dbo.Contract SET AvgWorkTimePerDay = 288000000000,Version = Version+1 WHERE AvgWorkTimePerDay = 0
+GO
+
+UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
+GO
