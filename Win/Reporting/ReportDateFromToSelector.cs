@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
                 dateTimePickerAdvWorkAStartDate.UseCurrentCulture =
                     dateTimePickerAdvWorkEndPeriod.UseCurrentCulture = false;
-                dateTimePickerAdvWorkEndPeriod.Culture =
-                    dateTimePickerAdvWorkAStartDate.Culture = TeleoptiPrincipal.Current.Regional.Culture;
+                dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
+                dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
             }
         }
 
