@@ -53,7 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
 			if (schedulingOptions.UseTeamBlockSameShiftCategory)
 			{
-				return scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+				var result = scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+				schedulingOptions.NotAllowedShiftCategories.Clear();
+				return result;
 			}
 			return scheduleOnce(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
 		}
@@ -121,7 +123,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
 				}
 			}
-			schedulingOptions.NotAllowedShiftCategories.Clear();
 			return true;
 		}
 

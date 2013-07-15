@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -573,8 +572,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
+				Assert.That(_schedulingOptions.NotAllowedShiftCategories.Count, Is.EqualTo(0));
 				Assert.IsTrue(_target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _selectedPeriod,
 															new List<IPerson> { _person }));
+				Assert.That(_schedulingOptions.NotAllowedShiftCategories.Count, Is.EqualTo(0));
 			}
 		}
 
