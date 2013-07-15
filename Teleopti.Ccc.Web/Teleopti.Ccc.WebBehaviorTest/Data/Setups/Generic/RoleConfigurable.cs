@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
         public bool AccessToAbsenceRequests { get; set; }
         public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
+		public bool AccessToCalendarLink { get; set; }
 
 		public bool AccessToViewAllGroupPages { get; set; }
 
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
             AccessToShiftTradeRequests = true;
 			AccessToAnywhere = false;
 			AccessToViewAllGroupPages = false;
+			AccessToCalendarLink = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -153,6 +155,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 									   select f;
+			if (!AccessToCalendarLink)
+				applicationFunctions = from f in applicationFunctions
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
+				                       select f;
 			return applicationFunctions;
 		}
 	}
