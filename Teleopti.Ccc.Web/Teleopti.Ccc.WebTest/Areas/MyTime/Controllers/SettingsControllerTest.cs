@@ -14,7 +14,9 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void IndexShouldReturnView()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null))
+			var settingsPermissionViewModelFactory = MockRepository.GenerateMock<ISettingsPermissionViewModelFactory>();
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, settingsPermissionViewModelFactory))
 			{
 				var res = target.Index();
 				res.ViewName.Should().Be.EqualTo("RegionalSettingsPartial");
@@ -162,9 +165,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var settings = new CalendarLinkSettings();
 			var currentDatasource = MockRepository.GenerateMock<ICurrentDataSource>();
 			const string dataName = "TestRepsitory";
+
 			currentDatasource.Stub(x => x.CurrentName()).Return(dataName);
 			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
-			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
+
+			using (var target = new StubbingControllerBuilder().CreateController<SettingsController>(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
 			{
 				var context = new FakeHttpContext("/");
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -173,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.ActivateCalendarLink(true).Data as string;
 				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
 				Assert.IsTrue(settings.IsActive);
-				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Share/" + dataName + "/" + id);
+				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Share?id=" + target.Url.Encode(StringEncryption.Encrypt(dataName + "/" + id)));
 			}
 		}
 
@@ -192,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			const string dataName = "TestRepsitory";
 			currentDatasource.Stub(x => x.CurrentName()).Return(dataName);
 			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
-			using (var target = new SettingsController(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
+			using (var target = new StubbingControllerBuilder().CreateController<SettingsController>(null, loggedOnUser, null, null, personalSettingDataRepository, currentDatasource, null))
 			{
 				var context = new FakeHttpContext("/");
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
