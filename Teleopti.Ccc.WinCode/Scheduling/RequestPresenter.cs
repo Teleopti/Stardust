@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var lstBusinessRuleResponse = Approve( _newBusinessRules);
             var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, _view, _overriddenBusinessRulesHolder);
             lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
-            if (lstBusinessRuleResponse.Count() == 0)
+            if (!lstBusinessRuleResponse.Any())
                 return true;
             // try again with overriden
             if (lstBusinessRuleResponseToOverride.Count > 0)
