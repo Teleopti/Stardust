@@ -15,6 +15,7 @@ using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -99,9 +100,14 @@ namespace Teleopti.Ccc.Win.Meetings
 			office2007OutlookTimePickerEndSlotPeriod.Leave += Office2007OutlookTimePickerEndSlotPeriodLeave;
 			office2007OutlookTimePickerEndSlotPeriod.KeyDown += Office2007OutlookTimePickerEndSlotPeriodKeyDown;
 
+            dateTimePickerAdvEndDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            dateTimePickerAdvStartDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            dateTimePickerAdvEndSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            dateTimePickerAdvStartSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
-
+            
 			dateTimePickerAdvStartSlotPeriod.SetSafeBoundary();
 			dateTimePickerAdvEndSlotPeriod.SetSafeBoundary();
 
