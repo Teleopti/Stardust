@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -24,37 +17,49 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly string _settingValue;
 	    private readonly IList<IActivity> _availableActivity;
 	    private readonly int _resolution;
+	    private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
 	    private readonly IList<IScheduleTag> _scheduleTags;
 
-        public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IList<IScheduleTag> scheduleTags, string settingValue, IList<IActivity> availableActivity, int resolution)
+        public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IList<IScheduleTag> scheduleTags, string settingValue, IList<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
             : this()
         {
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
             _availableActivity = availableActivity;
             _resolution = resolution;
+            _definitionSets = definitionSets;
             _overtimePreferences = overtimePreferences;
+            
             loadPersonalSettings();
             initTags();
             initActivityList();
+            initOvertimeTypes();
             SetDefaultTimePeriod();
-            SetInitialValues();
+            setInitialValues();
         }
 
-        private void OvertimePreferencesDialog_Load(object sender, EventArgs e)
+	    private void initOvertimeTypes()
+	    {
+            comboBoxAdvOvertimeType.DataSource = _definitionSets;
+            comboBoxAdvOvertimeType.DisplayMember = "Name";
+            comboBoxAdvOvertimeType.SelectedItem = _overtimePreferences.OvertimeType;
+	    }
+
+	    private void OvertimePreferencesDialog_Load(object sender, EventArgs e)
         {
-            
+            setDataToControls();
         }
 
-        private void initTags()
+	    private void setDataToControls()
+	    {
+	        checkBox1.Checked = _overtimePreferences.ExtendExistingShift;
+	    }
+
+	    private void initTags()
         {
             comboBoxAdvTag .DataSource = _scheduleTags;
             comboBoxAdvTag.DisplayMember = "Description";
             comboBoxAdvTag.SelectedItem = _overtimePreferences.ScheduleTag;
-            //if (_localSchedulingOptions.CommonActivity != null)
-            //{
-            //    comboBoxActivity.SelectedValue = _localSchedulingOptions.CommonActivity.Name;
-            //}
         }
 
         private void SetDefaultTimePeriod()
@@ -67,12 +72,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             TimeSpan start = TimeSpan.Zero;
             TimeSpan end = start.Add(TimeSpan.FromDays(1));
-
+            
             fromToTimePicker1.StartTime.CreateAndBindList(start, end);
             fromToTimePicker1.EndTime.CreateAndBindList(start, end);
 
-            fromToTimePicker1.StartTime.SetTimeValue(start);
-            fromToTimePicker1.EndTime.SetTimeValue(end);
+            fromToTimePicker1.StartTime.SetTimeValue(_overtimePreferences.SelectedTimePeriod.StartTime);
+            fromToTimePicker1.EndTime.SetTimeValue(_overtimePreferences.SelectedTimePeriod.EndTime);
 
             fromToTimePicker1.StartTime.TextChanged += startTimeTextChanged;
             fromToTimePicker1.EndTime.TextChanged += endTimeTextChanged;
@@ -94,7 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 fromToTimePicker1.EndTime.SetTimeValue(startTime);
         }
 
-        private void SetInitialValues()
+        private void setInitialValues()
         {
 
             fromToTimePicker1.WholeDay.Visible = false;
@@ -106,6 +111,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAdvActivity.DataSource = _availableActivity;
             comboBoxAdvActivity.DisplayMember = "Name";
             comboBoxAdvActivity.ValueMember = "Name";
+            comboBoxAdvActivity.SelectedItem = _overtimePreferences.SkillActivity;
         }
 
 	    public OvertimePreferencesDialog()
@@ -148,7 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
             }
             if (hasMissedloadingSettings()) return;
-            _defaultOvertimeGeneralSettings.MapTo(_overtimePreferences, _scheduleTags, _availableActivity);
+            _defaultOvertimeGeneralSettings.MapTo(_overtimePreferences, _scheduleTags, _availableActivity,_definitionSets );
         }
 
         private bool hasMissedloadingSettings()
@@ -168,13 +174,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        if (comboBoxAdvTag.SelectedText != "<None>")
 	        {
                 _overtimePreferences.ScheduleTag = (IScheduleTag)comboBoxAdvTag.SelectedItem;
-	            _overtimePreferences.SkillActivity = (IActivity) comboBoxAdvActivity.SelectedItem;
-	            _overtimePreferences.DoNotBreakMaxWorkPerWeek = false;
-	            _overtimePreferences.DoNotBreakNightlyRest = false;
-	            _overtimePreferences.DoNotBreakWeeklyRest = false;
-	            _overtimePreferences.ExtendExistingShift = checkBox1.Checked;
-                _overtimePreferences.SelectedTimePeriod = new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
+	            
 	        }
+            _overtimePreferences.SkillActivity = (IActivity)comboBoxAdvActivity.SelectedItem;
+            _overtimePreferences.DoNotBreakMaxWorkPerWeek = false;
+            _overtimePreferences.DoNotBreakNightlyRest = false;
+            _overtimePreferences.DoNotBreakWeeklyRest = false;
+            _overtimePreferences.ExtendExistingShift = checkBox1.Checked;
+	        _overtimePreferences.OvertimeType = (IMultiplicatorDefinitionSet) comboBoxAdvOvertimeType.SelectedItem;
+            var selectedPeriod =new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
+	        _overtimePreferences.SelectedTimePeriod = selectedPeriod;
 	    }
 	}
 }

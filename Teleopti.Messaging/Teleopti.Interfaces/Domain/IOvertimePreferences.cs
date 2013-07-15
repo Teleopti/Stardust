@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
         IScheduleTag ScheduleTag { get; set; }
         bool ExtendExistingShift { get; set; }
         IActivity SkillActivity { get; set; }
-        Guid OvertimeType { get; set; }
+        IMultiplicatorDefinitionSet OvertimeType { get; set; }
         TimePeriod SelectedTimePeriod { get; set; }
         bool DoNotBreakMaxWorkPerWeek { get; set; }
         bool DoNotBreakNightlyRest { get; set; }

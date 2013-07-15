@@ -7152,7 +7152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//preparation for future pbi
 		}
 
-        private void xxScheduleOvertimeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripMenuItemScheduleOvertime_Click(object sender, EventArgs e)
         {
             if (_backgroundWorkerScheduling.IsBusy) return;
 
@@ -7163,12 +7163,16 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IOvertimePreferences overtimePreferences = new OvertimePreferences(); 
                 try
                 {
-                    using (var options = new OvertimePreferencesDialog(overtimePreferences,_schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), 15))
+                    var definitionSets = (from set in MultiplicatorDefinitionSet
+                                         where set.MultiplicatorType == MultiplicatorType.Overtime
+                                         select set).AsEnumerable().ToList();
+                    
+                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), 15,  definitionSets))
                     {
                         if (options.ShowDialog(this) == DialogResult.OK)
                         {
                             options.Refresh();
-                            //startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+                            _container.Resolve<IScheduleOvertimeCommand>().Execute(overtimePreferences, _backgroundWorkerScheduling, scheduleDays);
                         }
                     }
                 }

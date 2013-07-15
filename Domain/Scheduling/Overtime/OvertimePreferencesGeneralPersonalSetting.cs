@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
 
-        public void MapTo(IOvertimePreferences overtimePreferences , IList<IScheduleTag> scheduleTags,IList<IActivity> activityList )
+        public void MapTo(IOvertimePreferences overtimePreferences , IList<IScheduleTag> scheduleTags,IList<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
         {
             foreach (var scheduleTag in scheduleTags)
             {
@@ -32,8 +32,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 if (_skillActivtyId == activity.Id )
                     overtimePreferences.SkillActivity = activity ;
             }
-            if (overtimePreferences.SkillActivity  == null)
-                overtimePreferences.SkillActivity  = null ;
+
+            foreach (var overtimeType in multiplicatorDefinitionSets)
+            {
+                if (_overtimeType == overtimeType.Id)
+                    overtimePreferences.OvertimeType = overtimeType;
+            }
 
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;
@@ -49,8 +53,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _doNotBreakNightlyRest = overtimePreferences.DoNotBreakNightlyRest;
             _doNotBreakWeeklyRest = overtimePreferences.DoNotBreakWeeklyRest;
             _extendExistingShifts = overtimePreferences.ExtendExistingShift;
+            
             _selectTimePeriod = overtimePreferences.SelectedTimePeriod;
-            _overtimeType = overtimePreferences.OvertimeType;
+            if (overtimePreferences.OvertimeType!=null)
+                _overtimeType = overtimePreferences.OvertimeType.Id;
             if(overtimePreferences.ScheduleTag != null)
                 _scheduleTagId = overtimePreferences.ScheduleTag.Id ;
             _skillActivtyId = overtimePreferences.SkillActivity.Id;
