@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.Win.Grouping
             if (!DesignMode)
             {
                 SetTexts();
+                dateTimePickerAdvFrom.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
+                dateTimePickerAdvTo.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
             }
         }
 

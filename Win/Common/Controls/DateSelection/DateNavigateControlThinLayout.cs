@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         public DateNavigateControlThinLayout()
         {
             InitializeComponent();
-            dateTimePickerAdv1.Calendar.Culture = CultureInfo.CurrentCulture;
-            dateTimePickerAdv1.Culture = CultureInfo.CurrentCulture;
+            dateTimePickerAdv1.SetCultureInfoSafe(CultureInfo.CurrentCulture);
         }
 
         public event EventHandler<CustomEventArgs<DateOnly>> SelectedDateChanged;
