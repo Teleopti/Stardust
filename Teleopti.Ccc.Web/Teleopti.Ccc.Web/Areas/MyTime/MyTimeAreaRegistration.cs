@@ -28,9 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 
 			context.MapRoute(
 				"MyTime-calendar",
-				"MyTime/Share/{dataSourceName}/{publishedId}",
-				new { controller = "ShareCalendar", action = "iCal" },
-				new { publishedId = new GuidConstraint() }
+				"MyTime/Share",
+				new { controller = "ShareCalendar", action = "iCal" }
 				);
 
 			context.MapRoute(

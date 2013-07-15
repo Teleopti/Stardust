@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 			var url =
 				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) +
-				"ShareCalendar?id=" + Url.Encode(encryptedUniqueValue);
+				"Share?id=" + Url.Encode(encryptedUniqueValue);
 				
 			return Json(url);
 		}
