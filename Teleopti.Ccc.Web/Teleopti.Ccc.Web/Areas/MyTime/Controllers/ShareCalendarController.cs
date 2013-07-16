@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IDataSourcesProvider _dataSourcesProvider;
 		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
+		private readonly INow _now;
 
-		public ShareCalendarController(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer)
+		public ShareCalendarController(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider, IJsonDeserializer<ExpandoObject> deserializer, INow now)
 		{
 			_repositoryFactory = repositoryFactory;
 			_dataSourcesProvider = dataSourcesProvider;
 			_deserializer = deserializer;
+			_now = now;
 		}
 
 		[HttpGet]
@@ -52,8 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				if (!calendarLinkSettings.IsActive)
 					return null;
 				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(DateOnly.Today.AddDays(-60),
-																		   DateOnly.Today.AddDays(180), publishedId);
+				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(-60),
+																		   _now.DateOnly().AddDays(180), publishedId);
 				if (scheduleDays == null || scheduleDays.IsEmpty())
 					return null;
 

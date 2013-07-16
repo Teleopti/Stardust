@@ -74,48 +74,48 @@ Scenario: View calendar sharing link
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
-	| Start time       | 2023-04-19 08:00 |
-	| End time         | 2023-04-19 17:00 |
-	And I have a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
 	| Start time       | 2023-04-20 08:00 |
 	| End time         | 2023-04-20 17:00 |
 	And I have a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
-	| Start time       | 2023-12-19 08:00 |
-	| End time         | 2023-12-19 17:00 |
+	| Start time       | 2023-04-21 08:00 |
+	| End time         | 2023-04-21 17:00 |
 	And I have a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
-	| Start time       | 2023-12-20 08:00 |
-	| End time         | 2023-12-20 17:00 |
+	| Start time       | 2023-12-17 08:00 |
+	| End time         | 2023-12-17 17:00 |
+	And I have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2023-12-18 08:00 |
+	| End time         | 2023-12-18 17:00 |
 	And I have shared calendar
 	When I view my settings
 	Then I should see a sharing link
 	When Someone is viewing sharing link
 	Then Someone should see ical calendar with
-	| Field    | Value            |
-	| Activity | Phone            |
-	| DTSTART  | 20230420T080000Z |
-	| DTEND    | 20230420T170000Z |
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20230421T080000Z |
+	| DTEND   | 20230421T170000Z |
 	And Someone should see ical calendar with
-	| Field    | Value            |
-	| Activity | Phone            |
-	| DTSTART  | 20231219T080000Z |
-	| DTEND    | 20231219T170000Z |
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20231217T080000Z |
+	| DTEND   | 20231217T170000Z |
 	And Someone should not see ical calendar with
-	| Field    | Value            |
-	| Activity | Phone            |
-	| DTSTART  | 20230419T080000Z |
-	| DTEND    | 20230419T170000Z |
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20130420T080000Z |
+	| DTEND   | 20130420T170000Z |
 	And Someone should not see ical calendar with
-	| Field    | Value            |
-	| Activity | Phone            |
-	| DTSTART  | 20231220T080000Z |
-	| DTEND    | 20231220T170000Z |
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20131218T080000Z |
+	| DTEND   | 20131218T170000Z |
 

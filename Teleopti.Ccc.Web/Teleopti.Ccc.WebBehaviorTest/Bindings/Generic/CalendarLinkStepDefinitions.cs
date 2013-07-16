@@ -1,4 +1,5 @@
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
@@ -59,21 +60,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"Someone should not see ical calendar")]
 		public void ThenSomeoneShouldNotSeeIcalCalendar()
 		{
-			//ScenarioContext.Current.Pending();
+			Browser.Current.Html.Contains("VCALENDAR");
 		}
 
 		[Then(@"Someone should see ical calendar with")]
 		public void ThenSomeoneShouldSeeIcalCalendarWith(Table table)
 		{
-			//ScenarioContext.Current.Pending();
+			var item = table.CreateInstance<IcsCalendarItem>();
+			Browser.Interactions.AssertContains("body", item.SUMMARY);
+			Browser.Interactions.AssertContains("body", item.DTSTART);
+			Browser.Interactions.AssertContains("body", item.DTEND);
 		}
 
 		[Then(@"Someone should not see ical calendar with")]
 		public void ThenSomeoneShouldNotSeeIcalCalendarWith(Table table)
 		{
-			//ScenarioContext.Current.Pending();
+			var item = table.CreateInstance<IcsCalendarItem>();
+			Browser.Interactions.AssertNotContains("body", item.DTSTART);
+			Browser.Interactions.AssertNotContains("body", item.DTEND);
 		}
 
+
+	}
+
+	public class IcsCalendarItem
+	{
+		public string SUMMARY { get; set; }
+		public string DTSTART { get; set; }
+		public string DTEND { get; set; }
 
 	}
 }

@@ -11,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -54,7 +53,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName("Main")).Return(dataSource);
 
 			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
-			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, deserializer))
+			var now = MockRepository.GenerateMock<INow>();
+			now.Stub(x => x.DateOnly()).Return(DateOnly.Today);
+			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, deserializer, now))
 			{
 				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
 				var result = target.iCal(id);
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName("Main")).Return(dataSource);
 
-			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>()))
+			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null))
 			{
 				var id = StringEncryption.Encrypt("Main" + "/" + Guid.NewGuid().ToString());
 				var result = target.iCal(id);
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 										 });
 			repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(uow)).Return(personalSettingDataRepository);
 
-			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>()))
+			using (var target = new ShareCalendarController(repositoryFactory, dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null))
 			{
 				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
 				var result = target.iCal(id);
