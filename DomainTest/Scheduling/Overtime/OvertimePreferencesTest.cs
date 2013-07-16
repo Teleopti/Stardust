@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
@@ -53,10 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         [Test]
         public void VerifyOvertimeToFrom()
         {
-            _target.OvertimeTo  = TimeSpan.FromHours(8);
-            _target.OvertimeFrom  = TimeSpan.FromHours(10);
-            Assert.AreEqual(_target.OvertimeTo , TimeSpan.FromHours(8));
-            Assert.AreEqual(_target.OvertimeFrom , TimeSpan.FromHours(10));
+            _target.SelectedTimePeriod   = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(10));
+            Assert.AreEqual(_target.SelectedTimePeriod , new TimePeriod(TimeSpan.FromHours(8),TimeSpan.FromHours(10) ));
         }
 
         [Test]
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var scheduleTag = new ScheduleTag();
             scheduleTag.Description = "test";
             _target.ScheduleTag = scheduleTag;
-            _target.OvertimeFrom = TimeSpan.FromHours(10);
+            _target.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(8),TimeSpan.FromHours(10));
             Assert.AreEqual(_target.ScheduleTag.Description, "test");
         }
 
@@ -74,6 +73,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             _target.SkillActivity = new Activity("thisActivity");
             Assert.AreEqual(_target.SkillActivity.Name ,"thisActivity");
+        }
+
+        [Test]
+        public void VerifyOvertimeType()
+        {
+            _target.OvertimeType = new MultiplicatorDefinitionSet("this",MultiplicatorType.Overtime );
+            Assert.AreEqual(_target.OvertimeType.Name,"this" );
         }
     }
 }

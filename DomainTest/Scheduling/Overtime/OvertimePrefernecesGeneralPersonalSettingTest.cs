@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
@@ -22,6 +23,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private Guid _guid;
         private IActivity _activity;
         private IOvertimePreferences _overtimePrefernces;
+        private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets;
+        private IMultiplicatorDefinitionSet _definitionSetMock;
+        private IMultiplicatorDefinitionSet _definitionSet;
 
         [SetUp]
         public void Setup()
@@ -33,7 +37,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _activity = new Activity("test");
             _target = new OvertimePreferencesGeneralPersonalSetting() ;
             _scheduleTag = new ScheduleTag();
+            _definitionSetMock = _mocks.StrictMock<IMultiplicatorDefinitionSet>();
             _guid = new Guid();
+            _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
+            _multiplicatorDefinitionSets.Add(_definitionSetMock);
+            _definitionSet = new MultiplicatorDefinitionSet("test",MultiplicatorType.Overtime );
         }
 
         [Test]
@@ -44,14 +52,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
                 Expect.Call(_overtimePreferncesMock.ScheduleTag).Return(_scheduleTagMock);
                 Expect.Call(_scheduleTagMock.Id).Return(_guid);
                 mapFromBoolExpectCalls();
-                Expect.Call(_overtimePreferncesMock.OvertimeFrom).Return(TimeSpan.FromHours(1));
-                Expect.Call(_overtimePreferncesMock.OvertimeTo).Return(TimeSpan.FromHours(2));
+                Expect.Call(_overtimePreferncesMock.SelectedTimePeriod).Return(new TimePeriod(TimeSpan.FromHours(1),TimeSpan.FromHours(2)));
                 Expect.Call(_overtimePreferncesMock.SkillActivity).Return(_activity);
+                Expect.Call(_overtimePreferncesMock.OvertimeType).Return(_multiplicatorDefinitionSets[0]).Repeat.Twice();
+                Expect.Call(_multiplicatorDefinitionSets[0].Id).Return(_guid);
 
                 Expect.Call(_scheduleTagMock.Id).Return(_guid).Repeat.AtLeastOnce();
                 Expect.Call(_overtimePreferncesMock.ScheduleTag).Return(_scheduleTagMock).Repeat.AtLeastOnce() ;
                 Expect.Call(() => _overtimePreferncesMock.ScheduleTag = _scheduleTagMock);
-                Expect.Call(_overtimePreferncesMock.SkillActivity).Return(_activity).Repeat.AtLeastOnce();
+                Expect.Call(() => _overtimePreferncesMock.OvertimeType = _definitionSetMock);
+                Expect.Call(_definitionSetMock.Id).Return(_guid);
+
                 mapToBoolExpectCalls();
             }
 
@@ -59,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
              {
                  _scheduleTags = new List<IScheduleTag> { _scheduleTagMock };
                  _target.MapFrom(_overtimePreferncesMock );
-                 _target.MapTo(_overtimePreferncesMock, _scheduleTags, new List<IActivity> { _activity });
+                 _target.MapTo(_overtimePreferncesMock, _scheduleTags, new List<IActivity> { _activity },_multiplicatorDefinitionSets);
              } 
         }
 
@@ -75,11 +86,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _overtimePrefernces.DoNotBreakNightlyRest = true;
             _overtimePrefernces.DoNotBreakWeeklyRest = false;
             _overtimePrefernces.ExtendExistingShift = true;
-            _overtimePrefernces.OvertimeFrom = TimeSpan.FromHours(10);
-            _overtimePrefernces.OvertimeTo = TimeSpan.FromHours(12);
+            _overtimePrefernces.SelectedTimePeriod  = new TimePeriod(TimeSpan.FromHours(10),TimeSpan.FromHours(12));
+            _overtimePrefernces.OvertimeType = _definitionSet;
             
             _target.MapFrom(_overtimePrefernces);
-            _target.MapTo(overtimePrefernces, _scheduleTags, new List<IActivity>{_activity});
+            _target.MapTo(overtimePrefernces, _scheduleTags, new List<IActivity> { _activity }, new List<IMultiplicatorDefinitionSet>{_definitionSet });
 
             Assert.AreEqual(overtimePrefernces.ScheduleTag, _scheduleTag);
             Assert.AreEqual(overtimePrefernces.SkillActivity, _activity);
@@ -87,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Assert.IsTrue(overtimePrefernces.DoNotBreakNightlyRest );
             Assert.IsFalse(overtimePrefernces.DoNotBreakWeeklyRest  );
             Assert.IsTrue( overtimePrefernces.ExtendExistingShift  );
-            Assert.AreEqual(overtimePrefernces .OvertimeFrom , TimeSpan.FromHours(10));
-            Assert.AreEqual(overtimePrefernces .OvertimeTo , TimeSpan.FromHours(12));
+            Assert.AreEqual(overtimePrefernces.SelectedTimePeriod , new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
+            Assert.AreEqual(overtimePrefernces.OvertimeType ,_definitionSet );
 
         }
 
@@ -98,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Expect.Call(_overtimePreferncesMock.DoNotBreakNightlyRest).Return(true);
             Expect.Call(_overtimePreferncesMock.DoNotBreakWeeklyRest).Return(true);
             Expect.Call(_overtimePreferncesMock.ExtendExistingShift).Return(false);
-            Expect.Call(_overtimePreferncesMock.OvertimeType).Return(_guid);
+            
         }
 
         private void mapToBoolExpectCalls()
@@ -108,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Expect.Call(() => _overtimePreferncesMock.DoNotBreakMaxWorkPerWeek = true);
             Expect.Call(() => _overtimePreferncesMock.DoNotBreakNightlyRest  = true);
             Expect.Call(() => _overtimePreferncesMock.DoNotBreakWeeklyRest  = true);
-            Expect.Call(() => _overtimePreferncesMock.OvertimeFrom = TimeSpan.FromHours(1));
-            Expect.Call(() => _overtimePreferncesMock.OvertimeTo = TimeSpan.FromHours(2));
+            Expect.Call(() => _overtimePreferncesMock.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
         }
 
     

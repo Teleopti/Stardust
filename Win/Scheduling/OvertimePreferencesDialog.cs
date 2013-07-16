@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public partial class OvertimePreferencesDialog : BaseRibbonForm
 	{
         private OvertimePreferencesGeneralPersonalSetting _defaultOvertimeGeneralSettings;
-	    private IOvertimePreferences _overtimePreferences;
+	    private readonly IOvertimePreferences _overtimePreferences;
         private readonly string _settingValue;
 	    private readonly IList<IActivity> _availableActivity;
 	    private readonly int _resolution;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             initTags();
             initActivityList();
             initOvertimeTypes();
-            SetDefaultTimePeriod();
+            setDefaultTimePeriod();
             setInitialValues();
         }
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAdvTag.SelectedItem = _overtimePreferences.ScheduleTag;
         }
 
-        private void SetDefaultTimePeriod()
+        private void setDefaultTimePeriod()
         {
             fromToTimePicker1.StartTime.DefaultResolution = _resolution;
             fromToTimePicker1.EndTime.DefaultResolution = _resolution;
