@@ -40,14 +40,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             CultureInfo ci = style.GetCulture(true);
 
             TimeSpan timeSpan = (TimeSpan) value;
-
-            DateTime d = DateTime.MinValue.Add(timeSpan);
-            string ret;
-            if (timeSpan.Days == 1)
-                ret = d.ToString("t", ci) + " +1";
-            else
-                return d.ToString("t", ci);
-            return ret;
+            return TimeHelper.TimeOfDayFromTimeSpan(timeSpan, ci);
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

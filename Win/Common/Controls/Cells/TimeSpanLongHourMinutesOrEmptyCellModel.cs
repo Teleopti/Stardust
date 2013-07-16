@@ -50,10 +50,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             // Get culture specified in style, default if null
             CultureInfo ci = style.GetCulture(true);
 
-            // Make sure value in cell is TimeSpan
-            if (typeof(TimeSpan) != value.GetType())
-                return "";
-
             String ret = string.Empty;
 
 			if (value is TimeSpan)

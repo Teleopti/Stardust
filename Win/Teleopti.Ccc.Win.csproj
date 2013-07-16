@@ -424,7 +424,6 @@
     <Compile Include="Common\Configuration\Columns\SFGridByteCellColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridCellValidatorBase.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDescriptionShortNameColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridExtendedHourMinutesColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridIntegerCellColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridReadOnlyTextColumn.cs" />
     <Compile Include="Common\Configuration\ChangePasswordControl.cs">
@@ -984,7 +983,6 @@
     </Compile>
     <Compile Include="Common\Controls\Cells\DescriptionShortNameCellModel.cs" />
     <Compile Include="Common\Controls\Cells\DoubleCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\ExtendedTimeSpanHourMinutesCellModel.cs" />
     <Compile Include="Common\Controls\Columns\ColumnCellDisplayChanged.cs" />
     <Compile Include="Common\Controls\DateSelection\DateNavigateControlThinLayout.cs">
       <SubType>UserControl</SubType>
@@ -2456,6 +2454,7 @@
     <Compile Include="Shifts\BaseUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shifts\ClipHandlerStateHolder.cs" />
     <Compile Include="Shifts\GeneralView.cs">
       <SubType>UserControl</SubType>
     </Compile>
