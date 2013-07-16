@@ -103,6 +103,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_browser.Element(Find.BySelector(selector)).WaitUntil<Element>(e=>e.Enabled);
 		}
 
+		public string Value(string selector)
+		{
+			return _browser.Element(Find.BySelector(selector)).Text;
+		}
+
 		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
 		{
 			_browser.RunScript("document.driverScriptResult = String( function(){" + javascript + "}() );");

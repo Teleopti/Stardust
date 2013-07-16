@@ -385,7 +385,6 @@
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IBusinessUnitsViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IDataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
-    <Compile Include="Core\RequestContext\StringEncryption.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />

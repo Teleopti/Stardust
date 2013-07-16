@@ -1,8 +1,6 @@
-﻿using System.Web.Security;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Domain.Security
 {
 	public static class StringEncryption
 	{

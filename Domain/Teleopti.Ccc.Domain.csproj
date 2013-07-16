@@ -1059,6 +1059,7 @@
     <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
+    <Compile Include="Security\StringEncryption.cs" />
     <Compile Include="Security\UserDetail.cs" />
     <Compile Include="Specification\All.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />

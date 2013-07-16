@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Web;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -18,7 +20,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var personalSettingDataRepository = new PersonalSettingDataRepository(uow);
 			var setting = personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = IsActive;
-			setting.CalendarUrl = "testUrl";
+			setting.CalendarUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
+			                      HttpUtility.UrlEncode(
+									  StringEncryption.Encrypt("TestData" + "/" + user.Id.Value));
 			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
 			personalSettingData.SetValue(setting);
 			var setOwnerMethod = typeof(CalendarLinkSettings).GetMethod("SetOwner", BindingFlags.Instance | BindingFlags.NonPublic,

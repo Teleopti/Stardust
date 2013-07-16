@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -111,8 +112,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				var uniqueValue = dataSourceName + "/" + userId;
 				var encryptedUniqueValue = StringEncryption.Encrypt(uniqueValue);
 				url =
-				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/SetCalendarLinkStatus", System.StringComparison.Ordinal)) +
-				"Share?id=" + Url.Encode(encryptedUniqueValue);
+					requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/SetCalendarLinkStatus", System.StringComparison.Ordinal)) +
+					"Share?id=" + Url.Encode(encryptedUniqueValue);
 			}
 			setting.IsActive = isActive;
 			setting.CalendarUrl = url;

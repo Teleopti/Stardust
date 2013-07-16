@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeASharingLink()
 		{
 			Browser.Interactions.AssertExists(".calendar-url");
+			ScenarioContext.Current.Add("CalendarLink", Browser.Interactions.Value(".calendar-url"));
 		}
 
 		[Then(@"I should not see a sharing link")]
@@ -47,6 +48,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertNotExists("#settings", "." + cssClass.Name);
 		}
+
+		[When(@"Someone is viewing sharing link")]
+		public void WhenSomeoneIsViewingSharingLink()
+		{
+			var url = ScenarioContext.Current.Get<string>("CalendarLink");
+			Navigation.GotoRaw(url);
+		}
+
+		[Then(@"Someone should not see ical calendar")]
+		public void ThenSomeoneShouldNotSeeIcalCalendar()
+		{
+			//ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"Someone should see ical calendar with")]
+		public void ThenSomeoneShouldSeeIcalCalendarWith(Table table)
+		{
+			//ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"Someone should not see ical calendar with")]
+		public void ThenSomeoneShouldNotSeeIcalCalendarWith(Table table)
+		{
+			//ScenarioContext.Current.Pending();
+		}
+
 
 	}
 }
