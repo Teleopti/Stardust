@@ -11,9 +11,18 @@ Background:
 	| Field                  | Value                  |
 	| Name                   | Access to CalendarLink |
 	| Access to CalendarLink | true                   |
+	And there is a role with
+	| Field                  | Value                     |
+	| Name                   | No access to CalendarLink |
+	| Access to CalendarLink | false                     |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
+
+Scenario: Cannot share calendar without permission
+	Given I have the role 'No access to CalendarLink'
+	When I view my settings
+	Then I should not see 'share my calendar' in settings
 
 Scenario: View calendar sharing activation status
 	Given I have the role 'Access to CalendarLink'
@@ -36,6 +45,15 @@ Scenario: Revoke calendar sharing
 	When I click 'revoke'
 	Then I should see 'share my calendar' inactive
 	And I should not see a sharing link
+
+Scenario: Stop calendar sharing after revoke
+	Given I have the role 'Access to CalendarLink'
+	And I have shared calendar
+	When I view my settings
+	Then I should see 'share my calendar' active
+	When I click 'revoke'
+	And Someone is viewing sharing link
+	Then Someone should not see ical calendar
 
 Scenario: View calendar sharing link
 	Given I have the role 'Access to CalendarLink'

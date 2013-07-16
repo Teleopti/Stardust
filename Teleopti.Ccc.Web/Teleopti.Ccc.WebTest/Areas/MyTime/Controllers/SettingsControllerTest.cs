@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
-			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/ActivateCalendarLink"));
+			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/SetCalendarLinkStatus"));
 			var settings = new CalendarLinkSettings();
 			var currentDatasource = MockRepository.GenerateMock<ICurrentDataSource>();
 			const string dataName = "TestRepsitory";
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
-			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/ActivateCalendarLink"));
+			request.Stub(x => x.Url).Return(new Uri("http://xxx.xxx.xxx.xxx/Mytime/Settings/SetCalendarLinkStatus"));
 			var settings = new CalendarLinkSettings();
 			var currentDatasource = MockRepository.GenerateMock<ICurrentDataSource>();
 			const string dataName = "TestRepsitory";

@@ -42,6 +42,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertNotExists(".share-my-calendar", ".calendar-url");
 		}
 
+		[Then(@"I should not see '(.*)' in settings")]
+		public void ThenIShouldNotSeeInSettings(CssClass cssClass)
+		{
+			Browser.Interactions.AssertNotExists("#settings", "." + cssClass.Name);
+		}
 
 	}
 }
