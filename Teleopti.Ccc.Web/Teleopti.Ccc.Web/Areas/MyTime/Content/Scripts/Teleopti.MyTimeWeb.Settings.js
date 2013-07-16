@@ -26,11 +26,11 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	    self.CalendarUrl = ko.observable();
 	    self.ActivateCalendarSharing = function() {
 	        self.CalendarSharingActive(true);
-	        _activateCalendarLink(true);
+	        _setCalendarLinkStatus(true);
 	    };
 	    self.DeactivateCalendarSharing = function() {
 	    	self.CalendarSharingActive(false);
-	    	_activateCalendarLink(false);
+	    	_setCalendarLinkStatus(false);
 	    };
 
         self.selectedUiCulture.subscribe(function(newValue) {
@@ -56,6 +56,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
     function _partialInit() {
         vm = new settingsViewModel();
         _loadCultures();
+	    _getCalendarLinkStatus();
         _bindData();
 	}
 
@@ -97,10 +98,27 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			}
 		});
 	}
+	
+	function _getCalendarLinkStatus() {
+		ajax.Ajax({
+			url: "Settings/CalendarLinkStatus",
+			contentType: 'application/json; charset=utf-8',
+			type: "GET",
+			success: function (data, textStatus, jqXHR) {
+				ajax.CallWhenAllAjaxCompleted(function () {
+					vm.CalendarSharingActive(data.IsActive);
+					vm.CalendarUrl(data.CalendarUrl);
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
     
-	function _activateCalendarLink(isActive) {
+	function _setCalendarLinkStatus(isActive) {
 	    ajax.Ajax({
-	        url: "Settings/ActivateCalendarLink",
+	    	url: "Settings/SetCalendarLinkStatus",
 	        contentType: 'application/json; charset=utf-8',
 	        type: "POST",
 	        data: JSON.stringify({IsActive: isActive}),

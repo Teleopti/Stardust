@@ -153,6 +153,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetCalendarLinkStatus()
+		{
+			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+			var settings = new CalendarLinkSettings();
+			personalSettingDataRepository.Stub(x => x.FindValueByKey("CalendarLinkSettings", settings)).IgnoreArguments().Return(settings);
+			using (
+				var target = new StubbingControllerBuilder().CreateController<SettingsController>(null, loggedOnUser, null, null,
+				                                                                                  personalSettingDataRepository,
+				                                                                                  null, null))
+			{
+				var result = target.CalendarLinkStatus().Data as CalendarLinkSettings;
+				result.Should().Be.SameInstanceAs(settings);
+			}
+		}
+
+		[Test]
 		public void ShouldActivateCalendarLink()
 		{
 			var person = new Person();
@@ -175,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 				context.SetRequest(request);
 
-				var result = target.ActivateCalendarLink(true).Data as string;
+				var result = target.SetCalendarLinkStatus(true).Data as string;
 				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
 				Assert.IsTrue(settings.IsActive);
 				Assert.AreEqual(result, "http://xxx.xxx.xxx.xxx/Mytime/Share?id=" + target.Url.Encode(StringEncryption.Encrypt(dataName + "/" + id)));
@@ -203,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 				context.SetRequest(request);
 
-				var result = target.ActivateCalendarLink(false).Data as string;
+				var result = target.SetCalendarLinkStatus(false).Data as string;
 				personalSettingDataRepository.AssertWasCalled(x => x.PersistSettingValue(settings));
 				Assert.IsFalse(settings.IsActive);
 				Assert.AreEqual(result, string.Empty);

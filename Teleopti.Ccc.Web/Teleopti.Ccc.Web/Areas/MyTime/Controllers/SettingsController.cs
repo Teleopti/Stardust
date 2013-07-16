@@ -99,24 +99,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
-		public JsonResult ActivateCalendarLink(bool isActive)
+		public JsonResult SetCalendarLinkStatus(bool isActive)
 		{
 			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
-			setting.IsActive = isActive;
-			_personalSettingDataRepository.PersistSettingValue(setting);
-			if (!isActive)
-				return Json(string.Empty);
-			var requestUrl = Request.Url.OriginalString;
-			var dataSourceName = _currentDataSource.CurrentName();
-			var userId = _loggedOnUser.CurrentUser().Id.Value;
-			var uniqueValue = dataSourceName + "/" + userId;
-			var encryptedUniqueValue = StringEncryption.Encrypt(uniqueValue);
-
-			var url =
-				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/ActivateCalendarLink", System.StringComparison.Ordinal)) +
+			var url = string.Empty;
+			if (isActive)
+			{
+				var requestUrl = Request.Url.OriginalString;
+				var dataSourceName = _currentDataSource.CurrentName();
+				var userId = _loggedOnUser.CurrentUser().Id.Value;
+				var uniqueValue = dataSourceName + "/" + userId;
+				var encryptedUniqueValue = StringEncryption.Encrypt(uniqueValue);
+				url =
+				requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/SetCalendarLinkStatus", System.StringComparison.Ordinal)) +
 				"Share?id=" + Url.Encode(encryptedUniqueValue);
-				
+			}
+			setting.IsActive = isActive;
+			setting.CalendarUrl = url;
+			_personalSettingDataRepository.PersistSettingValue(setting);
 			return Json(url);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
+		public JsonResult CalendarLinkStatus()
+		{
+			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
+			return Json(setting, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
