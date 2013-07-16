@@ -667,6 +667,7 @@ namespace Teleopti.Interfaces.Domain
                     int hours;
                     if (int.TryParse(ret[0], out hours))
                     {
+                        hours = verifySaneAmountOfHours(hours);
                         timeValue = TimeSpan.FromHours(hours);
                         if (timeValue > maximumValue)
                         {
@@ -687,6 +688,11 @@ namespace Teleopti.Interfaces.Domain
                 return true;
             }
             return TryParseLongHourString(timeAsText, out timeValue, timeFormatsType);
+        }
+
+        private static int verifySaneAmountOfHours(int hours)
+        {
+            return Math.Min(hours, 1000000);
         }
 
         ///<summary>
