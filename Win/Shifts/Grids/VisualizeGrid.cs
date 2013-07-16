@@ -9,8 +9,11 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Interfaces.Domain;
+using VisualPayloadInfo = Teleopti.Ccc.WinCode.Shifts.VisualPayloadInfo;
 
 namespace Teleopti.Ccc.Win.Shifts.Grids
 {
@@ -18,7 +21,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
     {
         private const int fieldAngle = 90;
         private const int defaultHourWidth = 60;
-        private  ToolTip _visualizeToolTip = new ToolTip();
+        private readonly ToolTip _visualizeToolTip = new ToolTip();
         private RowHeaderColumn<ReadOnlyCollection<VisualPayloadInfo>> _rowHeaderColumn;
         private readonly TimeSpan defaultTick = new TimeSpan(1, 0, 0);
         private readonly Pen pen = new Pen(Brushes.Black);
@@ -26,11 +29,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private readonly Brush defaultBrush = Brushes.Black;
 		private DateTime _lastTime = DateTime.Now;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VisualizeGrid"/> class.
-        /// </summary>
-        /// <param name="presenter">The presenter.</param>
-        /// <param name="grid">The grid.</param>
         public VisualizeGrid(IVisualizePresenter presenter, GridControl grid)
             : base(presenter, grid)
         {
@@ -41,14 +39,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             get { return ShiftCreatorViewType.VisualizingGrid; }
         }
 
-        #region Methods - Instance Member - VisualizeGridView Members
-
-        /// <summary>
-        /// Create column headers
-        /// </summary>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         internal override void CreateHeaders()
         {
             _rowHeaderColumn = new RowHeaderColumn<ReadOnlyCollection<VisualPayloadInfo>>();
@@ -70,12 +60,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 			_visualizeToolTip.RemoveAll();
 		}
 
-        /// <summary>
-        /// Prepares the view
-        /// </summary>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         internal override void PrepareView()
         {
             ColCount = GridColumns.Count;
@@ -91,13 +75,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.Name = "";
         }
 
-        /// <summary>
-        /// Query the cell info
-        /// </summary>
-        /// <param name="e"></param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
 			if (Presenter.ModelCollection.Count == 0) return;
@@ -113,7 +90,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                         if (Presenter.ContractTimes() != null)
                         {
                             var displayTime = Presenter.ContractTimes()[e.RowIndex - 1];
-                            e.Style.CellValue = new DateTime().Add(displayTime).ToString("hh:mm", CultureInfo.CurrentCulture);
+                            e.Style.CellValue = TimeHelper.GetLongHourMinuteTimeString(displayTime, CultureInfo.CurrentCulture);
                         }
                     }
                 }
@@ -123,14 +100,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Saves the cell info.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridSaveCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
             if (ValidCell(e.ColIndex, e.RowIndex))
@@ -139,24 +108,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Merge the headers
-        /// </summary>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
-        internal override void MergeHeaders()
-        {
-
-        }
-
-        /// <summary>
-        /// Draws the time line.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void DrawTimeLine(GridDrawCellEventArgs e)
         {
             int numberOfColumns;
@@ -206,7 +157,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                         if (startSpan.Hours < 0)
                             displayHour = new TimeSpan(startSpan.Hours * -1, 0, 0);
 
-                        string hour = new DateTime().Add(displayHour).ToString("t", CultureInfo.CurrentCulture);
+                        string hour = TimeHelper.TimeOfDayFromTimeSpan(displayHour, CultureInfo.CurrentCulture);
                         SizeF hourSize = e.Graphics.MeasureString(hour, font);
                         float hourStartingPoint = (timeSlotWidth * numberfSlotsPerHour) / 2 - (hourSize.Width / 2);
                         e.Graphics.DrawString(hour, font, defaultBrush, new PointF((width + hourStartingPoint), 6));
@@ -241,13 +192,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Draws the shifts.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void DrawShifts(GridDrawCellEventArgs e)
         {
             if (Presenter.GetNumberOfRowsToBeShown() == 0)
@@ -306,8 +250,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-
-    	
         private void ShowShiftToolTipText(GridCellMouseEventArgs e)
         {
             if (Presenter.GetNumberOfRowsToBeShown() == 0)
@@ -402,15 +344,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Draw a line on the grid column
-        /// </summary>
-        /// <param name="graphics">Instance of Graphics</param>
-        /// <param name="pX">Starting X</param>
-        /// <param name="pY">Starting Y</param>
-        /// <param name="qX">Ending X</param>
-        /// <param name="qY">Ending Y</param>
-        /// <param name="pen">Instance of the Pen used to draw the line</param>
         private static void DrawLine(Graphics graphics, float pX, float pY, float qX, float qY, Pen pen)
         {
             PointF pointX = new PointF(pX, pY);
@@ -418,64 +351,46 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             graphics.DrawLine(pen, pointX, pointY);
         }
 
-        #endregion
-
-        #region Events - Instance Member
-
-        /// <summary>
-        /// Handles the CellDrawn event of the Grid control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void Grid_CellDrawn(object sender, GridDrawCellEventArgs e)
         {
             DrawTimeLine(e);
             DrawShifts(e);
         }
 
-        /// <summary>
-        /// Handles the CellMouseHover event of the Grid control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridCellMouseEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void Grid_CellMouseHover(object sender, GridCellMouseEventArgs e)
         {
             ShowShiftToolTipText(e);
         }
 
-        /// <summary>
-        /// Handles the LostFocus event of the Grid control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void Grid_LostFocus(object sender, EventArgs e)
         {
             _visualizeToolTip.RemoveAll();
         }
 
-        #endregion
+        public override void Add()
+        {
+        }
+
+        public override void Delete()
+        {
+        }
+
+        public override void Rename()
+        {
+        }
+
+        public override void Sort(SortingMode mode)
+        {
+        }
 
         public override void RefreshView()
         {
-            /*Presenter.LoadModelCollection();*/
             Presenter.Explorer.View.SetVisualGridDrawingInfo();
             Grid.RowCount = Presenter.ModelCollection.Count;
             Grid.ColWidths[1] = (int) Presenter.Explorer.Model.VisualColumnWidth;       
             Grid.Invalidate();
         }
 
-        /// <summary>
-        /// Clears the view.
-        /// </summary>
         public override void Clear()
         {
             base.ClearView();

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Forecasting
@@ -14,30 +12,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
     /// </remarks>
     public static class OpenHourHelper
     {
-        /// <summary>
-        /// Formates the return string for displaying multiple open hours.
-        /// </summary>
-        /// <param name="periods">The periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-12-18
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
-        public static string OpenHoursToString(IList<TimePeriod> periods)
-        {
-            //robink: Changed to StringBuilder instead of appending strings, gives a lot better performance!
-            StringBuilder returnString = new StringBuilder();
-            foreach (TimePeriod period in periods)
-            {
-                returnString.AppendFormat("{0}; ", period.ToShortTimeString());
-            }
-            if (returnString.Length > 2)
-            {
-                returnString = returnString.Remove(returnString.Length - 2, 2);
-            }
-            return returnString.ToString();
-        }
         /// <summary>
         /// Checks the openHour string.
         /// </summary>

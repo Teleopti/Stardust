@@ -16,41 +16,13 @@ namespace Teleopti.Ccc.Win.Shifts
 {
     public abstract class GridViewBase : ICommonOperation, IDisposable
     {
-        private GridControl _grid;
-        /*private bool _isCtrlPressing = false;*/
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GridViewBase"/> class.
-        /// </summary>
-        /// <param name="grid">The grid.</param>
+        private readonly GridControl _grid;
+        
         protected GridViewBase(GridControl grid)
         {
             _grid = grid;
-            /*_grid.KeyDown += grid_KeyDown;
-            _grid.KeyUp += grid_KeyUp;*/
             Init();
         }
-
-        /*void grid_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.C)
-            {
-                if(_isCtrlPressing)
-                {
-                    _isCtrlPressing = false;
-                    GridRangeInfoList selectedRangeInfoList = Grid.Model.Selections.GetSelectedRows(true, false);
-                    if (selectedRangeInfoList.Count > 0)
-                        ClipboardCopy();
-                }
-            }
-        }
-
-        void grid_KeyDown(object sender, KeyEventArgs e)
-        {
-            _isCtrlPressing = false;
-            if (e.Control)
-                _isCtrlPressing = true;
-        }*/
 
         private void Init()
         {
@@ -70,10 +42,6 @@ namespace Teleopti.Ccc.Win.Shifts
             {
                 return _grid;
             }
-            //private set
-            //{
-            //    _grid = value;
-            //}
         }
 
         public virtual void ClearView()
@@ -102,11 +70,11 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public bool IsRightToLeft
         {
-            get { return Grid.RightToLeft == System.Windows.Forms.RightToLeft.Yes; }
+            get { return Grid.RightToLeft == RightToLeft.Yes; }
             set
             {
-                if (value) Grid.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-                else Grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
+                if (value) Grid.RightToLeft = RightToLeft.Yes;
+                else Grid.RightToLeft = RightToLeft.No;
             }
         }
 
@@ -148,15 +116,10 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             GridHelper.HandleSelectionKeys(Grid, e);
         }
+
         internal virtual void KeyDown(KeyEventArgs e)
         {
-            
         }
-
-        //internal void QueryColCount(object sender, GridRowColCountEventArgs e)
-        //{
-        //    e.Count = ColCount - 1;
-        //}
 
         internal virtual void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
@@ -170,18 +133,9 @@ namespace Teleopti.Ccc.Win.Shifts
         {
         }
 
-
-
         internal virtual void ClipboardPaste(GridCutPasteEventArgs e)
         {
             PasteFromClipboard(false);
-        }
-        internal virtual void CellButtonClicked(GridCellButtonClickedEventArgs e)
-        {
-        }
-
-        internal virtual void DrawCellButton(GridDrawCellButtonEventArgs e)
-        {
         }
 
         protected void PasteFromClipboard(bool insert)
@@ -215,16 +169,11 @@ namespace Teleopti.Ccc.Win.Shifts
             RowCount = 0;
         }
 
-        internal virtual void CellClick(object sender, GridCellClickEventArgs e)
-        {
-
-        }
-
         private static ClipHandler<string> ConvertClipboardToClipHandler()
         {
             ClipHandler<string> clipHandler = new ClipHandler<string>();
 
-            if (Clipboard.ContainsText() == true)
+            if (Clipboard.ContainsText())
             {
                 string clipboardText = Clipboard.GetText();
                 clipboardText = clipboardText.Replace("\n", "");
@@ -268,7 +217,6 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public virtual void Sort(bool isAscending, int columnIndex)
         {
-
         }
 
         public IList<T> Sort<T>(ISortColumn<T> column,
@@ -287,63 +235,27 @@ namespace Teleopti.Ccc.Win.Shifts
 
         #region ICommonOperation Members
 
-        /// <summary>
-        /// Adds the new.
-        /// </summary>
-        public virtual void Add()
-        {
+        public abstract void Add();
 
-        }
+        public abstract void Delete();
 
-        /// <summary>
-        /// Deletes the selected items.
-        /// </summary>
-        public virtual void Delete()
-        {
+        public abstract void Rename();
 
-        }
+        public abstract void Sort(SortingMode mode);
 
-        /// <summary>
-        /// Renames this instance.
-        /// </summary>
-        public virtual void Rename()
-        {
-
-        }
-
-        /// <summary>
-        /// Sorts this instance.
-        /// </summary>
-        /// <param name="mode"></param>
-        public virtual void Sort(SortingMode mode)
-        {
-
-        }
-
-        /// <summary>
-        /// Cuts this instance.
-        /// </summary>
         public virtual void Cut()
         {
             Copy();
             Delete();
-
         }
 
-        /// <summary>
-        /// Copies this instance.
-        /// </summary>
         public virtual void Copy()
         {
             ClipboardCopy();
         }
 
-        /// <summary>
-        /// Pastes this instance.
-        /// </summary>
         public virtual void Paste()
         {
-            //ClipHandler<string> clipHandler = GridHelper.ConvertClipboardToClipHandlerString();
             ClipHandler handler = (ClipHandler)ClipHandlerStateHolder.Current.Get();
             ClipHandler<string> clipHandler = GridHelper.ConvertClipHandler(handler);
             
@@ -378,41 +290,14 @@ namespace Teleopti.Ccc.Win.Shifts
             }
         }
 
-        /// <summary>
-        /// Moves up.
-        /// </summary>
-        public virtual void MoveUp()
-        {
-
-        }
-
-        /// <summary>
-        /// Moves down.
-        /// </summary>
-        public virtual void MoveDown()
-        {
-
-        }
-
-        /// <summary>
-        /// Refreshes the view.
-        /// </summary>
-        public virtual void RefreshView()
-        {
-
-        }
+        public abstract void RefreshView();
 
         public virtual void Amounts(IList<int> shiftAmount)
         {
-
         }
 
-        /// <summary>
-        /// Clears the view.
-        /// </summary>
         public virtual void Clear()
         {
-            
         }
 
         #endregion
@@ -495,35 +380,6 @@ namespace Teleopti.Ccc.Win.Shifts
             if (e.KeyValue == 46)
                 Delete();
             e.Handled = true;
-        }
-
-        
-    }
-
-    public class ClipHandlerStateHolder
-    {
-        private object value;
-
-        private static ClipHandlerStateHolder _instance;
-
-        public static ClipHandlerStateHolder Current
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new ClipHandlerStateHolder();
-                return _instance;
-            }
-        }
-
-        public void Set(object newValue)
-        {
-            this.value = newValue;
-        }
-
-        public object Get()
-        {
-            return this.value;
         }
     }
 }

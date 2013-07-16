@@ -94,16 +94,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             CultureInfo ci = style.GetCulture(true);
 
             // Make sure value in cell is TimeSpan
-            if (value==null || typeof(TimeSpan) != value.GetType()) return "";
+            if (value==null) return string.Empty;
 
             String ret = string.Empty;
-            if (value.GetType() == typeof(TimeSpan))
+            if (value is TimeSpan)
             {
-                
-                if (_showSeconds)
-                    ret = TimeHelper.GetLongHourMinuteSecondTimeString((TimeSpan)value, ci);
-                else
-                    ret = TimeHelper.GetLongHourMinuteTimeString((TimeSpan)value, ci);
+                ret = _showSeconds ? TimeHelper.GetLongHourMinuteSecondTimeString((TimeSpan)value, ci) : TimeHelper.GetLongHourMinuteTimeString((TimeSpan)value, ci);
             }
             return ret;
         }

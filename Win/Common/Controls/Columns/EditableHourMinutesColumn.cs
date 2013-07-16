@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private string _groupHeaderText;
         private readonly string _bindingCellTypeTimeOfDay;
         private string _bindingProperty;
-        private string _cellTypeLength = "HourMinutes";
+        private string _cellTypeLength = "TimeSpanLongHourMinutesCellModelHours";
         private string _cellTypeTimeOfDay = "TimeSpanTimeOfDayCellModel";
 
         public EditableHourMinutesColumn(string bindingProperty, string headerText)
@@ -27,9 +27,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             _groupHeaderText = groupHeaderText;
         }
 
-        public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText, string bindingCellTypeTimeOfDay) : this(bindingProperty,headerText,groupHeaderText)
+        public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText, string bindingCellTypeTimeOfDay = null, string cellTypeLength = null) : this(bindingProperty,headerText,groupHeaderText)
         {
             _bindingCellTypeTimeOfDay = bindingCellTypeTimeOfDay;
+
+            if (!string.IsNullOrEmpty(cellTypeLength))
+            {
+                _cellTypeLength = cellTypeLength;
+            }
         }
 
         public override int PreferredWidth
