@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var oneModelRow = model.Data.First();
             Assert.AreEqual("Arne weise", oneModelRow.Name);
             Assert.AreEqual(new DateOnly(2000, 1, 1), oneModelRow.Date);
-            Assert.AreEqual(UserTexts.Resources.Unknown, oneModelRow.ConflictType);
+			Assert.AreEqual(UserTexts.Resources.Unknown + "(" + typeof(dummyScheduleData) + ")", oneModelRow.ConflictType);
             Assert.AreEqual(UserTexts.Resources.Deleted, oneModelRow.LastModifiedName);
         }
 
