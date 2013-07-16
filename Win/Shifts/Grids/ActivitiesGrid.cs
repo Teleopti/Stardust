@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             if (grid == null) return;
 
             grid.CellModels.Add("TimeSpanTimeOfDayCellModel", new TimeSpanCultureTimeOfDayCellModel(grid.Model));
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelHours", new TimeSpanLongHourMinutesCellModel(grid.Model) { OnlyPositiveValues = true });
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanLongHourMinutesCellModel(grid.Model) { OnlyPositiveValues = true, InterpretAsMinutes = true });
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
                 grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model,Resources.MasterActivity16x16));
         }
@@ -133,7 +135,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _alSegment = new EditableHourMinutesColumn<IActivityViewModel>("ALSegment",
                                                                       UserTexts.Resources.Segment,
-                                                                      UserTexts.Resources.ActivityLength);
+                                                                      UserTexts.Resources.ActivityLength,
+                                                                      cellTypeLength: "TimeSpanLongHourMinutesCellModelMinutes");
             _alSegment.Validate = ValidateALSegment;
             AddColumn(_alSegment);
 
@@ -153,7 +156,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _apSegment = new EditableHourMinutesColumn<IActivityViewModel>("APSegment",
                                                                       UserTexts.Resources.Segment,
-                                                                      UserTexts.Resources.ActivityPosition);
+                                                                      UserTexts.Resources.ActivityPosition,
+                                                                      cellTypeLength: "TimeSpanLongHourMinutesCellModelMinutes");
             _apSegment.Validate = ValidateAPSegment;
             AddColumn(_apSegment);
         }
@@ -174,6 +178,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.ColWidths[1] = 169;
             Grid.ColWidths[4] = 129;
             Grid.ColWidths[5] = 259;
+            Grid.ColWidths[9] = 80;
+            Grid.ColWidths[10] = 80;
 
             Grid.Name = "ActivityGrid";
         }
@@ -485,6 +491,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         public override void Delete()
         {
             DeleteSelected();
+        }
+
+        public override void Rename()
+        {
         }
 
         public override void Sort(SortingMode mode)

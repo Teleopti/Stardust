@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
 
@@ -15,13 +13,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
     [Serializable]
     public class TimeSpanLongHourMinutesCellModel : GridTextBoxCellModel
     {
-        private bool _onlyPositiveValues;
-
-        public bool OnlyPositiveValues
-        {
-            get { return _onlyPositiveValues; }
-            set { _onlyPositiveValues = value; }
-        }
         public TimeSpanLongHourMinutesCellModel(GridModel grid) : base(grid)
         {
         }
@@ -29,6 +20,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         protected TimeSpanLongHourMinutesCellModel(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+        
+        public bool OnlyPositiveValues { get; set; }
+        public bool InterpretAsMinutes { get; set; }
 
         public override GridCellRendererBase CreateRenderer(GridControlBase control)
         {
@@ -37,34 +31,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            // Get culture specified in style, default if null
-            CultureInfo ci = style.GetCulture(true);
-
-            char separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
-            String[] ret = text.Split(separator);
-
-            if (ret.Length> 2)
+            TimeSpan timeSpan;
+            if (!TimeHelper.TryParseLongHourStringDefaultInterpretation(text, TimeSpan.MaxValue, out timeSpan, TimeFormatsType.HoursMinutes, InterpretAsMinutes))
                 return false;
 
-            int minutes = 0;
-            int hours;
-            if (ret.Length== 2)
-            {  
-                if (!int.TryParse(ret[1], out minutes))
-                    return false;
-                if (minutes > 59)
-                    return false;
-            }
-
-            if (!int.TryParse(ret[0], out hours))
-                return false;
-
-            if (hours < 0)
-                minutes *= -1;
-
-            TimeSpan timeSpan = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes));
-
-            if (_onlyPositiveValues && timeSpan.TotalSeconds < 0)
+            if (OnlyPositiveValues && timeSpan < TimeSpan.Zero)
                 return false;
 
             style.CellValue = timeSpan;
@@ -76,10 +47,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             // Get culture specified in style, default if null
             CultureInfo ci = style.GetCulture(true);
-
-            // Make sure value in cell is TimeSpan
-            if (typeof(TimeSpan) != value.GetType())
-                return "";
 
             String ret = string.Empty;
 

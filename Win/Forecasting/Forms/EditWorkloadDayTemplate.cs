@@ -183,10 +183,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (openHourDialog.ShowDialog(this) == DialogResult.OK)
             {
                 _openHours = openHourDialog.OpenHourPeriod;
-                if (_openHours.EndTime.Days > 0)
-                    textBoxOpenHours.Text = _openHours.ToShortTimeString() + " +1";
-                else
-                    textBoxOpenHours.Text = _openHours.ToShortTimeString();
+                textBoxOpenHours.Text = _openHours.ToShortTimeString();
                 var workloadDayTemplate = (WorkloadDayTemplate)_workload.GetTemplateAt(TemplateTarget.Workload, _templateIndex);
                 if (_workloadDay != null)
                     workloadDayTemplate.CloneTaskPeriodListFrom((WorkloadDayBase)_workloadDay);
@@ -206,10 +203,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             tableLayoutPanel1.SetColumnSpan(_workloadDayTemplatesDetailView, 2);
 
             textBoxTemplateName.Text = _workloadDayTemplate.Name;
-            if (_openHours.EndTime.Days > 0)
-                textBoxOpenHours.Text = _openHours.ToShortTimeString() + " +1";
-            else
-                textBoxOpenHours.Text = _openHours.ToShortTimeString();
+            textBoxOpenHours.Text = _openHours.ToShortTimeString();
 
             _workloadDayTemplatesDetailView.ReloadWorkloadDayTemplates();
         }

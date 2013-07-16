@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
@@ -34,14 +26,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            TimeSpan parsedTimeSpan = TimeSpan.MinValue;
+            TimeSpan parsedTimeSpan;
             if (!TimeHelper.TryParse(text, out parsedTimeSpan))
             {
                 return false;
             }
-
-			if (parsedTimeSpan.Ticks < 0)
-				return false;
+			if (parsedTimeSpan < TimeSpan.Zero)
+			{
+			    return false;
+			}
 
             style.CellValue = parsedTimeSpan;
             return true;
@@ -49,36 +42,21 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
         {
-            // Get culture specified in style, default if null
             var ci = style.GetCulture(true);
 
             var ret = string.Empty;
-            var day = string.Empty;
             if(value == null)
             {
                 style.Enabled = false;
                 style.CellType = "Static";
             }
-            else if (value.GetType() == typeof(TimeSpan))
+            else if (value is TimeSpan)
             {
                 var typedValue = (TimeSpan) value;
 
-				if (typedValue.Ticks < 0)
-					return ret;
-                
-                var min = Convert.ToString(typedValue.Minutes, ci);
-                if (min.Length == 1)
-                {
-                    min = "0" + min;
-                }
-                if (typedValue.Days > 0)
-                {
-                    if (typedValue.Days == 24)
-                        day = " +1";
-                    else
-                        day = " +" + typedValue.Days;
-                }
-                ret = Convert.ToString(typedValue.Hours, ci) + ci.DateTimeFormat.TimeSeparator + min + day;
+				if (typedValue < TimeSpan.Zero) return ret;
+
+                ret = TimeHelper.TimeOfDayFromTimeSpan(typedValue, ci);
             }
             return ret;
         }

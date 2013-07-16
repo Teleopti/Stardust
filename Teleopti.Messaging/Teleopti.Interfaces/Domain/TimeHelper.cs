@@ -42,14 +42,18 @@ namespace Teleopti.Interfaces.Domain
 		public string GetLongHourMinuteTimeString(TimeSpan timeSpan)
 		{
 			string separator = _culture.GetCulture().DateTimeFormat.TimeSeparator;
-			int sign = Math.Sign(timeSpan.Ticks);
+			
+            string signChar = string.Empty;
+            if (timeSpan < TimeSpan.Zero)
+            {
+                signChar = "-";
+                timeSpan = timeSpan.Negate();
+            }
 
-			TimeSpan absValue = TimeSpan.FromTicks(Math.Abs(timeSpan.Ticks));
+            int hour = (int)timeSpan.TotalHours;
+            int minutes = timeSpan.Minutes;
 
-			int hour = (int)absValue.TotalHours;
-			int minutes = absValue.Minutes;
-
-			if (absValue.Seconds >= 30)
+            if (timeSpan.Seconds >= 30)
 				minutes += 1;
 			if (minutes == 60)
 			{
@@ -59,10 +63,6 @@ namespace Teleopti.Interfaces.Domain
 
 			string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
 			string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
-
-			string signChar = string.Empty;
-			if (sign == -1)
-				signChar = "-";
 
 			if (min.Length == 1)
 				min = "0" + min;
@@ -95,7 +95,7 @@ namespace Teleopti.Interfaces.Domain
         {
             TimeSpan? span;
             var result = TryParse(timeAsText, out span);
-            timeValue = span.Value;
+            timeValue = span.GetValueOrDefault();
             return result;
         }
 
@@ -114,13 +114,13 @@ namespace Teleopti.Interfaces.Domain
             if (int.TryParse(timeAsText, out hours) &&
                 hours < 24 && hours >= 0)
             {
-                timeValue = new TimeSpan(hours, 0, 0);
+                timeValue = TimeSpan.FromHours(hours);
                 return true;
             }
 
             if (int.TryParse(timeAsText, out hours) && hours == 24)
             {
-                timeValue = new TimeSpan(1, 0, 0, 0);
+                timeValue = TimeSpan.FromDays(1);
                 return true;
             }
 
@@ -137,7 +137,7 @@ namespace Teleopti.Interfaces.Domain
             }
             if (hours > 2399)
             {
-                timeValue = new TimeSpan();
+                timeValue = TimeSpan.Zero;
                 return false;
             }
 
@@ -158,9 +158,9 @@ namespace Teleopti.Interfaces.Domain
                 if (int.TryParse(timeAsText.Substring(pos + 1, timeAsText.Length - pos - 1), out days))
                 {
                     TimeSpan timeSpannet;
-                    if (TryParse(timeAsText.Substring(0, pos - 1), out timeSpannet))
+                    if (TryParse(timeAsText.Substring(0, pos).TrimEnd(), out timeSpannet))
                     {
-                        timeValue = timeSpannet.Add(new TimeSpan(days, 0, 0, 0));
+                        timeValue = timeSpannet.Add(TimeSpan.FromDays(days));
                         return true;
                     }
                 }
@@ -174,7 +174,7 @@ namespace Teleopti.Interfaces.Domain
                     int minutes;
                     if (int.TryParse(timeAsText.Substring(pos + 1, timeAsText.Length - pos - 1), out minutes))
                     {
-                        timeValue = new TimeSpan(0, minutes, 0);
+                        timeValue = TimeSpan.FromMinutes(minutes);
                         return true;
                     }
                 }
@@ -216,9 +216,9 @@ namespace Teleopti.Interfaces.Domain
                 {
                     //Add twelve more hours if PM exists and the time is less than 12
                     if (pmDesignatorExists &&
-                        timeValue.Value.Hours < 12)
+                        timeValue.GetValueOrDefault().Hours < 12)
                     {
-                        timeValue = timeValue.Value.Add(new TimeSpan(12, 0, 0));
+                        timeValue = timeValue.GetValueOrDefault().Add(TimeSpan.FromHours(12));
                     }
 
                     return true;
@@ -288,7 +288,7 @@ namespace Teleopti.Interfaces.Domain
                 if (TimePeriod.TryParse(timePeriodItem.Trim(), out timePeriod))
                 {
                     if (dayAfter)
-                        timePeriod = new TimePeriod(timePeriod.StartTime, timePeriod.EndTime.Add(new TimeSpan(1, 0, 0, 0)));
+                        timePeriod = new TimePeriod(timePeriod.StartTime, timePeriod.EndTime.Add(TimeSpan.FromDays(1)));
                     result.Add(timePeriod);
                 }
                 else
@@ -316,7 +316,6 @@ namespace Teleopti.Interfaces.Domain
                 return true;
             }
 
-           
             text = text.Trim();
             bool isNegativSign = text.StartsWith("-", StringComparison.Ordinal);
 
@@ -340,7 +339,7 @@ namespace Teleopti.Interfaces.Domain
                 return false;
 
             if (hours < 0 || isNegativSign)
-                minutes *= -1;
+                minutes = -minutes;
 
             timeSpan = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes));
             return true;
@@ -439,15 +438,19 @@ namespace Teleopti.Interfaces.Domain
         public static string GetLongHourMinuteSecondTimeString(TimeSpan timeSpan, CultureInfo cultureInfo)
         {
             string separator = cultureInfo.DateTimeFormat.TimeSeparator;
-            int sign = Math.Sign(timeSpan.Ticks);
 
-            TimeSpan absValue = TimeSpan.FromTicks(Math.Abs(timeSpan.Ticks));
+            string signChar = string.Empty;
+            if (timeSpan < TimeSpan.Zero)
+            {
+                signChar = "-";
+                timeSpan = timeSpan.Negate();
+            }
 
-            int hour = (int)absValue.TotalHours;
-            int minutes = absValue.Minutes;
-            int seconds = absValue.Seconds;
+            int hour = (int)timeSpan.TotalHours;
+            int minutes = timeSpan.Minutes;
+            int seconds = timeSpan.Seconds;
 
-            if (absValue.Milliseconds >= 500)
+            if (timeSpan.Milliseconds >= 500)
                 seconds += 1;
             if (seconds == 60)
             {
@@ -463,10 +466,6 @@ namespace Teleopti.Interfaces.Domain
             string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
             string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
             string sec = Convert.ToString(seconds, CultureInfo.CurrentCulture);
-
-            string signChar = string.Empty;
-            if (sign == -1)
-                signChar = "-";
 
             if (min.Length == 1)
                 min = "0" + min;
@@ -581,8 +580,7 @@ namespace Teleopti.Interfaces.Domain
     	///  Created by: Ola
     	///  Created date: 2008-10-20    
     	/// /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public static string TimeOfDayFromTimeSpan(TimeSpan timeSpan, CultureInfo cultureInfo)
+		public static string TimeOfDayFromTimeSpan(TimeSpan timeSpan, IFormatProvider cultureInfo)
     	{
     		var parsed = ParseTimeOfDayFromTimeSpan(timeSpan);
 
@@ -590,14 +588,12 @@ namespace Teleopti.Interfaces.Domain
 			if (parsed.Days > 0)
 				nextDay = " +" + parsed.Days;
 
-    		var baseTime = DateTime.Now.Date;
+    		var baseTime = new DateTime(2001,1,1);
 			var timeOfDayAsDateTime = baseTime.Add(parsed.TimeOfDay);
-			//var timeOfDayAsDateTime = DateTime.MinValue.Add(parsed.TimeOfDay);
 			var formattedDateTime = timeOfDayAsDateTime.ToString("t", cultureInfo);
 			formattedDateTime += nextDay;
 			return formattedDateTime;
 		}
-
 
 		/// <summary>
 		/// Extract the number of days from a "time of day" timespan includes and
@@ -654,13 +650,12 @@ namespace Teleopti.Interfaces.Domain
                     int minutes;
                     if (int.TryParse(ret[0], out minutes))
                     {
-                        if (minutes > Convert.ToInt32(maximumValue.TotalMinutes))
+                        timeValue = TimeSpan.FromMinutes(minutes);
+                        if (timeValue > maximumValue)
                         {
-                            timeValue = TimeSpan.FromMinutes(maximumValue.TotalMinutes);
+                            timeValue = maximumValue;
                             return false;
                         }
-                        //timeAsText = string.Concat("0", separator, minutes, separator, "0");
-                        timeValue = TimeSpan.FromMinutes(minutes);
                         return true;
                     }
                 }
@@ -672,13 +667,13 @@ namespace Teleopti.Interfaces.Domain
                     int hours;
                     if (int.TryParse(ret[0], out hours))
                     {
-                        if (hours > Convert.ToInt32(maximumValue.TotalHours))
+                        timeValue = TimeSpan.FromHours(hours);
+                        if (timeValue > maximumValue)
                         {
-                            timeValue = TimeSpan.FromHours(maximumValue.TotalHours);
+                            timeValue = maximumValue;
                             return false;
                         }
-                        //timeAsText = string.Concat(hours, separator, "0", separator, "0");
-                        timeValue = TimeSpan.FromHours(hours);
+                        
                         return true;
                     }
                 }

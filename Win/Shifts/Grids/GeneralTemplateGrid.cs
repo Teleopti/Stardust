@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             _eventAggregator = eventAggregator;
             grid.CellModels.Add("TimeSpanTimeOfDayCellModel", new TimeSpanCultureTimeOfDayCellModel(grid.Model));
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelHours", new TimeSpanLongHourMinutesCellModel(grid.Model) { OnlyPositiveValues = true });
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanLongHourMinutesCellModel(grid.Model) { OnlyPositiveValues = true,InterpretAsMinutes = true});
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
 				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
         }
@@ -57,17 +59,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
         #region Methods
 
-        /// <summary>
-        /// Create the all the column headers
-        /// </summary>
-        /// <remarks>
-        /// Created By: kosalanp
-        /// Created Date: 12-05-2008
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-14
-        /// </remarks>
         internal override void CreateHeaders()
         {
             AddColumn(new RowHeaderColumn<IGeneralTemplateViewModel>());
@@ -109,7 +100,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _startPeriodSegment = new EditableHourMinutesColumn<IGeneralTemplateViewModel>("StartPeriodSegment",
                                                                                     UserTexts.Resources.Segment,
-                                                                                    UserTexts.Resources.StartPeriod);
+                                                                                    UserTexts.Resources.StartPeriod,
+                                                                                    cellTypeLength: "TimeSpanLongHourMinutesCellModelMinutes");
             _startPeriodSegment.Validate = ValidateStartPeriodSegment;
             AddColumn(_startPeriodSegment);
 
@@ -127,7 +119,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _endPeriodSegment = new EditableHourMinutesColumn<IGeneralTemplateViewModel>("EndPeriodSegment",
                                                                                     UserTexts.Resources.Segment,
-                                                                                    UserTexts.Resources.EndPeriod);
+                                                                                    UserTexts.Resources.EndPeriod,
+                                                                                    cellTypeLength: "TimeSpanLongHourMinutesCellModelMinutes");
             _endPeriodSegment.Validate = ValidateEndPeriodSegment;
             AddColumn(_endPeriodSegment);
 
@@ -145,7 +138,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             _workingSegment = new EditableHourMinutesColumn<IGeneralTemplateViewModel>("WorkingSegment",
                                                                                 UserTexts.Resources.Segment,
-                                                                                UserTexts.Resources.Length);
+                                                                                UserTexts.Resources.Length,
+                                                                                cellTypeLength: "TimeSpanLongHourMinutesCellModelMinutes");
             _workingSegment.Validate = ValidateWorkingSegment;
             AddColumn(_workingSegment);
 
@@ -163,17 +157,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 			Presenter.InvokeOnlyForRestrictionsCellChanged();		
 		}
 
-        /// <summary>
-        /// Prepare the grid structure
-        /// </summary>
-        /// <remarks>
-        /// Created By: kosalanp
-        /// Created Date: 12-05-2008
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-14
-        /// </remarks>
         internal override void PrepareView()
         {
             ColCount = GridColumns.Count;
@@ -191,24 +174,15 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.ColWidths[1] = 199;
             Grid.ColWidths[2] = 156;
             Grid.ColWidths[3] = 179;
-            Grid.ColWidths[4] = 104;
+            Grid.ColWidths[5] = 80;
+            Grid.ColWidths[6] = 80;
+            Grid.ColWidths[8] = 80;
+            Grid.ColWidths[9] = 80;
         	Grid.ColWidths[14] = 250;
 
             Grid.Name = "GeneralGrid";
         }
 
-
-        /// <summary>
-        /// Create the muliple headers
-        /// </summary>
-        /// <remarks>
-        /// Created By: kosalanp
-        /// Created Date: 12-05-2008
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-14
-        /// </remarks>
         internal override void MergeHeaders()
         {
             Grid.Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 0, 1, 0)); // Hearder ?
@@ -223,15 +197,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
         }
 
-        /// <summary>
-        /// Saves the cell info.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridSaveCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-15
-        /// </remarks>
         internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
             if (ValidCell(e.ColIndex, e.RowIndex))
@@ -243,13 +208,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="e"></param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-15
-        /// </remarks>
         internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
             
@@ -265,32 +223,11 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-
-
-
-        /// <summary>
-        /// Refreshes the cell.
-        /// </summary>
-        /// <param name="cell">The cell.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// </remarks>
         private void RefreshCell(int cell, int row)
         {
             Grid.RefreshRange(GridRangeInfo.Cell(row, cell));
         }
 
-        /// <summary>
-        /// Validates the start period start time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private void ValidateStartPeriodStartTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -304,16 +241,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(StartPeriodEndTimeCell, row);
         }
 
-        /// <summary>
-        /// Validates the start period end time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private void ValidateStartPeriodEndTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -329,17 +256,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(StartPeriodStartTimeCell, row);
         }
 
-        /// <summary>
-        /// Validates the start period segment.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="?">The ?.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private static void ValidateStartPeriodSegment(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -350,16 +266,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 styleInfo.ResetBackColor();
         }
 
-        /// <summary>
-        /// Validates the end period start time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-02
-        /// </remarks>
         private void ValidateEndPeriodStartTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -377,16 +283,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(EndPeriodEndTimeCell, row);
         }
 
-        /// <summary>
-        /// Validates the end period end time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-02
-        /// </remarks>
         private void ValidateEndPeriodEndTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -404,16 +300,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(EndPeriodStartTimeCell, row);
         }
 
-        /// <summary>
-        /// Validates the end period segment.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private static void ValidateEndPeriodSegment(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -424,16 +310,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 styleInfo.ResetBackColor();
         }
 
-        /// <summary>
-        /// Validates the working start time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private void ValidateWorkingStartTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -447,16 +323,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(12, row);
         }
 
-        /// <summary>
-        /// Validates the working end time.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private void ValidateWorkingEndTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -472,16 +338,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 RefreshCell(11, row);
         }
 
-        /// <summary>
-        /// Validates the working segment.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="styleInfo">The style info.</param>
-        /// <param name="row">The row.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-23
-        /// </remarks>
         private static void ValidateWorkingSegment(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)
         {
             bool valid = true;
@@ -494,15 +350,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
         #endregion
 
-        /// <summary>
-        /// Sort the data collection
-        /// </summary>
-        /// <param name="isAscending">Is ascending order</param>
-        /// <param name="columnIndex">Column index of the selected column</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-01
-        /// </remarks>
         public override void Sort(bool isAscending, int columnIndex)
         {
             if (columnIndex > 1)
@@ -515,6 +362,17 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
+        public override void Add()
+        {
+        }
+
+        public override void Delete()
+        {
+        }
+
+        public override void Rename()
+        {
+        }
 
         #region Overriden Methods
 
@@ -529,7 +387,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         /// </summary>
         public override void RefreshView()
         {
-            /*Presenter.LoadModelCollection();*/
             Grid.RowCount = Presenter.ModelCollection.Count + 1;
             Grid.Invalidate();
         }
