@@ -6,23 +6,14 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Drawing.Drawing2D;
+using Teleopti.Common.UI.OutlookControls;
+using Teleopti.Common.UI.OutlookControls.Workspaces;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: Madhuranga Pinnagoda
-    /// Created date: 1/15/2008
-    /// </remarks>
     public partial class OutlookBarWorkspace : UserControl
     {
-
-        #region private members
-        private static readonly OutlookBarInfo nullSmartPartInfo = new OutlookBarInfo(
-            Properties.Resources.NullSmartPartInfo,
-            null);
+        private static readonly OutlookBarInfo nullSmartPartInfo = new OutlookBarInfo("Item", null);
 
         private readonly Dictionary<UserControl, ToolStripButton> _contentUC;
         private readonly Dictionary<ToolStripButton, ToolStripButton> _buttons;
@@ -30,12 +21,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
         private int _visibleCount = -1;
         private int _lastCount = -1;
         private int _maxHeight;
-        private bool _IsCollapsed;
-        private bool _IsRightToLeft;
-        #endregion
-
-        #region Properties
-
 
         public Image ToggleButtonImage
         {
@@ -51,29 +36,9 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             }
         }
 
-        public bool IsCollapsed
-        {
-            get
-            {
-                return _IsCollapsed;
-            }
-            set
-            {
-                _IsCollapsed = value;
-            }
-        }
+        public bool IsCollapsed { get; set; }
 
-        public bool IsRightToLeft
-        {
-            get
-            {
-                return _IsRightToLeft;
-            }
-            set
-            {
-                _IsRightToLeft = value;
-            }
-        }
+        public bool IsRightToLeft { get; set; }
 
         public ReadOnlyCollection<UserControl> ContentUCCollection
         {
@@ -92,51 +57,15 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             get { return _headerLabel.Text; }
             set
             {
-                if (!_IsCollapsed) _headerLabel.Text = value;
+                if (!IsCollapsed) _headerLabel.Text = value;
                 else headerStrip2.Items[1].Text = value;
 
                 _headerLabel.Text = value;
             }
         }
 
-        #endregion
-
-        #region Event Handlers
-
-        //public delegate void OnClickEventHandler(Object sender, EventArgs e);
-        //public delegate void OnRightToLeftButtonClickEventHandler(Object sender, EventArgs e);
-        //public delegate void OnCollapsibleButtonClickEventHandler(Object sender, EventArgs e);
-
-        //public event OnRightToLeftButtonClickEventHandler RightToLeftClicked;
-        //public event OnCollapsibleButtonClickEventHandler ToolStripButtonClicked;
-        //public event OnClickEventHandler ModuleButtonClicked;
-
-        public event EventHandler<EventArgs> RightToLeftClicked;
         public event EventHandler<EventArgs> ToolStripButtonClicked;
         public event EventHandler<EventArgs> ModuleButtonClicked;
-
-
-        #endregion
-
-        #region Raise Event Handlers
-
-
-        void tsbRtL_Click(object sender, EventArgs e)
-        {
-            if (RightToLeftClicked != null)
-            {
-                if (!IsRightToLeft)
-                {
-                    this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-                }
-                else
-                {
-                    this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-                }
-                RightToLeftClicked(sender, e);
-            }
-        }
-
 
         void tsb_Click(object sender, EventArgs e)
         {
@@ -146,17 +75,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// This method initialized the main form & add header tool strip buttons.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 1/15/2008
-        /// </remarks>
         public OutlookBarWorkspace()
         {
             _contentUC = new Dictionary<UserControl, ToolStripButton>();
@@ -176,30 +94,15 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             headerStrip2.Items.Add(tsb);
             showFewerButtonsToolStripMenuItem.Text = Ccc.UserTexts.Resources.ShowLessPanels;
             showMoreButtonsToolStripMenuItem1.Text = Ccc.UserTexts.Resources.ShowMorePanels;
-
-            //Header RightToLeft button.
-            //ToolStripButton tsbRtL = new ToolStripButton(Properties.Resources.RightToLeft);
-            //tsbRtL.Alignment = ToolStripItemAlignment.Right;
-            //tsbRtL.ImageTransparentColor = Color.Black;
-            //tsbRtL.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            //tsbRtL.Click += new EventHandler(tsbRtL_Click);
-            //headerStrip2.Items.Add(tsbRtL);
         }
 
-        /// <summary>
-        /// Toggles the button.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 1/15/2008
-        /// </remarks>
         public void ToggleButton()
         {
             ToolStripButton htsb = (ToolStripButton)headerStrip2.Items[1];
             ToolStripButton htsbRtL = null;
             if (headerStrip2.Items.Count > 2)   
                 htsbRtL = (ToolStripButton)headerStrip2.Items[2];
-            if (!_IsCollapsed)
+            if (!IsCollapsed)
             {
                 BaseStackStrip bss = new BaseStackStrip();
                 htsb.ToolTipText = Teleopti.Ccc.UserTexts.Resources.Show;
@@ -231,7 +134,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
                 stackStripSplitter.Panel2.Controls.Add(bss);
                 if (htsbRtL != null)
                 htsbRtL.Visible = false;
-                _IsCollapsed = true;
+                IsCollapsed = true;
             }
             else
             {
@@ -240,7 +143,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
                 stackStripSplitter.Panel2.Controls.RemoveAt(stackStripSplitter.Panel2.Controls.Count - 1);
                 if(htsbRtL != null)
                     htsbRtL.Visible = true;
-                _IsCollapsed = false;
+                IsCollapsed = false;
             }
         }
 
@@ -272,9 +175,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             {
                 _topics.Add(stackStripButton.Text, info.EventTopicName);
             }
-            //_contentUC.Add(stackStripButton);
             _buttons.Add(stackStripButton, overflowStripButton);
-
         }
 
         public void AddContentControl(UserControl contentUC)
@@ -283,25 +184,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             contentUC.SuspendLayout();
             ContentPanel.Controls.Add(contentUC);
             contentUC.ResumeLayout(true);
-            #region commented for later use
-
-            //parameter -, ExtendedToolStripButton stackStripButton
-            //stackStripButton.Tag = contentUC;
-
-            //foreach (ToolStripItem tsi in overflowStrip.Items)
-            //{
-            //    try
-            //    {
-            //        ExtendedToolStripButton tsb = (ExtendedToolStripButton)tsi;
-            //        if (tsb.Name == stackStripButton.Name)
-            //        {
-            //            tsb.Tag = contentUC;
-            //            break;
-            //        }
-            //    }
-            //    catch { }
-            //}
-            #endregion
         }
 
         public string FindTitleByModulePath(string modulePath)
@@ -320,11 +202,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             }
         }
 
-        #endregion
-
-        #region Support events and methods
-
-        
         private void OnClick(object sender, EventArgs e)
         {
             foreach (ToolStripButton item in stackStrip.Items)
@@ -374,9 +251,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             stackStripButton.EventName = info.EventTopicName;
             stackStripButton.Enabled = info.Enable;
 
-            //-----
-
-            //overflowStripButton = new ExtendedToolStripButton(info.Icon);
             overflowStripButton.ImageTransparentColor = Color.Black;
             overflowStripButton.Alignment = ToolStripItemAlignment.Right;
             overflowStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -393,7 +267,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 
         protected virtual void AddNewButton(OutlookBarInfo info, ExtendedToolStripButton stackStripButton, ExtendedToolStripButton overflowStripButton)
         {
-            //stackStripButton = new ExtendedToolStripButton();
             stackStripButton.ImageTransparentColor = info.ImageTransparentColor == Color.Empty ? Color.Black : info.ImageTransparentColor;
             stackStripButton.CheckOnClick = true;
             stackStripButton.Image = info.Icon;
@@ -409,9 +282,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             stackStripButton.EventName = info.EventTopicName;
             stackStripButton.Name = info.EventTopicName;
             stackStripButton.Enabled = info.Enable;
-            //-----
 
-            //overflowStripButton = new ExtendedToolStripButton(info.Icon);
             overflowStripButton.ImageTransparentColor = Color.Black;
             overflowStripButton.Alignment = ToolStripItemAlignment.Right;
             overflowStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -425,16 +296,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             this.stackStrip.Items.Add(stackStripButton);
             UpdateSplitter();
         }
-
-        void overflowStripButton_Click(object sender, EventArgs e)
-        {
-            UpdateSplitter();
-        }
-
-
-        #endregion
-
-        #region StackStrip splitter
 
         private void UpdateSplitter()
         {
@@ -593,7 +454,5 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
                 stackStripSplitter.Refresh();
             }
         }
-        #endregion
-
     }
 }

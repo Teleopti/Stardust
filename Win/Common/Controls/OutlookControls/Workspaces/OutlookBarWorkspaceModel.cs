@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
     public class OutlookBarWorkspaceModel
     {

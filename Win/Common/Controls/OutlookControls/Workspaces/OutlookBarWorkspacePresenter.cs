@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
     public class OutlookBarWorkspacePresenter
     {

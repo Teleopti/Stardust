@@ -1,7 +1,6 @@
-using BaseStackStrip=Teleopti.Common.UI.OutlookControls.Workspaces.BaseStackStrip;
-using HeaderStrip=Teleopti.Common.UI.OutlookControls.Workspaces.HeaderStrip;
+using Teleopti.Common.UI.OutlookControls.Workspaces;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
     partial class OutlookBarWorkspace
     {
@@ -152,7 +151,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             // 
             // showMoreButtonsToolStripMenuItem1
             // 
-            this.showMoreButtonsToolStripMenuItem1.Image = global::Teleopti.Common.UI.OutlookControls.Properties.Resources.More;
+            this.showMoreButtonsToolStripMenuItem1.Image = Properties.Resources.More;
             this.showMoreButtonsToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Black;
             this.showMoreButtonsToolStripMenuItem1.Name = "showMoreButtonsToolStripMenuItem1";
             this.showMoreButtonsToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
@@ -161,7 +160,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             // 
             // showFewerButtonsToolStripMenuItem
             // 
-            this.showFewerButtonsToolStripMenuItem.Image = global::Teleopti.Common.UI.OutlookControls.Properties.Resources.Few;
+            this.showFewerButtonsToolStripMenuItem.Image = Properties.Resources.Few;
             this.showFewerButtonsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.showFewerButtonsToolStripMenuItem.Name = "showFewerButtonsToolStripMenuItem";
             this.showFewerButtonsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);

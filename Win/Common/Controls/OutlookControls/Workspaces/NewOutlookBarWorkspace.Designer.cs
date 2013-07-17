@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Common.UI.OutlookControls.Workspaces
+﻿namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
     partial class NewOutlookBarWorkspace
     {

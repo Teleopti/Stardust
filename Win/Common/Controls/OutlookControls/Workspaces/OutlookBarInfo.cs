@@ -2,24 +2,13 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
     public class OutlookBarInfo 
     {
-        private string _eventTopicName;
-        private Color _imageTransparentColor = Color.Empty;
+        public Color ImageTransparentColor { get; set; }
 
-        public Color ImageTransparentColor
-        {
-            get { return _imageTransparentColor; }
-            set { _imageTransparentColor = value; }
-        }
-
-        public string EventTopicName
-        {
-            get { return _eventTopicName; }
-            set { _eventTopicName = value; }
-        }
+        public string EventTopicName { get; set; }
 
         public Image Icon { get; set; }
 
@@ -33,8 +22,10 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 
         public bool Visible { get; set; }
 
-        public OutlookBarInfo()           
-        { }
+        public OutlookBarInfo()
+        {
+            ImageTransparentColor = Color.Empty;
+        }
 
         public OutlookBarInfo(string title, Image icon)
             : this (title, icon, String.Empty)
@@ -42,9 +33,10 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 
         public OutlookBarInfo(string title, Image icon, string eventTopic)
         {
+            ImageTransparentColor = Color.Empty;
             Title = title;
             Icon = icon;
-            _eventTopicName = eventTopic;
+            EventTopicName = eventTopic;
         }
     }
 }

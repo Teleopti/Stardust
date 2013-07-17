@@ -359,10 +359,6 @@
       <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
       <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Common.UI.OutlookControls\Teleopti.Common.UI.OutlookControls.csproj">
-      <Project>{6B653594-DC38-409A-B76E-2CB4C6A36EB0}</Project>
-      <Name>Teleopti.Common.UI.OutlookControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92D88C7B-2401-4BC2-8F89-B919DBC6D143}</Project>
       <Name>Teleopti.Common.UI.SmartPartControls</Name>

@@ -346,6 +346,33 @@
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
+    <Compile Include="Common\Controls\OutlookControls\ExtendedToolStripButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\BaseStackStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\HeaderStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.Designer.cs">
+      <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.Designer.cs">
+      <DependentUpon>OutlookBarWorkspace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
+    <Compile Include="Common\Controls\OutlookControls\Workspaces\StackStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1142,6 +1169,11 @@
       <DependentUpon>PermissionViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Permissions\PersonAdapter.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Reporting\ReportUserSelectorAuditingView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2359,11 +2391,6 @@
       <DependentUpon>AuthorizationSettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\DataHandlingStatusOption.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
@@ -2522,6 +2549,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MaskedTimeSpanTextBox.resx">
       <DependentUpon>MaskedTimeSpanTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.resx">
+      <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.resx">
+      <DependentUpon>OutlookBarWorkspace.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\SkillResultHighlightGridControl.resx">
       <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
@@ -2948,10 +2982,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.OutlookControls\Teleopti.Common.UI.OutlookControls.csproj">
-      <Project>{6B653594-DC38-409A-B76E-2CB4C6A36EB0}</Project>
-      <Name>Teleopti.Common.UI.OutlookControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92D88C7B-2401-4BC2-8F89-B919DBC6D143}</Project>
@@ -3665,6 +3695,8 @@
     <None Include="Resources\avaya_ccc.png" />
     <None Include="Resources\16x16empty.png" />
     <None Include="Resources\animated circle.bmp" />
+    <None Include="Resources\00038.bmp" />
+    <None Include="Resources\00040.bmp" />
     <Content Include="Resources\Browse.png" />
     <Content Include="Resources\bullet_black.png" />
     <Content Include="Resources\bullet_white.png" />
@@ -3931,6 +3963,7 @@
     <Content Include="Resources\information_32.png" />
     <None Include="Resources\intraday.ico" />
     <None Include="Resources\Magifier_zoom_out.png" />
+    <None Include="Resources\leftarrow.png" />
     <Content Include="Resources\magnifier_16x16.png" />
     <Content Include="Resources\magnifier_8x8.png" />
     <None Include="Resources\Magnifier_zoom_in.png" />

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Common.UI.OutlookControls.Workspaces
+namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 {
-    //At leased I tried to do a MWP pattern here, might not pe super pure, tough
     public partial class NewOutlookBarWorkspace : UserControl, IOutlookBarWorkspaceView 
     {
         private readonly OutlookBarWorkspacePresenter _presenter;
@@ -118,8 +117,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
                 groupBarItem.Tag = outlookBarSmartPartInfo;
                 groupBarItem.BackColor = Color.White;
                 groupBarItem.Tag = outlookBarSmartPartInfo.EventTopicName;
-                //Pga lankesernas äckliga kontroll kan man inte sätta detta som tänkt här....
-                //groupBarItem.Client = outlookBarSmartPartInfo.Client;
                 groupBarItem.InNavigationPane = true;
                 return groupBarItem;
             }
@@ -129,7 +126,6 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
         {
             var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
             _presenter.SpecialModule = (string)selectedGroupBarItem.Tag;
-
         }
 
         public void OpenSpecialModule()
