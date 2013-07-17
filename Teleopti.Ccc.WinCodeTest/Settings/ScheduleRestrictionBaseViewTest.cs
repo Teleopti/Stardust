@@ -59,17 +59,16 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			//Assert.AreEqual(_targetView.IsAvailable, _available);
-			Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTimeString);
-			Assert.AreEqual(_targetView.LateStartTime, _startTimeLimit.EndTimeString);
+			Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTime);
+			Assert.AreEqual(_targetView.LateStartTime, _startTimeLimit.EndTime);
 			Assert.AreEqual(_targetView.StartTimeLimit(), _startTimeLimit);
 
-			Assert.AreEqual(_targetView.EarlyEndTime, _endTimeLimit.StartTimeString);
-			Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTimeString);
+			Assert.AreEqual(_targetView.EarlyEndTime, _endTimeLimit.StartTime);
+			Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTime);
 			Assert.AreEqual(_targetView.EndTimeLimit(), _endTimeLimit);
 
-			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTimeString);
-			Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTimeString);
+			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTime);
+			Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTime);
 			Assert.AreEqual(_targetView.WorkTimeLimit(), _workTimePeriod);
 
 			Assert.AreEqual(_targetView.Week, ScheduleRestrictionBaseView.GetWeek(_dayCount));
@@ -89,10 +88,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			Assert.AreEqual(_createPerson.Name.ToString(), _targetView.CreatedBy);
 			Assert.AreEqual(_createDate.ToString(CultureInfo.CurrentCulture), _targetView.CreatedOn);
 
-			//int day = ScheduleRestrictionBaseView.GetDayOfWeek(_dayCount);
-			//IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
-			//DayOfWeek dayOfWeek = daysOfWeek[day];
-
 			string dayName = UserTexts.Resources.Day + " " + _dayCount.ToString(CultureInfo.CurrentUICulture);
 			Assert.AreEqual(_targetView.Day, dayName);
 
@@ -103,15 +98,15 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTimeString);
+			Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTime);
 
 			var time = new TimeSpan(8, 25,0);
 			StartTimeLimitation timeLimit = new StartTimeLimitation(time, time);
-			_targetView.LateStartTime = timeLimit.EndTimeString;
-			_targetView.EarlyStartTime = timeLimit.StartTimeString;
+			_targetView.LateStartTime = timeLimit.EndTime;
+			_targetView.EarlyStartTime = timeLimit.StartTime;
 
-			Assert.AreEqual(_targetView.EarlyStartTime, timeLimit.StartTimeString);
-			Assert.AreEqual(_targetView.LateStartTime, timeLimit.EndTimeString);
+			Assert.AreEqual(_targetView.EarlyStartTime, timeLimit.StartTime);
+			Assert.AreEqual(_targetView.LateStartTime, timeLimit.EndTime);
 		}
 
 		[Test]
@@ -119,15 +114,15 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTimeString);
+			Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTime);
 
 			var time = new TimeSpan(8, 25, 0);
 			EndTimeLimitation timeLimit = new EndTimeLimitation(time, time);
-			_targetView.EarlyEndTime = timeLimit.StartTimeString;
-			_targetView.LateEndTime = timeLimit.EndTimeString;
+			_targetView.EarlyEndTime = timeLimit.StartTime;
+			_targetView.LateEndTime = timeLimit.EndTime;
 
-			Assert.AreEqual(_targetView.EarlyEndTime, timeLimit.StartTimeString);
-			Assert.AreEqual(_targetView.LateEndTime, timeLimit.EndTimeString);
+			Assert.AreEqual(_targetView.EarlyEndTime, timeLimit.StartTime);
+			Assert.AreEqual(_targetView.LateEndTime, timeLimit.EndTime);
 		}
 
 		[Test]
@@ -135,12 +130,12 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			_targetView.MinimumWorkTime = "5:00";
+			_targetView.MinimumWorkTime = TimeSpan.FromHours(5);
 
-			Assert.AreEqual(_targetView.MinimumWorkTime, "5:00");
+			Assert.AreEqual(_targetView.MinimumWorkTime, TimeSpan.FromHours(5));
 
-			_targetView.MinimumWorkTime = _minTimeWork.ToString();
-			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTimeString);
+			_targetView.MinimumWorkTime = _minTimeWork;
+			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTime);
 		}
 
 		[Test]
@@ -148,12 +143,12 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			_targetView.MaximumWorkTime = "1000";
+			_targetView.MaximumWorkTime = TimeSpan.FromHours(10);
 
-			Assert.AreEqual("10:00", _targetView.MaximumWorkTime);
+			Assert.AreEqual(_targetView.MaximumWorkTime, TimeSpan.FromHours(10));
 
-			_targetView.MinimumWorkTime = _maxTimeWork.ToString();
-			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.EndTimeString);
+			_targetView.MinimumWorkTime = _maxTimeWork;
+			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.EndTime);
 		}
 
 		[Test]
@@ -161,39 +156,9 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			Assert.Throws<ArgumentOutOfRangeException>(delegate { _targetView.MaximumWorkTime = "0500"; });
-			Assert.Throws<ArgumentOutOfRangeException>(delegate { _targetView.MinimumWorkTime = "10"; });
-
-			//_targetView.MaximumWorkTime = "0500";
-			// can't set to less than min
-			//Assert.AreEqual("08:30", _targetView.MaximumWorkTime);
-			//_targetView.MinimumWorkTime = "10";
-			//Assert.AreEqual("07:00", _targetView.MinimumWorkTime);
-
-			_targetView.MinimumWorkTime = "500";
-			Assert.AreEqual("5:00", _targetView.MinimumWorkTime);
-			_targetView.MaximumWorkTime = "10";
-			Assert.AreEqual("10:00", _targetView.MaximumWorkTime);
-
+			Assert.Throws<ArgumentOutOfRangeException>(delegate { _targetView.MaximumWorkTime = TimeSpan.FromHours(5); });
+			Assert.Throws<ArgumentOutOfRangeException>(delegate { _targetView.MinimumWorkTime = TimeSpan.FromHours(10); });
 		}
-
-		//[Test]
-		//public void VerifyAvailableChange()
-		//{
-		//    Assert.IsNotNull(_targetView);
-
-		//    Assert.AreEqual(_targetView.IsAvailable, _available);
-
-		//    bool notAvailable = false;
-		//    _targetView.IsAvailable = notAvailable;
-
-		//    Assert.AreEqual(_targetView.IsAvailable, notAvailable);
-		//    Assert.AreNotEqual(_targetView.IsAvailable, _available);
-
-		//    _targetView.IsAvailable = _available;
-		//    Assert.AreEqual(_targetView.IsAvailable, _available);
-		//    Assert.AreNotEqual(_targetView.IsAvailable, notAvailable);
-		//}
 
 		[Test]
 		public void VerifyGetWeek()
@@ -211,7 +176,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			Assert.AreEqual(ScheduleRestrictionBaseView.GetWeek(maxDates), 2);
 			Assert.AreEqual(ScheduleRestrictionBaseView.GetWeek(boundyDates2), 2);
 			Assert.AreEqual(ScheduleRestrictionBaseView.GetWeek(maxDates2), 3);
-
 		}
 
 		[Test]
@@ -222,29 +186,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 
 			ScheduleRestrictionBaseView.GetWeek(int.MinValue);
 		}
-
-		//[Test]
-		//public void VerifyGetDayOfWeek()
-		//{
-		//    Assert.IsNotNull(_targetView);
-
-		//    int minDate = 2;
-		//    int boundaryDate = 6;
-		//    int upperBoundaryDate = 7;
-
-		//    Assert.AreEqual(minDate, ScheduleRestrictionBaseView.GetDayOfWeek(minDate));
-		//    Assert.AreEqual(boundaryDate, ScheduleRestrictionBaseView.GetDayOfWeek(boundaryDate));
-		//    Assert.AreEqual(0, ScheduleRestrictionBaseView.GetDayOfWeek(upperBoundaryDate));
-		//}
-
-		//[Test]
-		//[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		//public void TryCrashGetDayOfWeek()
-		//{
-		//    Assert.IsNotNull(_targetView);
-
-		//    ScheduleRestrictionBaseView.GetDayOfWeek(int.MinValue);
-		//}
 
 		[Test]
 		public void TryParseAvailabilityRestrictions()
@@ -270,38 +211,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			list.AddRange(ScheduleRestrictionBaseView.Parse(availability));
 			Assert.AreEqual(list.Count, 7);
 		}
-
-		//[Test]
-		//public void TryParseRotationRestrictions()
-		//{
-		//    Assert.IsNotNull(_targetView);
-
-		//    int days = 14;
-		//    Description desc = new Description("Some Name");
-
-		//    IRotation rotation = new Rotation(desc.Name, days);
-		//    List<RotationRestrictionView> list = new List<RotationRestrictionView>();
-		//    IDayOffTemplate holidayTemplate = new DayOffTemplate(new Description("Holiday"));
-
-		//    list.AddRange(ScheduleRestrictionBaseView.Parse(rotation, holidayTemplate));
-
-		//    Assert.AreEqual(list.Count, days);
-		//    Assert.AreEqual(list[5].DayOffTemplate, holidayTemplate);
-		//    Assert.AreEqual(list[6].DayOffTemplate, holidayTemplate);
-		//    Assert.AreEqual(list[12].DayOffTemplate, holidayTemplate);
-		//    Assert.AreEqual(list[13].DayOffTemplate, holidayTemplate);
-
-		//    rotation.RemoveDays(7);
-
-		//    list.Clear();
-
-		//    Assert.AreEqual(list.Count, 0);
-
-		//    list.AddRange(ScheduleRestrictionBaseView.Parse(rotation, holidayTemplate));
-		//    Assert.AreEqual(list.Count, 7);
-		//    Assert.AreEqual(list[5].DayOffTemplate, holidayTemplate);
-		//    Assert.AreEqual(list[6].DayOffTemplate, holidayTemplate);
-		//}
 
 		[Test]
 		public void TryParseRotationRestrictionsWithoutDayOffTemplates()
@@ -338,25 +247,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		}
 
 		[Test]
-		public void VerifyOvernightChange()
-		{
-			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(8, 0, 0));
-
-			string time = ScheduleRestrictionBaseView.ToOvernight(_endTimeLimit.EndTimeString);
-			Assert.AreNotEqual(time, _endTimeLimit.EndTimeString);
-
-			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(0, 0, 0));
-			string time1 = ScheduleRestrictionBaseView.ToOvernight(_endTimeLimit.EndTimeString);
-			Assert.AreNotEqual(time1, _endTimeLimit.EndTimeString);
-
-			string time2 = ScheduleRestrictionBaseView.ToOvernight(time);
-			Assert.AreEqual(time, time2);
-
-			string time3 = ScheduleRestrictionBaseView.ToOvernight("+1");
-			Assert.AreEqual(time3, "+1");
-		}
-
-		[Test]
 		public void VerifyTimePeriodIsValidRange()
 		{
 			// Normal - From(lo) < To(hi)
@@ -376,10 +266,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			_startTimeLimit = new StartTimeLimitation(new TimeSpan(18, 0, 0), null);
 			_endTimeLimit = new EndTimeLimitation(null, new TimeSpan(10, 0, 0));
 			Assert.IsFalse(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
-			//// From(hi)Overnight > To(lo)
-			//_startTimeLimit.StartTimeString = "0800+1";
-			//_endTimeLimit.EndTimeString = "1000";
-			//Assert.IsFalse(ScheduleRestrictionBaseView.IsValidRange(_startTimeLimit.StartTime, _endTimeLimit.EndTime));
 		}
 	}
 

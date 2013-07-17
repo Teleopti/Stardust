@@ -139,26 +139,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             var newMultiplicatorSet = new MultiplicatorDefinitionSet("multplic", MultiplicatorType.Overtime);
            IPersonPeriod period = _part.Person.Period(new DateOnly(CurrentPeriod.StartDateTime));
            period.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(newMultiplicatorSet);
-           _part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("overtime"), CurrentPeriod, newMultiplicatorSet));
+           _part.CreateAndAddOvertime(ActivityFactory.CreateActivity("overtime"), CurrentPeriod, newMultiplicatorSet);
             return this;
         }
 
         public SchedulePartFactoryForDomain AddPersonalLayer()
         {
-            _part.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod));
+            _part.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod);
             return this;
         }
 
 
 		public SchedulePartFactoryForDomain AddPersonalLayer(IScheduleDay scheduleDay)
 		{
-			scheduleDay.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod));
+			scheduleDay.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod);
 			return this;
 		}
 
         public SchedulePartFactoryForDomain AddMainShiftLayer()
         {
-            _part.CreateAndAddActivity(new MainShiftLayer(ActivityFactory.CreateActivity("Main"),CurrentPeriod),ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
+	        _part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
             return this;
         }
     }

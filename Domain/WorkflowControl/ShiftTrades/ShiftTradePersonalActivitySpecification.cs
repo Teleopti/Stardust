@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -18,12 +19,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			foreach (var shiftTradeSwapDetail in obj)
 			{
-				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.AssignmentHighZOrder();
+				var personAssignmentFrom = shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment();
 				if (personAssignmentFrom == null)
 					continue;
 				var mainShiftFrom = shiftTradeSwapDetail.SchedulePartFrom.GetEditorShift();
 				
-				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.AssignmentHighZOrder();
+				var personAssignmentTo = shiftTradeSwapDetail.SchedulePartTo.PersonAssignment();
 				if (personAssignmentTo == null) continue;
 				var mainShiftTo = shiftTradeSwapDetail.SchedulePartTo.GetEditorShift();
 
@@ -51,18 +52,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private static bool checkCover(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			foreach (var personalShift in personAssignment.PersonalShiftCollection)
-			{
-				if (!personalShift.HasProjection) continue;
-
-				var personalShiftPeriod = personalShift.LayerCollection.Period();
-				if (!personalShiftPeriod.HasValue) continue;
-
-				if (!period.Contains(personalShiftPeriod.Value))
-					return false;
-			}
-
-			return true;
+			return personAssignment.PersonalLayers().All(personalLayer => period.Contains(personalLayer.Period));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -108,13 +109,13 @@ namespace Teleopti.Ccc.Win.Common
                 if (options.PersonalShifts)
                 {
 									IPersonAssignment personAssignmentNoMainShift = new PersonAssignment(source.Person, source.Scenario, new DateOnly(2000, 1, 1));
-                    IPersonAssignment personAssignment = source.AssignmentHighZOrder();
+                    IPersonAssignment personAssignment = source.PersonAssignment();
                     if (personAssignment != null)
                     {
-                        foreach (IPersonalShift personalShift in personAssignment.PersonalShiftCollection)
-                        {
-                            personAssignmentNoMainShift.AddPersonalShift(personalShift);
-                        }
+	                    foreach (var personalLayer in personAssignment.PersonalLayers())
+	                    {
+		                    personAssignmentNoMainShift.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+	                    }
                     }
 
                     tempPart = (IScheduleDay)part.Clone();
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
-                    if (personAssignmentNoMainShift.PersonalShiftCollection.Count > 0)
+                    if (personAssignmentNoMainShift.PersonalLayers().Any())
                     {
                         tempPart.Add(personAssignmentNoMainShift);
                         destination.Merge(tempPart, false);

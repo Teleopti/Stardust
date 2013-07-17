@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             switch (schedulePart.SignificantPartForDisplay())
             {
                 case SchedulePartView.MainShift:
-                    var personAssignmentCollection = schedulePart.PersonAssignmentCollection();
+                    var personAssignmentCollection = schedulePart.PersonAssignmentCollectionDoNotUse();
                     if (personAssignmentCollection.Count > 0)
                     {
                         start = personAssignmentCollection.Min(p => p.Period.StartDateTimeLocal(schedulePart.TimeZone));
@@ -44,9 +44,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                     break;
                 case SchedulePartView.PersonalShift:
-                    IVisualLayer layer = (from personAssignment in schedulePart.PersonAssignmentCollection()
-                                          from personalShift in personAssignment.PersonalShiftCollection
-                                          from l in personalShift.ProjectionService().CreateProjection()
+                    var layer = (from personAssignment in schedulePart.PersonAssignmentCollectionDoNotUse()
+                                          from l in personAssignment.PersonalLayers()
                                           select l).FirstOrDefault();
                     if (layer != null)
                     {

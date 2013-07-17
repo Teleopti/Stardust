@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
@@ -11,21 +9,24 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 	public class NullableNumericCellModel : GridTextBoxCellModel, INumericCellModelWithDecimals
 	{
 		private int _numberOfDecimals;
-		private GridHorizontalAlignment _horizontalAlignement = GridHorizontalAlignment.Right;
-		private double _minValue = double.MinValue;
-		private double _maxValue = double.MaxValue;
 
-		protected NullableNumericCellModel(SerializationInfo info, StreamingContext context)
+	    protected NullableNumericCellModel(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
+		    MaxValue = double.MaxValue;
+		    MinValue = double.MinValue;
+		    HorizontalAlignment = GridHorizontalAlignment.Right;
 		}
 
-		public NullableNumericCellModel(GridModel grid)
+	    public NullableNumericCellModel(GridModel grid)
 			: base(grid)
-		{
-		}
+	    {
+	        MaxValue = double.MaxValue;
+	        MinValue = double.MinValue;
+	        HorizontalAlignment = GridHorizontalAlignment.Right;
+	    }
 
-		public int NumberOfDecimals
+	    public int NumberOfDecimals
 		{
 			get { return _numberOfDecimals; }
 			set
@@ -41,25 +42,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			}
 		}
 
-		public GridHorizontalAlignment HorizontalAlignment
-		{
-			get { return _horizontalAlignement; }
-			set { _horizontalAlignement = value; }
-		}
+	    public GridHorizontalAlignment HorizontalAlignment { get; set; }
 
-		public double MinValue
-		{
-			get { return _minValue; }
-			set { _minValue = value; }
-		}
+	    public double MinValue { get; set; }
 
-		public double MaxValue
-		{
-			get { return _maxValue; }
-			set { _maxValue = value; }
-		}
+	    public double MaxValue { get; set; }
 
-		public override GridCellRendererBase CreateRenderer(GridControlBase control)
+	    public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
 			return new NullableNumericCellRenderer(control, this);
 		}
@@ -80,10 +69,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				style.CellValue = null;
 				return true;
 			}
-			if (d < _minValue || d > _maxValue)
+			if (d < MinValue || d > MaxValue)
 				return false;
 
-			style.HorizontalAlignment = _horizontalAlignement;
+			style.HorizontalAlignment = HorizontalAlignment;
 			style.CellValue = d;
 			return true;
 		}
@@ -134,7 +123,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 		public override void OnPrepareViewStyleInfo(GridPrepareViewStyleInfoEventArgs e)
 		{
-			e.Style.HorizontalAlignment = ((NullableNumericCellModel)Model).HorizontalAlignment;//GridHorizontalAlignment.Right;
+			e.Style.HorizontalAlignment = ((NullableNumericCellModel)Model).HorizontalAlignment;
 			e.Style.VerticalAlignment = GridVerticalAlignment.Middle;
 			e.Style.WrapText = false;
 		}

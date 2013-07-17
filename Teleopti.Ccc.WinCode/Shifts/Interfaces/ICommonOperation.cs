@@ -19,10 +19,6 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 
         void Paste();
 
-        void MoveUp();
-
-        void MoveDown();
-
         void RefreshView();
 
         void Clear();

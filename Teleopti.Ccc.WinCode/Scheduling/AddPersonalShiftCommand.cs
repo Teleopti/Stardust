@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (IScheduleDay part in filteredScheduleParts)
             {
-                IPersonalShiftActivityLayer personalShiftActivityLayer = new PersonalShiftActivityLayer(activity, period);
-                part.CreateAndAddPersonalActivity(personalShiftActivityLayer);
+								part.CreateAndAddPersonalActivity(activity, period);
             }
 
 			Presenter.ModifySchedulePart(filteredScheduleParts);

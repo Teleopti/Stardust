@@ -1,17 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
+﻿using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
 	public class DropDownCultureCellModel : GridComboBoxCellModel
 	{
-
 		public DropDownCultureCellModel(GridModel grid)
 			: base(grid)
 		{
@@ -24,7 +17,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 		public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
-			return (GridCellRendererBase)new GridComboBoxCellRenderer(control, (GridCellModelBase)this);
+			return new GridComboBoxCellRenderer(control, this);
 		}
 
 		public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
@@ -47,9 +40,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 					return true;
 				}
 
-				// so far it is the same code as in the base, basically to support the original behaviour
-
-				// new staff
 				var culture = WinCode.PeopleAdmin.Culture.GetLanguageInfoByDisplayName(text);
 				if (culture.Id != 0)
 				{
@@ -57,7 +47,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 					return true;
 				}
 
-				// from here it is again the same code as in the base
 				if (exclusive)
 					return false;
 			}

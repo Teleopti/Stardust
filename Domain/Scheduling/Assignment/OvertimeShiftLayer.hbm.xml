@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="Teleopti.Ccc.Domain"
+									 namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
+									 default-access="field.camelcase-underscore">
+	<subclass name="OvertimeShiftLayer" discriminator-value="2" extends="ShiftLayer">
+		<many-to-one name="DefinitionSet"
+								class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet"
+								not-null="true"
+								foreign-key="FK_OvertimeShiftActivityLayer_DefinitionSet" 
+								access="property"/>
+	</subclass>
+</hibernate-mapping>
+

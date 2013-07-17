@@ -10329,4 +10329,271 @@ Teleopti R&amp;D</value>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Дата по (начала смен):</value>
   </data>
+  <data name="Little" xml:space="preserve">
+    <value>Небольшая</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Средняя</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Сильная</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Быстрый проггноз</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Деапазон данных сезонности и тенденций</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Степень сглаживания:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Выберите исторические данные для шаблонов</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Показать информационные сообщения</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Быстрый прогноз будет запущен как задача в фоновом режиме, после того, как мастер закончит работу, просмотрите статус в истории задач.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Невозможно отобразить расписание, если статус запроса на обмен сменами новый, отклоненный или подтвержденный</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Новое название шаблона</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Очистить название шаблона предпочтений</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Название не может быть пустым или быть длинее 50 символов.</value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>На один или более дней в запрашиваемом периоде {0} недостаточно допущения.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>Отсутствует бюджет для этого периода {0}</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>Бюджетная группа отсутствует для этого сотрудника: {0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>На этот день {0} недостаточно допущения в бюджете.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Ваш запрос на отсутствие был отклонен. Вы не можете сейчас отправлять запросы на отсутствие на этот период.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Ваш запрос на отсутствие был отклонен. Вы не можете сейчас отправлять запросы на отсутствие на этот период. Период будет открыт для запросов с {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Критическая нехватка персонала : {0}</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Текущее количество смен:</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Создание смен</value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>слишком сложный набор правил!</value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Просмотр всех группирований</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Создать прогноз для</value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Выбранные отсутствия</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Сообщения ({0})</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Бюджетная группа по кол-ву человек</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Количество человек</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Добавить отсутствие на полный день</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Неверная дата завершения</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Одинаковая смена</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Добавить предпочтение...</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>При сохранении изменений возникла ошибка. Наиболее возможной причиной этого может быть то, что вы или другой пользователь удалили внесенные вами данные. Для сохранения непротиворечивости данных форма будет закрыта. Приносим извинения, внесенные вами изменения утеряны.</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Недостаточное кол-во штата для:</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Недостаточное кол-во штата : {0}</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Стоп! Данные правила слишком сложные, и смены не могут быть созданы в пределах максимального лимита. Смены из данного набора правил не будут доступны для планирования и оптимизации. Измените правила, чтобы использовать данные смены.</value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Предупреждение! Создание смен по данным правилам занимает слишком много времени. Это повлияет на планирование и оптимизацию в даьнейшем!</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Обработка...</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Для этого дня недостаточно допущения:</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Дискретность (минуты)</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Пожалуйста, выберите хотя бы одну опцию "Одинаковая категория смен", "Одинаковое время начала" или "Одинаковая смена" при оптимизации блоками.</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Подтвердите удаление</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Невозможно переместить рабочую смену на другой день с помощью редактора смен, вместо этого воспользуйтесь вырезанием и вставкой</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Возможность подтверждения запроса на отсутствие:</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Добавить почасовую доступность...</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Полная</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Хорошая</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Низкая</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Сбор данные...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Улучшено</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Получатель ответил на ваше предыдущее сообщение. Обновите экран, чтобы увидеть ответ. Ваше сообщение не будет отправлено.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Доступность по оператору</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Ваш запрос на отсутствие был отклонен. Некоторые дни из запрашиваемого периода не открыты для запросов. Вы можете отправлять запросы на следующий период: {0}.</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Максимальное кол-во параллельных заданий:</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Просмотр активных операторов</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Чат</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Несостоявшиеся чаты</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Отвеченные чаты</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Среднее кол-во чатов</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Отклонено</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Местное время</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Добавить сверхурочную доступность... </value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Расчетное кол-во чатов</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Чаты кампании %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Сверхурочная доступность</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Ранее сохраненная сверхурочная доступность:</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Чат</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Отклонение чатов:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Спрогнозированные чаты</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Индекс чатов</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Поступившие чаты</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Фактически поступившие чаты</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Всего чатов</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Проверенные чаты</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Время чатов кампании %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Чаты</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Общее время чатов</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Почасовая доступность</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Почасовая доступность</value>
+  </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>Добавить доступность</value>
+  </data>
+  <data name="StudentHours" xml:space="preserve">
+    <value>Часы студентов</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Нет доступных смен для этой доступности.</value>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>Период доступности</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Открыть почасовую доступность</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Заблокировать почасовую доступность</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Почасовые доступности</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Выполнение почасовой доступности</value>
+  </data>
 </root>

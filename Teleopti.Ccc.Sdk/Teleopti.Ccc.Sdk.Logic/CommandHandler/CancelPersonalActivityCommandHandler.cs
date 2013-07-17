@@ -54,22 +54,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
-				var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
+				var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
 				foreach (var personAssignment in personAssignmentCollection)
 				{
-					var personalShifts = personAssignment.PersonalShiftCollection.ToList();
-					foreach (var personalShift in personalShifts)
-					{
-						cancelPersonalActivity(personalShift, dateTimePeriod);
-						if (personalShift.LayerCollection.Count == 0)
-						{
-							personAssignment.RemovePersonalShift(personalShift);
-						}
-					}
+					cancelPersonalActivity(personAssignment, dateTimePeriod);
 				}
 
-                _saveSchedulePartService.Save(scheduleDay, rules);
+				_saveSchedulePartService.Save(scheduleDay, rules);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{
 					uow.PersistAll();
@@ -84,23 +76,22 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
 		}
 
-		private static void cancelPersonalActivity(IPersonalShift personalShift, DateTimePeriod period)
+		private static void cancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			var layers = personalShift.LayerCollection.ToList();
-			foreach (IPersonalShiftActivityLayer layer in layers)
+			var layers = personAssignment.PersonalLayers().ToList();
+			foreach (IPersonalShiftLayer layer in layers)
 			{
 				var layerPeriod = layer.Period;
 				if (!layerPeriod.Intersect(period)) continue;
 
-				personalShift.LayerCollection.Remove(layer);
+				personAssignment.RemoveLayer(layer);
 
 				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
 				foreach (var dateTimePeriod in newPeriods)
 				{
 					if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 					{
-						var newLayer = new PersonalShiftActivityLayer(layer.Payload, dateTimePeriod);
-						personalShift.LayerCollection.Add(newLayer);
+						personAssignment.AddPersonalLayer(layer.Payload, dateTimePeriod);
 					}
 				}
 			}

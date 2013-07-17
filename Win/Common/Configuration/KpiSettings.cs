@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MaxValue", ">", null, "NumericCell", 30));
             gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("HigherThanMaxColor", UserTexts.Resources.Color, null));
 
-            SFGridColumnBase<IKpiTarget>.AppendAuditColumns(gridColumns);
+            gridColumns.AppendAuditColumns();
 
             gridControl1.RowCount = gridRowCount();
             gridControl1.ColCount = gridColumns.Count - 1;  //col index starts on 0

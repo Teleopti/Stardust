@@ -60,32 +60,24 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
-            IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
+            IPersonAssignment assignment = scheduleDay.PersonAssignment();
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-	            foreach (var layer in assignment.MainShiftLayers)
+	            foreach (var layer in assignment.MainLayers())
 	            {
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-                foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
-                {
-                    foreach (
-                        var layer in overtimeShift.LayerCollectionWithDefinitionSet())
-                    {
-											layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
-                    }
-                }
+	            foreach (var layer in assignment.OvertimeLayers())
+	            {
+								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
+	            }
 
-                foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                {
-                    foreach (ILayer<IActivity> layer in shift.LayerCollection)
-                    {
-                        layerViewModels.Add(new PersonalShiftLayerViewModel(observer, layer, shift, eventAggregator));
-                    }
-                }
-
+	            foreach (var personalLayer in assignment.PersonalLayers())
+	            {
+		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
+	            }
             }
 			// bug 14478 show meetings even if there is no assignment
 			foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())

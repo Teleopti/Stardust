@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 var schedule = currentSchedules.ScheduledDay(day);
                 // to check! are the assignments in correct order??
-                schedule.PersonAssignmentCollection().ForEach(ass => pAss.Add(ass));
+                schedule.PersonAssignmentCollectionDoNotUse().ForEach(ass => pAss.Add(ass));
             }
             if (pAss.Count == 0)
                 return true;

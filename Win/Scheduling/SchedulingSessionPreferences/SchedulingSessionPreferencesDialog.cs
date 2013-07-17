@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
         private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
+	    private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
     	
 
         private readonly bool _reschedule;
@@ -79,6 +80,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					_defaultGeneralSettings = settingRepository.FindValueByKey(_settingValue + "GeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
 					_defaultAdvancedSettings = settingRepository.FindValueByKey(_settingValue + "AdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
                     _defaultExtraSettings = settingRepository.FindValueByKey(_settingValue + "ExtraSetting", new SchedulingOptionsExtraPersonalSetting());
+					if (_backToLegal)
+						_defaultDayOffPlannerSettings = settingRepository.FindValueByKey(_settingValue + "DayOffPlannerSettings", new SchedulingOptionsDayOffPlannerPersonalSettings());
 				}
 			}
 			catch (DataSourceException)
@@ -88,6 +91,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
             _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForTeamBlockPer, _availableActivity);
+			if (_backToLegal && _defaultDayOffPlannerSettings != null)
+				_defaultDayOffPlannerSettings.MapTo(_daysOffPreferences);
 		}
 
         private bool hasMissedloadingSettings()
@@ -101,6 +106,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
             _defaultExtraSettings.MapFrom(_schedulingOptions );
+			if (_backToLegal && _defaultDayOffPlannerSettings != null)
+				_defaultDayOffPlannerSettings.MapFrom(_daysOffPreferences);
 
 			try
 			{
@@ -112,6 +119,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					uow.PersistAll();
                     new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "ExtraSetting",_defaultExtraSettings );
                     uow.PersistAll();
+					if (_backToLegal && _defaultDayOffPlannerSettings != null)
+					{
+						new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "DayOffPlannerSettings", _defaultDayOffPlannerSettings);
+						uow.PersistAll();
+					}
 				}
 			}
 			catch (DataSourceException)
@@ -175,7 +187,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if(schedulingSessionPreferencesTabPanel1.ValidateTeamSchedulingOption() )
+            if (!schedulingSessionPreferencesTabPanel1.ValidateTeamSchedulingOption())
+            {
+                MessageBox.Show(UserTexts.Resources.SelectAtleastOneSchedulingOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None;
+            }
+            else if (!schedulingSessionPreferencesTabPanel1.ValidateBlockOption())
+            {
+                MessageBox.Show(UserTexts.Resources.SelectAtleastOneBlockOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None;
+            }
+            else 
             {
                 schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 
@@ -187,11 +209,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 }
 
                 Close();
-            }
-            else
-            {
-                MessageBox.Show(UserTexts.Resources.SelectAtleastOneSchedulingOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
-                DialogResult = DialogResult.None;
             }
             
         }

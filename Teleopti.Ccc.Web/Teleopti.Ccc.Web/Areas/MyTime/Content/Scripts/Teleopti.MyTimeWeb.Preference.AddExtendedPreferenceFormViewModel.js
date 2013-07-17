@@ -5,11 +5,11 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
-Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
+Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, showMeridian, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod, isShiftCategorySelectedAsStandardPreferenceMethod) {
 	var self = this;
 
 	this.AvailableTemplates = ko.observableArray();
-	this.SelectedTemplate = ko.observable();
+	this.SelectedTemplateIdInternal = ko.observable();
 	this.IsTemplateDetailsVisible = ko.observable(true);
 
 	this.PreferenceId = ko.observable();
@@ -28,15 +28,90 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ActivityPreferenceId = ko.observable();
 	this.ActivityMinimumTime = ko.observable();
 	this.ActivityMaximumTime = ko.observable();
-
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.NewTemplateName = ko.observable('');
+	this.AddPreferenceFormVisible = ko.observable(false);
+	this.ValidationError = ko.observable();
+	this.IsPreferenceInputVisible = ko.observable(true);
+	this.ShowMeridian = ko.observable(showMeridian);
+    this.IsTimeInputVisible = ko.observable(true);
 
-	this.IsTimeInputEnabled = ko.observable();
+    this.IsPreferenceInputVisibleToggle = function() {
+        self.IsPreferenceInputVisible(!self.IsPreferenceInputVisible());
+    };
+
+    this.IsPreferenceInputVisibleToggleCss = ko.computed(function() {
+        return !self.IsPreferenceInputVisible() ? 'icon-circle-arrow-down' : undefined;
+    });
+
+	this.SelectedTemplateId = ko.computed({
+	    read: self.SelectedTemplateIdInternal,
+	    write: function(value) {
+	        self.SelectedTemplateIdInternal(value);
+	        self.UpdateModelFromTemplate();
+	    }
+	});
+
+    this.ShowError = ko.computed(function() {
+        return self.ValidationError() !== undefined && self.ValidationError() !== '';
+    });
+    this.DeleteTemplateEnabled = ko.computed(function() {
+        return (self.SelectedTemplateId() !== undefined && self.SelectedTemplateId().length > 0);
+    });
+    
+    this.DeleteTemplate = function() {
+        deletePreferenceTemplateMethod(self.SelectedTemplateId());
+    };
+
+    this.SaveAsNewTemplate = function() {
+        saveAsNewTemplateMethod(ko.toJS(self));
+    };
+
+    this.SavePreferences = function() {
+        savePreferenceMethod(ko.toJS(self));
+    };
+
+	this.ToggleAddPreferenceFormVisible = function () {
+	    self.AddPreferenceFormVisible(!self.AddPreferenceFormVisible());
+	};
 
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
+	});
+    
+	this.EarliestEndTimeNextDayClass = ko.computed(function () {
+	    return self.EarliestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+	this.LatestEndTimeNextDayClass = ko.computed(function () {
+	    return self.LatestEndTimeNextDay() ? undefined : 'icon-white';
+	});
+    
+	this.EarliestEndTimeNextDayToggleEnabled = ko.computed(function () {
+	    var isEnabled = self.EarliestEndTime() !== undefined && self.EarliestEndTime() !== '';
+	    if (!isEnabled)
+	        self.EarliestEndTimeNextDay(false);
+	    return isEnabled;
+	});
+	this.LatestEndTimeNextDayToggleEnabled = ko.computed(function () {
+	    var isEnabled = self.LatestEndTime() !== undefined && self.LatestEndTime() !== '';
+	    if (!isEnabled)
+	        self.LatestEndTimeNextDay(false);
+	    return isEnabled;
+	});
+    
+	this.LatestEndTimeNextDayToggle = function () {
+	    self.LatestEndTimeNextDay(!self.LatestEndTimeNextDay());
+	};
+	this.EarliestEndTimeNextDayToggle = function () {
+	    self.EarliestEndTimeNextDay(!self.EarliestEndTimeNextDay());
+	};
+    
+	this.IsSaveAsNewTemplateToggle = function () {
+	    self.IsSaveAsNewTemplate(!self.IsSaveAsNewTemplate());
+	};
+	this.IsSaveAsNewTemplateClass = ko.computed(function () {
+	    return self.IsSaveAsNewTemplate() ? 'icon-minus-sign' : undefined;
 	});
 
 	_initPreferenceString();
@@ -51,10 +126,12 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		});
 
 		self.PreferenceString.subscribe(function (newValue) {
-			if (self.SelectedTemplate()) {
-				self.SelectedTemplate(undefined);
-				$("#Preference-template")
-					.selectbox({ value: '' });
+			if (self.SelectedTemplateId()) {
+				self.SelectedTemplateId('');
+			}
+			self.IsTimeInputVisible(isShiftCategorySelectedAsStandardPreferenceMethod());
+			if (!self.IsTimeInputVisible()) {
+			    self.Reset();
 			}
 		});
 	}
@@ -75,49 +152,71 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
         return self.IsTemplateDetailsVisible() ? '-' : '+';
     });
 
-	this.SelectedTemplate.subscribe(function (newValue) {
-		if (newValue) {
-			_disposePreferenceString();
-			if (!newValue.PreferenceId)
-				self.PreferenceId('');
-			else
-				self.PreferenceId(newValue.PreferenceId);
-			self.EarliestStartTime(newValue.EarliestStartTime);
-			self.LatestStartTime(newValue.LatestStartTime);
-			self.EarliestEndTime(newValue.EarliestEndTime);
-			self.LatestEndTime(newValue.LatestEndTime);
-			self.EarliestEndTimeNextDay(newValue.EarliestEndTimeNextDay);
-			self.LatestEndTimeNextDay(newValue.LatestEndTimeNextDay);
-			self.MinimumWorkTime(newValue.MinimumWorkTime);
-			self.MaximumWorkTime(newValue.MaximumWorkTime);
-			if (!newValue.ActivityPreferenceId)
-				self.ActivityPreferenceId('');
-			else
-				self.ActivityPreferenceId(newValue.ActivityPreferenceId);
-			self.ActivityEarliestStartTime(newValue.ActivityEarliestStartTime);
-			self.ActivityLatestStartTime(newValue.ActivityLatestStartTime);
-			self.ActivityEarliestEndTime(newValue.ActivityEarliestEndTime);
-			self.ActivityLatestEndTime(newValue.ActivityLatestEndTime);
-			self.ActivityMinimumTime(newValue.ActivityMinimumTime);
-			self.ActivityMaximumTime(newValue.ActivityMaximumTime);
-
-			_initPreferenceString();
-		}
-	});
-
-	this.IsTimeInputEnabled.subscribe(function (newValue) {
-		if (!newValue) {
+    this.UpdateModelFromTemplate = function () {
+        var newValue = self.SelectedTemplate();
+        if (newValue === undefined || newValue.Value.length === 0)
+            return;
+	    _disposePreferenceString();
+		if (!newValue.PreferenceId)
+			self.PreferenceId('');
+		else
+			self.PreferenceId(newValue.PreferenceId);
+		self.EarliestStartTime(newValue.EarliestStartTime);
+		self.LatestStartTime(newValue.LatestStartTime);
+		self.EarliestEndTime(newValue.EarliestEndTime);
+		self.LatestEndTime(newValue.LatestEndTime);
+		self.EarliestEndTimeNextDay(newValue.EarliestEndTimeNextDay);
+		self.LatestEndTimeNextDay(newValue.LatestEndTimeNextDay);
+		self.MinimumWorkTime(newValue.MinimumWorkTime === undefined ? '' : newValue.MinimumWorkTime);
+		self.MaximumWorkTime(newValue.MaximumWorkTime === undefined ? '' : newValue.MaximumWorkTime);
+		if (!newValue.ActivityPreferenceId)
 			self.ActivityPreferenceId('');
-			self.EarliestStartTime(undefined);
-			self.LatestStartTime(undefined);
-			self.EarliestEndTime(undefined);
-			self.LatestEndTime(undefined);
-			self.EarliestEndTimeNextDay(false);
-			self.LatestEndTimeNextDay(false);
-			self.MinimumWorkTime(undefined);
-			self.MaximumWorkTime(undefined);
-		}
+		else
+			self.ActivityPreferenceId(newValue.ActivityPreferenceId);
+		self.ActivityEarliestStartTime(newValue.ActivityEarliestStartTime);
+		self.ActivityLatestStartTime(newValue.ActivityLatestStartTime);
+		self.ActivityEarliestEndTime(newValue.ActivityEarliestEndTime);
+		self.ActivityLatestEndTime(newValue.ActivityLatestEndTime);
+		self.ActivityMinimumTime(newValue.ActivityMinimumTime === undefined ? '' : newValue.ActivityMinimumTime);
+		self.ActivityMaximumTime(newValue.ActivityMaximumTime == undefined ? '' : newValue.ActivityMaximumTime);
+
+		_initPreferenceString();
+	};
+    
+	this.SelectedTemplate = ko.computed({
+	    read: function() {
+	        var selectedItemArray = $.grep(self.AvailableTemplates(), function (item, index) {
+	            return self.SelectedTemplateId() === item.Value;
+	        });
+
+	        if (selectedItemArray.length > 0)
+	            return selectedItemArray[0];
+	        
+	        return undefined;
+	    },
+	    write: function (value) {
+	        if (value !== undefined && value.Value !== undefined) {
+	            self.SelectedTemplateId(value.Value);
+	        }
+	    }
 	});
+
+	this.Reset = function () {
+	    if (self.IsTimeInputVisible()) {
+	        self.PreferenceId('');
+	    }
+	    self.EarliestStartTime(undefined);
+	    self.LatestStartTime(undefined);
+	    self.EarliestEndTime(undefined);
+	    self.EarliestEndTimeNextDay(undefined);
+	    self.LatestEndTime(undefined);
+	    self.LatestEndTimeNextDay(undefined);
+	    self.MinimumWorkTime('');
+	    self.MaximumWorkTime('');
+	    self.ActivityPreferenceId('');
+	    self.ValidationError(undefined);
+	    self.SelectedTemplateId(undefined);
+	};
 
 	this.EnableActivityTimeEditing.subscribe(function (newValue) {
 		if (!newValue) {
@@ -125,10 +224,18 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			self.ActivityLatestStartTime(undefined);
 			self.ActivityEarliestEndTime(undefined);
 			self.ActivityLatestEndTime(undefined);
-			self.ActivityMinimumTime(undefined);
-			self.ActivityMaximumTime(undefined);
+			self.ActivityMinimumTime('');
+			self.ActivityMaximumTime('');
 		}
 	});
 
-	this.ValidationError = ko.observable();
+	this.FormatPreferencesOption = function (option) {
+	    var optionElement = $(option.element);
+	    var activityColor = optionElement.data('color');
+
+	    if (option.id === '-') return '<hr>';
+	    if (option.text.length === 0) return option.text;
+	    
+	    return '<span class="pull-left" style="padding-left: 16px;margin-right: 5px;border-radius: 4px;background-color: ' + activityColor + '">&nbsp;</span>' + option.text;
+	};
 };

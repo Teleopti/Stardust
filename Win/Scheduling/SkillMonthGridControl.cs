@@ -74,29 +74,22 @@ namespace Teleopti.Ccc.Win.Scheduling
             CellModels.Add("TimeCell", timeSpanLongHourMinutesStaticCellModel());
             CellModels.Add("TimeSpanCell", initializeCallTimeSpanCell());
             CellModels.Add("ReadOnlyPercentCell", initializeCallPercentReadOnlyCell());
-            CellModels.Add("PercentCellModel", initializeCallPercentReadOnlyPercentCell());
         }
 
         private GridCellModelBase timeSpanLongHourMinutesStaticCellModel()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallTimeSpanCell()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
         	return new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
-        {
-			return new PercentFromPercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
@@ -181,8 +174,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				
-				gridRow = new SkillMonthGridRow(_rowManager, "PercentCellModel", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+
+                gridRow = new SkillMonthGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}

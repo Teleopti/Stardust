@@ -604,20 +604,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             if (!_workload.TemplateWeekCollection.Values.Contains(workloadDayTemplate)) _workload.AddTemplate(workloadDayTemplate);
 
             WorkloadDay workloadDay = new WorkloadDay();
-            workloadDay.Create(createDate, _workload, _openHours);
-            workloadDay.Close();
-			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
-            workloadDay.RecalculateDailyTasks();
+            workloadDay.CreateFromTemplate(createDate, _workload, workloadDayTemplate);
 
             Assert.AreEqual(44, workloadDay.TaskPeriodList.Count);
             Assert.IsTrue(workloadDay.TaskPeriodList.All(t => t.Tasks == 10));
 
             createDate = new DateOnly(2009, 3, 29);
             workloadDay = new WorkloadDay();
-            workloadDay.Create(createDate,_workload,_openHours);
-            workloadDay.Close();
-			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
-            workloadDay.RecalculateDailyTasks();
+            workloadDay.CreateFromTemplate(createDate, _workload, workloadDayTemplate);
 
             Assert.AreEqual(44, workloadDay.TaskPeriodList.Count);
             Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(new DateTime(2009, 03, 29, 7, 0, 0), _skill.TimeZone),
@@ -720,6 +714,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(createDate, _workload, openHours);
             workloadDay.Tasks = 1;
+
+            TimeSpan expectedAverageAfterTaskTime = new TimeSpan(0, 0, 2, 0);
+            workloadDay.AverageAfterTaskTime = expectedAverageAfterTaskTime;
+
+            //Apply the template
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
+
+            Assert.AreEqual(expectedAverageAfterTaskTime, workloadDay.AverageAfterTaskTime);
+        }
+  [Test]
+        public void VerifyCanApplyTemplateAndDayAverageAfterHandlingTimeNotTouchedWhenAllZeros()
+        {
+            DateOnly createDate = new DateOnly(2008, 01, 14);
+            string templateName = "<JULDAGEN>";
+            WorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
+
+            IList<TimePeriod> openHours = new List<TimePeriod>();
+            openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            foreach (ITemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
+            {
+                taskPeriod.AverageAfterTaskTime = new TimeSpan(0, 0, 0);
+                taskPeriod.AverageTaskTime = new TimeSpan(0, 0, 0);
+                taskPeriod.Tasks = 0;
+            }
+
+            WorkloadDay workloadDay = new WorkloadDay();
+            workloadDay.Create(createDate, _workload, openHours);
+            workloadDay.Tasks = 0;
 
             TimeSpan expectedAverageAfterTaskTime = new TimeSpan(0, 0, 2, 0);
             workloadDay.AverageAfterTaskTime = expectedAverageAfterTaskTime;

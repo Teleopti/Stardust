@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             ExcelLikeCurrentCell = true;
 
             CellModels.Add("NumericCell", new NumericReadOnlyCellModel(Model));
-            CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
+            CellModels.Add("TimeSpan", new TimeSpanDurationStaticCellModel(Model));
             CellModels.Add("ColumnHeaderCell", new GridSortColumnHeaderCellModel(Model));
         }
         public SingleAgentRestrictionPresenter SingleAgentRestrictionPresenter

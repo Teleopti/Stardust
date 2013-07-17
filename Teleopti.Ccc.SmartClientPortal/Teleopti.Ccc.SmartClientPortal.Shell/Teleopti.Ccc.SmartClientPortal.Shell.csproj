@@ -181,15 +181,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common">
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Library">
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Module">
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Module.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -200,11 +191,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationStartup.cs" />
-    <Compile Include="Constants\CommandNames.cs" />
-    <Compile Include="Constants\CommonEnum.cs" />
-    <Compile Include="Constants\EventTopicNames.cs" />
-    <Compile Include="Constants\UIExtensionSiteNames.cs" />
-    <Compile Include="Constants\WorkspaceNames.cs" />
+    <Compile Include="Common\Constants\UIExtensionSiteNames.cs" />
+    <Compile Include="Common\Library\Services\ActionCatalogException.cs" />
+    <Compile Include="Common\Library\Services\ActionCatalogService.cs" />
+    <Compile Include="Common\Library\Services\DependentModuleLoaderService.cs" />
+    <Compile Include="Common\Library\Services\IDependentModuleInfo.cs" />
+    <Compile Include="Common\Library\Services\IModuleInfoStore.cs" />
+    <Compile Include="Common\Library\Services\ProfileCatalogModuleInfoStore.cs" />
+    <Compile Include="Common\Library\Services\WorkspaceLocatorService.cs" />
+    <Compile Include="Common\Library\SmartClientApplication.cs" />
+    <Compile Include="Common\Library\Services\EmptyDependentModuleEnumerator.cs" />
+    <Compile Include="Common\Services\EntityTranslatorException.cs" />
+    <Compile Include="Common\Services\IActionCatalogService.cs" />
+    <Compile Include="Common\Services\IActionCondition.cs" />
+    <Compile Include="Common\Services\IEntityTranslator.cs" />
+    <Compile Include="Common\Services\IEntityTranslatorService.cs" />
+    <Compile Include="Common\Services\IWorkspaceLocatorService.cs" />
     <Compile Include="Detector.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OutlookPanelContentWorker.cs" />
@@ -242,9 +244,6 @@
     <None Include="Resources\ccc_PersonalSettings_32x32.png" />
     <Content Include="Resources\NotifyIconOk.ico" />
     <Content Include="Resources\NotifyIconWarning.ico" />
-    <Content Include="ProfileCatalog.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\ccc_Menu.png" />
     <None Include="Resources\ccc_Menu_ButtonDown.png" />
     <None Include="Resources\ccc_Menu_MouseOver.png" />
@@ -404,6 +403,7 @@
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y /r

@@ -51,7 +51,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 				new EditableShiftMapper().SetMainShiftLayers(agAss, msMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
                 if (_shiftContainsOvertime.IsSatisfiedBy(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift))
                 {
-                    agAss.AddOvertimeShift(overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
+									foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift))
+	                {
+		                agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+	                }
                 }
             }
 
@@ -69,7 +72,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 				new EditableShiftMapper().SetMainShiftLayers(agAss, msMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));
                 if (_shiftContainsOvertime.IsSatisfiedBy(oldEntity.AgentDayAssignment.AbsenceWorkshift))
                 {
-                    agAss.AddOvertimeShift(overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));
+									foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift))
+	                {
+										agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+	                }
                 }
             }
 
@@ -90,10 +96,16 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                     if(fillup.LayerCollection.Count == 0)
                         throw new InvalidOperationException("No layers in fill up shift for " + oldEntity.AssignedAgent.FullName() + " on date " + oldEntity.AgentDate);
 
-                    agAss.AddPersonalShift(psMapper.Map(fillup));
+	                foreach (var layer in psMapper.Map(fillup))
+	                {
+		                agAss.AddPersonalLayer(layer.Payload, layer.Period);
+	                }
                     if (_shiftContainsOvertime.IsSatisfiedBy(fillup))
                     {
-                        agAss.AddOvertimeShift(overtimeShiftMapper.Map(fillup));
+											foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(fillup))
+											{
+												agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+											}
                     }
                 }
             }

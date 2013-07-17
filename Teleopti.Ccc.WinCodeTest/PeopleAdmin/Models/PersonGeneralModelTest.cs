@@ -423,6 +423,22 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void ShouldResetChangeLogonCheck()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,DateOnly.Today, _base)).Return(true).Repeat.Twice();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.ApplicationLogOnName = "";
+				_target.ResetLogonDataCheck();
+				_target.ApplicationLogOnName = "";
+			}
+		}
+
         [Test]
         public void ShouldNotChangeIfUserHasNoPermissionToChangeLogOnAndPassword()
         {

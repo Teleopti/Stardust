@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             var period3 = new DateTimePeriod(baseDateTime.AddDays(10),baseDateTime.AddDays(10).AddHours(4));
 
             //Add underlying activities (to show the absences in projection)
-            schedulePart.CreateAndAddActivity(new MainShiftLayer(underlyingActivity,period1),new ShiftCategory("-"));
-            schedulePart2.CreateAndAddActivity(new MainShiftLayer(underlyingActivity, period2), new ShiftCategory("-"));
-            schedulePart3.CreateAndAddActivity(new MainShiftLayer(underlyingActivity, period3), new ShiftCategory("-"));
+            schedulePart.CreateAndAddActivity(underlyingActivity,period1,new ShiftCategory("-"));
+            schedulePart2.CreateAndAddActivity(underlyingActivity, period2, new ShiftCategory("-"));
+            schedulePart3.CreateAndAddActivity(underlyingActivity, period3, new ShiftCategory("-"));
             IList<IScheduleDay> days = new List<IScheduleDay>{schedulePart, schedulePart2, schedulePart3};
 
             //Add absences 
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             var period3 = new DateTimePeriod(baseDateTime.AddDays(10), baseDateTime.AddDays(10).AddHours(4));
 
             //Add underlying activities (to show the absences in projection)
-            schedulePart.CreateAndAddActivity(new MainShiftLayer(underlyingActivity, period1), new ShiftCategory("-"));
-            schedulePart2.CreateAndAddActivity(new MainShiftLayer(underlyingActivity, period2), new ShiftCategory("-"));
-            schedulePart3.CreateAndAddActivity(new MainShiftLayer(underlyingActivity, period3), new ShiftCategory("-"));
+            schedulePart.CreateAndAddActivity(underlyingActivity, period1, new ShiftCategory("-"));
+            schedulePart2.CreateAndAddActivity(underlyingActivity, period2, new ShiftCategory("-"));
+            schedulePart3.CreateAndAddActivity(underlyingActivity, period3, new ShiftCategory("-"));
             IList<IScheduleDay> days = new List<IScheduleDay> { schedulePart, schedulePart2, schedulePart3 };
 
             //Add absences 

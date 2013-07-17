@@ -85,28 +85,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             CellModels.Add("TimeCell", timeSpanLongHourMinutesStaticCellModel());
             CellModels.Add("TimeSpanCell", initializeCallTimeSpanCell());
             CellModels.Add("ReadOnlyPercentCell", initializeCallPercentReadOnlyCell());
-            CellModels.Add("PercentCellModel", initializeCallPercentReadOnlyPercentCell());
         }
 
         private GridCellModelBase timeSpanLongHourMinutesStaticCellModel()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallTimeSpanCell()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
         	var cellModel = new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
-        	return cellModel;
-        }
-
-        private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
-        {
-        	var cellModel = new PercentFromPercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         	return cellModel;
         }
 
@@ -233,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridRow(_rowManager, "PercentCellModel", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+                gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}

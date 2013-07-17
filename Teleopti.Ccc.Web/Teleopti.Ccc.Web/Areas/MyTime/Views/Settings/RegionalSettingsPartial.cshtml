@@ -7,14 +7,14 @@
 <div id="settings" class="well well-small">
     <div class="clearfix">
         <label for="CultureUi-Picker">@Resources.Language</label>
-        <select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { width: 'resolve', value: selectedUiCulture }, enable: culturesLoaded ">
+        <select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>
     <br/>
 	<div class="clearfix">
 		<label for="Culture-Picker">@Resources.DateFormat</label>
-		<select id="Culture-Picker" data-bind="foreach: cultures, select2: { width: 'resolve', value: selectedCulture }, enable: culturesLoaded">
+                        <select id="Culture-Picker" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
 			<option data-bind="text: text, value: id"></option>
 		</select>
 	</div>

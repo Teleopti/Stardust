@@ -9,33 +9,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 {
     public class ReadOnlyTextColumnPeriod<T> : ColumnBase<T>
     {
-        private static int _preferredWidth = 110;
-
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private string _headerText;
         private string _bindingProperty;
         private bool _makeRightAlign;
 
-
-        public ReadOnlyTextColumnPeriod(string bindingProperty, string headerText, bool makeRightAlign)
+        public ReadOnlyTextColumnPeriod(string bindingProperty, string headerText, bool makeRightAlign) : base(bindingProperty,110)
         {
             _headerText = headerText;
             _bindingProperty = bindingProperty;
             _makeRightAlign = makeRightAlign;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return _preferredWidth; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -43,15 +27,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             SetUpSingleHeader(e, dataItems);
         }
 
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)

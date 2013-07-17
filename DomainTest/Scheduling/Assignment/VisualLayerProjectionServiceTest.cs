@@ -50,9 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			IActivity act = ActivityFactory.CreateActivity("the one");
 			ass.SetMainShiftLayers(new[]{new MainShiftLayer(act, createPeriod(10,19))}, new ShiftCategory("cat"));
-			OvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(act, createPeriod(16, 17), defSet));
+			ass.AddOvertimeLayer(act, createPeriod(16, 17), defSet);
 			
 			IVisualLayerCollection res = ass.ProjectionService().CreateProjection();
 			Assert.AreEqual(3, res.Count());
@@ -394,16 +392,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 00, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 2, 00, 00, 0, DateTimeKind.Utc));
 
-			//Original layers in list
-			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(act3, period3);
-
-
-			PersonalShift personShift = new PersonalShift();
-			personShift.LayerCollection.Add(layer3);
-
+			
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
-			personAss.AddPersonalShift(personShift);
+			personAss.AddPersonalLayer(act3, period3);
 			personAss.SetMainShiftLayers(new[]
 				{
 					new MainShiftLayer(act1, period1), 
@@ -452,9 +444,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																							createPeriod(12, 16));
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			IActivity overTimeActivity = ActivityFactory.CreateActivity("d");
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(overTimeActivity, createPeriod(14, 15), defSet));
+			ass.AddOvertimeLayer(overTimeActivity, createPeriod(14, 15), defSet);
 
 			IVisualLayerCollection org = ass.ProjectionService().CreateProjection();
 			IList<IVisualLayer> proj = new List<IVisualLayer>(org);
@@ -475,9 +465,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet defSet = dummyDefinitionSet();
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet));
+			ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
 
 			IVisualLayerCollection org = ass.ProjectionService().CreateProjection();
 			IList<IVisualLayer> proj = new List<IVisualLayer>(org);
@@ -496,9 +484,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																				createPeriod(12,16),
 																				ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
-			IOvertimeShift ot = new OvertimeShift();
-			ass.AddOvertimeShift(ot);
-			ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet));
+			ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
 
 
 			IList<IVisualLayer> proj = new List<IVisualLayer>(ass.ProjectionService().CreateProjection());

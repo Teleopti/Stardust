@@ -191,5 +191,15 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-03-03
         /// </remarks>
         ISkillDayTemplate TryFindTemplateByName(string name);
+
+		/// <summary>
+		/// How many tasks can be hadled in parallel. Used for chat skill. Defaults to 3 on chat skill.
+		/// Always 1 on all other. Must be between 1 and 100.
+		/// </summary>
+		/// <remarks>
+		/// Created by: Ola
+		/// Created date: 2013-06-13
+		/// </remarks>
+		int MaxParallelTasks { get; set; }
     }
 }

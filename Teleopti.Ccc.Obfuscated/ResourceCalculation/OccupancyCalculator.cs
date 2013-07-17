@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         new SkillStaffPeriod(combinedSkillStaffPeriod.Period, combinedSkillStaffPeriod.Payload.TaskData,
                                              newSeviceAgreement, combinedSkillStaffPeriod.StaffingCalculatorService);
                     newSkillStaffPeriod.Payload.Shrinkage = combinedSkillStaffPeriod.Payload.Shrinkage;
+					newSkillStaffPeriod.SetSkillDay(combinedSkillStaffPeriod.SkillDay);
                     newSkillStaffPeriod.CalculateStaff();
                     skillCollectionKey.VirtualSkillStaffPeriod = newSkillStaffPeriod;
 

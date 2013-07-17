@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -222,16 +223,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipConflictingAssignments()
         {
-            _scheduleRange = new ScheduleRange(_dic, _param);
-
-            _scheduleRange.Add(_ass1);
-            _scheduleRange.Add(_ass2);
-            _scheduleRange.Add(_ass3);
-
-            _underlyingDictionary.Clear();
-            _underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
-
-            StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTipConflictingAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
+            //will be removed (or changed)
+					ViewBaseHelper.GetToolTipConflictingAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)))
+						.Should().Be.Empty();
         }
 
         [Test]
@@ -364,12 +358,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 						var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario, new DateOnly(2008, 1, 1));
             IActivity activity = ActivityFactory.CreateActivity("Overtime activity");
-            var overtimeShift = new OvertimeShift();
-            IOvertimeShiftActivityLayer layer =
-                new OvertimeShiftActivityLayer(activity, period,
-                                               multiplicatorDefinitionSet);
-            personAssignment.AddOvertimeShift(overtimeShift);
-            overtimeShift.LayerCollection.Add(layer);
+						personAssignment.AddOvertimeLayer(activity, period, multiplicatorDefinitionSet);
 
             var part = _scheduleRange.ScheduledDay(new DateOnly(2008, 1, 1));
             part.Add(personAssignment);
@@ -1024,7 +1013,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsenceBeginsAndEndsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodBeginsAndEndsToday);
 
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            ISchedulePart schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
+            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
 
             Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceEndsToday, schedulePart, visualLayerCollectionActivity));
             Assert.AreEqual(DisplayMode.BeginsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsToday, schedulePart, visualLayerCollectionActivity));
@@ -1079,17 +1068,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var range = _mockRep.StrictMock<IScheduleRange>();
             using (_mockRep.Record())
             {
-                Expect.Call(_schedulePart1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart1.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart1.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart1.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulePart2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.PersonDayOffCollection()).Return(_personDayOffCollection).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulePart3.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
+                Expect.Call(_schedulePart3.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 

@@ -139,17 +139,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             Expect.Call(_day.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>
                                                               {_personAssignmentJustBeforeDayOff})).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>
                                                               {_personAssignmentConflictingWithDayOffEnd})).Repeat.Twice();
             Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
             Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_day.PersonAssignmentCollection()).Return(
+            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
 
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             Expect.Call(_day.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffStart })).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentJustAfterDayOff })).Repeat.Twice();
 
             Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 
-            Expect.Call(_day.PersonAssignmentCollection()).Return(
+            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
 
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
@@ -209,9 +209,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             Expect.Call(_day.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffStart })).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollection()).Return(
+            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffEnd })).Repeat.Twice();
         	Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
 				_personAssignmentConflictingWithDayOffStartPeriod.StartDateTime).IgnoreArguments();
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
                 new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 
-            Expect.Call(_day.PersonAssignmentCollection()).Return(
+            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
             _mocks.ReplayAll();
 

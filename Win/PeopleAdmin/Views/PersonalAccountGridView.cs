@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.CellModels.Add("GridInCell", new GridInCellModel(Grid.Model));
 			if (!Grid.CellModels.ContainsKey("NumericCell"))
 				Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
-            Grid.CellModels.Add("TimeSpanLongHourMinutesCell", new TimeSpanLongHourMinutesCellModel(Grid.Model));
+            Grid.CellModels.Add("TimeSpanLongHourMinutesCell", new TimeSpanDurationCellModel(Grid.Model));
 
             var cellModel = new GridDropDownMonthCalendarAdvCellModel(Grid.Model);
             cellModel.HideNoneButton();

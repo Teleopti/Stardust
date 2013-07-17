@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         public IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
         {
             var resultingDay = (ExtractedSchedule)currentScheduleDay.Clone();
-            foreach (var personAssignment in currentScheduleDay.PersonAssignmentCollection())
+            foreach (var personAssignment in currentScheduleDay.PersonAssignmentCollectionDoNotUse())
             {
                 resultingDay.RemovePersonAssignment(personAssignment);
             }

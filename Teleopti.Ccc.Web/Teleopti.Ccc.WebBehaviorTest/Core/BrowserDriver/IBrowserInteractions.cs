@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.AssertJavascriptResultContains(js, "visible");
 		}
 
+		public static void AssertNotVisibleUsingJQuery(this IBrowserInteractions interactions, string selector)
+		{
+			var js = string.Format("return $('{0}').filter(\":not(:visible)\").length > 0 ? 'not visible but existing' : 'visible or non existing';", selector.JSEncode());
+			interactions.AssertJavascriptResultContains(js, "not visible but existing");
+		}
+
 		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
 		{
 			var selectSelector = selector + ":enabled";

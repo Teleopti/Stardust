@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
     {
         private readonly IEventAggregator _eventAggregator;
 
-        #region Variables
-
         private ColumnBase<IAccessibilityDateViewModel> _workShiftRule;
         private ColumnBase<IAccessibilityDateViewModel> _accesability;
         private ColumnBase<IAccessibilityDateViewModel> _date;
@@ -29,14 +27,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private ToolStripMenuItem _deletemenuItem;
         private ToolStripMenuItem _addNewLimiterFromClipboardMenuItem;
 
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccessibilityDateGrid"/> class.
-        /// </summary>
-        /// <param name="presenter">The presenter.</param>
-        /// <param name="grid">The grid.</param>
-        /// <param name="eventAggregator"></param>
         public AccessibilityDateGrid(IAccessibilityDatePresenter presenter, GridControl grid, IEventAggregator eventAggregator)
             : base(presenter, grid)
         {
@@ -50,38 +40,21 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        /// <value>The type.</value>
         internal override ShiftCreatorViewType Type
         {
             get { return ShiftCreatorViewType.DateExclusion; }
         }
 
-        /// <summary>
-        /// Creates the headers.
-        /// </summary>
         internal override void CreateHeaders()
         {
             AddColumn(new RowHeaderColumn<IAccessibilityDateViewModel>());
-            _workShiftRule = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, true);
+            _workShiftRule = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, makeStatic: true);
             AddColumn(_workShiftRule);
-            _accesability = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("AccessibilityText", UserTexts.Resources.Available, true);
+            _accesability = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("AccessibilityText", UserTexts.Resources.Available, makeStatic: true);
             AddColumn(_accesability);
             _date = new EditableDateTimeColumn<IAccessibilityDateViewModel>("Date", UserTexts.Resources.Date);
             AddColumn(_date);
         }
-
-        //internal override void KeyUp(KeyEventArgs e)
-        //{
-        //    if (e.KeyValue == 46)
-        //    {
-        //        if (Presenter.Explorer.View.AskForDelete())
-        //            DeleteSelectedGridRows(this, EventArgs.Empty);
-        //    }
-        //    e.Handled = true;
-        //}
 
         internal override void PrepareView()
         {
@@ -136,12 +109,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 			Grid.ContextMenuStrip.Show();
 		}
 
-        //internal override void AddNewGridRow<T>(object sender, T eventArgs)
-        //{
-        //    AddNewAccebilityDates();
-        //    RefreshGrid();
-        //}
-
         internal void AddNewAccebilityDates()
         {
             Presenter.AddAccessibilityDate();
@@ -187,13 +154,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="e"></param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-15
-        /// </remarks>
         internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
             if (ValidCell(e.ColIndex, e.RowIndex))
@@ -203,42 +163,20 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
             e.Handled = true;
         }
-              
-        #region Overriden Methods
 
-        /// <summary>
-        /// Adds the new.
-        /// </summary>
         public override void Add()
         {
             AddNewAccebilityDates();
             RefreshGrid();
         }
 
-        ///// <summary>
-        ///// Pastes this instance.
-        ///// </summary>
-        //public override void Paste()
-        //{
-        //    ClipHandler handler = (ClipHandler)ClipHandlerStateHolder.Current.Get();
-        //    ClipHandler<string> clipHandler = GridHelper.ConvertClipHandler(handler);
-
-        //    if (clipHandler.ClipList.Count > 0)
-        //    {
-        //        int rowSpan = clipHandler.RowSpan();
-        //        for (int row = 0; row < rowSpan; row++)
-        //            Add();
-        //        SimpleTextPasteAction pasteAction = new SimpleTextPasteAction();
-        //        GridHelper.HandlePaste(Grid, clipHandler, pasteAction);
-        //    }
-        //}
-
-        /// <summary>
-        /// Deletes the selected items.
-        /// </summary>
         public override void Delete()
         {
             DeleteSelectedDates();
+        }
+
+        public override void Rename()
+        {
         }
 
         public override void Sort(SortingMode mode)
@@ -253,15 +191,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Refreshes the view.
-        /// </summary>
         public override void RefreshView()
         {
             Grid.RowCount = Presenter.ModelCollection.Count;
             Grid.Invalidate();
         }
-
-        #endregion
     }
 }

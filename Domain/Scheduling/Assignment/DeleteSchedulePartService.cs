@@ -169,6 +169,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (options.StudentAvailability)
                 clonePart.DeleteStudentAvailabilityRestriction();
+            if(options.OvertimeAvailability)
+                clonePart.DeleteOvertimeAvailability();
 
             if (options.Default)
             {

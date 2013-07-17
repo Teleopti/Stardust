@@ -235,9 +235,8 @@ select.absence-input
 	width: 131px;
 	float: left;
 	z-index: 2;
-	border-bottom: 2px black;
+	border-bottom: 2px dashed black;
 	display: none;
-    border-style: dashed;
 }
 
 .week-schedule-time-indicator-small

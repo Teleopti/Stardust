@@ -39,9 +39,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+	    private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -61,7 +62,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
 	        _safeRollback = _mock.StrictMock<ISafeRollbackAndResourceCalculation>();
 		    _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new TeamBlockSchedulingService(_schedulingOptions, _teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _blockSteadyStateValidator, _safeRollback,_workShiftMinMaxCalculator);
+			_teamBlockMaxSeatChecker = _mock.StrictMock<ITeamBlockMaxSeatChecker>();
+		    _target = new TeamBlockSchedulingService(_schedulingOptions, _teamInfoFactory, _teamBlockInfoFactory,
+		                                             _teamBlockScheduler, _blockSteadyStateValidator, _safeRollback,
+		                                             _workShiftMinMaxCalculator, new List<IWorkShiftFinderResult>(),
+		                                             _teamBlockMaxSeatChecker);
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
             _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
@@ -105,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(_teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date, BlockFinderType.None ,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date, BlockFinderType.SingleDay  ,
 																	 false, _matrixList)).Return(null);
 
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
@@ -129,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay,
 																	 false, _matrixList)).Return(_teamBlockInfo);
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -162,10 +167,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -173,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(true);
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true);
-
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 expectCallForRollback();
             }
@@ -194,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay ,
 																	 false, _matrixList)).Return(_teamBlockInfo);
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -216,6 +221,46 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void ShouldStillContinueIfScheduleBlockDayIsSuccessfulWithTeamBlock()
+        {
+            var schedulingOptions = _schedulingOptions;
+            schedulingOptions.UseTeamBlockPerOption = true;
+	        _target = new TeamBlockSchedulingService(schedulingOptions, _teamInfoFactory, _teamBlockInfoFactory,
+	                                                 _teamBlockScheduler, _blockSteadyStateValidator, _safeRollback,
+	                                                 _workShiftMinMaxCalculator, new List<IWorkShiftFinderResult>(),
+	                                                 _teamBlockMaxSeatChecker);
+
+            var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
+
+
+            using (_mock.Record())
+            {
+                Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
+                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
+                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+                                                                     false, _matrixList)).Return(_teamBlockInfo);
+                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+                Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_blockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions))
+                      .Return(true);
+                Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, schedulingOptions,
+                                                                     _dateOnlyPeriod, _personList)).Return(false);
+
+                Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+                Expect.Call(() => _safeRollback.Execute(_rollbackService, schedulingOptions));
+                expectCallForRollback();
+            }
+
+            Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, _rollbackService));
+
+        }
+
+        [Test]
         public void ShouldBreakIfCancelMeIsSet()
         {
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
@@ -227,10 +272,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod , _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo,_date , BlockFinderType.None,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo,_date , BlockFinderType.SingleDay,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -239,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true );
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 expectCallForRollback();
             }
             SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
@@ -255,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
             Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
-            Expect.Call(_matrixPro.Person).Return(_person);
+            Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 
             Expect.Call(() => _rollbackService.ClearModificationCollection());
             Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
@@ -276,6 +321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 expectCallsForShouldBreakIfCancelMeIsSetWithNullDayScheduled(teamInfo);
                 expectCallForRollback();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
             }
             SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
             args.Cancel = true;
@@ -292,10 +338,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
             Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-            Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+            Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay,
 																  false, _matrixList)).Return(_teamBlockInfo);
-            Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+			Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
             Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
             Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -324,10 +370,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay ,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -335,11 +381,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(true);
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
                                                                      _dateOnlyPeriod, _personList)).Return(true);
-
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).Return(true);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
-                Expect.Call(_matrixPro.Person).Return(_person);
+                Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());

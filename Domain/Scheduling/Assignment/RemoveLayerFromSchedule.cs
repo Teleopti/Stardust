@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public class RemoveLayerFromSchedule : IRemoveLayerFromSchedule
     {
+			//no need to loop assignments multiple times - however, there will soon only be ONE assignment....
         public void Remove(IScheduleDay part,ILayer<IActivity> layer)
         {
             if (part != null)
@@ -14,11 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							if (msActivityLayer != null)
 							{
 								//Check for the layers in mainshift...
-								foreach (var assignment in part.PersonAssignmentCollection())
+								foreach (var assignment in part.PersonAssignmentCollectionDoNotUse())
 								{
 									if (assignment.RemoveLayer(msActivityLayer))
 									{
-										if (!assignment.MainShiftLayers.Any())
+										if (!assignment.MainLayers().Any())
 										{
 											//rk - why is this here!?
 											part.DeleteMainShift(part);
@@ -29,38 +30,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							}
                 
                 //Check for the layer in personalShift
-                foreach (var assignment in part.PersonAssignmentCollection())
+                foreach (var assignment in part.PersonAssignmentCollectionDoNotUse())
                 {
-                    foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                    {
-                        if (shift.LayerCollection.Contains(layer))
-                        {
-                            shift.LayerCollection.Remove(layer);
-                            if (shift.LayerCollection.Count == 0)
-                            {
-                                assignment.RemovePersonalShift(shift);
-                            }
-                            return;
-                        }
-                    }
+	                foreach (var personalLayer in assignment.PersonalLayers())
+	                {
+		                if (layer.Equals(personalLayer))
+		                {
+			                assignment.RemoveLayer(personalLayer);
+			                return;
+		                }
+	                }
                 }
 
                 //Check for the layer in overtime
-                foreach (var assignment in part.PersonAssignmentCollection())
+                foreach (var assignment in part.PersonAssignmentCollectionDoNotUse())
                 {
-                    //Check personalshifts and mainshift where its possible to have an activitylayer:
-                    foreach (IOvertimeShift shift in assignment.OvertimeShiftCollection)
-                    {
-                        if (shift.LayerCollection.Contains(layer))
-                        {
-                            shift.LayerCollection.Remove(layer);
-                            if (shift.LayerCollection.Count == 0)
-                            {
-                                assignment.RemoveOvertimeShift(shift);
-                            }
-                            return;
-                        }
-                    }
+	                foreach (var overtimeLayer in assignment.OvertimeLayers())
+	                {
+		                if (layer.Equals(overtimeLayer))
+		                {
+			                assignment.RemoveLayer(overtimeLayer);
+			                return;
+		                }
+	                }
                 }
             }
         }

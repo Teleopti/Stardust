@@ -83,110 +83,84 @@ namespace Teleopti.Ccc.WinCode.Settings
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets a minimum working time.
-		/// </summary>
-		/// <value>The created by.</value>
-		public string MinimumWorkTime
+		public TimeSpan? MinimumWorkTime
 		{
 			get
 			{
-				return _workTime.StartTimeString;
+				return _workTime.StartTime;
 			}
 			set
 			{
-				_workTime = new WorkTimeLimitation(_workTime.TimeSpanFromString(value), _workTime.EndTime);
+				_workTime = new WorkTimeLimitation(value, _workTime.EndTime);
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets a maximum working time.
-		/// </summary>
-		public string MaximumWorkTime
+		public TimeSpan? MaximumWorkTime
 		{
 			get
 			{
-				return _workTime.EndTimeString;
+				return _workTime.EndTime;
 			}
 			set
 			{
-				_workTime = new WorkTimeLimitation(_workTime.StartTime, _workTime.TimeSpanFromString(value));
+				_workTime = new WorkTimeLimitation(_workTime.StartTime, value);
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets an earliest starting time.
-		/// </summary>
-		public string EarlyStartTime
+		public TimeSpan? EarlyStartTime
 		{
 			get
 			{
-				return _startTime.StartTimeString;
+				return _startTime.StartTime;
 			}
 			set
 			{
-				TimeSpan timeValue;
-				TimeHelper.TryParse(value, out timeValue);
-
-				if (_endTime.EndTime.HasValue &&  timeValue > _endTime.EndTime.Value)
+				if (_endTime.EndTime.HasValue && value.HasValue && value > _endTime.EndTime.Value)
 					throw new ArgumentOutOfRangeException(UserTexts.Resources.EarlyStartTime, "Early start time can't be greater than late end time");
 
-				_startTime = new StartTimeLimitation(_startTime.TimeSpanFromString(value), _startTime.EndTime);
+				_startTime = new StartTimeLimitation(value, _startTime.EndTime);
 				OnStartTimeChanged();
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets a latest start time.
-		/// </summary>
-		public string LateStartTime
+		public TimeSpan? LateStartTime
 		{
 			get
 			{
-				return _startTime.EndTimeString;
+				return _startTime.EndTime;
 			}
 			set
 			{
-				_startTime = new StartTimeLimitation(_startTime.StartTime, _startTime.TimeSpanFromString(value));
+				_startTime = new StartTimeLimitation(_startTime.StartTime, value);
 				OnStartTimeChanged();
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets an earliest end time.
-		/// </summary>
-		public string EarlyEndTime
+		public TimeSpan? EarlyEndTime
 		{
 			get
 			{
-				return _endTime.StartTimeString;
+				return _endTime.StartTime;
 			}
 			set
 			{
-				_endTime = new EndTimeLimitation(_endTime.TimeSpanFromString(value), _endTime.EndTime);
+				_endTime = new EndTimeLimitation(value, _endTime.EndTime);
 				OnEndTimeChanged();
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets a latest ending time.
-		/// </summary>
-		public string LateEndTime
+		public TimeSpan? LateEndTime
 		{
 			get
 			{
-				return _endTime.EndTimeString;
+				return _endTime.EndTime;
 			}
 			set
 			{
-
-				TimeSpan timeValue;
-				TimeHelper.TryParse(value, out timeValue);
-
-				if (!string.IsNullOrEmpty(value) && _startTime.StartTime.HasValue && timeValue < _startTime.StartTime.Value)
+                if (value.HasValue && _startTime.StartTime.HasValue && value < _startTime.StartTime.Value)
 					throw new ArgumentOutOfRangeException(UserTexts.Resources.LateEndTime, "Early start time can't be greater than late end time");
 
-				_endTime = new EndTimeLimitation(_endTime.StartTime, _endTime.TimeSpanFromString(value));
+				_endTime = new EndTimeLimitation(_endTime.StartTime, value);
 				OnEndTimeChanged();
 			}
 		}
@@ -216,19 +190,11 @@ namespace Teleopti.Ccc.WinCode.Settings
 		protected virtual void OnStartTimeChanged() { }
 		protected virtual void OnEndTimeChanged() { }
 
-		/// <summary>
-		/// Provides the starting time as <see cref="StartTimeLimitation"/> value.
-		/// </summary>
-		/// <returns>A <see cref="StartTimeLimitation"/> value.</returns>
 		public StartTimeLimitation StartTimeLimit()
 		{
 			return _startTime;
 		}
 
-		/// <summary>
-		/// Provides the ending time as <see cref="EndTimeLimitation"/> value.
-		/// </summary>
-		/// <returns>A <see cref="EndTimeLimitation"/> value.</returns>
 		public EndTimeLimitation EndTimeLimit()
 		{
 			return _endTime;
@@ -239,12 +205,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 			return _workTime;
 		}
 
-		/// <summary>
-		/// Indicates whether the specified time period is valid or not.
-		/// </summary>
-		/// <param name="from">A <see cref="TimeSpan?"/> reference.</param>
-		/// <param name="to">A <see cref="TimeSpan?"/> reference.</param>
-		/// <returns></returns>
 		public static bool IsValidRange(TimeSpan? from, TimeSpan? to)
 		{
 			bool valid = true;
@@ -255,16 +215,10 @@ namespace Teleopti.Ccc.WinCode.Settings
 			return valid;
 		}
 
-		/// <summary>
-		/// Indicates whether the specified time is an overnight time or not.
-		/// </summary>
-		/// <param name="time">A time reference.</param>
-		/// <returns></returns>
 		protected static bool IsOvernight(string time)
 		{
 			bool retValue = string.IsNullOrEmpty(time);
 
-			// Splits if not null?
 			if (!retValue)
 			{
 				retValue = time.IndexOf("+", StringComparison.CurrentCultureIgnoreCase) > -1;

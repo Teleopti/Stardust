@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             PersistAndRemoveFromUnitOfWork(pAss);
 
             pAss = Session.Load<PersonAssignment>(pAss.Id.Value);
-						Assert.IsFalse(LazyLoadingManager.IsInitialized(pAss.MainShiftLayers));
-            LazyLoadingManager.Initialize(pAss.MainShiftLayers);
-						Assert.IsTrue(LazyLoadingManager.IsInitialized(pAss.MainShiftLayers));
+						Assert.IsFalse(LazyLoadingManager.IsInitialized(pAss.ShiftLayers));
+            LazyLoadingManager.Initialize(pAss.ShiftLayers);
+						Assert.IsTrue(LazyLoadingManager.IsInitialized(pAss.ShiftLayers));
         }
 
         [Test]

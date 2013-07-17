@@ -67,12 +67,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Set HourMinutes to CellModels.
 			gridControlAvailability.CellModels.Add(
 				"HourMinutesEmpty",
-				new TimeSpanHourMinuteCanBeEmptyCellModel(gridControlAvailability.Model)
+				new TimeSpanDurationCellModel(gridControlAvailability.Model){AllowEmptyCell = true}
 				);
 
 			gridControlAvailability.CellModels.Add(
 				"TimeOfDayCell",
-				new TimeSpanTimeOfDayCellModel(gridControlAvailability.Model)
+				new TimeSpanTimeOfDayCellModel(gridControlAvailability.Model){AllowEmptyCell = true}
 				);
 
 			InitGrid();
@@ -181,15 +181,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				
 				foreach (AvailabilityRestrictionView view in selectedList)
 				{
-					string overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.LateEndTime);
-					view.LateEndTime = overnightTime;
+				    if (lateEndTimeWillBeValid(view))
+				        view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
 				}
 			}
 			// Refreshes the Grid.
 			RefreshRange();
 		}
 
-		private void RefreshRange()
+	    private static bool lateEndTimeWillBeValid(AvailabilityRestrictionView view)
+	    {
+	        return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
+	    }
+
+	    private void RefreshRange()
 		{
 			int colIndex = _gridColumns.IndexOf(_lateEndTimeColumn);
 
@@ -286,8 +291,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				) {AllowExtendedCopyPaste = true};
 
 			// HACK: Handles event to get rid of fxcop.
-			_gridHelper.NewSourceEntityWanted +=
-				gridHelper_NewSourceEntityWanted;
+			_gridHelper.NewSourceEntityWanted += gridHelper_NewSourceEntityWanted;
 			_gridHelper.PasteFromClipboardFinished += GridHelperPasteFromClipboardFinished;
 		}
 
@@ -382,8 +386,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (_availabilityList == null)
 			{
 				// Loads all availabilities.
-				IList<IAvailabilityRotation> unSortedList = Repository.LoadAllAvailabilitiesWithHierarchyData(); //.OrderBy(a => a.Description.Name)
-				// Sort my list on description.
+				IList<IAvailabilityRotation> unSortedList = Repository.LoadAllAvailabilitiesWithHierarchyData();
 				IEnumerable<IAvailabilityRotation> sortedList = (from s in unSortedList
 																 orderby s.Name ascending
 																 select s);
@@ -424,7 +427,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Description description = PageHelper.CreateNewName(_availabilityList, "Name", UserTexts.Resources.NewAvailability);
 			IAvailabilityRotation newAvailability = new AvailabilityRotation(description.Name, (int)ScheduleRestrictionBaseView.DaysPerWeek);
 
-			//IScenarioRepository scenarioRep = new ScenarioRepository(_unitOfWork);
 			Repository.Add(newAvailability);
 
 			return newAvailability;
@@ -462,7 +464,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void gridHelper_NewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<AvailabilityRestrictionView> e)
 		{
-			//throw new NotImplementedException();
 		}
 
 	   private void GridHelperPasteFromClipboardFinished(object sender, EventArgs e)

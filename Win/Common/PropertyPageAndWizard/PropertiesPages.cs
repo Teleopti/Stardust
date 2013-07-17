@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 {
-    public partial class PropertiesPages : BaseRibbonForm
+    public partial class PropertiesPages : BaseDialogForm
     {
 		private readonly IAbstractPropertyPages _propertyPages;
 
