@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 			else
 			{
 				e.Style.BackColor = Color.White;
-				e.Style.CellType = "ComboBox";
+				e.Style.CellType = "TextBox";
 				if (dataItems == null) return;
 				T dataItem = dataItems[e.RowIndex - 1];
 				var items = _propertyReflector.GetValue(dataItem, _bindingPropertyGet) as StringCollection;
 				if (items != null && items.Count > 0)
 				{
-					e.Style.CellValue = items[0];
+                   e.Style.CellValue = items[0];
 					if (items.Count > 1)
 						e.Style.BackColor = Color.LightBlue;
 				}
