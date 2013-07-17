@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Security
     public class PasswordPolicyServiceViewModel : DataModel
     {
         private IPasswordPolicy _model;
-        private ILoadPasswordPolicyService _loadPasswordService  =new LoadPasswordPolicyService(string.Empty);
+        private readonly ILoadPasswordPolicyService _loadPasswordService  =new LoadPasswordPolicyService(string.Empty);
         private string _path;
         private bool _filePathIsOk;
         private string _password;
@@ -89,7 +89,6 @@ namespace Teleopti.Ccc.WinCode.Security
         #endregion
         #endregion //properties
 
-        //TODO: get rid of all these ctors
         public PasswordPolicyServiceViewModel()
         {
             LoadFileCommand = CommandModelFactory.CreateCommandModel(loadFile, canLoadFile, CommonRoutedCommands.LoadPasswordPolicy);
