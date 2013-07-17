@@ -111,11 +111,11 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -2984,7 +2984,7 @@
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
-      <Project>{92D88C7B-2401-4BC2-8F89-B919DBC6D143}</Project>
+      <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>
       <Name>Teleopti.Common.UI.SmartPartControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SyncfusionGridBinding\Teleopti.Ccc.SyncfusionGridBinding.csproj">
