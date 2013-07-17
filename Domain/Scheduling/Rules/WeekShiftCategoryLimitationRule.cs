@@ -44,29 +44,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var virtualSchedulePeriods =
                 _virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDaysList);
             var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDaysList).ToList();
+            var schedulePeriods = virtualSchedulePeriods as IVirtualSchedulePeriod[] ?? virtualSchedulePeriods.ToArray();
+            var anyPerson = schedulePeriods.First().Person;
+            IScheduleRange currentSchedules = rangeClones[anyPerson];
+            var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+            var oldResponseCount = oldResponses.Count();
+            foreach (IVirtualSchedulePeriod schedulePeriod in schedulePeriods)
+            {
+                if (schedulePeriod.IsValid)
+                {
+                    foreach (PersonWeek personWeek in personWeeks)
+                    {
+                        foreach (DateOnly day in personWeek.Week.DayCollection())
+                        {
+                            var dop = new DateOnlyPeriod(day, day);
+                            DateTimePeriod period = dop.ToDateTimePeriod(anyPerson.PermissionInformation.DefaultTimeZone());
+                            for (int i = oldResponses.Count - 1; i >= 0; i--)
+                            {
+                                var response = oldResponses[i];
+                                if (response.TypeOfRule == typeof(WeekShiftCategoryLimitationRule) && response.Period.Equals(period) && response.Person.Equals(anyPerson))
+                                    oldResponses.RemoveAt(i);
+                            }
+                        }
+                    }
+                }
+            }
             foreach (IVirtualSchedulePeriod schedulePeriod in virtualSchedulePeriods)
             {
                 if (schedulePeriod.IsValid)
                 {
                     DateOnlyPeriod scheduleDateOnlyPeriod = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
-                    IScheduleRange currentSchedules = rangeClones[person];
-                    var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-                    var oldResponseCount = oldResponses.Count();
-                    foreach (PersonWeek personWeek in personWeeks)
-                    {
-                        foreach (DateOnly day in personWeek.Week.DayCollection())
-                        {
-                            var dop = new DateOnlyPeriod(day, day);
-                            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-                            for (int i = oldResponses.Count - 1; i >= 0; i--)
-                            {
-                                var response = oldResponses[i];
-                                if (response.TypeOfRule == typeof(WeekShiftCategoryLimitationRule) && response.Period.Equals(period) && response.Person.Equals(person))
-                                    oldResponses.RemoveAt(i);
-                            }
-                        }
-                    }
+                    
                     
                     foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                     {
