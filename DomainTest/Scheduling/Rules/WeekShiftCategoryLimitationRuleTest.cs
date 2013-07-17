@@ -83,16 +83,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                     Return(vPeriods);
                 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).Return(
                     personWeeks);
-                Expect.Call(vPeriod1.IsValid).Return(true);
-                Expect.Call(vPeriod2.IsValid).Return(true);
+                Expect.Call(vPeriod1.IsValid).Return(true).Repeat.Twice();
+                Expect.Call(vPeriod2.IsValid).Return(true).Repeat.Twice();
 
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
                 Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person);
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
                 Expect.Call(vPeriod2.Person).Return(person);
 
-                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses).Repeat.Twice();
+                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
                 Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
                 Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
@@ -145,11 +145,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                     Return(vPeriods);
                 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).Return(
                     personWeeks);
-                Expect.Call(vPeriod1.IsValid).Return(true);
+                Expect.Call(vPeriod1.IsValid).Return(true).Repeat.Twice();
 
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person);
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
 
                 Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
 
@@ -205,20 +205,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                     Return(vPeriods);
                 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).Return(
                     personWeeks);
-                Expect.Call(vPeriod1.IsValid).Return(true);
-                Expect.Call(vPeriod2.IsValid).Return(true);
+                Expect.Call(vPeriod1.IsValid).Return(true).Repeat.Twice() ;
+                Expect.Call(vPeriod2.IsValid).Return(true).Repeat.Twice();
 
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
                 Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person);
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
                 Expect.Call(vPeriod2.Person).Return(person);
 
                 Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
                 Expect.Call(vPeriod2.ShiftCategoryLimitationCollection()).Return(_limitations);
 
                 Expect.Call(_limitation.Weekly).Return(true).Repeat.Twice();
-                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses).Repeat.Twice();
+                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
                 Expect.Call(person.Equals(person)).Return(true).Repeat.Twice();
 
                 Expect.Call(_limitationChecker.IsShiftCategoryOverWeekLimit(_limitation, range, new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory)).
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             using (_mocks.Playback())
             {
                 IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
-                Assert.AreEqual(0, ret.Count());
+                Assert.AreEqual(4, ret.Count());
             }
         }
 
