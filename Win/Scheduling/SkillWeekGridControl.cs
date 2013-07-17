@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase timeSpanLongHourMinutesStaticCellModel()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallTimeSpanCell()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

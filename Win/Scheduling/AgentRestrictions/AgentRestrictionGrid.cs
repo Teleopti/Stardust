@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			SelectionChanged += GridSelectionChanged;
 
 			if (!CellModels.ContainsKey("NumericReadOnlyCellModel")) CellModels.Add("NumericReadOnlyCellModel",new NumericReadOnlyCellModel(Model) {NumberOfDecimals = 0});
-			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
+			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanDurationStaticCellModel(Model));
 
 			//_waitClick = new ManualResetEvent(true);
 		}

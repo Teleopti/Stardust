@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         {
             object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
 			e.Style.CellType = "HourMinutesEmpty"; //"TimeOfDayCell";
-            e.Style.CellValue = value ?? string.Empty;
+            e.Style.CellValue = value ?? null;
         }
 
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)

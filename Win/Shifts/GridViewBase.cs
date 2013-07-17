@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Win.Shifts
             _grid.Dock = DockStyle.Fill;
             _grid.Location = new System.Drawing.Point(0, 0);
             _grid.Visible = true;
-            _grid.CellModels.Add("HourMinutes", new TimeSpanHourMinutesCellModel(_grid.Model));
         }
 
         internal abstract ShiftCreatorViewType Type { get; }

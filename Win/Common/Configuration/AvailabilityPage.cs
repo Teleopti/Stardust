@@ -67,12 +67,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Set HourMinutes to CellModels.
 			gridControlAvailability.CellModels.Add(
 				"HourMinutesEmpty",
-				new TimeSpanHourMinuteCanBeEmptyCellModel(gridControlAvailability.Model)
+				new TimeSpanDurationCellModel(gridControlAvailability.Model){AllowEmptyCell = true}
 				);
 
 			gridControlAvailability.CellModels.Add(
 				"TimeOfDayCell",
-				new TimeSpanTimeOfDayCellModel(gridControlAvailability.Model)
+				new TimeSpanTimeOfDayCellModel(gridControlAvailability.Model){AllowEmptyCell = true}
 				);
 
 			InitGrid();
@@ -181,8 +181,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				
 				foreach (AvailabilityRestrictionView view in selectedList)
 				{
-					string overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.LateEndTime);
-					view.LateEndTime = overnightTime;
+				    if (view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1))
+				        view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
 				}
 			}
 			// Refreshes the Grid.
@@ -286,8 +286,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				) {AllowExtendedCopyPaste = true};
 
 			// HACK: Handles event to get rid of fxcop.
-			_gridHelper.NewSourceEntityWanted +=
-				gridHelper_NewSourceEntityWanted;
+			_gridHelper.NewSourceEntityWanted += gridHelper_NewSourceEntityWanted;
 			_gridHelper.PasteFromClipboardFinished += GridHelperPasteFromClipboardFinished;
 		}
 

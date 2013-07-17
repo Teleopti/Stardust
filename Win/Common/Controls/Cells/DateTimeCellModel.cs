@@ -15,14 +15,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		public DateTimeCellModel (GridModel grid)
 			: base(grid)
 		{	 
-
 		}
 
         protected DateTimeCellModel(SerializationInfo info, StreamingContext context): base(info, context)
         {
-            
         }
-
 
 		public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
@@ -46,7 +43,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			dateTimePicker.ShowDropButton = true;
 			dateTimePicker.Border3DStyle = Border3DStyle.Flat;
 
-            
             dateTimePicker.Culture = CultureInfo.CurrentCulture;
             dateTimePicker.Style = VisualStyle.Office2007Outlook;
             dateTimePicker.Office2007Theme = Office2007Theme.Blue;
@@ -157,7 +153,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			}
 			base.OnKeyPress(e);
 		}
-		
 	}
 
 	public class CustomDateTimePicker : Syncfusion.Windows.Forms.Tools.DateTimePickerAdv
@@ -172,6 +167,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
-
 	}
 }

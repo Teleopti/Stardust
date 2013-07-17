@@ -1,37 +1,42 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
-    public class TimeSpanCultureTimeOfDayCellModel : GridTextBoxCellModel
+    public class TimeSpanTotalSecondsStaticCellModel : GridStaticCellModel, INumericCellModelWithDecimals
     {
+        private int _numberOfDecimals;
 
-        protected TimeSpanCultureTimeOfDayCellModel(SerializationInfo info, StreamingContext context)
+        protected TimeSpanTotalSecondsStaticCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
-        public TimeSpanCultureTimeOfDayCellModel(GridModel grid)
+        public TimeSpanTotalSecondsStaticCellModel(GridModel grid)
             : base(grid)
         {
         }
 
+        public int NumberOfDecimals
+        {
+            get { return _numberOfDecimals; }
+            set
+            {
+                _numberOfDecimals = Math.Max(Math.Min(3, value), 0);
+            }
+        }
+
         public override GridCellRendererBase CreateRenderer(GridControlBase control)
         {
-            return new TimeSpanEmptyCellModelRenderer(control, this);
+            return new TimeStaticCellRenderer(control, this);
         }
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            TimeSpan theTimeSpan;
-            style.CellValue = TimeHelper.TryParse(text, out theTimeSpan) ? theTimeSpan : new TimeSpan();
-            return true;
+            return false;
         }
 
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
@@ -39,8 +44,18 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             // Get culture specified in style, default if null
             CultureInfo ci = style.GetCulture(true);
 
-            TimeSpan timeSpan = (TimeSpan) value;
-            return TimeHelper.TimeOfDayFromTimeSpan(timeSpan, ci);
+            var ret = string.Empty;
+            if (value is TimeSpan)
+            {
+                double d = ((TimeSpan)value).TotalSeconds;
+
+                NumberFormatInfo nfi = (NumberFormatInfo)ci.NumberFormat.Clone();
+                nfi.NumberDecimalDigits = NumberOfDecimals;
+
+                ret = ((decimal)d).ToString("N", nfi);
+            }
+
+            return ret;
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -48,7 +63,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            //Hmm...
             info.AddValue("Text", GetActiveText(Grid.CurrentCellInfo.RowIndex, Grid.CurrentCellInfo.ColIndex));
             base.GetObjectData(info, context);
         }

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 
             // Add cellmodels
             gridControlMultiplicatorDefinition.CellModels.Add("DateTimeCellModel", new DateTimeCellModel(gridControlMultiplicatorDefinition.Model));
-            gridControlMultiplicatorDefinition.CellModels.Add("HourMinutes", new TimeSpanHourMinutesCellModel(gridControlMultiplicatorDefinition.Model));
+            gridControlMultiplicatorDefinition.CellModels.Add("HourMinutes", new TimeSpanTimeOfDayCellModel(gridControlMultiplicatorDefinition.Model));
             gridControlMultiplicatorDefinition.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlMultiplicatorDefinition.Model));
 
             var sfGridDropDownColumn = new SFGridDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicatorDefinitionAdapter>(

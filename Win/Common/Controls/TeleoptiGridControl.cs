@@ -173,7 +173,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
             CellModels.Add("IntegerCell", initializeIntegerCell());
             CellModels.Add("PositiveIntegerCell", initializePositiveIntegerCell());
             CellModels.Add("IntegerMinMaxAgentCell", initializeCallMinMaxAgentIntegercCell());
-            CellModels.Add("TimePeriodCell", new TimePeriodCellModel(Model));
             CellModels.Add("TimeSpanReadOnlyCell",initializeTimeSpanReadOnlyCell());
             CellModels.Add("TimeSpanLongHourMinutesCellModel", InitializeTimeSpanLongHourMinutesCellModel());
             CellModels.Add("TimeSpanLongHourMinutesOnlyPositiveCellModel", initializeTimeSpanLongHourMinutesPositiveCellModel());
@@ -197,33 +196,34 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
     	private GridCellModelBase initializeTimeSpanReadOnlyCell()
         {
-            TimeSpanLongHourMinutesStaticCellModel cellModel = new TimeSpanLongHourMinutesStaticCellModel(Model);
+            TimeSpanDurationStaticCellModel cellModel = new TimeSpanDurationStaticCellModel(Model);
             return cellModel;
         }
-        private TimeSpanLongHourMinutesCellModel InitializeTimeSpanLongHourMinutesCellModel()
+        private TimeSpanDurationCellModel InitializeTimeSpanLongHourMinutesCellModel()
         {
-            TimeSpanLongHourMinutesCellModel cellModel = new TimeSpanLongHourMinutesCellModel(Model);
+            TimeSpanDurationCellModel cellModel = new TimeSpanDurationCellModel(Model);
 
             return cellModel;
         }
-        private TimeSpanLongHourMinuteSecondCellModel initializeTimeSpanLongHourMinuteSecondPositiveCellModel()
+        private GridCellModelBase initializeTimeSpanLongHourMinuteSecondPositiveCellModel()
         {
-            TimeSpanLongHourMinuteSecondCellModel cellModel = new TimeSpanLongHourMinuteSecondCellModel(Model);
+            var cellModel = new TimeSpanDurationCellModel(Model);
+            cellModel.OnlyPositiveValues = true;
+            cellModel.DisplaySeconds = true;
+
+            return cellModel;
+        }
+        private TimeSpanDurationCellModel initializeTimeSpanLongHourMinutesPositiveCellModel()
+        {
+            TimeSpanDurationCellModel cellModel = new TimeSpanDurationCellModel(Model);
             cellModel.OnlyPositiveValues = true;
 
             return cellModel;
         }
-        private TimeSpanLongHourMinutesCellModel initializeTimeSpanLongHourMinutesPositiveCellModel()
+        private TimeSpanDurationStaticCellModel initializeTimeSpanLongHourMinutesStaticCellModel()
         {
-            TimeSpanLongHourMinutesCellModel cellModel = new TimeSpanLongHourMinutesCellModel(Model);
-            cellModel.OnlyPositiveValues = true;
-
-            return cellModel;
-        }
-        private TimeSpanLongHourMinutesStaticCellModel initializeTimeSpanLongHourMinutesStaticCellModel()
-        {
-            TimeSpanLongHourMinutesStaticCellModel cellModel = new TimeSpanLongHourMinutesStaticCellModel(Model);
-            cellModel.ShowSeconds = true;
+            TimeSpanDurationStaticCellModel cellModel = new TimeSpanDurationStaticCellModel(Model);
+            cellModel.DisplaySeconds = true;
 
             return cellModel;
         }
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         private GridCellModelBase initializeTotalSecondsReadOnlyCell()
         {
-            TimeSpanTotalSecondsReadOnlyCellModel cellModel = new TimeSpanTotalSecondsReadOnlyCellModel(Model);
+            TimeSpanTotalSecondsStaticCellModel cellModel = new TimeSpanTotalSecondsStaticCellModel(Model);
             cellModel.NumberOfDecimals = _numberOfDecimals;
             _numericCellModelWithDecimalses.Add(cellModel);
             return cellModel;

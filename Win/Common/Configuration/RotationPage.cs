@@ -87,13 +87,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitMessageBroker();
 
 			// Set HourMinutes to CellModels.
-			gridControlRotation.CellModels.Add(
-				"HourMinutesEmpty",
-				new TimeSpanHourMinuteCanBeEmptyCellModel(gridControlRotation.Model));
+		    gridControlRotation.CellModels.Add(
+		        "HourMinutesEmpty",
+		        new TimeSpanDurationCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
-			gridControlRotation.CellModels.Add(
-				"TimeOfDayCell",
-				new TimeSpanTimeOfDayCellModel(gridControlRotation.Model));
+		    gridControlRotation.CellModels.Add(
+		        "TimeOfDayCell",
+		        new TimeSpanTimeOfDayCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
 			InitGrid();
 			CreateColumns();
@@ -348,7 +348,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void ChangeToOverMidnight()
 		{
-			//bool lateStartSelected = _gridHelper.HasColumnSelected(_lateStartTimeColumn);
 			var earlyEndSelected = _gridHelper.HasColumnSelected(_earlyEndTimeColumn);
 			var lateEndSelected = _gridHelper.HasColumnSelected(_lateEndTimeColumn);
 
@@ -356,15 +355,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			ICollection<RotationRestrictionView> selectedList = _gridHelper.FindSelectedItems();
 			foreach (var view in selectedList)
 			{
-				string overnightTime;
 				if (earlyEndSelected)
 				{
-					overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.EarlyEndTime);
-					view.EarlyEndTime = overnightTime;
+                    if (view.EarlyEndTime.HasValue && view.EarlyEndTime.Value<TimeSpan.FromDays(1))
+                        view.EarlyEndTime = view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1));
 				}
 				if (!lateEndSelected) continue;
-				overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.LateEndTime);
-				view.LateEndTime = overnightTime;
+
+                if (view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1))
+                    view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
 			}
 			// Refreshes the Grid.
 			RefreshRange(RangeCategory.TimeColumns);

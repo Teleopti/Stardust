@@ -89,12 +89,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase timeSpanLongHourMinutesStaticCellModel()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallTimeSpanCell()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
