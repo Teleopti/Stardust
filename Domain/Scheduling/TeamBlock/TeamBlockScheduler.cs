@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool scheduleAttempts(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
-			var teamBlockIsFullyScheduled = false;
+			var hasDayCannotBeScheduled = false;
 			IShiftCategory shiftCategoryToBeBlocked = null;
-			while (!teamBlockIsFullyScheduled)
+			while (!hasDayCannotBeScheduled)
 			{
 				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
 				                                                                               schedulingOptions);
@@ -139,10 +139,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						                      selectedPeriod);
 						suggestedShiftProjectionCache = null;
 					}
+					if (!TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, day))
+						hasDayCannotBeScheduled = true;
 				}
-				if (TeamBlockScheduledDayChecker.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, selectedPersons))
-					teamBlockIsFullyScheduled = true;
-				else
+				if (hasDayCannotBeScheduled)
 				{
 					if (shiftCategoryToBeBlocked != null)
 					{
