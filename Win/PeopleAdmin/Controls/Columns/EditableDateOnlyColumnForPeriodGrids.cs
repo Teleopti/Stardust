@@ -19,34 +19,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly string _headerText;
         private readonly string _bindingProperty;
         private readonly DateTimeFormatInfo _dtfi;
-        private readonly bool CheckIfCanGray = true;
-
-        public EditableDateOnlyColumnForPeriodGrids(string bindingProperty, string headerText, bool checkIfCanGray)
-            : this(bindingProperty, headerText)
-        {
-            CheckIfCanGray = checkIfCanGray;
-        }
-
-        public EditableDateOnlyColumnForPeriodGrids(string bindingProperty, string headerText)
+        
+        public EditableDateOnlyColumnForPeriodGrids(string bindingProperty, string headerText) : base(bindingProperty,100)
         {
             _headerText = headerText;
             _bindingProperty = bindingProperty;
 
-            CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.LCID, false);
-            _dtfi = ci.DateTimeFormat;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
+            _dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -67,9 +46,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 DateTime? dateTimeValue = null;
                 if (value.HasValue) dateTimeValue = value.Value;
                 e.Style.CellValue = dateTimeValue;
-                
-                if (CheckIfCanGray)
-                     PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e);
+
+                PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e);
                 OnCellDisplayChanged(dataItem, e);
             }
             e.Handled = true;
@@ -81,15 +59,24 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 if (dataItems.Count == 0) return;
                 DateTime dt;
+                DateOnly? date = null;
 
                 if (e.Style.CellValue == null) return;
                 if (e.Style.CellType == "Test") 
                     return;
 
-                if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
+                if (e.Style.CellValue is DateTime)
+                {
+                    date = new DateOnly(((DateTime)e.Style.CellValue).LimitMin());
+                } 
+                else if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
+                {
+                    date = new DateOnly(DateTime.SpecifyKind(dt, DateTimeKind.Unspecified).LimitMin());
+                }
+                if (date.HasValue)
                 {
                     T dataItem = dataItems[e.RowIndex - 1];
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, new DateOnly(DateTime.SpecifyKind(dt, DateTimeKind.Unspecified).LimitMin()));
+                    _propertyReflector.SetValue(dataItem, _bindingProperty, date.Value);
                     OnCellChanged(dataItem, e);
                 }
                 e.Handled = true;

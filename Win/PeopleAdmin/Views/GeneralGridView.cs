@@ -228,14 +228,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
             if (_hasRights)
             {
-                var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles);
-			    column.SetPreferredWidth(200);
+                var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
 			    _roleColumn = column;
 			}
             else
             {
-                var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles);
-                column.SetPreferredWidth(200);
+                var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
                 _roleColumn = column;
             }
 

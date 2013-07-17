@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, ReportLevelDetails(), "DisplayName", "ReportLevelDetail"));
 
-            SFGridColumnBase<IActivity>.AppendAuditColumns(gridColumns);
+            gridColumns.AppendAuditColumns();
             gridControlGroupingActivities.RowCount = GridRowCount(GridType.Activity);
             gridControlGroupingActivities.ColCount = gridColumns.Count - 1;  //col index starts on 0
 

@@ -333,6 +333,7 @@
     </Compile>
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
+    <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -340,6 +341,10 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
+    <Compile Include="Common\Controls\Columns\IColumnDisableCondition.cs" />
+    <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
+    <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
+    <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -465,10 +470,7 @@
       <DependentUpon>MonthlyProjectionVisualiser.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\MonthlyProjectionColumnHeaderCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\GridDropDownMonthCalendarAdvOnlyDateCellModel.cs" />
     <Compile Include="Common\Controls\Cells\NullableIntegerCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\PercenFromPercentReadOnlyCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\RestrictionViewCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeSpanCultureTimeOfDayCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeSpanHourMinuteCanBeEmptyCellModel.cs" />
     <Compile Include="Common\Controls\Cells\VisualProjectionCellModel.cs" />
@@ -982,7 +984,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Controls\Cells\DescriptionShortNameCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\DoubleCellModel.cs" />
     <Compile Include="Common\Controls\Columns\ColumnCellDisplayChanged.cs" />
     <Compile Include="Common\Controls\DateSelection\DateNavigateControlThinLayout.cs">
       <SubType>UserControl</SubType>
@@ -993,7 +994,6 @@
     <Compile Include="Common\Controls\DateSelection\DateTimePickerAdvExtension.cs" />
     <Compile Include="Common\Controls\IntervalLengthItem.cs" />
     <Compile Include="Common\Configuration\TreeFamily.cs" />
-    <Compile Include="Common\Interop\MultipleElementHost.cs" />
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />
     <Compile Include="Forecasting\Forms\TaskOwnerDayGridHelper.cs" />
@@ -1434,7 +1434,6 @@
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionSummaryGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scheduling\RestrictionView.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IPdfScheduleTemplate.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfDayOfWeekHeader.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleAssignment.cs" />
@@ -1522,9 +1521,7 @@
     <Compile Include="Common\Configuration\Columns\SFGridCheckBoxColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColorPickerColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnBase.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridColumnCellChangedEventArgs.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelper.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelperBase.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDescriptionNameColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDropDownColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDropDownEnumColumn.cs" />
@@ -1844,7 +1841,6 @@
     <Compile Include="Common\Controls\Columns\EditableTextColumn.cs" />
     <Compile Include="Common\Controls\GridRangePasteEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\IColumn.cs" />
-    <Compile Include="Common\Controls\Columns\NumericCellColumn.cs" />
     <Compile Include="Common\Controls\OutlierBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1885,8 +1881,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Common\Controls\Rows\SkillStaffPeriodGridRow.cs" />
-    <Compile Include="Common\Controls\Cells\TimeCellModel.cs">
-    </Compile>
     <Compile Include="Common\Controls\Cells\TimeSpanTotalSecondsCellModel.cs" />
     <Compile Include="Common\FontExtension.cs" />
     <Compile Include="Common\GridControlExtension.cs" />
@@ -2176,7 +2170,6 @@
     <Compile Include="PeopleAdmin\GuiHelpers\PersonRotationStateholder.cs" />
     <Compile Include="PeopleAdmin\Views\RotationBaseGridView.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\DropDownGridCreator.cs" />
-    <Compile Include="PeopleAdmin\Controls\Columns\EditableDateTimeColumnForPeriodGrids.cs" />
     <Compile Include="PeopleAdmin\Views\DropDownGridViewBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -2213,7 +2206,6 @@
     <Compile Include="PeopleAdmin\Views\PersonSkillGridView.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\ReadOnlyCollectionColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\ReadOnlyHourMinutesColumnForSchedulePeriod.cs" />
-    <Compile Include="PeopleAdmin\Controls\Columns\ReadOnlyRoleDescriptionColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\ReadOnlySkillDescriptionColumn.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\ReadOnlyTextColumnPeriod.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\TrackerDescriptionTextOrDropDownColumnComparer.cs" />

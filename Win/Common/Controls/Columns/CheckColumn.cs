@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Columns
@@ -14,45 +10,26 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
         private string _headerText;
         private string _groupHeaderText;
-        private string _bindingProperty;
         private string _checkedValue;
         private string _indetermValue;
         private string _uncheckedValue;
         private Type _valueType;
 
-        public CheckColumn(string bindingProperty, string trueValue, string falseValue, string intermValue, Type valueType, string headerText)
+        public CheckColumn(string bindingProperty, string trueValue, string falseValue, string intermValue, Type valueType, string headerText) : base(bindingProperty,100)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _checkedValue = trueValue;
             _indetermValue = intermValue;
             _uncheckedValue = falseValue;
             _valueType = valueType;
         }
-        public CheckColumn(string bindingProperty, string trueValue, string falseValue, string intermValue, Type valueType, string headerText, string groupHeaderText)
+
+        public CheckColumn(string bindingProperty, string trueValue, string falseValue, string intermValue, Type valueType, string headerText, string groupHeaderText) : this(bindingProperty,trueValue,falseValue,intermValue,valueType,headerText)
         {
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
-            _checkedValue = trueValue;
-            _indetermValue = intermValue;
-            _uncheckedValue = falseValue;
-            _valueType = valueType;
             _groupHeaderText = groupHeaderText;
         }
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
 
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
-        }
-
-        public override void GetCellInfo(Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e, System.Collections.ObjectModel.ReadOnlyCollection<T> dataItems)
+        public override void GetCellInfo(GridQueryCellInfoEventArgs e, System.Collections.ObjectModel.ReadOnlyCollection<T> dataItems)
         {
             if (string.IsNullOrEmpty(_groupHeaderText))
             {
@@ -72,7 +49,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                         e.Style.CheckBoxOptions.IndetermValue = _indetermValue;
                         e.Style.CheckBoxOptions.UncheckedValue = _uncheckedValue;
                         e.Style.CellValueType = _valueType;
-                        e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                        e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                         e.Style.HorizontalAlignment = GridHorizontalAlignment.Center;
                     }
                 }
@@ -99,7 +76,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                         e.Style.CheckBoxOptions.IndetermValue = _indetermValue;
                         e.Style.CheckBoxOptions.UncheckedValue = _uncheckedValue;
                         e.Style.CellValueType = _valueType;
-                        e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                        e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                         e.Style.HorizontalAlignment = GridHorizontalAlignment.Center;
                     }
                 }
@@ -110,7 +87,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
-        public override void SaveCellInfo(Syncfusion.Windows.Forms.Grid.GridSaveCellInfoEventArgs e, System.Collections.ObjectModel.ReadOnlyCollection<T> dataItems)
+        public override void SaveCellInfo(GridSaveCellInfoEventArgs e, System.Collections.ObjectModel.ReadOnlyCollection<T> dataItems)
         {
             int rowIndex = e.RowIndex;
             T dataItem;
@@ -137,7 +114,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
             if (cellValue.GetType() == _valueType)
             {
-                _propertyReflector.SetValue(dataItem, _bindingProperty, cellValue);
+                _propertyReflector.SetValue(dataItem, BindingProperty, cellValue);
                 OnCellChanged(dataItem);
             }
 

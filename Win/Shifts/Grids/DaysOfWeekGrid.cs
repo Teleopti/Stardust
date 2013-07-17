@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             
             AddColumn(new RowHeaderColumn<IDaysOfWeekViewModel>());
             
-            _ruleSetColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, UserTexts.Resources.RuleSet, true);
+            _ruleSetColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, UserTexts.Resources.RuleSet, makeStatic:true);
             AddColumn(_ruleSetColumn);
 
-            _accessibilityColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("AccessibilityText", UserTexts.Resources.IncludeExclude, UserTexts.Resources.Available, true);
+            _accessibilityColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("AccessibilityText", UserTexts.Resources.IncludeExclude, UserTexts.Resources.Available, makeStatic:true);
             AddColumn(_accessibilityColumn);
 
             _mondayColumn = new CheckColumn<IDaysOfWeekViewModel>("Monday", "true", "false", "1", typeof(bool), UserTexts.Resources.Monday, UserTexts.Resources.WeekDay);

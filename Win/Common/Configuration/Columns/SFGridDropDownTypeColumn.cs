@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         	if (e.Style.CellValue is Type)
         	{
         		OnTypeChanged(((Type)e.Style.CellValue), dataItem);
-        		OnCellChanged(dataItem);
         	}
 
         	e.Handled = true;

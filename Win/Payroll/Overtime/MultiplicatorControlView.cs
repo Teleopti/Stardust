@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 
             CreateColumnsForMultipplicatorGrid(gridColumns);
 
-            SFGridColumnBase<T>.AppendAuditColumns(gridColumns);
+            gridColumns.AppendAuditColumns();
 
             gridMultiplicator.RowCount = GridRowCount();
             gridMultiplicator.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
         private void AddCellmodels()
         {
             // Adds the cell models to the grid control
-            gridMultiplicator.CellModels.Add("DoubleCell", new DoubleCellModel(gridMultiplicator.Model, 2));
+            gridMultiplicator.CellModels.Add("DoubleCell", new NumericCellModel(gridMultiplicator.Model){NumberOfDecimals = 2});
             gridMultiplicator.CellModels.Add("DescriptionNameCell", new DescriptionNameCellModel(gridMultiplicator.Model));
             gridMultiplicator.CellModels.Add("DescriptionShortNameCellModel",
                                        new DescriptionShortNameCellModel(gridMultiplicator.Model));
@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
             gridColumns.Add(new SFGridDescriptionShortNameColumn<T>("Description", Resources.ShortName, 100, false, 2));
             gridColumns.Add(new SFGridColorPickerColumn<T>("DisplayColor", Resources.Color, null));
             gridColumns.Add(new SFGridReadOnlyEnumColumn<T>("MultiplicatorType", Resources.MultiplicatorType));
-            //gridColumns.Add(new SFGridDropDownColumn<T, MultiplicatorTypeView>("MultiplicatorType", "xxMultiplicatorType", _multiplicatorTypeViewCollection, "DisplayName", null));
             gridColumns.Add(new SFGridNumericCellColumn<T>("MultiplicatorValue", Resources.MultiplicatorValue, null, "DoubleCell",50));
             gridColumns.Add(new SFGridEditableTextColumn<T>("ExportCode", 20, Resources.ExportCode){AllowEmptyValue = true});
 

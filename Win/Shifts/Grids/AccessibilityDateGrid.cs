@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         internal override void CreateHeaders()
         {
             AddColumn(new RowHeaderColumn<IAccessibilityDateViewModel>());
-            _workShiftRule = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, true);
+            _workShiftRule = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, makeStatic: true);
             AddColumn(_workShiftRule);
-            _accesability = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("AccessibilityText", UserTexts.Resources.Available, true);
+            _accesability = new ReadOnlyTextColumn<IAccessibilityDateViewModel>("AccessibilityText", UserTexts.Resources.Available, makeStatic: true);
             AddColumn(_accesability);
             _date = new EditableDateTimeColumn<IAccessibilityDateViewModel>("Date", UserTexts.Resources.Date);
             AddColumn(_date);

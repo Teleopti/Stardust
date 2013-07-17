@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
@@ -40,11 +38,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            //Hmm...
             info.AddValue("Text", GetActiveText(Grid.CurrentCellInfo.RowIndex, Grid.CurrentCellInfo.ColIndex));
             base.GetObjectData(info, context);
         }

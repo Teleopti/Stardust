@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         }
         private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-            PercentFromPercentReadOnlyCellModel cellModel = new PercentFromPercentReadOnlyCellModel(Model);
+            PercentReadOnlyCellModel cellModel = new PercentReadOnlyCellModel(Model);
             cellModel.NumberOfDecimals = 0;
             return cellModel;
         }

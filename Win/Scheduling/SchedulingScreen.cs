@@ -6399,46 +6399,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ExportToPdf(false);
 		}
 
-		private void setRestrictionUsage()
-		{
-			var view = _scheduleView as RestrictionView;
-			if (view == null)
-				return;
-
-        	var restrictionPresenter = (RestrictionPresenter) view.Presenter;
-            restrictionPresenter.UseStudent = toolStripMenuItemUseStudentAvailability.Checked;
-            restrictionPresenter.UseSchedule = toolStripMenuItemUseSchedule.Checked;
-            restrictionPresenter.UseRotation = toolStripMenuItemUseRotation.Checked;
-            restrictionPresenter.UsePreference = toolStripMenuItemUsePreference.Checked;
-            restrictionPresenter.UseAvailability = toolStripMenuItemUseAvailability.Checked;
-			disableAllExceptCancelInRibbon();
-			_grid.Enabled = false;
-			validateAllPersons();
-		}
-
 		private void toolStripMenuItemUseStudentAvailability_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseSchedule_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseRotation_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUsePreference_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseAvailability_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)

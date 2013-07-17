@@ -9,37 +9,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private string _headerText;
-        private string _groupHeaderText;
-        private string _bindingProperty;
-        private int _preferredWidth = 150;
-
-        public TimeOfDayColumn(string bindingProperty, string headerText)
+        private readonly string _headerText;
+        private readonly string _groupHeaderText;
+        
+        public TimeOfDayColumn(string bindingProperty, string headerText, string groupHeaderText)
+            : base(bindingProperty, 80)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
-
-            if (!string.IsNullOrEmpty(System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AMDesignator))
-                _preferredWidth += 12;
-        }
-
-        public TimeOfDayColumn(string bindingProperty, string headerText, string groupHeaderText)
-            : this(bindingProperty, headerText)
-        {
             _groupHeaderText = groupHeaderText;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return _preferredWidth; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -55,8 +32,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             e.Handled = true;
         }
 
-        #region Set Up Headers
-
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -67,7 +42,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             {
                 e.Style.CellType = "TimeSpanTimeOfDayCellModel";
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 InvokeValidate(dataItem, e.Style, e.RowIndex, false);
             }
         }
@@ -89,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     return;
 
                 T dataItem = dataItems[e.RowIndex - 2];
-                object cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object cellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 e.Style.CellType = "TimeSpanTimeOfDayCellModel";
                 if (cellValue == null)
                     e.Style.CellType = "Static";
@@ -99,8 +74,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 InvokeValidate(dataItem, e.Style, e.RowIndex, false);
             }
         }
-
-        #endregion
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.TimeSpan.TryParse(System.String,System.TimeSpan@)")]
         public override void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -132,7 +105,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 {
                     TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
                 }
-                _propertyReflector.SetValue(dataItem, _bindingProperty, cellValue);
+                _propertyReflector.SetValue(dataItem, BindingProperty, cellValue);
             }
 
             InvokeValidate(dataItem, e.Style, e.RowIndex, true);

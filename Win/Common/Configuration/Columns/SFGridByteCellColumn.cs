@@ -36,13 +36,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
             byte value;
-
-            if (byte.TryParse(e.Style.CellValue.ToString(), out value))
+            bool parseResult = true;
+            if (e.Style.CellValue is byte)
+            {
+                value = (byte) e.Style.CellValue;
+            }
+            else
+            {
+                parseResult = byte.TryParse(e.Style.CellValue.ToString(), out value);
+            }
+            if (parseResult)
             {
                 PropertyReflectorHelper.SetValue(currentItem, BindingProperty, value);
             }
         }
-
     }
-
 }

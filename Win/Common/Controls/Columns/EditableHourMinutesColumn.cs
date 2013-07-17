@@ -12,14 +12,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private string _headerText;
         private string _groupHeaderText;
         private readonly string _bindingCellTypeTimeOfDay;
-        private string _bindingProperty;
         private string _cellTypeLength = "TimeSpanLongHourMinutesCellModelHours";
         private string _cellTypeTimeOfDay = "TimeSpanTimeOfDayCellModel";
 
-        public EditableHourMinutesColumn(string bindingProperty, string headerText)
+        public EditableHourMinutesColumn(string bindingProperty, string headerText) : base(bindingProperty, 150)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
         }
 
         public EditableHourMinutesColumn(string bindingProperty, string headerText, string groupHeaderText) : this(bindingProperty,headerText)
@@ -37,19 +35,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
         }
 
-        public override int PreferredWidth
-        {
-            get { return 150; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
-        }
-
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (string.IsNullOrEmpty(_groupHeaderText))
@@ -63,17 +48,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             e.Handled = true;
         }
 
-        #region Set Up Headers
-
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -93,7 +67,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         {
             e.Style.BackColor = System.Drawing.Color.Gray;
                 
-            var cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+            var cellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
             var cellType = _cellTypeLength;
             if (cellTypeIsTimeOfDay(dataItem))
             {
@@ -122,15 +96,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             return (value is bool && (bool) value);
         }
 
-        /// <summary>
-        /// Sets up multiple headers.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpMultipleHeaders(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0)
@@ -150,8 +115,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 setCellTypeAndValue(e,dataItem);
             }
         }
-
-        #endregion
 
         public override void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
@@ -184,7 +147,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     {
                         TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
                     }
-        			_propertyReflector.SetValue(dataItem, _bindingProperty, cellValue);
+        			_propertyReflector.SetValue(dataItem, BindingProperty, cellValue);
 				}
 
 				InvokeValidate(dataItem, e.Style, e.RowIndex, true);
@@ -193,17 +156,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 		   	e.Handled = true;
         }
 
-        /// <summary>
-        /// Invokes the validate.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="style">The style.</param>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="inSaveMode">if set to <c>true</c> [in save mode].</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-02
-        /// </remarks>
         private void InvokeValidate(T dataItem, GridStyleInfo style, int rowIndex, bool inSaveMode)
         {
         	var handler = Validate;

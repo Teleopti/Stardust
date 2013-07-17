@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _workShiftRuleSet = new ReadOnlyTextColumn<IActivityViewModel>("WorkShiftRuleSet.Description.Name",
                                                                       UserTexts.Resources.RuleSet,
                                                                       UserTexts.Resources.RuleSet,
-                                                                      true);
+                                                                      makeStatic:true);
             AddColumn(_workShiftRuleSet);
 
             _isAutoPosition = new CheckColumn<IActivityViewModel>("IsAutoPosition",

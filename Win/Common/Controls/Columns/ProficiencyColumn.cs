@@ -10,21 +10,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 {
 	public class ProficiencyColumn<T> : ColumnBase<T>
 	{
-		private readonly string _bindingPropertyGet;
 		private readonly string _bindingPropertySet;
 		private readonly string _headerText;
 		private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 		
-		public ProficiencyColumn(string bindingPropertyGet, string bindingPropertySet, string headerText)
+		public ProficiencyColumn(string bindingPropertyGet, string bindingPropertySet, string headerText) : base(bindingPropertyGet, 120)
 		{
-			_bindingPropertyGet = bindingPropertyGet;
 			_bindingPropertySet = bindingPropertySet;
 			_headerText = headerText;
-		}
-
-		public override int PreferredWidth
-		{
-			get { return 120; }
 		}
 
 		public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -42,7 +35,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 				e.Style.CellType = "ComboBox";
 				if (dataItems == null) return;
 				T dataItem = dataItems[e.RowIndex - 1];
-				var items = _propertyReflector.GetValue(dataItem, _bindingPropertyGet) as StringCollection;
+				var items = _propertyReflector.GetValue(dataItem, BindingProperty) as StringCollection;
 				if (items != null && items.Count > 0)
 				{
 					e.Style.CellValue = items[0];
