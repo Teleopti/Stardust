@@ -46,13 +46,21 @@ Scenario: Revoke calendar sharing
 	Then I should see 'share my calendar' inactive
 	And I should not see a sharing link
 
-Scenario: Stop calendar sharing after revoke
+Scenario: Stop calendar sharing after revoke sharing
 	Given I have the role 'Access to CalendarLink'
 	And I have shared calendar
 	When I view my settings
 	Then I should see a sharing link
 	When I click 'revoke'
 	And Someone is viewing sharing link
+	Then Someone should not see ical calendar
+
+Scenario: Stop calendar sharing after revoke permission
+	Given I have the role 'No access to CalendarLink'
+	And I have shared calendar before
+	When I view my settings
+	Then I should not see 'share my calendar' in settings
+	When Someone is viewing sharing link
 	Then Someone should not see ical calendar
 
 Scenario: View calendar sharing link

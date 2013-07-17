@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Web;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			setting.CalendarUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
 			                      HttpUtility.UrlEncode(
 									  StringEncryption.Encrypt("TestData" + "/" + user.Id.Value));
+			ScenarioContext.Current.Add("CalendarLink", setting.CalendarUrl);
+
 			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
 			personalSettingData.SetValue(setting);
 			var setOwnerMethod = typeof(CalendarLinkSettings).GetMethod("SetOwner", BindingFlags.Instance | BindingFlags.NonPublic,

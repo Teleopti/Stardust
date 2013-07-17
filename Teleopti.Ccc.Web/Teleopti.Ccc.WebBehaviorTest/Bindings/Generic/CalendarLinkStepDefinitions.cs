@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class CalendarLinkStepDefinitions
 	{
 		[Given(@"I have shared calendar")]
+		[Given(@"I have shared calendar before")]
 		public void GivenIHaveSharedCalendar()
 		{
 			var calendarLinkConfigurable = new CalendarLinkConfigurable
@@ -35,7 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeASharingLink()
 		{
 			Browser.Interactions.AssertExists(".calendar-url");
-			ScenarioContext.Current.Add("CalendarLink", Browser.Interactions.Value(".calendar-url"));
 		}
 
 		[Then(@"I should not see a sharing link")]
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()
 		{
+			TestControllerMethods.ExpireMyCookieInsidePortal();
 			var url = ScenarioContext.Current.Get<string>("CalendarLink");
 			Navigation.GotoRaw(url);
 		}
