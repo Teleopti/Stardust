@@ -535,15 +535,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var shifts = getCashes();
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			using (_mocks.Record())
 			{
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod).Repeat.Twice();
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(_selectedPeriod).Repeat.Twice();
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
 				Expect.Call(_restrictionAggregator.AggregatePerDay(_teamBlockInfo, _schedulingOptions, shifts[0])).Return(restriction);
-				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction).Repeat.Twice();
+				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly)))
 					  .Return(shifts).Repeat.AtLeastOnce();
@@ -560,7 +557,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0], _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false).Repeat.Twice();
-				Expect.Call(scheduleDay.IsScheduled()).Return(true).Repeat.Twice();
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 
 				Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
