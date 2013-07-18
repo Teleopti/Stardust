@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -61,7 +62,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				 scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
 				                              overtimeLayerPeriod,
 				                              overtimePreferences.OvertimeType);
-				_schedulePartModifyAndRollbackService.Modify(scheduleDay);
+				if (overtimePreferences.ScheduleTag.Description != "<None>")
+				{
+				    IScheduleTagSetter  scheduleTagSetter= new ScheduleTagSetter(overtimePreferences.ScheduleTag);
+				    _schedulePartModifyAndRollbackService.Modify(scheduleDay, scheduleTagSetter);
+				}
+				else
+                    _schedulePartModifyAndRollbackService.Modify(scheduleDay);
+			    
 				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 				resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 																		  overtimeLayerPeriod,
