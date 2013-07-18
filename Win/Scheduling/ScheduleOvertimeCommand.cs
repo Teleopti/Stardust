@@ -19,16 +19,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private BackgroundWorker _backgroundWorker;
 
 		public ScheduleOvertimeCommand(ISchedulingResultStateHolder schedulingResultStateHolder,
 		                               IOvertimeLengthDecider overtimeLengthDecider,
 		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService
-		                               )
+		                               ISchedulerStateHolder schedulerStateHolder)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+			_schedulerStateHolder = schedulerStateHolder;
 		}
 		
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -61,7 +63,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				 scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
 				                              overtimeLayerPeriod,
 				                              overtimePreferences.OvertimeType);
-				_schedulePartModifyAndRollbackService.Modify(scheduleDay);
+				_schedulePartModifyAndRollbackService.Modify(scheduleDay,
+				                                             NewBusinessRuleCollection.AllForScheduling(
+					                                             _schedulerStateHolder.SchedulingResultState));
 				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 				resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 																		  overtimeLayerPeriod,
