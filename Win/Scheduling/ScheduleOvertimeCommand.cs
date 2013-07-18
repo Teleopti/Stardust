@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -20,19 +23,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly IProjectionProvider _projectionProvider;
 		private BackgroundWorker _backgroundWorker;
 
 		public ScheduleOvertimeCommand(ISchedulingResultStateHolder schedulingResultStateHolder,
 		                               IOvertimeLengthDecider overtimeLengthDecider,
-		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService
-		                               ISchedulerStateHolder schedulerStateHolder)
+		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                               ISchedulerStateHolder schedulerStateHolder,
+		                               IProjectionProvider projectionProvider)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulerStateHolder = schedulerStateHolder;
+			_projectionProvider = projectionProvider;
 		}
-		
+
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -47,7 +53,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 //Randomly select one of the selected agents that does not end his shift with overtime
 				var person = selectPersonRandomly(selectedPersons, dateOnly);
 				var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-                var scheduleEndTime = scheduleDay.PersonAssignment().ProjectionService().CreateProjection().Period().GetValueOrDefault().EndDateTime;
+				if (scheduleDay.SignificantPart() != SchedulePartView.MainShift) continue;
+                var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
 				
 				//Calculate best length (if any) for overtime
                 var overtimeLayerLength = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
@@ -88,8 +95,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (var person in persons)
 			{
 				var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-			    var personAssignment = schedule.PersonAssignment();
-                if (personAssignment!=null && personAssignment.ProjectionService().CreateProjection().Overtime() > TimeSpan.Zero)
+				var projection = _projectionProvider.Projection(schedule);
+			    if(projection.Last().DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
+					continue;
+				if (((VisualLayer)projection.Last()).HighestPriorityAbsence != null)
 					continue;
 				personsHaveNoOvertime.Add(person);
 			}
