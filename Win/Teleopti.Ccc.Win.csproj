@@ -337,13 +337,7 @@
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
-    <Compile Include="Common\Controls\OutlookControls\ExtendedToolStripButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\Controls\OutlookControls\Workspaces\BaseStackStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\HeaderStrip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.cs">
@@ -355,9 +349,6 @@
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\StackStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1673,19 +1664,6 @@
     <Compile Include="Common\Controls\DateSelection\IDateSelectionControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\Controls\Filters\FilterBoxItem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\Filters\FilterBoxItem.Designer.cs">
-      <DependentUpon>FilterBoxItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Controls\Filters\FilterBoxListItem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\Filters\FilterBoxListItem.Designer.cs">
-      <DependentUpon>FilterBoxListItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Controls\Filters\FilterItem.cs" />
     <Compile Include="Common\Controls\Office2007OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1835,12 +1813,6 @@
     <Compile Include="Common\Controls\Rows\DateHeaderGridRow.cs" />
     <Compile Include="Common\Controls\Rows\TemplateTaskPeriodGridRow.cs" />
     <Compile Include="Common\Controls\Rows\SkillDataPeriodGridRow.cs" />
-    <Compile Include="Common\Controls\Drawing\LineControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\Drawing\LineControl.Designer.cs">
-      <DependentUpon>LineControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\Cells\NumericCellModel.cs" />
     <Compile Include="Common\Controls\Cells\PercentCellModell.cs" />
     <Compile Include="Common\Controls\Cells\PercentReadOnlyCellModel.cs" />
@@ -2166,12 +2138,6 @@
     <Compile Include="Permissions\PeopleInsertScreen.Designer.cs">
       <DependentUpon>PeopleInsertScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\RequestReplyDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\RequestReplyDialog.Designer.cs">
-      <DependentUpon>RequestReplyDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\RequestView.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\WorksheetStateHolder.cs" />
     <Compile Include="PeopleAdmin\PeopleWorksheet.cs">
@@ -2207,7 +2173,6 @@
     </Compile>
     <Compile Include="Common\ISelfDataHandling.cs" />
     <Compile Include="Common\GridHelper.cs" />
-    <Compile Include="Common\IGuestDataHandling.cs" />
     <Compile Include="Common\PropertyPageAndWizard\PropertiesPages.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3204,20 +3169,8 @@
       <DependentUpon>DateSelectionRolling.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\Drawing\LineControl.resx">
-      <DependentUpon>LineControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\Drawing\TransparentUserControl.resx">
       <DependentUpon>TransparentUserControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\Filters\FilterBoxItem.resx">
-      <DependentUpon>FilterBoxItem.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\Filters\FilterBoxListItem.resx">
-      <DependentUpon>FilterBoxListItem.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\FindAndReplaceForm.resx">
@@ -3435,10 +3388,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\MeetingPicker.resx">
       <DependentUpon>MeetingPicker.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\RequestReplyDialog.resx">
-      <DependentUpon>RequestReplyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\KpiSettings.resx">

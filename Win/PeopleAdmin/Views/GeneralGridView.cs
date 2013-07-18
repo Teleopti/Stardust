@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private readonly List<ColumnBase<PersonGeneralModel>> _gridColumns = new List<ColumnBase<PersonGeneralModel>>();
 		private bool _hasRights;
-		private const int basicGridColCount = 16;
 
 		private ColumnBase<PersonGeneralModel> _firstNameColumn;
 		private ColumnBase<PersonGeneralModel> _lastNameColumn;

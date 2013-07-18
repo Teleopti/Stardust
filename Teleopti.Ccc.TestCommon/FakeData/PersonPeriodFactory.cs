@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Teleopti.Ccc.Domain.AgentInfo;
+﻿using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -48,30 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonPeriod personPeriod = CreatePersonPeriodWithSkills(startDate, skills);
             personPeriod.RuleSetBag = ruleSetBag;
-
-            return personPeriod;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static PersonPeriod CreatePersonPeriodWithSkills(DateOnly startDate, Team team)
-        {
-            PersonContract personContract =
-                new PersonContract(new Contract("my first contract"), new PartTimePercentage("Testing"),
-                                   new ContractSchedule("Test1"));
-
-            PersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
-
-            GroupingActivity groupActivity = new GroupingActivity("dummy group activity");
-            Activity activity = new Activity("dummy activity");
-            activity.GroupingActivity = groupActivity;
-
-            Skill skill = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillType());
-            skill.Activity = activity;
-            Percent percent = new Percent(1);
-            PersonSkill personSkill = new PersonSkill(skill, percent);
-
-            personPeriod.AddPersonSkill(personSkill);
 
             return personPeriod;
         }

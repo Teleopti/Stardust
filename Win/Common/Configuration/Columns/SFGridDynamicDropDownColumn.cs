@@ -12,11 +12,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         private readonly Type _baseClass;
         private readonly string _comboItemsProperty;
 
-        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string comboItemsProperty, string displayMember, Type baseClass)
-            : this(bindingProperty, headerText,null, comboItemsProperty, displayMember, baseClass)
-        {
-        }
-
         public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, string comboItemsProperty, string displayMember, Type baseClass)
             : base(bindingProperty, headerText)
         {

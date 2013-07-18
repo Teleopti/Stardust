@@ -182,11 +182,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _selectedPeoplePeriodGridData; }
         }
 
-        public ReadOnlyCollection<IPersonRotation> NewPersonRotationCollection
-        {
-            get { return new ReadOnlyCollection<IPersonRotation>(_newPersonRotationCollection); }
-        }
-
         public void AddNewPersonRotation(IPersonRotation personRotation)
         {
             InParameter.NotNull("personRotation", personRotation);
@@ -206,11 +201,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
 
             return isDeleted;
-        }
-
-        public ReadOnlyCollection<IPersonAvailability> NewPersonAvailabilityCollection
-        {
-            get { return new ReadOnlyCollection<IPersonAvailability>(_newPersonAvailabilityCollection); }
         }
 
         public void AddNewPersonAvailability(IPersonAvailability personAvailability)
@@ -499,14 +489,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         private void LoadTeams()
         {
-            //_teamBindingCollection.Clear();
             _siteTeamBindingCollection.Clear();
             var repository = new TeamRepository(UnitOfWork);
             var list = repository.FindAllTeamByDescription().ToList();
             
             foreach (ITeam item in list)
             {
-                // _teamBindingCollection.Add(item);
                 _siteTeamBindingCollection.Add(EntityConverter.ConvertToOther<ITeam, SiteTeamModel>(item));
             }
         }
@@ -1275,35 +1263,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return new ReadOnlyCollection<RolesModel>(_rolesViewAdapterCollection); }
         }
 
-        public void LoadOptionalColumnsGridData()
-        {
-            //remove current association from Uow.
-            foreach (IOptionalColumn oc in _optionalColumnCollection)
-            {
-                UnitOfWork.Remove(oc);
-            }
-            //Load latest optional columns & values 
-           
-           IOptionalColumnRepository optionalColumnRepository =new OptionalColumnRepository(UnitOfWork);
-           _optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
-            
-
-            //Add to filtered ppl collection.
-            foreach (PersonGeneralModel gridData in _filteredPeopleGridData)
-            {
-                gridData.SetOptionalColumns(_optionalColumnCollection);
-            }
-        }
-
         private void LoadSettings()
         {
-			//using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			//{
-			//	ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
-
-			//	_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-			//}
-
 	        IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
 			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
 			_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());

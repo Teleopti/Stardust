@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
         private readonly RowManager<SkillDataGridRow, ISkillData> _rowManager;
-        private readonly int _maxLength;
-
+        
         public event EventHandler<FromCellEventArgs<ISkillData>> SaveCellValue;
 
         public SkillDataGridRow(RowManager<SkillDataGridRow, ISkillData> rowManager, string cellType, 
@@ -21,13 +20,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             : base(cellType, displayMember, rowHeaderText)
         {
             _rowManager = rowManager;
-        }
-
-        public SkillDataGridRow(RowManager<SkillDataGridRow, ISkillData> rowManager, string cellType,
-                                      string displayMember, string rowHeaderText, int maxLength)
-            : this(rowManager, cellType, displayMember, rowHeaderText)
-        {
-            _maxLength = maxLength;
         }
 
         public override void QueryCellInfo(CellInfo cellInfo)
@@ -56,7 +48,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 }
                 cellInfo.Style.CellType = CellType;
                 cellInfo.Style.CellValue = GetValue(skillDataPeriod);
-                cellInfo.Style.MaxLength = _maxLength;
             }
         }
 

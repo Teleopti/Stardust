@@ -196,8 +196,6 @@
     <Compile Include="Common\Library\Services\ActionCatalogService.cs" />
     <Compile Include="Common\Library\Services\DependentModuleLoaderService.cs" />
     <Compile Include="Common\Library\Services\IDependentModuleInfo.cs" />
-    <Compile Include="Common\Library\Services\IModuleInfoStore.cs" />
-    <Compile Include="Common\Library\Services\ProfileCatalogModuleInfoStore.cs" />
     <Compile Include="Common\Library\Services\WorkspaceLocatorService.cs" />
     <Compile Include="Common\Library\SmartClientApplication.cs" />
     <Compile Include="Common\Library\Services\EmptyDependentModuleEnumerator.cs" />

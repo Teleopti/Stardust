@@ -21,15 +21,6 @@ namespace Teleopti.Ccc.Win.Reporting
             if (!DesignMode) SetTexts();
         }
 
-        protected virtual IApplicationFunction MyApplicationFunction
-        {
-            get
-            {
-                return ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                DefinedRaptorApplicationFunctionPaths.OpenSchedulePage);
-            }
-        }
-
         /// <summary>
         /// Gets or sets the selected item.
         /// </summary>

@@ -20,16 +20,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                     startDateTime,length,flexibility,anchor);
         }
 
-		private static IPersonDayOff CreatePersonDayOff(IPerson person, IScenario scenario, DateTime startDateTime, TimeSpan length, TimeSpan flexibility, TimeSpan anchor, string payrollCode)
-    	{
-			IDayOffTemplate dayOff = DayOffFactory.CreateDayOff(new Description("test"));
-
-			dayOff.Anchor = anchor;
-			dayOff.PayrollCode = payrollCode;
-			dayOff.SetTargetAndFlexibility(length, flexibility);
-			return CreatePersonDayOff(person, scenario, new DateOnly(startDateTime.Date), dayOff);
-    	}
-
     	public static IPersonDayOff CreatePersonDayOff(IPerson person, IScenario scenario, DateTime startDateTime, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
         {
             IDayOffTemplate dayOff = DayOffFactory.CreateDayOff(new Description("test"));

@@ -614,22 +614,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             get { return _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1); }
         }
 
-        public bool HandlePasteWhenCellIsCopied()
-        {
-            ClipHandler<string> clipHandler = GridHelper.ConvertClipboardToClipHandlerString();
-
-            int columnsInGrid = gridControlAbsenceRequestOpenPeriods.ColCount -
-                                gridControlAbsenceRequestOpenPeriods.Cols.HeaderCount;
-            if (columnsInGrid != clipHandler.ColSpan())
-            {
-                // Cell (not row) is copied - use gridhelpers clipboard handling
-                _gridHelper.PasteFromClipboard();
-                return true;
-            }
-
-            return false;
-        }
-
         public void SetClipboardText(string text)
         {
             _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetText(text));

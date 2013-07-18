@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private readonly IEventAggregator _globalEventAggregator;
 
         private static WorksheetStateHolder _stateHolder;
-        private delegate void RefreshFilterPanel();
         private TabControlAdv _tabControlPeopleAdmin;
         private bool _readOnly;
         private ILifetimeScope _container;
@@ -612,14 +611,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.View.Invalidate();
 
             Cursor.Current = Cursors.Default;
-        }
-
-        /// <summary>
-        /// Called when [people worksheet closed].
-        /// </summary>
-        private void OnPeopleWorksheetSave()
-        {
-            _peopleAdminFilterPanel.Refresh();
         }
 
         private void gridWorksheet_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)

@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -567,7 +565,7 @@ namespace Teleopti.Ccc.Win
         /// <summary>
         /// Adds the specified recipient to this collection.
         /// </summary>
-        public void Add(Recipient value)
+        private void Add(Recipient value)
         {
             List.Add(value);
         }
@@ -578,41 +576,6 @@ namespace Teleopti.Ccc.Win
         public void Add(string address)
         {
             Add(new Recipient(address));
-        }
-
-        /// <summary>
-        /// Adds a new recipient with the specified address and display Name to this collection.
-        /// </summary>
-        public void Add(string address, string displayName)
-        {
-            Add(new Recipient(address, displayName));
-        }
-
-        /// <summary>
-        /// Adds a new recipient with the specified address and recipient Type to this collection.
-        /// </summary>
-        public void Add(string address, MapiMailMessage.RecipientType recipientType)
-        {
-            Add(new Recipient(address, recipientType));
-        }
-
-        /// <summary>
-        /// Adds a new recipient with the specified address, display Name and recipient Type to this collection.
-        /// </summary>
-        public void Add(string address, string displayName, MapiMailMessage.RecipientType recipientType)
-        {
-            Add(new Recipient(address, displayName, recipientType));
-        }
-
-        /// <summary>
-        /// Returns the recipient stored in this collection at the specified index.
-        /// </summary>
-        public Recipient this[int index]
-        {
-            get
-            {
-                return (Recipient)List[index];
-            }
         }
 
         internal InteropRecipientCollection GetInteropRepresentation()

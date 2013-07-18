@@ -58,11 +58,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Close();
 		}
 
-		public void SetInfoText(string info) 
-		{
-			labelInfo.Text = info;
-		}
-
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			_presenter.OnCancel();

@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private IList<IPersonAvailability> _childrenPersonAvailabilityCollection = new List<IPersonAvailability>();
 		private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
 		private readonly TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
-		private readonly TypedBindingCollection<int> _weeksCollection = new TypedBindingCollection<int>();
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
 		
 		private readonly List<GridClassType> _trackerDescriptionClassTypes = new List<GridClassType>();
@@ -285,14 +284,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 
                 return new ReadOnlyCollection<PersonPeriodChildModel>(_personPeriodGridViewChildCollection);
-            }
-        }
-
-        public ReadOnlyCollection<PersonPeriodChildModel> FullPersonPeriodChildGridData
-        {
-            get
-            {
-                return new ReadOnlyCollection<PersonPeriodChildModel>(_fullPersonPeriodGridViewChildCollection);
             }
         }
 
@@ -923,18 +914,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             filteredPeopleHolder.PersonRotationParentAdapterCollection[rowIndex] = personRotationModelParent;
         }
 
-        private static void removeNewPersonRotation(IPersonRotation rotationToBeRemoved, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            if (rotationToBeRemoved != null && rotationToBeRemoved.Id == null)
-            {
-                if (filteredPeopleHolder.AllPersonRotationCollection.Contains(rotationToBeRemoved))
-                {
-                    filteredPeopleHolder.AllPersonRotationCollection.Remove(rotationToBeRemoved);
-                    filteredPeopleHolder.DeleteNewPersonRotation(rotationToBeRemoved);
-                }
-            }
-        }
-
         public IPersonRotation GetSamplePersonRotation(IPerson person)
         {
             IRotation rotation = getDefaultRotation();
@@ -998,38 +977,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 _personaccountGridViewChildCollection.Reverse();
                 return new ReadOnlyCollection<IPersonAccountChildModel>(
                     _personaccountGridViewChildCollection);
-            }
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerDescriptionTypesCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerDescriptionClassTypes);
-            }
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerDescriptionTypesCollectionForRibbon
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerDescriptionClassTypesForRibbon);
-            }
-        }
-
-        public ReadOnlyCollection<IAbsence> AbsenceCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<IAbsence>(_absenceCollection);
-            }   
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerAccountTypesCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerAccountClassTypes);
             }
         }
 
