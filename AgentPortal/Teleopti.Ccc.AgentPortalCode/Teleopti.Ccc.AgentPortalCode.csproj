@@ -213,7 +213,6 @@
     <Compile Include="Common\CustomScheduleAppointmentDeleteEventArgs.cs" />
     <Compile Include="Common\CustomScheduleAppointmentCopyPasteEventArgs.cs" />
     <Compile Include="Common\Factory\ScheduleAppointmentFactory.cs" />
-    <Compile Include="Common\PermissionException.cs" />
     <Compile Include="Common\ScheduleAppointmentPartType.cs" />
     <Compile Include="Common\ScheduleGridDateSelectionEventArgs.cs" />
     <Compile Include="Common\ScheduleAppointmentStatusTypes.cs" />

@@ -12,18 +12,16 @@ namespace Teleopti.Ccc.Domain.Common
         public const UInt32 DefaultSeed = 0xffffffff;
 
         private UInt32 hash;
-        private readonly UInt32 seed;
-        private readonly UInt32[] table;
         private static UInt32[] defaultTable;
 
         public override void Initialize()
         {
-            hash = seed;
+            hash = 0;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(table, hash, array, ibStart, cbSize);
+            hash = CalculateHash(null, hash, array, ibStart, cbSize);
         }
 
         protected override byte[] HashFinal()
