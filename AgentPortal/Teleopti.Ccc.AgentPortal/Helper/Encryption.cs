@@ -16,71 +16,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
     public static class Encryption
     {
         /// <summary>
-        /// Encrypts the string to bytes using Rijndael AES.
-        /// </summary>
-        /// <param name="plaintext">The plain text.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="iv">The initialization vector.</param>
-        /// <returns>encrypted string</returns>
-        /// <remarks>Taken from http://msdn.microsoft.com/en-us/library/system.security.cryptography.rijndaelmanaged.aspx</remarks>
-        public static byte[] EncryptStringToBytes(string plaintext, byte[] key, byte[] iv)
-        {
-            // Check arguments.
-            if (key == null || key.Length <= 0)
-                throw new ArgumentNullException("key");
-            if (iv == null || iv.Length <= 0)
-                throw new ArgumentNullException("key");
-
-            // Declare the streams used
-            // to encrypt to an in memory
-            // array of bytes.
-            MemoryStream msEncrypt = null;
-            CryptoStream csEncrypt = null;
-            StreamWriter swEncrypt = null;
-
-            // Declare the RijndaelManaged object
-            // used to encrypt the data.
-            RijndaelManaged aesAlg = null;
-
-            try
-            {
-                // Create a RijndaelManaged object
-                // with the specified key and IV.
-                aesAlg = new RijndaelManaged { Key = key, IV = iv };
-
-                // Create a decrytor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create the streams used for encryption.
-                msEncrypt = new MemoryStream();
-                csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
-                swEncrypt = new StreamWriter(csEncrypt);
-
-                //Write all data to the stream.
-                swEncrypt.Write(plaintext);
-            }
-            finally
-            {
-                // Clean things up.
-
-                // Close the streams.
-                if (swEncrypt != null)
-                    swEncrypt.Close();
-                if (csEncrypt != null)
-                    csEncrypt.Close();
-                if (msEncrypt != null)
-                    msEncrypt.Close();
-
-                // Clear the RijndaelManaged object.
-                if (aesAlg != null)
-                    aesAlg.Clear();
-            }
-
-            // Return the encrypted bytes from the memory stream.
-            return msEncrypt.ToArray();
-        }
-
-        /// <summary>
         /// Decrypts the string from bytes using Rijndael AES.
         /// </summary>
         /// <param name="cipherText">The cipher text.</param>
@@ -148,18 +83,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             }
 
             return plaintext;
-        }
-
-        /// <summary>
-        /// Encrypts the string to a base 64 stringusing Rijndael AES.
-        /// </summary>
-        /// <param name="plaintext">The plaintext.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="iv">The iv.</param>
-        /// <returns>the ciphertext in base64 format</returns>
-        public static string EncryptStringToBase64(string plaintext, byte[] key, byte[] iv)
-        {
-            return Convert.ToBase64String(EncryptStringToBytes(plaintext, key, iv));
         }
 
         /// <summary>

@@ -326,7 +326,6 @@
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
-    <Compile Include="Optimization\PersonalSettings.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
@@ -434,8 +433,6 @@
     <Compile Include="Repositories\IBudgetDayRepository.cs" />
     <Compile Include="Repositories\IBudgetGroupRepository.cs" />
     <Compile Include="Repositories\IPayrollResultRepository.cs" />
-    <Compile Include="Repositories\IRotationRepository.cs" />
-    <Compile Include="Repositories\IScheduleAuditTrailReportRepository.cs" />
     <Compile Include="Repositories\IExtendedPreferenceTemplateRepository.cs" />
     <Compile Include="Repositories\IMasterActivityRepository.cs" />
     <Compile Include="Repositories\IPersonAbsenceAccountRepository.cs" />
@@ -1086,7 +1083,6 @@
     <Compile Include="Repositories\IPersonRotationRepository.cs" />
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
     <Compile Include="Repositories\ISkillTypeRepository.cs" />
-    <Compile Include="Repositories\ISlpsRepository.cs" />
     <Compile Include="Repositories\IWorkloadRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartTracker.cs" />
     <Compile Include="ResourceCalculation\PeriodDistribution.cs" />
@@ -1226,7 +1222,6 @@
     <Compile Include="ResourceCalculation\PersonSkillDictionary.cs" />
     <Compile Include="ResourceCalculation\SkillCollectionKey.cs" />
     <Compile Include="Scheduling\AbsenceSorter.cs" />
-    <Compile Include="Scheduling\Assignment\IScheduleEventListener.cs" />
     <Compile Include="Scheduling\Rules\NightlyRestRule.cs" />
     <Compile Include="Scheduling\Assignment\Schedule.cs" />
     <Compile Include="Scheduling\Assignment\ExtractedSchedule.cs" />
@@ -1286,7 +1281,6 @@
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformation.cs" />
     <Compile Include="Repositories\IPersonAvailabilityRepository.cs" />
-    <Compile Include="Repositories\IPersonContractRepository.cs" />
     <Compile Include="Repositories\IPersonDayOffRepository.cs" />
     <Compile Include="Repositories\IPersonRepository.cs" />
     <Compile Include="Repositories\IRepositoryFactory.cs" />

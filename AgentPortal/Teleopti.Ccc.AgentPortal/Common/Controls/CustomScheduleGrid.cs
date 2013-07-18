@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         private Color _allDayColor;
         private const int _roundedCornersRadius = 5;
         private const HatchStyle _requestHatchStyle = HatchStyle.WideDownwardDiagonal;
-        private const HatchStyle _restrictionHatchStyle = HatchStyle.WideUpwardDiagonal;
         private const HatchStyle _personMeetingHatchStyle = HatchStyle.Weave;
         private const HatchStyle _personalShiftHatchStyle = HatchStyle.Wave;
 

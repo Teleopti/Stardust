@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
     public interface IPersonIndexBuilder
     {
-        IDictionary<IPerson, string> BuildIndex();
         void ChangePeriod(DateOnlyPeriod dateOnlyPeriod);
     }
 

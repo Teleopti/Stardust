@@ -5,10 +5,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {
     public class SFGridDescriptionNameColumn<T> : SFGridColumnBase<T>
     {
-        public SFGridDescriptionNameColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        { }
-
         public SFGridDescriptionNameColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)
         { }
@@ -31,7 +27,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
             object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
             if (value == null) return new Description();
 
-            if (value.GetType() == typeof(Description))
+            if (value is Description)
                 description = (Description)value;
             else
                 description = new Description(value.ToString(), System.String.Empty);

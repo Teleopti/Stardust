@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory);
-
-		ManualResetEvent ManualResetEvent { get; }
 	}
 
 	public class ShiftCategoryPeriodValueExtractorThread : IShiftCategoryPeriodValueExtractorThread, IDisposable
@@ -130,10 +128,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnBusinessRules(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
-            
-            //_shiftProjectionList = _shiftProjectionCacheFilter.
-            //    FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
-
             
 			_shiftProjectionList =
                 _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(

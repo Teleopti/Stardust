@@ -100,7 +100,6 @@
     <Compile Include="DataTableDefinition\SkillInfrastructure.cs" />
     <Compile Include="DataTableDefinition\GroupPagePersonInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PmUserInfrastructure.cs" />
-    <Compile Include="DataTableDefinition\DayOffInfrastructure.cs" />
     <Compile Include="CubeRepository.cs" />
     <Compile Include="DataTableDefinition\ActivityInfrastructure.cs" />
     <Compile Include="DataTableDefinition\AbsenceInfrastructure.cs" />

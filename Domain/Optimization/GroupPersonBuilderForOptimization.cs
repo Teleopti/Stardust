@@ -64,19 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return groupPerson;
 		}
 
-		public IGroupPerson BuildGroupPerson(IPerson person, DateOnlyPeriod period)
-		{
-			IGroupPerson groupPerson = null;
-			foreach (var dateOnly in period.DayCollection())
-			{
-				groupPerson = BuildGroupPerson(person, dateOnly);
-				if (groupPerson.GroupMembers.Count > 0)
-					break;
-			}
-
-			return groupPerson;
-		}
-
 		private IList<IPerson> curentPersonsInGroup(IPersonGroup personGroup)
 		{
 			var dic = _resultStateHolder.Schedules;

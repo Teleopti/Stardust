@@ -52,7 +52,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         #endregion
 
         // Public Methods (7) 
-
+        [Test]
         public void VerifyMonth()
         {
             // Today it is not sure how we will handle month and week names. Maybe it will be made
@@ -65,6 +65,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(31, _dateList3[2].DayInMonth);
         }
 
+        [Test]
         public void VerifyQuarter()
         {
             Assert.AreEqual("2007Q1", _dateList1[0].Quarter);
@@ -73,6 +74,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual("2006Q4", _dateList1[2].Quarter);
         }
 
+        [Test]
         public void VerifyWeek()
         {
             // Today it is not sure how we will handle month and week names. Maybe it will be made

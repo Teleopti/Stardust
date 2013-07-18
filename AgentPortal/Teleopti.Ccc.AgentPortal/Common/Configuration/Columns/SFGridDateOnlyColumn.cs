@@ -7,10 +7,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
     public class SFGridDateOnlyColumn<T> : SFGridColumnBase<T>
     {
         private readonly string _toBeBold = string.Empty;
-        public SFGridDateOnlyColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        {
-        }
 
         public SFGridDateOnlyColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)

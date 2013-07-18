@@ -214,7 +214,6 @@
     <Compile Include="Common\CustomScheduleAppointmentCopyPasteEventArgs.cs" />
     <Compile Include="Common\Factory\ScheduleAppointmentFactory.cs" />
     <Compile Include="Common\ScheduleAppointmentPartType.cs" />
-    <Compile Include="Common\ScheduleGridDateSelectionEventArgs.cs" />
     <Compile Include="Common\ScheduleAppointmentStatusTypes.cs" />
     <Compile Include="Common\ScheduleAppointmentTypes.cs" />
     <Compile Include="Common\ShiftCategory.cs" />

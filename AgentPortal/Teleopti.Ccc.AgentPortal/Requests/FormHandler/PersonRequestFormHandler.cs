@@ -47,7 +47,5 @@ namespace Teleopti.Ccc.AgentPortal.Requests.FormHandler
     {
         public MissingViewerException(string message):base(message){}
         protected MissingViewerException(SerializationInfo info, StreamingContext context):base(info,context){}
-        public MissingViewerException(){}
-        public MissingViewerException(String message, Exception innerException) : base(message, innerException) { }
     }
 }

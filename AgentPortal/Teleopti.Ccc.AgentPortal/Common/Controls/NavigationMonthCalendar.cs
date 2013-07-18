@@ -892,20 +892,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         }
 
         /// <summary>
-        /// Sets the selected dates.
-        /// </summary>
-        /// <param name="selections">The selections.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-06-09
-        /// </remarks>
-        public void SetSelectedDates(DateSelections selections)
-        {
-            _selectedDates.Clear();
-            _selectedDates.AddRange(selections);
-        }
-
-        /// <summary>
         /// Gets or sets the _today.
         /// </summary>
         /// <value>The _today.</value>
@@ -924,23 +910,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             {
                 _today = value;
                 Refresh();
-            }
-        }
-
-        /// <summary>
-        /// Gets the top left date.
-        /// </summary>
-        /// <value>The top left date.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-03
-        /// </remarks>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DateTime TopLeftDate
-        {
-            get
-            {
-                return (DateTime)_calendar.GetViewStyleInfo(2, 1, true).CellValue;
             }
         }
 

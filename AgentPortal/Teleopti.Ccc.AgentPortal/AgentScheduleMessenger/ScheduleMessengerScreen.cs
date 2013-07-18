@@ -78,39 +78,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             notifyIconScheduleMessenger.ShowBalloonTip(500);
         }
 
-        /// <summary>
-        /// Sets the schedule period in title.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Sachintha Weerasekara
-        /// Created date: 11/17/2008
-        /// </remarks>
-        public void SetSchedulePeriodInTitle()
-        {
-            IScheduleAppointmentList scheduleItems =
-                AgentScheduleStateHolder.Instance().ScheduleMessengerScheduleDictionary.AllScheduleAppointments();
-            if (scheduleItems != null && scheduleItems.Count > 0)
-            {
-                DateTime startDateTime = scheduleItems[0].StartTime;
-
-                int count = scheduleItems.Count;
-                DateTime endDateTime = scheduleItems[count - 1].EndTime;
-
-                //if belongs to different days
-                if (!startDateTime.Date.Equals(endDateTime.Date))
-                {
-                    Text = string.Format(CultureInfo.CurrentUICulture, "{0} : {1} - {2}", Text,
-                                         startDateTime.ToString("ddd d MMM", CultureInfo.CurrentCulture),
-                                         endDateTime.ToString("ddd d MMM", CultureInfo.CurrentCulture));
-                }
-                else
-                {
-                    Text = string.Format(CultureInfo.CurrentUICulture, "{0} : {1}", Text,
-                                         startDateTime.ToString("ddd d MMM", CultureInfo.CurrentCulture));
-                }
-            }
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);

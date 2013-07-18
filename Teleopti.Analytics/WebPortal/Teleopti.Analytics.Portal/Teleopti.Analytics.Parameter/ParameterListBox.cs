@@ -315,68 +315,6 @@ namespace Teleopti.Analytics.Parameters
 			EnsureChildControls();
 		}
 
-		private void Move(Object sender, ImageClickEventArgs e)//Flyttar värden mellan listboxar och textboxar
-		{
-			var from = new ListBox();
-			var to = new ListBox();
-			string one = "ButtonOne" + Dbid;
-			string all = "ButtonAll" + Dbid;
-			string oneBack = "ButtonOneBack" + Dbid;
-			string allBack = "ButtonAllBack" + Dbid;
-			bool moveAll = false;
-			int i = 0;
-			var butt = (ImageButton)sender;
-			string controlid = butt.ID;
-
-			if (controlid == one)
-			{
-				from = _listBox;
-				to = _listBox2;
-			}
-
-			if (controlid == all)
-			{
-				from = _listBox;
-				to = _listBox2;
-				moveAll = true;
-			}
-
-			if (controlid == oneBack)
-			{
-				from = _listBox2;
-				to = _listBox;
-				moveAll = false;
-			}
-
-			if (controlid == allBack)
-			{
-				from = _listBox2;
-				to = _listBox;
-				moveAll = true;
-			}
-
-			if (moveAll)
-			{
-				foreach (ListItem itm in from.Items)
-				{
-					itm.Selected = true;
-				}
-			}
-
-			int mCount = from.Items.Count - 1;
-			while (i <= mCount)
-			{
-				if (from.Items[i].Selected)
-				{
-					to.Items.Add(from.Items[i]);
-					from.Items.Remove(from.Items[i]);
-					mCount = from.Items.Count - 1;
-				}
-				else
-					i++;
-			}
-		}
-
 		private void textBoxTextChanged(object sender, EventArgs e)
 		{
 			Value = _textBox.Text;

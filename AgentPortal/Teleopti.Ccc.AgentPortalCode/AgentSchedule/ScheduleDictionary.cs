@@ -114,20 +114,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             FillScheuldeDictionary(scheduleItemCollection);
         }
 
-        public void Fill(ICustomScheduleAppointment scheduleItem)
-        {
-            if (scheduleItem != null)
-            {
-                DateTime scheduleDate = scheduleItem.StartTime.Date;
-
-                if (!_dictionary.ContainsKey(scheduleDate))
-                {
-                    _dictionary.Add(scheduleDate, new ScheduleItemList());
-                }
-                _dictionary[scheduleDate].AddScheduleItem(scheduleItem);
-            }
-        }
-
         public IScheduleAppointmentList AllScheduleAppointments()
         {
             IScheduleAppointmentList list = new ScheduleAppointmentList();
@@ -206,15 +192,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             return Filter(unsavedStatusType);
         }
 
-        public IList<ICustomScheduleAppointment> UnsavedAppointments(ScheduleAppointmentTypes appointmentType, ScheduleAppointmentStatusTypes filterBy)
-        {
-            ScheduleAppointmentStatusTypes unsavedStatusType = ScheduleAppointmentStatusTypes.New |
-                                                                ScheduleAppointmentStatusTypes.Updated |
-                                                                ScheduleAppointmentStatusTypes.Deleted ;
-
-            return Filter(appointmentType, unsavedStatusType);
-        }
-
         public IList<ICustomScheduleAppointment> Filter(ScheduleAppointmentTypes appointmentTypes,ScheduleAppointmentStatusTypes appointmentStatusType)
         {
             IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();
@@ -264,40 +241,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             }
         }
         
-        public void RemoveScheduleAppointment(ICustomScheduleAppointment sourceScheduleAppointment)
-        {
-            Dto dto = sourceScheduleAppointment.Tag as Dto;
-
-            if (dto!=null)
-            {
-                foreach (KeyValuePair<DateTime, IScheduleItemList> keyValuePair in _dictionary)
-                {
-                    foreach (ICustomScheduleAppointment scheduleAppointment in keyValuePair.Value.ScheduleItemCollection
-                        )
-                    {
-                        if (dto.Id == null)
-                        {
-                            if (scheduleAppointment.Tag == dto)
-                            {
-                                keyValuePair.Value.ScheduleItemCollection.Remove(scheduleAppointment);
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            Dto sourceDto = scheduleAppointment.Tag as Dto;
-
-                            if (sourceDto != null && sourceDto.Id == dto.Id)
-                            {
-                                scheduleAppointment.Status = ScheduleAppointmentStatusTypes.Deleted;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void FillScheuldeDictionary(IEnumerable<ICustomScheduleAppointment> scheduleItemCollection)
         {
             if (scheduleItemCollection != null)

@@ -4,7 +4,6 @@ using System.Web.UI.WebControls;
 
 namespace Teleopti.Analytics.Parameters
 {
-
 	/// <summary>
 	/// Summary description for ParameterListBox.
 	/// </summary>
@@ -19,11 +18,6 @@ namespace Teleopti.Analytics.Parameters
 		private Image _buttonMoveAll;
 		private Image _buttonMoveAllBack;
 		private Image _buttonMoveOneBack;
-		//private RequiredFieldValidator _Validator;
-		
-		//public static readonly object EventListChanged = new object();
-
-
 
 		public override ControlCollection Controls
 		{
@@ -44,18 +38,10 @@ namespace Teleopti.Analytics.Parameters
 	    protected override void SetData()
 		{
 			EnsureChildControls();
-			//_Validator.Validate();
-            //if (_Validator.IsValid)
-            //{
+
             Value = _textBox.Text;
             ParameterText = _textBoxText.Text;
-            //}
-            //else
-            //{
-            //    _value = "";
-            //    _parameterText = "";
-            //}
-            //_valid = _Validator.IsValid;
+
             _valid = true; 
 		}
 
@@ -72,12 +58,7 @@ namespace Teleopti.Analytics.Parameters
 			                   DataValueField = "id",
 			                   ID = "List" + Dbid
 			               };
-		    //_ListBox.Width = Selector._List1Width; //new Unit("200");
 
-		    //_Validator = new RequiredFieldValidator();
-
-		    //_Validator.ErrorMessage = Selector.ErrorMessage + " '" + _Text + "'";
-			//_Validator.Display = ValidatorDisplay.Dynamic;
 			_label.Text = Text;
 
 			//ListBox nummer två
@@ -90,7 +71,6 @@ namespace Teleopti.Analytics.Parameters
 			                    CssClass = "ControlStyle",
 			                    ID = "List2" + Dbid
 			                };
-//			_ListBox2.Width = Selector._List2Width; //new Unit("200");
 
 		    _textBox = new TextBox {Width = new Unit(0), Height = new Unit(0), ID = "TextHidden" + Dbid};
 		    _textBox.Style.Add("position", "absolute");
@@ -99,14 +79,6 @@ namespace Teleopti.Analytics.Parameters
 			_textBoxText = new TextBox {Width = new Unit("0"), Height = new Unit("0"), ID = "TextHiddenText" + Dbid};
 		    _textBoxText.Style.Add("position", "absolute");
             _textBoxText.Style.Add("left", "-10px");
-
-			//_Validator.ControlToValidate = _TextBox.ID;
-			//_Validator.Text = "*";
-		
-			//_Validator.ErrorMessage = Selector.ErrorMessage + " '" + _Text + "'";
-			//_Validator.Display = ValidatorDisplay.Dynamic;
-
-            
 
 			//Hidden textBox			
 
@@ -138,7 +110,6 @@ namespace Teleopti.Analytics.Parameters
 			base.Controls.Add(_buttonMoveAll);
 			base.Controls.Add(_buttonMoveOneBack);
 			base.Controls.Add(_buttonMoveAllBack);
-			//base.Controls.Add(_Validator);
 			base.Controls.Add(_textBox);
 			base.Controls.Add(_textBoxText);
 
@@ -182,7 +153,6 @@ namespace Teleopti.Analytics.Parameters
 			{
 				_textBoxText.Text = _textBoxText.Text.Substring(0,_textBoxText.Text.Length -1);
 				_textBox.Text = _textBox.Text.Substring(0,_textBox.Text.Length -1);
-				//_TextBox.Text = _DefaultValue;
 			}
 			if (_listBox2.Items.Count == 0)
 			{
@@ -198,36 +168,10 @@ namespace Teleopti.Analytics.Parameters
 			if (Dependent.Count > 0)
 					submitOrNo = "Yes";
 
-            //_ButtonMoveAll.ImageUrl = GetClientFileUrl("right_all_light.gif");
-            //_ButtonMoveOne.ImageUrl = GetClientFileUrl("right_light.gif");
-
-            //_ButtonMoveOneBack.ImageUrl = GetClientFileUrl("left_light.gif");
-            //_ButtonMoveAllBack.ImageUrl = GetClientFileUrl("left_all_light.gif");
-
-            //string _ButtonMoveOneIMG = GetClientFileUrl("right_dark.gif");
-            //_ButtonMoveOne.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveOne.ClientID + "','" + _ButtonMoveOneIMG + "')");
-            //_ButtonMoveOne.Attributes.Add("onMouseOut", "changepic('" + _ButtonMoveOne.ClientID + "','" + _ButtonMoveOne.ImageUrl + "')");
             _buttonMoveOne.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-
-            //string _ButtonMoveAllIMG = GetClientFileUrl("right_all_dark.gif");
-            //_ButtonMoveAll.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveAll.ClientID + "','" + _ButtonMoveAllIMG + "')");
-            //_ButtonMoveAll.Attributes.Add("onMouseOut", "changepic('" + _ButtonMoveAll.ClientID + "','" + _ButtonMoveAll.ImageUrl + "')");
             _buttonMoveAll.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-
-            //string _ButtonMoveOneBackIMG = GetClientFileUrl("left_dark.gif");
-            //_ButtonMoveOneBack.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveOneBack.ClientID + "','" + _ButtonMoveOneBackIMG + "')");
-            //_ButtonMoveOneBack.Attributes.Add("onMouseOut", "changepic('" + _ButtonMoveOneBack.ClientID + "','" + _ButtonMoveOneBack.ImageUrl + "')");
             _buttonMoveOneBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-
-            //string _ButtonMoveAllBackIMG = GetClientFileUrl("left_all_dark.gif");
-            //_ButtonMoveAllBack.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBackIMG + "')");
-            //_ButtonMoveAllBack.Attributes.Add("onMouseOut", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
             _buttonMoveAllBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-
-            //_ButtonMoveOne.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveOne.ClientID + "','" + _ButtonMoveOne.ImageUrl + "')");
-            //_ButtonMoveAll.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAll.ClientID + "','" + _ButtonMoveAll.ImageUrl + "')");
-            //_ButtonMoveOneBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveOneBack.ClientID + "','" + _ButtonMoveOneBack.ImageUrl + "')");
-            //_ButtonMoveAllBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
 
             // Doubleclick one item in the list to move it to the other
             _listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
@@ -296,7 +240,6 @@ namespace Teleopti.Analytics.Parameters
 			writer.RenderEndTag();
 			
 			writer.RenderEndTag();
-			//writer.WriteEndTag("TABLE");
 			
 			writer.RenderEndTag();
 
@@ -305,7 +248,6 @@ namespace Teleopti.Analytics.Parameters
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,"20");
 			var panel = new Panel {Height = new Unit("20")};
-		    //_Panel.Controls.Add(_Validator);
 			panel.Controls.Add(_textBox);
 			panel.Controls.Add(_textBoxText);
 			Controls.Add(panel);
@@ -317,68 +259,6 @@ namespace Teleopti.Analytics.Parameters
 		protected override void SetAutoPostBack()
 		{
 			EnsureChildControls();			
-		}
-
-		private void move( Object sender, ImageClickEventArgs e)//Flyttar värden mellan listboxar och textboxar
-		{
-			var from = new ListBox();
-			var to = new ListBox();
-		    string one = "ButtonOne" + Dbid;
-			string all = "ButtonAll" + Dbid;
-			string oneBack = "ButtonOneBack" + Dbid;
-			string allBack = "ButtonAllBack" + Dbid;
-			bool moveAll = false;
-			int i = 0;
-			var butt = (ImageButton)sender;
-			string controlid = butt.ID;
-
-			if  (controlid == one)
-			{				
-				from = _listBox;
-				to = _listBox2;
-			}
-
-			if  (controlid == all)
-			{
-				from = _listBox;
-				to = _listBox2;
-				moveAll = true;
-			}
-
-			if  (controlid == oneBack)
-			{
-				from = _listBox2;
-				to = _listBox;
-				moveAll = false;
-			}
-
-			if  (controlid == allBack)
-			{
-				from = _listBox2;
-				to = _listBox;
-				moveAll = true;
-			}
-			
-			if (moveAll)
-			{
-				foreach (ListItem itm in from.Items)
-				{
-					itm.Selected = true;
-				}
-			}
-
-		    int mCount = from.Items.Count - 1;
-			while (i <= mCount)
-			{
-				if (from.Items[i].Selected)
-				{
-					to.Items.Add(from.Items[i]);
-					from.Items.Remove(from.Items[i]);
-					mCount = from.Items.Count - 1;
-				}
-				else
-					i ++;
-			}			
 		}
 
 		private void textBoxTextChanged(object sender, EventArgs e)
@@ -397,7 +277,6 @@ namespace Teleopti.Analytics.Parameters
 			
 			foreach (ParameterBase ctrl in Dependent)
 			{
-				//ctrl.Reloaded = false;
 				ctrl.LoadData();
 			}
 		}
@@ -463,6 +342,5 @@ namespace Teleopti.Analytics.Parameters
 		        Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
 		    }
 		}
-
 	}
 }

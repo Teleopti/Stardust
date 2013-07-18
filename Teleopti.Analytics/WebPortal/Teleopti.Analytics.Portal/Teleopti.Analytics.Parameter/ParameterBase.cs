@@ -127,33 +127,11 @@ namespace Teleopti.Analytics.Parameters
 		    
 
 		    return System.Web.VirtualPathUtility.ToAbsolute("~" + clientFilesUrlPrefix + fileName);
-
-			//return ClientFilesUrlPrefix + fileName;
 		}
-
-		public string GetClientScriptInclude(string scriptFile) 
-		{
-
-			return "<script language='JavaScript' charset='windows-1252' type='text/javascript' src= '" + GetClientFileUrl(scriptFile) + "'></script>";
-
-		}
-
 
 		public void AddDependent(ParameterBase dependent)
 		{
 			Dependent.Add(dependent);
-		}
-
-		public bool Reloaded
-		{
-			get
-			{
-				return _reLoaded;
-			}
-			set
-			{
-				_reLoaded = value;
-			}
 		}
 
 	    protected abstract void Clear();

@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         void RemoveMustHave();
         TimePeriod CurrentPeriodTime();
         TimeSpan PeriodTargetTime();
-        TimeSpan BalancedPeriodTargetTime();
         TimePeriod BalancedTargetTimeWithTolerance();
         int PeriodTargetDayOffs();
         int PeriodDayOffs();
@@ -344,19 +343,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                 {
 					if (preferenceCellData.IsInsidePeriod)
 						return preferenceCellData.PeriodTarget;
-                }
-            }
-            return TimeSpan.Zero;
-        }
-
-        public TimeSpan BalancedPeriodTargetTime()
-        {
-            if (_cellDataCollection.Count > 0)
-            {
-                foreach (PreferenceCellData preferenceCellData in _cellDataCollection.Values)
-                {
-					if (preferenceCellData.IsInsidePeriod)
-						return preferenceCellData.BalancedPeriodTarget;
                 }
             }
             return TimeSpan.Zero;

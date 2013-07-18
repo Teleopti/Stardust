@@ -1,177 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {
-    /// <summary>
-    /// Helper for syncfusion grid
-    /// </summary>
     public static class GridHelper
     {
-        public static LinearGradientBrush GetGradientBrush(Rectangle destinationRectangle, Color color)
-        {
-            //create a brush rectangle slightly bigger than dest rect
-            Rectangle rect = new Rectangle(destinationRectangle.X, destinationRectangle.Y - 1, destinationRectangle.Width, destinationRectangle.Height + 2);
-            //return brush
-            return new LinearGradientBrush(rect, Color.WhiteSmoke, color, 90, false);
-        }
-
-        public static GridRangeInfoList GetGridSelectedRanges(GridControl grid, bool excludeHeaders)
-        {
-            // CreateProjection an object of rangeList
-            GridRangeInfoList rangelist;
-            GridRangeInfoList rangelistTemp = new GridRangeInfoList();
-
-            // Get the selected ranges
-            if (grid.Selections.GetSelectedRanges(out rangelist, true))
-            {
-                //check if we have any rows or columns selected
-                foreach (GridRangeInfo range in rangelist)
-                {
-                    //if we have rows selected we add cells in row to a temp list
-                    if (range.IsRows)
-                    {
-                        if (excludeHeaders)
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top, range.Left + grid.Cols.HeaderCount + 1, range.Bottom, grid.ColCount));
-                        else
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top, range.Left, range.Bottom, grid.ColCount));
-                    }
-
-                    //if we have col  selected we add cells in col to a temp list
-                    if (range.IsCols)
-                    {
-                        if (excludeHeaders)
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top + grid.Rows.HeaderCount + 1, range.Left, grid.RowCount, range.Right));
-                        else
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top, range.Left, grid.RowCount, range.Right));
-                    }
-
-                    //if we have table selected we add cells in table to a temp list
-                    if (range.IsTable)
-                    {
-                        if (excludeHeaders)
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top + grid.Cols.HeaderCount + 1, range.Left + grid.Rows.HeaderCount + 1, grid.RowCount, grid.ColCount));
-                        else
-                            rangelistTemp.Add(GridRangeInfo.Cells(range.Top, range.Left, grid.RowCount, grid.ColCount));
-                    }
-                }
-
-                //add cells from selected rows and cols to range list
-                foreach (GridRangeInfo range in rangelistTemp)
-                {
-                    rangelist.Add(range);
-                }
-            }
-
-
-            return rangelist;
-        }
-
-        /// <summary>
-        /// Copies the selected values and headers to public clipboard.
-        /// </summary>
-        /// <param name="control">The control.</param>
-        /// <remarks>
-        /// If you just wants an ordinary copy call gridcontrol.CutPaste.Copy()
-        /// Created by: micke
-        /// Created date: 2008-05-26
-        /// </remarks>
-        public static void CopySelectedValuesAndHeadersToPublicClipboard(GridControl control)
-        {
-            string s = string.Empty;
-
-            //selected range
-            GridRangeInfoList rangeList = GetGridSelectedRanges(control, true);
-
-            //loop all ranges
-            foreach (GridRangeInfo range in rangeList)
-            {
-                //get column headers
-                s += GetColHeadersString(control, range);
-
-                //loop all rows
-                for (int row = range.Top; row <= range.Bottom; row++)
-                {
-                    //if we find a new row add newline chars
-                    if (row != range.Top)
-                        s += Environment.NewLine;
-
-                    //add rowheaderw
-                    for (int i = 0; i <= control.Rows.HeaderCount; i++)
-                        s += control[row, i].FormattedText + '\t';
-
-                    //loop all columns
-                    for (int col = range.Left; col <= range.Right; col++)
-                    {
-                        //if we find a new column add new column char
-                        if (col != range.Left)
-                            s += '\t';
-
-                        //add cell value
-                        s += control[row, col].FormattedText;
-                    }
-                }
-
-                //add newline chars for each range
-                s += Environment.NewLine;
-            }
-
-            //add string to clipboard
-            try
-            {
-                Clipboard.SetDataObject(new DataObject(s), true);
-            }
-            catch (ExternalException)
-            {
-                MessageBoxHelper.ShowInformationMessage(
-                    UserTexts.Resources.ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot,
-                    UserTexts.Resources.ExternalResourceInUse);
-            }
-        }
-
-        private static string GetColHeadersString(GridControl control, GridRangeInfo range)
-        {
-            string s = string.Empty;
-
-            //loop all columns
-            for (int j = 0; j <= control.Rows.HeaderCount; j++)
-            {
-                //add space for rowheaders
-                for (int i = 0; i <= control.Rows.HeaderCount; i++)
-                    s += "\t";
-
-                for (int col = range.Left; col <= range.Right; col++)
-                {
-                    //if we find a new column add new column char
-                    if (col != range.Left)
-                        s += '\t';
-
-                    //add header value
-                    s += control[j, col].FormattedText;
-                }
-
-                //add new line chars
-                s += Environment.NewLine;
-            }
-
-            return s;
-        }
-
-        /// <summary>
-        /// Fill a rounded rectangle
-        /// </summary>
-        /// <param name="graphics">The graphics.</param>
-        /// <param name="rectangle">The rectangle.</param>
-        /// <param name="roundness">The roundness.</param>
-        /// <param name="brush">The brush.</param>
-        /// <param name="inflate">The inflate.</param>
         public static void FillRoundedRectangle(Graphics graphics, Rectangle rectangle, int roundness, Brush brush, int inflate)
         {
             Rectangle rect = rectangle;
@@ -180,12 +17,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             graphics.FillPath(brush, GetRoundBox(rect, roundness));
         }
 
-        /// <summary>
-        /// Get a round box
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="roundness"></param>
-        /// <returns></returns>
         public static GraphicsPath GetRoundBox(Rectangle rect, int roundness)
         {
             GraphicsPath result = new GraphicsPath();
@@ -215,8 +46,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             return result;
         }
 
-        #region GridStyle
-
         public static void GridStyle(GridControl gridControl)
         {
             gridControl.GridVisualStyles = GridVisualStyles.Office2007Blue;
@@ -233,28 +62,8 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             gridControl.VerticalThumbTrack = true;
             gridControl.Model.Options.WrapCellBehavior = GridWrapCellBehavior.WrapRow;
             gridControl.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
-            //gridControl.ResizeColsBehavior = GridResizeCellsBehavior.None;
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
         }
-
-        public static void GridStyles(GridListControl gridControl)
-        {
-            gridControl.ThemesEnabled = true;
-            gridControl.GridVisualStyles = GridVisualStyles.Office2007Blue;
-            gridControl.Properties.GridLineColor = Color.FromArgb(((208)), ((215)), ((229)));
-            gridControl.BorderStyle = BorderStyle.FixedSingle;
-            gridControl.BackColor = SystemColors.Window;
-            gridControl.Dock = DockStyle.Fill;
-            gridControl.Properties.GridLineColor = Color.FromArgb(208, 215, 229);
-            gridControl.Grid.RowHeights.ResizeToFit(GridRangeInfo.Table());
-            gridControl.AutoSize = true;
-            gridControl.Grid.Dock = DockStyle.Fill;
-            gridControl.FillLastColumn = true;
-        }
-
-        #endregion
-
-        #region Selection
 
         public static void HandleSelectionKeys(GridControl gridControl, KeyEventArgs e)
         {
@@ -269,7 +78,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 
             if (e.KeyCode == Keys.Tab)
             {
-                //Trace.WriteLine("TAB");
                 HandleTabOnGridFirstAndLastCell(gridControl, e.Shift);
             }
 
@@ -297,8 +105,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                         newGridRangeInfo =
                             GridRangeInfo.Auto(gridControl.Rows.HeaderCount + 1, gridControl.CurrentCell.ColIndex,
                                                gridControl.CurrentCell.RowIndex, gridControl.CurrentCell.ColIndex);
-                        break;
-                    default:
                         break;
                 }
                 if (newGridRangeInfo != null)
@@ -342,7 +148,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             {
                 Form form = gridControl.FindParentForm();
                 form.SelectNextControl(gridControl, true, true, true, true);
-                return;
             }
         }
 
@@ -374,17 +179,5 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                 gridControl.Selections.Add(dataOnlyGridRangeInfo);
             }
         }
-
-        //TODO kolla om denna kan erätta ovansående "handleSelectAll"
-        public static void SelectAll(GridControl grid)
-        {
-            int top = grid.Rows.HeaderCount + 1;
-            int left = grid.Cols.HeaderCount + 1;
-            int right = grid.ColCount;
-            int bottom = grid.RowCount;
-            grid.Selections.SelectRange(GridRangeInfo.Cells(top, left, bottom, right), true);
-        }
-
-        #endregion
     }
 }
