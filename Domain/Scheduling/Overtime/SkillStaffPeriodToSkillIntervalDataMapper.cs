@@ -3,20 +3,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface ISkillStaffPeriodToSkillIntervalDataMapper
+	public interface IOvertimeSkillStaffPeriodToSkillIntervalDataMapper
 	{
-		IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriod);
+		IList<IOvertimeSkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriod);
 	}
 
-	public class SkillStaffPeriodToSkillIntervalDataMapper : ISkillStaffPeriodToSkillIntervalDataMapper
+	public class OvertimeSkillStaffPeriodToSkillIntervalDataMapper : IOvertimeSkillStaffPeriodToSkillIntervalDataMapper
 	{
-		public IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriodList)
+		public IList<IOvertimeSkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriodList)
 		{
-			var skillIntervalList = new List<ISkillIntervalData>();
+			var skillIntervalList = new List<IOvertimeSkillIntervalData>();
 			if (skillStaffPeriodList != null)
 				foreach (var skillStaffPeriod in skillStaffPeriodList)
 				{
-					skillIntervalList.Add(new SkillIntervalData(skillStaffPeriod.Period, skillStaffPeriod.RelativeDifference));
+					skillIntervalList.Add(new OvertimeSkillIntervalData(skillStaffPeriod.Period, skillStaffPeriod.RelativeDifference));
 				}
 			return skillIntervalList;
 		}

@@ -2,18 +2,18 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface ISkillIntervalData
+	public interface IOvertimeSkillIntervalData
 	{
 		DateTimePeriod Period { get; }
 		double RelativeDifference { get; }
 	}
 
-	public class SkillIntervalData : ISkillIntervalData
+	public class OvertimeSkillIntervalData : IOvertimeSkillIntervalData
 	{
 		public DateTimePeriod Period { get; private set; }
 		public double RelativeDifference { get; private set; }
 
-		public SkillIntervalData(DateTimePeriod dateTimePeriod, double relativeDifference)
+		public OvertimeSkillIntervalData(DateTimePeriod dateTimePeriod, double relativeDifference)
 		{
 			Period = dateTimePeriod;
 			RelativeDifference = relativeDifference;

@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private IOvertimeLengthDecider _target;
 		private MockRepository _mocks;
 		private ISkillResolutionProvider _skillResolutionProvider;
-		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
-		private ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private IOvertimeSkillStaffPeriodToSkillIntervalDataMapper _overtimeSkillStaffPeriodToSkillIntervalDataMapper;
+		private IOvertimeSkillIntervalDataDivider _overtimeSkillIntervalDataDivider;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private DateTime _date;
 		private ISkillDay _skillDay1;
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_mocks = new MockRepository();
 			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
 			_skillResolutionProvider = _mocks.StrictMock<ISkillResolutionProvider>();
-			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
-			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
+			_overtimeSkillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
+			_overtimeSkillIntervalDataDivider = _mocks.StrictMock<IOvertimeSkillIntervalDataDivider>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillDay1 = _mocks.StrictMock<ISkillDay>();
 			_skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue,
 																					new List<ISkill> { _skill1, _skill2 });
 			_skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _skillStaffPeriod });
-			_target = new OvertimeLengthDecider(_skillResolutionProvider, _skillStaffPeriodToSkillIntervalDataMapper,
-			                                    _skillIntervalDataDivider, _schedulingResultStateHolder);
+			_target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
+			                                    _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder);
 		}
 
 		[Test]
@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		[Test]
 		public void ShouldPickTheMostShortageOption()
 		{
-			var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0.02);
-			var skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0.08);
-			var skillIntervalData3 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), -0.07);
-			var skillIntervalData4 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), -0.19);
-			var skillIntervalData5 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), -0.55);
-			var skillIntervalData6 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)), 0.06);
-			var skillIntervalData7 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), 0.27);
+			var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0.02);
+			var skillIntervalData2 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0.08);
+			var skillIntervalData3 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), -0.07);
+			var skillIntervalData4 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), -0.19);
+			var skillIntervalData5 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), -0.55);
+			var skillIntervalData6 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)), 0.06);
+			var skillIntervalData7 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), 0.27);
 
 			var skillIntervalDataList = new[]
 				{
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
 
 				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
 					 skillIntervalDataList).Repeat.AtLeastOnce();
-				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
+				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
 						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
@@ -99,13 +99,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		[Test]
 		public void ShouldNotExtendWhenRelativeDifferenceIsPositive()
 		{
-			var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0);
-			var skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0);
-			var skillIntervalData3 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), 0);
-			var skillIntervalData4 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), 0);
-			var skillIntervalData5 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), 2);
-			var skillIntervalData6 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)),1);
-			var skillIntervalData7 = new SkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), -3);
+			var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0);
+			var skillIntervalData2 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0);
+			var skillIntervalData3 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), 0);
+			var skillIntervalData4 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), 0);
+			var skillIntervalData5 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), 2);
+			var skillIntervalData6 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)),1);
+			var skillIntervalData7 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), -3);
 
 			var skillIntervalDataList = new[]
 				{
@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
 
 				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
 					 skillIntervalDataList).Repeat.AtLeastOnce();
-				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
+				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
 						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())

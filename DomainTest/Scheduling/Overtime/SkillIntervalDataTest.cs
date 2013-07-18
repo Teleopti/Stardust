@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	[TestFixture]
 	public class SkillIntervalDataTest
 	{
-		private ISkillIntervalData _target;
+		private IOvertimeSkillIntervalData _target;
 		private DateTimePeriod _dtp;
 
 		[SetUp]
 		public void Setup()
 		{
 			_dtp = new DateTimePeriod(2012, 11, 28, 2012, 11, 28);
-			_target = new SkillIntervalData(_dtp, -0.3);
+			_target = new OvertimeSkillIntervalData(_dtp, -0.3);
 		}
 
 		[Test]

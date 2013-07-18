@@ -7166,13 +7166,30 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var definitionSets = (from set in MultiplicatorDefinitionSet
                                          where set.MultiplicatorType == MultiplicatorType.Overtime
                                          select set).AsEnumerable().ToList();
-                    
-                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), 15,  definitionSets))
+
+                    var resolution = 15;
+                    if (_scheduleView.SelectedSchedules().Count > 0)
+                    {
+                       var tempScheduleDay = _scheduleView.SelectedSchedules()[0];
+                       var person = tempScheduleDay.Person;
+                       var skills = aggregateSkills(person, tempScheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+                       if (skills.Count != 0)
+                       {
+                           var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
+                           resolution = skillResolutionProvider.MinimumResolution(skills);
+                       }
+                    }
+                 
+
+                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), resolution, definitionSets))
                     {
                         if (options.ShowDialog(this) == DialogResult.OK)
                         {
                             options.Refresh();
-                            _container.Resolve<IScheduleOvertimeCommand>().Execute(overtimePreferences, _backgroundWorkerScheduling, scheduleDays);
+                            //consider short breaks ???
+                            var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
+                                                                                       true, true);
+                            _container.Resolve<IScheduleOvertimeCommand>().Exectue(overtimePreferences, _backgroundWorkerScheduling, _scheduleView.SelectedSchedules(), resouceCalculateDelayer);
                         }
                     }
                 }
@@ -7184,6 +7201,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 }
             }
+        }
+
+        private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
+        {
+            var ret = new List<ISkill>();
+            var personPeriod = person.Period(dateOnly);
+
+            foreach (var personSkill in personPeriod.PersonSkillCollection)
+            {
+                if (!ret.Contains(personSkill.Skill))
+                    ret.Add(personSkill.Skill);
+            }
+            return ret;
         }
 
 	}

@@ -4,15 +4,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface ISkillIntervalDataDivider
+	public interface IOvertimeSkillIntervalDataDivider
 	{
-		IList<ISkillIntervalData> SplitSkillIntervalData(IList<ISkillIntervalData> skillIntervalDataList, int resolution);
+		IList<IOvertimeSkillIntervalData> SplitSkillIntervalData(IList<IOvertimeSkillIntervalData> skillIntervalDataList, int resolution);
 	}
-	public class SkillIntervalDataDivider : ISkillIntervalDataDivider
+	public class OvertimeSkillIntervalDataDivider : IOvertimeSkillIntervalDataDivider
 	{
-		public IList<ISkillIntervalData> SplitSkillIntervalData(IList<ISkillIntervalData> skillIntervalDataList, int resolution)
+		public IList<IOvertimeSkillIntervalData> SplitSkillIntervalData(IList<IOvertimeSkillIntervalData> skillIntervalDataList, int resolution)
 		{
-			var resultingskillIntervalDataList = new List<ISkillIntervalData>();
+			var resultingskillIntervalDataList = new List<IOvertimeSkillIntervalData>();
 			if (skillIntervalDataList != null)
 			{
 				var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					//split the interval into to 30 min as the interval length is 15 and the resolution is 10
 					var sortedSkillList =
 						skillIntervalDataList.OrderBy(s => s.Period.StartDateTime).ThenBy(s => s.Period.EndDateTime).ToList();
-					var aggregatedList = new List<ISkillIntervalData>();
+					var aggregatedList = new List<IOvertimeSkillIntervalData>();
 					for (var j = 0; j < sortedSkillList.Count(); j++)
 					{
 						if (j + 1 < skillIntervalDataList.Count)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					for (int j = 0; j < totallDiffInMin; j++)
 					{
 						resultingskillIntervalDataList.Add(
-							new SkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
+							new OvertimeSkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
 							                      skillIntervalItem.RelativeDifference));
 						startPeriod = startPeriod.AddMinutes(resolution);
 					}
@@ -58,16 +58,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return resultingskillIntervalDataList;
 		}
 
-		private static ISkillIntervalData aggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
+		private static IOvertimeSkillIntervalData aggregateTwoIntervals(IOvertimeSkillIntervalData overtimeSkillIntervalData1, IOvertimeSkillIntervalData overtimeSkillIntervalData2)
 		{
-			if (skillIntervalData2 == null)
+			if (overtimeSkillIntervalData2 == null)
 			{
-				return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData1.Period.EndDateTime.AddMinutes(15)),
-				                             skillIntervalData1.RelativeDifference);
+				return new OvertimeSkillIntervalData(new DateTimePeriod(overtimeSkillIntervalData1.Period.StartDateTime, overtimeSkillIntervalData1.Period.EndDateTime.AddMinutes(15)),
+				                             overtimeSkillIntervalData1.RelativeDifference);
 			}
 
-			return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData2.Period.EndDateTime),
-			                             (skillIntervalData1.RelativeDifference + skillIntervalData2.RelativeDifference) / 2);
+			return new OvertimeSkillIntervalData(new DateTimePeriod(overtimeSkillIntervalData1.Period.StartDateTime, overtimeSkillIntervalData2.Period.EndDateTime),
+			                             (overtimeSkillIntervalData1.RelativeDifference + overtimeSkillIntervalData2.RelativeDifference) / 2);
 		}
 	}
 }

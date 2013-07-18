@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	public class SkillStaffPeriodToSkillIntervalDataMapperTest
 	{
 		private MockRepository _mock;
-		private SkillStaffPeriodToSkillIntervalDataMapper _target;
+		private OvertimeSkillStaffPeriodToSkillIntervalDataMapper _target;
 		private IList<ISkillStaffPeriod> _skillStaffPeriodList;
 		private ISkillStaffPeriod _skillStaffPeriod1;
 		private ISkillStaffPeriod _skillStaffPeriod2;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_target = new SkillStaffPeriodToSkillIntervalDataMapper();
+			_target = new OvertimeSkillStaffPeriodToSkillIntervalDataMapper();
 			_skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriod2 = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriod3 = _mock.StrictMock<ISkillStaffPeriod>();

@@ -14,18 +14,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	public class OvertimeLengthDecider : IOvertimeLengthDecider
 	{
 		private readonly ISkillResolutionProvider _skillResolutionProvider;
-		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
-		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private readonly IOvertimeSkillStaffPeriodToSkillIntervalDataMapper _overtimeSkillStaffPeriodToSkillIntervalDataMapper;
+		private readonly IOvertimeSkillIntervalDataDivider _overtimeSkillIntervalDataDivider;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-		public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
-		                             ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
-		                             ISkillIntervalDataDivider skillIntervalDataDivider,
+        public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
+		                             IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
+		                             IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
 		                             ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_skillResolutionProvider = skillResolutionProvider;
-			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
-			_skillIntervalDataDivider = skillIntervalDataDivider;
+			_overtimeSkillStaffPeriodToSkillIntervalDataMapper = overtimeSkillStaffPeriodToSkillIntervalDataMapper;
+			_overtimeSkillIntervalDataDivider = overtimeSkillIntervalDataDivider;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
 			var skillDay = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly}).FirstOrDefault();
 			if (skillDay == null) return TimeSpan.Zero;
-			var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
-			mappedData = _skillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+			var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
+			mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 			var durationValuePairs = new List<KeyValuePair<TimeSpan, double>>();
 			var minEndTime = overtimeStartTime.Add(duration.Minimum);
 			var maxEndTime = overtimeStartTime.Add(duration.Maximum);
