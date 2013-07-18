@@ -217,7 +217,6 @@
     <Compile Include="Common\ScheduleAppointmentStatusTypes.cs" />
     <Compile Include="Common\ScheduleAppointmentTypes.cs" />
     <Compile Include="Common\ShiftCategory.cs" />
-    <Compile Include="Common\StateChangedEventArgs.cs" />
     <Compile Include="Common\TimeLimitation.cs" />
     <Compile Include="Common\VisualProjection.cs" />
     <Compile Include="Foundation\StateHandlers\ISessionData.cs" />

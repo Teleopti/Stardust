@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.DBConverter
             _connectionString = connectionString;
         }
 
-        protected CommonHelper(){}
-
         protected IList<DataRow> ReadData(string query)
         {
             IList<DataRow> ret = new List<DataRow>();

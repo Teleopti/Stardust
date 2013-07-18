@@ -184,33 +184,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             return list;
         }
 
-        public IList<ICustomScheduleAppointment> UnsavedAppointments()
-        {
-            ScheduleAppointmentStatusTypes unsavedStatusType = ScheduleAppointmentStatusTypes.New | ScheduleAppointmentStatusTypes.Updated |
-                                                        ScheduleAppointmentStatusTypes.Deleted;
-
-            return Filter(unsavedStatusType);
-        }
-
-        public IList<ICustomScheduleAppointment> Filter(ScheduleAppointmentTypes appointmentTypes,ScheduleAppointmentStatusTypes appointmentStatusType)
-        {
-            IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();
-
-            foreach (KeyValuePair<DateTime, IScheduleItemList> keyValuePair in _dictionary)
-            {
-                foreach (ICustomScheduleAppointment scheduleAppointment in keyValuePair.Value.ScheduleItemCollection)
-                {
-                    if (((appointmentStatusType & scheduleAppointment.Status) == scheduleAppointment.Status) &&
-                        ((appointmentTypes & scheduleAppointment.AppointmentType) == scheduleAppointment.AppointmentType))
-                    {
-                        scheduleItemCollection.Add(scheduleAppointment);
-                    }
-                }
-            }
-
-            return scheduleItemCollection;
-        }
-
         public IList<ICustomScheduleAppointment> Filter(ScheduleAppointmentStatusTypes appointmentStatusType)
         {
             IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();

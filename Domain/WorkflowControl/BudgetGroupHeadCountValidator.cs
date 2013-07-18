@@ -10,14 +10,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             get { return "RequestDenyReasonBudgetGroupAllowance"; }
         }
         
-        public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
-
-
         public string DisplayText
         {
             get { return UserTexts.Resources.BudgetGroupHeadCount; }
         }
-
 
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
         {
