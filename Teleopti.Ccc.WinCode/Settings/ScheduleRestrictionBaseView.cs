@@ -228,18 +228,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 		}
 
 		/// <summary>
-		/// Changes the specified time into an overnight time.
-		/// </summary>
-		/// <param name="time">A time reference.</param>
-		/// <returns></returns>
-		public static string ToOvernight(string time)
-		{
-			if (!IsOvernight(time)) time += "+1";
-
-			return time;
-		}
-
-		/// <summary>
 		/// Gets the representing week of the day.
 		/// </summary>
 		/// <param name="day">A day. Zero-based value.</param>

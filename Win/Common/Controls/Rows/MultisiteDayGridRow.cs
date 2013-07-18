@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
         private readonly RowManager<MultisiteDayGridRow, IMultisiteDay> _rowManager;
-        private readonly int _maxLength;
         private readonly IList<DateOnly> _dateTimes;
         private readonly DayHasInvalidMultisiteDistribution _specificationInvalidDistribution = new DayHasInvalidMultisiteDistribution();
 
@@ -27,13 +26,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         {
             _rowManager = rowManager;
             _dateTimes = dateTimes;
-        }
-
-        public MultisiteDayGridRow(RowManager<MultisiteDayGridRow, IMultisiteDay> rowManager, string cellType,
-                                   string displayMember, string rowHeaderText, IList<DateOnly> dateTimes, int maxLength)
-            : this(rowManager, cellType, displayMember, rowHeaderText, dateTimes)
-        {
-            _maxLength = maxLength;
         }
 
         public override void QueryCellInfo(CellInfo cellInfo)
@@ -54,7 +46,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 IMultisiteDay multisiteDay = GetObjectAtPosition(_rowManager, cellInfo.ColIndex, colHeaders);
                 cellInfo.Style.CellType = CellType;
                 cellInfo.Style.CellValue = GetValue(multisiteDay);
-                cellInfo.Style.MaxLength = _maxLength;
 
                 if (_specificationInvalidDistribution.IsSatisfiedBy(multisiteDay))
                 {

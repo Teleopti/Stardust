@@ -6,24 +6,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridNumericCellColumn<T> : SFGridColumnBase<T>
     {
-        private readonly IComparer<T> _columnComparer;
         private readonly string _cellModel;
         private readonly int _preferredWidth;
 
-        public SFGridNumericCellColumn(string bindingProperty, string headerText, IComparer<T> columnComparer, 
+        public SFGridNumericCellColumn(string bindingProperty, string headerText, 
             string cellModel, int preferredWidth): base(bindingProperty, headerText)
         {
-            _columnComparer = columnComparer;
             _cellModel = cellModel;
             _preferredWidth = preferredWidth;
-        }
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
         }
 
         public override int PreferredWidth

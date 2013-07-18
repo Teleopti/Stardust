@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {
-    public partial class VisualizeView : PayrollBaseUserControl, IVisualizeView
+    public partial class VisualizeView : PayrollBaseUserControl
     {
         private float _pixelSize;
         private float _widthPerHour;

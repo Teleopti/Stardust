@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IGroupPersonBuilderForOptimization
 	{
 		IGroupPerson BuildGroupPerson(IPerson person, DateOnly dateOnly);
-		IGroupPerson BuildGroupPerson(IPerson person, DateOnlyPeriod period);
 	}
 
 	public class GroupPersonBuilderForOptimization : IGroupPersonBuilderForOptimization

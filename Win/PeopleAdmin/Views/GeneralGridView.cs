@@ -17,7 +17,6 @@ using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
@@ -335,18 +334,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 				if (string.IsNullOrEmpty(e.DataItem.WindowsLogOnName)) e.QueryCellInfoEventArg.Style.BackColor = Color.Red;
 				else e.QueryCellInfoEventArg.Style.ResetBackColor();
-			}
-		}
-
-		void GeneralGridView_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-		{
-			if (Grid.InvokeRequired)
-			{
-				Grid.BeginInvoke(new Action<object, EventMessageArgs>(GeneralGridView_OnEventMessageHandlerChanged), sender, e);
-			}
-			else
-			{
-				RefreshOnOptionalColumnChange();
 			}
 		}
 
@@ -707,37 +694,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 
 			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
-		}
-
-		public void RefreshOnOptionalColumnChange()
-		{
-			//Grid.Update = Syncfusion.Windows.Forms.BeginUpdateOptions.None;
-			Grid.Visible = false;
-			int gridColCount = _gridColumns.Count;
-			if (_gridColumns.Count > basicGridColCount)
-			{
-				for (int i = gridColCount - 2; i > basicGridColCount - 1; i--)
-				{
-					_gridColumns.RemoveAt(i);
-				}
-			}
-			//PeopleWorksheet.StateHolder.LoadAllOptionalColumns();
-			FilteredPeopleHolder.LoadOptionalColumnsGridData();
-
-			foreach (IOptionalColumn optCol in FilteredPeopleHolder.OptionalColumnCollection)
-			{
-				var newColumn = new OptionalColumn<PersonGeneralModel>(optCol.Name, 100, optCol.Name);
-				newColumn.CellChanged += columnCellChanged;
-				newColumn.CellDisplayChanged += columnCellDisplayChanged;
-				_gridColumns.Insert(_gridColumns.Count - 1, newColumn);
-			}
-
-			ColCount = _gridColumns.Count;
-			Grid.ColCount = ColCount - 1;
-			Grid.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-			Grid.Visible = true;
-			Grid.Invalidate();
-
 		}
 
 		public void ConfigureGridForDynamicColumns()

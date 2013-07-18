@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Meetings
         {
         }
 
-        public AddressBookParticipantSelectionEventArgs(AddressBookViewModel addressBookViewModel)
+        public AddressBookParticipantSelectionEventArgs(AddressBookViewModel addressBookViewModel) : this()
         {
             _addressBookViewModel = addressBookViewModel;
         }

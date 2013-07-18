@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   where ((IDeleteTag)item).IsDeleted == false
                                                   select item).ToList();
 
-            var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
+            var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // Schedule White Spots after back to legal state

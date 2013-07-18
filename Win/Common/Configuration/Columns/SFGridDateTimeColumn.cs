@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     public class SFGridDateTimeColumn<T> : SFGridColumnBase<T>
     {
         private readonly int _prefferedWidth;
-        public SFGridDateTimeColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        {
-            _prefferedWidth = 150;
-        }
 
         public SFGridDateTimeColumn(string bindingProperty, string headerText , int preferredWidth)
             :base(bindingProperty,headerText)

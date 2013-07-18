@@ -334,7 +334,6 @@
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\Message\MessageForm.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />

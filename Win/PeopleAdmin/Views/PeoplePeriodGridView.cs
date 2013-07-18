@@ -19,7 +19,6 @@ using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
@@ -27,9 +26,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	{
 		private Rectangle cellButtonRect;
 
-		public GridConstructor TestGrid { get; set; }
-
-		private ToolStripMenuItem _addNewPersonPeriodMenuItem;
+	    private ToolStripMenuItem _addNewPersonPeriodMenuItem;
 		private ToolStripMenuItem _copySpecialPersonPeriodMenuItem;
 		private ToolStripMenuItem _deletePersonPeriodMenuItem;
 		private ToolStripMenuItem _pasteSpecialPersonPeriodMenuItem;

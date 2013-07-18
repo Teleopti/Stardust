@@ -5552,25 +5552,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			control.Width = width;
 		}
 
-		private static IPersonAssignment getAssignmentZOrderBefore(IPersonAssignment highZOrder, IPersonAssignment pa, int num, IList<IPersonAssignment> personAssignments)
-		{
-			if (pa == highZOrder && num > 0)
-				return personAssignments[num - 1];
-			return null;
-		}
-
-		private static IPersonAssignment getAssignmentZOrderNext(IPersonAssignment highZOrder, IPersonAssignment pa, int num, IList<IPersonAssignment> personAssignments)
-		{
-			if (pa == highZOrder)
-			{
-				if (num < personAssignments.Count - 1)
-				{
-					return personAssignments[num + 1];
-				}
-			}
-			return null;
-		}
-
 		public void RefreshSelection()
 		{
 			if (_scheduleView != null)

@@ -12,39 +12,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     {
         private readonly IList<TItem> _comboItems;
         private readonly string _displayMember;
-        private readonly IComparer<T> _columnComparer;
         private readonly Type _baseClass;
 
         private readonly DisabledObjectSpecification<T> _disabledObjectSpecification =
             new DisabledObjectSpecification<T>("IsTrackerDisabled");
 
-        public SFGridDropDownColumn(string bindingProperty, string headerText, IList<TItem> comboItems, string displayMember, IComparer<T> columnComparer)
-            : this(bindingProperty, headerText, comboItems, displayMember, columnComparer, null)
+        public SFGridDropDownColumn(string bindingProperty, string headerText, IList<TItem> comboItems, string displayMember, Type baseClass)
+            : this(bindingProperty, headerText, null, comboItems, displayMember, baseClass)
         {
         }
 
-        public SFGridDropDownColumn(string bindingProperty, string headerText, IList<TItem> comboItems, string displayMember, IComparer<T> columnComparer, Type baseClass)
-            : this(bindingProperty, headerText, null, comboItems, displayMember, columnComparer, baseClass)
-        {
-        }
-
-        public SFGridDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, IList<TItem> comboItems, string displayMember, IComparer<T> columnComparer, Type baseClass)
+        public SFGridDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, IList<TItem> comboItems, string displayMember, Type baseClass)
             : base(bindingProperty, headerText)
         {
             GroupHeaderText = groupHeaderText;
             _comboItems = comboItems;
             _displayMember = displayMember;
-            _columnComparer = columnComparer;
             _baseClass = baseClass;
             UseDisablePropertyCheck = false;
-        }
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
         }
 
         public override int PreferredWidth

@@ -82,15 +82,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         }
 
         /// <summary>
-        /// Occurs when [date selection].
-        /// </summary>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-11-10
-        /// </remarks>
-        public event EventHandler<ScheduleGridDateSelectionEventArgs> DateSelection;
-
-        /// <summary>
         /// Occurs when [appointments copy].
         /// </summary>
         /// <remarks>
@@ -162,8 +153,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             if (!e.Control && !e.Shift)
             {
                 _modifierKeyIsPressed = false;
-                if (Dates.Count > 0)
-                    OnDateSelection();
             }
 
             base.OnKeyUp(e);
@@ -267,11 +256,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                 Dates.Clear();
                 Dates.Add(date);
             }
-        }
-
-        public void ClearSelectedCellInfo()
-        {
-            _selectedCellStyleList.Clear();
         }
 
         public override string GetFormattedString(DateTime dt, string format)
@@ -398,20 +382,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             if (AppointmentsPaste != null)
             {
                 AppointmentsPaste(this, new EventArgs());
-            }
-        }
-
-
-        protected virtual void OnDateSelection()
-        {
-            OnDateSelection(new ScheduleGridDateSelectionEventArgs(Dates));
-        }
-
-        protected virtual void OnDateSelection(ScheduleGridDateSelectionEventArgs args)
-        {
-            if (DateSelection != null)
-            {
-                DateSelection(this, args);
             }
         }
 

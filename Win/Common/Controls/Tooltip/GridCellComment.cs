@@ -110,12 +110,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             }
         }
 
-        public Font CommentFont
-        {
-            get { return _comment.Font; }
-            set { _comment.Font = value; }
-        }
-
         public Size CommentCorner
         {
             get { return new Size(_dx, _dy); }

@@ -17,11 +17,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
 		public bool AllowEmptyValue { get; set; }
 
-        public virtual IComparer<T> ColumnComparer
-        {
-            get { return null; }
-        }
-
         public SortCompare<T> SortCompare { get; set; }
 
         public virtual IComparer<T> Comparer

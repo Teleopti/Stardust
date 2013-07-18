@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridRowHeaderColumn<IActivity>(string.Empty));
             gridColumns.Add(new SFGridDescriptionNameColumn<IActivity>("Description", Resources.Name));
 
-            gridColumns.Add(new SFGridColorPickerColumn<IActivity>("DisplayColor", Resources.Color, null));
+            gridColumns.Add(new SFGridColorPickerColumn<IActivity>("DisplayColor", Resources.Color));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InContractTime", Resources.IsContractTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InWorkTime", Resources.IsWorkTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InPaidTime", Resources.IsPaidTime));

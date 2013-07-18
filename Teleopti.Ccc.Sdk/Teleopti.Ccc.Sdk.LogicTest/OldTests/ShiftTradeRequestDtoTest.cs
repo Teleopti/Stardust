@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 {
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         [SetUp]
         public void Setup()
         {
-            _id = GuidFactory.GetGuid();
+            _id = Guid.NewGuid();
             _target = new ShiftTradeRequestDto();
         }
 

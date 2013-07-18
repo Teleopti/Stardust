@@ -211,7 +211,6 @@
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
-    <Compile Include="Common\SpecificDataSource.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
@@ -251,7 +250,6 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileConstants.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileSkillNameValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
-    <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
     <Compile Include="Forecasting\Import\ForecastFile.cs" />
     <Compile Include="Forecasting\Import\ForecastParseResult.cs" />
     <Compile Include="Forecasting\Import\ForecastsFileContentProvider.cs" />
@@ -290,7 +288,6 @@
     <Compile Include="GroupPageCreator\PersonIndexBuilder.cs" />
     <Compile Include="GroupPageCreator\SingleAgentTeamGroupPage.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPage.cs" />
-    <Compile Include="Helper\LoggerNames.cs" />
     <Compile Include="Helper\LogPointOutput.cs" />
     <Compile Include="Helper\MessageBrokerExtensions.cs" />
     <Compile Include="Helper\NoFormatting.cs" />
@@ -349,7 +346,6 @@
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\IWorkRuleSetExtractorForGroupOfPeople.cs" />
-    <Compile Include="Optimization\IRuleSetBagCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
     <Compile Include="Optimization\OptimizationPreferences.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProvider.cs" />
@@ -1091,7 +1087,6 @@
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
     <Compile Include="Repositories\ISkillTypeRepository.cs" />
     <Compile Include="Repositories\ISlpsRepository.cs" />
-    <Compile Include="Repositories\ISystemSettingRepository.cs" />
     <Compile Include="Repositories\IWorkloadRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartTracker.cs" />
     <Compile Include="ResourceCalculation\PeriodDistribution.cs" />
@@ -1133,7 +1128,6 @@
     <Compile Include="Common\ContractScheduleWeek.cs" />
     <Compile Include="Common\EntityContainer.cs" />
     <Compile Include="Common\EntityConverter.cs" />
-    <Compile Include="Common\IBusinessUnitHierarchyEntity.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRootWithBusinessUnit.cs" />
     <Compile Include="Scheduling\Rules\DayOffRule.cs" />
     <Compile Include="Common\PayloadTime.cs" />
@@ -1195,7 +1189,6 @@
     <Compile Include="Forecasting\QueueSource.cs" />
     <Compile Include="Forecasting\Skill.cs" />
     <Compile Include="Forecasting\SkillType.cs" />
-    <Compile Include="Common\LayerStartDateTimeSorter.cs" />
     <Compile Include="Forecasting\WorkloadDay.cs" />
     <Compile Include="Forecasting\WorkloadDayBase.cs" />
     <Compile Include="Forecasting\WorkloadDayTemplate.cs" />

@@ -11,10 +11,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             ScheduleItem = item;
         }
 
-        public StateChangedEventArgs()
-        {
-        }
-
         public ScheduleAppointmentStatusTypes ScheduleAppointmentStatus { get; set; }
 
         public Dto ScheduleItem { get; set; }

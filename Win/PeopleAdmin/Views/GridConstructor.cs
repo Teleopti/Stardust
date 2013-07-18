@@ -27,12 +27,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         PersonAvailabilityView
     };
 
-    public enum RotationType
-    {
-        PersonRotation,
-        PersonAvailability
-    };
-
     public class GridConstructor : Component
     {
         private FilteredPeopleHolder _filteredPeopleHolder;

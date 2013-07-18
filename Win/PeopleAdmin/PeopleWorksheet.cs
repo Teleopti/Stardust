@@ -60,12 +60,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private GridConstructor _panelConstructor;
         private FilteredPeopleHolder _filteredPeopleHolder;
         private readonly IEventAggregator _globalEventAggregator;
-//        private readonly IComponentContext _componentContext;
-        //Check async callback result.
-        private IAsyncResult _onSaveResult;
+
         private static WorksheetStateHolder _stateHolder;
         private delegate void RefreshFilterPanel();
-        private bool _onClose;
         private TabControlAdv _tabControlPeopleAdmin;
         private bool _readOnly;
         private ILifetimeScope _container;
@@ -402,20 +399,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null && ex.InnerException is DataSourceException)
+                if (ex.InnerException is DataSourceException)
                 {
                     DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
                     FormKill();
                 }
-            }
-        }
-
-        public void InvalidateTabPages()
-        {
-            foreach (TabPageAdv tab in tabControlPeopleAdmin.TabPages)
-            {
-                if (tab.Controls.Count > 0 && tab.Controls[0].GetType() == typeof(GridControl))
-                    ((GridControl)tab.Controls[0]).Invalidate();
             }
         }
 
@@ -632,21 +620,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private void OnPeopleWorksheetSave()
         {
             _peopleAdminFilterPanel.Refresh();
-        }
-
-        private void backgroundWorkerReLoad_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (_onSaveResult == null || _onSaveResult.IsCompleted)
-            {
-                Cursor.Current = Cursors.WaitCursor;
-            	var handler = PeopleWorksheetSaved;
-                if (handler != null)
-                {
-                	handler.Invoke(sender, e);
-                }
-                if (!_onClose) _onSaveResult = _peopleAdminFilterPanel.BeginInvoke(new RefreshFilterPanel(OnPeopleWorksheetSave));
-                Cursor.Current = Cursors.Default;
-            }
         }
 
         private void gridWorksheet_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
@@ -1492,7 +1465,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 _findAndReplaceForm.Dispose();
                 _findAndReplaceForm = null;
             }
-            _onClose = true;
         }
 
         #endregion
@@ -1533,15 +1505,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             // Load all part-time percentages (to show on the combo boxes).
             StateHolder.LoadPartTimePercentages(_filteredPeopleHolder);
 
-            // Load all teams available (to show on the combo boxes).
-
-
             //Load all contracts available (to show on the combo boxes).
             StateHolder.LoadContracts(_filteredPeopleHolder);
-
-            // Loads rule set bags (to show on rule set bag combo on the grid).
-            //_filteredPeopleHolder.LoadRuleSetBag();
-            //_filteredPeopleHolder.LoadBudgetGroup();
         }
 
         private void toolStripComboBoxExTrackerDescription_SelectedIndexChanged(object sender, EventArgs e)

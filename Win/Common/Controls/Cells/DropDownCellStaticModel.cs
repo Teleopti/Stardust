@@ -73,17 +73,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 return (GridDropDownContainer)base.DropDownContainer;
             }
         }
-
-        public PopupControlContainer PopupControlContainer
-        {
-            get
-            {
-                if (DropDownImp != null)
-                {
-                    return (PopupControlContainer)DropDownImp.PopupControlContainer;
-                }
-                return null;
-            }
-        }
     }
 }

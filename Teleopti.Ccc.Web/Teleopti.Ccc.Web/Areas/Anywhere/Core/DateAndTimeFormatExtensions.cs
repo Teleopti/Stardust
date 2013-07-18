@@ -85,29 +85,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return format;
 		}
 
-
-
-
-		public static string ToFixedDateFormat(this DateOnly instance)
-		{
-			return ((DateTime)instance).ToFixedDateFormat();
-		}
-
-		public static string ToFixedDateFormat(this DateTime instance)
-		{
-			return instance.ToString(FixedDateFormat);
-		}
-
 		public static string ToFixedDateTimeFormat(this DateTime instance)
 		{
 			return instance.ToString(FixedDateTimeFormat);
 		}
-
-		public static string ToFixedTimeFormat(this DateTime instance)
-		{
-			return instance.ToString(FixedTimeFormat);
-		}
-
-
 	}
 }

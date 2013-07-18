@@ -237,16 +237,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double IncomingDifference { get; }
 
-        ///// <summary>
-        ///// Gets the distributed difference.
-        ///// </summary>
-        ///// <value>The distributed difference.</value>
-        ///// <remarks>
-        ///// Created by: micke
-        ///// Created date: 2008-11-24
-        ///// </remarks>
-        //double DistributedDifference { get; }
-
         /// <summary>
         /// Gets the F staff.
         /// </summary>

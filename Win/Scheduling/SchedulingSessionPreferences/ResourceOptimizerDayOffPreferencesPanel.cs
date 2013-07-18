@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         #region Interface
 
-        public IDaysOffPreferences RuleSet
-        {
-            get { return _ruleSet; }
-        }
-
         #region IDataExchange Members
 
         public bool ValidateData(ExchangeDataOption direction)

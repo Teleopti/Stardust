@@ -28,21 +28,7 @@ namespace Teleopti.Ccc.Win
             public string Name = null;
             public IntPtr Type = IntPtr.Zero;
         }
-        /// <summary>
-        /// Creates the message and adds an attachment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="filePath">The file path.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-09-23
-        /// </remarks>
-        public void CreateMessage(string address, string filePath)
-        {
-            ((RecipientCollection)Recipients).Add(address);
-            Files.Add(filePath);
-            ShowDialog();
-        }
+
         /// <summary>
         /// Creates the message and adds a range of attachments.
         /// </summary>
@@ -105,15 +91,6 @@ namespace Teleopti.Ccc.Win
             _files = new ArrayList();
             _recipientCollection = new RecipientCollection();
             _manualResetEvent = new ManualResetEvent(false);
-        }
-
-        /// <summary>
-        /// Creates a new mail message with the specified Subject.
-        /// </summary>
-        public MapiMailMessage(string subject)
-            : this()
-        {
-            _subject = subject;
         }
 
         /// <summary>

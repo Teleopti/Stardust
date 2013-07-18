@@ -9,21 +9,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class SkillStaffPeriodFactory
     {
-
-        /// <summary>
-        /// Creates a skill staff period.
-        /// </summary>
-        /// <param name="start">The start.</param>
-        /// <param name="end">The end.</param>
-        /// <param name="task">The task.</param>
-        /// <param name="serviceAgreement">The service agreement.</param>
-        /// <returns></returns>
-        public static SkillStaffPeriod CreateSkillStaffPeriod(DateTime start, DateTime end, Task task, ServiceAgreement serviceAgreement)
-        {
-            DateTimePeriod tp = new DateTimePeriod(start, end);
-            return CreateSkillStaffPeriod(tp, task, serviceAgreement);
-        }
-
         /// <summary>
         /// Creates a skill staff period.
         /// </summary>

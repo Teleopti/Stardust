@@ -8,10 +8,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class AvailableDataFactory
     {
-        /// <summary>
-        /// Creates available data with two business units two sites two teams and two persons.
-        /// </summary>
-        /// <returns></returns>
         public static AvailableData CreateAvailableDataWithTwoBusinessUnitsSitesTeamsPersons(out IList<IPerson> persons)
         {
             AvailableData availableData = new AvailableData();
@@ -44,28 +40,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return availableData;
         }
 
-        /// <summary>
-        /// Creates available data with two business units two sites two teams and two persons.
-        /// </summary>
-        /// <returns></returns>
         public static AvailableData CreateAvailableDataWithTwoBusinessUnitsSitesTeamsPersons()
         {
             IList<IPerson> persons;
             return CreateAvailableDataWithTwoBusinessUnitsSitesTeamsPersons(out persons);
-        }
-
-        /// <summary>
-        /// Creates available data list with two available data instances. Each instances will
-        /// have two business units, two sites, two teams and two persons.
-        /// </summary>
-        public static IList<IAvailableData> CreateAvailableDataList()
-        {
-            IList<IAvailableData> availableDatas = new List<IAvailableData>();
-            IAvailableData data1 = CreateAvailableDataWithTwoBusinessUnitsSitesTeamsPersons();
-            IAvailableData data2 = CreateAvailableDataWithTwoBusinessUnitsSitesTeamsPersons();
-            availableDatas.Add(data1);
-            availableDatas.Add(data2);
-            return availableDatas;
         }
     }
 }

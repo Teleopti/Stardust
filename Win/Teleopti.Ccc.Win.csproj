@@ -353,12 +353,6 @@
       <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.Designer.cs">
-      <DependentUpon>OutlookBarWorkspace.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\StackStrip.cs">
@@ -545,12 +539,6 @@
     <Compile Include="Common\Controls\Rows\TaskOwnerDayFilterGridRow.cs" />
     <Compile Include="Common\Controls\TeleoptiPercentTextBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\TimeDurationPickerView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\TimeDurationPickerView.Designer.cs">
-      <DependentUpon>TimeDurationPickerView.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\NullableIntegerTextBox.cs">
       <SubType>Component</SubType>
@@ -1013,12 +1001,6 @@
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />
     <Compile Include="Forecasting\Forms\TaskOwnerDayGridHelper.cs" />
-    <Compile Include="Intraday\IntradayOverviewArea.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Intraday\IntradayOverviewArea.Designer.cs">
-      <DependentUpon>IntradayOverviewArea.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main\ApplyLicense.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1062,7 +1044,6 @@
     <Compile Include="Payroll\DefinitionSets\PayrollBaseUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Common\Configuration\IPayrollExplorerLoader.cs" />
     <Compile Include="Payroll\DefinitionSets\ClipboardHandler.cs" />
     <Compile Include="Payroll\Overtime\MultiplicatorAddedEventArgs.cs" />
     <Compile Include="Payroll\DefinitionSets\DefinitionSetDropDownView.cs">
@@ -1363,12 +1344,6 @@
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\GroupDayOffOptimizerHelper.cs" />
-    <Compile Include="Scheduling\OptimizationProgress.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\OptimizationProgress.Designer.cs">
-      <DependentUpon>OptimizationProgress.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
@@ -1432,7 +1407,6 @@
       <DependentUpon>CellComment.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\CommentMouseControler.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\IToggleButtonState.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsencePainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
@@ -1507,7 +1481,6 @@
       <DependentUpon>SkillSummary.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SkillTabRenderer.cs" />
-    <Compile Include="Scheduling\SplitterManager.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\SplitterManagerRestrictionView.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\TeleoptiLessIntelligentSplitContainer.cs">
       <SubType>Component</SubType>
@@ -1535,10 +1508,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\Configuration\Columns\SFGridTimeOfDayColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridEditableDateColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesOrEmptyColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridWrappedTextReadOnlyColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridRequestStatusColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridCheckBoxColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColorPickerColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnBase.cs" />
@@ -1546,9 +1516,7 @@
     <Compile Include="Common\Configuration\Columns\SFGridDescriptionNameColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDropDownColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDropDownEnumColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridDropDownTypeColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridLongHourMinutesOrIntegerColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridNumericCellColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridRowHeaderColumn.cs" />
     <Compile Include="Common\Configuration\CommonAgentNameDescriptionControl.cs">
@@ -1606,9 +1574,7 @@
     <Compile Include="Scheduling\DaysOffControl.Designer.cs">
       <DependentUpon>DaysOffControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Configuration\EarlyEndTimeCellValidator.cs" />
     <Compile Include="Common\Configuration\LateEndTimeCellValidator.cs" />
-    <Compile Include="Common\Configuration\LateStartTimeCellValidator.cs" />
     <Compile Include="Common\Configuration\RotationPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1646,7 +1612,6 @@
     <Compile Include="Common\Controls\Cells\ColorPickerCellModel.cs" />
     <Compile Include="Common\Controls\Cells\GridDropDownMonthCalendarAdvCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeCellModelRenderer.cs" />
-    <Compile Include="Common\Controls\Cells\WrappedTextReadOnlyCellModel.cs" />
     <Compile Include="Common\Controls\Cells\INumericCellModelWithDecimals.cs" />
     <Compile Include="Common\Controls\Cells\TimeSpanDurationCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeSpanDurationStaticCellModel.cs" />
@@ -1707,13 +1672,6 @@
     </Compile>
     <Compile Include="Common\Controls\DateSelection\IDateSelectionControl.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\ExcelLikeOutlineHeader.cs" />
-    <Compile Include="Common\Controls\Filters\FilterBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\Filters\FilterBox.Designer.cs">
-      <DependentUpon>FilterBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Filters\FilterBoxItem.cs">
       <SubType>UserControl</SubType>
@@ -1790,9 +1748,6 @@
     <Compile Include="Common\ISortColumn.cs" />
     <Compile Include="Common\PeopleDomainFinder.cs" />
     <Compile Include="Common\Controls\Rows\SkillDayGridRow.cs" />
-    <Compile Include="Common\Controls\ToolStripEventBinder.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\Controls\Columns\ReadOnlyTextColumn.cs" />
     <Compile Include="Common\Controls\ScenarioSelector.cs">
       <SubType>UserControl</SubType>
@@ -1886,12 +1841,6 @@
     <Compile Include="Common\Controls\Drawing\LineControl.Designer.cs">
       <DependentUpon>LineControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\Drawing\RectangleUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\Drawing\RectangleUserControl.Designer.cs">
-      <DependentUpon>RectangleUserControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\Cells\NumericCellModel.cs" />
     <Compile Include="Common\Controls\Cells\PercentCellModell.cs" />
     <Compile Include="Common\Controls\Cells\PercentReadOnlyCellModel.cs" />
@@ -1905,8 +1854,6 @@
     <Compile Include="Common\GuiHelper.cs" />
     <Compile Include="Common\HelpHelper.cs" />
     <Compile Include="Common\HelpType.cs" />
-    <Compile Include="Common\InsertEventArgs.cs" />
-    <Compile Include="Common\ListViewExtension.cs" />
     <Compile Include="Common\MoreOrLessState.cs" />
     <Compile Include="Common\PropertyPagesHelper.cs" />
     <Compile Include="Common\Controls\Drawing\TransparentUserControl.cs">
@@ -1914,12 +1861,6 @@
     </Compile>
     <Compile Include="Common\Controls\Drawing\TransparentUserControl.Designer.cs">
       <DependentUpon>TransparentUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\SaveAssist.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\SaveAssist.designer.cs">
-      <DependentUpon>SaveAssist.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\SchedulePasteAction.cs" />
     <Compile Include="Common\TimedWarningDialog.cs">
@@ -2045,12 +1986,6 @@
     <Compile Include="Forecasting\Forms\SkillPages\MultisiteDistributions.designer.cs">
       <DependentUpon>MultisiteDistributions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\WFControls\AddValuePopup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forecasting\Forms\WFControls\AddValuePopup.Designer.cs">
-      <DependentUpon>AddValuePopup.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forecasting\Forms\WFControls\WorkflowValidateView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2138,12 +2073,6 @@
     <Compile Include="Grouping\OptionalColumnGroupPage.cs" />
     <Compile Include="Grouping\TreeConstructor.cs" />
     <Compile Include="Grouping\TreeViewCreator.cs" />
-    <Compile Include="Intraday\IntradaySmartPartsArea.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Intraday\IntradaySmartPartsArea.Designer.cs">
-      <DependentUpon>IntradaySmartPartsArea.cs</DependentUpon>
-    </Compile>
     <Compile Include="Intraday\IntradayView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2151,12 +2080,6 @@
       <DependentUpon>IntradayView.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\EntityEventAggregator.cs">
-    </Compile>
-    <Compile Include="Matrix\ReportWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Matrix\ReportWindow.Designer.cs">
-      <DependentUpon>ReportWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Meetings\AddressBookView.cs">
       <SubType>Form</SubType>
@@ -2171,16 +2094,12 @@
     <Compile Include="Meetings\MeetingGeneralView.Designer.cs">
       <DependentUpon>MeetingGeneralView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meetings\MeetingPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Meetings\MeetingComposerView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Meetings\MeetingComposerView.Designer.cs">
       <DependentUpon>MeetingComposerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meetings\MeetingTimeChangedEventArgs.cs" />
     <Compile Include="Meetings\ModifyMeetingEventArgs.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\NumericCellColumnForSchedulePeriod.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\EditableTextColumnForPeriodGrids.cs" />
@@ -2197,7 +2116,6 @@
     <Compile Include="PeopleAdmin\GuiHelpers\FilteredPeopleHolder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\IRotationStateHolder.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\NumericCellColumnPeriod.cs" />
-    <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminComparers.cs" />
     <Compile Include="PeopleAdmin\Controls\PeopleAdminFilterPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2263,29 +2181,11 @@
       <DependentUpon>PeopleWorksheet.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\SchedulePeriodGridView.cs" />
-    <Compile Include="Permissions\AuthorizationStepPresenterControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Permissions\AuthorizationStepPresenterControl.Designer.cs">
-      <DependentUpon>AuthorizationStepPresenterControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Permissions\AuthorizationStepResultListScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Permissions\AuthorizationStepResultListScreen.Designer.cs">
-      <DependentUpon>AuthorizationStepResultListScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\BaseUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Common\Controls\Cells\NumericReadOnlyCell.cs" />
     <Compile Include="Permissions\PermissionsExplorerStateHolder.cs" />
-    <Compile Include="Permissions\MyAvailableDataRangePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Permissions\MyAvailableDataRangePanel.Designer.cs">
-      <DependentUpon>MyAvailableDataRangePanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Permissions\PermissionsExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2307,9 +2207,6 @@
     </Compile>
     <Compile Include="Common\ISelfDataHandling.cs" />
     <Compile Include="Common\GridHelper.cs" />
-    <Compile Include="Common\Controls\TimePeriodTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\IGuestDataHandling.cs" />
     <Compile Include="Common\PropertyPageAndWizard\PropertiesPages.cs">
       <SubType>Form</SubType>
@@ -2323,23 +2220,11 @@
     <Compile Include="Common\PropertyPageAndWizard\Wizard.designer.cs">
       <DependentUpon>Wizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\PropertyPageAndWizard\WizardWelcome.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\PropertyPageAndWizard\WizardWelcome.Designer.cs">
-      <DependentUpon>WizardWelcome.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\HandleBusinessRuleResponse.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\HandleBusinessRuleResponse.Designer.cs">
       <DependentUpon>HandleBusinessRuleResponse.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\TimePeriodBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\TimePeriodBox.Designer.cs">
-      <DependentUpon>TimePeriodBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\Forecaster.cs">
       <SubType>Form</SubType>
@@ -2375,13 +2260,6 @@
     <Compile Include="Forecasting\Forms\TaskOwnerWeekGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Permissions\AuthorizationSettingsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Permissions\AuthorizationSettingsPanel.Designer.cs">
-      <DependentUpon>AuthorizationSettingsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\DataHandlingStatusOption.cs" />
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
@@ -2392,12 +2270,6 @@
       <DependentUpon>FormClipboardSpecial.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ResourceOptimizationHelperWin.cs" />
-    <Compile Include="Scheduling\SchedulerRibbon.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulerRibbon.Designer.cs">
-      <DependentUpon>SchedulerRibbon.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\ScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\SchedulingScreen.cs">
       <SubType>Form</SubType>
@@ -2543,10 +2415,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.resx">
       <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspace.resx">
-      <DependentUpon>OutlookBarWorkspace.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\SkillResultHighlightGridControl.resx">
       <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
@@ -2742,10 +2610,6 @@
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Permissions\AuthorizationStepResultListScreen.resx">
-      <DependentUpon>AuthorizationStepResultListScreen.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\AbstractNavigator.resx">
       <DependentUpon>AbstractNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2762,17 +2626,9 @@
       <DependentUpon>Wizard.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\PropertyPageAndWizard\WizardWelcome.resx">
-      <DependentUpon>WizardWelcome.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\HandleBusinessRuleResponse.resx">
       <SubType>Designer</SubType>
       <DependentUpon>HandleBusinessRuleResponse.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\TimePeriodBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>TimePeriodBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\Forecaster.resx">
       <DependentUpon>Forecaster.cs</DependentUpon>
@@ -2789,10 +2645,6 @@
     <EmbeddedResource Include="Forecasting\Forms\WorkloadPages\OpenHourDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OpenHourDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Permissions\AuthorizationSettingsPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AuthorizationSettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Permissions\PermissionViewer.resx">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
@@ -2932,7 +2784,6 @@
     </Compile>
     <Compile Include="Scheduling\OverViewView.cs" />
     <Compile Include="Scheduling\PeriodView.cs" />
-    <Compile Include="Scheduling\DetailView.cs" />
     <Compile Include="Scheduling\WeekView.cs" />
     <Compile Include="Services\StateManager.cs" />
     <EmbeddedResource Include="licenses.licx" />
@@ -3114,9 +2965,6 @@
     <EmbeddedResource Include="Meetings\DailyRecurrenceView.resx">
       <DependentUpon>DailyRecurrenceView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Meetings\MeetingPanel.resx">
-      <DependentUpon>MeetingPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Payroll\DefinitionSets\MultiplicatorDefinitionView.resx">
       <DependentUpon>MultiplicatorDefinitionView.cs</DependentUpon>
     </EmbeddedResource>
@@ -3150,10 +2998,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\DateSelection\DateNavigateControlThinLayout.resx">
       <DependentUpon>DateNavigateControlThinLayout.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Intraday\IntradayOverviewArea.resx">
-      <DependentUpon>IntradayOverviewArea.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\ApplyLicense.resx">
@@ -3234,9 +3078,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ExportToScenarioResultView.resx">
       <DependentUpon>ExportToScenarioResultView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\OptimizationProgress.resx">
-      <DependentUpon>OptimizationProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersistConflictView.resx">
       <DependentUpon>PersistConflictView.cs</DependentUpon>
@@ -3367,16 +3208,8 @@
       <DependentUpon>LineControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\Drawing\RectangleUserControl.resx">
-      <DependentUpon>RectangleUserControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\Drawing\TransparentUserControl.resx">
       <DependentUpon>TransparentUserControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\Filters\FilterBox.resx">
-      <DependentUpon>FilterBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\Filters\FilterBoxItem.resx">
@@ -3413,10 +3246,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\PromptTextBox.resx">
       <DependentUpon>PromptTextBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\SaveAssist.resx">
-      <DependentUpon>SaveAssist.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\TimedWarningDialog.resx">
@@ -3515,10 +3344,6 @@
       <DependentUpon>WeekOpenHoursGrid.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\WFControls\AddValuePopup.resx">
-      <DependentUpon>AddValuePopup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\WorkflowValidateView.resx">
       <DependentUpon>WorkflowValidateView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3567,19 +3392,11 @@
       <DependentUpon>NameDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Intraday\IntradaySmartPartsArea.resx">
-      <DependentUpon>IntradaySmartPartsArea.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Intraday\IntradayView.resx">
       <DependentUpon>IntradayView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="licenses.licx" />
-    <EmbeddedResource Include="Matrix\ReportWindow.resx">
-      <DependentUpon>ReportWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Meetings\AddressBookView.resx">
       <DependentUpon>AddressBookView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3604,14 +3421,6 @@
       <DependentUpon>PeopleInsertScreen.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Permissions\AuthorizationStepPresenterControl.resx">
-      <DependentUpon>AuthorizationStepPresenterControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Permissions\MyAvailableDataRangePanel.resx">
-      <DependentUpon>MyAvailableDataRangePanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Permissions\PermissionsExplorer.resx">
       <DependentUpon>PermissionsExplorer.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3631,10 +3440,6 @@
     <EmbeddedResource Include="Scheduling\RequestReplyDialog.resx">
       <DependentUpon>RequestReplyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulerRibbon.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>SchedulerRibbon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\KpiSettings.resx">
       <DependentUpon>KpiSettings.cs</DependentUpon>

@@ -20,15 +20,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			initializeGrid();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public SkillResultHighlightGridControl(IContainer container)
-		{
-			container.Add(this);
-
-			InitializeComponent();
-			initializeGrid();
-		}
-
 		public event EventHandler<GoToDateEventArgs> GoToDate;
 
 		public void OnGoToDate(GoToDateEventArgs e)

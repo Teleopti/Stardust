@@ -153,23 +153,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new DateOnlyPeriod(minDate, maxDate);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetStartDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
-        {
-            IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
-            return GetStartDateInSelectedDays(selectedParts, personTimeZone);
-        }
         public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Min(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetEndDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
-        {
-            IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
-            return GetEndDateInSelectedDays(selectedParts, personTimeZone);
-        }
         public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
@@ -231,23 +219,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return validatorListCreator.BuildActiveValidatorList();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
-        public static IList<IDayOffLegalStateValidator> CreateLegalStateValidatorsToKeepWeekendNumbers(
-            ILockableBitArray bitArray,
-            IOptimizationPreferences optimizerPreferences)
-        {
-            MinMax<int> periodArea = bitArray.PeriodArea;
-            if (!optimizerPreferences.DaysOff.ConsiderWeekBefore)
-                periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
-            IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
-            IDayOffLegalStateValidatorListCreator validatorListCreator =
-                new DayOffOptimizationWeekendLegalStateValidatorListCreator(optimizerPreferences.DaysOff,
-                     weekendDays,
-                     periodArea);
-
-            return validatorListCreator.BuildActiveValidatorList();
-        }
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
             ILockableBitArray scheduleMatrixArray,
@@ -257,13 +228,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 
 			return dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
-        }
-
-		[Obsolete("Never used")]
-        public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
-        {
-            IEnumerable<IPerson> persons = CreatePersonsList(clipHandler);
-            SetConsiderShortBreaks(persons, period, options, container);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]

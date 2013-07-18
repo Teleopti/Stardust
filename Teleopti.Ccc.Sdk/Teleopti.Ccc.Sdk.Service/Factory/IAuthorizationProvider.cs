@@ -6,11 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-    public interface IAuthorizationProvider
-    {
-        IAuthorizationService AuthorizationService { get; }
-    }
-
     /// <summary>
     /// This one is used to avoid creating all possible instances for every instance of the SDK.
     /// </summary>

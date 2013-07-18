@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule
 			return ((int) state).ToString();
 		}
 
-		public string FormatState(DayState state)
-		{
-			return ((int) state).ToString();
-		}
-
 		public string StyleClassToday(DayViewModelBase model)
 		{
 			if (model.Date.Equals(DateOnly.Today))

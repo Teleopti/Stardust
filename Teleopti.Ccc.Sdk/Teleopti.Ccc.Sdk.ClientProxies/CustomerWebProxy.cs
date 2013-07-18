@@ -91,11 +91,6 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
 
     public class CustomerWebProxy : ClientBase<ISingleSignOnServiceSoap>
     {
-        public string InitializeSSO(string indata)
-        {
-            return Channel.InitializeSSO(indata);
-        }
-
         public InitializeSSOArrayResponse InitializeSSOArray(InitializeSSOArrayRequest request)
         {
             return Channel.InitializeSSOArray(request);

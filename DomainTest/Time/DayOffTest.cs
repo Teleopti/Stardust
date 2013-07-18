@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyPropertiesAreSetUsingCreate()
         {
-            var duration = TimeFactory.CreateTimeSpan(24);
+            var duration = TimeSpan.FromHours(24);
 
 			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             Assert.AreEqual(anchor, per.Anchor);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyPropertiesAreSetUsingSetter()
         {
-            TimeSpan duration = TimeFactory.CreateTimeSpan(24);
+            TimeSpan duration = TimeSpan.FromHours(24);
             //Percent flexibility = new Percent(0.66d);
             DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             //per.Anchor = anchor;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyOverloadedOperatorsWork()
         {
-            TimeSpan duration = TimeFactory.CreateTimeSpan(24);
+            TimeSpan duration = TimeSpan.FromHours(24);
             //Percent flexibility = new Percent(0.66d);
 			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             DayOff per2 = new DayOff();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyGetHashCodeWorks()
         {
-            TimeSpan duration = TimeFactory.CreateTimeSpan(4);
+            TimeSpan duration = TimeSpan.FromHours(4);
             //Percent flexibility = new Percent(0.66);
 			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             IDictionary<DayOff, int> dic = new Dictionary<DayOff, int>();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyCorrectAnchorDateTimePeriodIsUtc()
         {
 
-            TimeSpan duration = TimeFactory.CreateTimeSpan(4);
+            TimeSpan duration = TimeSpan.FromHours(4);
             //Percent flexibility = new Percent(0.66);
 			DayOff per = new DayOff(DateTime.SpecifyKind(anchor, DateTimeKind.Local), duration, flexibility, description, displayColor, payrollCode);
             Assert.AreEqual(per,per);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         //[ExpectedException(typeof (ArgumentException))]
         //public void VerifyCorrectAnchorDateTimePeriodIsUtcUsingSetter()
         //{
-        //    TimeSpan duration = TimeFactory.CreateTimeSpan(4);
+        //    TimeSpan duration = TimeSpan.FromHours(4);
         //    //Percent flexibility = new Percent(0.66d);
         //    DayOff per = new DayOff(anchor, duration, flexibility);
 

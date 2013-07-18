@@ -75,15 +75,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(QueueAggId, _target2.QueueAggId);
             Assert.AreEqual(string.Empty, _target2.LogObjectName);
             Assert.AreEqual(false, _target2 is IBelongsToBusinessUnit);
-            Assert.IsNotNull(_target2.LayerCollection);
-
-        }
-
-        [Test]
-        public void VerifyOnAddIsCalled()
-        {
-            const ILayer<IStat> layer = null;
-            _target2.OnAdd(layer);
         }
 
         /// <summary>

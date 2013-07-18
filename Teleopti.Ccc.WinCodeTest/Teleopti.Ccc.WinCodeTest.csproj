@@ -808,14 +808,10 @@
     <Compile Include="Scheduler\GridlockManagerTest.cs" />
     <Compile Include="Scheduler\GridlockTest.cs" />
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
-    <Compile Include="Presentation\PersonListBoxPresenterTest.cs" />
-    <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
     <Compile Include="Common\LanguageResourceHelperTest.cs" />
-    <Compile Include="Presentation\BusinessUnitListBoxPresenterTest.cs" />
-    <Compile Include="Presentation\TeamListBoxPresenterTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AfterSavedEventArgsTest.cs" />
