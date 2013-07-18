@@ -77,5 +77,14 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scheduleParts"></param>
 		/// <returns></returns>
 		IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts);
+
+	    
+		/// <summary>
+		/// Modifies the specified schedule part.
+		/// </summary>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
+		/// <param name="newBusinessRuleCollection">business rules</param>
+	    void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
     }
 }

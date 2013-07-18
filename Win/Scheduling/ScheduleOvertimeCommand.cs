@@ -73,8 +73,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
 												 overtimeLayerPeriod,
 												 overtimePreferences.OvertimeType);
-					_schedulePartModifyAndRollbackService.Modify(scheduleDay,
-																 NewBusinessRuleCollection.AllForScheduling(
+					if (overtimePreferences.ScheduleTag.Description != "<None>")
+					{
+						IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
+						_schedulePartModifyAndRollbackService.Modify(scheduleDay, scheduleTagSetter, NewBusinessRuleCollection.AllForScheduling(
+																	 _schedulerStateHolder.SchedulingResultState));
+					}
+					else
+					_schedulePartModifyAndRollbackService.Modify(scheduleDay, NewBusinessRuleCollection.AllForScheduling(
 																	 _schedulerStateHolder.SchedulingResultState));
 					OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 					resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
