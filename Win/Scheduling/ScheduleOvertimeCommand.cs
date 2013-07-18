@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -20,19 +22,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
+		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private BackgroundWorker _backgroundWorker;
 
 		public ScheduleOvertimeCommand(ISchedulingResultStateHolder schedulingResultStateHolder,
 		                               IOvertimeLengthDecider overtimeLengthDecider,
 		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                               IResourceCalculateDelayer resourceCalculateDelayer)
+		                               IResourceCalculateDelayer resourceCalculateDelayer,
+		                               ISchedulerStateHolder schedulerStateHolder)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_resourceCalculateDelayer = resourceCalculateDelayer;
+			_schedulerStateHolder = schedulerStateHolder;
 		}
-		
+
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -62,7 +67,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				 scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
 				                              overtimeLayerPeriod,
 				                              overtimePreferences.OvertimeType);
-				_schedulePartModifyAndRollbackService.Modify(scheduleDay);
+				_schedulePartModifyAndRollbackService.Modify(scheduleDay,
+				                                             NewBusinessRuleCollection.AllForScheduling(
+					                                             _schedulerStateHolder.SchedulingResultState));
 				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 				_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 																		  overtimeLayerPeriod,
