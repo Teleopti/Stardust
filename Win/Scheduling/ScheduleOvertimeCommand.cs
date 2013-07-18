@@ -49,34 +49,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			foreach (var dateOnly in selectedDates)
 			{
-			    if (checkIfCancelPressed()) return;
-                //Randomly select one of the selected agents that does not end his shift with overtime
-				var person = selectPersonRandomly(selectedPersons, dateOnly);
-				var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-				if (scheduleDay.SignificantPart() != SchedulePartView.MainShift) continue;
-                var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
-				
-				//Calculate best length (if any) for overtime
-                var overtimeLayerLength = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
-				                                                        overtimePreferences.SkillActivity,
-				                                                        new MinMax<TimeSpan>(
-					                                                        overtimePreferences.SelectedTimePeriod.StartTime,
-					                                                        overtimePreferences.SelectedTimePeriod.EndTime));
-				if(overtimeLayerLength ==TimeSpan.Zero)
-					continue;
+				var persons = orderCandidatesRandomly(selectedPersons, dateOnly);
+				foreach (var person in persons)
+				{
+					if (checkIfCancelPressed()) return;
+					//Randomly select one of the selected agents that does not end his shift with overtime
+					var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+					if (scheduleDay.SignificantPart() != SchedulePartView.MainShift) continue;
+					var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
 
-				//extend shift
-				var overtimeLayerPeriod = new DateTimePeriod(scheduleEndTime, scheduleEndTime.Add(overtimeLayerLength));
-				 scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
-				                              overtimeLayerPeriod,
-				                              overtimePreferences.OvertimeType);
-				_schedulePartModifyAndRollbackService.Modify(scheduleDay,
-				                                             NewBusinessRuleCollection.AllForScheduling(
-					                                             _schedulerStateHolder.SchedulingResultState));
-				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
-				resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-																		  overtimeLayerPeriod,
-															new List<IScheduleDay> { scheduleDay });
+					//Calculate best length (if any) for overtime
+					var overtimeLayerLength = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
+																			overtimePreferences.SkillActivity,
+																			new MinMax<TimeSpan>(
+																				overtimePreferences.SelectedTimePeriod.StartTime,
+																				overtimePreferences.SelectedTimePeriod.EndTime));
+					if (overtimeLayerLength == TimeSpan.Zero)
+						continue;
+
+					//extend shift
+					var overtimeLayerPeriod = new DateTimePeriod(scheduleEndTime, scheduleEndTime.Add(overtimeLayerLength));
+					scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
+												 overtimeLayerPeriod,
+												 overtimePreferences.OvertimeType);
+					_schedulePartModifyAndRollbackService.Modify(scheduleDay,
+																 NewBusinessRuleCollection.AllForScheduling(
+																	 _schedulerStateHolder.SchedulingResultState));
+					OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+					resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+																			  overtimeLayerPeriod,
+																new List<IScheduleDay> { scheduleDay });
+				}
 			}
 		}
 
@@ -89,10 +92,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private IPerson selectPersonRandomly(IList<IPerson> persons, DateOnly dateOnly)
+		private IEnumerable<IPerson> orderCandidatesRandomly(IEnumerable<IPerson> persons, DateOnly dateOnly)
 		{
 			var personsHaveNoOvertime = new List<IPerson>();
-			foreach (var person in persons)
+			var randomizedPersons = persons.Randomize();
+			foreach (var person in randomizedPersons)
 			{
 				var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
 				var projection = _projectionProvider.Projection(schedule);
@@ -102,9 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					continue;
 				personsHaveNoOvertime.Add(person);
 			}
-			if (personsHaveNoOvertime.Count > 0)
-				return personsHaveNoOvertime.GetRandom();
-			return null;
+			return personsHaveNoOvertime;
 		}
 
 
