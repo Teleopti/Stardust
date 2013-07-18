@@ -1298,8 +1298,6 @@
     <Compile Include="Security\AuthorizationEntities\ApplicationFunction.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationRole.cs" />
     <Compile Include="Security\AuthorizationEntities\AuthorizationSettings.cs" />
-    <Compile Include="Security\PermissionTypeOption.cs" />
-    <Compile Include="Security\AuthorizationEntities\IAuthenticationInfo.cs" />
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />

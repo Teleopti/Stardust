@@ -35,9 +35,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _dateList2 = DateFactory.CreateDateCollection(new CultureInfo("en-GB"));
             _dateList3 = DateFactory.CreateDateCollection(new CultureInfo("en-US"));
 
-            //_dateList = DateFactory.CreateDateCollection2(_swedishCulture);
-            //var period = new DateTimePeriod(_dateList[0].DateDate, _dateList[4].DateDate);
-
             _dataTable = new DataTable();
             _dataTable.Locale = Thread.CurrentThread.CurrentCulture;
             DateInfrastructure.AddColumnsToDataTable(_dataTable);
@@ -58,7 +55,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             // Today it is not sure how we will handle month and week names. Maybe it will be made
             // localized from the data amrt instead. Will see...
             Assert.AreEqual(2007, _dateList2[0].Year);
-            Assert.AreEqual(200705, _dateList1[1].YearMonth);
+            Assert.AreEqual("200705", _dateList1[1].YearMonth);
             Assert.AreEqual("May", _dateList2[1].MonthName);
             Assert.AreEqual("januari", _dateList1[0].MonthName);
             Assert.AreEqual(1, _dateList1[0].DayInMonth);
@@ -70,7 +67,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             Assert.AreEqual("2007Q1", _dateList1[0].Quarter);
             Assert.AreEqual("2007Q2", _dateList1[1].Quarter);
-            Assert.AreEqual("2007Q3", _dateList1[5].Quarter);
+            Assert.AreEqual("2006Q3", _dateList1[5].Quarter);
             Assert.AreEqual("2006Q4", _dateList1[2].Quarter);
         }
 
@@ -88,13 +85,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(1, _dateList1[0].WeekNumber); //SE
             Assert.AreEqual(52, _dateList1[2].WeekNumber); //SE
             Assert.AreEqual(1, _dateList2[0].WeekNumber); //GB
-            Assert.AreEqual(53, _dateList2[2].WeekNumber); //GB
+            Assert.AreEqual(52, _dateList2[2].WeekNumber); //GB
             Assert.AreEqual(1, _dateList3[0].WeekNumber); //US
             Assert.AreEqual(53, _dateList3[2].WeekNumber); //US
 
             Assert.AreEqual("200701", _dateList1[0].YearWeek); //SE
             Assert.AreEqual("200652", _dateList1[2].YearWeek); //SE
-            Assert.AreEqual("200653", _dateList2[2].YearWeek); //GB
+            Assert.AreEqual("200652", _dateList2[2].YearWeek); //GB
         }
 
         [Test]

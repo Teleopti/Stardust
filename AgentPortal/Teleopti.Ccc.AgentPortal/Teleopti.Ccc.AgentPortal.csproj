@@ -469,7 +469,6 @@
       <DependentUpon>ChangePasswordControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Configuration\Columns\SFGridColumnBase.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridColumnCellChangedEventArgs.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelper.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDescriptionNameColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />

@@ -241,25 +241,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
 		}
 
-		private void expectCallForCheckerForMatrix2(IPerson person, bool isSchedule)
-		{
-			IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
-			ISchedulingResultStateHolder schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			Expect.Call(_matrix2.SchedulePeriod).Return(virtualSchedulePeriod);
-			Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
-
-
-			Expect.Call(_matrix2.SchedulingStateHolder).Return(schedulingResultStateHolder);
-			Expect.Call(_matrix2.Person).Return(person).Repeat.AtLeastOnce();
-			Expect.Call(schedulingResultStateHolder.Schedules[person]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
-			Expect.Call(scheduleDay.IsScheduled()).Return(isSchedule);
-
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldContinueScheduleSelectedBlockForShiftsAvailable()
 		{
