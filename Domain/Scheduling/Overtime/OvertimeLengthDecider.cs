@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var skills = aggregateSkills(person, dateOnly).Where(x=>x.Activity == activity).ToList();
 			if (skills.Count == 0) return TimeSpan.Zero;
 			var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
-			var skillDay = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly}).FirstOrDefault();
-			if (skillDay == null) return TimeSpan.Zero;
-			var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
+			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
+			if (skillDays == null) return TimeSpan.Zero;
+			var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDays.SelectMany(x=>x.SkillStaffPeriodCollection));
 			mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 			var durationValuePairs = new List<KeyValuePair<TimeSpan, double>>();
 			var minEndTime = overtimeStartTime.Add(duration.Minimum);

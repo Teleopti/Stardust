@@ -106,10 +106,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (var person in randomizedPersons)
 			{
 				var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+				if (schedule.SignificantPart() != SchedulePartView.MainShift) continue;
 				var projection = _projectionProvider.Projection(schedule);
-			    if(projection.Last().DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
+				var lastLayer = projection.Last();
+				if (lastLayer.DefinitionSet != null && lastLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
 					continue;
-				if (((VisualLayer)projection.Last()).HighestPriorityAbsence != null)
+				if (((VisualLayer)lastLayer).HighestPriorityAbsence != null)
 					continue;
 				personsHaveNoOvertime.Add(person);
 			}

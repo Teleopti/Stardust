@@ -234,6 +234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
             builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
             builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
+			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)
