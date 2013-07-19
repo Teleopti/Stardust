@@ -95,8 +95,6 @@ namespace Teleopti.Ccc.Win.Reporting
                     case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
                         RefreshScheduleTimeVersusTarget();
                         break;
-                    default:
-                        break;
                 }
             }
             catch (DataSourceException dataSourceException)
@@ -105,13 +103,12 @@ namespace Teleopti.Ccc.Win.Reporting
                 {
                     view.ShowDialog();
                 }
-
-                return;
             }
         }
         
         void _backgroundWorkerLoadReport_DoWork(object sender, DoWorkEventArgs e)
         {
+            setThreadCulture();
             switch (_reportDetail.FunctionPath)
             {
                 case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
@@ -124,11 +121,15 @@ namespace Teleopti.Ccc.Win.Reporting
                 case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
                         e.Result = GetReportDataForScheduledTimeVersusTarget(e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
                     break;
-                default:
-                    break;
             }
             
             Application.DoEvents();
+        }
+
+        private static void setThreadCulture()
+        {
+            Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.Current.Regional.Culture;
+            Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.Current.Regional.UICulture;
         }
 
         void _backgroundWorkerLoadReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
