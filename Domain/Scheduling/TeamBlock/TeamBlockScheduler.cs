@@ -113,7 +113,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						                      selectedPeriod);
 					}
 				}
-				allSelectedDaysAreScheduled = selectedPeriod.DayCollection().All(x => TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, x));
+				allSelectedDaysAreScheduled = selectedPeriod.DayCollection()
+					              .Where(x => teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Contains(x))
+					              .All(x => TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, x));
 				if (!allSelectedDaysAreScheduled)
 				{
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, _rollbackService, teamBlockInfo);
