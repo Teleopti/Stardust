@@ -79,11 +79,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
 							  Return(new List<ISkillDay> { _skillDay1 });
 				
-				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
-
 				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
 				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-					 skillIntervalDataList).Repeat.AtLeastOnce();
+					 skillIntervalDataList);
 				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
 						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
 			}
@@ -117,8 +115,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			{
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
 							  Return(new List<ISkillDay> { _skillDay1 });
-
-				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
 
 				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
 				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
