@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private DateTime _date;
 		private ISkillDay _skillDay1;
-		private ISkillStaffPeriod _skillStaffPeriod;
-		private ReadOnlyCollection<ISkillStaffPeriod> _skillStaffPeriodCollection;
 		private IPerson _person;
 		private ISkill _skill1;
 		private ISkill _skill2;
@@ -38,12 +36,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_overtimeSkillIntervalDataDivider = _mocks.StrictMock<IOvertimeSkillIntervalDataDivider>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillDay1 = _mocks.StrictMock<ISkillDay>();
-			_skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
 			_skill1 = SkillFactory.CreateSkill("1");
 			_skill2 = SkillFactory.CreateSkill("2");
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue,
 																					new List<ISkill> { _skill1, _skill2 });
-			_skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _skillStaffPeriod });
 			_target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
 			                                    _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder);
 		}
