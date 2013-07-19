@@ -350,18 +350,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
         #endregion
 
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IGeneralTemplateViewModel> result = this.Sort((ISortColumn<IGeneralTemplateViewModel>)GridColumns[columnIndex], 
-                    Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IGeneralTemplateViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
         public override void Add()
         {
         }

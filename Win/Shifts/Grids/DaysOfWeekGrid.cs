@@ -149,18 +149,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.Invalidate();
         }
 
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IDaysOfWeekViewModel> result = this.Sort((ISortColumn<IDaysOfWeekViewModel>) GridColumns[columnIndex],
-                                                         Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IDaysOfWeekViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
         #region Overriden Methods
 
         public override void Add()

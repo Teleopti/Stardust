@@ -2,22 +2,6 @@
 
 namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
 {
-    public enum ClipboardOperation
-    {
-        /// <summary>
-        /// Copy
-        /// </summary>
-        Copy,
-        /// <summary>
-        /// Cut
-        /// </summary>
-        Cut,
-        /// <summary>
-        /// Paste
-        /// </summary>
-        Paste
-    }
-
     public interface IExplorerView
     {
         /// <summary>

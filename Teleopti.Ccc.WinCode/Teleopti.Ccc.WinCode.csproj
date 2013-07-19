@@ -723,9 +723,7 @@
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\IDateTimeBaseConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\IDateTimeParser.cs" />
-    <Compile Include="Converters\IParseBehavior.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayerConverter.cs" />
-    <Compile Include="Converters\ParseBehavior.cs" />
     <Compile Include="Events\EventExtensions.cs" />
     <Compile Include="Events\GenericEvent.cs" />
     <Compile Include="FileImport\DimQueueTable.cs" />

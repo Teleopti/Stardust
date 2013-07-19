@@ -107,7 +107,6 @@
     <Compile Include="Domain\BlockFinderType.cs" />
     <Compile Include="Domain\BlockSchedulingServiceEventArgs.cs" />
     <Compile Include="Domain\BudgetCalculationResult.cs" />
-    <Compile Include="Domain\BudgetSection.cs" />
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
@@ -393,8 +392,6 @@
     <Compile Include="Domain\IMultiplicatorLayer.cs" />
     <Compile Include="Domain\IMultiplicatorProjectionService.cs" />
     <Compile Include="Domain\IMultisiteDay.cs" />
-    <Compile Include="Domain\IMyReportAdherenceInfo.cs" />
-    <Compile Include="Domain\IMyReportLogOnInfo.cs" />
     <Compile Include="Domain\IOptionalColumn.cs" />
     <Compile Include="Domain\IOptionalColumnValue.cs" />
     <Compile Include="Domain\IOriginator.cs" />
@@ -564,7 +561,6 @@
     <Compile Include="Domain\IWorkloadDayBase.cs" />
     <Compile Include="Domain\IWorkShiftFilterResult.cs" />
     <Compile Include="Domain\IWorkShiftFinderResult.cs" />
-    <Compile Include="Domain\IMinMaxContractTimeCalculator.cs" />
     <Compile Include="Domain\ModifyEventArgs.cs" />
     <Compile Include="Domain\ScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\ScheduleModifier.cs" />
@@ -579,8 +575,6 @@
     <Compile Include="Domain\StartTimeLimitation.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
-    <Compile Include="Domain\IMyReportScheduleInfo.cs" />
-    <Compile Include="Domain\IMyReportVisualPayloadInfo.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
@@ -615,7 +609,6 @@
     <Compile Include="Domain\ILayerCollectionOwner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\ILayerSorter.cs" />
     <Compile Include="Domain\ILoadAggregateById.cs" />
     <Compile Include="Domain\IMeetingPerson.cs" />
     <Compile Include="Domain\InParameter.cs">
@@ -678,7 +671,6 @@
     <Compile Include="Domain\ISkillDayTemplate.cs" />
     <Compile Include="Domain\ISkillRestrictionSet.cs" />
     <Compile Include="Domain\ISkillType.cs" />
-    <Compile Include="Domain\IStat.cs" />
     <Compile Include="Domain\IStateHolderReader.cs" />
     <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\IStatisticTask.cs" />

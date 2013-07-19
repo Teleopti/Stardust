@@ -40,14 +40,6 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
             Dispose(false);
         }
 
-        protected virtual CommandBehavior CmdBehavior
-        {
-            get
-            {
-                return CommandBehavior.CloseConnection;
-            }
-        }
-
         public void AddProcParameter(IDbDataParameter parameter)
         {
             NotNull("parameter", parameter);

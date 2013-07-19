@@ -18,15 +18,6 @@ namespace Teleopti.Ccc.WinCode.Common
     /// </remarks>
     public class LanguageResourceHelper
     {
-        #region Constants 
-
-        /// <summary>
-        /// Placeholder for the text Singular.
-        /// </summary>
-        private const string Singular = "Singular";
-
-        #endregion
-
         #region Set texts
 
         ILocalized _targetControl;

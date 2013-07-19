@@ -130,22 +130,6 @@ namespace Teleopti.Ccc.Win.Shifts
         }
 
         /// <summary>
-        /// Moves up.
-        /// </summary>
-        public virtual void MoveUp()
-        {
-            
-        }
-
-        /// <summary>
-        /// Moves down.
-        /// </summary>
-        public virtual void MoveDown()
-        {
-            
-        }
-
-        /// <summary>
         /// Refreshes the view.
         /// </summary>
         public virtual void RefreshView()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -104,14 +103,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (_manualResetEvent != null)
         		_manualResetEvent.Set();
         }
-
-		public ManualResetEvent ManualResetEvent
-		{
-			get { return _manualResetEvent; }
-		}
-
-		
-
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(TimeZoneInfo agentTimeZone, 

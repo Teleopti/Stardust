@@ -26,7 +26,6 @@ using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Common.UI.OutlookControls.Workspaces;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
