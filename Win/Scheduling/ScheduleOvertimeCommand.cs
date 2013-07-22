@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
 				var projection = _projectionProvider.Projection(schedule);
-			    if(projection.Last().DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
+			    if (projection.Last().DefinitionSet == null) 
+                    continue;
+                if(projection.Last().DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
 					continue;
 				if (((VisualLayer)projection.Last()).HighestPriorityAbsence != null)
 					continue;
