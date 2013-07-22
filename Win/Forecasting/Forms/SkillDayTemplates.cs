@@ -61,11 +61,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Text = string.Concat(Text, " - ", string.IsNullOrEmpty(_newSkillName) ? _skill.Name : _newSkillName);
         }
 
-		public void ShowNewSkillName(string name)
-		{
-			_newSkillName = name;
-		}
-
         private void SetColor()
         {
             tabControlAdvWeekDays.SelectedTab.TabForeColor = ColorHelper.TabForegroundColor();

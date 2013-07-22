@@ -110,22 +110,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         #region Navigation
 
-        public void ShowWorkloadDayTemplateManager()
-        {
-            tabControlAdv1.SelectedTab = tabTemplation;
-            tabControlAdv1.TabPages.Remove(tabSeason);
-            tabControlAdv1.TabPages.Remove(tabValidation);
-        }
-
-        public void ShowValidateManager()
-        {
-            tabControlAdv1.SelectedTab = tabValidation;
-            tabControlAdv1.TabPages.Remove(tabSeason);
-            tabControlAdv1.TabPages.Remove(tabTemplation);
-            btnForward.Visible = false;
-            btnBack.Visible = false;
-        }
-
         private void forward_clicked(object sender, EventArgs e)
         {
             GoForward();

@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _model.InitializeOutliersByWorkDate();
         }
 
-        public void SetValidatedVolumeDays(IList<IValidatedVolumeDay> days)
-        {
-            _model.SetValidatedVolumeDays(days);
-        }
-
         public void LoadWorkloadDayTemplates(IList<DateOnlyPeriod> dates)
         {
             _model.LoadWorkloadDayTemplates(dates);

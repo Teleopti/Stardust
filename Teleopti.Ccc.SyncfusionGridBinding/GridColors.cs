@@ -7,9 +7,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 	{
 		public Color ColorHolidayCell{ get; set;}
 		public Color ColorHolidayHeader { get; set; }
-		public Color ColorEditableCell { get; set; }
 		public Color ColorReadOnlyCell { get; set; }
 		public BrushInfo ReadOnlyBackgroundBrush { get; set; }
-		public BrushInfo UnderstaffingBrush { get; set; }
 	}
 }

@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     typeof(IPersistableScheduleData),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-            _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
-                                                     typeof(IMeeting));
+        	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
+        	                                         typeof (IMeetingChangedEntity));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
                                                     period.StartDateTime,

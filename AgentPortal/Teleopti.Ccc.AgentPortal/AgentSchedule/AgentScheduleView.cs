@@ -182,26 +182,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Sets the color theme.
         /// </summary>
         /// <param name="colorTheme">The color theme.</param>
-        /// <remarks>
         public override void SetColorTheme(ScheduleAppointmentColorTheme colorTheme) 
         {
             base.SetColorTheme(colorTheme);
             Refresh(false);
         }
 
-        public void PersistScheduleAppointment(ScheduleAppointmentTypes appointmentType, Dto dto, double changedMinuteLength)
-        {
-            Presenter.PersistScheduleAppointment(appointmentType, dto, changedMinuteLength);
-        }
-
-        /// <summary>
-        /// Persists the schedule appointment.
-        /// </summary>
-        public void PersistScheduleAppointments()
-        {
-            Presenter.PersistScheduleAppointments();
-        }
-        
         /// <summary>
         /// Deletes the schedule appointments.
         /// </summary>
@@ -272,6 +258,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 	    /// <param name="clipHandler">The clip handler.</param>
 	    /// <param name="legendLoader"></param>
 	    public AgentScheduleView(CustomScheduleControl scheduleControl, AgentScheduleStateHolder scheduleStateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler, ILegendLoader legendLoader)
+             : this()
         {
             Presenter = new AgentSchedulePresenter(this, scheduleStateHolder, clipHandler);
             _scheduleControl = scheduleControl;

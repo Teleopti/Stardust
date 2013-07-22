@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			datePicker.Value = defaultDate;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
-		    _presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);
+            _presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);
         }
 
 		private void FilterOvertimeAvailabilityView_Load(object sender, EventArgs e)
@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var nextFullHour = TimeSpan.FromHours(Math.Ceiling(timeOfDay.TotalHours));
 			outlookTimePickerFrom.SetTimeValue(nextFullHour);
 			outlookTimePickerTo.SetTimeValue(nextFullHour.Add(TimeSpan.FromHours(1)));
-			_presenter.Initialize();
 		}
 
 		public DateOnly SelectedDate
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    var endTime = outlookTimePickerTo.TimeValue();
 		    if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 			    endTime = endTime.Value.Add(TimeSpan.FromDays(1));
-		    _presenter.Filter(startTime.Value, endTime.Value);
+            _presenter.Filter(startTime.Value, endTime.Value, new DateOnly(datePicker.Value));
 			DialogResult = DialogResult.OK;
 		    Close();
 	    }

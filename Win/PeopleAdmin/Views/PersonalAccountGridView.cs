@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.CellModels.Add("GridInCell", new GridInCellModel(Grid.Model));
 			if (!Grid.CellModels.ContainsKey("NumericCell"))
 				Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
-            Grid.CellModels.Add("TimeSpanLongHourMinutesCell", new TimeSpanLongHourMinutesCellModel(Grid.Model));
+            Grid.CellModels.Add("TimeSpanLongHourMinutesCell", new TimeSpanDurationCellModel(Grid.Model));
 
             var cellModel = new GridDropDownMonthCalendarAdvCellModel(Grid.Model);
             cellModel.HideNoneButton();
@@ -1420,7 +1420,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             DeletePersonAccounts();
         }
 
-        internal override void PasteSpecial<T>(object sender, T eventArgs)
+        internal void PasteSpecial<T>(object sender, T eventArgs)
         {
             var gridRangeInfoList = Grid.Model.Selections.Ranges;
 
@@ -1457,7 +1457,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.Refresh();
         }
 
-        internal override void CopySpecial<T>(object sender, T eventArgs)
+        internal void CopySpecial<T>(object sender, T eventArgs)
         {
             if (Grid.Model.CurrentCellInfo == null)
             {

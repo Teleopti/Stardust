@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [SetUp]
         public void Setup()
         {
-            _avgWorkTime = TimeFactory.CreateTimeSpan(8);
+            _avgWorkTime = TimeSpan.FromHours(8);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyWorkTimeLimitWorks()
         {
-            WorkTime workTime = new WorkTime(TimeFactory.CreateTimeSpan(25));
+            WorkTime workTime = new WorkTime(TimeSpan.FromHours(25));
             Assert.AreEqual(workTime, workTime);
         }
     }

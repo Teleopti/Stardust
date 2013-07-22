@@ -472,15 +472,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// </summary>
         internal void CreateCellModels()
         {
-            // Simple singleton check
-            //if (ViewGrid.CellModels.Count != 0) return;
-
             if (!ViewGrid.CellModels.ContainsKey("TotalDayOffCell"))
                 ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0});
             if (!ViewGrid.CellModels.ContainsKey("TotalTimeCell"))
-                ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanLongHourMinutesStaticCellModel(ViewGrid.Model));
-            if (!ViewGrid.CellModels.ContainsKey("TimeCellModel"))
-                ViewGrid.CellModels.Add("TimeCellModel", new TimeCellModel(ViewGrid.Model));
+                ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionSummaryViewCellModel"))
                 ViewGrid.Model.CellModels.Add("RestrictionSummaryViewCellModel", new RestrictionSummaryViewCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionWeekHeaderViewCellModel"))

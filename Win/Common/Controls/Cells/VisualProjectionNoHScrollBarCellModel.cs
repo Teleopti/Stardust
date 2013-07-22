@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;

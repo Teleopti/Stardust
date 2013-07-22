@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
@@ -23,18 +22,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
         {
             period1 = new TimePeriod(new TimeSpan(2, 0, 0), new TimeSpan(16, 0, 0));
             period2 = new TimePeriod(new TimeSpan(18, 0, 0), new TimeSpan(23, 0, 0));
-        }
-
-        [Test, SetCulture("sv-SE")]
-        public void CanReturnCorrectOpenHourString()
-        {
-            period1 = new TimePeriod(new TimeSpan(2, 0, 0), new TimeSpan(16, 0, 0));
-            period2 = new TimePeriod(new TimeSpan(18, 0, 0), new TimeSpan(23, 0, 0));
-            List<TimePeriod> periods = new List<TimePeriod>();
-            periods.Add(period1);
-            periods.Add(period2);
-            string expectedString = "02:00 - 16:00; 18:00 - 23:00";
-            Assert.AreEqual(expectedString, OpenHourHelper.OpenHoursToString(periods));
         }
 
         [Test]

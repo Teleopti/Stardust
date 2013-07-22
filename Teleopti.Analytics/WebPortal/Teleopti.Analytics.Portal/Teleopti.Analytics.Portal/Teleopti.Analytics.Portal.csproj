@@ -182,7 +182,6 @@
       <DependentUpon>KeepAlive.aspx</DependentUpon>
     </Compile>
     <Compile Include="PerformanceManager\ReportInstanceHandler.cs" />
-    <Compile Include="PerformanceManager\Settings.cs" />
     <Compile Include="PerformanceManager\ShowReport.aspx.cs">
       <DependentUpon>ShowReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

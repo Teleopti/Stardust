@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.Location = new System.Drawing.Point(0, 0);
             Grid.Visible = true;
 
-            Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanHourMinutesOrEmptyCellModel(Grid.Model));
-			Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanLongHourMinutesOrEmptyCellModel(Grid.Model));
+            Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanTimeOfDayCellModel(Grid.Model){AllowEmptyCell = true});
+			Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(Grid.Model){AllowEmptyCell = true});
 			Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
             Grid.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications); 
@@ -310,23 +310,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         internal virtual void AddNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
 
-        internal virtual void InsertNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void InsertNewGridColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void DeleteOptionalColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void ChangeOptionalColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
         internal virtual void AddNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
 
-        internal virtual void InsertNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
-
         internal virtual void DeleteSelectedGridRows<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void CopySpecial<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void PasteSpecial<T>(object sender, T eventArgs) where T : EventArgs { }
 
         internal virtual void ViewDataSaved<T>(object sender, T eventArgs) where T : EventArgs { }
 

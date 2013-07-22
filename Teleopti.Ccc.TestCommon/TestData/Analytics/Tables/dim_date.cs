@@ -105,11 +105,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 				.ToArray();
 		}
 
-		public static int FindDateIdByDate(this IEnumerable<DataRow> rows, DateTime date)
-		{
-			return rows.FindDateIdsByDate(date).Single();
-		}
-
 		public static DateTime FindDateByDateId(this IEnumerable<DataRow> rows, int date_id)
 		{
 			return (

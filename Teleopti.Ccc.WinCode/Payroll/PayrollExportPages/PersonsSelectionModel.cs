@@ -13,11 +13,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
             _selectedPersons.Add(person);
         }
 
-        public void RemovePerson(IPerson person)
-        {
-            _selectedPersons.Remove(person);
-        }
-
         public IEnumerable<IPerson> SelectedPersons
         {
             get { return _selectedPersons; }

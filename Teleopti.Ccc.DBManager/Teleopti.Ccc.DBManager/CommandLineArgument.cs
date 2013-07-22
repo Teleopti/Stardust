@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.DBManager
         private bool _patchMode;
         private string _pathToDbManager = string.Empty;
 
-        private CommandLineArgument() { }
-
         public CommandLineArgument(string[] args)
         {
             foreach (string s in args)

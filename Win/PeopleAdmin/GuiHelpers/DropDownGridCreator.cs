@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             
             _grid = new CellEmbeddedGrid();
 
-            _grid.CellModels.Add("HourMinutes", new TimeSpanHourMinutesOrEmptyCellModel(_grid.Model));
+            _grid.CellModels.Add("HourMinutes", new TimeSpanTimeOfDayCellModel(_grid.Model){AllowEmptyCell = true});
             _grid.CellModels.Add(GridCellModelConstants.CellTypeNumericCell, new NumericCellModel(_grid.Model));
-            _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesCell, new TimeSpanLongHourMinutesCellModel(_grid.Model));
-            _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanLongHourMinutesOrEmptyCellModel(_grid.Model));
+            _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesCell, new TimeSpanDurationCellModel(_grid.Model));
+            _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(_grid.Model){AllowEmptyCell = true});
 
             var percentCellModel = new PercentCellModel(_grid.Model) {MinMax = new MinMax<double>(-1, 1)};
             _grid.CellModels.Add(GridCellModelConstants.CellTypePercentCell, percentCellModel);

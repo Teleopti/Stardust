@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.DomainTest.Collection
 {
@@ -47,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(test);
 
             // Sets an PropertyDescriptor to the specific property.
-            System.ComponentModel.PropertyDescriptor myProperty = properties.Find("Test1", false);
+            PropertyDescriptor myProperty = properties.Find("Test1", false);
             PropertyDescriptor[] arr = new PropertyDescriptor[1];
             arr[0] = myProperty;
 

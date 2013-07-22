@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.DBConverter
             _connectionString = connectionString;
         }
 
-        protected CommonHelper(){}
-
         protected IList<DataRow> ReadData(string query)
         {
             IList<DataRow> ret = new List<DataRow>();
@@ -38,30 +36,5 @@ namespace Teleopti.Ccc.DBConverter
             }
             return ret;
         }
-
-        protected string ReadString(string query)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                using(var command=new SqlCommand(query,connection))
-                {
-                    connection.Open();
-                    return (string)command.ExecuteScalar();
-                }
-            }
-        }
-
-        public DateTime? PublishedToDate()
-        {
-            DateTime? ret = null;
-            IList<DataRow> result = ReadData("SELECT act_date FROM special_dates WHERE item_key = 'sched_date'");
-
-            if (result.Count > 0)
-                ret = (DateTime)result[0]["act_date"];
-
-            return ret;
-
-        }
-
     }
 }

@@ -1,29 +1,17 @@
-#region Imports
-
 using System;
-using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-
-#endregion
 
 namespace Teleopti.Ccc.AgentPortalCode.Common.Clipboard
 {
-
-    /// <summary>
-    /// Represents a clip to be handle in clipboard copy and paste.
-    /// </summary>
     public class Clip<T>
     {
-
-        #region Fields - Instance Member
-
         private readonly T _clipValue;
         private readonly DateTime _date;
 
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - Clip Members
+        public Clip(T clipValue, DateTime date)
+        {
+            _clipValue = clipValue;
+            _date = date;
+        }
 
         public T ClipValue
         {
@@ -35,27 +23,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Clipboard
             get { return _date; }
         }
 
-        public ScheduleAppointmentTypes ClipValueType
-        {
-            get { return _clipValueType; }
-            set { _clipValueType = value; }
-        }
-
-        private ScheduleAppointmentTypes _clipValueType;
-
-        #endregion
-
-        #endregion
-
-        #region Methods - Instance Member
-
-        #region Methods - Instance Member - Clip Members
-
-        /// <summary>
-        /// Equals
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public override bool Equals(object obj)
         {
             Clip<T> clip = obj as Clip<T>;
@@ -78,10 +45,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Clipboard
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -114,23 +78,5 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Clipboard
         {
             return !clip1.Equals(clip2);
         }
-
-        #endregion
-
-        #region Methods - Instance Member - Clip Members - (constructors)
-
-        public Clip(T clipValue, ScheduleAppointmentTypes clipValueType,DateTime date)
-        {
-            _clipValue = clipValue;
-            _clipValueType = clipValueType;
-            _date = date;
-        }
-
-        #endregion
-
-        #endregion
-
-
     }
-
 }

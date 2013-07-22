@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private IScenario _scenario;
         private IList<ISkillDay> _childSkillDays = new List<ISkillDay>();
         private ISkillDay _multisiteSkillDay;
-        private bool _isDeleted;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MultisiteDay"/> class.
@@ -350,11 +349,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 		
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
-
         private void _multisiteSkillDay_StaffRecalculated(object sender, EventArgs e)
         {
             RedistributeChilds();
@@ -520,12 +514,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 retobj._childSkillDays.Add(childSkillDay);
             }
             return retobj;
-        }
-
-        //TODO: to be removed.
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
         }
     }
 }

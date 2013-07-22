@@ -1090,12 +1090,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-			daysOffPreferences.UseDaysOffPerWeek = true;
-			daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 3);
-			daysOffPreferences.UseConsecutiveDaysOff = true;
-			daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
-			daysOffPreferences.UseConsecutiveWorkdays = true;
-			daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
 			using (
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", GetNonDeletedActivty()))
@@ -5559,25 +5553,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			control.Width = width;
 		}
 
-		private static IPersonAssignment getAssignmentZOrderBefore(IPersonAssignment highZOrder, IPersonAssignment pa, int num, IList<IPersonAssignment> personAssignments)
-		{
-			if (pa == highZOrder && num > 0)
-				return personAssignments[num - 1];
-			return null;
-		}
-
-		private static IPersonAssignment getAssignmentZOrderNext(IPersonAssignment highZOrder, IPersonAssignment pa, int num, IList<IPersonAssignment> personAssignments)
-		{
-			if (pa == highZOrder)
-			{
-				if (num < personAssignments.Count - 1)
-				{
-					return personAssignments[num + 1];
-				}
-			}
-			return null;
-		}
-
 		public void RefreshSelection()
 		{
 			if (_scheduleView != null)
@@ -6406,46 +6381,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ExportToPdf(false);
 		}
 
-		private void setRestrictionUsage()
-		{
-			var view = _scheduleView as RestrictionView;
-			if (view == null)
-				return;
-
-        	var restrictionPresenter = (RestrictionPresenter) view.Presenter;
-            restrictionPresenter.UseStudent = toolStripMenuItemUseStudentAvailability.Checked;
-            restrictionPresenter.UseSchedule = toolStripMenuItemUseSchedule.Checked;
-            restrictionPresenter.UseRotation = toolStripMenuItemUseRotation.Checked;
-            restrictionPresenter.UsePreference = toolStripMenuItemUsePreference.Checked;
-            restrictionPresenter.UseAvailability = toolStripMenuItemUseAvailability.Checked;
-			disableAllExceptCancelInRibbon();
-			_grid.Enabled = false;
-			validateAllPersons();
-		}
-
 		private void toolStripMenuItemUseStudentAvailability_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseSchedule_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseRotation_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUsePreference_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripMenuItemUseAvailability_Click(object sender, EventArgs e)
 		{
-			setRestrictionUsage();
 		}
 
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public abstract class SFGridColumnBase<T> : ISortColumn<T>
     {
-        public event EventHandler<SFGridColumnCellChangedEventArgs<T>> CellChanged;
-
         protected SFGridColumnBase(string bindingProperty, string headerText)
         {
             HeaderText = headerText;
@@ -20,11 +16,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         }
 
 		public bool AllowEmptyValue { get; set; }
-
-        public virtual IComparer<T> ColumnComparer
-        {
-            get { return null; }
-        }
 
         public SortCompare<T> SortCompare { get; set; }
 
@@ -113,28 +104,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         	T dataItem = dataItems[e.RowIndex - (e.Style.CellModel.Grid.Rows.HeaderCount + 1)];
         	// Saves validated values in the cell.
         	SaveCellValue(e, dataItems, dataItem);
-        	// Notifies that values have changed.
-        	OnCellChanged(dataItem);
 
         	e.Handled = true;
         }
 
         public abstract void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem);
- 
-        public virtual void OnCellChanged(T dataItem)
-        {
-        	var handler = CellChanged;
-        	if (handler == null) return;
-        	var args = new SFGridColumnCellChangedEventArgs<T>(dataItem);
-        	handler(this, args);
-        }
-
-        public static void AppendAuditColumns(IList<SFGridColumnBase<T>> gridColumns)
-        {
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("CreatedBy.Name", Resources.CreatedBy));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("CreatedTimeInUserPerspective", Resources.CreatedOn));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("UpdatedBy.Name", Resources.UpdatedBy));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
-        }
     }
 }

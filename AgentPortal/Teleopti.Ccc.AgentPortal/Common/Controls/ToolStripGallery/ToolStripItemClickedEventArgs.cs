@@ -38,20 +38,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
         }
 
         /// <summary>
-        /// Gets or sets the mouse button used to perform the click operation.
-        /// </summary>
-        /// <value>
-        /// The mouse button used to perform the click operation.
-        /// </value>
-        public MouseButtons MouseButton
-        {
-            get
-            {
-                return mouseButton;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the context menu strip instance
         /// </summary>
         /// <value>
@@ -66,51 +52,11 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
         }
 
         /// <summary>
-        ///  Represents an event with no event data.
-        /// </summary>
-        public static new ToolStripItemClickedEventArgs Empty
-        {
-            get { return new ToolStripItemClickedEventArgs(); }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the 
         /// <see cref="System.Windows.Forms.ToolStripItemClickedEventArgs" /> class.
         /// </summary>
         public ToolStripItemClickedEventArgs()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the 
-        /// <see cref="System.Windows.Forms.ToolStripItemClickedEventArgs" /> class,
-        /// using the given clicked item.
-        /// </summary>
-        /// <param name="clickedItem">
-        /// The item on which the click operation was performed.
-        /// </param>
-        public ToolStripItemClickedEventArgs(ToolStripGalleryItem clickedItem)
-            : this(clickedItem, MouseButtons.Left)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the 
-        /// <see cref="System.Windows.Forms.ToolStripItemClickedEventArgs" /> class,
-        /// using the given clicked item and the button used.
-        /// </summary>
-        /// <param name="clickedItem">
-        /// The item on which the click operation was performed.
-        /// </param>
-        /// <param name="mouseButton">
-        /// The mouse button used to perform the click operation.
-        /// </param>
-        public ToolStripItemClickedEventArgs(ToolStripGalleryItem clickedItem, MouseButtons mouseButton)
-            : this()
-        {
-            // set instance fields
-            this.clickedItem = clickedItem;
-            this.mouseButton = mouseButton;
         }
 
         /// <summary>

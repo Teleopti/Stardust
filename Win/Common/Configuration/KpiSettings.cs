@@ -230,14 +230,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // Grid must have a Header column
             gridColumns.Add(new SFGridRowHeaderColumn<IKpiTarget>(string.Empty));
             gridColumns.Add(new SFGridReadOnlyTextColumn<IKpiTarget>("Team.SiteAndTeam", UserTexts.Resources.Team));
-            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("TargetValue", UserTexts.Resources.Target, null, "NumericCell",30));
-            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("LowerThanMinColor", UserTexts.Resources.Color, null));
-            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MinValue", "<", null, "NumericCell", 30));
-            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("BetweenColor", UserTexts.Resources.Color, null));
-            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MaxValue", ">", null, "NumericCell", 30));
-            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("HigherThanMaxColor", UserTexts.Resources.Color, null));
+            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("TargetValue", UserTexts.Resources.Target, "NumericCell",30));
+            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("LowerThanMinColor", UserTexts.Resources.Color));
+            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MinValue", "<", "NumericCell", 30));
+            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("BetweenColor", UserTexts.Resources.Color));
+            gridColumns.Add(new SFGridNumericCellColumn<IKpiTarget>("MaxValue", ">", "NumericCell", 30));
+            gridColumns.Add(new SFGridColorPickerColumn<IKpiTarget>("HigherThanMaxColor", UserTexts.Resources.Color));
 
-            SFGridColumnBase<IKpiTarget>.AppendAuditColumns(gridColumns);
+            gridColumns.AppendAuditColumns();
 
             gridControl1.RowCount = gridRowCount();
             gridControl1.ColCount = gridColumns.Count - 1;  //col index starts on 0

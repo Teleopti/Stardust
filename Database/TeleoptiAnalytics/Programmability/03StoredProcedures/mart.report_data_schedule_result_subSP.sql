@@ -17,6 +17,8 @@ GO
 -- 2011-03-17	DJ		#14092
 -- 2011-04-12	DJ		#14477
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-07-10 backed out of #23621
+-- 2013-07-10 Fix #24119, same as #23621
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_schedule_result_subSP] 
 @date_from_id int,
@@ -38,6 +40,7 @@ CREATE TABLE #agent_queue_statistics_subSP
 	date_id int,
 	interval_id int,
 	acd_login_id int,
+	person_code uniqueidentifier,
 	person_id int,
 	answered_calls int,		
 	talk_time_s decimal(20,2),
@@ -50,7 +53,7 @@ CREATE TABLE #agent_statistics_subSP
 	date_id int,
 	interval_id int,
 	acd_login_id int,
-	person_id int,
+	person_code uniqueidentifier,
 	ready_time_s int
 	)
 
@@ -76,11 +79,13 @@ CREATE TABLE #fact_schedule_subSP
 	scheduled_contract_time_m int
 	)
 
-
+CREATE TABLE #person (
+	person_id int
+	)
 
 CREATE TABLE #acd_login (
 	acd_login_id int,
-	person_id int,
+	person_code uniqueidentifier
 	)
 
 ---------
@@ -96,11 +101,16 @@ IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') <
 	SET @hide_time_zone = 1
 ELSE
 	SET @hide_time_zone = 0
-	
+
 --get distinct person_id and acd_login_id
 INSERT INTO #acd_login
-SELECT acd_login_id, MAX(person_id)  
-FROM #person_acd_subSP GROUP BY acd_login_id, person_code
+SELECT DISTINCT
+	acd_login_id,
+	person_code
+FROM #person_acd_subSP
+
+INSERT INTO #person
+SELECT DISTINCT person_id FROM #person_acd_subSP
 
 --Create local table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_subSP
@@ -115,55 +125,61 @@ SELECT
 	fsd.is_logged_in,
 	fsd.contract_time_s
 FROM mart.fact_schedule_deviation fsd
-INNER JOIN #acd_login a
+INNER JOIN #person a
 	ON fsd.person_id = a.person_id
 WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id	
 
 --Get agent statistics
-INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,person_id,acd_login_id,answered_calls,talk_time_s,after_call_work_time_s)
+INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_code,answered_calls,talk_time_s,after_call_work_time_s)
 SELECT	faq.date_id,
 		faq.interval_id,
-		acd.person_id,
 		faq.acd_login_id,
+		acd1.person_code,
 		SUM(faq.answered_calls),
 		SUM(faq.talk_time_s),
 		SUM(faq.after_call_work_time_s)
 FROM mart.fact_agent_queue faq
-INNER JOIN #acd_login acd
-	ON acd.acd_login_id = faq.acd_login_id 
+INNER JOIN #acd_login acd1
+	ON acd1.acd_login_id = faq.acd_login_id
+INNER JOIN #acd_login acd2
+	ON acd2.acd_login_id = acd1.acd_login_id
+	AND acd2.person_code = acd1.person_code
 WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
-GROUP BY faq.date_id, faq.date_id, faq.interval_id, faq.acd_login_id, acd.person_id
+GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id, acd1.person_code
 
 --Get the ready time from mart.fact_agent 
 INSERT INTO #agent_statistics_subSP
 SELECT	faq.date_id,
 		faq.interval_id,
 		faq.acd_login_id,
-		acd.person_id,
+		acd1.person_code,
 		SUM(ISNULL(faq.ready_time_s,0))
 FROM mart.fact_agent faq
-INNER JOIN #acd_login acd
-	ON acd.acd_login_id = faq.acd_login_id
-WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
-GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id, acd.person_id
+INNER JOIN #acd_login acd1
+	ON acd1.acd_login_id = faq.acd_login_id
+INNER JOIN #acd_login acd2
+	ON acd2.acd_login_id = acd1.acd_login_id
+	AND acd2.person_code = acd1.person_code
+WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id
+GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id, acd1.person_code
 
 UPDATE #agent_queue_statistics_subSP
 SET ready_time_s = a.ready_time_s
 FROM #agent_queue_statistics_subSP aqs
-INNER JOIN #agent_statistics_subSP a ON aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id
+INNER JOIN #agent_statistics_subSP a ON aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id and aqs.person_code = a.person_code
 
-INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_id,ready_time_s)
-SELECT a.date_id,a.interval_id,a.acd_login_id,a.person_id,ISNULL(a.ready_time_s,0)
+INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_code,ready_time_s)
+SELECT a.date_id,a.interval_id,a.acd_login_id,a.person_code,ISNULL(a.ready_time_s,0)
 FROM #agent_statistics_subSP a
 WHERE NOT EXISTS (SELECT 1 FROM #agent_queue_statistics_subSP aqs
 					WHERE aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id)
 
 UPDATE #agent_queue_statistics_subSP
-SET person_id	= acd.person_id --potential bug: may result in random update on person_id if multiple person_id share same acd_login_id :Ola my change has hopefully fixed that
+SET person_id	= acd.person_id --potential bug: may result in random update on person_id if multiple person_id share same acd_login_id
 FROM #agent_queue_statistics_subSP ags
-INNER JOIN #acd_login acd
+INNER JOIN #person_acd_subSP acd
 	ON ags.acd_login_id = acd.acd_login_id
-	WHERE ags.acd_login_id = -1
+	AND ags.person_code = acd.person_code
 
 --Get agent schedule
 INSERT INTO #fact_schedule_subSP(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
@@ -174,7 +190,7 @@ SELECT	fs.schedule_date_id,
 		SUM(fs.scheduled_ready_time_m), 
 		SUM(fs.scheduled_contract_time_m)
 FROM mart.fact_schedule fs
-INNER JOIN #acd_login a
+INNER JOIN #person a
 	ON fs.person_id = a.person_id
 WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
 AND fs.scenario_id = @scenario_id
@@ -222,7 +238,7 @@ INNER JOIN #fact_schedule_subSP fs --only inlclude scheduled intervals
 	ON fsd.date_id = fs.schedule_date_id
 	AND fsd.interval_id = fs.interval_id
 	AND fsd.person_id = fs.person_id
-	
+
 --if @adherence_id=2 we include intervals that have ready_time but no scheduled time. Fake scheduled_time_m = Interval Lenght
 IF @adherence_id=2
 BEGIN
@@ -243,7 +259,7 @@ BEGIN
 				WHEN 3 THEN fsd.deviation_contract_s
 			END
 	FROM #fact_schedule_deviation_subSP fsd
-	INNER JOIN #acd_login a
+	INNER JOIN #person a
 		ON a.person_id = fsd.person_id
 	WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id				
 	AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id

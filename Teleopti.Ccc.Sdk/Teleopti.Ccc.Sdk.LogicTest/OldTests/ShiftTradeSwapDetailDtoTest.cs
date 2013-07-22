@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 			_dateFrom = new DateOnlyDto { DateTime = new DateOnly(2008, 10, 1) };
 			_dateTo = new DateOnlyDto { DateTime = new DateOnly(2008, 10, 3) };
 
-            _id = GuidFactory.GetGuid();
+            _id = Guid.NewGuid();
 
             _personFrom = new PersonDto();
             _personFrom.Id = _id;

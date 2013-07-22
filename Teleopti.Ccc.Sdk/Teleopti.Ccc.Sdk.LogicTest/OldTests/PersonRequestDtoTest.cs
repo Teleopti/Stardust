@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         public void Setup()
         {
             _person = new PersonDto();
-            _id = GuidFactory.GetGuid();
+            _id = Guid.NewGuid();
 			_date = new DateOnlyDto { DateTime = new DateOnly(2008, 01, 01) };
             _absenceRequest = new AbsenceRequestDto();
             _message = "message";

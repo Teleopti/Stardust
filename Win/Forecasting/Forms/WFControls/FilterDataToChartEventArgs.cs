@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 {
 	public class FilterDataToChartEventArgs : EventArgs
 	{
-		private readonly GridCellModelBase _cellModelType;
 		private readonly string _headerText;
 		private readonly int _columnIndex;
 		private readonly IDictionary<DateTime, double> _values;
 		private readonly bool _removeColumn;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public FilterDataToChartEventArgs(GridCellModelBase cellModelType, string headerText, int columnIndex, IDictionary<DateTime, double> values, bool removeColumn = false)
+		public FilterDataToChartEventArgs(string headerText, int columnIndex, IDictionary<DateTime, double> values, bool removeColumn = false)
 		{
-			_cellModelType = cellModelType;
 			_headerText = headerText;
 			_columnIndex = columnIndex;
 			_values = values;
@@ -35,11 +32,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		public string HeaderText
 		{
 			get { return _headerText; }
-		}
-
-		public GridCellModelBase CellModelType
-		{
-			get { return _cellModelType; }
 		}
 
 		public int ColumnIndex

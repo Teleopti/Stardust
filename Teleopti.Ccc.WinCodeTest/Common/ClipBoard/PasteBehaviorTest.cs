@@ -112,13 +112,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest, rangeList);
                 Assert.AreEqual((row*col), pasteActionForTest.CalledTimes);
 
-                //pasteActionForTest.RetValue = "clip for test";
-                //pasteActionForTest.CalledTimes = 0;
                 IList<string> list = _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest,
                                                                         rangeList);
                 Assert.AreEqual(0, list.Count);
 
-                pasteActionForTest.RetValue = "clip for test";
+                pasteActionForTest.SetRetValue("clip for test");
                 list = _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest, rangeList);
                 Assert.AreEqual(4, list.Count);
             }
@@ -313,19 +311,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         private T _retValue;// = true;
         private int _calledTimes;
 
-        internal T RetValue
+        internal void SetRetValue(T value)
         {
-            get { return _retValue; }
-            set { _retValue = value; }
+            _retValue = value;
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value")]
         internal int CalledTimes
         {
             get { return _calledTimes; }
-            set { _calledTimes = 0; }
         }
 
-      
         public T Paste(GridControl gridControl,  Clip<T> clip, int rowIndex, int columnIndex)
         {
             _calledTimes++;

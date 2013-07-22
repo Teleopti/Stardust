@@ -14,31 +14,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private string _headerText;
-        private string _bindingProperty;
         private IEnumerable<TItems> _comboItems;
         private string _displayMember;
 
         public DropDownCultureColumn(string bindingProperty, string headerText,
                               IEnumerable<TItems> comboItems,
-                              string displayMember)
+                              string displayMember) : base(bindingProperty,150)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _comboItems = comboItems;
             _displayMember = displayMember;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 150; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override IComparer<TData> ColumnComparer { get; set; }
@@ -49,15 +34,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, IList<TData> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -72,7 +48,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
 				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 OnCellDisplayChanged(dataItem, e);
             }
         }
@@ -85,11 +61,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
                 if (typeof(TItems) == e.Style.CellValue.GetType())
                 {
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                    _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                 }
                 else
                 {
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, Culture.GetLanguageInfoByDisplayName(e.Style.CellValue.ToString()));
+                    _propertyReflector.SetValue(dataItem, BindingProperty, Culture.GetLanguageInfoByDisplayName(e.Style.CellValue.ToString()));
                 }
                 e.Handled = true;
                 OnCellChanged(dataItem, e);

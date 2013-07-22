@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     {
         private List<IOptionalColumn> _optionalColumnList;
         private const string PersonTableName = "Person";
-        internal const int DefaultItemIndex = 0;
         private const short ItemDiffernce = 1;
         private const short InvalidItemIndex = -1;
         private const short FirstItemIndex = 0;

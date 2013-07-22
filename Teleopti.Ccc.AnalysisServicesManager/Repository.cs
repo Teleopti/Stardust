@@ -3,7 +3,6 @@ using System.Globalization;
 using Microsoft.AnalysisServices.AdomdClient;
 using Microsoft.AnalysisServices;
 
-
 namespace AnalysisServicesManager
 {
     public class Repository
@@ -11,11 +10,6 @@ namespace AnalysisServicesManager
 		private string _connectionString;
 		private string _databaseName;
 		private const string CubeName = "Teleopti Analytics";
-
-		public Repository()
-        {
-            
-        }
 
         public Repository(CommandLineArgument connectionString)
         {

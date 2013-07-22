@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	var handler = ReportProgress;
             if (handler != null)
             {
-                var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+                var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
                 handler(this, args);
                 if (args.Cancel)
                     _cancelMe = true;

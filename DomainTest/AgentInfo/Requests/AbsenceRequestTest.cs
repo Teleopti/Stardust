@@ -27,9 +27,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private Absence _absence;
         private AbsenceRequest _target;
         private RequestPartForTest _obj;
-        private const string AbsenceRequestHasBeenDeniedDot = "AbsenceRequestHasBeenDeniedDot";
-        private const string AbsenceRequestHasBeenApprovedDot = "AbsenceRequestHasBeenApprovedDot";
-        private const string AbsenceRequestForOneDayHasBeenApprovedDot = "AbsenceRequestForOneDayHasBeenApprovedDot";
 
         /// <summary>
         /// Setups this instance.
@@ -161,12 +158,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                                                         person.PermissionInformation.DefaultTimeZone()).ToString(
                                                             datePattern));
             Assert.AreEqual(notificationMessage, _target.TextForNotification);
-            //Assert.AreEqual(AbsenceRequestForOneDayHasBeenApprovedDot, _target.TextForNotification);
-
+            
             mocks.VerifyAll();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        [Test, System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyApproveOneDayAbsenceCallWorks()
         {
            

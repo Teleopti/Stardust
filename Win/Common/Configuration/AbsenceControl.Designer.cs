@@ -30,10 +30,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
@@ -52,16 +48,10 @@
 			this.buttonAdvDeleteAbsence = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelSubHeader2 = new System.Windows.Forms.Label();
 			this.buttonAdvAddAbsence = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-			this.gridControlGroupingAbsences = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.gridControlAbsences = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonAdv1 = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.btnAdd = new System.Windows.Forms.Button();
-			this.labelSubHeader1 = new System.Windows.Forms.Label();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -72,12 +62,9 @@
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanelBody.SuspendLayout();
 			this.tableLayoutPanelSubHeader2.SuspendLayout();
-			this.tableLayoutPanel9.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.gridControlGroupingAbsences)).BeginInit();
 			this.tableLayoutPanel10.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsences)).BeginInit();
 			this.contextMenuStrip2.SuspendLayout();
-			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -220,9 +207,7 @@
 			this.tableLayoutPanelBody.ColumnCount = 1;
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 2);
-			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel9, 0, 1);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel10, 0, 3);
-			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 55);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
@@ -296,65 +281,6 @@
 			this.buttonAdvAddAbsence.UseVisualStyleBackColor = false;
 			this.buttonAdvAddAbsence.Click += new System.EventHandler(this.ButtonAddAdvAbsenceClick);
 			// 
-			// tableLayoutPanel9
-			// 
-			this.tableLayoutPanel9.ColumnCount = 1;
-			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel9.Controls.Add(this.gridControlGroupingAbsences, 0, 0);
-			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 36);
-			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-			this.tableLayoutPanel9.RowCount = 1;
-			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Size = new System.Drawing.Size(489, 169);
-			this.tableLayoutPanel9.TabIndex = 2;
-			this.tableLayoutPanel9.Visible = false;
-			// 
-			// gridControlGroupingAbsences
-			// 
-			gridBaseStyle1.Name = "Header";
-			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.CellType = "Header";
-			gridBaseStyle1.StyleInfo.Font.Bold = true;
-			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle2.Name = "Standard";
-			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle3.Name = "Row Header";
-			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle4.Name = "Column Header";
-			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			this.gridControlGroupingAbsences.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
-			this.gridControlGroupingAbsences.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.gridControlGroupingAbsences.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridControlGroupingAbsences.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.gridControlGroupingAbsences.Location = new System.Drawing.Point(3, 3);
-			this.gridControlGroupingAbsences.Name = "gridControlGroupingAbsences";
-			this.gridControlGroupingAbsences.NumberedRowHeaders = false;
-			this.gridControlGroupingAbsences.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-			this.gridControlGroupingAbsences.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
-			this.gridControlGroupingAbsences.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
-			this.gridControlGroupingAbsences.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlGroupingAbsences.Size = new System.Drawing.Size(483, 163);
-			this.gridControlGroupingAbsences.SmartSizeBox = false;
-			this.gridControlGroupingAbsences.TabIndex = 0;
-			this.gridControlGroupingAbsences.UseRightToLeftCompatibleTextBox = true;
-			this.gridControlGroupingAbsences.Visible = false;
-			// 
 			// tableLayoutPanel10
 			// 
 			this.tableLayoutPanel10.ColumnCount = 1;
@@ -426,66 +352,6 @@
 			this.toolStripMenuItem3.Text = "xxPasteNew";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
-			// tableLayoutPanelSubHeader1
-			// 
-			this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.tableLayoutPanelSubHeader1.ColumnCount = 3;
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdv1, 2, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.btnAdd, 1, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
-			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
-			this.tableLayoutPanelSubHeader1.RowCount = 1;
-			this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(489, 27);
-			this.tableLayoutPanelSubHeader1.TabIndex = 1;
-			this.tableLayoutPanelSubHeader1.Visible = false;
-			// 
-			// buttonAdv1
-			// 
-			this.buttonAdv1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonAdv1.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-			this.buttonAdv1.Location = new System.Drawing.Point(465, 2);
-			this.buttonAdv1.Margin = new System.Windows.Forms.Padding(3, 2, 0, 4);
-			this.buttonAdv1.Name = "buttonAdv1";
-			this.buttonAdv1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-			this.buttonAdv1.Size = new System.Drawing.Size(24, 23);
-			this.buttonAdv1.TabIndex = 7;
-			this.buttonAdv1.TabStop = false;
-			this.buttonAdv1.Click += new System.EventHandler(this.buttonAdv1_Click);
-			// 
-			// btnAdd
-			// 
-			this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnAdd.BackColor = System.Drawing.Color.White;
-			this.btnAdd.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-			this.btnAdd.Location = new System.Drawing.Point(438, 2);
-			this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 2, 0, 4);
-			this.btnAdd.Name = "btnAdd";
-			this.btnAdd.Size = new System.Drawing.Size(24, 23);
-			this.btnAdd.TabIndex = 6;
-			this.btnAdd.UseVisualStyleBackColor = false;
-			this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-			// 
-			// labelSubHeader1
-			// 
-			this.labelSubHeader1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSubHeader1.AutoSize = true;
-			this.labelSubHeader1.BackColor = System.Drawing.Color.Transparent;
-			this.labelSubHeader1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-			this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
-			this.labelSubHeader1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
-			this.labelSubHeader1.Name = "labelSubHeader1";
-			this.labelSubHeader1.Size = new System.Drawing.Size(261, 13);
-			this.labelSubHeader1.TabIndex = 0;
-			this.labelSubHeader1.Text = "xxEnterPropertyValuesForGroupingAbsences";
-			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// gradientPanelHeader
 			// 
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -550,13 +416,9 @@
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.PerformLayout();
-			this.tableLayoutPanel9.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.gridControlGroupingAbsences)).EndInit();
 			this.tableLayoutPanel10.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsences)).EndInit();
 			this.contextMenuStrip2.ResumeLayout(false);
-			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
-			this.tableLayoutPanelSubHeader1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -582,13 +444,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdv1;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Label labelSubHeader1;
-        private Syncfusion.Windows.Forms.Grid.GridControl gridControlGroupingAbsences;
         private Syncfusion.Windows.Forms.Grid.GridControl gridControlAbsences;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvAddAbsence;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDeleteAbsence;

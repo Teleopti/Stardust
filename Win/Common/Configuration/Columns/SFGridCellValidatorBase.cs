@@ -38,9 +38,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         /// </summary>
         protected abstract CultureInfo CurrentCulture { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected SFGridCellValidatorBase()
         {
             Canceled = false;

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     {
         private IPerson _person;
         private PayrollFormatDto _payrollFormat;
-        private readonly Guid _payrollExportGuid = GuidFactory.GetGuid();
+        private readonly Guid _payrollExportGuid = Guid.NewGuid();
         private DateOnly _dateMin;
         private MockRepository _mocks;
         private IAssembler<IPerson, PersonDto> _personAssembler;

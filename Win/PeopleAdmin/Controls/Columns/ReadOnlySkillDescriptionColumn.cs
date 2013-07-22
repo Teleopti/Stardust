@@ -11,27 +11,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private string _headerText;
-        private string _bindingProperty;
-       
-        public ReadOnlySkillDescriptionColumn(string bindingProperty, string headerText)
+        private readonly string _headerText;
+
+        public ReadOnlySkillDescriptionColumn(string bindingProperty, string headerText) :base(bindingProperty,100)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
         }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-		public override string BindingProperty
-		{
-			get
-			{
-				return _bindingProperty;
-			}
-		}
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
@@ -44,7 +29,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 T dataItem = dataItems.ElementAt(e.RowIndex - 1);
 
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
 
                 PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e); 
                 
@@ -62,7 +47,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 if (dataItems.Count == 0) return;
                 
                 T dataItem = dataItems.ElementAt(e.RowIndex - 1);
-                _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue.ToString());
+                _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue.ToString());
                 OnCellChanged(dataItem, e);
                 e.Handled = true;
             }

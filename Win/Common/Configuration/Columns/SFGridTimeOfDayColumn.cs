@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridTimeOfDayColumn<T> : SFGridColumnBase<T>
     {
-
-        //public delegate void ChangedEventHandler(object sender, GridSaveCellInfoEventArgs e, T dataItem);
-        //public event ChangedEventHandler Changed;
-
         public SFGridTimeOfDayColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         {
@@ -22,8 +16,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         {
             get { return 100; }
         }
-
-        public RightToLeft RightToLeft { set; get; }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
@@ -39,10 +31,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 			try
 			{
 				PropertyReflectorHelper.SetValue(currentItem, BindingProperty, e.Style.CellValue);
-
-				//if (Changed != null)
-                //    Changed(this, e, currentItem);
-                
             }
 			catch (System.Reflection.TargetInvocationException ex)
 			{

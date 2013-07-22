@@ -27,12 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private MockRepository _mocks;
         private IScheduleDictionary _dic;
 
-        public IPersonAssignment PersonAssignmentConflictingWithDayOffFlexibility
-        {
-            get { return _personAssignmentConflictingWithDayOffFlexibility; }
-        }
-
-       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {

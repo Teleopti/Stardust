@@ -13,14 +13,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
         {
         }
 
-        public ToolStripSpinningProgressControl(Control control) : base(control)
-        {
-        }
-
-        public ToolStripSpinningProgressControl(Control control, string name) : base(control, name)
-        {
-        }
-
         public SpinningProgressControl SpinningProgressControl
         {
             get { return (SpinningProgressControl)Control; }
@@ -50,11 +42,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
             {
                 base.Visible = value;
             }
-        }
-
-        public void Refresh()
-        {
-            SpinningProgressControl.Refresh();
         }
 
         public Color InactiveSegmentColor

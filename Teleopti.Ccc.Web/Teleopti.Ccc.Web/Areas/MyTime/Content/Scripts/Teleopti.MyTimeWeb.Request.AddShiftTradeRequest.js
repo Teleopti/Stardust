@@ -113,18 +113,21 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             },
             write: function (value) {
                 if (self.requestedDateInternal().diff(value) == 0) return;
-                //    self.setScheduleLoadedReady();
-                //    self.isReadyLoaded(true);
-                //    return;
-                //}
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.loadSchedule();
             }
         });
 
+        self.nextDateValid = ko.computed(function () {
+        	return self.openPeriodEndDate().diff(self.requestedDateInternal())>0;
+		});
 
-	    self.isRequestedDateValid = function(date) {
+        self.previousDateValid = ko.computed(function () {
+        	return self.requestedDateInternal().diff(self.openPeriodStartDate())>0;
+		});
+
+        self.isRequestedDateValid = function (date) {
 	        if (date.diff(self.openPeriodStartDate()) < 0) {
 	            return false;
 	        } else if (self.openPeriodEndDate().diff(date) < 0) {
@@ -175,7 +178,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-	    self.changeRequestedDate = function(movement) {
+		self.changeRequestedDate = function (movement) {
 	        var date = moment(self.requestedDateInternal()).add('days', movement);
 	        if (self.isRequestedDateValid(date))
 	            self.requestedDate(date);

@@ -136,9 +136,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _fillFormData(data) {
 	    requestViewModel.Subject(data.Subject);
 	    requestViewModel.Message(data.Text);
-		requestViewModel.DateTo(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
+		requestViewModel.DateFrom(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
 		requestViewModel.TimeFrom(data.RawTimeFrom);
-		requestViewModel.DateFrom(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+		requestViewModel.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
 		requestViewModel.TimeTo(data.RawTimeTo);
 		requestViewModel.EntityId(data.Id);
 	    requestViewModel.AbsenceId(data.PayloadId);

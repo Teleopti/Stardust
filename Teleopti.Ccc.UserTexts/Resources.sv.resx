@@ -11084,4 +11084,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="TotalChatTime" xml:space="preserve">
     <value>Total chattid</value>
   </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Teamblockperioden är inte i ett giltigt läge.</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Var god välj minst ett av alternativen "Skiftkategori", "Starttid" eller "Samma skift" för blockschemaläggningen. </value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filtrera tillgänglighet för övertid</value>
+  </data>
 </root>

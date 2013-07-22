@@ -169,28 +169,6 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             SetWorkloadsForSmartpart();
         }
 
-        public EntityUpdateInformation SetLastUpdatedWorkloadDetailedValues(bool longterm)
-        {
-            EntityUpdateInformation values = new EntityUpdateInformation();
-            if (_skill != null)
-            {
-                using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    SkillDayRepository skillRepository = new SkillDayRepository(uow);
-                    ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, DefaultScenario, longterm);
-                    if (skillDay != null)
-                    {
-                        TimeZoneInfo timeZoneInfo =
-                            TeleoptiPrincipal.Current.Regional.TimeZone;
-                        values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.GetValueOrDefault(skillDay.CreatedOn.Value), timeZoneInfo);
-                        values.Name = skillDay.UpdatedBy != null ? skillDay.UpdatedBy.Name : skillDay.CreatedBy.Name;
-                        values.Tag = DefaultScenario.Description.Name;
-                    }
-                }
-            }
-            return values;
-        }
-
         public IDictionary<IScenario, EntityUpdateInformation> SetLastUpdatedWorkloadDetailedValuesOfAllScenarios(bool longterm)
         {
             IDictionary<IScenario, EntityUpdateInformation> allvalues = new Dictionary<IScenario, EntityUpdateInformation>();

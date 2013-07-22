@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -11,8 +10,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		void ExtractShiftCategoryPeriodValue(object possibleStartEndCategory);
-
-		ManualResetEvent ManualResetEvent { get; }
 	}
 
 	public class ShiftCategoryPeriodValueExtractorThread : IShiftCategoryPeriodValueExtractorThread, IDisposable
@@ -107,14 +104,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         		_manualResetEvent.Set();
         }
 
-		public ManualResetEvent ManualResetEvent
-		{
-			get { return _manualResetEvent; }
-		}
-
-		
-
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(TimeZoneInfo agentTimeZone, 
             IEffectiveRestriction effectiveRestriction,IList<IPerson>persons,
@@ -130,10 +119,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             
             _shiftProjectionList = _shiftProjectionCacheFilter.
                 FilterOnBusinessRules(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
-            
-            //_shiftProjectionList = _shiftProjectionCacheFilter.
-            //    FilterOnPersonalShifts(persons, dictionary, _dateOnly, _shiftProjectionList, finderResult);
-
             
 			_shiftProjectionList =
                 _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(

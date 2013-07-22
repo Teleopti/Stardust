@@ -272,17 +272,12 @@
     <Compile Include="Common\Configuration\Cells\VisualProjectionCellModel.cs" />
     <Compile Include="Common\Configuration\Cells\VisualProjectionColumnHeaderCellModel.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDateOnlyColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridEnumDescriptionColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridRequestStatusColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridScheduleAdherenceColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridStringCellColumn.cs" />
     <Compile Include="Common\Configuration\Rows\ShiftTradeVisualRowHeaderColumn.cs" />
     <Compile Include="Common\Configuration\Rows\VisualProjectionGridRowHeaderColumn.cs" />
-    <Compile Include="Common\Controls\Columns\ColumnBase.cs" />
-    <Compile Include="Common\Controls\Columns\ColumnCellChangedEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\ShiftTradeVisualProjectionColumn.cs" />
-    <Compile Include="Common\Controls\Columns\IColumn.cs" />
-    <Compile Include="Common\Controls\Columns\RowHeaderColumn.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridColumnBase.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridVisualProjectionColumn.cs" />
     <Compile Include="Common\Controls\CustomScheduleControl.cs">
@@ -299,12 +294,6 @@
     </Compile>
     <Compile Include="Common\Controls\Office2007OutlookTimePickerAP.Designer.cs">
       <DependentUpon>Office2007OutlookTimePickerAP.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Controls\OutlookDateTimePicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\OutlookDateTimePicker.Designer.cs">
-      <DependentUpon>OutlookDateTimePicker.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
@@ -335,7 +324,6 @@
     </Compile>
     <Compile Include="Common\GuiHelper.cs" />
     <Compile Include="Common\IHelpContext.cs" />
-    <Compile Include="Common\PermissionException.cs" />
     <Compile Include="Common\ScheduleResolutionType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -481,12 +469,9 @@
       <DependentUpon>ChangePasswordControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Configuration\Columns\SFGridColumnBase.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridColumnCellChangedEventArgs.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelper.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelperBase.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridDescriptionNameColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridNumericCellColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridRowHeaderColumn.cs" />
     <Compile Include="Settings\AgentPortalOptions.cs">
       <SubType>Form</SubType>
@@ -510,8 +495,6 @@
     <Compile Include="Helper\MatrixAgent.cs" />
     <Compile Include="Helper\PropertyReflector.cs" />
     <Compile Include="Common\HelpHelper.cs" />
-    <Compile Include="Common\IDataHandling.cs" />
-    <Compile Include="Common\MinMax.cs" />
     <Compile Include="Main\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -523,12 +506,6 @@
     </Compile>
     <Compile Include="AgentSchedule\ScheduleTeamView.Designer.cs">
       <DependentUpon>ScheduleTeamView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Main\ScoreCardControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Main\ScoreCardControl.Designer.cs">
-      <DependentUpon>ScoreCardControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -574,10 +551,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MailButton.resx">
       <DependentUpon>MailButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\OutlookDateTimePicker.resx">
-      <DependentUpon>OutlookDateTimePicker.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\TimeSpanTextbox.resx">
       <DependentUpon>TimeSpanTextBox.cs</DependentUpon>
@@ -663,10 +636,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AgentSchedule\ScheduleTeamView.resx">
       <DependentUpon>ScheduleTeamView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\ScoreCardControl.resx">
-      <DependentUpon>ScoreCardControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -761,7 +730,6 @@
     <Compile Include="AgentSchedule\ScheduleControl.designer.cs">
       <DependentUpon>ScheduleControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgentSchedule\TeamMemberGridItem.cs" />
     <Compile Include="Main\ViewConstructor.cs" />
   </ItemGroup>
   <ItemGroup>

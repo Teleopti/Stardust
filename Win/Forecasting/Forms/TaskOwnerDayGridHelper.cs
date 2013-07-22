@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 gridStyleInfo.CellTipText = UserTexts.Resources.Closed;
                 return;
             }
-            StringBuilder openHours;
             WorkloadDay workloadDay = templateDay as WorkloadDay;
             if (workloadDay == null)
             {
@@ -39,11 +38,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 return;
             }
 
-            openHours = new StringBuilder(workloadDay.OpenHourList[0].ToShortTimeString());
-            if (workloadDay.OpenHourList[0].EndTime.Days == 1)
-                openHours.Append(" +1");
-
-            gridStyleInfo.CellTipText = templateDay.TemplateReference.TemplateName + '\n' + openHours;
+            gridStyleInfo.CellTipText = templateDay.TemplateReference.TemplateName + '\n' + workloadDay.OpenHourList[0].ToShortTimeString();
         }
 
         internal static void SetTemplateCellStyle(GridStyleInfo gridStyle, ITemplateDay realTemplateDay, DayOfWeek dayOfWeek)

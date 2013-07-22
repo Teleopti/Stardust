@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         [SetUp]
         public void Setup()
         {
-            _maxTimePerWeek = TimeFactory.CreateTimeSpan(48);
-            _nightlyRest = TimeFactory.CreateTimeSpan(11);
-            _weeklyRest = TimeFactory.CreateTimeSpan(36);
+            _maxTimePerWeek = TimeSpan.FromHours(48);
+            _nightlyRest = TimeSpan.FromHours(11);
+            _weeklyRest = TimeSpan.FromHours(36);
         }
 
         /// <summary>

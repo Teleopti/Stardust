@@ -177,5 +177,39 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(0, stateHolder.AllPermittedPersons.Count);
             _mockRep.VerifyAll();
         }
+
+		[Test]
+		public void ShouldLoadPersonWithTerminalDateSameAsRequestedPeriodStart()
+		{
+			_selectedEntities.Clear();
+			_selectedEntities.Add(_team);
+			_person.TerminalDate = new DateOnly(2009, 9, 6);
+			_target = new PeopleLoaderForTeamLeaderMode(_uow, _schedulerStateHolder, _selectedEntitiesForPeriod, _repositoryFactory);
+			IList<IPerson> returnPersons = new List<IPerson>();
+
+			using (_mockRep.Record())
+			{
+				expectsForRepositoryFactory();
+				Expect.Call(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(_team, _requestedPeriod)).Return(_persons);
+				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
+				Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
+				Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
+				Expect.Call(_contractRepository.FindAllContractByDescription()).Return(_contracts);
+				Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(new disposeStub());
+				Expect.Call(_skillRepository.LoadAll());
+				Expect.Call(_partTimePercentageRepository.LoadAll());
+				Expect.Call(_ruleSetBagRepository.LoadAllWithRuleSets());
+				Expect.Call(_ruleSetRepository.FindAllWithLimitersAndExtenders());
+				Expect.Call(_workflowControlSetRepository.LoadAll());
+				Expect.Call(_siteRepository.LoadAll());
+				Expect.Call(_teamRepository.LoadAll());
+			}
+
+			using (_mockRep.Playback())
+			{
+				ISchedulerStateHolder stateHolder = _target.Initialize();
+				Assert.AreEqual(1, stateHolder.AllPermittedPersons.Count);
+			}
+		}
     }
 }

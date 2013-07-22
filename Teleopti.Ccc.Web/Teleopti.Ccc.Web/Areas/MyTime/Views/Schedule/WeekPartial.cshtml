@@ -24,13 +24,16 @@
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
                 <button class="btn" data-bind="click: previousWeek"><i class="icon-arrow-left"></i></button>
-                <input data-bind="value: displayDate" type="text" class="span2 date-picker-width" readonly="readonly"/>
+                <input data-bind="value: displayDate" type="text" class="span3 text-center" readonly="readonly"/>
                 <button class="btn" data-bind="mytimeDatePicker: selectedDate"><i class="icon-th" ></i></button>
                 <button class="btn" data-bind="click: nextWeek"><i class="icon-arrow-right"></i></button>
             </div>
         </form>
         <ul class="nav">
-            <li><a href="#" class="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+            <li><a href="#" class="week-schedule-today" data-bind="click: today">
+                    <i class="icon-stop"></i>
+                    @Resources.Today
+                </a></li>
         </ul>
     </div>
 </div>

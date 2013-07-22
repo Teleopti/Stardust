@@ -13,15 +13,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
         public ScheduleTransformerException() { }
 
-        public ScheduleTransformerException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        public ScheduleTransformerException(string message)
-            : base(message)
-        {
-        }
-
         public ScheduleTransformerException(string message, string stackTrace)
             : this()
         {

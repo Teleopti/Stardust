@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
 
         public void SetOptionItems(ICollection<string> options)
         {
-            optionList1.OptionItems = options;
+            optionList1.SetOptionItems(options);
         }
 
         private void optionList1_RadioButtonIsChecked(object sender, EventArgs e)

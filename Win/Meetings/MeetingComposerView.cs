@@ -33,12 +33,7 @@ namespace Teleopti.Ccc.Win.Meetings
             SetTexts();
         }
 
-    	public IMeeting TheMeeting
-    	{
-			get { return _meetingComposerPresenter.Model.Meeting; }
-    	}
-
-        public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
+	    public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
             bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator)
             : this()
         {

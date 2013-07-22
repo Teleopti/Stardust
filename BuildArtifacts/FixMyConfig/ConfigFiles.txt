@@ -13,4 +13,6 @@
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\DenormalizeQueue.config,..\ServiceBusHostDenormalizeQueue.config
 ..\..\AgentPortal\Teleopti.Ccc.AgentPortal\app.config,..\AppMytime.config
 ..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,..\BrokerBackplaneWeb.config
+..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\Web.config,..\RTAWeb.config
+..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config,..\AppRTATestApplication.config
 FixMyConfig.nhib.xml,..\TeleoptiCCC7.nhib.xml

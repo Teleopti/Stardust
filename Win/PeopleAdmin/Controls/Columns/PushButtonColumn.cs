@@ -8,18 +8,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
     public class PushButtonColumn<T> : ColumnBase<T>
     {
         private readonly string _headerText;
-        private readonly string _bindingProperty;
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        public PushButtonColumn(string headerText, string bindingProperty)
+        public PushButtonColumn(string headerText, string bindingProperty) : base(bindingProperty, 10)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 10; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -43,7 +36,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.Font.Size = 8;
                 e.Style.Font.Bold = true;
 
-                object obj = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object obj = _propertyReflector.GetValue(dataItem, BindingProperty);
                 int count;
 
                 if (int.TryParse(obj.ToString(), out count) && count == 0)

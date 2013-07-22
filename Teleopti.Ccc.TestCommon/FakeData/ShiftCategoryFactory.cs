@@ -29,13 +29,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             myShiftCategory.DisplayColor = Color.FromName(displayColor);
             return myShiftCategory;
         }
-
-
-				public static IShiftCategory ShiftCategoryWithId()
-				{
-					var shiftCategory = new ShiftCategory("arne anka");
-					shiftCategory.SetId(Guid.NewGuid());
-					return shiftCategory;
-				}
     }
 }

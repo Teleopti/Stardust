@@ -48,13 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.That(timeValue, Is.EqualTo(new TimeSpan(24, 0, 0)));
         }
         
-        /// <summary>
-        /// Determines whether this instance [can parse time from text].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-14
-        /// </remarks>
         [Test]
         public void CanParseTimeFromText()
         {
@@ -64,13 +57,24 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(new TimeSpan(14, 0, 0), timeValue);
         }
 
-        /// <summary>
-        /// Determines whether this instance [can parse time from text as integer].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-14
-        /// </remarks>
+        [Test]
+        public void CanParseTimeFromTextWithPlusOne()
+        {
+            string timeAsText = "2pm +1";
+
+            Assert.IsTrue(TimeHelper.TryParse(timeAsText, out timeValue));
+            Assert.AreEqual(new TimeSpan(38, 0, 0), timeValue);
+        }
+
+        [Test]
+        public void CanParseTimeFromTextWithPlusOneNoSpacing()
+        {
+            string timeAsText = "2pm+1";
+
+            Assert.IsTrue(TimeHelper.TryParse(timeAsText, out timeValue));
+            Assert.AreEqual(new TimeSpan(38, 0, 0), timeValue);
+        }
+
         [Test]
         public void CanParseTimeFromTextAsInteger()
         {

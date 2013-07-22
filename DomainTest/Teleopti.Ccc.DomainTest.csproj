@@ -279,6 +279,7 @@
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancePersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreatorTest.cs" />
+    <Compile Include="Optimization\SchedulingOptionsDayOffPlannerPersonalSettingsTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregatorTest.cs" />
@@ -486,7 +487,6 @@
     <Compile Include="Common\DoNothingAppender.cs" />
     <Compile Include="Common\GroupPageTest.cs" />
     <Compile Include="Common\LocalizedUpdateInfoTest.cs" />
-    <Compile Include="Common\LogEmpty.cs" />
     <Compile Include="Common\LogWriterTest.cs" />
     <Compile Include="Common\Messaging\CreatePushMessageDialoguesServiceTest.cs" />
     <Compile Include="Common\Messaging\PushMessageDialogueTest.cs" />
@@ -600,7 +600,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodHelperTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
     <Compile Include="ResourceCalculation\ResourceOptimizerPreferencesTest.cs" />
-    <Compile Include="ResourceCalculation\MinMaxLengthTestDataCalculator.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceTest.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarmTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
@@ -715,7 +714,6 @@
     <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatImpactOnPeriodForProjectionTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryTestClass.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculatorTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\EndTimeLimiterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\PersonMeetingByDateSorterTest.cs" />

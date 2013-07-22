@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -62,7 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (schedulingOptions.UseTeamBlockSameShiftCategory)
 			{
-				return scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+				var result = scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+				schedulingOptions.NotAllowedShiftCategories.Clear();
+				return result;
 			}
 			return scheduleOnce(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
 
@@ -107,9 +110,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool scheduleAttempts(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
-			var teamBlockIsFullyScheduled = false;
+			var allSelectedDaysAreScheduled = false;
 			IShiftCategory shiftCategoryToBeBlocked = null;
-			while (!teamBlockIsFullyScheduled)
+			while (!allSelectedDaysAreScheduled)
 			{
 				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
 				                                                                               schedulingOptions);
@@ -138,9 +141,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						suggestedShiftProjectionCache = null;
 					}
 				}
-				if (TeamBlockScheduledDayChecker.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, selectedPersons))
-					teamBlockIsFullyScheduled = true;
-				else
+				allSelectedDaysAreScheduled = selectedPeriod.DayCollection()
+					              .Where(x => teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Contains(x))
+					              .All(x => TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, x));
+				if (!allSelectedDaysAreScheduled)
 				{
 					if (shiftCategoryToBeBlocked != null)
 					{
@@ -150,7 +154,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					}
 				}
 			}
-			schedulingOptions.NotAllowedShiftCategories.Clear();
 			return true;
 		}
 
@@ -282,8 +285,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
-			var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
-			restriction = restriction.Combine(openHourRestriction);
+			//This code has timezone problem
+			//var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+			//restriction = restriction.Combine(openHourRestriction);
 
 			// (should we cover for max seats here?) 
 			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,

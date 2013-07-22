@@ -99,20 +99,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		}
 
 
-		public void AddJobStep(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult)
-		{
-
-			var parameterList = new List<SqlParameter>
-									{
-										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
-										new SqlParameter("jobstep_name", jobStepResult.Name)
-									};
-
-
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_log_jobstep_save", parameterList,
-											_connectionString);
-		}
-
 		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
 			var parameterList = new List<SqlParameter>

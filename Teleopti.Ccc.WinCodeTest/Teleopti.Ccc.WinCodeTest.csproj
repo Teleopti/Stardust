@@ -111,11 +111,11 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -808,14 +808,10 @@
     <Compile Include="Scheduler\GridlockManagerTest.cs" />
     <Compile Include="Scheduler\GridlockTest.cs" />
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
-    <Compile Include="Presentation\PersonListBoxPresenterTest.cs" />
-    <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
     <Compile Include="Common\LanguageResourceHelperTest.cs" />
-    <Compile Include="Presentation\BusinessUnitListBoxPresenterTest.cs" />
-    <Compile Include="Presentation\TeamListBoxPresenterTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AfterSavedEventArgsTest.cs" />

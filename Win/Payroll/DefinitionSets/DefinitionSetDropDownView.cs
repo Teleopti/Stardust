@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {
-    public partial class DefinitionSetDropDownView : PayrollBaseUserControl, IDefinitionSetView
+    public partial class DefinitionSetDropDownView : PayrollBaseUserControl
     {
        private IDefinitionSetViewModel SelectedDefinitionSet
         {

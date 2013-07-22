@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 
 namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
@@ -73,28 +70,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             {
                 _clips.Add(((ICloneable)node.TagObject));
             }
-        }
-        /// <summary>
-        /// Verifies whether paste action can be performed.
-        /// </summary>
-        /// <returns>True if can be pasted, otherwise False.</returns>
-        public bool CanPaste()
-        {
-            return (_clips.Count > 0);
-        }
-
-        /// <summary>
-        /// Adds selected cells to clipboard container.
-        /// </summary>
-        /// <param name="grid">Grid to be copied.</param>
-        public void CopyGridData(GridControl grid)
-        {
-            BeginCopy();
-
-            if (!grid.CutPaste.CanCopy()) return;
-            if (grid.Model.SelectedRanges == null || grid.Model.SelectedRanges.Count == 0) return;
-
-            grid.CutPaste.Copy();
         }
     }
 }

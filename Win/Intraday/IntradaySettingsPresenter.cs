@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.Win.Intraday
             get { return _intradaySetting; }
         }
 
-        public void Load()
-        {
-            _intradaySettings = new List<IntradaySetting>();
-        }
-
         public void RemoveIntradaySetting(IntradaySetting intradaySetting)
         {
             _intradaySettings.Remove(intradaySetting);
@@ -51,22 +46,6 @@ namespace Teleopti.Ccc.Win.Intraday
             }
 
             return intradaySetting;
-        }
-
-        public void SaveIntradaySetting(IntradaySetting intradaySetting)
-        {
-            if(!_intradaySettings.Contains(intradaySetting))
-            {
-                _intradaySettings.Add(intradaySetting);
-                if (((ISettingValue)this).BelongsTo == null)
-                    return;
-
-                using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    new PersonalSettingDataRepository(uow).PersistSettingValue(this);
-                    uow.PersistAll();
-                }
-            }
         }
     }
 }

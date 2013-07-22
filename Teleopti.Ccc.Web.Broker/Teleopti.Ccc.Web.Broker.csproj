@@ -60,9 +60,9 @@
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.4.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
+    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.5.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.1.1.4\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+      <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.1.1.5\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>

@@ -7,17 +7,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 {
     public class GridInCellColumn<T> : ColumnBase<T>
     {
-        private string _bindingProperty;
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        public GridInCellColumn(string bindingProperty)
+        public GridInCellColumn(string bindingProperty) : base(bindingProperty, 0)
         {
-            _bindingProperty = bindingProperty;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 0; }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -32,7 +25,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 e.Style.CellType = "GridInCell";
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.Control = (GridControl)_propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.Control = (GridControl)_propertyReflector.GetValue(dataItem, BindingProperty);
                 e.Handled = true;
             }
         }
@@ -42,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (e.ColIndex > 0 && e.RowIndex > 0 && e.RowIndex <= dataItems.Count)
             {
                 T dataItem = dataItems[e.RowIndex - 1];
-                _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.Control);
+                _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.Control);
                 e.Handled = true;
             }
         }
