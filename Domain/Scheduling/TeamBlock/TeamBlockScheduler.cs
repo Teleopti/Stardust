@@ -191,8 +191,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    return null;
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
-		    var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
-		    restriction = restriction.Combine(openHourRestriction);
+			// Has timezone problem.
+		    //var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+		    //restriction = restriction.Combine(openHourRestriction);
 
             // (should we cover for max seats here?) 
             var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
