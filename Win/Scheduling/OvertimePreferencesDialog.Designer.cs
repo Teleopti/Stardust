@@ -40,7 +40,6 @@
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.fromToTimePicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
 			this.ribbonControHeader = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.tableLayoutPanelButtons = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -48,6 +47,7 @@
 			this.tabControlTopLevel = new System.Windows.Forms.TabControl();
 			this.tabPageGenaral = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.fromToTimeDurationPicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimeDurationPicker();
 			this.tableLayoutPanelMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();
@@ -123,7 +123,7 @@
 			this.tableLayoutPanelMain.Controls.Add(this.label3, 0, 1);
 			this.tableLayoutPanelMain.Controls.Add(this.checkBox1, 0, 2);
 			this.tableLayoutPanelMain.Controls.Add(this.label5, 0, 5);
-			this.tableLayoutPanelMain.Controls.Add(this.fromToTimePicker1, 0, 6);
+            this.tableLayoutPanelMain.Controls.Add(this.fromToTimeDurationPicker1, 0, 6);
 			this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMain.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(6);
@@ -196,19 +196,6 @@
 			this.label5.Size = new System.Drawing.Size(414, 13);
 			this.label5.TabIndex = 17;
 			this.label5.Text = "xxOvertimeDuration";
-			// 
-			// fromToTimePicker1
-			// 
-			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimePicker1, 2);
-			this.fromToTimePicker1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.fromToTimePicker1.Location = new System.Drawing.Point(6, 201);
-			this.fromToTimePicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxEndTime")));
-			this.fromToTimePicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxStartTime")));
-			this.fromToTimePicker1.Name = "fromToTimePicker1";
-			this.fromToTimePicker1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-			this.fromToTimePicker1.Size = new System.Drawing.Size(414, 27);
-			this.fromToTimePicker1.TabIndex = 18;
-			this.fromToTimePicker1.WholeDayText = "xxNextDay";
 			// 
 			// ribbonControHeader
 			// 
@@ -307,6 +294,16 @@
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(446, 530);
 			this.tableLayoutPanel3.TabIndex = 15;
 			// 
+            // fromToTimeDurationPicker1
+            // 
+            this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(6, 201);
+            this.fromToTimeDurationPicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
+            this.fromToTimeDurationPicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
+            this.fromToTimeDurationPicker1.Name = "fromToTimeDurationPicker1";
+            this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(260, 27);
+            this.fromToTimeDurationPicker1.TabIndex = 18;
+            this.fromToTimeDurationPicker1.WholeDayText = "xxNextDay";
+            // 
 			// OvertimePreferencesDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,7 +351,7 @@
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvTag;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label5;
-		private Common.Controls.FromToTimePicker fromToTimePicker1;
+        private System.Windows.Forms.Label label5;
+        private Common.Controls.FromToTimeDurationPicker fromToTimeDurationPicker1;
 	}
 }

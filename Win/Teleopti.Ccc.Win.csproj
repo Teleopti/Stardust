@@ -332,7 +332,8 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
+    
+	<Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
     <Compile Include="Common\Controls\Columns\IColumnDisableCondition.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
@@ -346,6 +347,18 @@
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
+	<Compile Include="Common\Controls\FromToTimeDurationPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\FromToTimeDurationPicker.Designer.cs">
+      <DependentUpon>FromToTimeDurationPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Controls\Office2007OutlookTimeDurationPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\Office2007OutlookTimeDurationPicker.Designer.cs">
+      <DependentUpon>Office2007OutlookTimeDurationPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2366,6 +2379,9 @@
     <EmbeddedResource Include="Common\Configuration\ScheduleTagControl.resx">
       <DependentUpon>ScheduleTagControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+	<EmbeddedResource Include="Common\Controls\FromToTimeDurationPicker.resx">
+      <DependentUpon>FromToTimeDurationPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MaskedTimeSpanTextBox.resx">
       <DependentUpon>MaskedTimeSpanTextBox.cs</DependentUpon>
