@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				durationValuePairs.Add(pair);
 			}
 			var worstRelativeDifference = durationValuePairs.Min(x => x.Value);
-			if (worstRelativeDifference >= 0) return TimeSpan.Zero;
+			if (worstRelativeDifference >= 0 || double.IsNaN(worstRelativeDifference)) return TimeSpan.Zero;
 			return durationValuePairs.First(x => x.Value == worstRelativeDifference).Key;
 		}
 
