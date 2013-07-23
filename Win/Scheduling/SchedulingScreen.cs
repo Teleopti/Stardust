@@ -7142,8 +7142,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                             //consider short breaks ???
                             var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
                                                                                        true, true);
+							_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
                             _container.Resolve<IScheduleOvertimeCommand>().Exectue(overtimePreferences, _backgroundWorkerScheduling, _scheduleView.SelectedSchedules(), resouceCalculateDelayer);
-                        }
+							_undoRedo.CommitBatch();
+						}
                     }
                 }
                 catch (DataSourceException dataSourceException)
