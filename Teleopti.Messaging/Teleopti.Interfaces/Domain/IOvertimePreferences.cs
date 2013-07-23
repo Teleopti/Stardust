@@ -9,8 +9,8 @@ namespace Teleopti.Interfaces.Domain
         IActivity SkillActivity { get; set; }
         IMultiplicatorDefinitionSet OvertimeType { get; set; }
         TimePeriod SelectedTimePeriod { get; set; }
-        bool DoNotBreakMaxWorkPerWeek { get; set; }
-        bool DoNotBreakNightlyRest { get; set; }
-        bool DoNotBreakWeeklyRest { get; set; }
+        bool AllowBreakMaxWorkPerWeek { get; set; }
+        bool AllowBreakNightlyRest { get; set; }
+        bool AllowBreakWeeklyRest { get; set; }
     }
 }

@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private void setDataToControls()
 	    {
 	        checkBoxExtendExistingShift.Checked = _overtimePreferences.ExtendExistingShift;
-	        checkBoxAllowBreakingMaxTimePerWeek.Checked  = _overtimePreferences.DoNotBreakMaxWorkPerWeek;
-	        checkBoxAllowBreakingNightlyRest.Checked  = _overtimePreferences.DoNotBreakNightlyRest;
-	        checkBoxAllowBreakingWeeklyRest.Checked = _overtimePreferences.DoNotBreakWeeklyRest;
+	        checkBoxAllowBreakingMaxTimePerWeek.Checked  = _overtimePreferences.AllowBreakMaxWorkPerWeek;
+	        checkBoxAllowBreakingNightlyRest.Checked  = _overtimePreferences.AllowBreakNightlyRest;
+	        checkBoxAllowBreakingWeeklyRest.Checked = _overtimePreferences.AllowBreakWeeklyRest;
 	    }
 
 	    private void initTags()
@@ -180,9 +180,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 	            
 	        }
             _overtimePreferences.SkillActivity = (IActivity)comboBoxAdvActivity.SelectedItem;
-            _overtimePreferences.DoNotBreakMaxWorkPerWeek = checkBoxAllowBreakingMaxTimePerWeek.Checked;
-            _overtimePreferences.DoNotBreakNightlyRest = checkBoxAllowBreakingNightlyRest.Checked ;
-            _overtimePreferences.DoNotBreakWeeklyRest = checkBoxAllowBreakingWeeklyRest.Checked ;
+            _overtimePreferences.AllowBreakMaxWorkPerWeek = checkBoxAllowBreakingMaxTimePerWeek.Checked;
+            _overtimePreferences.AllowBreakNightlyRest = checkBoxAllowBreakingNightlyRest.Checked ;
+            _overtimePreferences.AllowBreakWeeklyRest = checkBoxAllowBreakingWeeklyRest.Checked ;
             _overtimePreferences.ExtendExistingShift = checkBoxExtendExistingShift.Checked;
 	        _overtimePreferences.OvertimeType = (IMultiplicatorDefinitionSet) comboBoxAdvOvertimeType.SelectedItem;
             var selectedPeriod =new TimePeriod(fromToTimeDurationPicker1.StartTime.TimeValue(), fromToTimeDurationPicker1.EndTime.TimeValue());

@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
            _overtimePrefernces.ScheduleTag = _scheduleTag;
            _overtimePrefernces.SkillActivity = _activity;
-           _overtimePrefernces.DoNotBreakMaxWorkPerWeek = true;
-            _overtimePrefernces.DoNotBreakNightlyRest = true;
-            _overtimePrefernces.DoNotBreakWeeklyRest = false;
+           _overtimePrefernces.AllowBreakMaxWorkPerWeek = true;
+            _overtimePrefernces.AllowBreakNightlyRest = true;
+            _overtimePrefernces.AllowBreakWeeklyRest = false;
             _overtimePrefernces.ExtendExistingShift = true;
             _overtimePrefernces.SelectedTimePeriod  = new TimePeriod(TimeSpan.FromHours(10),TimeSpan.FromHours(12));
             _overtimePrefernces.OvertimeType = _definitionSet;
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
             Assert.AreEqual(overtimePrefernces.ScheduleTag, _scheduleTag);
             Assert.AreEqual(overtimePrefernces.SkillActivity, _activity);
-            Assert.IsTrue(overtimePrefernces.DoNotBreakMaxWorkPerWeek);
-            Assert.IsTrue(overtimePrefernces.DoNotBreakNightlyRest );
-            Assert.IsFalse(overtimePrefernces.DoNotBreakWeeklyRest  );
+            Assert.IsTrue(overtimePrefernces.AllowBreakMaxWorkPerWeek);
+            Assert.IsTrue(overtimePrefernces.AllowBreakNightlyRest );
+            Assert.IsFalse(overtimePrefernces.AllowBreakWeeklyRest  );
             Assert.IsTrue( overtimePrefernces.ExtendExistingShift  );
             Assert.AreEqual(overtimePrefernces.SelectedTimePeriod , new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
             Assert.AreEqual(overtimePrefernces.OvertimeType ,_definitionSet );
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
         private void mapFromBoolExpectCalls()
         {
-            Expect.Call(_overtimePreferncesMock.DoNotBreakMaxWorkPerWeek).Return(true);
-            Expect.Call(_overtimePreferncesMock.DoNotBreakNightlyRest).Return(true);
-            Expect.Call(_overtimePreferncesMock.DoNotBreakWeeklyRest).Return(true);
+            Expect.Call(_overtimePreferncesMock.AllowBreakMaxWorkPerWeek).Return(true);
+            Expect.Call(_overtimePreferncesMock.AllowBreakNightlyRest).Return(true);
+            Expect.Call(_overtimePreferncesMock.AllowBreakWeeklyRest).Return(true);
             Expect.Call(_overtimePreferncesMock.ExtendExistingShift).Return(false);
             
         }
@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             Expect.Call(() => _overtimePreferncesMock.SkillActivity   = _activity);
             Expect.Call(() => _overtimePreferncesMock.ExtendExistingShift = false);
-            Expect.Call(() => _overtimePreferncesMock.DoNotBreakMaxWorkPerWeek = true);
-            Expect.Call(() => _overtimePreferncesMock.DoNotBreakNightlyRest  = true);
-            Expect.Call(() => _overtimePreferncesMock.DoNotBreakWeeklyRest  = true);
+            Expect.Call(() => _overtimePreferncesMock.AllowBreakMaxWorkPerWeek = true);
+            Expect.Call(() => _overtimePreferncesMock.AllowBreakNightlyRest  = true);
+            Expect.Call(() => _overtimePreferncesMock.AllowBreakWeeklyRest  = true);
             Expect.Call(() => _overtimePreferncesMock.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
         }
 

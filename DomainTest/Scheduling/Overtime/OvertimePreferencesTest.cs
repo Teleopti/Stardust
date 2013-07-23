@@ -26,22 +26,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         [Test]
         public void VerifyDoNotBreakMaxWorkPerWeek()
         {
-            _target.DoNotBreakMaxWorkPerWeek = true;
-            Assert.IsTrue(_target.DoNotBreakMaxWorkPerWeek );
+            _target.AllowBreakMaxWorkPerWeek = true;
+            Assert.IsTrue(_target.AllowBreakMaxWorkPerWeek );
         }
 
         [Test]
         public void VerifyDoNotBreakNightlyRest()
         {
-            _target.DoNotBreakNightlyRest = true;
-            Assert.IsTrue(_target.DoNotBreakNightlyRest );
+            _target.AllowBreakNightlyRest = true;
+            Assert.IsTrue(_target.AllowBreakNightlyRest );
         }
 
         [Test]
         public void VerifyDoNotBreakWeeklyRest()
         {
-            _target.DoNotBreakWeeklyRest  = true;
-            Assert.IsTrue(_target.DoNotBreakWeeklyRest);
+            _target.AllowBreakWeeklyRest  = true;
+            Assert.IsTrue(_target.AllowBreakWeeklyRest);
         }
 
         [Test]

@@ -41,17 +41,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;
-            overtimePreferences.DoNotBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
-            overtimePreferences.DoNotBreakNightlyRest = _doNotBreakNightlyRest;
-            overtimePreferences.DoNotBreakWeeklyRest = _doNotBreakWeeklyRest;
+            overtimePreferences.AllowBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
+            overtimePreferences.AllowBreakNightlyRest = _doNotBreakNightlyRest;
+            overtimePreferences.AllowBreakWeeklyRest = _doNotBreakWeeklyRest;
             
         }
 
         public void MapFrom(IOvertimePreferences overtimePreferences)
         {
-            _doNotBreakMaxSeatPerWeek = overtimePreferences.DoNotBreakMaxWorkPerWeek;
-            _doNotBreakNightlyRest = overtimePreferences.DoNotBreakNightlyRest;
-            _doNotBreakWeeklyRest = overtimePreferences.DoNotBreakWeeklyRest;
+            _doNotBreakMaxSeatPerWeek = overtimePreferences.AllowBreakMaxWorkPerWeek;
+            _doNotBreakNightlyRest = overtimePreferences.AllowBreakNightlyRest;
+            _doNotBreakWeeklyRest = overtimePreferences.AllowBreakWeeklyRest;
             _extendExistingShifts = overtimePreferences.ExtendExistingShift;
             
             _selectTimePeriod = overtimePreferences.SelectedTimePeriod;

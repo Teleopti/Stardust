@@ -74,10 +74,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 												 overtimeLayerPeriod,
 												 overtimePreferences.OvertimeType);
 					var rules = NewBusinessRuleCollection.Minimum();
-					rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
-					rules.Add(new MinWeeklyRestRule(
-                                  new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
+					if(!overtimePreferences.AllowBreakNightlyRest)
+						rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+					if(!overtimePreferences.AllowBreakMaxWorkPerWeek)
+						rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+					if(!overtimePreferences.AllowBreakWeeklyRest)
+						rules.Add(new MinWeeklyRestRule(
+							          new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
 
 					if (overtimePreferences.ScheduleTag.Description != "<None>")
 					{
