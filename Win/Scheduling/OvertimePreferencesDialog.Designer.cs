@@ -74,7 +74,7 @@
             this.checkBoxExtendExistingShift.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.checkBoxExtendExistingShift.Size = new System.Drawing.Size(414, 17);
             this.checkBoxExtendExistingShift.TabIndex = 2;
-            this.checkBoxExtendExistingShift.Text = "Extend the end of existing shifts";
+            this.checkBoxExtendExistingShift.Text = "xxExtendTheEndOfExistingShiftsColon";
             this.checkBoxExtendExistingShift.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -97,7 +97,7 @@
             this.label2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.label2.Size = new System.Drawing.Size(248, 25);
             this.label2.TabIndex = 6;
-            this.label2.Text = "xxSkillActivity";
+            this.label2.Text = "xxSkillActivityColon";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label4
@@ -109,7 +109,7 @@
             this.label4.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.label4.Size = new System.Drawing.Size(248, 20);
             this.label4.TabIndex = 10;
-            this.label4.Text = "xxTypeOfOvertime";
+            this.label4.Text = "xxTypeOfOvertimeColon";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanelMain
@@ -160,7 +160,7 @@
             this.checkBoxAllowBreakingNightlyRest.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.checkBoxAllowBreakingNightlyRest.Size = new System.Drawing.Size(414, 17);
             this.checkBoxAllowBreakingNightlyRest.TabIndex = 21;
-            this.checkBoxAllowBreakingNightlyRest.Text = "Allow break contract nightly rest";
+            this.checkBoxAllowBreakingNightlyRest.Text = "xxAllowBreakContractNightlyRestColon";
             this.checkBoxAllowBreakingNightlyRest.UseVisualStyleBackColor = true;
             // 
             // checkBoxAllowBreakingWeeklyRest
@@ -173,7 +173,7 @@
             this.checkBoxAllowBreakingWeeklyRest.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.checkBoxAllowBreakingWeeklyRest.Size = new System.Drawing.Size(414, 17);
             this.checkBoxAllowBreakingWeeklyRest.TabIndex = 20;
-            this.checkBoxAllowBreakingWeeklyRest.Text = "Allow break contract weekly rest";
+            this.checkBoxAllowBreakingWeeklyRest.Text = "xxAllowBreakContractWeeklyRestColon";
             this.checkBoxAllowBreakingWeeklyRest.UseVisualStyleBackColor = true;
             // 
             // checkBoxAllowBreakingMaxTimePerWeek
@@ -186,7 +186,7 @@
             this.checkBoxAllowBreakingMaxTimePerWeek.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.checkBoxAllowBreakingMaxTimePerWeek.Size = new System.Drawing.Size(414, 17);
             this.checkBoxAllowBreakingMaxTimePerWeek.TabIndex = 19;
-            this.checkBoxAllowBreakingMaxTimePerWeek.Text = "Allow break contract max work time per week";
+            this.checkBoxAllowBreakingMaxTimePerWeek.Text = "xxAllowBreakContractMaxWorkTimePerWeekColon";
             this.checkBoxAllowBreakingMaxTimePerWeek.UseVisualStyleBackColor = true;
             // 
             // comboBoxAdvOvertimeType
@@ -244,7 +244,7 @@
             this.label5.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.label5.Size = new System.Drawing.Size(414, 13);
             this.label5.TabIndex = 17;
-            this.label5.Text = "xxOvertimeDuration";
+            this.label5.Text = "xxOvertimeDurationColon";
             // 
             // fromToTimeDurationPicker1
             // 
