@@ -151,16 +151,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
-                                                    UserTexts.Resources.AbsenceRequestHasBeenApprovedDot,
-                                                    personRequest.Request.Period.StartDateTimeLocal(
-                                                        person.PermissionInformation.DefaultTimeZone()).ToString(
-                                                            datePattern),
-                                                    personRequest.Request.Period.EndDateTimeLocal(
-                                                        person.PermissionInformation.DefaultTimeZone()).ToString(
-                                                            datePattern));
-            Assert.AreEqual(notificationMessage, _target.TextForNotification);
+           
+            Assert.IsNotEmpty(_target.TextForNotification);
             //Assert.AreEqual(AbsenceRequestForOneDayHasBeenApprovedDot, _target.TextForNotification);
 
             mocks.VerifyAll();
