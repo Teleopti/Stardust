@@ -1718,6 +1718,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow break contract max work time per week.
+        /// </summary>
+        public static string AllowBreakContractMaxWorkTimePerWeek {
+            get {
+                return ResourceManager.GetString("AllowBreakContractMaxWorkTimePerWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow break contract nightly rest.
+        /// </summary>
+        public static string AllowBreakContractNightlyRest {
+            get {
+                return ResourceManager.GetString("AllowBreakContractNightlyRest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow break contract weekly rest.
+        /// </summary>
+        public static string AllowBreakContractWeeklyRest {
+            get {
+                return ResourceManager.GetString("AllowBreakContractWeeklyRest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Meetings.
         /// </summary>
         public static string AllowMeetings {
@@ -8145,6 +8172,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ExtendReduceTimeForFlexibleAgents {
             get {
                 return ResourceManager.GetString("ExtendReduceTimeForFlexibleAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extend the end of existing shifts:.
+        /// </summary>
+        public static string ExtendTheEndOfExistingShiftsColon {
+            get {
+                return ResourceManager.GetString("ExtendTheEndOfExistingShiftsColon", resourceCulture);
             }
         }
         
@@ -15941,6 +15977,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime duration:.
+        /// </summary>
+        public static string OvertimeDurationColon {
+            get {
+                return ResourceManager.GetString("OvertimeDurationColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overview.
         /// </summary>
         public static string OverView {
@@ -21874,6 +21919,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skill activity:.
+        /// </summary>
+        public static string SkillActivityColon {
+            get {
+                return ResourceManager.GetString("SkillActivityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill:.
         /// </summary>
         public static string SkillColon {
@@ -24248,6 +24302,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TypeOfOvertime {
             get {
                 return ResourceManager.GetString("TypeOfOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of overtime:.
+        /// </summary>
+        public static string TypeOfOvertimeColon {
+            get {
+                return ResourceManager.GetString("TypeOfOvertimeColon", resourceCulture);
             }
         }
         

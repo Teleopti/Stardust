@@ -11577,6 +11577,27 @@ Reduce the complexity to use these shifts.</value>
   <data name="TypeOfOvertime" xml:space="preserve">
     <value>Type of overtime</value>
   </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Allow break contract max work time per week</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Allow break contract nightly rest</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Allow break contract weekly rest</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Extend the end of existing shifts:</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Overtime duration:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Skill activity:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Type of overtime:</value>
+  </data>
   <data name="RepViewerCurrentPage" xml:space="preserve">
     <value>Current page</value>
     <comment>Report Viewer Toolbar</comment>
