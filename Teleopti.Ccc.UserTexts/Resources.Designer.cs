@@ -5367,6 +5367,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection to database timed out, try to limit your search conditions..
+        /// </summary>
+        public static string DatabaseTimedOutSelectLessData {
+            get {
+                return ResourceManager.GetString("DatabaseTimedOutSelectLessData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data:.
         /// </summary>
         public static string DataColon {
@@ -18525,6 +18534,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fulfilled.
+        /// </summary>
+        public static string ResFulfilled {
+            get {
+                return ResourceManager.GetString("ResFulfilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fulfillment (%).
+        /// </summary>
+        public static string ResFulfillmentPercent {
+            get {
+                return ResourceManager.GetString("ResFulfillmentPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must Haves.
+        /// </summary>
+        public static string ResMustHaves {
+            get {
+                return ResourceManager.GetString("ResMustHaves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolution (minutes).
         /// </summary>
         public static string ResolutionMin {
@@ -18926,6 +18962,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResultView {
             get {
                 return ResourceManager.GetString("ResultView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfulfilled.
+        /// </summary>
+        public static string ResUnfulfilled {
+            get {
+                return ResourceManager.GetString("ResUnfulfilled", resourceCulture);
             }
         }
         

@@ -11548,4 +11548,24 @@ Reduce the complexity to use these shifts.</value>
     <value>Zoom</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
+	<data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connection to database timed out, try to limit your search conditions.</value>
+    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  </data>
+	<data name="ResFulfilled" xml:space="preserve">
+    <value>Fulfilled</value>
+    <comment>Fulfilled</comment>
+  </data>
+	<data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Fulfillment (%)</value>
+    <comment>Fulfillment (%)</comment>
+  </data>
+	<data name="ResMustHaves" xml:space="preserve">
+    <value>Must Haves</value>
+    <comment>Must Haves</comment>
+  </data>
+	<data name="ResUnfulfilled" xml:space="preserve">
+    <value>Unfulfilled</value>
+    <comment>Unfulfilled</comment>
+  </data>
 </root>
