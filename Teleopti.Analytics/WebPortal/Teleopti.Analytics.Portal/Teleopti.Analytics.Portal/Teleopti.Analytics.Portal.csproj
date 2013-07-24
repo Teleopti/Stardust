@@ -256,6 +256,7 @@
     <Compile Include="Reports\Ccc\report_agent_schedule_adherence.aspx.designer.cs">
       <DependentUpon>report_agent_schedule_adherence.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ReportViewerToolbarTexts.cs" />
     <Compile Include="Timeout.aspx.cs">
       <DependentUpon>Timeout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

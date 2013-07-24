@@ -1217,25 +1217,97 @@ Schedule</value>
     <value>Date To (shifts starting):</value>
     <comment>Date To (shifts starting):</comment>
   </data>
-  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>Connection to database timed out, try to limit your search conditions.</value>
-    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Current page</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
-  <data name="ResFulfilled" xml:space="preserve">
-    <value>Fulfilled</value>
-    <comment>Fulfilled</comment>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
-  <data name="ResFulfillmentPercent" xml:space="preserve">
-    <value>Fulfillment (%)</value>
-    <comment>Fulfillment (%)</comment>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Find</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
-  <data name="ResMustHaves" xml:space="preserve">
-    <value>Must Haves</value>
-    <comment>Must Haves</comment>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Find Next</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
-  <data name="ResUnfulfilled" xml:space="preserve">
-    <value>Unfulfilled</value>
-    <comment>Unfulfilled</comment>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Find Text In Report</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>First Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Invalid page number</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Last Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Next</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Next Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>No more matches found.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>of</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Page Setup</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Page Width</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Previous Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Print Layout</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Print</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stop Rendering</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text not found.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total Pages</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Whole Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Availability Per Agent</value>
