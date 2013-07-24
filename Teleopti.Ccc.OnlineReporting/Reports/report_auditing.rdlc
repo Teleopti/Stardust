@@ -1,79 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DummyDataSource">
-      <ConnectionProperties>
-        <DataProvider>SQL</DataProvider>
-        <ConnectString />
-      </ConnectionProperties>
-      <rd:DataSourceID>b138d3ef-2336-4318-8537-57b8be9df885</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet2">
-      <Fields>
-        <Field Name="AuditType">
-          <DataField>AuditType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Detail">
-          <DataField>Detail</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ModifiedAt">
-          <DataField>ModifiedAt</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ModifiedBy">
-          <DataField>ModifiedBy</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ScheduledAgent">
-          <DataField>ScheduledAgent</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ScheduleEnd">
-          <DataField>ScheduleEnd</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ScheduleStart">
-          <DataField>ScheduleStart</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ShiftType">
-          <DataField>ShiftType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DummyDataSource</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>Teleopti.Interfaces.Domain</rd:DataSetName>
-        <rd:TableName>IScheduleAuditingReportData</rd:TableName>
-        <rd:ObjectDataSourceType>Teleopti.Interfaces.Domain.IScheduleAuditingReportData, Teleopti.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.03236in</Width>
+              <Width>5.16219cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.42913in</Width>
+              <Width>11.24999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.13386in</Width>
+              <Width>10.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -104,7 +48,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -145,7 +88,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -213,7 +156,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -287,7 +230,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.21317in</Height>
+              <Height>0.54145cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -391,33 +334,33 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>3.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.62152in</Width>
+              <Width>4cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.73499in</Width>
+              <Width>4cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.49999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.49999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.38009in</Width>
+              <Width>3.50543cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.3905in</Width>
+              <Width>3.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5155in</Width>
+              <Width>3.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -718,7 +661,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1049,7 +992,7 @@
         <Top>3.63049cm</Top>
         <Left>0.18718cm</Left>
         <Height>1.2cm</Height>
-        <Width>26.91219cm</Width>
+        <Width>27.00542cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -1061,229 +1004,7 @@
     <Height>5.85382cm</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="param_scenario">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>scenario</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_agents">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>agents</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_date_from">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_from</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_date_to">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_to</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_timezone">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>timezone</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="language_id">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>language_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="culture">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Report_Parameter_10</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ScheduleAuditTrailReport">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResReportScheduledTimePerActivity</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="AgentsColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Agent:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="DateColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>DateColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="TimeZoneColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTimeZoneColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ScheduleDateColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_change_date_from">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_change_date_to">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="param_audit_owner">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="UserColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="AuditOwner">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ChangeDate">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Agent">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ObjectType">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Action">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Detail">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ScheduleDateFrom">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ScheduleDateTo">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="UserName">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ChangeDateColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="InUTC">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
-  <Code>Public Function TimeString(i as integer)as string
-	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
-End function</Code>
-  <Width>27.58853cm</Width>
+  <Width>27.71813cm</Width>
   <Page>
     <PageHeader>
       <Height>1.75cm</Height>
@@ -1457,8 +1178,287 @@ End function</Code>
     <ColumnSpacing>1cm</ColumnSpacing>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DummyDataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:DataSourceID>b138d3ef-2336-4318-8537-57b8be9df885</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet2">
+      <Query>
+        <DataSourceName>DummyDataSource</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="AuditType">
+          <DataField>AuditType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Detail">
+          <DataField>Detail</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedAt">
+          <DataField>ModifiedAt</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedBy">
+          <DataField>ModifiedBy</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ScheduledAgent">
+          <DataField>ScheduledAgent</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ScheduleEnd">
+          <DataField>ScheduleEnd</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ScheduleStart">
+          <DataField>ScheduleStart</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ShiftType">
+          <DataField>ShiftType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Teleopti.Interfaces.Domain</rd:DataSetName>
+        <rd:TableName>IScheduleAuditingReportData</rd:TableName>
+        <rd:ObjectDataSourceType>Teleopti.Interfaces.Domain.IScheduleAuditingReportData, Teleopti.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="param_scenario">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>scenario</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_agents">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>agents</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_date_from">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_from</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_date_to">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_to</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_timezone">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>timezone</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="language_id">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>language_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="culture">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_10</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ScheduleAuditTrailReport">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResReportScheduledTimePerActivity</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AgentsColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Agent:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DateColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>DateColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TimeZoneColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTimeZoneColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ScheduleDateColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_change_date_from">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_change_date_to">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="param_audit_owner">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AuditOwner">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ChangeDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Agent">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ObjectType">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Action">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Detail">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ScheduleDateFrom">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ScheduleDateTo">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ChangeDateColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="InUTC">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function TimeString(i as integer)as string
+	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
+End function</Code>
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>
