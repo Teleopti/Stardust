@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -23,24 +22,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private readonly IProjectionProvider _projectionProvider;
 		private BackgroundWorker _backgroundWorker;
 
 		public ScheduleOvertimeCommand(ISchedulingResultStateHolder schedulingResultStateHolder,
 		                               IOvertimeLengthDecider overtimeLengthDecider,
 		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                               ISchedulerStateHolder schedulerStateHolder,
 		                               IProjectionProvider projectionProvider)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-			_schedulerStateHolder = schedulerStateHolder;
 			_projectionProvider = projectionProvider;
 		}
-
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
                              IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -98,13 +92,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs e)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			if (_backgroundWorker.CancellationPending)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
+				e.Cancel = true;
 			}
+			_backgroundWorker.ReportProgress(1, e.SchedulePart);
 		}
 
 		private IEnumerable<IPerson> orderCandidatesRandomly(IEnumerable<IPerson> persons, DateOnly dateOnly)
