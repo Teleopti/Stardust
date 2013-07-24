@@ -4138,6 +4138,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonRequestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 			toolStripButtonOptions.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			ToolStripMenuItemScheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
 		}
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
