@@ -1718,29 +1718,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow break contract max work time per week:.
+        ///   Looks up a localized string similar to Allow break contract max work time per week.
         /// </summary>
-        public static string AllowBreakContractMaxWorkTimePerWeekColon {
+        public static string AllowBreakContractMaxWorkTimePerWeek {
             get {
-                return ResourceManager.GetString("AllowBreakContractMaxWorkTimePerWeekColon", resourceCulture);
+                return ResourceManager.GetString("AllowBreakContractMaxWorkTimePerWeek", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow break contract nightly rest:.
+        ///   Looks up a localized string similar to Allow break contract nightly rest.
         /// </summary>
-        public static string AllowBreakContractNightlyRestColon {
+        public static string AllowBreakContractNightlyRest {
             get {
-                return ResourceManager.GetString("AllowBreakContractNightlyRestColon", resourceCulture);
+                return ResourceManager.GetString("AllowBreakContractNightlyRest", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow break contract weekly rest:.
+        ///   Looks up a localized string similar to Allow break contract weekly rest.
         /// </summary>
-        public static string AllowBreakContractWeeklyRestColon {
+        public static string AllowBreakContractWeeklyRest {
             get {
-                return ResourceManager.GetString("AllowBreakContractWeeklyRestColon", resourceCulture);
+                return ResourceManager.GetString("AllowBreakContractWeeklyRest", resourceCulture);
             }
         }
         

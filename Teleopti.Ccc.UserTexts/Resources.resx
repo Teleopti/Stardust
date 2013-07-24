@@ -11577,14 +11577,14 @@ Reduce the complexity to use these shifts.</value>
   <data name="TypeOfOvertime" xml:space="preserve">
     <value>Type of overtime</value>
   </data>
-  <data name="AllowBreakContractMaxWorkTimePerWeekColon" xml:space="preserve">
-    <value>Allow break contract max work time per week:</value>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Allow break contract max work time per week</value>
   </data>
-  <data name="AllowBreakContractNightlyRestColon" xml:space="preserve">
-    <value>Allow break contract nightly rest:</value>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Allow break contract nightly rest</value>
   </data>
-  <data name="AllowBreakContractWeeklyRestColon" xml:space="preserve">
-    <value>Allow break contract weekly rest:</value>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Allow break contract weekly rest</value>
   </data>
   <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
     <value>Extend the end of existing shifts:</value>
