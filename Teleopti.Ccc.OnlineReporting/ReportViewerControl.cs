@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.OnlineReporting
 
         public ReportViewerControl()
         {
-            InitializeComponent();  
+            InitializeComponent();
+	        reportViewer1.ShowBackButton = false;
+			reportViewer1.Messages = new ReportViewerToolbarTexts(); //set to a class that return correct strings
         }
 
         public ReportViewer ReportViewerControl1

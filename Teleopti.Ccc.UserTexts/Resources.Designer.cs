@@ -5466,6 +5466,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection to database timed out, try to limit your search conditions..
+        /// </summary>
+        public static string DatabaseTimedOutSelectLessData {
+            get {
+                return ResourceManager.GetString("DatabaseTimedOutSelectLessData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data:.
         /// </summary>
         public static string DataColon {
@@ -18102,6 +18111,204 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current page.
+        /// </summary>
+        public static string RepViewerCurrentPage {
+            get {
+                return ResourceManager.GetString("RepViewerCurrentPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string RepViewerExport {
+            get {
+                return ResourceManager.GetString("RepViewerExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find.
+        /// </summary>
+        public static string RepViewerFind {
+            get {
+                return ResourceManager.GetString("RepViewerFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Next.
+        /// </summary>
+        public static string RepViewerFindNext {
+            get {
+                return ResourceManager.GetString("RepViewerFindNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Text In Report.
+        /// </summary>
+        public static string RepViewerFindText {
+            get {
+                return ResourceManager.GetString("RepViewerFindText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Page.
+        /// </summary>
+        public static string RepViewerFirstPage {
+            get {
+                return ResourceManager.GetString("RepViewerFirstPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Page.
+        /// </summary>
+        public static string RepViewerLastPage {
+            get {
+                return ResourceManager.GetString("RepViewerLastPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string RepViewerNext {
+            get {
+                return ResourceManager.GetString("RepViewerNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next Page.
+        /// </summary>
+        public static string RepViewerNextPage {
+            get {
+                return ResourceManager.GetString("RepViewerNextPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No more matches found..
+        /// </summary>
+        public static string RepViewerNoMoreMatches {
+            get {
+                return ResourceManager.GetString("RepViewerNoMoreMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to of.
+        /// </summary>
+        public static string RepViewerOf {
+            get {
+                return ResourceManager.GetString("RepViewerOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Setup.
+        /// </summary>
+        public static string RepViewerPageSetup {
+            get {
+                return ResourceManager.GetString("RepViewerPageSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Width.
+        /// </summary>
+        public static string RepViewerPageWidth {
+            get {
+                return ResourceManager.GetString("RepViewerPageWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous Page.
+        /// </summary>
+        public static string RepViewerPreviousPage {
+            get {
+                return ResourceManager.GetString("RepViewerPreviousPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print Layout.
+        /// </summary>
+        public static string RepViewerPrinLayout {
+            get {
+                return ResourceManager.GetString("RepViewerPrinLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        public static string RepViewerPrint {
+            get {
+                return ResourceManager.GetString("RepViewerPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string RepViewerRefresh {
+            get {
+                return ResourceManager.GetString("RepViewerRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Rendering.
+        /// </summary>
+        public static string RepViewerStop {
+            get {
+                return ResourceManager.GetString("RepViewerStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text not found..
+        /// </summary>
+        public static string RepViewerTextNotFound {
+            get {
+                return ResourceManager.GetString("RepViewerTextNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Pages.
+        /// </summary>
+        public static string RepViewerTotalPages {
+            get {
+                return ResourceManager.GetString("RepViewerTotalPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whole Page.
+        /// </summary>
+        public static string RepViewerWholePage {
+            get {
+                return ResourceManager.GetString("RepViewerWholePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom.
+        /// </summary>
+        public static string RepViewerZoom {
+            get {
+                return ResourceManager.GetString("RepViewerZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request.
         /// </summary>
         public static string Request {
@@ -18534,6 +18741,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fulfilled.
+        /// </summary>
+        public static string ResFulfilled {
+            get {
+                return ResourceManager.GetString("ResFulfilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fulfillment (%).
+        /// </summary>
+        public static string ResFulfillmentPercent {
+            get {
+                return ResourceManager.GetString("ResFulfillmentPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must Haves.
+        /// </summary>
+        public static string ResMustHaves {
+            get {
+                return ResourceManager.GetString("ResMustHaves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolution (minutes).
         /// </summary>
         public static string ResolutionMin {
@@ -18944,6 +19178,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResultView {
             get {
                 return ResourceManager.GetString("ResultView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfulfilled.
+        /// </summary>
+        public static string ResUnfulfilled {
+            get {
+                return ResourceManager.GetString("ResUnfulfilled", resourceCulture);
             }
         }
         
