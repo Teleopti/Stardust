@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						if (!schedulingOptions.NotAllowedShiftCategories.Contains(shiftCategoryToBeBlocked))
 							schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
 					}
+					else return false;
 				}
 			}
 			return true;
