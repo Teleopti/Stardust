@@ -17,7 +17,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (skillStaffPeriodList != null)
                 foreach (var skillStaffPeriod in skillStaffPeriodList)
                 {
-                    skillIntervalList.Add(new SkillIntervalData(skillStaffPeriod.Period ,skillStaffPeriod.FStaff ,skillStaffPeriod.FStaff - skillStaffPeriod.CalculatedResource ,0,null,null));
+                    //skillIntervalList.Add(new SkillIntervalData(skillStaffPeriod.Period ,skillStaffPeriod.FStaff ,skillStaffPeriod.FStaff - skillStaffPeriod.CalculatedResource ,0,skillStaffPeriod.AbsoluteDifferenceMinStaffBoosted() ,skillStaffPeriod.AbsoluteDifferenceMaxStaffBoosted() ));
+                    var minStaff = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
+                    var maxStaff = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons ;
+                    var currentHead = skillStaffPeriod.Payload.CalculatedLoggedOn;
+                    skillIntervalList.Add(new SkillIntervalData(skillStaffPeriod.Period, skillStaffPeriod.FStaff, skillStaffPeriod.FStaff - skillStaffPeriod.CalculatedResource, currentHead, minStaff, maxStaff));
                 }
             return skillIntervalList;
         }
