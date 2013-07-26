@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson),
 		                                                        		typeof (IPersonWriteProtectionInfo),
 		                                                        	};
+		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
+		                                                        	{
+		                                                        		typeof (ITeam),
+		                                                        		typeof (ISite),
+		                                                        	};
 
     	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
     	private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
@@ -30,7 +35,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 	    {
 		    var atLeastOneMessage = false;
-		    var affectedInterfaces = from r in modifiedRoots
+		    var rootChangeInfos = modifiedRoots as IList<IRootChangeInfo> ?? modifiedRoots.ToList();
+		    var affectedInterfaces = from r in rootChangeInfos
 		                             let t = r.Root.GetType()
 		                             where _triggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
 		                             select (IAggregateRoot) r.Root;
@@ -43,6 +49,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                     _saveToDenormalizationQueue.Execute(message);
 			    atLeastOneMessage = true;
 		    }
+			
+			if (rootChangeInfos.Select(r => new {r, t = r.Root.GetType()}).Count(@t1 => _otherTriggerInterfaces.Any(ti => ti.IsAssignableFrom(@t1.t))) > 0)
+			{
+				var message = new PersonChangedMessage {SerializedPeople = Guid.Empty.ToString()};
+				_saveToDenormalizationQueue.Execute(message, runSql);
+				atLeastOneMessage = true;
+			}
 
 		    if (atLeastOneMessage)
 		    {
