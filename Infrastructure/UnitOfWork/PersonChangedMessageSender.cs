@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (rootChangeInfos.Select(r => new {r, t = r.Root.GetType()}).Count(@t1 => _otherTriggerInterfaces.Any(ti => ti.IsAssignableFrom(@t1.t))) > 0)
 			{
 				var message = new PersonChangedMessage {SerializedPeople = Guid.Empty.ToString()};
-				_saveToDenormalizationQueue.Execute(message, runSql);
+				_saveToDenormalizationQueue.Execute(message);
 				atLeastOneMessage = true;
 			}
 
