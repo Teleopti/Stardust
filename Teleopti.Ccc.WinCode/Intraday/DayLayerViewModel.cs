@@ -220,9 +220,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             _rtaStateHolder = null;
             _dispatcherWrapper = null;
-	        _collectionViewSource = null;
-	        ModelEditable = null;
-	        Models = null;
         }
     }
 }
