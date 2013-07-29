@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -87,6 +88,28 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 _target.Execute(session, new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
             }
         }
+
+		[Test]
+		public void ShouldSaveRebuildReadModelForPersonWriteProtectionToQueueOnTeam()
+		{
+			var session = _mocks.DynamicMock<IRunSql>();
+			var team = new Team();
+			var ids = new Guid[] { };
+			var message = new PersonChangedMessage();
+			message.SetPersonIdCollection(ids);
+
+			var roots = new IRootChangeInfo[1];
+			roots[0] = new RootChangeInfo(team, DomainUpdateType.Update);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute(session, roots);
+			}
+		}
 	}
 
 	
