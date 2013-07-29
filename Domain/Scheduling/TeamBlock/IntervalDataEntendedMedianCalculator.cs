@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     
 
-    public class IntervalDataMinimumMedianCalculator : IIntervalDataCalculator
+    public class IntervalDataEntendedMedianCalculator : IIntervalDataCalculator
     {
         public double Calculate(IList<double> intervalValue)
         {

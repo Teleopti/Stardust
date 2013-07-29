@@ -8,14 +8,14 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
     [TestFixture]
-    public class IntervalDataMinimumMedianCalculatorTest
+    public class IntervalDataExtendedMedianCalculatorTest
     {
         private IIntervalDataCalculator _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new IntervalDataMinimumMedianCalculator();
+            _target = new IntervalDataEntendedMedianCalculator();
         }
 
         [Test]
@@ -26,6 +26,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             intervalValue = new List<double>() { 14, 3, 12, 13, 3, 13,1 };
             Assert.AreEqual(13, _target.Calculate(intervalValue));
+        }
+
+        [Test]
+        public void ShouldCalculateMaximumMedian()
+        {
+            var intervalValue = new List<double>() { 0, 2, 5, 3, 5, 2, 4, 2, 3, 5, 5 };
+            Assert.AreEqual(5, _target.Calculate(intervalValue));
+
+            intervalValue = new List<double>() { 16, 5, 14, 14, 4, 17, 7 };
+            Assert.AreEqual(14, _target.Calculate(intervalValue));
         }
 
         [Test]
