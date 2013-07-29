@@ -72,7 +72,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAbsence)).BeginInit();
             this.tableLayoutPanelDates.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd.Calendar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart.Calendar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPEndTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAllDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPStartTime)).BeginInit();
@@ -177,6 +179,7 @@
             // 
             this.textBoxExtMessage.BorderColor = System.Drawing.Color.DarkTurquoise;
             this.textBoxExtMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxExtMessage.Cursor = System.Windows.Forms.Cursors.IBeam;
             resources.ApplyResources(this.textBoxExtMessage, "textBoxExtMessage");
             this.textBoxExtMessage.Name = "textBoxExtMessage";
             this.textBoxExtMessage.OverflowIndicatorToolTipText = null;
@@ -451,7 +454,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExtSubject)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAbsence)).EndInit();
             this.tableLayoutPanelDates.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd.Calendar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart.Calendar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPEndTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAllDay)).EndInit();
