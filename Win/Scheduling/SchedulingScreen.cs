@@ -7046,8 +7046,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void showRequestAllowanceView()
 		{
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0
-									 ? _requestView.SelectedAdapters().First().PersonRequest
-									 : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+				                     ? _requestView.SelectedAdapters().First().PersonRequest
+				                     : _schedulerState.PersonRequests.FirstOrDefault(
+					                     r =>
+					                     r.Request is AbsenceRequest &&
+					                     _schedulerState.RequestedPeriod.Period().Contains(r.Request.Period));
+
 			if (defaultRequest == null)
 			{
 				var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);

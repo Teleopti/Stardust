@@ -35,6 +35,7 @@
                     </Trigger>
 					<Trigger Property="IsSelected" Value="True">
 						<Setter Property="Background" Value="{StaticResource RaptorDarkGridSelectionGradientBrush}"/>
+						<Setter Property="IsHitTestVisible" Value="False" />
 					</Trigger>
 					<!--    <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
