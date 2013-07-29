@@ -439,7 +439,37 @@ namespace Teleopti.Ccc.Sdk.WcfService
             }
 		}
 
-		public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+        public ICollection<PayrollTimeExportDataDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+                                                     string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+            {
+                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiTimeExportData(personList, startDate,
+                                                                                             endDate, timeZoneId, string.Empty);
+            }
+        }
+
+        public ICollection<SchedulePartDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+                                                         string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+            {
+                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
+                                                                                             endDate, timeZoneId, string.Empty);
+            }
+        }
+
+        public ICollection<SchedulePartDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+                                                           string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+            {
+                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiPayrollActivitiesExportData(personList, startDate,
+                                                                                             endDate, timeZoneId, string.Empty);
+            }
+        }
+
+        public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
 			if (scheduleLoadOptionDto == null)
 				throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
