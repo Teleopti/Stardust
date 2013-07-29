@@ -109,15 +109,11 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Practices.CompositeUI.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -177,27 +173,15 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Linq.Dynamic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\System.Linq.Dynamic.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -226,7 +210,6 @@
     <Compile Include="Budgeting\Models\DateDayModel.cs" />
     <Compile Include="Budgeting\Models\EditShrinkageModel.cs" />
     <Compile Include="Budgeting\Models\IBudgetGroupDayDetailModel.cs" />
-    <Compile Include="Budgeting\Models\IBudgetGroupMonthDetailModel.cs" />
     <Compile Include="Budgeting\NetStaffFcAdjustSurplusDistributor.cs" />
     <Compile Include="Budgeting\Presenters\AddShrinkagePresenter.cs" />
     <Compile Include="Budgeting\Presenters\BudgetDayGapFiller.cs" />
@@ -278,10 +261,8 @@
     <Compile Include="Common\Clipboard\IClipboardSpecialView.cs" />
     <Compile Include="Common\Collections\CommonRootCollection.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\ActionExecutionStrategy.cs" />
-    <Compile Include="Common\Commands\CommandBehaviors\BehaviorBinding.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehavior.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBinding.cs" />
-    <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorCollection.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\EventHandlerGenerator.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
@@ -523,7 +504,6 @@
     <Compile Include="Meetings\Commands\DeleteMeetingCommand.cs" />
     <Compile Include="Meetings\Commands\PasteMeetingCommand.cs" />
     <Compile Include="Meetings\Events\AddAppointmentClicked.cs" />
-    <Compile Include="Meetings\Events\ClipboardStatusEventModel.cs" />
     <Compile Include="Meetings\Events\AppointmentSelectionChanged.cs" />
     <Compile Include="Meetings\Events\CopyAppointmentClicked.cs" />
     <Compile Include="Meetings\Events\CutAppointmentClicked.cs" />
@@ -584,12 +564,24 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\FilterOvertimeAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\HandleBusinessRules.cs" />
+    <Compile Include="Scheduling\IAgentOvertimeAvailabilityView.cs" />
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
+    <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
+    <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
@@ -732,9 +724,7 @@
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\IDateTimeBaseConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\IDateTimeParser.cs" />
-    <Compile Include="Converters\IParseBehavior.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayerConverter.cs" />
-    <Compile Include="Converters\ParseBehavior.cs" />
     <Compile Include="Events\EventExtensions.cs" />
     <Compile Include="Events\GenericEvent.cs" />
     <Compile Include="FileImport\DimQueueTable.cs" />
@@ -802,16 +792,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Payroll\GridViewBaseModel.cs" />
-    <Compile Include="Payroll\Interfaces\IBaseView.cs" />
     <Compile Include="Payroll\Interfaces\IContainedControl.cs" />
-    <Compile Include="Payroll\Interfaces\IDefinitionSetView.cs" />
     <Compile Include="Payroll\Interfaces\IGridViewBaseModel.cs" />
     <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionPresenter.cs" />
     <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionView.cs" />
     <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionViewModel.cs" />
     <Compile Include="Payroll\Interfaces\IPresenterBase.cs" />
     <Compile Include="Payroll\Interfaces\IViewModel.cs" />
-    <Compile Include="Payroll\Interfaces\IVisualizeView.cs" />
     <Compile Include="Payroll\Interfaces\ICommon.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -865,7 +852,6 @@
     <Compile Include="PeopleAdmin\Models\ExternalLogOnDisplay.cs" />
     <Compile Include="PeopleAdmin\Models\ExternalLogOnParser.cs" />
     <Compile Include="Presentation\IReportPersonsSelectionView.cs" />
-    <Compile Include="Presentation\IReportScheduledTimePerActivityView.cs" />
     <Compile Include="Presentation\ReportDetail.cs" />
     <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityPresenter.cs" />
     <Compile Include="Presentation\IReportSettingsScheduledTimePerActivityView.cs" />
@@ -943,7 +929,6 @@
     <Compile Include="Scheduling\ShiftCategoryFairnessAggregateManager.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessGroupPersonHolder.cs" />
     <Compile Include="Scheduling\ViewModelIsValidRule.cs" />
-    <Compile Include="Scheduling\Editor\HandleTriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\IAddLayerViewModel.cs" />
     <Compile Include="Scheduling\INotesAltered.cs" />
@@ -984,8 +969,6 @@
     <Compile Include="Scheduling\Requests\PersonRequestViewModelIsEditableSpecification.cs" />
     <Compile Include="Scheduling\Requests\PersonRequestViewModelIsSelectedChanged.cs" />
     <Compile Include="Scheduling\Requests\ShowOnlyPersonRequestViewModelSpecification.cs" />
-    <Compile Include="Scheduling\RequestViewAdapterField.cs" />
-    <Compile Include="Scheduling\RequestViewOperand.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RestrictionCellValue.cs" />
     <Compile Include="Scheduling\RestrictionPresenter.cs" />
@@ -1026,7 +1009,6 @@
     <Compile Include="Common\GuiHelpers\GuiSettings.cs" />
     <Compile Include="Common\IGridPasteAction.cs" />
     <Compile Include="Common\IHandleBusinessRuleResponse.cs" />
-    <Compile Include="Common\IProgress.cs" />
     <Compile Include="Common\Clipboard\PasteBehavior.cs" />
     <Compile Include="Common\ITeleoptiGridControl.cs" />
     <Compile Include="Common\IViewBase.cs" />
@@ -1121,13 +1103,6 @@
     <Compile Include="Scheduling\DateTimePeriodViewModel.cs" />
     <Compile Include="Scheduling\Gridlock.cs" />
     <Compile Include="Scheduling\GridlockManager.cs" />
-    <Compile Include="Presentation\BusinessUnitListBoxPresenter.cs" />
-    <Compile Include="Presentation\IEntityPresenter.cs" />
-    <Compile Include="Presentation\IListBoxPresenter.cs" />
-    <Compile Include="Presentation\PersonListBoxPresenter.cs" />
-    <Compile Include="Presentation\SiteListBoxPresenter.cs" />
-    <Compile Include="Presentation\TeamListBoxPresenter.cs" />
-    <Compile Include="Presentation\ListBoxPresenter.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgs.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSeconds.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelper.cs" />
@@ -1142,12 +1117,9 @@
     <Compile Include="Common\PropertyReflector.cs" />
     <Compile Include="Common\SchedulerStateHolder.cs" />
     <Compile Include="Common\CommonStateHolder.cs" />
-    <Compile Include="Common\DailyAssignmentList.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
     <Compile Include="Common\PasteOptions.cs" />
-    <Compile Include="PeopleAdmin\IPersonRoleView.cs" />
     <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
-    <Compile Include="Presentation\AuthorizationEntityListBoxPresenter.cs" />
     <Compile Include="Scheduling\PersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />
@@ -1232,16 +1204,12 @@
     <Compile Include="Shifts\Interfaces\IPresenterBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Shifts\Interfaces\ITreeNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Shifts\Interfaces\IValidate.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Shifts\Interfaces\IVisualizePresenter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Shifts\Interfaces\IVisualizeViewModel.cs" />
     <Compile Include="Shifts\Models\AbsolutePositionViewModel.cs">
       <SubType>Code</SubType>
     </Compile>

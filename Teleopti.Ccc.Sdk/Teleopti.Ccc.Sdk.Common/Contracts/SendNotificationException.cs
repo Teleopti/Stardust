@@ -6,8 +6,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 	[Serializable]
 	public class SendNotificationException : Exception
 	{
-		public SendNotificationException() { }
-
 		public SendNotificationException(string message) : base(message) { }
 
 		public SendNotificationException(string message, Exception innerException)

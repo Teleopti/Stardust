@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -32,6 +33,8 @@ namespace Teleopti.Ccc.Win.Meetings
 
         	dateTimePickerAdvStartDate.SetSafeBoundary();
         	dateTimePickerAdvEndDate.SetSafeBoundary();
+            dateTimePickerAdvStartDate.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
+            dateTimePickerAdvEndDate.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
         }
 
         private void SetColors()

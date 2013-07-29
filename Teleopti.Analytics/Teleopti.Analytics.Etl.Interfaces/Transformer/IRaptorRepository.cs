@@ -31,7 +31,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
         int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
 	    int FillIntradayScheduleDataMart(IBusinessUnit businessUnit);
-        int FillScheduleContractDataMart(DateTimePeriod period);
         int PersistDate(DataTable dataTable);
         int FillDateDataMart();
         int PersistInterval(DataTable dataTable);
@@ -104,7 +103,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
         int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
         int FillAcdLogOnDataMart(int dataSourceId);
-        int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone);
+        int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday);
 
         //KPI
         IList<IKeyPerformanceIndicator> LoadKpi();
@@ -185,7 +184,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IApplicationFunction> LoadApplicationFunction();
         IList<IApplicationRole> LoadApplicationRole(ICommonStateHolder stateHolder);
         IList<IAvailableData> LoadAvailableData();
-        IsolationLevel IsolationLevel { get; }
         int PersistPmUser(DataTable dataTable);
 
         // Group Page dataprovider
@@ -229,5 +227,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		int PersistAvailability(DataTable dataTable);
 	    int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 	    int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario);
+	    ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period);
     }
 }

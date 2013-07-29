@@ -27,14 +27,23 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private MockRepository mocks;
         private IScenario scenario;
         private IList<IPerson> selectedPersons;
+	    private IPerson _person1;
+		private IPerson _person2;
+	    private Guid _guid1;
+	    private Guid _guid2;
 
         [SetUp]
         public void Setup()
         {
             scenario = ScenarioFactory.CreateScenarioAggregate();
             dtp = new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2001,1,1));
-            IPerson person = PersonFactory.CreatePerson("first", "last");
-            selectedPersons = new List<IPerson>{person};
+            _person1 = PersonFactory.CreatePerson("first", "last");
+	        _person2 = PersonFactory.CreatePerson("firstName", "lastName");
+	        _guid1 = Guid.NewGuid();
+	        _guid2 = Guid.NewGuid();
+	        _person1.SetId(_guid1);
+			_person2.SetId(_guid2);
+            selectedPersons = new List<IPerson>{_person1, _person2};
         	target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
@@ -283,5 +292,64 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsTrue(target.ConsiderShortBreaks);
 		}
 
+		[Test]
+		public void ShouldReturnIsFilteredOnAgentsWhenFilterCountNotEqualToAllPermittedCount()
+		{
+			target.FilterPersons(new List<IPerson>{_person1});
+			var result = target.AgentFilter();
+			Assert.IsTrue(result);
+		}
+
+		[Test]
+		public void ShouldReturnIsNotFilteredOnAgentsWhenFilterCountEqualToAllPermittedCount()
+		{
+			target.FilterPersons(new List<IPerson> { _person1, _person2 });
+			var result = target.AgentFilter();
+			Assert.IsFalse(result);	
+		}
+
+		//[Test]
+		//public void ShouldReturnIsFilteredOnOvertimeAvailabilityWhenFilterCountNotEqualToAllPermittedCountAndIsNotEmpty()
+		//{
+		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1 });
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsTrue(result);	
+		//}
+
+		//[Test]
+		//public void ShouldReturnIsNotFilteredWhenIsEmpty()
+		//{
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsFalse(result);	
+		//}
+
+		//[Test]
+		//public void ShouldReturnIsNotFilteredOnOvertimeAvailabilityWhenFilterCountCountEqualToAllPermittedCount()
+		//{
+		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2 });
+		//	var result = target.OvertimeAvailabilityFilter();
+		//	Assert.IsFalse(result);
+		//}
+
+		[Test]
+		public void ShouldReturnFilterStatusOnOvertimeAvailability()
+		{
+			target.FilterPersonsOvertimeAvailability(new List<IPerson>());
+			Assert.IsTrue(target.OvertimeAvailabilityFilter());
+
+			target.ResetFilteredPersonsOvertimeAvailability();
+			Assert.IsFalse(target.OvertimeAvailabilityFilter());
+		}
+
+		[Test]
+		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
+		{
+			target.FilterPersons(new List<IPerson>{_person1});
+			target.FilterPersonsOvertimeAvailability(new List<IPerson>{_person1, _person2});
+			var filteredPersons = target.FilteredPersonDictionary;
+
+			Assert.AreEqual(1, filteredPersons.Count);
+			Assert.IsTrue(filteredPersons.ContainsKey(_guid1));
+		}
     }
 }

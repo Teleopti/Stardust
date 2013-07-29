@@ -97,6 +97,7 @@
     <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
     <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
     <Compile Include="Job\Steps\FactAvailabilityJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Job\Steps\StageAvailabilityJobStep.cs" />
@@ -197,7 +198,6 @@
     <Compile Include="Job\Steps\DimSiteJobStep.cs" />
     <Compile Include="Job\Steps\DimTeamJobStep.cs" />
     <Compile Include="Job\Steps\FactForecastWorkloadJobStep.cs" />
-    <Compile Include="Job\Steps\FactScheduleContractJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleJobStep.cs" />
     <Compile Include="Job\Steps\StageAbsenceJobStep.cs" />
     <Compile Include="Job\Steps\StageActivityJobStep.cs" />

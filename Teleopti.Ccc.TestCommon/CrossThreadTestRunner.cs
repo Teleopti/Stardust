@@ -9,11 +9,6 @@ namespace Teleopti.Ccc.TestCommon
     {
         private Exception lastException;
 
-        public void RunInMTA(ThreadStart userDelegate)
-        {
-            Run(userDelegate, ApartmentState.MTA);
-        }
-
         public void RunInSTA(ThreadStart userDelegate)
         {
             Run(userDelegate, ApartmentState.STA);

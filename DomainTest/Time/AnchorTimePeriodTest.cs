@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyPropertiesAreSetUsingCreate()
         {
-            TimeSpan duration = TimeFactory.CreateTimeSpan(4);
-            TimeSpan anchor = TimeFactory.CreateTimeSpan(12);
+            TimeSpan duration = TimeSpan.FromHours(4);
+            TimeSpan anchor = TimeSpan.FromHours(12);
             Percent flexibility = new Percent(0.66d);
             AnchorTimePeriod per = new AnchorTimePeriod(anchor, duration, flexibility);
             Assert.AreEqual(anchor, per.Anchor);
@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyOverloadedOperatorsWork()
         {
-            TimeSpan anchor = TimeFactory.CreateTimeSpan(10);
-            TimeSpan duration = TimeFactory.CreateTimeSpan(4);
+            TimeSpan anchor = TimeSpan.FromHours(10);
+            TimeSpan duration = TimeSpan.FromHours(4);
             Percent flexibility = new Percent(0.66d);
             AnchorTimePeriod per = new AnchorTimePeriod(anchor, duration, flexibility);
             AnchorTimePeriod per2 = new AnchorTimePeriod();
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyGetHashCodeWorks()
         {
-            TimeSpan anchor = TimeFactory.CreateTimeSpan(10);
-            TimeSpan duration = TimeFactory.CreateTimeSpan(4);
+            TimeSpan anchor = TimeSpan.FromHours(10);
+            TimeSpan duration = TimeSpan.FromHours(4);
             Percent flexibility = new Percent(0.66d);
             AnchorTimePeriod per = new AnchorTimePeriod(anchor, duration, flexibility);
             IDictionary<AnchorTimePeriod, int> dic = new Dictionary<AnchorTimePeriod, int>();

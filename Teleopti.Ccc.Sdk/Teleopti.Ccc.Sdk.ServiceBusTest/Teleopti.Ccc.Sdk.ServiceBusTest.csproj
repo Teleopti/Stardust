@@ -163,7 +163,6 @@
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
-    <Compile Include="SimpleBootStrapper.cs" />
     <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
     <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
     <Compile Include="Notification\NotificationConfigReaderTest.cs" />

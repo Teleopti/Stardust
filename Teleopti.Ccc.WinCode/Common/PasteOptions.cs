@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private bool _defaultDelete;
         private bool _preference;
         private bool _studentAvailability;
+        private bool _overtimeAvailability;
 
 
         /// <summary>
@@ -158,6 +159,12 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get { return _studentAvailability; }
             set { _studentAvailability = value; }
+        }
+
+        public bool OvertimeAvailability
+        {
+            get { return _overtimeAvailability; }
+            set { _overtimeAvailability = value; }
         }
     }
 }

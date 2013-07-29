@@ -35,16 +35,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         private Rectangle redrawRect = Rectangle.Empty;
 
         private Brush cornerBrush1;
-        public Brush CornerBrush
-        {
-            get { return cornerBrush1; }
-            set { cornerBrush1 = value; }
-        }
 
-        public int CommentCornerSize
+        private int CommentCornerSize
         {
             get { return cornerSize; }
-            set { cornerSize = value; }
         }
 
         public CommentMouseController(GridControlBase owner)
@@ -252,17 +246,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         }
 
         /// <summary>
-        /// Provides access to default values for this type
-        /// </summary>
-        public static GridExcelTipStyleProperties Default
-        {
-            get
-            {
-                return defaultObject;
-            }
-        }
-
-        /// <summary>
         /// Force static ctor being called at least once
         /// </summary>
         public static void Initialize()
@@ -287,15 +270,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         /// </summary>
         public GridExcelTipStyleProperties(GridStyleInfo style)
             : base(style)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a GridExcelTipStyleProperties object with an empty style object. Design
-        /// time environment will use this ctor and later copy the values to a style object
-        /// by calling style.CustomProperties.Add(gridExcelTipStyleProperties1)
-        /// </summary>
-        public GridExcelTipStyleProperties()
         {
         }
 

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -20,117 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    public interface ISchedulePresenterBase
-    {
-        IScheduleTag DefaultScheduleTag { get; set; }
-
-        /// <summary>
-        /// Column week mapping dictionary
-        /// </summary>
-        Dictionary<int, int> ColWeekMap { get; }
-
-        Dictionary<int, TimeSpan> TimelineHourPositions { get; }
-        ISchedulerStateHolder SchedulerState { get; }
-        SchedulePartFilter SchedulePartFilter { get; }
-        DateTime Now { get; set; }
-
-        /// <summary>
-        /// Number of columns
-        /// </summary>
-        int ColCount { get; }
-
-        /// <summary>
-        /// Number of rows
-        /// </summary>
-        int RowCount { get; }
-
-        /// <summary>
-        /// Get dictionary with timespans(min start to max end) for each date
-        /// </summary>
-        DateDateTimePeriodDictionary TimelineSpan { get; }
-
-        /// <summary>
-        /// Number of max weeks to show in a certain view
-        /// </summary>
-        int VisibleWeeks { get; set; }
-
-        IDateOnlyPeriodAsDateTimePeriod SelectedPeriod { get; set; }
-        IScheduleDay LastUnsavedSchedulePart { get; set; }
-        IGridlockManager LockManager { get; }
-        ClipHandler<IScheduleDay> ClipHandlerSchedule { get; }
-
-        /// <summary>
-        /// Sort order for the current sorted column
-        /// </summary>
-        bool IsAscendingSort { get; }
-
-        int CurrentSortColumn { get; }
-        IScheduleSortCommand SortCommand { get; set; }
-
-        /// <summary>
-        /// Sort the column ascending or desceding
-        /// </summary>
-        /// <param name="column">Column to sort on</param>
-        /// <returns>Returns true if the rows are reordered</returns>
-        bool SortColumn(int column);
-
-        void SortOnTime(DateOnly dateOnly);
-
-        /// <summary>
-        /// Handler cell info.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: claess /moved by zoet
-        /// Created date: 2007-11-15
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e);
-
-        /// <summary>
-        /// Merge headers
-        /// </summary>
-        /// <remarks>
-        /// Writes the same information in the header if its within the same week
-        /// Headers will be merged if they show same info.
-        /// </remarks>
-        void MergeHeaders();
-
-        void QueryOverviewStyleInfo(GridStyleInfo styleInfo, IPerson person, ColumnType columnType);
-
-        /// <summary>
-        /// Modifies the schedule part.
-        /// </summary>
-        /// <param name="theParts">The part.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-08-14    
-        /// </remarks>
-        bool ModifySchedulePart(IList<IScheduleDay> theParts);
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        bool TryModify(IList<IScheduleDay> scheduleParts);
-        bool TryModify(IList<IScheduleDay> scheduleParts, IScheduleTag scheduleTag);
-
-        void UpdateRestriction();
-        void UpdateNoteFromEditor();
-        void UpdatePublicNoteFromEditor();
-        void UpdateFromEditor();
-        void AddActivity(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod);
-        void AddActivity();
-        void AddOvertime(IList<IMultiplicatorDefinitionSet> definitionSets);
-        void AddOvertime(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IList<IMultiplicatorDefinitionSet> definitionSets);
-        void AddAbsence(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod);
-        void AddAbsence();
-        void AddPersonalShift(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod);
-        void AddPersonalShift();
-    }
-
-    /// <summary>
-    /// The ScheduleViewBase presenter in the MVP pattern
-    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class SchedulePresenterBase : ISchedulePresenterBase
     {
@@ -144,18 +31,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly DateDateTimePeriodDictionary _timelineSpan = new DateDateTimePeriodDictionary();
         private readonly Dictionary<int, TimeSpan> _timelineHourPositionDictionary = new Dictionary<int, TimeSpan>();
 
-        private int _visibleWeeks = 4;
-        private int _currentSortColumn = 1;
-        private bool _isAscendingSort = true;
-
         private readonly IGridlockManager _lockManager;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
         private readonly SchedulePartFilter _schedulePartFilter;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private IScheduleTag _defaultScheduleTag;
-
-        private IScheduleSortCommand _sortCommand;
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -163,6 +43,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
         {
+            VisibleWeeks = 4;
+            IsAscendingSort = true;
+            CurrentSortColumn = 1;
             _view = view;
             _schedulerState = schedulerState;
             _lockManager = lockManager;
@@ -170,10 +53,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _schedulePartFilter = schedulePartFilter;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _defaultScheduleTag = defaultScheduleTag;
+            DefaultScheduleTag = defaultScheduleTag;
             Now = DateTime.UtcNow;
             SelectedPeriod = SchedulerState.RequestedPeriod;
-            _sortCommand = new NoSortCommand(_schedulerState);
+            SortCommand = new NoSortCommand(_schedulerState);
         }
 
         protected IScheduleViewBase View
@@ -181,11 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _view; }
         }
 
-        public IScheduleTag DefaultScheduleTag
-        {
-            get { return _defaultScheduleTag; }
-            set { _defaultScheduleTag = value; }
-        }
+        public IScheduleTag DefaultScheduleTag { get; set; }
 
         /// <summary>
         /// Column week mapping dictionary
@@ -257,11 +136,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <summary>
         /// Number of max weeks to show in a certain view
         /// </summary>
-        public int VisibleWeeks
-        {
-            get { return _visibleWeeks; }
-            set { _visibleWeeks = value; }
-        }
+        public int VisibleWeeks { get; set; }
 
         public virtual IDateOnlyPeriodAsDateTimePeriod SelectedPeriod { get; set; }
 
@@ -300,51 +175,34 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
         }
 
-        /// <summary>
-        /// Sort order for the current sorted column
-        /// </summary>
-        public bool IsAscendingSort
-        {
-            get
-            {
-                return _isAscendingSort;
-            }
-            set
-            {
-                _isAscendingSort = value;
-            }
-        }
+        public bool IsAscendingSort { get; set; }
 
-        public int CurrentSortColumn
-        {
-            get { return _currentSortColumn; }
-			set { _currentSortColumn = value; }
-        }
+        public int CurrentSortColumn { get; set; }
 
-        public IScheduleSortCommand SortCommand
-        {
-            get { return _sortCommand; }
-            set { _sortCommand = value; }
-        }
+        public IScheduleSortCommand SortCommand { get; set; }
 
-		public void ApplyGridSort()
+        public void ApplyGridSort()
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
-
+		
 			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			if (IsAscendingSort)
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType) CurrentSortColumn), comparer).ToList();
+			}
 			else
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType) CurrentSortColumn), comparer).ToList();	
+			}
 
-
-			SchedulerState.FilteredPersonDictionary.Clear();
+			SchedulerState.FilteredAgentsDictionary.Clear();
 			foreach (var keyValuePair in sortedFilteredPersonDictionary)
 			{
-				SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
 			}
+
 		}
 
         /// <summary>
@@ -356,7 +214,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             // Resort _schedulerState.FilteredPersonDictionary
             List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
-            if (_currentSortColumn != column || !_isAscendingSort)
+
+            if (CurrentSortColumn != column || !IsAscendingSort)
             {
                 // removed as bugfix: 15718
                 //sortedFilteredPersonDictionary = (from p in SchedulerState.FilteredPersonDictionary
@@ -366,9 +225,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
-                
+
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
+		 
                 IsAscendingSort = true;
             }
             else
@@ -381,31 +242,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
- 
+		
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
                 IsAscendingSort = false;
             }
-            _currentSortColumn = column;
+            CurrentSortColumn = column;
             SortCommand = new NoSortCommand(_schedulerState);
 
-            if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredPersonDictionary))
-            {
-                return false;
-            }
+			if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredAgentsDictionary))
+			{
+				return false;
+			}
 
-            SchedulerState.FilteredPersonDictionary.Clear();
-            foreach (var keyValuePair in sortedFilteredPersonDictionary)
-            {
-                SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
-            }
+			SchedulerState.FilteredAgentsDictionary.Clear();
+			foreach (var keyValuePair in sortedFilteredPersonDictionary)
+			{
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
+			}
 
             return true;
         }
 
         public void SortOnTime(DateOnly dateOnly)
         {
-            _sortCommand.Execute(dateOnly);
+            SortCommand.Execute(dateOnly);
         }
 
         #endregion
@@ -489,8 +351,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, localDate.Date, true, false, daySchedule);
-                    //set zorder
-                    SetAssignmentZorder(daySchedule);
                 }
             }
         }
@@ -514,20 +374,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         internal static bool IsInsidePersonPeriod(IScheduleDay schedulePart)
         {
             return (schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly) != null);
-        }
-
-        //To ensure that visible assignment is still on top if we change other assignments on that day
-        internal static void SetAssignmentZorder(IScheduleDay part)
-        {
-            //check if we have set the zorder on any assignment
-            var personAssignments = part.PersonAssignmentCollection();
-            IPersonAssignment assignmentWithZOrderSet = personAssignments.FirstOrDefault(pa => pa.ZOrder != DateTime.MinValue);
-
-            //if we havent set zorder we set first to have highest zorder
-            IPersonAssignment firstPersonAssignment = personAssignments.FirstOrDefault();
-            if (assignmentWithZOrderSet == null && firstPersonAssignment != null)
-                firstPersonAssignment.ZOrder = DateTime.MinValue.AddTicks(1);
-
         }
 
         /// <summary>
@@ -714,13 +560,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         #endregion
 
 
-        protected void FilterSchedulePart(ISchedulePart schedulePart)
+				protected void FilterSchedulePart(IScheduleDay schedulePart)
         {
             if (_schedulePartFilter == SchedulePartFilter.Meetings)
             {
                 schedulePart.Clear<IPersonAbsence>();
                 schedulePart.Clear<IPersonAssignment>();
-                schedulePart.PersonAssignmentConflictCollection.Clear();
                 schedulePart.Clear<IPersonDayOff>();
                 schedulePart.BusinessRuleResponseCollection.Clear();
             }
@@ -780,7 +625,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
             foreach (IScheduleDay part in scheduleParts)
             {
-                foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }
@@ -792,7 +637,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
             var lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag));
-            if (lstBusinessRuleResponse.Count() == 0)
+            if (!lstBusinessRuleResponse.Any())
                 return true;
             var handleBusinessRules = new HandleBusinessRules(View.HandleBusinessRuleResponse, View, _overriddenBusinessRulesHolder);
             lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
@@ -828,7 +673,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool TryModify(IList<IScheduleDay> scheduleParts)
 		{
-		    return TryModify(scheduleParts, _defaultScheduleTag);
+		    return TryModify(scheduleParts, DefaultScheduleTag);
 		}
 
         public void UpdateRestriction()
@@ -839,7 +684,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
             undoRedoContainer.CreateBatch("Saving restriction");
 
-            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
+
+            undoRedoContainer.CommitBatch();
+            LastUnsavedSchedulePart = null;
+        }
+		
+		public void UpdateOvertimeAvailability()
+        {
+            if (LastUnsavedSchedulePart == null) return;
+            IList<IScheduleDay> theParts =  new List<IScheduleDay> { LastUnsavedSchedulePart };
+
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+            undoRedoContainer.CreateBatch("Saving overtime availability");
+
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
 
             undoRedoContainer.CommitBatch();
             LastUnsavedSchedulePart = null;
@@ -853,7 +712,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
             undoRedoContainer.CreateBatch("Saving note");
 
-            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
 
             undoRedoContainer.CommitBatch();
             LastUnsavedSchedulePart = null;
@@ -867,7 +726,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
             undoRedoContainer.CreateBatch("Saving public note");
 
-            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
 
             undoRedoContainer.CommitBatch();
             LastUnsavedSchedulePart = null;
@@ -879,7 +738,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             try
             {
-                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }
@@ -975,61 +834,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public void AddPersonalShift()
         {
             AddPersonalShift(null, null);
-        }
-
-		
-    }
-
-
-    public class HandleBusinessRules
-    {
-        private readonly IHandleBusinessRuleResponse _handleBusinessRuleResponse;
-        private readonly IViewBase _viewBase;
-        private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
-
-        public HandleBusinessRules(IHandleBusinessRuleResponse handleBusinessRuleResponse, IViewBase viewBase, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
-        {
-            _handleBusinessRuleResponse = handleBusinessRuleResponse;
-            _viewBase = viewBase;
-            _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
-        }
-
-        public IEnumerable<IBusinessRuleResponse> Handle(IEnumerable<IBusinessRuleResponse> listBusinessRuleResponse, IList<IBusinessRuleResponse> listBusinessRuleResponseToOverride)
-        {
-            var ret = new List<IBusinessRuleResponse>(listBusinessRuleResponseToOverride);
-            var internalList = new List<IBusinessRuleResponse>();
-            foreach (var businessRuleResponse in listBusinessRuleResponse)
-            {
-                if(!businessRuleResponse.Overridden)
-                    internalList.Add(businessRuleResponse);
-            }
-            if (!internalList.IsEmpty() && listBusinessRuleResponseToOverride.Count == 0)
-            {
-                foreach (IBusinessRuleResponse response in internalList)
-                {
-                    if (response.Mandatory)
-                    {
-                        _viewBase.ShowErrorMessage(response.Message, Resources.ViolationOfABusinessRule);
-                        return ret;
-                    }
-                }
-                //show dialog to override rules
-                _handleBusinessRuleResponse.SetResponse(internalList);
-                if (_handleBusinessRuleResponse.DialogResult == DialogResult.Cancel)
-                {
-                    return ret;
-                }
-                // we want to override them
-                foreach (IBusinessRuleResponse response in internalList)
-                {
-                    response.Overridden = true;
-                    if(_handleBusinessRuleResponse.ApplyToAll)
-                        _overriddenBusinessRulesHolder.AddOverriddenRule(response);
-                }
-
-                return internalList.Concat(ret);
-            }
-            return ret;
         }
 
 		

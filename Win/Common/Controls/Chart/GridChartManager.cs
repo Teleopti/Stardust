@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         private static double getCellValue(GridStyleInfo cell, bool timeSpanAsMinutes, bool andThenToMinutes)
         {
             var cellValueAsObject = cell.CellValue;
-            if (cell.CellModel is TimeSpanLongHourMinutesStaticCellModel)
+            if (cell.CellModel is TimeSpanDurationStaticCellModel)
             {
                 timeSpanAsMinutes = true;
                 andThenToMinutes = true;

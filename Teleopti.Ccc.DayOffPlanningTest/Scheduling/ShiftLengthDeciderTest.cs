@@ -30,7 +30,21 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldNotFilterListIfNotUsingAverageShiftLength()
+		public void ShouldNotFilterListIfNotUsingAverageShiftLengthAndNotUsingTeamBlockSameShift()
+		{
+			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
+			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
+			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
+			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> { c1, c2, c3 };
+			_schedulingOptions.UseAverageShiftLengths = false;
+
+			IList<IShiftProjectionCache> result;
+			result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+			Assert.AreEqual(3, result.Count);
+		}
+
+		[Test]
+		public void ShouldNotFilterListIfNotWorkShiftLengthHintOptionAverageWorkTimeAndNotUsingTeamBlockSameShift()
 		{
 			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
@@ -51,6 +65,10 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
 			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
 			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> {c1, c2, c3};
+			_schedulingOptions.UseAverageShiftLengths = false;
+			//should filter becouse we are using teamblock and same shift
+			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 
 			using (_mocks.Record())
 			{

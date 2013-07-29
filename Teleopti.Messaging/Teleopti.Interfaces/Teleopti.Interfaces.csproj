@@ -107,7 +107,6 @@
     <Compile Include="Domain\BlockFinderType.cs" />
     <Compile Include="Domain\BlockSchedulingServiceEventArgs.cs" />
     <Compile Include="Domain\BudgetCalculationResult.cs" />
-    <Compile Include="Domain\BudgetSection.cs" />
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
@@ -126,7 +125,9 @@
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
+    <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
+    <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -154,7 +155,6 @@
     <Compile Include="Domain\IForecastScheduleValuePair.cs" />
     <Compile Include="Domain\IGroupPageLight.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
-    <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
@@ -190,7 +190,6 @@
     <Compile Include="Domain\IBestShiftCategoryResult.cs" />
     <Compile Include="Domain\IDayOffsInPeriodCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCreator.cs" />
-    <Compile Include="Domain\IGroupBlockScheduleDecider.cs" />
     <Compile Include="Domain\IGroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="Domain\IIncreasePeriodByOne.cs" />
     <Compile Include="Domain\IIntraDayOptimizer2Creator.cs" />
@@ -265,7 +264,6 @@
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePart.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
@@ -279,15 +277,12 @@
     <Compile Include="Domain\IScheduleResultDataExtractor.cs" />
     <Compile Include="Domain\IScheduleTag.cs" />
     <Compile Include="Domain\IScheduleTagSetter.cs" />
-    <Compile Include="Domain\ISchedulingObjectContainer.cs" />
     <Compile Include="Domain\IPersonSkillPeriodsDataHolderManager.cs" />
-    <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
     <Compile Include="Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
-    <Compile Include="Domain\IScheduleMatrixSchedulePeriodContainer.cs" />
     <Compile Include="Domain\ISchedulePartExtractor.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\IDataSourceEtl.cs" />
@@ -310,6 +305,7 @@
     <Compile Include="Domain\ISchedulingResultService.cs" />
     <Compile Include="Domain\IScorecard.cs" />
     <Compile Include="Domain\IScorecardPeriod.cs" />
+    <Compile Include="Domain\IServiceLevel.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessHolder.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessFactors.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
@@ -318,6 +314,7 @@
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftLayer.cs" />
     <Compile Include="Domain\IShiftLengthDecider.cs" />
     <Compile Include="Domain\IShiftProjectionCache.cs" />
     <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
@@ -395,30 +392,20 @@
     <Compile Include="Domain\IMultiplicatorLayer.cs" />
     <Compile Include="Domain\IMultiplicatorProjectionService.cs" />
     <Compile Include="Domain\IMultisiteDay.cs" />
-    <Compile Include="Domain\IMyReportAdherenceInfo.cs" />
-    <Compile Include="Domain\IMyReportAgentQueueInfo.cs" />
-    <Compile Include="Domain\IMyReportLogOnInfo.cs" />
-    <Compile Include="Domain\IMyReportSource.cs" />
     <Compile Include="Domain\IOptionalColumn.cs" />
     <Compile Include="Domain\IOptionalColumnValue.cs" />
     <Compile Include="Domain\IOriginator.cs" />
-    <Compile Include="Domain\IOvertimeShift.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />
     <Compile Include="Domain\IPayrollResult.cs" />
     <Compile Include="Domain\IPeriodDistribution.cs" />
     <Compile Include="Domain\IPersonAbsenceRepository.cs" />
-    <Compile Include="Domain\IPersonAccountDataProvider.cs" />
     <Compile Include="Domain\IPersonAccountProjectionService.cs" />
     <Compile Include="Domain\IPersonRequest.cs" />
     <Compile Include="Domain\IPopulationStatisticsCalculator.cs" />
     <Compile Include="Domain\IPopulationStatisticsData.cs" />
     <Compile Include="Domain\IRecurrentDailyMeeting.cs" />
-    <Compile Include="Domain\IRecurrentMeeting.cs" />
     <Compile Include="Domain\IRecurrentMeetingOption.cs" />
     <Compile Include="Domain\IDialogueMessage.cs" />
     <Compile Include="Domain\IRecurrentMonthlyByDayMeeting.cs" />
@@ -437,7 +424,6 @@
     <Compile Include="Domain\IRtaVisualLayer.cs" />
     <Compile Include="Domain\IScheduleData.cs" />
     <Compile Include="Domain\IScheduleDataRestriction.cs" />
-    <Compile Include="Domain\IScheduleDayTracker.cs" />
     <Compile Include="Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="Domain\IRtaState.cs" />
     <Compile Include="Domain\IRtaStateGroup.cs" />
@@ -465,7 +451,6 @@
     <Compile Include="Domain\IStateGroupActivityAlarm.cs" />
     <Compile Include="Domain\IStudentAvailabilityDay.cs" />
     <Compile Include="Domain\ISwapDetail.cs" />
-    <Compile Include="Domain\ISystemSetting.cs" />
     <Compile Include="Domain\ITemplateReference.cs" />
     <Compile Include="Domain\DateHelper.cs">
       <SubType>Code</SubType>
@@ -498,13 +483,7 @@
     <Compile Include="Domain\IAuthorizationEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\IAuthorizationService.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IAuthorizationSettings.cs" />
-    <Compile Include="Domain\IAuthorizationStep.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IAvailableData.cs" />
     <Compile Include="Domain\IAvailableDataEntry.cs" />
     <Compile Include="Domain\IBusinessRuleResponse.cs" />
@@ -548,7 +527,6 @@
     <Compile Include="Domain\ISkillStaffPeriod.cs" />
     <Compile Include="Domain\ISkillStaffSegment.cs" />
     <Compile Include="Domain\ISkillStaffSegmentPeriod.cs" />
-    <Compile Include="Domain\ISlpsService.cs" />
     <Compile Include="Domain\ISwapService.cs" />
     <Compile Include="Domain\ITaskTimeDistributionService.cs" />
     <Compile Include="Domain\ITemplateDay.cs" />
@@ -558,7 +536,6 @@
     <Compile Include="Domain\IWorkShiftVisualLayerInfo.cs" />
     <Compile Include="Domain\IWorkShiftWeekMinMaxCalculator.cs" />
     <Compile Include="Domain\IWorkShiftWorkTime.cs" />
-    <Compile Include="Domain\IWorkTimeBackToLegalStateService.cs" />
     <Compile Include="Domain\IWorkTimeMinMax.cs" />
     <Compile Include="Domain\IPersonWriteProtectionInfo.cs" />
     <Compile Include="Domain\IWorkTimeMinMaxCalculator.cs" />
@@ -568,15 +545,11 @@
     <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
-    <Compile Include="Domain\MultipleBool.cs" />
     <Compile Include="Domain\OpenForWork.cs" />
-    <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\RequestType.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
-    <Compile Include="Domain\ITimeLayer.cs" />
-    <Compile Include="Domain\ITimeLayerOfDouble.cs" />
     <Compile Include="Domain\ITracker.cs" />
     <Compile Include="Domain\ITrackerCalculator.cs" />
     <Compile Include="Domain\ITrackingDataProvider.cs" />
@@ -588,27 +561,20 @@
     <Compile Include="Domain\IWorkloadDayBase.cs" />
     <Compile Include="Domain\IWorkShiftFilterResult.cs" />
     <Compile Include="Domain\IWorkShiftFinderResult.cs" />
-    <Compile Include="Domain\IMinMaxContractTimeCalculator.cs" />
     <Compile Include="Domain\ModifyEventArgs.cs" />
-    <Compile Include="Domain\PeriodValueCalculationMethodOption.cs" />
     <Compile Include="Domain\ScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\ScheduleModifier.cs" />
     <Compile Include="Domain\SchedulePartView.cs" />
     <Compile Include="Domain\ScheduleVisibleReasons.cs" />
-    <Compile Include="Domain\ScheduleVisualization.cs" />
     <Compile Include="Domain\SchedulingServiceBaseEventArgs.cs" />
-    <Compile Include="Domain\SettingKeys.cs" />
     <Compile Include="Domain\ReportLevelDetail.cs" />
     <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
     <Compile Include="Domain\ShiftTradeStatus.cs" />
-    <Compile Include="Domain\ShrinkageType.cs" />
     <Compile Include="Domain\StaffingThreshold.cs" />
     <Compile Include="Domain\StaffingThresholds.cs" />
     <Compile Include="Domain\StartTimeLimitation.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
-    <Compile Include="Domain\IMyReportScheduleInfo.cs" />
-    <Compile Include="Domain\IMyReportVisualPayloadInfo.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
@@ -624,10 +590,8 @@
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
-    <Compile Include="Infrastructure\ICheckLicenseAtPersist.cs" />
     <Compile Include="Infrastructure\IConfigReader.cs" />
     <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
-    <Compile Include="Infrastructure\ICustomDataCache.cs" />
     <Compile Include="Infrastructure\IDeleteTag.cs" />
     <Compile Include="Domain\IEntity.cs" />
     <Compile Include="Domain\IExternalLogOn.cs">
@@ -645,7 +609,6 @@
     <Compile Include="Domain\ILayerCollectionOwner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\ILayerSorter.cs" />
     <Compile Include="Domain\ILoadAggregateById.cs" />
     <Compile Include="Domain\IMeetingPerson.cs" />
     <Compile Include="Domain\InParameter.cs">
@@ -691,7 +654,6 @@
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
-    <Compile Include="Infrastructure\IPersonAssignmentCommon.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
     <Compile Include="Infrastructure\IRootChangeInfo.cs">
       <SubType>Code</SubType>
@@ -703,14 +665,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\ISchedulePeriod.cs" />
-    <Compile Include="Domain\IServiceLevel.cs" />
     <Compile Include="Domain\IShiftCategory.cs" />
     <Compile Include="Domain\ISite.cs" />
     <Compile Include="Domain\ISkill.cs" />
     <Compile Include="Domain\ISkillDayTemplate.cs" />
     <Compile Include="Domain\ISkillRestrictionSet.cs" />
     <Compile Include="Domain\ISkillType.cs" />
-    <Compile Include="Domain\IStat.cs" />
     <Compile Include="Domain\IStateHolderReader.cs" />
     <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\IStatisticTask.cs" />
@@ -818,7 +778,6 @@
     <Compile Include="Messages\General\IForecastsRow.cs" />
     <Compile Include="Messages\General\ImportForecastsToSkill.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
-    <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
     <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\IRaptorDomainMessageInfo.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
@@ -828,7 +787,6 @@
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\SettingValueTypes.cs" />
     <Compile Include="Domain\UnderStaffingData.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />

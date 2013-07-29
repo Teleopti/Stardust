@@ -60,14 +60,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData(pa => pa.Scenario)
 				.ExcludeRelationData(pa => pa.BusinessUnit)
 				.ExcludeRelationData(pa => pa.ShiftCategory);
-			fluentCfg.Audit<MainShiftLayer>()
-				.ExcludeRelationData(al => al.Payload);
-			fluentCfg.Audit<PersonalShiftLayer>()
-				.ExcludeRelationData(al => al.Payload);
-			fluentCfg.Audit<OvertimeShift>();
-			fluentCfg.Audit<OvertimeShiftActivityLayer>()
-				.ExcludeRelationData(al => al.DefinitionSet)
-				.ExcludeRelationData(al => al.Payload);
+			fluentCfg.Audit<ShiftLayer>()
+			   .ExcludeRelationData(l => l.Payload);
+			fluentCfg.Audit<MainShiftLayer>();
+			fluentCfg.Audit<PersonalShiftLayer>();
+			fluentCfg.Audit<OvertimeShiftLayer>()
+				.ExcludeRelationData(al => al.DefinitionSet);
 
 			//personabsence
 			fluentCfg.Audit<PersonAbsence>()

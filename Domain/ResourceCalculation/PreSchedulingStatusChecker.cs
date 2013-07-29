@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _schedulePart.Person; }
         }
 
-        public static bool CheckAssignments(ISchedulePart schedulePart)
+				public static bool CheckAssignments(IScheduleDay schedulePart)
         {
             //no assignment is ok
-            var personAssignmentCollection = schedulePart.PersonAssignmentCollection();
+            var personAssignmentCollection = schedulePart.PersonAssignmentCollectionDoNotUse();
             if (personAssignmentCollection.Count == 0)
                 return true;
             //more than 1 is not ok
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             //1 assignment is ok if we have no mainshift and we have a personalshift
             IPersonAssignment personAssignment = personAssignmentCollection[0];
 
-						if (personAssignment.PersonalLayers.Any() && personAssignment.ShiftCategory == null)
+						if (personAssignment.PersonalLayers().Any() && personAssignment.ShiftCategory == null)
                 return true;
 
             return false;

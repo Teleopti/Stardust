@@ -314,15 +314,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             endDateTime = scheduleControlMain.ClickedDate.Date.AddDays(1).AddMinutes(-1);
         }
 
-        public void ShowAbsenceRequestScreen(DateTime startDateTime, DateTime endDateTime, IWin32Window parentForm)
-        {
-            DateTimePeriodDto dateTimePeriodDto = HelperFunctions.CreateDateTimePeriodDto(startDateTime, endDateTime);
-            AbsenceRequestView absenceRequestView = new AbsenceRequestView(dateTimePeriodDto);
-            absenceRequestView.StartPosition = FormStartPosition.CenterScreen;
-            absenceRequestView.ShowDialog(parentForm);
-            _scheduleView.Refresh(true);
-        }
-
         /// <summary>
         /// Handles the Click event of the toolStripMenuItemNewShiftTrade control.
         /// </summary>

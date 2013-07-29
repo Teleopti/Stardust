@@ -41,8 +41,26 @@ namespace Teleopti.Ccc.TestCommon
 
 			CreateDatabase(ccc7, true);
 			CreateSchema(dataSourceFactory, ccc7, true);
+			CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			BackupDatabase(ccc7);
+		}
+
+		private static void CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
+		{
+			//would be better if dbmanager was called, but don't have the time right now....
+			ExceptionToConsole(
+				() =>
+				{
+					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+					{
+						conn.Open();
+						using (var cmd = new SqlCommand("exec [dbo].[MergePersonAssignments]", conn))
+							cmd.ExecuteNonQuery();
+					}
+				},
+				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 		}
 
 		private static void SetupAnalytics(DataSourcesFactory dataSourceFactory, DatabaseHelper analytics)

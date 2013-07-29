@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_addAbsenceCommandDto);
-                schedulePart.PersonAssignmentCollection().Count.Should().Be.EqualTo(1);
+                schedulePart.PersonAssignmentCollectionDoNotUse().Count.Should().Be.EqualTo(1);
             }
         }
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_addAbsenceCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_addAbsenceCommandDto);
-				schedulePart.PersonAssignmentCollection().Count.Should().Be.EqualTo(1);
+				schedulePart.PersonAssignmentCollectionDoNotUse().Count.Should().Be.EqualTo(1);
 			}
 		}
     }

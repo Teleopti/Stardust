@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 
                 
                 ZoomToPeriod(Layers.TotalDateTimePeriod(true));
-                var assignement = SchedulePart.AssignmentHighZOrder();
+                var assignement = SchedulePart.PersonAssignment();
 				if (assignement != null && assignement.ShiftCategory != null)
                 {
                     _category = assignement.ShiftCategory;
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 CollectionViewSource.GetDefaultView(Categories).MoveCurrentTo(_category);
                 if (SchedulePart != null)
                 {
-                    var assignement = SchedulePart.AssignmentHighZOrder();
+                    var assignement = SchedulePart.PersonAssignment();
 					if (assignement != null)
 					{
 						var editorShift = _editableShiftMapper.CreateEditorShift(assignement);

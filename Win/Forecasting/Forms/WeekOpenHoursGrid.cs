@@ -200,11 +200,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             ((List<TimePeriod>)this[row, 1].CellValue).Clear();
             ((List<TimePeriod>)this[row, 1].CellValue).Add(period);
 
-            if (period.EndTime.Days == 1)
-            {
-                this[row, 1].CellTipText = period.ToShortTimeString() + " ->";
-            }
-            else if (period == new TimePeriod())
+            if (period == new TimePeriod())
             {
                 this[row, 1].CellTipText = ""; //Closed
             }

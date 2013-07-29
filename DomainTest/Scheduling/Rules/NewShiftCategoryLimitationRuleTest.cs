@@ -119,13 +119,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _target = new NewShiftCategoryLimitationRule(_limitationChecker, _virtualSchedulePeriodExtractor);
 
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+            //var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 
-            var lstOfDays = new List<IScheduleDay> { scheduleDay, scheduleDay2 };
+            var lstOfDays = new List<IScheduleDay> { scheduleDay };
 
             IVirtualSchedulePeriod vPeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            IVirtualSchedulePeriod vPeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            var vPeriods = new List<IVirtualSchedulePeriod> { vPeriod1, vPeriod2 };
+            //IVirtualSchedulePeriod vPeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            var vPeriods = new List<IVirtualSchedulePeriod> { vPeriod1 };
             IList<DateOnly> datesWithCategory = new List<DateOnly>();
             datesWithCategory.Add(new DateOnly(2009,2,5));
             datesWithCategory.Add(new DateOnly(2009,2,10));
@@ -137,6 +137,64 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(lstOfDays)).
                     Return(vPeriods);
                 
+                Expect.Call(vPeriod1.IsValid).Return(true);
+                //Expect.Call(vPeriod2.IsValid).Return(true);
+
+                Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
+                //Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
+
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.AtLeastOnce();
+                //Expect.Call(vPeriod2.Person).Return(person).Repeat.AtLeastOnce();
+
+                Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
+                //Expect.Call(vPeriod2.ShiftCategoryLimitationCollection()).Return(_limitations);
+
+                Expect.Call(_limitation.Weekly).Return(false);
+                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
+                Expect.Call(_limitationChecker.IsShiftCategoryOverPeriodLimit(_limitation, dateOnlyPeriod, range, out datesWithCategory)).
+                    Return(true).OutRef(datesWithCategory);
+                Expect.Call(_limitation.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
+                Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
+                Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
+                //Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
+                Assert.AreNotEqual(0, ret.Count());
+            }
+        }
+
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ValidateReturnsListWithTooManyShiftCategoryButNoErrorInList()
+        {
+            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
+            var person = _mocks.StrictMock<IPerson>();
+            var range = _mocks.StrictMock<IScheduleRange>();
+            _dic = new Dictionary<IPerson, IScheduleRange>();
+            _dic.Add(person, range);
+            _target = new NewShiftCategoryLimitationRule(_limitationChecker, _virtualSchedulePeriodExtractor);
+
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+
+            var lstOfDays = new List<IScheduleDay> { scheduleDay, scheduleDay2 };
+
+            IVirtualSchedulePeriod vPeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            IVirtualSchedulePeriod vPeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            var vPeriods = new List<IVirtualSchedulePeriod> { vPeriod1, vPeriod2 };
+            IList<DateOnly> datesWithCategory = new List<DateOnly>();
+            datesWithCategory.Add(new DateOnly(2009, 2, 5));
+            datesWithCategory.Add(new DateOnly(2009, 2, 10));
+            datesWithCategory.Add(new DateOnly(2009, 2, 12));
+            var oldResponses = new List<IBusinessRuleResponse>();
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(lstOfDays)).
+                    Return(vPeriods);
+
                 Expect.Call(vPeriod1.IsValid).Return(true);
                 Expect.Call(vPeriod2.IsValid).Return(true);
 
@@ -161,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             using (_mocks.Playback())
             {
                 IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
-                Assert.AreNotEqual(0, ret.Count());
+                Assert.AreEqual( 0, ret.Count());
             }
         }
 

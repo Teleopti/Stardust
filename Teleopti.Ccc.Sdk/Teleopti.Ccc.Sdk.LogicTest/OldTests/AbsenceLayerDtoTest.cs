@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         {
             DateTimePeriod periodDo = new DateTimePeriod(2009, 1, 1, 2009, 1, 2);
             AbsenceDto absenceDto = new AbsenceDto();
-            absenceDto.Id = GuidFactory.GetGuid();
+            absenceDto.Id = Guid.NewGuid();
             _target.Absence = absenceDto;
             Assert.AreSame(absenceDto, _target.Absence);
             _target.Period = new DateTimePeriodDto { UtcStartTime = periodDo.StartDateTime, UtcEndTime = periodDo.EndDateTime };

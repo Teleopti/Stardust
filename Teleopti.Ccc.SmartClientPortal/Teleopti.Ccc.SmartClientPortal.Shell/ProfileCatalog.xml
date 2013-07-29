@@ -1,7 +1,0 @@
-﻿<SolutionProfile xmlns="http://schemas.microsoft.com/pag/cab-profile/2.0">
-  <Section Name="Services">
-    <Modules>
-      <ModuleInfo AssemblyFile="Teleopti.Ccc.SmartClientPortal.Common.Module.dll" />
-    </Modules>   
-  </Section>
-</SolutionProfile>

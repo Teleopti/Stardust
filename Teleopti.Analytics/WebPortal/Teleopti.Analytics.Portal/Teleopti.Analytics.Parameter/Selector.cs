@@ -255,30 +255,6 @@ namespace Teleopti.Analytics.Parameters
             }
         }
 
-        public int SaveParametersWithName(string name, IList<SqlParameter> parameterList)
-        {
-            //Reader _Reader = new Reader(_ConnectionString, _langId);
-
-            //if (_SavedID == -1){
-            _savedId = _reader.SaveNewName(name, _savedId, CurrentUserCode);
-            //}
-            foreach (SqlParameter param in parameterList)
-            {
-                _reader.SaveUserSetting(_reportId, CurrentUserCode, param.ParameterName, _savedId, param.Value.ToString());
-            }
-            return _savedId;
-        }
-
-        public void DeleteSavedReport()
-        {
-            if (_savedId == -1)
-            {
-                return;
-            }
-            //Reader _Reader = new Reader(_ConnectionString, _langId);
-            _reader.DeleteSavedReport(_savedId);
-        }
-
         public bool IsValid
         {
             get

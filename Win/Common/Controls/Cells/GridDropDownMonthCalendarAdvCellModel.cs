@@ -3,8 +3,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Diagnostics;
 using Syncfusion.Windows.Forms;
@@ -23,7 +21,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         private bool showNoneButton = true;
         private bool showTodayButton = true;
 
-        // Methods
         public GridDropDownMonthCalendarAdvCellModel(GridModel grid)
             : base(grid)
         {
@@ -76,7 +73,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            //Hmm...
             info.AddValue("Text", GetActiveText(Grid.CurrentCellInfo.RowIndex, Grid.CurrentCellInfo.ColIndex));
             base.GetObjectData(info, context);
         }
@@ -102,13 +98,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                     if (style.StrictValueType)
                     {
                         //Ignore applicable functionality if StrictValueType, not promting to the user as an exception. If there is good way then need to proceed.
-
-                        //throw;
                     }
                     if (!(exception is FormatException) && !(exception.InnerException is FormatException))
                     {
                         //Ignore applicable functionality if FormatException, not promting to the user as an exception. If there is good way then need to proceed.
-                        //throw;
                     }
                     style.CellValue = text;
                 }
@@ -182,12 +175,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 return time.ToString(style.Format, info.DateTimeFormat);
             }
             return base.GetFormattedText(style, value, textInfo);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static object GetValueFromStyle(GridStyleInfo style)
-        {
-            return GetValueFromStyle(style, style.CellValue);
         }
 
         private static object GetValueFromStyle(GridStyleInfo style, object value)

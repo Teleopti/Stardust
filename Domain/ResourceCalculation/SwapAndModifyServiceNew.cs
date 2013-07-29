@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules));
 
-				foreach (var assignment in part1.PersonAssignmentCollection())
+				foreach (var assignment in part1.PersonAssignmentCollectionDoNotUse())
 				{
 					assignment.CheckRestrictions();
 				}
 
-				foreach (var assignment in part2.PersonAssignmentCollection())
+				foreach (var assignment in part2.PersonAssignmentCollectionDoNotUse())
 				{
 					assignment.CheckRestrictions();
 				}

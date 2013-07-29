@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 taskOwnerPeriodHelper, 
                 _workload.Skill.TimeZone,
                 _workload.Skill.DefaultResolution,
-                this, ForecasterChartSetting.GetChartSettings());
+				this, ForecasterChartSetting.GetChartSettings(), _workload.Skill.SkillType);
             workloadIntradayGridControl.Create(); //Inits the oject
             workloadIntradayGridControl.Dock = DockStyle.Fill;
             workloadIntradayGridControl.ModifyCells += workloadIntradayGridControl_ModifyCells;

@@ -85,11 +85,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-            OvertimeShiftFactory.CreateOvertimeShift(_activity, _period,
+					scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
                                                                          new MultiplicatorDefinitionSet("test",
                                                                                                         MultiplicatorType
-                                                                                                            .Overtime),
-                                                                         scheduleDay.PersonAssignmentCollection()[0]);
+                                                                                                            .Overtime));
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_cancelOvertimeCommandDto);
-                scheduleDay.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count.Should().Be.EqualTo(0);
+                scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
             }
         }
 
@@ -121,11 +120,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
  			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			OvertimeShiftFactory.CreateOvertimeShift(_activity, _period,
-																		 new MultiplicatorDefinitionSet("test",
-																										MultiplicatorType
-																											.Overtime),
-																		 scheduleDay.PersonAssignmentCollection()[0]);
+			scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
+																		 new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -148,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelOvertimeCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelOvertimeCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count.Should().Be.EqualTo(0);
+				scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
 			}
 		}
     }

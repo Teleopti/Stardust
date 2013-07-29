@@ -55,11 +55,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             
         }
 
-        public void SetComparisonValues(ITaskOwner taskOwner, double taskIndex, double talkTimeIndex, double afterTalkTimeIndex)
-        {
-            SetComparisonValues(taskOwner,taskIndex,talkTimeIndex,afterTalkTimeIndex,DayTrendFactor);
-        }
-
         /// <summary>
         /// Gets the index of the task.
         /// </summary>

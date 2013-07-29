@@ -73,60 +73,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         void StopMessageBroker();
 
         /// <summary>
-        /// Gets or sets the initialized.
-        /// </summary>
-        /// <value>The initialized.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        int Initialized { get; set; }
-        /// <summary>
-        /// Gets or sets the remoting port.
-        /// </summary>
-        /// <value>The remoting port.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        int RemotingPort { get; set; }
-        /// <summary>
-        /// Gets or sets the threads.
-        /// </summary>
-        /// <value>The threads.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        int Threads { get; set; }
-        /// <summary>
-        /// Gets or sets the user id.
-        /// </summary>
-        /// <value>The user id.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        int UserId { get; set; }
-        /// <summary>
-        /// Gets or sets the messaging port.
-        /// </summary>
-        /// <value>The messaging port.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        int MessagingPort { get; set; }
-        /// <summary>
-        /// Gets or sets the server.
-        /// </summary>
-        /// <value>The server.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        string Server { get; set; }
-        /// <summary>
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
@@ -135,26 +81,7 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// Created date: 16/04/2009
         /// </remarks>
         string ConnectionString { get; set; }
-        /// <summary>
-        /// Gets or sets the subscriber id.
-        /// </summary>
-        /// <value>The subscriber id.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        Guid SubscriberId { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is type filter applied.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is type filter applied; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        bool IsTypeFilterApplied { get; set; }
+        
         /// <summary>
         /// Gets a value indicating whether this instance is initialized.
         /// </summary>
@@ -166,34 +93,5 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// Created date: 16/04/2009
         /// </remarks>
         bool IsInitialized { get; }
-
-        /// <summary>
-        /// Occurs when [event message handler].
-        /// </summary>
-        event EventHandler<EventMessageArgs> EventMessageHandler;
-
-        /// <summary>
-        /// Occurs when [exception handler].
-        /// </summary>
-        event EventHandler<UnhandledExceptionEventArgs> ExceptionHandler;
-
-        /// <summary>
-        /// If you need to restart the message broker.
-        /// </summary>
-        /// <returns></returns>
-        bool Restart();
-
-        /// <summary>
-        /// Sends the receipt.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        void SendReceipt(IEventMessage message);
-
-        /// <summary>
-        /// Internals the log.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        void InternalLog(Exception exception);
     }
 }

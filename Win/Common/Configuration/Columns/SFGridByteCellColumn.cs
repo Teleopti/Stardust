@@ -6,25 +6,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridByteCellColumn<T> : SFGridColumnBase<T>
     {
-        private readonly IComparer<T> _columnComparer;
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
-        }
-
         public override int PreferredWidth
         {
             get { return 50; }
         }
 
-        public SFGridByteCellColumn(string bindingProperty, string headerText, IComparer<T> columnComparer)
+        public SFGridByteCellColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         {
-            _columnComparer = columnComparer;
         }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
@@ -36,13 +25,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
             byte value;
-
-            if (byte.TryParse(e.Style.CellValue.ToString(), out value))
+            bool parseResult = true;
+            if (e.Style.CellValue is byte)
+            {
+                value = (byte) e.Style.CellValue;
+            }
+            else
+            {
+                parseResult = byte.TryParse(e.Style.CellValue.ToString(), out value);
+            }
+            if (parseResult)
             {
                 PropertyReflectorHelper.SetValue(currentItem, BindingProperty, value);
             }
         }
-
     }
-
 }

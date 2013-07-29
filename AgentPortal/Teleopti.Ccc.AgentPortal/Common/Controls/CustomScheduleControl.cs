@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                     {
                         DeleteScheduleAppointment.Invoke(this,
                                                   new CustomScheduleAppointmentDeleteEventArgs(
-                                                      _clickedScheduleAppointment));
+                                                      ));
                     }
                 }
             }
@@ -344,8 +344,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         private void ScheduleGridAppointmentsPaste(object sender, EventArgs e)
         {
             CustomScheduleGrid scheduleGrid = (CustomScheduleGrid)GetScheduleHost();
-            CustomScheduleAppointmentCopyPasteEventArgs arg = new CustomScheduleAppointmentCopyPasteEventArgs(
-                ScheduleAppointmentTypes.PreferenceRestriction, null, scheduleGrid.Dates);
+            CustomScheduleAppointmentCopyPasteEventArgs arg = new CustomScheduleAppointmentCopyPasteEventArgs();
             OnPasteScheduleAppointment(arg);
 
         }
@@ -361,8 +360,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         /// </remarks>
         private void ScheduleGridAppointmentsCopy(object sender, EventArgs e)
         {
-            CustomScheduleAppointmentCopyPasteEventArgs arg = new CustomScheduleAppointmentCopyPasteEventArgs(
-                 ScheduleAppointmentTypes.PreferenceRestriction, _selectedScheduleAppointments, null);
+            CustomScheduleAppointmentCopyPasteEventArgs arg = new CustomScheduleAppointmentCopyPasteEventArgs();
             OnCopyScheduleAppointment(arg);
         }
 
@@ -470,22 +468,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             _nextButton.Visible = true;
             _previousButton.Visible = true;
             GetScheduleHost().SelectCellsMouseButtonsMask = MouseButtons.Left | MouseButtons.Right;
-        }
-
-        /// <summary>
-        /// Called when [delete].
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <remarks>
-        /// Created by: Sachinthaw
-        /// Created date: 2008-11-18
-        /// </remarks>
-        protected virtual void OnDelete(ICustomScheduleAppointment item)
-        {
-            if (DeleteScheduleAppointment != null)
-            {
-                DeleteScheduleAppointment.Invoke(this, new CustomScheduleAppointmentDeleteEventArgs(item));
-            }
         }
 
         protected virtual void OnCopyScheduleAppointment(CustomScheduleAppointmentCopyPasteEventArgs arg)

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             ExcelLikeCurrentCell = true;
 
             CellModels.Add("NumericCell", new NumericReadOnlyCellModel(Model));
-            CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
+            CellModels.Add("TimeSpan", new TimeSpanDurationStaticCellModel(Model));
             CellModels.Add("ColumnHeaderCell", new GridSortColumnHeaderCellModel(Model));
         }
         public SingleAgentRestrictionPresenter SingleAgentRestrictionPresenter
@@ -199,14 +199,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         {
         }
 
-        public void RegisterEvents()
-        {
-            PrepareViewStyleInfo += grid_PrepareViewStyleInfo;
-            CurrentCellDeactivated += grid_CurrentCellDeactivated;
-            CurrentCellActivated += grid_CurrentCellActivated;
-            CellClick += RestrictionSummaryGrid_CellClick;
-            SelectionChanged += RestrictionSummaryGridSelectionChanged;
-        }
         private void InitializeComponent()
         {
             ((ISupportInitialize)(this)).BeginInit();

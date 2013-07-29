@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private OvertimeLayerViewModel _target;
 		private MockRepository _mocks;
-		private IOvertimeShiftActivityLayer _layerWithPayload;
+		private IOvertimeShiftLayer _layerWithPayload;
 		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			_layerWithPayload = new OvertimeShiftActivityLayer(_payload, _period, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
+			_layerWithPayload = new OvertimeShiftLayer(_payload, _period, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var lastLayer = ass.OvertimeShiftCollection.Single().LayerCollectionWithDefinitionSet().Last();
+			var lastLayer = ass.OvertimeLayers().Last();
 			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), moveupdown);
 			target.MoveUp();
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var firstLayer = ass.OvertimeShiftCollection.Single().LayerCollectionWithDefinitionSet().First();
+			var firstLayer = ass.OvertimeLayers().First();
 			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), moveupdown);
 			target.MoveDown();
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			IActivity activity = _mocks.StrictMock<IActivity>();
 			DateTimePeriod period = new DateTimePeriod();
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet = _mocks.StrictMock<IMultiplicatorDefinitionSet>();
-			OvertimeShiftActivityLayer overtimeLayer = new OvertimeShiftActivityLayer(activity, period, multiplicatorDefinitionSet);
+			var overtimeLayer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 
 			Expect.Call(multiplicatorDefinitionSet.Name).Return("Qualified overtime");
 

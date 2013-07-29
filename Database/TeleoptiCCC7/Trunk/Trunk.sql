@@ -482,6 +482,69 @@ EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer_new]', N'PersonalShiftActivit
 EXEC sp_rename N'[dbo].[PersonalShiftActivityLayer].[PK_PersonalShiftActivityLayer_new]', N'PK_PersonalShiftActivityLayer', N'INDEX'
 GO
 
+--2) [dbo].[OvertimeShiftActivityLayer] 
+
+--drop FKs
+ALTER TABLE [dbo].[OvertimeShift] DROP CONSTRAINT [FK_OvertimeShift_PersonAssignment]
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_OvertimeShift]
+GO
+
+--Create new layer table
+CREATE TABLE [dbo].[OvertimeShiftActivityLayer_new](
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[DefinitionSet] uniqueidentifier NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
+ CONSTRAINT [PK_OvertimeShiftActivityLayer_new] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE CLUSTERED INDEX [CIX_OvertimeShiftActivityLayer] ON [dbo].[OvertimeShiftActivityLayer_new]
+(
+	[Parent] ASC
+)
+GO
+
+--move data
+INSERT INTO [dbo].[OvertimeShiftActivityLayer_new] (Id, payLoad, Minimum, Maximum, DefinitionSet, Parent, OrderIndex)
+select
+L2.Id,
+L2.payLoad,
+L2.Minimum,
+L2.Maximum,
+L2.DefinitionSet,
+L1.Parent,
+NewOrderIndex = ROW_NUMBER() OVER(PARTITION BY L0.Id ORDER BY L1.OrderIndex,L2.OrderIndex) -1
+from  dbo.PersonAssignment L0
+inner join dbo.OvertimeShift L1
+	on L0.Id = L1.Parent
+inner join dbo.OvertimeShiftActivityLayer L2
+	on L1.Id = L2.Parent
+GO
+
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+ON DELETE CASCADE
+ALTER TABLE [dbo].[OvertimeShiftActivityLayer_new] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_PersonAssignment]
+
+DROP TABLE OvertimeShiftActivityLayer
+DROP TABLE OvertimeShift
+GO
+
+EXEC sp_rename N'[dbo].[OvertimeShiftActivityLayer_new]', N'OvertimeShiftActivityLayer', N'OBJECT'
+EXEC sp_rename N'[dbo].[OvertimeShiftActivityLayer].[PK_OvertimeShiftActivityLayer_new]', N'PK_OvertimeShiftActivityLayer', N'INDEX'
+GO
+
 ----------------  
 --Name: David J
 --Date: 2013-06-24
@@ -526,7 +589,7 @@ REFERENCES [dbo].[Person] ([Id])
 ALTER TABLE [Auditing].[Revision] CHECK CONSTRAINT [FK_Revision_Person]
 GO
 
-CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
+CREATE TABLE [Auditing].[ShiftLayer_AUD](
 	[Id] uniqueidentifier NOT NULL,
 	[REV] bigint NOT NULL,
 	[REVTYPE] tinyint NOT NULL,
@@ -534,67 +597,21 @@ CREATE TABLE [Auditing].[MainShiftActivityLayer_AUD](
 	[Maximum] datetime NULL,
 	[OrderIndex] int NULL,
 	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_MainShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[MainShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_MainShiftActivityLayer_REV]
-GO
-
-
-CREATE TABLE [Auditing].[OvertimeShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
+	[LayerType] tinyint NULL,
 	[DefinitionSet] uniqueidentifier NULL,
 	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_OvertimeShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ShiftLayer_AUD] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC,
 	[REV] ASC
 )
 )
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
+ALTER TABLE [Auditing].[ShiftLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_REV] FOREIGN KEY([REV])
 REFERENCES [Auditing].[Revision] ([Id])
 ON DELETE CASCADE
 
-ALTER TABLE [Auditing].[OvertimeShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
-GO
-
-CREATE TABLE [Auditing].[PersonalShiftActivityLayer_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[Minimum] datetime NULL,
-	[Maximum] datetime NULL,
-	[OrderIndex] int NULL,
-	[Payload] uniqueidentifier NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_PersonalShiftActivityLayer_AUD] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[REV] ASC
-)
-)
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD]  WITH CHECK ADD  CONSTRAINT [FK_PersonalShiftActivityLayer_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
-ON DELETE CASCADE
-
-ALTER TABLE [Auditing].[PersonalShiftActivityLayer_AUD] CHECK CONSTRAINT [FK_PersonalShiftActivityLayer_REV]
-
+ALTER TABLE [Auditing].[ShiftLayer_AUD] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_REV]
 GO
 
 CREATE TABLE [Auditing].[PersonAssignment_AUD](
@@ -680,24 +697,229 @@ ON DELETE CASCADE
 ALTER TABLE [Auditing].[PersonDayOff_AUD] CHECK CONSTRAINT [FK_PersonDayOff_REV]
 GO
 
+----------------  
+--Name: Asad Mirza
+--Date: 2013-06-10
+--Desc: Added a new table for overtime availability day
+----------------
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OvertimeAvailability]') AND type in (N'U'))
+BEGIN
 
-CREATE TABLE [Auditing].[OvertimeShift_AUD](
-	[Id] uniqueidentifier NOT NULL,
-	[REV] bigint NOT NULL,
-	[REVTYPE] tinyint NOT NULL,
-	[OrderIndex] int NULL,
-	[Parent] uniqueidentifier NULL,
- CONSTRAINT [PK_OvertimeShift_AUD] PRIMARY KEY CLUSTERED 
+	CREATE TABLE [dbo].[OvertimeAvailability](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[DateOfOvertime] [date] NOT NULL,
+		[StartTime] [bigint] NULL,
+		[EndTime] [bigint] NULL,
+		[BusinessUnit] [uniqueidentifier] NOT NULL,
+		[CreatedBy] [uniqueidentifier] NOT NULL,
+		[UpdatedBy] [uniqueidentifier] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[UpdatedOn] [datetime] NOT NULL,
+		CONSTRAINT [PK_OvertimeAvailability] PRIMARY KEY NONCLUSTERED
 (
-	[Id] ASC,
-	[REV] ASC
+	[Id] ASC
+))
+	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_BusinessUnit] FOREIGN KEY([BusinessUnit])
+	REFERENCES [dbo].[BusinessUnit] ([Id])
+	
+	ALTER TABLE [dbo].[OvertimeAvailability]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeAvailability_Person] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	
+	CREATE CLUSTERED INDEX [CIX_OvertimeAvailability] ON [dbo].[OvertimeAvailability]
+	(
+		[Person] ASC
+	)
+
+END
+
+
+------------------
+-- Name: CS
+-- Date: 2013-06-11
+-- application function for Overtime availability
+-------------------------
+SET NOCOUNT ON
+	
+--declarations
+DECLARE @SuperUserId as uniqueidentifier
+DECLARE @FunctionId as uniqueidentifier
+DECLARE @ParentFunctionId as uniqueidentifier
+DECLARE @ForeignId as varchar(255)
+DECLARE @ParentForeignId as varchar(255)
+DECLARE @FunctionCode as varchar(255)
+DECLARE @FunctionDescription as varchar(255)
+DECLARE @ParentId as uniqueidentifier
+
+--insert to super user if not exist
+SELECT	@SuperUserId = '3f0886ab-7b25-4e95-856a-0d726edc2a67'
+
+-- check for the existence of super user role
+IF  (NOT EXISTS (SELECT id FROM [dbo].[Person] WHERE Id = @SuperUserId)) 
+INSERT [dbo].[Person]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Email], [Note], [EmploymentNumber], [TerminalDate], [FirstName], [LastName], [DefaultTimeZone], [IsDeleted], [BuiltIn], [FirstDayOfWeek])
+VALUES (@SuperUserId,1,@SuperUserId, @SuperUserId, getdate(), getdate(), '', '', '', NULL, '_Super User', '_Super User', 'UTC', 0, 1, 1)
+
+--get parent level
+SELECT @ParentForeignId = '0023'	--Parent Foreign id that is hardcoded
+SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
+	
+--insert/modify application function
+SELECT @ForeignId = '0087' --Foreign id of the function > hardcoded	
+SELECT @FunctionCode = 'OvertimeAvailability' --Name of the function > hardcoded
+SELECT @FunctionDescription = 'xxOvertimeAvailability' --Description of the function > hardcoded
+SELECT @ParentId = @ParentId
+
+IF  (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
+INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [IsDeleted])
+VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0) 
+SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+SET NOCOUNT OFF
+GO
+----------------  
+--Name: Ola Håkansson
+--Date: 2013-06-13
+--Desc: Adding the new skill type Retail to the database.
+----------------  
+DECLARE @creator uniqueidentifier
+SELECT TOP 1 @creator=CreatedBy FROM SkillType
+IF @creator IS NULL
+	BEGIN
+		SELECT TOP 1 @creator=Id FROM Person
+	END
+INSERT INTO SkillType (Id,ForecastType,Version,CreatedBy,UpdatedBy,CreatedOn,UpdatedOn,Name,ShortName,ForecastSource,IsDeleted)
+VALUES (NEWID(),0,1,@creator,@creator,GETUTCDATE(),GETUTCDATE(),N'SkillTypeChat',null,9,0)
+
+GO
+----------------  
+--Name: Ola Håkansson
+--Date: 2013-06-13
+--Desc: Adding MaxParallelTasks to Skill.
+---------------- 
+ALTER TABLE Skill
+ADD MaxParallelTasks int NULL
+GO
+UPDATE Skill SET MaxParallelTasks = 1
+ALTER TABLE Skill ALTER COLUMN MaxParallelTasks int not null
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-07-01
+--Desc: PBI #21978 - merging all shiftLayer tables into one
+----------------  
+CREATE TABLE [dbo].[ShiftLayer](
+	[Id] uniqueidentifier NOT NULL,
+	[payLoad] uniqueidentifier NOT NULL,
+	[Minimum] datetime NOT NULL,
+	[Maximum] datetime NOT NULL,
+	[Parent] uniqueidentifier NOT NULL,
+	[OrderIndex] int NOT NULL,
+	[LayerType] tinyint NOT NULL,
+	[DefinitionSet] uniqueidentifier NULL,
+	CONSTRAINT [PK_ShiftLayer] PRIMARY KEY NONCLUSTERED 	
+	(	
+		[Id] ASC
+	)	
 )
+CREATE CLUSTERED INDEX [CIX_ShiftLayer_Parent] ON [dbo].[ShiftLayer]
+(
+            [Parent] ASC
 )
-ALTER TABLE [Auditing].[OvertimeShift_AUD]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShift_REV] FOREIGN KEY([REV])
-REFERENCES [Auditing].[Revision] ([Id])
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH NOCHECK ADD  CONSTRAINT [FK_ShiftLayer_Activity] FOREIGN KEY([payLoad])
+REFERENCES [dbo].[Activity] ([Id])
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_Activity]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_Activity]
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
 ON DELETE CASCADE
 
-ALTER TABLE [Auditing].[OvertimeShift_AUD] CHECK CONSTRAINT [FK_OvertimeShift_REV]
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ShiftLayer_PersonAssignment]') AND parent_object_id = OBJECT_ID(N'[dbo].[ShiftLayer]'))
+ALTER TABLE [dbo].[ShiftLayer] CHECK CONSTRAINT [FK_ShiftLayer_PersonAssignment]
 
 GO
 
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= Id,
+	[payLoad]	= [payLoad],
+	[Minimum]	= [Minimum],
+	[Maximum]	= [Maximum],
+	[Parent]	= [Parent],
+	[OrderIndex]= [OrderIndex],
+	[LayerType]	= 1,
+	[DefinitionSet] = NULL
+FROM dbo.MainShiftActivityLayer
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= o.[Id],
+	[payLoad]	= o.[payLoad],
+	[Minimum]	= o.[Minimum],
+	[Maximum]	= o.[Maximum],
+	[Parent]	= o.[Parent] ,
+	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
+	[LayerType]	= 2,
+	[DefinitionSet] = o.DefinitionSet
+FROM dbo.OvertimeShiftActivityLayer o
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = o.Parent
+
+INSERT INTO [dbo].[ShiftLayer]
+SELECT
+	[Id]		= p.[Id],
+	[payLoad]	= p.[payLoad],
+	[Minimum]	= p.[Minimum],
+	[Maximum]	= p.[Maximum],
+	[Parent]	= p.[Parent] ,
+	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
+	[LayerType]	= 3,
+	[DefinitionSet] = NULL
+FROM dbo.PersonalShiftActivityLayer p
+INNER JOIN
+	(
+	SELECT Parent,MAX(OrderIndex) AS OrderIndex
+	FROM [dbo].[ShiftLayer]
+	GROUP BY Parent
+	) s
+	ON s.Parent = p.Parent
+GO
+
+DROP TABLE dbo.MainShiftActivityLayer
+DROP TABLE dbo.OvertimeShiftActivityLayer
+DROP TABLE dbo.PersonalShiftActivityLayer
+GO
+
+------
+-- dummy change to force a new db schema when running test
+------
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-07-15
+--Desc: Bug #24018 - Fix messed up default values for Contract
+---------------- 
+UPDATE dbo.Contract SET AvgWorkTimePerDay = 288000000000,Version = Version+1 WHERE AvgWorkTimePerDay = 0
+GO
+
+UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
+GO
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-07-18
+--Desc: Remove unused column for soft deletes
+---------------- 
+ALTER TABLE dbo.MultisiteDay DROP COLUMN IsDeleted
+GO

@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             //bind for the grid.
             ReadOnlyCollection<SFGridColumnBase<AgentQueueStatDetailsDto>> configGrid = ConfigureGrid();
             _columnGridHelper = new SFGridColumnGridHelper<AgentQueueStatDetailsDto>(gridQueue, configGrid, _source);
-            _columnGridHelper.NewSourceEntityWanted += _columnGridHelper_NewSourceEntityWanted;
             //set column widths.
             gridQueue.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 
@@ -79,11 +78,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             gridQueue.KeyDown -= _columnGridHelper.grid_KeyDown;
             gridQueue.ClipboardPaste -= _columnGridHelper.grid_ClipboardPaste;
             gridQueue.SaveCellInfo -= _columnGridHelper.grid_SaveCellInfo;
-        }
-
-        void _columnGridHelper_NewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<AgentQueueStatDetailsDto> e)
-        {
-
         }
 
         /// <summary>
@@ -107,8 +101,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AverageTalkTime", UserTexts.Resources.AverageTalkTime, 150));
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AfterContactWorkTime", UserTexts.Resources.AverageAfterCallWork, 150));
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AverageHandlingTime", UserTexts.Resources.AverageHandlingTime, 150));
-            //gridColumns.Add(new SFGridHourMinutesColumn<MyReportAgentQueueInfoDto>("AvailableTime", UserTexts.Resources.AvailableTime, 150, "ToBeBold"));
-
+            
             gridQueue.RowCount = gridRowCount();
             gridQueue.ColCount = gridColumns.Count - 1;  //col index starts on 0
             gridQueue.ColHiddenEntries.Add(new GridColHidden(0));

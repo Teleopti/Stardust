@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool _isDeleted;
         private int _priority = 4;
         private Percent _overstaffingFactor = new Percent(.5);
-        /// <summary>
+	    private int _maxParallelTasks;
+
+	    /// <summary>
         /// For NHibernate
         /// </summary>
         protected Skill()
@@ -62,6 +64,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _staffingThresholds = StaffingThresholds.DefaultValues();
 
             _templateWeekCollection = new Dictionary<int, ISkillDayTemplate>();
+	        _maxParallelTasks = 1;
+	        //defaults to 3 on chat
+			if (skillType.ForecastSource.Equals(ForecastSource.Chat))
+		        _maxParallelTasks = 3;
 
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -372,7 +378,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return pair.Value;
         }
 
-        /// <summary>
+	    public virtual int MaxParallelTasks
+	    {
+		    get { return _maxParallelTasks; }
+		    set
+		    {
+				if (value < 1 || value > 100)
+					throw new ArgumentOutOfRangeException("value", value, "Priority must be between 1 and 100.");
+				_maxParallelTasks = value;
+		    }
+	    }
+
+	    /// <summary>
         /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
         /// </summary>
         /// <returns>

@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private static bool isNightShift(IScheduleDay scheduleDay)
         {
             TimeZoneInfo tz = TeleoptiPrincipal.Current.Regional.TimeZone;
-            DateOnly viewerStartDate = new DateOnly(scheduleDay.AssignmentHighZOrder().Period.StartDateTimeLocal(tz).Date);
-            DateOnly viewerEndDate = new DateOnly(scheduleDay.AssignmentHighZOrder().Period.EndDateTimeLocal(tz).AddMinutes(-1).Date);
+            DateOnly viewerStartDate = new DateOnly(scheduleDay.PersonAssignment().Period.StartDateTimeLocal(tz).Date);
+            DateOnly viewerEndDate = new DateOnly(scheduleDay.PersonAssignment().Period.EndDateTimeLocal(tz).AddMinutes(-1).Date);
 
             return viewerStartDate != viewerEndDate;
         }

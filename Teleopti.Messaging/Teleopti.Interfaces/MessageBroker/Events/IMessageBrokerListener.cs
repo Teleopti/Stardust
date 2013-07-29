@@ -24,17 +24,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType);
 
 		/// <summary>
-		/// Designated method for Raptor Developers to Register Event Subscriptions
-		/// passing in a delegate along with filter criterias in form of a GUID.
-		/// </summary>
-		/// <param name="eventMessageHandler"></param>
-		/// <param name="domainObjectId"></param>
-		/// <param name="domainObjectType"></param>
-		/// <param name="businessUnitId"></param>
-		/// <param name="dataSource"></param>
-		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType);
-
-		/// <summary>
 		/// Registers the event subscription.
 		/// </summary>
 		/// <param name="eventMessageHandler">The event message handler.</param>

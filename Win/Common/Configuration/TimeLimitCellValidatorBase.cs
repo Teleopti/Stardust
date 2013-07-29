@@ -6,15 +6,9 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    /// <summary>
-    /// Represents a .
-    /// </summary>
     public abstract class TimeLimitCellValidatorBase<T> : SFGridCellValidatorBase<T>
         where T : ScheduleRestrictionBaseView
     {
-        /// <summary>
-        /// Gets information about current culture.
-        /// </summary>
         protected override CultureInfo CurrentCulture
         {
             get
@@ -23,11 +17,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fromTime">A start-time reference.</param>
-        /// <param name="toTime">An end-time reference.</param>
         protected void CreateErrorTip(string fromTime, string toTime)
         {
             Message = string.Format(

@@ -4,8 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -67,12 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var actL = new FakeLayerClass(fakeActivity, per);
 			actL.SetParent(null);
 		}
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(ActivityLayer)));
-        }
-
 
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
@@ -114,24 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             cloneLayer = (FakeLayerClass)orgLayer.NoneEntityClone();
 			Assert.That(cloneLayer, Is.Not.Null);
         }
-        /// <summary>
-        /// Verifies the order index works.
-        /// TODO: more test here when insert, delete and so on exists
-        /// </summary>
-        [Test]
-        public void VerifyOrderIndexWorks()
-        {
-
-						var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
-						var shift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
-																																			new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-																																			defSet,
-																																			new PersonAssignment(new Person(), new Scenario("d"),
-																																													 new DateOnly(2000, 1, 1)));
-						var layer2 = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1), defSet);
-						shift.LayerCollection.Add(layer2);
-						Assert.AreEqual(1, layer2.OrderIndex);
-				}
 
         [Test]
         public void CanSetProperties()

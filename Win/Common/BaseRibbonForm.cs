@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Common.UI.OutlookControls.Workspaces;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -72,9 +71,9 @@ namespace Teleopti.Ccc.Win.Common
             if (e.KeyCode == Keys.F1)
             {
                 if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
-                    ShowHelp(false);//Online
+                    ShowHelp(true);//Offline
                 else
-                    ShowHelp(true);
+                    ShowHelp(false); //Online
             }
             base.OnKeyDown(e);
         }

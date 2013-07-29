@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             Assert.IsNotNull(_targetView);
 
             Assert.AreEqual(_targetView.DayOffTemplate, _dayOff);
-            Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTimeString);
-            Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTimeString);
-            Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTimeString);
-            Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTimeString);
+            Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTime);
+            Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTime);
+            Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTime);
+            Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTime);
             Assert.IsNotNull(_targetView.ShiftCategory);
             Assert.AreEqual(_targetView.Week, ScheduleRestrictionBaseView.GetWeek(DayCount));
 
@@ -84,19 +84,19 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             IDayOffTemplate dayOff = new DayOffTemplate(new Description("LeisureDay"));
 
             _targetView.DayOffTemplate = dayOff;
-            _targetView.EarlyStartTime = "0825";
+            _targetView.EarlyStartTime = new TimeSpan(8,25,0);
             Assert.AreEqual(_targetView.DayOffTemplate, RotationRestrictionView.DefaultDayOff);
 
             _targetView.DayOffTemplate = null;
-            _targetView.LateStartTime = "0825";
+            _targetView.LateStartTime = new TimeSpan(8, 25,0);
             Assert.AreEqual(_targetView.DayOffTemplate, RotationRestrictionView.DefaultDayOff);
 
             _targetView.DayOffTemplate = dayOff;
-            _targetView.EarlyEndTime = "0825";
+            _targetView.EarlyEndTime = new TimeSpan(8, 25,0);
             Assert.AreEqual(_targetView.DayOffTemplate, RotationRestrictionView.DefaultDayOff);
 
             _targetView.DayOffTemplate = null;
-            _targetView.LateEndTime = "0825";
+            _targetView.LateEndTime = new TimeSpan(8, 25,0);
             Assert.AreEqual(_targetView.DayOffTemplate, RotationRestrictionView.DefaultDayOff);
         }
 
@@ -156,12 +156,12 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             _containedEntity.ShiftCategory = null;
             var rotationRestrictionView = new RotationRestrictionView(_containedEntity, 10, 1)
                                               {
-                                                  EarlyStartTime = "08:00",
-                                                  LateStartTime = "12:00",
-                                                  EarlyEndTime = "20:00",
-                                                  LateEndTime = "23:00",
-                                                  MinimumWorkTime = "07:00",
-                                                  MaximumWorkTime = "09:00"
+                                                  EarlyStartTime = TimeSpan.FromHours(8),
+                                                  LateStartTime = TimeSpan.FromHours(12),
+                                                  EarlyEndTime = TimeSpan.FromHours(20),
+                                                  LateEndTime = TimeSpan.FromHours(23),
+                                                  MinimumWorkTime = TimeSpan.FromHours(7),
+                                                  MaximumWorkTime = TimeSpan.FromHours(9)
                                               };
 
             rotationRestrictionView.AssignValuesToDomainObject();

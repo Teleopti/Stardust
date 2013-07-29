@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     assignedPersons.Add(person);
                 }
 
-                personAssignmentSource = scheduleDaySource.AssignmentHighZOrder();
+                personAssignmentSource = scheduleDaySource.PersonAssignment();
                 break;
             }
 

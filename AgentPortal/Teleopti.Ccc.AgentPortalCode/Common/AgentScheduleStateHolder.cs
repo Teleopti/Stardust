@@ -64,19 +64,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             get { return _asmScheduleDictionary; }
         }
 
-        public bool IsEndOfTheActivityCheck
-        {
-            get
-            {
-                DateTime currentDate = DateTime.Today;
-                IScheduleItemList asmScheduleItemList;
-
-                if (_asmScheduleDictionary.TryGetValue(currentDate, out asmScheduleItemList))
-                    return (asmScheduleItemList.GetNextActivity(currentDate) == null);
-                return true;
-            }
-        }
-
         public ScheduleAppointmentTypes VisualizingScheduleAppointmentTypes
         {
             get
@@ -95,8 +82,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
 
         public int CurrentResolution { get; set; }
 
-        public int CalendarDayIndex { get; set; }
-
         public IList<DayOff> DaysOff
         {
             get { return _daysOff; }
@@ -107,24 +92,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             get { return _instance != null; }
         }
 
-        /// <summary>
-        /// Occurs when current activity changed .
-        /// </summary>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-07-26
-        /// </remarks>
         public static event EventHandler<ActivityChangedEventArgs> ActivityChanged;
-
-        public static event EventHandler<StateChangedEventArgs> StateChanged;
 
         public static AgentScheduleStateHolder Instance()
         {
-            if (_instance == null)
-            {
-                _instance = new AgentScheduleStateHolder();
-            }
-            return _instance;
+            return _instance ?? (_instance = new AgentScheduleStateHolder());
         }
 
         public void Initialize(PersonDto person)
@@ -197,7 +169,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
                     if(categoryDto.Id.Equals(shiftCategoryDto.Id))
                     {
                         found = true;
-                        continue;
+                        break;
                     }
                 }
                 if(found)
@@ -393,22 +365,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             SdkServiceHelper.SchedulingService.DeletePreference(restrictionDto);
         }
 
-        public StudentAvailabilityDayDto StudentAvailabilityDayOnDate(DateTime date)
-        {
-            if (!_schedulePartDictionary.ContainsKey(date))
-                return null;
-            SchedulePartDto part = _schedulePartDictionary[date];
-            return part.StudentAvailabilityDay;
-        }
-
         public bool CanVisualize(ScheduleAppointmentTypes type)
         {
             return ((_visualizingScheduleAppointmentTypes & type) == type);
-        }
-
-        public IList<ICustomScheduleAppointment> UnsavedAppointments()
-        {
-            return _agentScheduleDctionary.UnsavedAppointments();
         }
 
         public void CheckNextActivity()
@@ -442,14 +401,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
                 }
             }
             OnActivityChanged(nextActivity);
-        }
-
-        public void OnStateChange(ScheduleAppointmentStatusTypes status, Dto item)
-        {
-            if (StateChanged != null)
-            {
-                StateChanged(this, new StateChangedEventArgs(status, item));
-            }
         }
 
         protected void OnActivityChanged(ICustomScheduleAppointment nextScheduleItem)

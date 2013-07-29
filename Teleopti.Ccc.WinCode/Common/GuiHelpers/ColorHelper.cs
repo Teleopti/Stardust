@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
         public static BrushInfo WizardHeaderBrush
         {
-            get { return new BrushInfo(GradientStyle.Horizontal, Color.White, WizardPanelButtonHolder()); }
+            get { return new BrushInfo(GradientStyle.Vertical, Color.White, WizardPanelButtonHolder()); }
         }
 
         public static void SetTabControlSettings(TabControlAdv theTab)

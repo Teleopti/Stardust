@@ -11,12 +11,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest
     [TestFixture]
     public class ScorecardTransformerTest
     {
+		private readonly DateTime _updatedOnDateTime = DateTime.Now;
+
         #region Setup/Teardown
 
         [SetUp]
         public void Setup()
         {
-            _scorecardList = ScorecardFactory.CreateScorecardCollection();
+			_scorecardList = ScorecardFactory.CreateScorecardCollection(_updatedOnDateTime);
             _target = new ScorecardTransformer();
             _dataTable = _target.Transform(_scorecardList, _insertDateTime);
         }
@@ -35,8 +37,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(_scorecardList[0].BusinessUnit.Id, _dataTable.Rows[0]["business_unit_code"]);
             Assert.AreEqual(_scorecardList[1].BusinessUnit.Description.Name, _dataTable.Rows[1]["business_unit_name"]);
             //UpdatedOn
-            Assert.AreEqual(RaptorTransformerHelper.GetUpdatedDate(_scorecardList[0]),
-                            _dataTable.Rows[0]["datasource_update_date"]);
+			Assert.AreEqual(_updatedOnDateTime,_dataTable.Rows[0]["datasource_update_date"]);
         }
 
         [Test]
@@ -54,6 +55,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(1, _dataTable.Rows[0]["datasource_id"]);
             Assert.AreEqual(_insertDateTime, _dataTable.Rows[1]["insert_date"]);
             Assert.AreEqual(_insertDateTime, _dataTable.Rows[0]["update_date"]);
+			Assert.AreEqual(_updatedOnDateTime, _dataTable.Rows[0]["datasource_update_date"]);
         }
     }
 }

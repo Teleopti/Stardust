@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
                 dateTimePickerAdvWorkAStartDate.UseCurrentCulture =
                     dateTimePickerAdvWorkEndPeriod.UseCurrentCulture = false;
-                dateTimePickerAdvWorkEndPeriod.Culture =
-                    dateTimePickerAdvWorkAStartDate.Culture = TeleoptiPrincipal.Current.Regional.Culture;
+                dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
+                dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
             }
         }
 
@@ -113,20 +113,6 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-     
-        public void ShowWarning()
-        {
-            if (IsWorkPeriodValid == false)
-            {
-                TimedWarningDialog warning = new TimedWarningDialog();
-                warning.WarningShownInSeconds = 2;
-                warning.WarningMessageShown = "WARNING! \n the startdate is after enddate!";
-                warning.WarningShownNearThisControl = labelTargetPeriodTo;
-                warning.ShowDialog(this);
-            }
-        }
-
-       
         /// <summary>
         /// Handles the ValueChanged event of the dateTimePickerAdvWorkEndPeriod control.
         /// </summary>

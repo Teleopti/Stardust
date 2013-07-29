@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -32,16 +31,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         public IOutlier Outlier
         {
             get { return _outlier; }
-        }
-
-        public IOutlier OriginalOutlier
-        {
-            get { return _originalOutlier; }
-        }
-
-        public IList<IOutlier> AlreadyAddedOutliers
-        {
-            get { return _alreadyAddedOutliers; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#")]

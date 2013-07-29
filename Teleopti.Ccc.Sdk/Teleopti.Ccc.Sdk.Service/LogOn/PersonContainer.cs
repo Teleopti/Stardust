@@ -22,7 +22,5 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         public string Password { get; set; }
 
         public string DataSource { get; set; }
-
-        public Guid BusinessUnit { get; set; }
     }
 }

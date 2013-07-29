@@ -94,5 +94,10 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         {
             _model.StudentAvailability = check;
         }
+
+        public void OnCheckBoxOvertimeAvailabilityCheckedChanged(bool check)
+        {
+            _model.OvertimeAvailability = check;
+        }
     }
 }

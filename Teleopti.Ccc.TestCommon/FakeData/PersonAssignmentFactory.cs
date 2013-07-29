@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
-			ass.AddOvertimeShift(OvertimeShiftFactory.CreateOvertimeShift(activity, period, multiplicatorDefinitionSet, ass));
+			ass.AddOvertimeLayer(activity, period, multiplicatorDefinitionSet);
 			return ass;
 		}
 
@@ -363,11 +363,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 				var ret = new PersonAssignment(p, new Scenario("d"), new DateOnly(2000, 1, 1));
 				var act = new Activity("overtime");
-				var overtimeShift = new OvertimeShift();
-				ret.AddOvertimeShift(overtimeShift);
-				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi));
-				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi));
-				overtimeShift.LayerCollection.Add(new OvertimeShiftActivityLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi));
+				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi);
+				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi);
+				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi);
 				return ret;
 			}
     }

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             var font = PdfFontManager.GetFont(9f, PdfFontStyle.Regular, culture);
 		    var stringWidthHandler = new StringWidthHandler(font, 130);
 		    personString = stringWidthHandler.GetString(personString);
-
+			var rowTop = top;
             float personTop = DrawColumnData(top, 0, personString, 130, culture);
             float break1Top = top;
             float lunchTop = top;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
             if(GetSchedulePartView(part))
                 return personTop;
-
+			float left = 190;
             IVisualLayerCollection projection = part.ProjectionService().CreateProjection();
             if (projection.HasLayers && projection.Period().HasValue)
             {
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 DateTime start = period.StartDateTimeLocal(timeZoneInfo);
                 DateTime end = period.EndDateTimeLocal(timeZoneInfo);
                 DrawColumnData(top, 130, start.ToString("t", culture), 80, culture);
-                float left = 190;
+                
                 if (details != ScheduleReportDetail.None)
                 {
                     bool beforeLunch = true;
@@ -139,14 +139,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 if (break2Top > top) top = break2Top;
             }
             // if there was no layers
-            if (personTop > top) top = personTop;
+           
 
             if(publicNote)
             {
                 var note = part.PublicNoteCollection().FirstOrDefault();
                 var noteString = note != null ? note.GetScheduleNote(new NoFormatting()) : string.Empty;
-                if(noteString.Length > 0) top = DrawColumnData(top, 130, noteString, pageWidth - 130, culture);
+				if (noteString.Length > 0) top = DrawColumnData(rowTop, left + 80, noteString, pageWidth - (left + 80), culture);
             }
+			if (personTop > top) top = personTop;
 
             DrawLine(top - 3, pageWidth, 1);
             return top;

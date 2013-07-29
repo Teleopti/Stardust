@@ -25,9 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private IList<PersonRequestViewModel> _source = new List<PersonRequestViewModel>();
         private readonly HandlePersonRequestViewModel _model;
         private IEventAggregator _eventAggregator;
-        private bool _needReload;
         private readonly IPersonRequestCheckAuthorization _authorization;
-        private bool _needUpdate;
 
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
@@ -98,22 +96,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             return _model.SelectedModels;
         }
 
-		public PersonRequestViewModel SelectedModel
-		{
-			get { return _model.SelectedModel; }
-		}
+        public bool NeedReload { get; set; }
 
-        public bool NeedReload
-        {
-            get { return _needReload; }
-            set { _needReload = value; }
-        }
-
-        public bool NeedUpdate
-        {
-            get { return _needUpdate; }
-            set { _needUpdate = value; }
-        }
+        public bool NeedUpdate { get; set; }
 
         #region events
 

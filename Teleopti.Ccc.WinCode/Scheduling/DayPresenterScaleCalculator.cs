@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     IScheduleDay yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
                 	timeZone = yesterDay.TimeZone;
-                    foreach (var personAssignment in yesterDay.PersonAssignmentCollection())
+                    foreach (var personAssignment in yesterDay.PersonAssignmentCollectionDoNotUse())
                     {
 	                    var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
                         if (shift != null && shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
 
                 IScheduleDay today = range.ScheduledDay(selectedDate);
-                foreach (var personAssignment in today.PersonAssignmentCollection())
+                foreach (var personAssignment in today.PersonAssignmentCollectionDoNotUse())
                 {
 					var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
 					if (shift != null)

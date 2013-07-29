@@ -6,21 +6,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridReadOnlyEnumColumn<T> : SFGridColumnBase<T>
     {
-        private readonly int _preferredWidth;
+        private const int _preferredWidth = 150;
 
         public SFGridReadOnlyEnumColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         { }
 
-        public SFGridReadOnlyEnumColumn(string bindingProperty, int preferredWidth, string headerText)
-            : base(bindingProperty, headerText)
-        {
-            _preferredWidth = preferredWidth;
-        }
-
         public override int PreferredWidth
         {
-            get { return (_preferredWidth > 0) ? _preferredWidth : 150; }
+            get { return _preferredWidth; }
         }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
@@ -31,8 +25,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
-            // Commented: To avoid getting exceptions when doing copy past 
-            //throw new InvalidOperationException("Attempt to set value of read-only cell");
         }
     }
 }

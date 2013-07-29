@@ -111,13 +111,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             var timePeriod = (DateTimePeriod)style.Tag;
             var pixelConverter = new LengthToTimeCalculator(timePeriod, clientRectangle.Width);
 
-            //foreach (var interval in timePeriod.AffectedHourCollection())
-            //{
-            //    double x = pixelConverter.PositionFromDateTime(interval.StartDateTime, Grid.IsRightToLeft());
-            //    if (x > 0)
-            //        g.DrawLine(new Pen(Color.LightGray, 1), (int)(clientRectangle.Left + x), (int)(clientRectangle.Top), (int)(clientRectangle.Left + x), clientRectangle.Bottom);
-            //}
-
             if (_toolTipLists.ContainsKey(rowIndex))
                 _toolTipLists.Remove(rowIndex);
 

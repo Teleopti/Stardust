@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var pLayer = layer as IPersonalShiftLayer;
 			if (pLayer != null)
 			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
 				var index = pLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index-1, pLayer);
@@ -37,11 +38,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			//no need to cast later when agentday is done
-			var overLayer = layer as IOvertimeShiftActivityLayer;
+			var overLayer = layer as IOvertimeShiftLayer;
 			if (overLayer != null)
 			{
-				var shift = (IOvertimeShift) overLayer.Parent;
-				shift.LayerCollection.MoveUpLayer(layer);
+				var oldLayers = personAssignment.OvertimeLayers().ToList();
+				var index = overLayer.OrderIndex;
+				oldLayers.RemoveAt(index);
+				oldLayers.Insert(index - 1, overLayer);
+				personAssignment.ClearOvertimeLayers();
+				foreach (var newOvertimeShiftLayer in oldLayers)
+				{
+					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period, newOvertimeShiftLayer.DefinitionSet);
+				}
 			}
 		}
 
@@ -51,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var msLayer = layer as IMainShiftLayer;
 			if (msLayer != null)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers);
+				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);
@@ -62,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var pLayer = layer as IPersonalShiftLayer;
 			if (pLayer != null)
 			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers);
+				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
 				var index = pLayer.OrderIndex;
 				oldLayers.RemoveAt(index);
 				oldLayers.Insert(index +1, pLayer);
@@ -75,11 +83,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			//no need to cast later when agentday is done
-			var overLayer = layer as IOvertimeShiftActivityLayer;
+			var overLayer = layer as IOvertimeShiftLayer;
 			if (overLayer != null)
 			{
-				var shift = (IOvertimeShift)overLayer.Parent;
-				shift.LayerCollection.MoveDownLayer(layer);
+				var oldLayers = personAssignment.OvertimeLayers().ToList();
+				var index = overLayer.OrderIndex;
+				oldLayers.RemoveAt(index);
+				oldLayers.Insert(index + 1, overLayer);
+				personAssignment.ClearOvertimeLayers();
+				foreach (var newOvertimeShiftLayer in oldLayers)
+				{
+					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period, newOvertimeShiftLayer.DefinitionSet);
+				}
 			}
 		}
 	}

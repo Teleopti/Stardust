@@ -201,9 +201,6 @@
     <Compile Include="OldTests\DataSourceDtoTest.cs" />
     <Compile Include="OldTests\DateOnlyDtoTest.cs" />
     <Compile Include="OldTests\DefinedRaptorApplicationFunctionPathsDtoTest.cs" />
-    <Compile Include="OldTests\FakeData\DescriptionFactory.cs" />
-    <Compile Include="OldTests\FakeData\GuidFactory.cs" />
-    <Compile Include="OldTests\FakeData\TimeLimitationFactory.cs" />
     <Compile Include="OldTests\FaultDtoTest.cs" />
     <Compile Include="OldTests\LicenseVerificationResultDtoTest.cs" />
     <Compile Include="OldTests\MatrixReportInfoDtoTest.cs" />

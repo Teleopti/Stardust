@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Facsimile);
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.InboundTelephony);
                 Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Retail);
+				Expect.Call(_skillType.ForecastSource).Return(ForecastSource.Chat);
             }
             using (mocks.Playback())
             {
@@ -47,6 +48,8 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
                 Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
                 _target = new TextManager(_skillType);
                 Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
+				_target = new TextManager(_skillType);
+				Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
             }
         }
     }

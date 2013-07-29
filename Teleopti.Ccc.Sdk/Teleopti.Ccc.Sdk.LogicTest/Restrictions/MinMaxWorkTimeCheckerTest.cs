@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
             Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(
                 new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-            Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(
+            Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
             Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
             Expect.Call(dateOnlyAsPeriod.DateOnly).Return(onDate);

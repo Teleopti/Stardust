@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
 
     	private void ContextMenuStrip_Click(object sender, EventArgs e)
         {
-            OnContextMenuClicked(selectedGalleryItem);
+            OnContextMenuClicked();
             contextMenuMode = 2;
         }
 
@@ -275,17 +275,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
                 handler(this, e);
         }
 
-        private void OnContextMenuClicked(ToolStripGalleryItem item)
+        private void OnContextMenuClicked()
         {
-            ToolStripGalleryItemContextMenuClickEventArgs args = new ToolStripGalleryItemContextMenuClickEventArgs(item);
-            OnContextMenuClicked(args);
-        }
-
-        private void OnContextMenuClicked(ToolStripGalleryItemContextMenuClickEventArgs e)
-        {
+            ToolStripGalleryItemContextMenuClickEventArgs args = new ToolStripGalleryItemContextMenuClickEventArgs();
         	var handler = ContextMenuClicked;
             if (handler != null)
-                handler(this, e);
+                handler(this, args);
         }
 
 		protected override void Dispose(bool disposing)

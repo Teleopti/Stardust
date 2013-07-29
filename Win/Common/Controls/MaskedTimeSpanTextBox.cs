@@ -72,14 +72,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
             errorProvider1.SetError(maskedTextBox1, errorStatus);
         }
 
-        public void SetWarningStatus(string warningStatus)
-        {
-            _validatedStatus = ValidatedStatus.Warning;
-            errorProvider1.Icon = _warningIcon;
-            errorProvider1.SetIconPadding(maskedTextBox1, 4);
-            errorProvider1.SetError(maskedTextBox1, warningStatus);
-        }
-
         public void SetOkStatus()
         {
             _validatedStatus = ValidatedStatus.Ok;

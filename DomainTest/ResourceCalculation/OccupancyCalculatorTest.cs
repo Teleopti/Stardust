@@ -89,16 +89,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ITask t1 = new Task(150,TimeSpan.FromSeconds(110), TimeSpan.FromSeconds(10));
             ServiceAgreement sa1 = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
             ISkillStaffPeriod ssp1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp, t1, sa1);
+			ssp1.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),dtp.StartDateTime));
             ssp1.CalculateStaff();
             ret.Add(_s1, ssp1);
 
             ITask t2 = new Task(100, TimeSpan.FromSeconds(170), TimeSpan.FromSeconds(10));
             ISkillStaffPeriod ssp2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp, t2, sa1);
+			ssp2.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dtp.StartDateTime));
             ssp2.CalculateStaff();
             ret.Add(_s2, ssp2);
 
             ITask t3 = new Task(50, TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(10));
             ISkillStaffPeriod ssp3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dtp, t3, sa1);
+			ssp3.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dtp.StartDateTime));
             ssp3.CalculateStaff();
             ret.Add(_s3, ssp3);
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
     public class IntradayPresenterTest : IDisposable
     {
         private IntradayPresenter _target;
-        private readonly DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow.Date), new DateOnly(DateTime.UtcNow.AddDays(1).Date));
+        private readonly DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(2013, 1, 1), new DateOnly(2013, 1, 2));
         private readonly DateOnlyPeriod _periodNow = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
         private MockRepository _mocks;
         private IList<IPerson> _persons;
@@ -408,8 +407,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_mocks.ReplayAll();
 
-		    Enumerable.Range(0, 101)
-		              .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+			//Enumerable.Range(0, 101)
+			//		  .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
+
+			Enumerable.Range(0, 101)
+					 .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
+
 		    _schedulerStateHolder.RequestedPeriod =
 		        new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
 		                                           TimeZoneInfo.Utc);
@@ -465,7 +468,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private void CreateRtaStateHolderExpectation()
 		{
 			Expect.Call(_rtaStateHolder.Initialize);
-			_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.Empty, _persons.First());
+			//_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.Empty, _persons.First());
+			_schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.Empty, _persons.First());
 			Expect.Call(_target.SchedulerStateHolder).IgnoreArguments().Return(_schedulerStateHolder);
 			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
 				.IgnoreArguments();

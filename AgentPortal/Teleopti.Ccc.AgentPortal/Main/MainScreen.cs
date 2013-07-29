@@ -80,17 +80,6 @@ namespace Teleopti.Ccc.AgentPortal.Main
             get { return panelLegends; }
         }       
 
-        public void RefreshSchedules()
-        {
-            Cursor = Cursors.WaitCursor;
-            var control = panelSchedule.Controls[0] as ScheduleControl;
-            if (control != null)
-            {
-                ((IAgentScheduleViewBase)control.ScheduleView).Refresh(true);
-            }
-            Cursor = Cursors.Default;
-        }
-
         public void RefreshTab()
         {
             if (ActiveControl != null)

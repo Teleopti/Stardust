@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 
         void Delete();
 
-        void Rename();
-
         void Sort(SortingMode mode);
 
         void Cut();
@@ -19,15 +17,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 
         void Paste();
 
-        void MoveUp();
-
-        void MoveDown();
-
         void RefreshView();
-
-        void Clear();
-
-        void PasteSpecial();
 
         void Amounts(IList<int> shiftAmount);
     }

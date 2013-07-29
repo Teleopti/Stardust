@@ -70,7 +70,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             IScenario scenario = new Scenario(name);
             scenario.SetId(Guid.NewGuid());
             scenario.DefaultScenario = isDefaultScenario;
-            //Type rootType = typeof(AggregateRootWithBusinessUnit);
             Type rootType = typeof(AggregateRoot);
             rootType.GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(
                 scenario, new DateTime(1900, 1, 1, 1, 0, 0, 0, DateTimeKind.Utc));
@@ -122,10 +121,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
         }
 
-        //public int PersistSchedule(DataTable scheduleDataTable, DataTable contractDataTable, DataTable absenceDayCountDataTable)
         public int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable)
         {
-            //return scheduleDataTable.Rows.Count + contractDataTable.Rows.Count + absenceDayCountDataTable.Rows.Count;
             return scheduleDataTable.Rows.Count + absenceDayCountDataTable.Rows.Count;
         }
 
@@ -138,11 +135,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	    {
 		    throw new NotImplementedException();
 	    }
-
-	    public int FillScheduleContractDataMart(DateTimePeriod period)
-        {
-            return 0;
-        }
 
         public int PersistDate(DataTable dataTable)
         {
@@ -314,11 +306,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        //public ICollection<SkillDay> LoadSkillDays(DateTimePeriod period)
-        //{
-        //    return new Collection<SkillDay>();
-        //}
-
         public IDictionary<ISkill, IList<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
         {
             return new Dictionary<ISkill, IList<ISkillDay>>();
@@ -344,7 +331,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone)
+        public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday)
         {
             return 0;
         }
@@ -545,11 +532,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
 
-    	public int PersistDayOff(DataTable dataTable)
-        {
-            return 0;
-        }
-
         public IList<IApplicationFunction> LoadApplicationFunction()
         {
             return new List<IApplicationFunction>();
@@ -563,11 +545,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         public IList<IAvailableData> LoadAvailableData()
         {
             return new List<IAvailableData>();
-        }
-
-        public IsolationLevel IsolationLevel
-        {
-            get { return IsolationLevel.ReadUncommitted; }
         }
 
         public int PersistPmUser(DataTable dataTable)
@@ -753,6 +730,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	    public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
 	    {
 			return 0;
+	    }
+
+	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
+	    {
+			return new LastChangedReadModel();
 	    }
 
 	    public DateTime GetMaxDateInDimDate()

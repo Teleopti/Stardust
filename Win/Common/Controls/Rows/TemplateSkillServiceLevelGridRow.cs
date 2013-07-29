@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     public class TemplateSkillServiceLevelGridRow : SkillDataGridRow
     {
         private readonly RowManager<SkillDataGridRow, ISkillData> _rowManager;
-        private readonly int _maxLength;
         private static readonly TimeSpan MaximumTotalServiceLevelTimeSpan = TimeSpan.FromDays(2);
 
         public new event EventHandler<FromCellEventArgs<ISkillData>> SaveCellValue;
@@ -20,11 +19,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             _rowManager = rowManager;
         }
 
-        public TemplateSkillServiceLevelGridRow(RowManager<SkillDataGridRow, ISkillData> rowManager, string cellType, string displayMember, string rowHeaderText, int maxLength) : base(rowManager, cellType, displayMember, rowHeaderText, maxLength)
-        {
-            _maxLength = maxLength;
-        }
-        
         public override void QueryCellInfo(CellInfo cellInfo)
         {
             if (cellInfo.ColIndex == 0)
@@ -52,7 +46,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
                 cellInfo.Style.CellType = CellType;
                 cellInfo.Style.CellValue = GetValue(skillDataPeriod);
-                cellInfo.Style.MaxLength = _maxLength;
                 var intervalSpecification = new IntervalLengthServiceLevelSpecification(_rowManager.IntervalLength);
                 if(!intervalSpecification.IsSatisfiedBy(skillDataPeriod.ServiceLevelSeconds))
                 {

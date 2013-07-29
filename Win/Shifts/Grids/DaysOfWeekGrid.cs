@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
     {
         private readonly IEventAggregator _eventAggregator;
 
-        #region Variables
-
         private ColumnBase<IDaysOfWeekViewModel> _ruleSetColumn;
         private ColumnBase<IDaysOfWeekViewModel> _accessibilityColumn;
         private ColumnBase<IDaysOfWeekViewModel> _sundayColumn;
@@ -31,9 +29,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private ColumnBase<IDaysOfWeekViewModel> _saturdayColumn;
 
         private Dictionary<DayOfWeek, ColumnBase<IDaysOfWeekViewModel>> _columnDictionary;
-
-
-        #endregion
 
         public DaysOfWeekGrid(IDaysOfWeekPresenter presenter, GridControl grid, IEventAggregator eventAggregator)
             : base(presenter, grid)
@@ -54,10 +49,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             
             AddColumn(new RowHeaderColumn<IDaysOfWeekViewModel>());
             
-            _ruleSetColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, UserTexts.Resources.RuleSet, true);
+            _ruleSetColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("WorkShiftRuleSet.Description.Name", UserTexts.Resources.RuleSet, UserTexts.Resources.RuleSet, makeStatic:true);
             AddColumn(_ruleSetColumn);
 
-            _accessibilityColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("AccessibilityText", UserTexts.Resources.IncludeExclude, UserTexts.Resources.Available, true);
+            _accessibilityColumn = new ReadOnlyTextColumn<IDaysOfWeekViewModel>("AccessibilityText", UserTexts.Resources.IncludeExclude, UserTexts.Resources.Available, makeStatic:true);
             AddColumn(_accessibilityColumn);
 
             _mondayColumn = new CheckColumn<IDaysOfWeekViewModel>("Monday", "true", "false", "1", typeof(bool), UserTexts.Resources.Monday, UserTexts.Resources.WeekDay);
@@ -154,33 +149,22 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.Invalidate();
         }
 
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IDaysOfWeekViewModel> result = this.Sort((ISortColumn<IDaysOfWeekViewModel>) GridColumns[columnIndex],
-                                                         Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IDaysOfWeekViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
         #region Overriden Methods
 
-        /// <summary>
-        /// Deletes the selected items.
-        /// </summary>
+        public override void Add()
+        {
+        }
+
         public override void Delete()
         {
             ResetSelected();
             _eventAggregator.GetEvent<RuleSetChanged>().Publish(Presenter.Explorer.Model.FilteredRuleSetCollection);
         }
 
-        /// <summary>
-        /// Sorts this instance.
-        /// </summary>
-        /// <param name="mode"></param>
+        public override void Rename()
+        {
+        }
+
         public override void Sort(SortingMode mode)
         {
             int columnIndex = Grid.CurrentCell.ColIndex;
@@ -193,9 +177,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Refreshes the view.
-        /// </summary>
         public override void RefreshView()
         {
             Grid.RowCount = (Presenter.ModelCollection.Count + 1);

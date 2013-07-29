@@ -103,7 +103,6 @@
     <Compile Include="Transformer\IScheduleProjection.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
     <Compile Include="PerformanceManager\IPMService.cs" />
-    <Compile Include="PerformanceManager\PmGetUsersException.cs" />
     <Compile Include="PerformanceManager\PmSynchronizeException.cs" />
     <Compile Include="PerformanceManager\ResultDto.cs" />
     <Compile Include="PerformanceManager\UserDto.cs" />
@@ -133,7 +132,6 @@
     <Compile Include="Transformer\IScheduleForecastSkillResourceCalculation.cs" />
     <Compile Include="Transformer\ISchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\JobCategoryType.cs" />
-    <Compile Include="Transformer\JobResultStatusType.cs" />
     <Compile Include="Transformer\CustomEventArgs.cs" />
     <Compile Include="Transformer\IJob.cs" />
     <Compile Include="Transformer\IJobResult.cs" />

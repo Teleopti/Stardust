@@ -1,12 +1,9 @@
-﻿using Teleopti.Interfaces.Infrastructure;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Source class
     /// </summary>
-    public interface IQueueSource : IAggregateRoot, 
-                                    ILayerCollectionOwner<IStat>
+    public interface IQueueSource : IAggregateRoot
     {
         /// <summary>
         /// Property Name

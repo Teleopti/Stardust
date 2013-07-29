@@ -95,15 +95,15 @@ Scenario: Add extended preference
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 11:30 |
 	| Activity Start time maximum | 11:45 |
 	| Activity End time minimum   | 12:00 |
 	| Activity End time maximum   | 12:15 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I click the apply extended preferences button
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see extended preference with
@@ -121,8 +121,8 @@ Scenario: Add extended preference
 	| Activity Start time maximum | 11:45      |
 	| Activity End time minimum   | 12:00      |
 	| Activity End time maximum   | 12:15      |
-	| Activity time minimum       | 0:15       |
-	| Activity time maximum       | 0:45       |
+	| Activity time minimum       | 0:30       |
+	| Activity time maximum       | 1:00       |
 
 Scenario: Add extended preference when span to next day
 	Given I have the role 'Access to extended preferences'
@@ -147,7 +147,7 @@ Scenario: View available preference list when adding extended preference
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
-	And I click the extended preference select-box
+	And I click to open thee extended preference drop down list
 	Then I should see these available preferences
 	| Value   |
 	| Late    |
@@ -158,7 +158,7 @@ Scenario: View available activity list when adding extended preference
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
-	And I click the extended preference activity select-box
+	And I click to open thee extended activity drop down list
 	Then I should see these available activities
 	| Value |
 	| Lunch |
@@ -180,15 +180,15 @@ Scenario: Replace extended preference
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 12:00 |
 	| Activity Start time maximum | 12:15 |
 	| Activity End time minimum   | 12:30 |
 	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I click the apply extended preferences button
 	And I click the extended preference indication on '2012-09-05'
 	Then I should see extended preference with
@@ -206,8 +206,8 @@ Scenario: Replace extended preference
 	| Activity Start time maximum | 12:15      |
 	| Activity End time minimum   | 12:30      |
 	| Activity End time maximum   | 12:45      |
-	| Activity time minimum       | 0:15       |
-	| Activity time maximum       | 0:45       |
+	| Activity time minimum       | 0:30       |
+	| Activity time maximum       | 1:00       |
 
 
 Scenario: Validate preference times
@@ -223,35 +223,23 @@ Scenario: Validate preference times
 	And I click the apply extended preferences button
 	Then I should see add extended preferences panel with error 'Invalid time startTime'
 
-Scenario: Disable all time fields when absence preference is selected
+Scenario: Hide all time fields when absence preference is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
 	And I input extended preference fields with
 	| Field      | Value   |
 	| Preference | Illness |
-	Then I should not be able to edit time fields
+	Then I should not see the edit time fields
 
-Scenario: Disable all time fields, when day off is selected
+Scenario: Hide all time fields, when day off is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
 	And I input extended preference fields with
 	| Field      | Value  |
 	| Preference | Dayoff |
-	Then I should not be able to edit time fields
-
-Scenario: Reset activity field when day off is selected
-	Given I have the role 'Access to extended preferences'
-	And I am viewing preferences
-	When I click the add extended preference button
-	And I input extended preference fields with
-	| Field    | Value |
-	| Activity | Lunch |
-	And I input extended preference fields with
-	| Field      | Value  |
-	| Preference | Dayoff |
-	Then I should see activity dropdown list selected to " "
+	Then I should not see the edit time fields
 	
 Scenario: Reset time input fields when day off is selected
 	Given I have the role 'Access to extended preferences'
@@ -264,18 +252,21 @@ Scenario: Reset time input fields when day off is selected
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 12:00 |
 	| Activity Start time maximum | 12:15 |
 	| Activity End time minimum   | 12:30 |
 	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I input extended preference fields with
 	| Field      | Value  |
 	| Preference | Dayoff |
+	And I input extended preference fields with
+	| Field      | Value  |
+	| Preference | Late |
 	Then all the time fields should be reset
 	
 Scenario: Reset time input fields when absence is selected
@@ -289,46 +280,37 @@ Scenario: Reset time input fields when absence is selected
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 12:00 |
 	| Activity Start time maximum | 12:15 |
 	| Activity End time minimum   | 12:30 |
 	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I input extended preference fields with
 	| Field      | Value   |
 	| Preference | Illness |
+	And I input extended preference fields with
+	| Field      | Value  |
+	| Preference | Late |
 	Then all the time fields should be reset
-
-Scenario: Reset activity field when absence is selected
-	Given I have the role 'Access to extended preferences'
-	And I am viewing preferences
-	When I click the add extended preference button
-	And I input extended preference fields with
-	| Field    | Value |
-	| Activity | Lunch |
-	And I input extended preference fields with
-	| Field      | Value   |
-	| Preference | Illness |
-	Then I should see activity dropdown list selected to " "
 		 
-Scenario: Enable activity time fields when activity is selected
+Scenario: Show activity time fields when activity is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
 	And I input extended preference fields with
 	| Field      | Value |
 	| Activity   | Lunch |
-	Then I should be able to edit activity minimum and maximum fields
+	Then I should see the activity minimum and maximum fields
 
-Scenario: Disable activity time fields when no activity selected
+Scenario: Hide activity time fields when no activity selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
-	Then I should not be able to edit activity minimum and maximum fields
+	Then I should not see the edit activity minimum and maximum fields
 
 Scenario: Reset extended preference form 
 	Given I have the role 'Access to extended preferences'
@@ -341,17 +323,17 @@ Scenario: Reset extended preference form
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 08:00 |
-	| Work time maximum           | 08:30 |
+	| Work time minimum           | 8:00 |
+	| Work time maximum           | 8:30 |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 12:00 |
 	| Activity Start time maximum | 12:15 |
 	| Activity End time minimum   | 12:30 |
 	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 00:15 |
-	| Activity time maximum       | 00:45 |
+	| Activity time minimum       | 0:30 |
+	| Activity time maximum       | 1:00 |
 	And I click the reset extended preference button
-	Then I should see preference dropdown list selected to " "
+	Then I should see nothing selected in the preference dropdown
 	And all the time fields should be reset
-	And I should see activity dropdown list selected to " "
-	And I should not be able to edit activity minimum and maximum fields
+	And I should see nothing selected in the activity dropdown
+	And I should not see the edit activity minimum and maximum fields
