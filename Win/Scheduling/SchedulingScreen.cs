@@ -6547,8 +6547,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updateShiftEditor();
 		}
 
+		private DateTime _lastclickLabels;
 		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
+			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
+			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;
 			toolStripButtonShowTexts.Checked = !toolStripButtonShowTexts.Checked;
 			_showRibbonTexts = toolStripButtonShowTexts.Checked;
 			setShowRibbonTexts();
