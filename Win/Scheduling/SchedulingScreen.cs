@@ -15,6 +15,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
@@ -2553,7 +2554,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
 				if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot)
-					new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
+					new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
 				else
 					ViewBase.ShowInformationMessage(this, string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled,
 						_scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
