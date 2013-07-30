@@ -66,15 +66,31 @@ namespace Teleopti.Ccc.Payroll
                     var currentAgents = payrollExport.PersonCollection.Take(batchSize).ToArray();
                     TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
-                    PayrollExportFeedback.ReportProgress(progress, "Loading schedules...");
-                    exportPersonAbsences(schedulingService, currentAgents, timeZoneInfo);
+					PayrollExportFeedback.ReportProgress(progress, "Loading data...");
+	                var detailedExportDtos = schedulingService.GetTeleoptiDetailedExportData(currentAgents, _startDateOnlyDto, _endDateOnlyDto,
+	                                                                timeZoneInfo.Id);
 
-                    progress += step;
+	                foreach (var dto in detailedExportDtos)
+	                {
+		                _payrollDt.LoadDataRow(
+			                new object[]
+				                {
+					                dto.EmploymentNumber,
+					                dto.FirstName,
+					                dto.LastName,
+					                dto.BusinessUnitName,
+					                dto.SiteName,
+					                dto.TeamName,
+					                dto.ContractName,
+					                dto.PartTimePercentageName,
+					                dto.PartTimePercentageNumber,
+					                dto.Date,
+					                dto.PayrollCode,
+					                dto.Time
+				                }, true);
+	                }
 
-                    PayrollExportFeedback.ReportProgress(progress, "Loading multiplicator data...");
-                    exportMultiplicatorData(schedulingService, currentAgents, timeZoneInfo);
-
-                    progress += step;
+					progress += step;
                 }
 
                 var builder = new StringBuilder();
@@ -99,76 +115,13 @@ namespace Teleopti.Ccc.Payroll
                 return result;
             }
         }
-
-        private void exportMultiplicatorData(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
-        {
-            var multiplicatorData = schedulingService.GetPersonMultiplicatorDataForPersons(currentAgents,
-                                                                                           _startDateOnlyDto,
-                                                                                           _endDateOnlyDto,
-                                                                                           timeZoneInfo.Id);
-            foreach (var multiplicatorDataDto in multiplicatorData)
-            {
-                var person = _personDic[multiplicatorDataDto.PersonId.GetValueOrDefault(Guid.Empty)];
-                var teminateDate = person.TerminationDate;
-                if (teminateDate != null && multiplicatorDataDto.Date > teminateDate.DateTime)
-                    continue;
-                _payrollDt.LoadDataRow(
-                    new object[]
-                        {
-                            person.EmploymentNumber,
-                            multiplicatorDataDto.Date,
-                            multiplicatorDataDto.Multiplicator.PayrollCode,
-                            multiplicatorDataDto.Amount
-                        },	true);
-            }
-        }
-
-        private void exportPersonAbsences(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
-        {
-#pragma warning disable 612,618
-            ICollection<SchedulePartDto> scheduleParts = schedulingService.GetSchedulePartsForPersons(currentAgents,
-#pragma warning restore 612,618
-                                                                                                      _startDateOnlyDto,
-                                                                                                      _endDateOnlyDto,
-                                                                                                      timeZoneInfo.Id);
-
-            var personTimeZone = timeZoneInfo;
-            foreach (SchedulePartDto schedulePart in scheduleParts)
-            {
-                var person = _personDic[schedulePart.PersonId];
-                var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate.DateTime).FirstOrDefault();
-                if (firstPeriod != null && schedulePart.Date.DateTime < firstPeriod.Period.StartDate.DateTime)
-                    continue;
-                var teminateDate = person.TerminationDate;
-                if (teminateDate != null && schedulePart.Date.DateTime > teminateDate.DateTime)
-                    continue;
-                foreach (ProjectedLayerDto layerDto in schedulePart.ProjectedLayerCollection)
-                {
-                    if (layerDto.IsAbsence && layerDto.ContractTime != TimeSpan.Zero)
-                    {
-                        if (person.TimeZoneId != personTimeZone.Id)
-                            personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(person.TimeZoneId);
-	                    _payrollDt.LoadDataRow(
-		                    new object[]
-			                    {
-				                    person.EmploymentNumber,
-				                    TimeZoneInfo.ConvertTimeFromUtc(layerDto.Period.UtcStartTime, personTimeZone),
-				                    _absenceDic[layerDto.PayloadId].PayrollCode,
-				                    layerDto.ContractTime
-			                    }, true);
-                    }
-                }
-            }
-        }
-
+		
         private void preparePeopleCache(PayrollExportDto payrollExport)
         {
             _personDic = new Dictionary<Guid, PersonDto>();
-            foreach (PersonDto personDto in payrollExport.PersonCollection)
-            {
-                if (personDto.Id.HasValue)
-                    _personDic.Add(personDto.Id.Value, personDto);
-            }
+	        foreach (var personDto in payrollExport.PersonCollection)
+		        if (personDto.Id.HasValue)
+			        _personDic.Add(personDto.Id.Value, personDto);
         }
 
         private void prepareAbsenceCache(ITeleoptiSchedulingService schedulingService)
@@ -176,11 +129,9 @@ namespace Teleopti.Ccc.Payroll
 	        var absences =
 		        schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
             _absenceDic = new Dictionary<Guid, AbsenceDto>();
-            foreach (AbsenceDto dto in absences)
-            {
-                if(dto.Id.HasValue)
-                    _absenceDic.Add(dto.Id.Value, dto);
-            }
+	        foreach (var dto in absences)
+		        if (dto.Id.HasValue)
+			        _absenceDic.Add(dto.Id.Value, dto);
         }
 
 	    private void addColumnsToTable()
@@ -194,7 +145,7 @@ namespace Teleopti.Ccc.Payroll
 			_payrollDt.Columns.Add("TeamName", typeof (string));
 			_payrollDt.Columns.Add("ContractName", typeof (string));
 			_payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
-			_payrollDt.Columns.Add("PartTimePercentageNumber", typeof (decimal));
+			_payrollDt.Columns.Add("PartTimePercentageNumber", typeof (double));
 		    _payrollDt.Columns.Add("Date", typeof (DateTime));
 		    _payrollDt.Columns.Add("PayrollCode", typeof (string));
 		    _payrollDt.Columns.Add("Time", typeof (TimeSpan));
@@ -202,7 +153,7 @@ namespace Teleopti.Ccc.Payroll
 
 	    private static int getIncreasePercentagePerBatch(int count)
         {
-            var batchCount = Math.Max(count / batchSize, 1) * 2;
+            var batchCount = Math.Max(count / batchSize, 1);
             return 80 / batchCount;
         }
 

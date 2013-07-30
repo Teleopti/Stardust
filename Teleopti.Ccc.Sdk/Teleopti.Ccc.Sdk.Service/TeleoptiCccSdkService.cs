@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             using (var inner = _lifetimeScope.BeginLifetimeScope())
             {
                 return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty);
+                                                                                             endDate, timeZoneId, string.Empty, this);
             }
         }
 
