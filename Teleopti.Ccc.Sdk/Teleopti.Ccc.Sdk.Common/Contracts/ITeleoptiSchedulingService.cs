@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <returns></returns>
         /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
         [OperationContract]
-        ICollection<SchedulePartDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
+        ICollection<PayrollDetailedExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 
         /// <summary>
         /// Gets Payroll activities export information for all persons between the given dates.

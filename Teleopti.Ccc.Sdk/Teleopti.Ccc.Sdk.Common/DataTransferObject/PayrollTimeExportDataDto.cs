@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
     public class PayrollTimeExportDataDto: Dto
     {
-      
         /// <summary>
         /// Gets or sets the employment number.
         /// </summary>
@@ -110,7 +105,5 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         [DataMember]
         public string DayOffPayrollCode { get; set; }
-
-       
     }
 }

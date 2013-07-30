@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             }
         }
 
-        public ICollection<SchedulePartDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+		public ICollection<PayrollDetailedExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
                                                          string timeZoneId)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())

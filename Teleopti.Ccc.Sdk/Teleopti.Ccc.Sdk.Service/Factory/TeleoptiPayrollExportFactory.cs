@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -18,22 +20,28 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     	private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
-        private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
+        private readonly ISchedulePartAssembler _schedulePartAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
+	    private readonly ITeleoptiSchedulingService _schedulingService;
+	    private Dictionary<Guid, AbsenceDto> _absenceDictinary;
 
-        public TeleoptiPayrollExportFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService,
-			  ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, 
-			  SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
-			  ICurrentScenario scenarioRepository)
+	    public TeleoptiPayrollExportFactory(IScheduleRepository scheduleRepository,
+	                                        ISaveSchedulePartService saveSchedulePartService,
+	                                        ICurrentUnitOfWorkFactory unitOfWorkFactory,
+	                                        IAssembler<IPerson, PersonDto> personAssembler,
+	                                        ISchedulePartAssembler schedulePartAssembler,
+	                                        IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
+	                                        ICurrentScenario scenarioRepository, ITeleoptiSchedulingService schedulingService)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
         	_unitOfWorkFactory = unitOfWorkFactory;
         	_personAssembler = personAssembler;
-            _scheduleDayAssembler = scheduleDayAssembler;
+            _schedulePartAssembler = schedulePartAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _scenarioRepository = scenarioRepository;
+		    _schedulingService = schedulingService;
         }
 
          public ICollection<PayrollTimeExportDataDto> GetTeleoptiTimeExportData(IEnumerable<PersonDto> personCollection,
@@ -42,8 +50,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                                                        string timeZoneInfoId,
                                                                        string specialProjection)
          {
-
-             IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
              IList<PayrollTimeExportDataDto> payrollTimeExportDataList = new List<PayrollTimeExportDataDto>();
              var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
              var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
@@ -92,16 +98,107 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
              return payrollTimeExportDataList;
          }
 
-         public ICollection<SchedulePartDto> GetTeleoptiDetailedExportData(IEnumerable<PersonDto> personCollection,
-                                                                       DateOnlyDto startDate,
-                                                                       DateOnlyDto endDate,
-                                                                       string timeZoneInfoId,
-                                                                       string specialProjection)
-         {
-             return new List<SchedulePartDto>();
-         }
+	    public ICollection<PayrollDetailedExportDto> GetTeleoptiDetailedExportData(IEnumerable<PersonDto> personCollection,
+	                                                                               DateOnlyDto startDate,
+	                                                                               DateOnlyDto endDate,
+	                                                                               string timeZoneInfoId,
+	                                                                               string specialProjection)
+	    {
+		    var payrollDetailedExportDataList = new List<PayrollDetailedExportDto>();
+		    var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
+		    var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
+		    var period =
+			    new DateOnlyPeriod(dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+		    ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
 
-         public ICollection<SchedulePartDto> GetTeleoptiPayrollActivitiesExportData(IEnumerable<PersonDto> personCollection,
+		    prepareAbsenceDictionary();
+
+		    using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+		    {
+			    var personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
+			    var scheduleDictionary =
+				    _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList),
+				                                                       new ScheduleDictionaryLoadOptions(
+					                                                       true, false), period,
+				                                                       _scenarioRepository.Current());
+			    foreach (var person in personList)
+			    {
+				    var scheduleRange = scheduleDictionary[person];
+				    foreach (var dateOnly in dateOnlyPeriod.DayCollection())
+				    {
+					    var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
+					    var overtimeAndShiftAllowance = setOvertimeAndShiftAllowance(dateOnly, person, scheduleDay);
+						if (overtimeAndShiftAllowance != null) 
+							payrollDetailedExportDataList.Add(overtimeAndShiftAllowance);
+
+						payrollDetailedExportDataList.Add(setAbsence(dateOnly, person, scheduleDay));
+				    }
+			    }
+		    }
+
+		    return payrollDetailedExportDataList;
+	    }
+
+		private static PayrollDetailedExportDto setOvertimeAndShiftAllowance(DateOnly dateOnly, IPerson person, IScheduleDay scheduleDay)
+		{
+			var multiplicatorProjectionService = new MultiplicatorProjectionService(scheduleDay, dateOnly);
+			var projection = multiplicatorProjectionService.CreateProjection();
+			foreach (var layer in projection)
+			{
+				var payrollDetailedExportDto = setPersonData(person, dateOnly);
+
+				payrollDetailedExportDto.PayrollCode = layer.Payload.ExportCode;
+				payrollDetailedExportDto.Time = layer.Period.ElapsedTime();
+				return payrollDetailedExportDto;
+			}
+			return null;
+		}
+
+		private PayrollDetailedExportDto setAbsence(DateOnly dateOnly, IPerson person, IScheduleDay scheduleDay)
+	    {
+		    var schedulePartDto = _schedulePartAssembler.DomainEntityToDto(scheduleDay);
+		    var absencesInProjection = schedulePartDto.ProjectedLayerCollection
+		                                              .Where(layer => layer.IsAbsence &&
+		                                                              layer.ContractTime != TimeSpan.Zero);
+		    foreach (var layer in absencesInProjection)
+		    {
+				var payrollDetailedExportDto = setPersonData(person, dateOnly);
+			    payrollDetailedExportDto.PayrollCode = _absenceDictinary[layer.PayloadId].PayrollCode;
+			    payrollDetailedExportDto.Time = layer.ContractTime;
+			    return payrollDetailedExportDto;
+		    }
+			return null;
+	    }
+
+
+		private static PayrollDetailedExportDto setPersonData(IPerson person, DateOnly dateOnly)
+		{
+			var payrollDetailedExportDto = new PayrollDetailedExportDto
+				{
+					EmploymentNumber = person.EmploymentNumber,
+					FirstName = person.Name.FirstName,
+					LastName = person.Name.LastName,
+					BusinessUnitName = person.Period(dateOnly).Team.BusinessUnitExplicit.Name,
+					SiteName = person.Period(dateOnly).Team.Site.Description.Name,
+					TeamName = person.Period(dateOnly).Team.Description.Name,
+					ContractName = person.Period(dateOnly).PersonContract.Contract.Description.Name,
+					PartTimePercentageName = person.Period(dateOnly).PersonContract.PartTimePercentage.Description.Name,
+					PartTimePercentageNumber = person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value,
+					Date = DateTime.Now.Date.ToShortDateString()
+				};
+			return payrollDetailedExportDto;
+		}
+
+	    private void prepareAbsenceDictionary()
+	    {
+		    var absences = _schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
+		    _absenceDictinary = new Dictionary<Guid, AbsenceDto>();
+			
+			foreach (var absence in absences.Where(absence => absence.Id.HasValue))
+				_absenceDictinary.Add(absence.Id.Value, absence);
+	    }
+
+	    public ICollection<SchedulePartDto> GetTeleoptiPayrollActivitiesExportData(IEnumerable<PersonDto> personCollection,
                                                                       DateOnlyDto startDate,
                                                                       DateOnlyDto endDate,
                                                                       string timeZoneInfoId,

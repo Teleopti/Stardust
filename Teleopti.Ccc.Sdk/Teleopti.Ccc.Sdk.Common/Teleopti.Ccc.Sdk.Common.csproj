@@ -180,6 +180,7 @@
     <Compile Include="DataTransferObject\DefinitionSetLayerDto.cs" />
     <Compile Include="DataTransferObject\ImportForecastsOptionsDto.cs" />
     <Compile Include="DataTransferObject\OptionalValueDto.cs" />
+    <Compile Include="DataTransferObject\PayrollDetailedExportDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDetailDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDto.cs" />
     <Compile Include="DataTransferObject\GroupPageDto.cs" />

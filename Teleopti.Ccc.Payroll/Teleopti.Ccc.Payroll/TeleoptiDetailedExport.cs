@@ -23,22 +23,24 @@ namespace Teleopti.Ccc.Payroll
         private IDictionary<Guid, PersonDto> _personDic;
         private DateOnlyDto _startDateOnlyDto;
         private DateOnlyDto _endDateOnlyDto;
-        private const int BatchSize = 50;
+        private const int batchSize = 50;
 
         public PayrollFormatDto PayrollFormat
         {
             get { return Format; }
         }
 
-        public IXPathNavigable ProcessPayrollData(ITeleoptiSchedulingService schedulingService, ITeleoptiOrganizationService organizationService, PayrollExportDto payrollExport)
+	    public IXPathNavigable ProcessPayrollData(ITeleoptiSchedulingService schedulingService,
+	                                              ITeleoptiOrganizationService organizationService,
+	                                              PayrollExportDto payrollExport)
         {
             using(_payrollDt = new DataTable("PayrollExport"))
             {
-                AddColumnsToTable();
+                addColumnsToTable();
 
                 Logger.Debug("Preparing cache for absences and persons");
-                PrepareAbsenceCache(schedulingService);
-                PreparePeopleCache(payrollExport);
+                prepareAbsenceCache(schedulingService);
+                preparePeopleCache(payrollExport);
                 Logger.Debug("Done with preparing cache for absences and persons");
 
                 _startDateOnlyDto = payrollExport.DatePeriod.StartDate;
@@ -51,26 +53,26 @@ namespace Teleopti.Ccc.Payroll
                 var count = payrollExport.PersonCollection.Count;
                 PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
                                                          "Running Export for {0} persons in batches of {1}", count,
-                                                         BatchSize));
+                                                         batchSize));
 
-                Stopwatch stopwatch = new Stopwatch();
+                var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                int step = GetIncreasePercentagePerBatch(count);
+                int step = getIncreasePercentagePerBatch(count);
                 var progress = 10;
 
-                for (int i = 0; i < count; i = i + BatchSize)
+                for (int i = 0; i < count; i = i + batchSize)
                 {
-                    var currentAgents = payrollExport.PersonCollection.Take(BatchSize).ToArray();
+                    var currentAgents = payrollExport.PersonCollection.Take(batchSize).ToArray();
                     TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
                     PayrollExportFeedback.ReportProgress(progress, "Loading schedules...");
-                    ExportPersonAbsences(schedulingService, currentAgents, timeZoneInfo);
+                    exportPersonAbsences(schedulingService, currentAgents, timeZoneInfo);
 
                     progress += step;
 
                     PayrollExportFeedback.ReportProgress(progress, "Loading multiplicator data...");
-                    ExportMultiplicatorData(schedulingService, currentAgents, timeZoneInfo);
+                    exportMultiplicatorData(schedulingService, currentAgents, timeZoneInfo);
 
                     progress += step;
                 }
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.Payroll
             }
         }
 
-        private void ExportMultiplicatorData(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
+        private void exportMultiplicatorData(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
         {
             var multiplicatorData = schedulingService.GetPersonMultiplicatorDataForPersons(currentAgents,
                                                                                            _startDateOnlyDto,
@@ -117,11 +119,11 @@ namespace Teleopti.Ccc.Payroll
                             multiplicatorDataDto.Date,
                             multiplicatorDataDto.Multiplicator.PayrollCode,
                             multiplicatorDataDto.Amount
-                        }, true);
+                        },	true);
             }
         }
 
-        private void ExportPersonAbsences(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
+        private void exportPersonAbsences(ITeleoptiSchedulingService schedulingService, PersonDto[] currentAgents, TimeZoneInfo timeZoneInfo)
         {
 #pragma warning disable 612,618
             ICollection<SchedulePartDto> scheduleParts = schedulingService.GetSchedulePartsForPersons(currentAgents,
@@ -146,20 +148,20 @@ namespace Teleopti.Ccc.Payroll
                     {
                         if (person.TimeZoneId != personTimeZone.Id)
                             personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(person.TimeZoneId);
-                        _payrollDt.LoadDataRow(
-                            new object[]
-                                {
-                                    person.EmploymentNumber,
-                                    TimeZoneInfo.ConvertTimeFromUtc(layerDto.Period.UtcStartTime, personTimeZone),
-                                    _absenceDic[layerDto.PayloadId].PayrollCode,
-                                    layerDto.ContractTime
-                                }, true);
+	                    _payrollDt.LoadDataRow(
+		                    new object[]
+			                    {
+				                    person.EmploymentNumber,
+				                    TimeZoneInfo.ConvertTimeFromUtc(layerDto.Period.UtcStartTime, personTimeZone),
+				                    _absenceDic[layerDto.PayloadId].PayrollCode,
+				                    layerDto.ContractTime
+			                    }, true);
                     }
                 }
             }
         }
 
-        private void PreparePeopleCache(PayrollExportDto payrollExport)
+        private void preparePeopleCache(PayrollExportDto payrollExport)
         {
             _personDic = new Dictionary<Guid, PersonDto>();
             foreach (PersonDto personDto in payrollExport.PersonCollection)
@@ -169,10 +171,10 @@ namespace Teleopti.Ccc.Payroll
             }
         }
 
-        private void PrepareAbsenceCache(ITeleoptiSchedulingService schedulingService)
+        private void prepareAbsenceCache(ITeleoptiSchedulingService schedulingService)
         {
-            ICollection<AbsenceDto> absences =
-                schedulingService.GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
+	        var absences =
+		        schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
             _absenceDic = new Dictionary<Guid, AbsenceDto>();
             foreach (AbsenceDto dto in absences)
             {
@@ -181,18 +183,26 @@ namespace Teleopti.Ccc.Payroll
             }
         }
 
-        private void AddColumnsToTable()
-        {
-            _payrollDt.Locale = CultureInfo.InvariantCulture;
-            _payrollDt.Columns.Add("Person", typeof(string));
-            _payrollDt.Columns.Add("Date", typeof(DateTime));
-            _payrollDt.Columns.Add("PayrollCode", typeof(string));
-            _payrollDt.Columns.Add("Time", typeof(TimeSpan));
-        }
+	    private void addColumnsToTable()
+	    {
+		    _payrollDt.Locale = CultureInfo.InvariantCulture;
+		    _payrollDt.Columns.Add("Person", typeof (string));
+		    _payrollDt.Columns.Add("FirstName", typeof (string));
+		    _payrollDt.Columns.Add("LastName", typeof (string));
+			_payrollDt.Columns.Add("BusinessUnitName", typeof (string));
+			_payrollDt.Columns.Add("SiteName", typeof (string));
+			_payrollDt.Columns.Add("TeamName", typeof (string));
+			_payrollDt.Columns.Add("ContractName", typeof (string));
+			_payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
+			_payrollDt.Columns.Add("PartTimePercentageNumber", typeof (decimal));
+		    _payrollDt.Columns.Add("Date", typeof (DateTime));
+		    _payrollDt.Columns.Add("PayrollCode", typeof (string));
+		    _payrollDt.Columns.Add("Time", typeof (TimeSpan));
+	    }
 
-        private static int GetIncreasePercentagePerBatch(int count)
+	    private static int getIncreasePercentagePerBatch(int count)
         {
-            var batchCount = Math.Max(count / BatchSize, 1) * 2;
+            var batchCount = Math.Max(count / batchSize, 1) * 2;
             return 80 / batchCount;
         }
 
