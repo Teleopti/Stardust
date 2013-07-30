@@ -453,9 +453,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
                                                          string timeZoneId)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty, this);
+			{
+				var absences = GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
+				var absenceDictinary = absences
+					.Where(a => a.Id.HasValue)
+					.ToDictionary(a => a.Id.Value);
+
+				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
+                                                                                             endDate, timeZoneId, string.Empty, absenceDictinary);
             }
         }
 

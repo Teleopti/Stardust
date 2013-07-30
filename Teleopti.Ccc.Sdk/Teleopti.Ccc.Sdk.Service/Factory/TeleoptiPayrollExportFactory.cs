@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -16,13 +15,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class TeleoptiPayrollExportFactory
     {
         private readonly IScheduleRepository _scheduleRepository;
-    	private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly ISchedulePartAssembler _schedulePartAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
-	    private Dictionary<Guid, AbsenceDto> _absenceDictinary;
 
 	    public TeleoptiPayrollExportFactory(IScheduleRepository scheduleRepository,
 	                                        ISaveSchedulePartService saveSchedulePartService,
@@ -33,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	                                        ICurrentScenario scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
-        	_saveSchedulePartService = saveSchedulePartService;
         	_unitOfWorkFactory = unitOfWorkFactory;
         	_personAssembler = personAssembler;
             _schedulePartAssembler = schedulePartAssembler;
@@ -100,8 +96,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	                                                                               DateOnlyDto endDate,
 	                                                                               string timeZoneInfoId,
 	                                                                               string specialProjection,
-	                                                                               ITeleoptiSchedulingService
-		                                                                               schedulingService)
+																				   Dictionary<Guid, AbsenceDto> absenceDictinary)
 	    {
 		    var payrollDetailedExportDataList = new List<PayrollDetailedExportDto>();
 		    var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
@@ -109,9 +104,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		    var period =
 			    new DateOnlyPeriod(dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
 		    ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
-
-		    prepareAbsenceDictionary(schedulingService);
-
+			
 		    using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 		    {
 			    var personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
@@ -132,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 							payrollDetailedExportDataList.AddRange(overtimeAndShiftAllowanceDtos);
 
 					    var schedulePartDto = _schedulePartAssembler.DomainEntityToDto(scheduleDay);
-						var absences = getAbsences(dateOnly, person, schedulePartDto).ToList();
+						var absences = getAbsences(dateOnly, person, schedulePartDto, absenceDictinary).ToList();
 						if (absences.Any())
 							payrollDetailedExportDataList.AddRange(absences);
 				    }
@@ -155,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			}
 		}
 
-		private IEnumerable<PayrollDetailedExportDto> getAbsences(DateOnly dateOnly, IPerson person, SchedulePartDto schedulePartDto)
+		private static IEnumerable<PayrollDetailedExportDto> getAbsences(DateOnly dateOnly, IPerson person, SchedulePartDto schedulePartDto, IDictionary<Guid, AbsenceDto> absenceDictinary)
 	    {
 		    var absencesInProjection = schedulePartDto.ProjectedLayerCollection
 		                                              .Where(layer => layer.IsAbsence &&
@@ -163,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		    foreach (var layer in absencesInProjection)
 			{
 				var payrollDetailedExportDto = initializeDtoWithPersonData(person, dateOnly);
-			    payrollDetailedExportDto.PayrollCode = _absenceDictinary[layer.PayloadId].PayrollCode;
+			    payrollDetailedExportDto.PayrollCode = absenceDictinary[layer.PayloadId].PayrollCode;
 			    payrollDetailedExportDto.Time = layer.ContractTime;
 			    yield return payrollDetailedExportDto;
 		    }
@@ -186,17 +179,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				};
 			return payrollDetailedExportDto;
 		}
-
-	    private void prepareAbsenceDictionary(ITeleoptiSchedulingService schedulingService)
-	    {
-		    var absences = schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
-		    _absenceDictinary = new Dictionary<Guid, AbsenceDto>();
-
-		    foreach (var absence in absences)
-				if (absence.Id.HasValue)
-			    _absenceDictinary.Add(absence.Id.Value, absence);
-			
-	    }
 
 	    public ICollection<SchedulePartDto> GetTeleoptiPayrollActivitiesExportData(IEnumerable<PersonDto> personCollection,
                                                                       DateOnlyDto startDate,
