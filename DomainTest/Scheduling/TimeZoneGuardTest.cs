@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
@@ -22,6 +23,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target.TimeZone = timeZone;
 
 			Assert.That(_target.TimeZone, Is.EqualTo(timeZone));
+		}
+
+		[Test]
+		public void ShoudHaveDefaultTimeZone()
+		{
+			Assert.AreEqual(TeleoptiPrincipal.Current.Regional.TimeZone, _target.TimeZone);
 		}
 	}
 }
