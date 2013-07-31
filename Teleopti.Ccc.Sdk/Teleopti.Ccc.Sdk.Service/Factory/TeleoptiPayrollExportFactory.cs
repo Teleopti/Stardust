@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		                                                                       DateOnlyDto startDate,
 		                                                                       DateOnlyDto endDate,
 		                                                                       string timeZoneInfoId,
-		                                                                       Dictionary<Guid, AbsenceDto>
-			                                                                       absenceDictinary)
+		                                                                       Dictionary<Guid, AbsenceDto> absenceDictinary)
 		{
 			var exportBuilder = new TeleoptiPayrollExportBuilder(_schedulePartAssembler, absenceDictinary, null, null);
 			var detailedExportDtos = createPayrollExportDtos(personCollection, startDate, endDate, timeZoneInfoId,
@@ -104,11 +103,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		}
 
 		private static IEnumerable<PayrollBaseExportDto> getExportDtosForPersons(IEnumerable<IPerson> personList,
-		                                                            IScheduleDictionary scheduleDictionary,
-		                                                            DateOnlyPeriod datePeriod,
-		                                                            Func
-			                                                            <IPerson, DateOnly, IScheduleDay,
-			                                                            IList<PayrollBaseExportDto>> buildExportFunction)
+		                                                                         IScheduleDictionary scheduleDictionary,
+		                                                                         DateOnlyPeriod datePeriod,
+		                                                                         Func
+			                                                                         <IPerson, DateOnly, IScheduleDay,
+			                                                                         IList<PayrollBaseExportDto>>
+			                                                                         buildExportFunction)
 		{
 			var payrollTimeExportDataList = new List<PayrollBaseExportDto>();
 			foreach (var person in personList)
@@ -116,6 +116,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				var scheduleRange = scheduleDictionary[person];
 				foreach (var dateOnly in datePeriod.DayCollection())
 				{
+					if (afterTerminationDate(person, dateOnly) || isBeforeFirstPeriod(person, dateOnly))
+						continue;
+
 					var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 					var payrollExportDtos = buildExportFunction(person, dateOnly, scheduleDay);
 					if (payrollExportDtos.Any())
@@ -123,6 +126,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				}
 			}
 			return payrollTimeExportDataList;
+		}
+
+		private static bool afterTerminationDate(IPerson person, DateOnly dateOnly)
+		{
+			var terminateDate = person.TerminalDate;
+			return terminateDate != null && dateOnly > terminateDate;
+		}
+
+		private static bool isBeforeFirstPeriod(IPerson person, DateOnly dateOnly)
+		{
+			var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate).FirstOrDefault();
+			return firstPeriod != null && dateOnly < firstPeriod.Period.StartDate;
 		}
 	}
 }

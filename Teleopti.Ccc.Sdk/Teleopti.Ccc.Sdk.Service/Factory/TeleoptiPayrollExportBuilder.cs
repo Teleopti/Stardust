@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public IList<PayrollBaseExportDto> BuildDetailedExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();
-			var overtimeAndShiftAllowances = createOvertimeAndShiftAllowanceDtos(person, dateOnly, scheduleDay).ToList();
-			var absences = createAbsenceDtos(person, dateOnly, scheduleDay, _absenceDictionary).ToList();
 
+			var overtimeAndShiftAllowances = createOvertimeAndShiftAllowanceDtos(person, dateOnly, scheduleDay).ToList();
 			if (overtimeAndShiftAllowances.Any())
 				exportDtos.AddRange(overtimeAndShiftAllowances);
 
+			var absences = createAbsenceDtos(person, dateOnly, scheduleDay, _absenceDictionary).ToList();
 			if (absences.Any())
 				exportDtos.AddRange(absences);
 
@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			var multiplicatorProjectionService = new MultiplicatorProjectionService(scheduleDay, dateOnly);
 			var projection = multiplicatorProjectionService.CreateProjection();
+
 			foreach (var layer in projection)
 			{
 				var payrollDetailedExportDto = createDtoWithPersonData(person, dateOnly);
