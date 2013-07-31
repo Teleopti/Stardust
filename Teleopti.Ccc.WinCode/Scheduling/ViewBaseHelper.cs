@@ -464,6 +464,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var startPeriod = schedulePeriods[0].GetSchedulePeriod(openPeriod.StartDate);
 			var endPeriod = schedulePeriods[schedulePeriods.Count - 1].GetSchedulePeriod(openPeriod.EndDate);
+			if (startPeriod == null || endPeriod == null) return false;
 			return startPeriod.Value.StartDate == openPeriod.StartDate && endPeriod.Value.EndDate == openPeriod.EndDate;
 		}
 
