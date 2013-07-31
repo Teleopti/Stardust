@@ -299,8 +299,12 @@ namespace Teleopti.Ccc.Win.Shifts
             loadView(ShiftCreatorViewType.Activities);
         }
 
+	    private DateTime _lastSaveClick;
         private void toolStripButtonSaveClick(object sender, EventArgs e)
         {
+			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
+			if (_lastSaveClick.AddSeconds(1) > DateTime.Now) return;
+	        _lastSaveClick = DateTime.Now;
             if (validateGrid())
             {
                 Cursor.Current = Cursors.WaitCursor;
