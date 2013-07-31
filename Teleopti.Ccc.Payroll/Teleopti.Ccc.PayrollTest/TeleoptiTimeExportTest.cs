@@ -79,11 +79,23 @@ namespace Teleopti.Ccc.PayrollTest
                 Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2009, 2, 2) }
             });
             person4.TerminationDate = new DateOnlyDto(2009, 1, 31);
-#pragma warning disable 612,618
-            Expect.Call(schedulingService.GetSchedulePartsForPersons(new[] { person1 ,person2}, dateOnlyDto, dateOnlyDto, "Utc")).Return(
-#pragma warning restore 612,618
-                new List<SchedulePartDto> { schedulePartDto1, schedulePartDto2, schedulePartDto3, schedulePartDto4 }).IgnoreArguments();
 
+			Expect.Call(schedulingService.GetTeleoptiTimeExportData(new[] { person1, person2 }, dateOnlyDto, dateOnlyDto,
+																	"Utc")).Return(
+																		new List<PayrollBaseExportDto>
+			                                                                {
+				                                                                new PayrollBaseExportDto
+					                                                                {
+																						EmploymentNumber = person1.EmploymentNumber,
+																						ContractTime = new TimeSpan(07,30,00)
+					                                                                },
+																					new PayrollBaseExportDto
+																						{
+																							EmploymentNumber = person2.EmploymentNumber,
+																							ContractTime = new TimeSpan(08,30,00)
+																						}
+
+			                                                                }).IgnoreArguments();
             mocks.ReplayAll();
 
             IXPathNavigable result = Target.ProcessPayrollData(schedulingService, organizationService, new PayrollExportDtoForPayrollTest(personDtos, TargetDateOnlyPeriodDto, null) { TimeZoneId = "Utc" });

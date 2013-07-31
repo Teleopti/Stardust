@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public ICollection<PayrollBaseExportDto> GetTeleoptiTimeExportData(IEnumerable<PersonDto> personCollection,
 		                                                                   DateOnlyDto startDate,
 		                                                                   DateOnlyDto endDate,
-		                                                                   string timeZoneInfoId,
-		                                                                   string specialProjection)
+		                                                                   string timeZoneInfoId)
 		{
 			var exportBuilder = new TeleoptiPayrollExportBuilder(_schedulePartAssembler, null, null, null);
 			var timeExportDtos = createPayrollExportDtos(personCollection, startDate, endDate, timeZoneInfoId,
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		                                                                       DateOnlyDto startDate,
 		                                                                       DateOnlyDto endDate,
 		                                                                       string timeZoneInfoId,
-		                                                                       string specialProjection,
 		                                                                       Dictionary<Guid, AbsenceDto>
 			                                                                       absenceDictinary)
 		{
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			DateOnlyDto startDate,
 			DateOnlyDto endDate,
 			string timeZoneInfoId,
-			string specialProjection,
 			IDictionary<Guid, AbsenceDto> absenceDictinary,
 			IList<Guid> dayOffCodes,
 			IDictionary<Guid, ActivityDto> activityDictionary)
@@ -98,16 +95,31 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList),
 					                                                   new ScheduleDictionaryLoadOptions(true, false), period,
 					                                                   _scenarioRepository.Current());
-				foreach (var person in personList)
+
+				var exportDtos = getExportDtosForPersons(personList, scheduleDictionary, datePeriod, buildExportFunction).ToList();
+				if (exportDtos.Any())
+					payrollTimeExportDataList.AddRange(exportDtos);
+			}
+			return payrollTimeExportDataList;
+		}
+
+		private static IEnumerable<PayrollBaseExportDto> getExportDtosForPersons(IEnumerable<IPerson> personList,
+		                                                            IScheduleDictionary scheduleDictionary,
+		                                                            DateOnlyPeriod datePeriod,
+		                                                            Func
+			                                                            <IPerson, DateOnly, IScheduleDay,
+			                                                            IList<PayrollBaseExportDto>> buildExportFunction)
+		{
+			var payrollTimeExportDataList = new List<PayrollBaseExportDto>();
+			foreach (var person in personList)
+			{
+				var scheduleRange = scheduleDictionary[person];
+				foreach (var dateOnly in datePeriod.DayCollection())
 				{
-					var scheduleRange = scheduleDictionary[person];
-					foreach (var dateOnly in datePeriod.DayCollection())
-					{
-						var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-						var timeExportDtos = buildExportFunction(person, dateOnly, scheduleDay);
-						if (timeExportDtos.Any())
-							payrollTimeExportDataList.AddRange(timeExportDtos);
-					}
+					var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
+					var payrollExportDtos = buildExportFunction(person, dateOnly, scheduleDay);
+					if (payrollExportDtos.Any())
+						payrollTimeExportDataList.AddRange(payrollExportDtos);
 				}
 			}
 			return payrollTimeExportDataList;

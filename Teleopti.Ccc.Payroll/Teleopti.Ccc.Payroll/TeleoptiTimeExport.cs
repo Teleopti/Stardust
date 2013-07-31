@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Payroll
         private void AddColumnsToTable()
         {
             payrollDt.Locale = CultureInfo.InvariantCulture;
-            payrollDt.Columns.Add("EmploymentNumber", typeof(string));
+            payrollDt.Columns.Add("Person", typeof(string));
             payrollDt.Columns.Add("FirstName", typeof(string));
             payrollDt.Columns.Add("LastName", typeof(string));
             payrollDt.Columns.Add("BusinessUnitName", typeof(string));
@@ -144,13 +144,13 @@ namespace Teleopti.Ccc.Payroll
             payrollDt.Columns.Add("TeamName", typeof(string));
             payrollDt.Columns.Add("ContractName", typeof(string));
             payrollDt.Columns.Add("PartTimePercentageName", typeof(string));
-            payrollDt.Columns.Add("Date", typeof(string));
-            payrollDt.Columns.Add("StartDate", typeof(string));
-            payrollDt.Columns.Add("EndDate", typeof(string));
+            payrollDt.Columns.Add("Date", typeof(DateTime));
+            payrollDt.Columns.Add("StartDate", typeof(DateTime));
+            payrollDt.Columns.Add("EndDate", typeof(DateTime));
             payrollDt.Columns.Add("ShiftCategoryName", typeof(string));
-            payrollDt.Columns.Add("ContractTime", typeof(string));
-            payrollDt.Columns.Add("WorkTime", typeof(string));
-            payrollDt.Columns.Add("PaidTime", typeof(string));
+            payrollDt.Columns.Add("Time", typeof(TimeSpan));
+            payrollDt.Columns.Add("WorkTime", typeof(TimeSpan));
+            payrollDt.Columns.Add("PaidTime", typeof(TimeSpan));
             payrollDt.Columns.Add("AbsencePayrollCode", typeof(string));
             payrollDt.Columns.Add("DayOffPayrollCode", typeof(string));
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
@@ -30,9 +31,9 @@ namespace Teleopti.Ccc.PayrollTest
 	    [Test]
 	    public void VerifyPayrollTimeExport()
 	    {
-		    MockRepository mocks = new MockRepository();
+		    var mocks = new MockRepository();
 
-		    DateTimePeriodDtoForPayrollTest dateTimePeriodDto =
+		    var dateTimePeriodDto =
 			    new DateTimePeriodDtoForPayrollTest(new DateTime(2009, 2, 1, 0, 0, 0, DateTimeKind.Utc),
 			                                        new DateTime(2009, 2, 28, 0, 0, 0, DateTimeKind.Utc));
 
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.PayrollTest
 			    new DateOnly(2009, 2, 28));
 
 
-		    ITeleoptiOrganizationService organizationService = mocks.StrictMock<ITeleoptiOrganizationService>();
-		    ITeleoptiSchedulingService schedulingService = mocks.StrictMock<ITeleoptiSchedulingService>();
+		    var organizationService = mocks.StrictMock<ITeleoptiOrganizationService>();
+		    var schedulingService = mocks.StrictMock<ITeleoptiSchedulingService>();
 
 		    PersonDto person1 = new PersonDtoForPayrollTest(Guid.NewGuid());
 		    PersonDto person2 = new PersonDtoForPayrollTest(Guid.NewGuid());
@@ -62,58 +63,58 @@ namespace Teleopti.Ccc.PayrollTest
 					    new DateOnlyPeriodDto {StartDate = new DateOnlyDto(2009, 2, 2)}
 			    });
 		    person4.TerminationDate = new DateOnlyDto(2009, 2, 15);
-		    AbsenceDto absence = new AbsenceDto {PayrollCode = "801", Id = Guid.Empty};
-		    ProjectedLayerDto projectedLayerDto = new ProjectedLayerDto();
-		    projectedLayerDto.IsAbsence = true;
-		    projectedLayerDto.PayloadId = absence.Id.Value;
+		    var absence = new AbsenceDto {PayrollCode = "801", Id = Guid.Empty};
+		    var projectedLayerDto = new ProjectedLayerDto
+			    {
+				    IsAbsence = true,
+				    PayloadId = absence.Id.Value,
+				    Period = dateTimePeriodDto,
+				    ContractTime = TimeSpan.FromHours(7.5)
+			    };
 
-		    projectedLayerDto.Period = dateTimePeriodDto;
-		    projectedLayerDto.ContractTime = TimeSpan.FromHours(7.5);
-		    MultiplicatorDto multiplicator = new MultiplicatorDto() {PayrollCode = "371"};
-		    SchedulePartDto schedulePartDto1 = new SchedulePartDto();
-		    SchedulePartDto schedulePartDto2 = new SchedulePartDto();
-		    SchedulePartDto schedulePartDto3 = new SchedulePartDto {Date = new DateOnlyDto(2009, 2, 1)};
-		    SchedulePartDto schedulePartDto4 = new SchedulePartDto {Date = new DateOnlyDto(2009, 2, 16)};
+		    var multiplicator = new MultiplicatorDto {PayrollCode = "371"};
+		    var schedulePartDto1 = new SchedulePartDto();
+		    var schedulePartDto2 = new SchedulePartDto();
+		    var schedulePartDto3 = new SchedulePartDto {Date = new DateOnlyDto(2009, 2, 1)};
+		    var schedulePartDto4 = new SchedulePartDto {Date = new DateOnlyDto(2009, 2, 16)};
 		    //schedulePartDto1.ProjectedLayerCollection.Clear();
 		    schedulePartDto1.ProjectedLayerCollection.Add(projectedLayerDto);
 		    //schedulePartDto2.ProjectedLayerCollection.Clear();
-		    DateOnlyDto startDate = TargetDateOnlyPeriodDto.StartDate;
-		    DateOnlyDto endDate = TargetDateOnlyPeriodDto.EndDate;
+		    var startDate = TargetDateOnlyPeriodDto.StartDate;
+		    var endDate = TargetDateOnlyPeriodDto.EndDate;
 		    schedulePartDto1.PersonId = person1.Id.Value;
 		    schedulePartDto2.PersonId = person2.Id.Value;
 		    schedulePartDto3.PersonId = person3.Id.Value;
 		    schedulePartDto4.PersonId = person4.Id.Value;
 
-		    Expect.Call(schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true})).Return(
-			    new List<AbsenceDto> {absence}).IgnoreArguments();
-#pragma warning disable 612,618
-		    Expect.Call(schedulingService.GetSchedulePartsForPersons(new[] {person1, person2, person3, person4}, startDate,
-		                                                             endDate, "Utc")).Return(
-#pragma warning restore 612,618
-			    new List<SchedulePartDto> {schedulePartDto1, schedulePartDto2, schedulePartDto3, schedulePartDto4})
-		          .IgnoreArguments();
-
-		    Expect.Call(schedulingService.GetPersonMultiplicatorDataForPersons(new[] {person1, person2, person3, person4},
-		                                                                       startDate, endDate, "Utc"))
-		          .Return(new List<MultiplicatorDataDto>
-			          {
-				          new MultiplicatorDataDto
-					          {
-						          Amount = TimeSpan.FromHours(8.25),
-						          Date = TargetDateOnlyPeriodDto.StartDate.DateTime,
-						          Multiplicator = multiplicator,
-						          PersonId = person2.Id
-					          }
-			          }).IgnoreArguments();
-
+			Expect.Call(schedulingService.GetTeleoptiDetailedExportData(new[] { person1, person2, person3, person4 }, startDate,
+													 endDate, "Utc")).Return(new Collection<PayrollBaseExportDto>
+				                                         {
+					                                         new PayrollBaseExportDto
+						                                         {
+							                                         EmploymentNumber = person1.EmploymentNumber,
+																	 Date = new DateTime(2009,02,01),
+																	 PayrollCode = "801",
+																	 Time = new TimeSpan(07,30,00)
+						                                         },
+					                                         new PayrollBaseExportDto
+						                                         {
+							                                         EmploymentNumber = person2.EmploymentNumber,
+																	 Date = new DateTime(2009,02,01),
+																	 PayrollCode = "371",
+																	 Time = new TimeSpan(08,15,00)
+						                                         }
+				                                         })
+							 .IgnoreArguments();
+		    
 		    mocks.ReplayAll();
 
-		    IXPathNavigable result = Target.ProcessPayrollData(schedulingService, organizationService,
+		    var result = Target.ProcessPayrollData(schedulingService, organizationService,
 		                                                       new PayrollExportDtoForPayrollTest(personDtos,
 		                                                                                          TargetDateOnlyPeriodDto,
 		                                                                                          null) {TimeZoneId = "Utc"});
-		    XPathNavigator navigator = result.CreateNavigator();
-		    XPathNavigator xmlNodeList =
+		    var navigator = result.CreateNavigator();
+		    var xmlNodeList =
 			    navigator.SelectSingleNode(string.Format(System.Globalization.CultureInfo.InvariantCulture, "//Person[.='{0}']",
 			                                             person1.Id.Value));
 		    Assert.AreEqual(TargetDateOnlyPeriodDto.StartDate.DateTime,

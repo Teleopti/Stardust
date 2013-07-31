@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             using (var inner = _lifetimeScope.BeginLifetimeScope())
             {
                 return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiTimeExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty);
+                                                                                             endDate, timeZoneId);
             }
         }
 
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					.ToDictionary(a => a.Id.GetValueOrDefault());
 
 				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty, absenceDictinary);
+                                                                                             endDate, timeZoneId, absenceDictinary);
             }
         }
 
@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 	            return
 		            _factoryProvider.CreateTeleoptiPayrollFactory(inner)
 		                            .GetTeleoptiPayrollActivitiesExportData(personList, startDate,
-		                                                                    endDate, timeZoneId, string.Empty,
+		                                                                    endDate, timeZoneId,
 		                                                                    absenceDictinary,
 																			dayOffCodes,
 																			activityDictionary);

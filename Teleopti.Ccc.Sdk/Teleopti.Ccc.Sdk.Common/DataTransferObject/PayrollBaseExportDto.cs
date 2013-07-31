@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// Gets or sets the date.
 		/// </summary>
 		[DataMember]
-		public string Date { get; set; }
+		public DateTime Date { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Part-time percentage number (XXXXX, last two is decimals) 
