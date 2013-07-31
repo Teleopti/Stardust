@@ -460,21 +460,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				throw new ArgumentNullException("person");
 
 			var schedulePeriods = person.PersonSchedulePeriods(openPeriod);
+			if (!schedulePeriods.Any()) return false;
 
-			foreach (var schedulePeriod in schedulePeriods)
-			{
-			    var startPeriod = schedulePeriod.GetSchedulePeriod(openPeriod.StartDate);
-			    var endPeriod = schedulePeriod.GetSchedulePeriod(openPeriod.EndDate);
-				if (startPeriod.HasValue && endPeriod.HasValue)
-				{
-					if (startPeriod.Value.StartDate == openPeriod.StartDate && endPeriod.Value.EndDate == openPeriod.EndDate) 
-					{
-						return true;
-					}
-				}
-			}
-
-			return false;
+			var startPeriod = schedulePeriods[0].GetSchedulePeriod(openPeriod.StartDate);
+			var endPeriod = schedulePeriods[schedulePeriods.Count - 1].GetSchedulePeriod(openPeriod.EndDate);
+			if (startPeriod == null || endPeriod == null) return false;
+			return startPeriod.Value.StartDate == openPeriod.StartDate && endPeriod.Value.EndDate == openPeriod.EndDate;
 		}
 
         public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
