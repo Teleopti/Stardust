@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Payroll
         private static readonly PayrollFormatDto Format = new PayrollFormatDto(new Guid("{605B87C4-B98A-4FE1-9EA2-9B7308CAA947}"), "Teleopti Detailed Export");
         private readonly static ILog Logger = LogManager.GetLogger(typeof(TeleoptiDetailedExport));
         private DataTable _payrollDt;
-        private IDictionary<Guid, AbsenceDto> _absenceDic;
-        private IDictionary<Guid, PersonDto> _personDic;
         private DateOnlyDto _startDateOnlyDto;
         private DateOnlyDto _endDateOnlyDto;
         private const int batchSize = 50;
@@ -39,8 +37,6 @@ namespace Teleopti.Ccc.Payroll
                 addColumnsToTable();
 
                 Logger.Debug("Preparing cache for absences and persons");
-                prepareAbsenceCache(schedulingService);
-                preparePeopleCache(payrollExport);
                 Logger.Debug("Done with preparing cache for absences and persons");
 
                 _startDateOnlyDto = payrollExport.DatePeriod.StartDate;
@@ -58,13 +54,13 @@ namespace Teleopti.Ccc.Payroll
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                int step = getIncreasePercentagePerBatch(count);
+                var step = getIncreasePercentagePerBatch(count);
                 var progress = 10;
 
-                for (int i = 0; i < count; i = i + batchSize)
+                for (var i = 0; i < count; i = i + batchSize)
                 {
                     var currentAgents = payrollExport.PersonCollection.Take(batchSize).ToArray();
-                    TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
+                    var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
 					PayrollExportFeedback.ReportProgress(progress, "Loading data...");
 	                var detailedExportDtos = schedulingService.GetTeleoptiDetailedExportData(currentAgents, _startDateOnlyDto, _endDateOnlyDto,
@@ -94,9 +90,7 @@ namespace Teleopti.Ccc.Payroll
                 }
 
                 var builder = new StringBuilder();
-                using (
-                    var stringWriter = new StringWriter(builder, CultureInfo.InvariantCulture)
-                    )
+                using (var stringWriter = new StringWriter(builder, CultureInfo.InvariantCulture))
                 {
                     _payrollDt.WriteXml(stringWriter, XmlWriteMode.IgnoreSchema, false);
                     stringWriter.Flush();
@@ -116,25 +110,7 @@ namespace Teleopti.Ccc.Payroll
             }
         }
 		
-        private void preparePeopleCache(PayrollExportDto payrollExport)
-        {
-            _personDic = new Dictionary<Guid, PersonDto>();
-	        foreach (var personDto in payrollExport.PersonCollection)
-		        if (personDto.Id.HasValue)
-			        _personDic.Add(personDto.Id.Value, personDto);
-        }
-
-        private void prepareAbsenceCache(ITeleoptiSchedulingService schedulingService)
-        {
-	        var absences =
-		        schedulingService.GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
-            _absenceDic = new Dictionary<Guid, AbsenceDto>();
-	        foreach (var dto in absences)
-		        if (dto.Id.HasValue)
-			        _absenceDic.Add(dto.Id.Value, dto);
-        }
-
-	    private void addColumnsToTable()
+		private void addColumnsToTable()
 	    {
 		    _payrollDt.Locale = CultureInfo.InvariantCulture;
 		    _payrollDt.Columns.Add("Person", typeof (string));

@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             }
 		}
 
-        public ICollection<PayrollTimeExportDataDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+		public ICollection<PayrollBaseExportDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
                                                      string timeZoneId)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             }
         }
 
-		public ICollection<PayrollDetailedExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+		public ICollection<PayrollBaseExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
                                                          string timeZoneId)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())
@@ -457,20 +457,41 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				var absences = GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
 				var absenceDictinary = absences
 					.Where(a => a.Id.HasValue)
-					.ToDictionary(a => a.Id.Value);
+					.ToDictionary(a => a.Id.GetValueOrDefault());
 
 				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
                                                                                              endDate, timeZoneId, string.Empty, absenceDictinary);
             }
         }
 
-        public ICollection<SchedulePartDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
-                                                           string timeZoneId)
+		public ICollection<PayrollBaseExportDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())
             {
-                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiPayrollActivitiesExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty);
+	            var loadDeleted = new LoadOptionDto{LoadDeleted = true};
+
+				var absences = GetAbsences((AbsenceLoadOptionDto)loadDeleted);
+				var absenceDictinary = absences
+					.Where(a => a.Id.HasValue)
+					.ToDictionary(a => a.Id.GetValueOrDefault());
+
+				var dayOffCodes = GetDaysOffs(loadDeleted)
+					.Where(d => d.Id.HasValue)
+					.Select(d => d.Id.GetValueOrDefault())
+					.ToList();
+
+	            var activites = GetActivities(loadDeleted);
+	            var activityDictionary = activites
+		            .Where(a => a.Id.HasValue)
+		            .ToDictionary(a => a.Id.GetValueOrDefault());
+
+	            return
+		            _factoryProvider.CreateTeleoptiPayrollFactory(inner)
+		                            .GetTeleoptiPayrollActivitiesExportData(personList, startDate,
+		                                                                    endDate, timeZoneId, string.Empty,
+		                                                                    absenceDictinary,
+																			dayOffCodes,
+																			activityDictionary);
             }
         }
 

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
-	public class PayrollDetailedExportDto : Dto
+	public class PayrollBaseExportDto : Dto
 	{
 		/// <summary>
 		/// Gets or sets the employment number.
@@ -54,16 +54,16 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		public string PartTimePercentageName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Part-time percentage number (XXXXX, last two is decimals) 
-		/// </summary>
-		[DataMember]
-		public double PartTimePercentageNumber { get; set; }
-
-		/// <summary>
 		/// Gets or sets the date.
 		/// </summary>
 		[DataMember]
 		public string Date { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Part-time percentage number (XXXXX, last two is decimals) 
+		/// </summary>
+		[DataMember]
+		public double PartTimePercentageNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets the payroll code
@@ -76,5 +76,53 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// </summary>
 		[DataMember]
 		public TimeSpan Time { get; set; }
+
+		/// <summary>
+		/// Gets or sets the start date.
+		/// </summary>
+		[DataMember]
+		public DateTime StartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the end date.
+		/// </summary>
+		[DataMember]
+		public DateTime EndDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the shift category name.
+		/// </summary>
+		[DataMember]
+		public string ShiftCategoryName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the shift contract time.
+		/// </summary>
+		[DataMember]
+		public TimeSpan ContractTime { get; set; }
+
+		/// <summary>
+		/// Gets or sets the work time.
+		/// </summary>
+		[DataMember]
+		public TimeSpan WorkTime { get; set; }
+
+		/// <summary>
+		/// Gets or sets the paid time.
+		/// </summary>
+		[DataMember]
+		public TimeSpan PaidTime { get; set; }
+
+		/// <summary>
+		/// Gets or sets the absence payroll code.
+		/// </summary>
+		[DataMember]
+		public string AbsencePayrollCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Day off payroll code.
+		/// </summary>
+		[DataMember]
+		public string DayOffPayrollCode { get; set; }
 	}
 }

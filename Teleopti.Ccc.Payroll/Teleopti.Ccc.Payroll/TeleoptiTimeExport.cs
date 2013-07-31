@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Payroll
                     var personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
                     
                     #pragma warning disable 612,618
-                                        ICollection<PayrollTimeExportDataDto> payrollTimeExportDataList =
+                                        ICollection<PayrollBaseExportDto> payrollTimeExportDataList =
                                             schedulingService.GetTeleoptiTimeExportData(currentAgents,
                     #pragma warning restore 612,618
                                                                                          startDateOnlyDto,

@@ -169,6 +169,7 @@
   <ItemGroup>
     <Compile Include="AsyncResult.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportFactory.cs" />
+    <Compile Include="Factory\TeleoptiPayrollExportBuilder.cs" />
     <Compile Include="SdkCommandHandlersModule.cs" />
     <Compile Include="CreateScheduleDistributionAsyncResult.cs" />
     <Compile Include="Factory\AbsenceTypeFactory.cs" />
