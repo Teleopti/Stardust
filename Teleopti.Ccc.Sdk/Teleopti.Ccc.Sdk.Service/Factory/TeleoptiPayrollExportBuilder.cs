@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 					TeamName = personPeriod.Team.Description.Name,
 					ContractName = personPeriod.PersonContract.Contract.Description.Name,
 					PartTimePercentageName = personPeriod.PersonContract.PartTimePercentage.Description.Name,
-					Date = DateTime.Now.Date.ToShortDateString()
+					Date = DateTime.Now.Date
 				};
 			return payrollBaseExportDto;
 		}
