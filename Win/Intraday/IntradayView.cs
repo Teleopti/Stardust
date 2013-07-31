@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.Win.Intraday
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+			if (Scenario != null) Text = Text + " - " + Scenario.Description.Name;
             Cursor = Cursors.AppStarting;
             try
             {
@@ -487,7 +488,9 @@ namespace Teleopti.Ccc.Win.Intraday
             statusStripButtonServerUnavailable.Visible = false;
         }
 
-        public void SetChartButtons(bool enabled, AxisLocation location, ChartSeriesDisplayType type, Color color)
+	    public IScenario Scenario { get; set; }
+
+	    public void SetChartButtons(bool enabled, AxisLocation location, ChartSeriesDisplayType type, Color color)
         {
             _gridrowInChartSetting.SetButtons(enabled, location, type, color);
         }

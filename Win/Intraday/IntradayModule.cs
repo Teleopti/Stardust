@@ -77,13 +77,14 @@ namespace Teleopti.Ccc.Win.Intraday
                 stateHolder.SetRequestedScenario(intradayMainModel.Scenario);
                 stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(intradayMainModel.Period,TeleoptiPrincipal.Current.Regional.TimeZone);
             
-                var budgetMain = inner.Resolve<IIntradayView>();
-                var form = (Form)budgetMain;
+                var intraday = inner.Resolve<IIntradayView>();
+				intraday.Scenario = scenario;
+				var form = (Form)intraday;
                 form.Show();
                 //correct event?
                 form.FormClosed += mainFormClosed;
-                innerScopes[budgetMain] = inner;
-                return budgetMain;
+				innerScopes[intraday] = inner;
+				return intraday;
             }
 
             private void mainFormClosed(object sender, FormClosedEventArgs e)
