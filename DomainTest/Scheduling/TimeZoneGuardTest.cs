@@ -5,14 +5,14 @@ using Teleopti.Ccc.Domain.Scheduling;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[TestFixture]
-	public class TimeZoneDudeTest
+	public class TimeZoneGuardTest
 	{
-		private ITimeZoneDude _target;
+		private ITimeZoneGuard _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = TimeZoneDude.Instance;
+			_target = TimeZoneGuard.Instance;
 		}
 
 		[Test]

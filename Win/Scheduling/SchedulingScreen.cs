@@ -6338,7 +6338,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupContextMenuAvailTimeZones()
 		{
-			_schedulerState.TimeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
 			IList<TimeZoneInfo> otherList = new List<TimeZoneInfo> { _schedulerState.TimeZoneInfo };
@@ -6708,11 +6709,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			var item = (ToolStripMenuItem)sender;
-			_schedulerState.TimeZoneInfo = (TimeZoneInfo)item.Tag;
-			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
+			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo) item.Tag;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (_schedulerState.TimeZoneInfo == downItem.Tag);
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone == downItem.Tag);
 			}
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{

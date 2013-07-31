@@ -2,33 +2,33 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public interface ITimeZoneDude
+	public interface ITimeZoneGuard
 	{
 		TimeZoneInfo TimeZone { get; set; }
 	}
 
-	public sealed class TimeZoneDude : ITimeZoneDude
+	public sealed class TimeZoneGuard : ITimeZoneGuard
 	{
 		public TimeZoneInfo TimeZone { get; set; }
-		private static volatile TimeZoneDude _dude;
+		private static volatile TimeZoneGuard _guard;
 		private static readonly object Locker = new Object();
 
-		private TimeZoneDude() { }
+		private TimeZoneGuard() { }
 
-		public static TimeZoneDude Instance
+		public static TimeZoneGuard Instance
 		{
 			get
 			{
-				if (_dude == null)
+				if (_guard == null)
 				{
 					lock (Locker)
 					{
-						if (_dude == null)
-							_dude = new TimeZoneDude();
+						if (_guard == null)
+							_guard = new TimeZoneGuard();
 					}
 				}
 
-				return _dude;
+				return _guard;
 			}
 		}
 	}
