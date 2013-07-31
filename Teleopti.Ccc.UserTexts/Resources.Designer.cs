@@ -7717,7 +7717,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General View: user details.
+        ///   Looks up a localized string similar to Can not save!.
         /// </summary>
         public static string ErrorMsgCaptionDuplicateUserCredentials {
             get {
