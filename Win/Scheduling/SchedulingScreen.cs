@@ -6720,6 +6720,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
 			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 			_grid.Invalidate();
 			_grid.Refresh();
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
