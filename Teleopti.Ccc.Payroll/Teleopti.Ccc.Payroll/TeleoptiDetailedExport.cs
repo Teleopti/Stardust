@@ -104,9 +104,6 @@ namespace Teleopti.Ccc.Payroll
 				PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
 				                                         "The payroll export took {0} to complete.", stopwatch.Elapsed));
 
-				var fileName = @"C:\detailedExport.xml";
-				document.Save(fileName);
-
 				return result;
 			}
 		}
