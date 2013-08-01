@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             {
 	            var loadDeleted = new LoadOptionDto{LoadDeleted = true};
 
-				var absences = GetAbsences((AbsenceLoadOptionDto)loadDeleted);
+				var absences = GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
 				var absenceDictinary = absences
 					.Where(a => a.Id.HasValue)
 					.ToDictionary(a => a.Id.GetValueOrDefault());

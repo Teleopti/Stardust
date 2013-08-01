@@ -57,12 +57,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				payrollTimeExportDataDto.DayOffPayrollCode = dayOff.DayOff.PayrollCode;
 			}
-
 			else
 			{
+				var absence = scheduleDay.PersonAbsenceCollection().FirstOrDefault(d => d.Period.Contains(dateOnly));
+				if (absence != null)
+					payrollTimeExportDataDto.AbsencePayrollCode = absence.Layer.Payload.PayrollCode;
+				
 				var personAssignment = scheduleDay.PersonAssignment();
-				payrollTimeExportDataDto.ShiftCategoryName = personAssignment != null
-					                                             ? scheduleDay.PersonAssignment().ShiftCategory.Description.Name
+				payrollTimeExportDataDto.ShiftCategoryName = personAssignment != null &&
+				                                             personAssignment.ShiftCategory != null
+					                                             ? personAssignment.ShiftCategory.Description.Name
 					                                             : string.Empty;
 
 				payrollTimeExportDataDto.StartDate = projection.Period().GetValueOrDefault().LocalStartDateTime;
@@ -71,10 +75,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				payrollTimeExportDataDto.WorkTime = projection.WorkTime();
 				payrollTimeExportDataDto.PaidTime = projection.PaidTime();
 			}
-
-			var absence = scheduleDay.PersonAbsenceCollection().FirstOrDefault(d => d.Period.Contains(dateOnly));
-			if (absence != null)
-				payrollTimeExportDataDto.AbsencePayrollCode = absence.Layer.Payload.PayrollCode;
 
 			yield return payrollTimeExportDataDto;
 		}
