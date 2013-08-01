@@ -3,9 +3,22 @@
   <Document DocumentElement="DocumentElement" Separator="," Type="Csv">
     <Items Element="PayrollExport">
       <Item Element="Person" Type="string" />
-      <Item Element="Date" Type="date" Format="yyyy-MM-dd" />
-      <Item Element="PayrollCode" Type="string" />
-      <Item Element="Time" Type="time" Format="hhmm" />
+			<Item Element="FirstName" Type="string" />
+			<Item Element="LastName" Type="string" />
+			<Item Element="BusinessUnitName" Type="string" />
+			<Item Element="SiteName" Type="string" />
+			<Item Element="TeamName" Type="string" />
+			<Item Element="ContractName" Type="string" />
+			<Item Element="PartTimePercentageName" Type="string" />
+			<Item Element="PartTimePercentageNumber" Type="decimal"/>
+			<Item Element="Date" Type="date" Format="yyyy-MM-dd" />
+			<Item Element="Start" Type="dateTime" Format="yyyy-MM-dd hh:mm" />
+			<Item Element="End" Type="dateTime" Format="yyyy-MM-dd hh:mm" />
+			<Item Element="PayrollCode" Type="string" />
+			<Item Element="ContractTime" Type="time" Format="hh:mm" />
+			<Item Element="WorkTime" Type="time" Format="hh:mm" />
+			<Item Element="PaidTime" Type="time" Format="hh:mm" />
+			<Item Element="Time" Type="time" Format="hh:mm" />
     </Items>
   </Document>
-</Format>
+</Format> 
