@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			{
 				if (groupPageDto.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
 				{
-					groupPageDto.PageName = LanguageResourceHelper.Translate(groupPageDto.PageName);
+					groupPageDto.PageName = LanguageResourceHelper.Translate(groupPageDto.PageName).Replace("\r\n", " ");
 				}
 				if (groupPageDto.Id==PageMain)
 				{
