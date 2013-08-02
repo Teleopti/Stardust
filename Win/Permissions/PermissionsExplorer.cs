@@ -1362,7 +1362,7 @@ namespace Teleopti.Ccc.Win.Permissions
                         ShowInformationMessage(UserTexts.Resources.ThisRoleCannotBeDeleted, UserTexts.Resources.NotRemovable);
                         return;
                     }
-                    response = ShowConfirmationMessage(
+                    response = ShowYesNoMessage(
                                             string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.AreYouSureYouWantToDelete,
                                             listViewRoles.SelectedItems[firstElement].Text),
                                             UserTexts.Resources.ConfirmRoleDelete);
@@ -1370,7 +1370,7 @@ namespace Teleopti.Ccc.Win.Permissions
                 else
                 {
                     response =
-                        ShowConfirmationMessage(
+						ShowYesNoMessage(
                             string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.AreYouSureYouWantToDelete,
                                           selectedItemsCount),
                             UserTexts.Resources.ConfirmRoleDelete);
@@ -1434,14 +1434,14 @@ namespace Teleopti.Ccc.Win.Permissions
                 if (count == 1)
                 {
                     response =
-                        ShowConfirmationMessage(
+						ShowYesNoMessage(
                             string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.AreYouSureYouWantToDelete,
                                           listViewPeople.SelectedItems[firstElement].Text), UserTexts.Resources.ConfirmPeopleRemove);
                 }
                 else
                 {
                     response =
-                       ShowConfirmationMessage(
+					   ShowYesNoMessage(
                            string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.AreYouSureYouWantToDelete, count),
                            UserTexts.Resources.ConfirmPeopleRemove);
                 }
@@ -2004,8 +2004,8 @@ namespace Teleopti.Ccc.Win.Permissions
             if (PermissionsExplorerStateHolder.UnitOfWork.IsDirty())
             {
                 DialogResult response =
-                    ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
-                        Text);
+					ShowYesNoMessage( UserTexts.Resources.DoYouWantToSaveChangesYouMade,
+                        Text, MessageBoxDefaultButton.Button1);
 
                 switch (response)
                 {
