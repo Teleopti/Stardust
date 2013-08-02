@@ -194,7 +194,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             createColumnsForAbsenceGrid(gridColumns);
 
-            gridColumns.AppendAuditColumns();
+			// append audit columns
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedBy", Resources.CreatedBy));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedTimeInUserPerspective", Resources.CreatedOn));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedBy", Resources.UpdatedBy));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
 
             gridControlAbsences.RowCount = gridRowCount();
             gridControlAbsences.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
