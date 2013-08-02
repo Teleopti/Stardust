@@ -60,10 +60,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		public DateTime Date { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Part-time percentage number (XXXXX, last two is decimals) 
+		/// Gets or sets the Part-time percentage number  
 		/// </summary>
+		/// <remarks>Format: XXXXX, last two is decimals</remarks>
 		[DataMember]
-		public double PartTimePercentageNumber { get; set; }
+		public int PartTimePercentageNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets the payroll code

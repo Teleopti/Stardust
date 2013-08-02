@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Payroll
 
 				stopwatch.Stop();
 				PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture, "The payroll export took {0} to complete.",
-				                                         stopwatch.Elapsed));
+														 stopwatch.Elapsed));
 
 				return result;
 			}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Payroll
 			payrollDt.Columns.Add("TeamName", typeof (string));
 			payrollDt.Columns.Add("ContractName", typeof (string));
 			payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
-			payrollDt.Columns.Add("PartTimePercentageNumber", typeof (double));
+			payrollDt.Columns.Add("PartTimePercentageNumber", typeof (int));
 			payrollDt.Columns.Add("Date", typeof (DateTime));
 			payrollDt.Columns.Add("Start", typeof (DateTime));
 			payrollDt.Columns.Add("End", typeof (DateTime));

@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Payroll
 									payrollTimeExportData.TeamName,
 									payrollTimeExportData.ContractName,
 									payrollTimeExportData.PartTimePercentageName,
+									payrollTimeExportData.PartTimePercentageNumber,
 									payrollTimeExportData.Date,
 									payrollTimeExportData.StartDate,
 									payrollTimeExportData.EndDate,
@@ -95,7 +96,6 @@ namespace Teleopti.Ccc.Payroll
 								},
 							true);
 					}
-
 					progress += step;
 				}
 
@@ -138,6 +138,7 @@ namespace Teleopti.Ccc.Payroll
 			payrollDt.Columns.Add("TeamName", typeof (string));
 			payrollDt.Columns.Add("ContractName", typeof (string));
 			payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
+			payrollDt.Columns.Add("PartTimePercentageNumber", typeof (int));
 			payrollDt.Columns.Add("Date", typeof (DateTime));
 			payrollDt.Columns.Add("StartDate", typeof (DateTime));
 			payrollDt.Columns.Add("EndDate", typeof (DateTime));

@@ -50,25 +50,27 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
 			var projection = new ProjectionProvider().Projection(scheduleDay);
+
+			if (isDayEmpty(scheduleDay, projection))
+				yield break;
+
 			var payrollTimeExportDataDto = createDtoWithPersonData(person, dateOnly);
 
-			var dayOff = scheduleDay.PersonDayOffCollection().FirstOrDefault(d => d.Period.Contains(dateOnly));
+			var dayOff = scheduleDay.PersonDayOffCollection().FirstOrDefault();
 			if (dayOff != null)
 			{
 				payrollTimeExportDataDto.DayOffPayrollCode = dayOff.DayOff.PayrollCode;
 			}
 			else
 			{
-				var absence = scheduleDay.PersonAbsenceCollection().FirstOrDefault(d => d.Period.Contains(dateOnly));
+				var absence = scheduleDay.PersonAbsenceCollection().FirstOrDefault();
 				if (absence != null)
 					payrollTimeExportDataDto.AbsencePayrollCode = absence.Layer.Payload.PayrollCode;
 				
 				var personAssignment = scheduleDay.PersonAssignment();
-				payrollTimeExportDataDto.ShiftCategoryName = personAssignment != null &&
-				                                             personAssignment.ShiftCategory != null
-					                                             ? personAssignment.ShiftCategory.Description.Name
-					                                             : string.Empty;
-
+				if (havePersonAssignmentAndShiftCategory(personAssignment))
+					payrollTimeExportDataDto.ShiftCategoryName = personAssignment.ShiftCategory.Description.Name;
+				
 				payrollTimeExportDataDto.StartDate = projection.Period().GetValueOrDefault().LocalStartDateTime;
 				payrollTimeExportDataDto.EndDate = projection.Period().GetValueOrDefault().LocalEndDateTime;
 				payrollTimeExportDataDto.ContractTime = schedulePartDto.ContractTime.TimeOfDay;
@@ -77,6 +79,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			}
 
 			yield return payrollTimeExportDataDto;
+		}
+
+		private static bool havePersonAssignmentAndShiftCategory(IPersonAssignment personAssignment)
+		{
+			return personAssignment != null && personAssignment.ShiftCategory != null;
+		}
+
+		private static bool isDayEmpty(IScheduleDay scheduleDay, IVisualLayerCollection projection)
+		{
+			return !projection.HasLayers &&
+			       !scheduleDay.PersonDayOffCollection().Any() &&
+			       !scheduleDay.PersonAbsenceCollection(false).Any();
 		}
 
 		public IList<PayrollBaseExportDto> BuildDetailedExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
@@ -104,8 +118,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			foreach (var layer in projection)
 			{
 				var payrollDetailedExportDto = createDtoWithPersonData(person, dateOnly);
-				payrollDetailedExportDto.PartTimePercentageNumber =
-					person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value;
 				payrollDetailedExportDto.PayrollCode = layer.Payload.ExportCode;
 				payrollDetailedExportDto.Time = layer.Period.ElapsedTime();
 				yield return payrollDetailedExportDto;
@@ -123,8 +135,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			foreach (var layer in absencesInProjection)
 			{
 				var payrollDetailedExportDto = createDtoWithPersonData(person, dateOnly);
-				payrollDetailedExportDto.PartTimePercentageNumber =
-					person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value;
 				payrollDetailedExportDto.PayrollCode = absenceDictionary[layer.PayloadId].PayrollCode;
 				payrollDetailedExportDto.Time = layer.ContractTime;
 				yield return payrollDetailedExportDto;
@@ -156,7 +166,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			foreach (var layer in projectedLayersWithoutDayOffs)
 			{
 				var payrollActivitiesExportDto = createDtoWithPersonData(person, dateOnly);
-				var projection = new ProjectionProvider().Projection(scheduleDay);
 
 				if (layer.IsAbsence)
 				{
@@ -166,16 +175,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				else
 				{
 					payrollActivitiesExportDto.PayrollCode = activityDictionary[layer.PayloadId].PayrollCode;
-					payrollActivitiesExportDto.Time = scheduleDay.Period.ElapsedTime();
+					payrollActivitiesExportDto.Time = layer.Period.UtcEndTime - layer.Period.UtcStartTime;
 				}
 
-				payrollActivitiesExportDto.PartTimePercentageNumber =
-					person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value;
-				payrollActivitiesExportDto.StartDate = layer.Period.LocalStartDateTime;
-				payrollActivitiesExportDto.EndDate = layer.Period.LocalEndDateTime;
-				payrollActivitiesExportDto.ContractTime = projection.ContractTime();
-				payrollActivitiesExportDto.WorkTime = projection.WorkTime();
-				payrollActivitiesExportDto.PaidTime = projection.PaidTime();
+				payrollActivitiesExportDto.StartDate = layer.Period.UtcStartTime;
+				payrollActivitiesExportDto.EndDate = layer.Period.UtcEndTime;
+				payrollActivitiesExportDto.ContractTime = layer.ContractTime;
+				payrollActivitiesExportDto.WorkTime = layer.WorkTime;
+				payrollActivitiesExportDto.PaidTime = layer.PaidTime;
 
 				yield return payrollActivitiesExportDto;
 			}
@@ -183,6 +190,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		private static PayrollBaseExportDto createDtoWithPersonData(IPerson person, DateOnly dateOnly)
 		{
+
 			var personPeriod = person.Period(dateOnly);
 			var payrollBaseExportDto = new PayrollBaseExportDto
 				{
@@ -194,9 +202,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 					TeamName = personPeriod.Team.Description.Name,
 					ContractName = personPeriod.PersonContract.Contract.Description.Name,
 					PartTimePercentageName = personPeriod.PersonContract.PartTimePercentage.Description.Name,
-					Date = DateTime.Now.Date
+					PartTimePercentageNumber =
+						fiveDigitPartTimePercentage(person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value),
+					Date = dateOnly.Date
 				};
 			return payrollBaseExportDto;
+		}
+
+		private static int fiveDigitPartTimePercentage(double value)
+		{
+			return (int)(value*10000);
 		}
 	}
 }
