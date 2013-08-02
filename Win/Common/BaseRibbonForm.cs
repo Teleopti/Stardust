@@ -109,6 +109,11 @@ namespace Teleopti.Ccc.Win.Common
             return ViewBase.ShowYesNoMessage(this, text, caption);
         }
 
+		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+		{
+			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
+		}
+
         public void ShowInformationMessage(string text, string caption)
         {
             ViewBase.ShowInformationMessage(this, text, caption);
