@@ -304,7 +304,6 @@ namespace Teleopti.Ccc.Win.Shifts
         {
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastSaveClick.AddSeconds(1) > DateTime.Now) return;
-	        _lastSaveClick = DateTime.Now;
             if (validateGrid())
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -312,6 +311,7 @@ namespace Teleopti.Ccc.Win.Shifts
                 toolStripButtonRefresh.PerformClick();
                 Cursor.Current = Cursors.Default;
             }
+			_lastSaveClick = DateTime.Now;
         }
 
         private void toolStripButtonHelpClick(object sender, EventArgs e)
