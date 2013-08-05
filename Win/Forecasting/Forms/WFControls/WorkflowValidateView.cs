@@ -261,17 +261,41 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             _gridControl.RefreshGrid();
         }
 
-        private void percentTextBoxDeviationAfterTaskTime_Validated(object sender, EventArgs e)
+	    private void PercentTextBoxTasks_OnKeyUp(object sender, KeyEventArgs keyEventArgs)
+	    {
+		    if (keyEventArgs.KeyCode != Keys.Enter) 
+				return;
+		    ProcessTabKey(true);
+			keyEventArgs.Handled = true;
+	    }
+
+	    private void percentTextBoxDeviationAfterTaskTime_Validated(object sender, EventArgs e)
+        {
+            _gridControl.DeviationAfterTaskTime = new Percent(percentTextBoxDeviationAfterTaskTime.DoubleValue);
+            _gridControl.RefreshGrid();
+        }
+
+		private void PercentTextBoxDeviationAfterTaskTime_OnKeyUp(object sender, KeyEventArgs keyEventArgs)
+		{
+			if (keyEventArgs.KeyCode != Keys.Enter)
+				return;
+			ProcessTabKey(true);
+			keyEventArgs.Handled = true;
+		}
+
+        private void percentTextBoxDeviationTaskTime_Validated(object sender, EventArgs e)
         {
             _gridControl.DeviationTaskTime = new Percent(percentTextBoxDeviationTaskTime.DoubleValue);
             _gridControl.RefreshGrid();
         }
 
-        private void percentTextBoxDeviationTaskTime_Validated(object sender, EventArgs e)
-        {
-            _gridControl.DeviationAfterTaskTime = new Percent(percentTextBoxDeviationAfterTaskTime.DoubleValue);
-            _gridControl.RefreshGrid();
-        }
+		private void PercentTextBoxDeviationTaskTime_OnKeyUp(object sender, KeyEventArgs keyEventArgs)
+		{
+			if (keyEventArgs.KeyCode != Keys.Enter)
+				return;
+			ProcessTabKey(true);
+			keyEventArgs.Handled = true;			
+		}
 
         private void outlierBoxControl_AddOutlier(object sender, CustomEventArgs<DateOnly> e)
         {
