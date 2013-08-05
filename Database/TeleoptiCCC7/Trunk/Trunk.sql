@@ -293,12 +293,3 @@ GO
 
 UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
 GO
-
-----------------  
---Name: Anders Forsberg
---Date: 2013-08-05
---Desc: Bug #24161 - MyTime still shows the old team names after team name is modified from Options. It also exists on Web Mytime.
---Ola fixed in code but it must be updated in db too
-----------------
-exec [ReadModel].[UpdateGroupingReadModel] '00000000-0000-0000-0000-000000000000'
-GO
