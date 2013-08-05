@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        {
 				if (periodResource.Value.Resource == 0) continue;
 		        var skills = periodResource.Value.Skills;
-				var traff = periodResource.Value.Resource;
 				var headCount = periodResource.Value.Count;
 
 				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
@@ -55,14 +54,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (var skill in skills)
 				{
+					var intervalPart = ((double) filteredProjections.MinSkillResolution/skill.DefaultResolution);
+					var traff = periodResource.Value.Resource*intervalPart;
+
 					double skillEfficiencyValue;
 					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue))
 					{
-						skillEfficiencyValue = 1;
+						skillEfficiencyValue = intervalPart;
 					}
 					else
 					{
-						skillEfficiencyValue = skillEfficiencyValue/headCount;
+						skillEfficiencyValue = (skillEfficiencyValue/headCount)*intervalPart;
 					}
 
 					double personSkillResourceValue = traff;
@@ -90,9 +92,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					dividedActivity.KeyedSkillResourceEfficiencies.Add(periodResource.Key, personSkillEfficiencyRow);
 					dividedActivity.WeightedRelativeKeyedSkillResourceResources.Add(periodResource.Key, personSkillResourceRow);
 					dividedActivity.RelativeKeyedSkillResourceResources.Add(periodResource.Key, relativePersonSkillResourceRow);
-					dividedActivity.RelativePersonResources.Add(periodResource.Key, traff);
+					dividedActivity.RelativePersonResources.Add(periodResource.Key, periodResource.Value.Resource);
 
-					double targetResourceValue = elapsedToCalculate.TotalMinutes * traff;
+					double targetResourceValue = elapsedToCalculate.TotalMinutes * periodResource.Value.Resource;
 					dividedActivity.PersonResources.Add(periodResource.Key, targetResourceValue);
 				}
 	        }

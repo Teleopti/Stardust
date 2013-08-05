@@ -13,11 +13,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
 		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>(); 
 		
-		private int MinSkillResolution = 60;
+		private int _minSkillResolution = 60;
 
 		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider)
 		{
 			_personSkillProvider = personSkillProvider;
+		}
+
+		public int MinSkillResolution
+		{
+			get { return _minSkillResolution; }
 		}
 
 		public void Clear()
@@ -48,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					int minResolution = skills.Skills.Min(s => s.DefaultResolution);
 					if (minResolution < MinSkillResolution)
 					{
-						MinSkillResolution = minResolution;
+						_minSkillResolution = minResolution;
 					}
 				}
 				_skills.Add(skills.Key,skills.Skills);
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var detail = interval.GetResources(activityKey, skillKey);
 				result = new PeriodResourceDetail(result.Count + detail.Count, result.Resource + detail.Resource);
 			}
-			return new Tuple<double, double>(result.Resource,result.Count);
+			return new Tuple<double, double>(result.Resource / periodSplit.Count, result.Count / periodSplit.Count);
 		}
 
 		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
@@ -94,10 +99,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource = Math.Max(resource, interval.GetResources(activityKeys, skillKey).Resource);
+				resource += interval.GetResources(activityKeys, skillKey).Resource;
 
 			}
-			return resource;
+			return resource / periodSplit.Count;
 		}
 
 		public bool AllIsSingleSkill()

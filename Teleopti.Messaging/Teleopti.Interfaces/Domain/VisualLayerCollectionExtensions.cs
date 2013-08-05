@@ -80,6 +80,7 @@ namespace Teleopti.Interfaces.Domain
 		bool AllIsSingleSkill();
 		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
 		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
+		int MinSkillResolution { get; }
 	}
 
 	public struct AffectedSkills
