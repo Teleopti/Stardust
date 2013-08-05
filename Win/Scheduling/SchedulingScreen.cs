@@ -1403,14 +1403,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (selectedSchedules.Count() == 0)
 							return;
 
-						var sortedList = (from d in ScheduleViewBase.AllSelectedDates(selectedSchedules)
+						var sortedList = (from d in ScheduleViewBase.AllSelectedUtcDates(selectedSchedules)
 										  orderby d.Date
 										  select d).ToList();
 
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
-						var period = new DateOnlyPeriod(first, last).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
-						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, _schedulerState.TimeZoneInfo, period);
+						var period = new DateTimePeriod(DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc),
+						                                DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc));
+						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.TimeZone, period);
 
 						if (!addDayOffDialog.Result)
 							return;
