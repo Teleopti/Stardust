@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			{
 				cmd.Parameters.AddWithValue("@personId", personId);
 				cmd.Parameters.AddWithValue("@baseDate", AgentDayConverters.DateOfUnconvertedSchedule.Date);
-				//TODO: REMOVE COMMENT there is a bug here that needs to be solved
-                //cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 			}
 			using (var cmd = new SqlCommand(updatePersonAssignmentAuditDateCommand, transaction.Connection, transaction))
 			{
