@@ -923,3 +923,12 @@ GO
 ---------------- 
 ALTER TABLE dbo.MultisiteDay DROP COLUMN IsDeleted
 GO
+
+----------------  
+--Name: Anders Forsberg
+--Date: 2013-08-05
+--Desc: Bug #24161 - MyTime still shows the old team names after team name is modified from Options. It also exists on Web Mytime.
+--Ola fixed in code but it must be updated in db too
+----------------
+exec [ReadModel].[UpdateGroupingReadModel] '00000000-0000-0000-0000-000000000000'
+GO
