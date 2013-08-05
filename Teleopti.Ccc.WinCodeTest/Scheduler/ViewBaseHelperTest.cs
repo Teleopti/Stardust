@@ -195,6 +195,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                _nightlyRest,
                                                                new TimeSpan(50, 0, 0));
             _contract.MinTimeSchedulePeriod = new TimeSpan(1);
+
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
         }
 
         [Test]
@@ -231,7 +233,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipAbsences()
         {
-           
             IPersonAbsence abs3 = new PersonAbsence(_agent, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(2006, 1, 1, 2006, 1, 3)));
 
             //rk ändrat här. ska det visas agentens tid eller betraktarens tid?
@@ -275,7 +276,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (_mockRep.Record())
             {
                 Expect.Call(part.PersonAbsenceCollection()).Return(absCollection).Repeat.AtLeastOnce();
-                Expect.Call(part.TimeZone).Return(TimeZoneHelper.CurrentSessionTimeZone).Repeat.AtLeastOnce();
                 Expect.Call(part.Period).Return(partStartperiod);
                 Expect.Call(part.Period).Return(partMiddlePeriod);
                 Expect.Call(part.Period).Return(partEndPeriod);
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyToolTipOvertime()
         {
             var period = new DateTimePeriod(new DateTime(2008, 1, 1, 17, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 18, 0, 0, DateTimeKind.Utc));
-            IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(_agent.PermissionInformation.DefaultTimeZone()));
+			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone));
             IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
                 MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Paid Overtime",
                                                                                    MultiplicatorType.Overtime);
