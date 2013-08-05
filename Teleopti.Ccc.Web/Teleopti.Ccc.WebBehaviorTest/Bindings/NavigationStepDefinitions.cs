@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class NavigationStepDefinitions
 	{
+		[When(@"(.*) is viewing sharing link")]
+		public void WhenSomeoneIsViewingSharingLink(string p0)
+		{
+			UserFactory.User().MakeUser();
+			Navigation.GotoRaw(UserFactory.User().UserData<CalendarLinkConfigurable>().SharingUrl);
+		}
 
 		[Given(@"I am viewing an application page")]
 		[When(@"I am viewing an application page")]
@@ -211,5 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().MakeUser();
 			Navigation.GotoAnywhere();
 		}
+
+
 	}
 }

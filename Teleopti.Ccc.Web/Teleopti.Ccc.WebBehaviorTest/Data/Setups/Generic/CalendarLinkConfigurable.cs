@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public bool IsActive { get; set; }
 
+		public string SharingUrl { get; set; }
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var personalSettingDataRepository = new PersonalSettingDataRepository(uow);
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			setting.CalendarUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
 			                      HttpUtility.UrlEncode(
 									  StringEncryption.Encrypt("TestData" + "/" + user.Id.Value));
-			ScenarioContext.Current.Add("CalendarLink", setting.CalendarUrl);
+			SharingUrl = setting.CalendarUrl;
 
 			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
 			personalSettingData.SetValue(setting);

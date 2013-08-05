@@ -26,7 +26,7 @@ Scenario: Cannot share calendar without permission
 
 Scenario: View calendar sharing activation status
 	Given I have the role 'Access to CalendarLink'
-	And I have shared calendar
+	And I have shared my calendar
 	When I view my settings
 	Then I should see 'share my calendar' active
 	And I should see a sharing link
@@ -39,27 +39,22 @@ Scenario: Activate calendar sharing
 
 Scenario: Revoke calendar sharing
 	Given I have the role 'Access to CalendarLink'
-	And I have shared calendar
+	And I have shared my calendar
 	When I view my settings
 	Then I should see 'share my calendar' active
 	When I click 'revoke'
 	Then I should see 'share my calendar' inactive
 	And I should not see a sharing link
 
-Scenario: Stop calendar sharing after revoke sharing
+Scenario: Dont share calendar when sharing is revoked
 	Given I have the role 'Access to CalendarLink'
-	And I have shared calendar
-	When I view my settings
-	Then I should see a sharing link
-	When I click 'revoke'
-	And Someone is viewing sharing link
+	And I have revoked calendar sharing
+	When Someone is viewing sharing link
 	Then Someone should not see ical calendar
 
-Scenario: Stop calendar sharing after revoke permission
+Scenario: Dont share calendar when permission is revoked
 	Given I have the role 'No access to CalendarLink'
-	And I have shared calendar before
-	When I view my settings
-	Then I should not see 'share my calendar' in settings
+	And I have shared my calendar before
 	When Someone is viewing sharing link
 	Then Someone should not see ical calendar
 
@@ -102,9 +97,7 @@ Scenario: View calendar sharing link
 	| Activity         | Phone            |
 	| Start time       | 2023-12-18 08:00 |
 	| End time         | 2023-12-18 17:00 |
-	And I have shared calendar
-	When I view my settings
-	Then I should see a sharing link
+	And I have shared my calendar
 	When Someone is viewing sharing link
 	Then Someone should see ical calendar with
 	| Field   | Value            |
@@ -126,4 +119,3 @@ Scenario: View calendar sharing link
 	| SUMMARY | Phone            |
 	| DTSTART | 20131218T080000Z |
 	| DTEND   | 20131218T170000Z |
-
