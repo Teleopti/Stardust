@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Payroll
 
                 for (int i = 0; i < count; i = i + BatchSize)
                 {
-                    var currentAgents = payrollExport.PersonCollection.Take(BatchSize).ToArray();
+                    var currentAgents = payrollExport.PersonCollection.Skip(i).Take(BatchSize).ToArray();
                     TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
                     PayrollExportFeedback.ReportProgress(progress, "Loading schedules...");
