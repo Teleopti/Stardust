@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -17,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             //put mandatory here
             Add(new NewMaxOneDayOffRule());
-            Add(new NewOverlappingAssignmentRule());
-			Add(new DataPartOfAgentDay());
+					Add(new DataPartOfAgentDay());
         }
 
         public static INewBusinessRuleCollection Minimum()
@@ -155,8 +153,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			foreach (INewBusinessRule rule in ret)
 			{
-				if (rule is NewOverlappingAssignmentRule)
-					rule.ForDelete = true;
 				rule.HaltModify = false;
 			}
 

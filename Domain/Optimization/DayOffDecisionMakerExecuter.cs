@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         IScheduleDayPro scheduleDayPro =
                         matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset];
                         IScheduleDay part = scheduleDayPro.DaySchedulePart();
-                    	IPersonAssignment assignment = part.AssignmentHighZOrder();
+                    	IPersonAssignment assignment = part.PersonAssignment();
 											if (assignment == null || assignment.ShiftCategory == null)
 							return new dayOffOptimizerMoveDaysResult { Result = false, MovedDays = movedDays };
                         var changed = new changedDay

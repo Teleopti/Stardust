@@ -8,26 +8,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridIntegerCellWithIgnoreColumn<T> : SFGridColumnBase<T>
     {
-        private readonly IComparer<T> _columnComparer;
-
-        public SFGridIntegerCellWithIgnoreColumn(string bindingProperty, string headerText, IComparer<T> columnComparer)
-            : this(bindingProperty, headerText,null,columnComparer)
-        {
-        }
-
-        public SFGridIntegerCellWithIgnoreColumn(string bindingProperty, string headerText, string groupHeaderText, IComparer<T> columnComparer)
+        public SFGridIntegerCellWithIgnoreColumn(string bindingProperty, string headerText, string groupHeaderText)
             : base(bindingProperty, headerText)
         {
             GroupHeaderText = groupHeaderText;
-            _columnComparer = columnComparer;
-        }
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
         }
 
         public override int PreferredWidth

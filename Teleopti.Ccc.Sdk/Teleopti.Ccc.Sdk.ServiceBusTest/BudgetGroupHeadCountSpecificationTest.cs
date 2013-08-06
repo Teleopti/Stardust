@@ -20,10 +20,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private MockRepository _mocks;
         private IScenarioRepository _scenarioRepository;
         private IBudgetDayRepository _budgetDayRepository;
-        private ISkillDayRepository _skillDayRepository;
         private IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
         private IBudgetGroupHeadCountSpecification _target;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IPerson _person;
         private DateOnly _defaultDay;
         private DateOnlyPeriod _defaultDatePeriod;
@@ -36,16 +34,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _mocks = new MockRepository();
             _scenarioRepository = _mocks.StrictMock<IScenarioRepository>();
             _budgetDayRepository = _mocks.StrictMock<IBudgetDayRepository>();
-            _skillDayRepository = _mocks.StrictMock<ISkillDayRepository>();
             _scheduleProjectionReadOnlyRepository = _mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
-            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
             _skills = prepareSkillListOpenFromMondayToFriday();
             _person = PersonFactory.CreatePersonWithBasicPermissionInfo("billg", "billg");
             _defaultDay = new DateOnly();
             _defaultDatePeriod = new DateOnlyPeriod();
 
-            _target = new BudgetGroupHeadCountSpecification(_schedulingResultStateHolder, _scenarioRepository, _budgetDayRepository, _skillDayRepository, 
+            _target = new BudgetGroupHeadCountSpecification(_scenarioRepository, _budgetDayRepository,  
                                                             _scheduleProjectionReadOnlyRepository);
         }
 

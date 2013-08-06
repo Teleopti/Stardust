@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public override bool IsSatisfiedBy(IScheduleDay obj)
 		{
 			if (obj == null) return false;
-			return obj.PersonAbsenceCollection().Count == 0 && obj.PersonAssignmentCollection().Count == 0 &&
+			return obj.PersonAbsenceCollection().Count == 0 && obj.PersonAssignmentCollectionDoNotUse().Count == 0 &&
 			       obj.PersonDayOffCollection().Count == 0 && obj.PersonMeetingCollection().Count == 0;
 		}
 	}

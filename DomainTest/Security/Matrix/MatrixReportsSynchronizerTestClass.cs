@@ -84,17 +84,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
         /// <summary>
         /// Makes the base class method testable.
         /// </summary>
-        /// <param name="matrixReports">The matrix reports.</param>
-        /// <param name="functions">The functions.</param>
-        /// <returns></returns>
-        public IEnumerable<MatrixReportInfo> NewMatrixReports(IEnumerable<MatrixReportInfo> matrixReports, IEnumerable<IApplicationFunction> functions)
-        {
-            return base.AddedMatrixReports(matrixReports, functions);
-        }
-
-        /// <summary>
-        /// Makes the base class method testable.
-        /// </summary>
         /// <param name="functions">The functions.</param>
         /// <param name="matrixReports">The matrix reports.</param>
         /// <returns></returns>

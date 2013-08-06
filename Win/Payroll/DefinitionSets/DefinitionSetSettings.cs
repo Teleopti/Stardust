@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         private IExplorerPresenter _explorerPresenter;
         private UserControl _definitionSetView;
         private UserControl _visualizeView;
-        private const ClipboardOperation ClipboardAction = ClipboardOperation.Copy;
         private UserControl _multiplicatorDefinitionView;
 
         public DefinitionSetSettings()
@@ -38,32 +37,10 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             get { return _explorerPresenter;}
         }
 
-        public ClipboardOperation ClipboardActionType
-        {
-            get{ return ClipboardAction; }
-        }
-
-        public void SetSelectedView(PayrollViewType view)
-        {
-            //_currentView = view;
-        }
-
-        public void SetClipboardControlState(ClipboardOperation action, bool status)
-        {
-          
-        }
-
         public float GetWidthOfVisualizeControlContainer()
         {
             float panelWidth = splitContainerBottom.Panel2.Width;
             return panelWidth;
-        }
-
-        public void Refresh(PayrollViewType view)
-        {
-            if (_explorerPresenter == null)
-                return;
-            GetCommonBehaviorInstance(view).RefreshView();
         }
 
         public void RefreshSelectedViews()
@@ -74,11 +51,6 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             {
                 behavior.Reload();
             }
-        }
-
-        public bool CheckForDelete()
-        {
-           throw new NotImplementedException();
         }
 
         public void InitializeDialogControl()

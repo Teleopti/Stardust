@@ -987,4 +987,34 @@
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Date À (horaires débutant):</value>
   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>La connection à la base de données a expiré, essayé de limiter vos conditions de recherche.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Remplies</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Remplissage (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Doit avoir</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Non Remplies</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Disponibilité Par Agent</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Jours Disponibles</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Temps Disponible</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Jours Planifiés</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilisation</value>
+  </data>
 </root>

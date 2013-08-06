@@ -85,28 +85,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             CellModels.Add("TimeCell", timeSpanLongHourMinutesStaticCellModel());
             CellModels.Add("TimeSpanCell", initializeCallTimeSpanCell());
             CellModels.Add("ReadOnlyPercentCell", initializeCallPercentReadOnlyCell());
-            CellModels.Add("PercentCellModel", initializeCallPercentReadOnlyPercentCell());
         }
 
         private GridCellModelBase timeSpanLongHourMinutesStaticCellModel()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallTimeSpanCell()
         {
-            return new TimeSpanLongHourMinutesStaticCellModel(Model);
+            return new TimeSpanDurationStaticCellModel(Model);
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
         	var cellModel = new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
-        	return cellModel;
-        }
-
-        private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
-        {
-        	var cellModel = new PercentFromPercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         	return cellModel;
         }
 
@@ -233,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridRow(_rowManager, "PercentCellModel", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+                gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
@@ -365,7 +358,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        //refresh grid
         public void RefreshGrid()
         {
             using (PerformanceOutput.ForOperation("Refreshing SkillDayGridControl"))
@@ -373,34 +365,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Refresh();
             }
         }
-
-        //refresh grid on selected dates
-        public void RefreshGrid(IList<DateOnly> localDates)
-        {
-            if (_rowManager==null || _rowManager.DataSource==null || _rowManager.DataSource.Count == 0) return;
-
-            using (PerformanceOutput.ForOperation("Refreshing SkillDayGridControl on dates"))
-            {
-                foreach(DateOnly date in localDates)
-                {
-                    RefreshRange(GridRangeInfo.Col(getColumnIndexFromDate(date)), true); 
-                }
-            }
-        }
-
-        //get colIndex from a date
-        private int getColumnIndexFromDate(DateTime localDate)
-        {
-            for (int i = 0; i < ColCount; i++)
-            {
-                if (_dates[i] == TimeZoneHelper.ConvertToUtc(localDate))
-                    return i + 1;
-            }
-            
-            return -1;
-        }
-
-		
 
 		public void GoToDate(DateTime theDate)
         {

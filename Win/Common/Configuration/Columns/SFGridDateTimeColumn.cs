@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     public class SFGridDateTimeColumn<T> : SFGridColumnBase<T>
     {
         private readonly int _prefferedWidth;
-        public SFGridDateTimeColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        {
-            _prefferedWidth = 150;
-        }
 
         public SFGridDateTimeColumn(string bindingProperty, string headerText , int preferredWidth)
             :base(bindingProperty,headerText)
@@ -38,10 +33,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             e.Style.Format = format;
             
             
-            if (value != null)
+            if (value is DateTime)
             {
             	e.Style.Enabled = true;
-            	e.Style.CellValue = string.Equals(value.ToString(), "00:00:00") ? DateTime.Today.ToString() : value;
+            	e.Style.CellValue = ((DateTime)value==DateTime.MinValue) ? DateTime.Today : value;
             }
             else
             {

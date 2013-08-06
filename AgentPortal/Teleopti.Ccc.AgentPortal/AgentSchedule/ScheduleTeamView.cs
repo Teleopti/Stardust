@@ -262,7 +262,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             try
             {
             	LoadTeams();
-                Reload(FilterPeopleForShiftTrade);
+
+                var oldSelectedItem = comboSiteAndTeam.SelectedItem as GroupDetailModel;
+                reloadGroups(oldSelectedItem!=null ? (Guid?)oldSelectedItem.Id : null);
             }
             finally
             {
@@ -324,7 +326,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			{
 				if (groupPageDto.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
 				{
-					groupPageDto.PageName = LanguageResourceHelper.Translate(groupPageDto.PageName);
+					groupPageDto.PageName = LanguageResourceHelper.Translate(groupPageDto.PageName).Replace("\r\n", " ");
 				}
 				if (groupPageDto.Id==PageMain)
 				{
@@ -550,17 +552,20 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             Reload(FilterPeopleForShiftTrade);
             Cursor = Cursors.Default;
         }
-        private void populateSiteTeamCombo(IList<GroupDetailModel> teams)
+
+        private void populateSiteTeamCombo(IList<GroupDetailModel> teams, Guid? preselectedGroupdId)
         {
+            comboSiteAndTeam.SelectedIndexChanged -= comboSiteAndTeam_SelectedIndexChanged;
 			comboSiteAndTeam.DataSource = teams;
 			comboSiteAndTeam.DisplayMember = "DisplayText";
+            comboSiteAndTeam.SelectedIndexChanged += comboSiteAndTeam_SelectedIndexChanged;
             comboSiteAndTeam.SelectedItem = null;
 
-            if (_loggedOnPersonTeam != null)
+            if (preselectedGroupdId.HasValue)
             {
             	foreach (var groupDetailModel in teams)
             	{
-            		if (_loggedOnPersonTeam.Id == groupDetailModel.Id)
+            		if (preselectedGroupdId.Value == groupDetailModel.Id)
             		{
 						comboSiteAndTeam.SelectedItem = groupDetailModel;
 						break;
@@ -581,34 +586,42 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     	}
 
     	private void comboBoxAdvGroup_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			var dataSourceItems = new List<GroupDetailModel>();
-			var selectedItem = ((GroupPageDto) comboBoxAdvGroup.SelectedItem);
+    	{
+            reloadGroups(_loggedOnPersonTeam != null ? _loggedOnPersonTeam.Id : null);
+    	}
 
-			var groups = SdkServiceHelper.OrganizationService.GroupPageGroupsByQuery(new GetGroupsForGroupPageAtDateQueryDto
-			                                                                         	{
-			                                                                         		PageId = selectedItem.Id.GetValueOrDefault(),
-			                                                                         		QueryDate =
-			                                                                         			new DateOnlyDto
-			                                                                         				{
-			                                                                         					DateTime = _startDateForTeamView,
-			                                                                         				}
-			                                                                         	});
+        private void reloadGroups(Guid? preselectedGroupId)
+        {
+            var dataSourceItems = new List<GroupDetailModel>();
+            var selectedItem = ((GroupPageDto) comboBoxAdvGroup.SelectedItem);
+
+            var groups = SdkServiceHelper.OrganizationService.GroupPageGroupsByQuery(new GetGroupsForGroupPageAtDateQueryDto
+                {
+                    PageId = selectedItem.Id.GetValueOrDefault(),
+                    QueryDate =
+                        new DateOnlyDto
+                            {
+                                DateTime = _startDateForTeamView,
+                            }
+                });
             foreach (var groupPageGroupDto in groups)
-			{
-				dataSourceItems.Add(new GroupDetailModel
-				                    	{
-				                    		DisplayText = groupPageGroupDto.GroupName.StartsWith("xx",StringComparison.OrdinalIgnoreCase) ? LanguageResourceHelper.Translate(groupPageGroupDto.GroupName) : groupPageGroupDto.GroupName,
-				                    		Id = groupPageGroupDto.Id.GetValueOrDefault(),
-				                    		Object = groupPageGroupDto
-				                    	});
-			}
-			if (selectedItem.Id == PageMain)
-			{
-				dataSourceItems.Insert(0, new GroupDetailModel {DisplayText = Resources.All, Id = _teamAll, Object = null});
-			}
-			populateSiteTeamCombo(dataSourceItems);
-		}
+            {
+                dataSourceItems.Add(new GroupDetailModel
+                    {
+                        DisplayText =
+                            groupPageGroupDto.GroupName.StartsWith("xx", StringComparison.OrdinalIgnoreCase)
+                                ? LanguageResourceHelper.Translate(groupPageGroupDto.GroupName)
+                                : groupPageGroupDto.GroupName,
+                        Id = groupPageGroupDto.Id.GetValueOrDefault(),
+                        Object = groupPageGroupDto
+                    });
+            }
+            if (selectedItem.Id == PageMain)
+            {
+                dataSourceItems.Insert(0, new GroupDetailModel {DisplayText = Resources.All, Id = _teamAll, Object = null});
+            }
+            populateSiteTeamCombo(dataSourceItems, preselectedGroupId);
+        }
 
         private void panelBetweenRibbonAndGridRightResize(object sender, EventArgs e)
         {

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void VerifyEmptyPersonAssignmentCollection()
 		{
-			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
+			_scheduleDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
 				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
 			using (_mocks.Record()) {}
 			using (_mocks.Playback())
@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IPerson person = PersonFactory.CreatePerson();
 			IActivity activity = _mocks.StrictMock<IActivity>();
 
-			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
+			_scheduleDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
 				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
 			_scheduleDay.Stub(x=>x.Person)
 				.Return(person);
-			personAssignment.Stub(x=>x.PersonalLayers)
+			personAssignment.Stub(x=>x.PersonalLayers())
 				.Return(new []{new PersonalShiftLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()) });
 
 

@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 				scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(_scenario).Repeat.Any();
             _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
-            _mockRepository.StrictMock<IAuthorizationService>();
 			_target = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(scenarioRepository), _scheduleRepository);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
@@ -72,8 +71,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 AtLeastOnce();
             Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart2).Repeat.
                 AtLeastOnce();
-            Expect.Call(_schedulePart1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment1 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment1 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 

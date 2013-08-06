@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
-using log4net;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {
@@ -78,15 +77,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _businessUnitId && p.PersonId == _personId), Is.EqualTo(1));
 			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _secondBusinessUnit && p.PersonId == _personId), Is.EqualTo(1));
 			_mock.VerifyAll();
-		}
-
-		public class PersonResolverForTest : PersonResolver
-		{
-			public PersonResolverForTest(IDatabaseConnectionFactory databaseConnectionFactory,
-			                             string connectionString, ILog loggingSvc)
-				: base(databaseConnectionFactory, connectionString, loggingSvc)
-			{
-			}
 		}
 	}
 }

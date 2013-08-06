@@ -542,29 +542,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        protected void FormatCell(GridStyleInfo gridStyleInfo, ITaskOwner taskOwnerDay)
-        {
-            if (taskOwnerDay != null)
-            {
-                if (!taskOwnerDay.OpenForWork.IsOpen)
-                {
-                    gridStyleInfo.TextColor = ColorFontClosedCell;
-                    gridStyleInfo.Font.FontStyle = FontClosedCell;
-                    gridStyleInfo.Enabled = false;
-                }
-                else
-                {
-                    gridStyleInfo.Enabled = true;
-                    gridStyleInfo.BackColor = ColorEditableCell;
-				}
-            }
-            else //Template editing...
-            {
-                gridStyleInfo.Enabled = true;
-                gridStyleInfo.BackColor = ColorEditableCell;
-            }
-        }
-
         protected void ResetGridCoveredRanges()
         {
             ResetVolatileData();

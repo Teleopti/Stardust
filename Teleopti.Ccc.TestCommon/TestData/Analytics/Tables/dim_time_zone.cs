@@ -48,19 +48,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["to_be_deleted"] = false;
 			dataTable.Rows.Add(row);
 		}
-
-		public static TimeZoneInfo FindTimeZoneById(
-			this IEnumerable<DataRow> dataTable,
-			int time_zone_id)
-		{
-			var time_zone_code =
-				(
-					from t in dataTable
-					where (int) t["time_zone_id"] == time_zone_id
-					select (string) t["time_zone_code"]
-				).Single();
-			return TimeZoneInfo.FindSystemTimeZoneById(time_zone_code);
-		}
-
 	}
 }

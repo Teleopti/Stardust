@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                     row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
                     row["insert_date"] = _insertDateTime;
                     row["update_date"] = _insertDateTime;
-                    row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(scorecard);
+					row["datasource_update_date"] = scorecard.UpdatedOn;
 
                     table.Rows.Add(row);
                 }

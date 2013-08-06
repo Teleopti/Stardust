@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
                 layerDetails.Summary.Should().Be.EqualTo("8:00");
                 layerDetails.Title.Should().Be.EqualTo("Phone");
-                layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00");
+                layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00 +1");
                 layerDetails.Meeting.Should().Be.Null();
                 layerDetails.Color.Should().Be.EqualTo("0,128,0");
                 layerDetails.StartPositionPercentage.Should().Be.EqualTo((visualShiftStart - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);

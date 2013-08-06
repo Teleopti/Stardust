@@ -166,7 +166,6 @@
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
-    <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
     <Compile Include="Denormalizer\LegacyMessagesConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
@@ -182,8 +181,6 @@
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
-    <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
@@ -240,7 +237,6 @@
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="DataSourceFactory.cs" />
-    <Compile Include="Messages\CustomErrorMessage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MessageBrokerSendEnabler.cs" />
     <Compile Include="RaptorDomainMessageModule.cs" />

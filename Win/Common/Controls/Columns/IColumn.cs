@@ -16,7 +16,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
         void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems);
         void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems);
-        void CellsChanging(GridCellsChangingEventArgs e);
-        
     }
 }

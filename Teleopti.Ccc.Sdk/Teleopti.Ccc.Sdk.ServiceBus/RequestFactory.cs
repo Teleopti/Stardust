@@ -1,7 +1,6 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -24,11 +23,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			return new RequestApprovalServiceScheduler(_schedulingResultStateHolder.Schedules, 
 													   scenario, _swapAndModifyService,  allNewRules, new EmptyScheduleDayChangeCallback());
-		}
-
-		public IPersonAccountProjectionService GetPersonAccountProjectionService(IAccount account, IScheduleRange range)
-		{
-			return new PersonAccountProjectionService(account, range);
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker()

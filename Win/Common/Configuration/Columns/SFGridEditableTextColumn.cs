@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             _maxLength = maxLength;
         }
 
-        
-
         public override int PreferredWidth
         {
             get { return 100; }

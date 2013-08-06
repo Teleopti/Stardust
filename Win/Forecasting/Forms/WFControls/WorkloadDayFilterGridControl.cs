@@ -334,17 +334,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			return keyValueCollection;
 		}
 
-		private GridCellModelBase GetCellModelType()
-		{
-			for(int i = 0; i < _gridRows.Count; i++)
-			{
-				var row = _gridRows[i] as TaskOwnerDayFilterGridRow;
-				if (row != null && row.RowHeaderText.Equals(GridRowShowInChart))
-					return Model[i, ColHeaderCount + 1].CellModel;
-			}
-			return null;
-		}
-
 		private string GetColumnHeaderName(GridRangeInfo gridRangeInfo)
 		{
 			//the first column is Template column
@@ -389,10 +378,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			var handler = FilterDataToChart;
 			if (handler != null)
 			{
-				var removeColumn = false;
-				if (_excludedColumns.Contains(gridRangeInfo.Left)) removeColumn = true;
-				var eventArgs = new FilterDataToChartEventArgs(
-					GetCellModelType(),
+			    bool removeColumn = _excludedColumns.Contains(gridRangeInfo.Left);
+			    var eventArgs = new FilterDataToChartEventArgs(
 					GetColumnHeaderName(gridRangeInfo),
 					gridRangeInfo.Left, GetColumnDataForChart(gridRangeInfo), removeColumn);
 				handler.Invoke(this, eventArgs);
@@ -450,11 +437,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		public FilterDataSelectionChangedEventArgs(string selectedRow)
 		{
 			_selectedRow = selectedRow;
-		}
-
-		public string SelectedRow
-		{
-			get { return _selectedRow; }
 		}
 	}
 }

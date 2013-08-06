@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 																				dateToCheck.AddDays(3)));
 			foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
+                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
                 {
                     if (ass.ShiftCategory != null)
                     {

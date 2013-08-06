@@ -17,7 +17,6 @@ using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private readonly List<ColumnBase<PersonGeneralModel>> _gridColumns = new List<ColumnBase<PersonGeneralModel>>();
 		private bool _hasRights;
-		private const int basicGridColCount = 16;
 
 		private ColumnBase<PersonGeneralModel> _firstNameColumn;
 		private ColumnBase<PersonGeneralModel> _lastNameColumn;
@@ -66,6 +64,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ToolStripMenuItem _timeZoneMenuItem;
 
 		private IList<IPerson> _currentSelectedPersons;
+
 
 		public GeneralGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder)
 			: base(grid, filteredPeopleHolder)
@@ -216,7 +215,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 _applicationUserColumn = new EditableTextColumn<PersonGeneralModel>("ApplicationLogOnName", 50, Resources.ApplicationLogInName);
 			else 
                 _applicationUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("ApplicationLogOnName", Resources.ApplicationLogInName);
-            _applicationUserColumn.CellDisplayChanged += columnCellDisplayChanged;
+			_applicationUserColumn.CellDisplayChanged += applicationUsercolumnCellDisplayChanged;
 			_applicationUserColumn.CellChanged += applicationLogOnNameColumnCellChanged;
 			_gridColumns.Add(_applicationUserColumn);
 
@@ -227,14 +226,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
             if (_hasRights)
             {
-                var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles);
-			    column.SetPreferredWidth(200);
+                var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
 			    _roleColumn = column;
 			}
             else
             {
-                var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles);
-                column.SetPreferredWidth(200);
+                var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
                 _roleColumn = column;
             }
 
@@ -299,6 +296,25 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
+		private static void applicationUsercolumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonGeneralModel> e)
+		{
+			if (e.DataItem.CanBold)
+			{
+				e.QueryCellInfoEventArg.Style.Font.Bold = true;
+			}
+
+			if (!e.DataItem.logonDataCanBeChanged())
+			{
+				e.QueryCellInfoEventArg.Style.ReadOnly = true;
+				e.QueryCellInfoEventArg.Style.BackColor = Color.Silver;	
+			}
+			else
+			{
+				e.QueryCellInfoEventArg.Style.ReadOnly = false;
+				e.QueryCellInfoEventArg.Style.ResetBackColor();	
+			}
+		}
+
 		private static void windowsLogOnNameColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonGeneralModel> e)
 		{
 			if (e.DataItem.CanBold)
@@ -317,18 +333,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 				if (string.IsNullOrEmpty(e.DataItem.WindowsLogOnName)) e.QueryCellInfoEventArg.Style.BackColor = Color.Red;
 				else e.QueryCellInfoEventArg.Style.ResetBackColor();
-			}
-		}
-
-		void GeneralGridView_OnEventMessageHandlerChanged(object sender, EventMessageArgs e)
-		{
-			if (Grid.InvokeRequired)
-			{
-				Grid.BeginInvoke(new Action<object, EventMessageArgs>(GeneralGridView_OnEventMessageHandlerChanged), sender, e);
-			}
-			else
-			{
-				RefreshOnOptionalColumnChange();
 			}
 		}
 
@@ -691,37 +695,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
 		}
 
-		public void RefreshOnOptionalColumnChange()
-		{
-			//Grid.Update = Syncfusion.Windows.Forms.BeginUpdateOptions.None;
-			Grid.Visible = false;
-			int gridColCount = _gridColumns.Count;
-			if (_gridColumns.Count > basicGridColCount)
-			{
-				for (int i = gridColCount - 2; i > basicGridColCount - 1; i--)
-				{
-					_gridColumns.RemoveAt(i);
-				}
-			}
-			//PeopleWorksheet.StateHolder.LoadAllOptionalColumns();
-			FilteredPeopleHolder.LoadOptionalColumnsGridData();
-
-			foreach (IOptionalColumn optCol in FilteredPeopleHolder.OptionalColumnCollection)
-			{
-				var newColumn = new OptionalColumn<PersonGeneralModel>(optCol.Name, 100, optCol.Name);
-				newColumn.CellChanged += columnCellChanged;
-				newColumn.CellDisplayChanged += columnCellDisplayChanged;
-				_gridColumns.Insert(_gridColumns.Count - 1, newColumn);
-			}
-
-			ColCount = _gridColumns.Count;
-			Grid.ColCount = ColCount - 1;
-			Grid.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-			Grid.Visible = true;
-			Grid.Invalidate();
-
-		}
-
 		public void ConfigureGridForDynamicColumns()
 		{
 			IList<IOptionalColumn> optionalColumnCollection = FilteredPeopleHolder.OptionalColumnCollection;
@@ -732,6 +705,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				optionalColumn.CellChanged += columnCellChanged;
 				optionalColumn.CellDisplayChanged += columnCellDisplayChanged;
 				_gridColumns.Add(optionalColumn);
+			}
+		}
+
+		public void ResetChangeLogonDataCheck()
+		{
+			foreach (var model in FilteredPeopleHolder.FilteredPeopleGridData)
+			{
+				model.ResetLogonDataCheck();	
 			}
 		}
 	}

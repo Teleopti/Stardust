@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -71,11 +70,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using (mocks.Record())
             {
                 Expect.Call(_person.Id)
-                    .Return(GuidFactory.GetGuid())
+                    .Return(Guid.NewGuid())
                     .Repeat.Any();
 
                 Expect.Call(_period.Id)
-                    .Return(GuidFactory.GetGuid())
+                    .Return(Guid.NewGuid())
                     .Repeat.Any();
 
                 Expect.Call(_person.Name)

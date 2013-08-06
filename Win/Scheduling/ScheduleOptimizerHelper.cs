@@ -751,7 +751,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
 
-            var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
+            var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // to make sure we are in legal state before we can do day off optimization
@@ -775,7 +775,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 														 rollbackService);
 			}
 
-            e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
+            e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // Schedule White Spots after back to legal state
@@ -825,7 +825,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
         {
-            var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+            var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
             resourceOptimizerPersonOptimized(this, e);
 
             rollbackService.ClearModificationCollection();

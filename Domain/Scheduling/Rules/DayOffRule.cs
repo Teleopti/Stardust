@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             IPersonAssignment returnVal = null;
             foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (var assignment in scheduleDay.PersonAssignmentCollection())
+                foreach (var assignment in scheduleDay.PersonAssignmentCollectionDoNotUse())
                 {
                     if(assignment.Period.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
                         continue;
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (var assignment in scheduleDay.PersonAssignmentCollection())
+                foreach (var assignment in scheduleDay.PersonAssignmentCollectionDoNotUse())
                 {
                     if (assignment.Period.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
                         continue;

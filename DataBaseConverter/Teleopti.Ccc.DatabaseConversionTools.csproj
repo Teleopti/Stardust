@@ -138,7 +138,6 @@
     <Compile Include="CollectionConverter\EmployeeOptionalColumnConverter.cs" />
     <Compile Include="CollectionConverter\ExternalLogOnConverter.cs" />
     <Compile Include="CollectionConverter\GroupingConverter.cs" />
-    <Compile Include="CollectionConverter\OvertimeAvailabilityConverter.cs" />
     <Compile Include="CollectionConverter\PersonAvailabilityConverter.cs" />
     <Compile Include="CollectionConverter\PersonRotationConverter.cs" />
     <Compile Include="CollectionConverter\QueueSourceConverter.cs" />

@@ -1,3 +1,5 @@
+Import-Module Carbon
+
 function Load-SnapIn {
     param(
         $ModuleName
@@ -204,8 +206,11 @@ function UnZip-File(){
 } 
 
 function Copy-ZippedMsi{
+    param(
+        $workingFolder
+    )
     $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder='c:\temp'
+    $destFolder=$workingFolder
 
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
@@ -215,14 +220,34 @@ function Copy-ZippedMsi{
     return @("$destFolder\$zipFileName")
 }
 
+function destroy-WorkingFolder{
+    param(
+        $workingFolder
+    )
+	if (Test-Path "$workingFolder") {
+		remove-item "$workingFolder\*" -recurse
+		remove-item "$workingFolder\"
+	}
+}
+
+function create-WorkingFolder{
+    param(
+        $workingFolder
+    )
+	if (!(Test-Path "$workingFolder")) {
+		& mkdir "$workingFolder"
+	}
+}
 
 function Check-HttpStatus {     
 	param(
-	[string] $url
+	[string] $url,
+    [System.Net.NetworkCredential]$credentials = $null
 	)
 
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
-	$req.Method = "HEAD"
+    $req.Credentials = $credentials;
+	$req.Method = "GET"
 
 	[net.httpWebResponse] $res = $req.getResponse()
 
@@ -254,8 +279,11 @@ function Install-TeleoptiCCCServer
 }
 
 function Copy-ZippedMsi{
+    param(
+        $workingFolder
+    )
     $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder='c:\temp'
+    $destFolder=$workingFolder
 
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
@@ -309,7 +337,6 @@ function Create-LocalGroup
 
 function Stop-TeleoptiCCC
 {
-    $dir = Split-Path $MyInvocation.ScriptName
     $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StopSystem.bat"
     
     [string]$ErrorMessage = "Stop system failed!"
@@ -321,7 +348,6 @@ function Stop-TeleoptiCCC
 
 function Start-TeleoptiCCC
 {
-    $dir = Split-Path $MyInvocation.ScriptName
     $batchFile = "C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\StartSystem.bat"
     
     [string]$ErrorMessage = "Start system failed!"
@@ -331,11 +357,10 @@ function Start-TeleoptiCCC
     }
 }
 
-
 function Check-ServiceIsRunning{
 	param(
 		$ServiceName
-		)
+ 	)
     $arrService = Get-Service -Name $ServiceName
     if ($arrService.Status -eq "Running") {
     	return $True
@@ -343,4 +368,32 @@ function Check-ServiceIsRunning{
     else {
 	return $False
     }
+}
+
+function Start-MyService{
+	param($ServiceName)
+	$arrService = Get-Service -Name $ServiceName
+	if ($arrService.Status -ne "Running"){
+		Start-Service $ServiceName
+	}
+}
+
+function Stop-MyService{
+	param($ServiceName)
+	$arrService = Get-Service -Name $ServiceName
+	if ($arrService.Status -ne "Stopped"){
+		Stop-Service $ServiceName
+	}
+}
+
+function stop-AppPool{
+    param($PoolName)
+            Invoke-AppCmd Stop Apppool "$PoolName"
+			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:false
+}
+
+function start-AppPool{
+    param($PoolName)
+            Invoke-AppCmd Start Apppool "$PoolName"
+			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:true
 }

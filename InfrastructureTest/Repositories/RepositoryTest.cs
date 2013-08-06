@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// Will only be run by types with BelongsToBusinessUnit = true
         /// </remarks>
         [Test]
-        public void VerifyIncorrectBusinessUnitIsNotReadable()
+        public virtual void VerifyIncorrectBusinessUnitIsNotReadable()
         {
             T correct = CreateAggregateWithCorrectBusinessUnit();
             IBelongsToBusinessUnit buRef = correct as IBelongsToBusinessUnit;
@@ -167,11 +167,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanLoadAllEntities()
         {
             T simpleEntity1 = CreateAggregateWithCorrectBusinessUnit();
-            T simpleEntity2 = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(simpleEntity1);
-            PersistAndRemoveFromUnitOfWork(simpleEntity2);
             ICollection<T> coll = rep.LoadAll();
-            Assert.AreEqual(2, coll.Count);
+            Assert.AreEqual(1, coll.Count);
         }
 
 
@@ -181,10 +179,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCountDatabaseEntities()
         {
-            T obj2 = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(simpleEntity);
-            PersistAndRemoveFromUnitOfWork(obj2);
-            Assert.AreEqual(2, rep.CountAllEntities());
+            Assert.AreEqual(1, rep.CountAllEntities());
         }
 
         /// <summary>

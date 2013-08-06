@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
     public static class ScorecardFactory
     {
-        public static IList<IScorecard> CreateScorecardCollection()
+		public static IList<IScorecard> CreateScorecardCollection(DateTime updatedOnDateTime)
         {
             IList<IScorecard> retList = new List<IScorecard>();
             IScorecardPeriod scorecardPeriodWeek = new ScorecardPeriod(1);
@@ -17,6 +17,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IScorecard scorecard1 = new Scorecard();
             scorecard1.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scorecard1, DateTime.Now);
+			RaptorTransformerHelper.SetUpdatedOn(scorecard1, updatedOnDateTime);
             scorecard1.Name = "scorecard week";
             scorecard1.Period = scorecardPeriodWeek;
             scorecard1.AddKpi(CreateKpi());
@@ -25,6 +26,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IScorecard scorecard2 = new Scorecard();
             scorecard2.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scorecard2, DateTime.Now);
+			RaptorTransformerHelper.SetUpdatedOn(scorecard2, updatedOnDateTime);
             scorecard2.Name = "scorecard quarter";
             scorecard2.Period = scorecardPeriodQuarter;
             scorecard2.AddKpi(CreateKpi());

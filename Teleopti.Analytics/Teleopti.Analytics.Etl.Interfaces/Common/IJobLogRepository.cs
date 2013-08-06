@@ -9,6 +9,5 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
 		int SaveLogPre();
 		void SaveLogPost(IEtlJobLog etlJobLogItem, IJobResult jobResult);
 		void SaveLogStepPost(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult);
-		void AddJobStep(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult);
 	}
 }

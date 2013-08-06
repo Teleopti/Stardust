@@ -304,8 +304,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.tooltipText = ko.computed(function () {
 			//not nice! rewrite tooltips in the future!
+			var text = '';
 			if (self.hasMeeting()) {
-				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt><dt>{5} {6}</dt></dl></div>'
+				text =  '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt><dt>{5} {6}</dt></dl></div>'
 					.format(self.timeSpan(),
 							parent.userTexts.subjectColon,
 							$('<div/>').text(self.meetingTitle()).html(),
@@ -314,8 +315,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 							parent.userTexts.descriptionColon,
 							$('<div/>').text(self.meetingDescription()).html());
 			} else {
-				return self.timeSpan();
+				text = self.timeSpan();
 			}
+
+			return '<div>{0}</div>{1}'.format(self.title(), text);
 		});
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);

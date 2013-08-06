@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests.FakeData;
 using Teleopti.Interfaces.Domain;
 
 
@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
     {
         private TeamDto         _target;
         private Description     _description;
+        private Guid teamId = Guid.NewGuid();
 
         [SetUp]
         public void Setup()
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 
                 Expect.On(team)
                     .Call(team.Id)
-                    .Return(GuidFactory.GetGuid());
+                    .Return(teamId);
 
                 Expect.On(team)
                     .Call(team.SiteAndTeam)
@@ -42,18 +43,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         public void VerifyConstructor()
         {
             Assert.AreEqual(_description.Name , _target.Description);
-            Assert.AreEqual(GuidFactory.GetGuid(), _target.Id);
+            Assert.AreEqual(teamId, _target.Id);
         }
 
         [Test]
         public void VerifyCanSetProperties()
         {
+            var id = teamId;
             _target.Description = "test";
             Assert.AreEqual("test", _target.Description);
-            _target.Id = GuidFactory.GetGuid();
+            _target.Id = id;
 	        _target.SiteAndTeam = "ngt";
-            Assert.AreEqual(GuidFactory.GetGuid(), _target.Id);
-            Assert.AreEqual(GuidFactory.GetGuid(), _target.Id);
+            Assert.AreEqual(id, _target.Id);
             Assert.IsFalse(string.IsNullOrEmpty(_target.SiteAndTeam));
         }
     }

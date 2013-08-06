@@ -10,10 +10,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {
     public class SFGridRequestStatusColumn<T> : SFGridColumnBase<T>
     {
-        public SFGridRequestStatusColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        { }
-
         public SFGridRequestStatusColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)
         { }

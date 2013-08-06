@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void DrawAssignmentFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            IPersonAssignment pa = scheduleRange.AssignmentHighZOrder();
+            IPersonAssignment pa = scheduleRange.PersonAssignment();
 
             if (pa != null)
             {

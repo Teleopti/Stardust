@@ -19,7 +19,6 @@ using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
@@ -27,9 +26,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	{
 		private Rectangle cellButtonRect;
 
-		public GridConstructor TestGrid { get; set; }
-
-		private ToolStripMenuItem _addNewPersonPeriodMenuItem;
+	    private ToolStripMenuItem _addNewPersonPeriodMenuItem;
 		private ToolStripMenuItem _copySpecialPersonPeriodMenuItem;
 		private ToolStripMenuItem _deletePersonPeriodMenuItem;
 		private ToolStripMenuItem _pasteSpecialPersonPeriodMenuItem;
@@ -1510,7 +1507,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		internal override void PasteSpecial<T>(object sender, T eventArgs)
+		internal void PasteSpecial<T>(object sender, T eventArgs)
 		{
 			GridRangeInfoList gridRangeInfoList = Grid.Model.Selections.Ranges;
 
@@ -1553,7 +1550,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.Refresh();
 		}
 
-		internal override void CopySpecial<T>(object sender, T eventArgs)
+		internal void CopySpecial<T>(object sender, T eventArgs)
 		{
 			if (Grid.Model.CurrentCellInfo != null)
 			{

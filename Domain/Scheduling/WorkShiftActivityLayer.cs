@@ -20,12 +20,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public WorkShiftActivityLayer(IActivity activity, DateTimePeriod period) : base(activity, period)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkShiftActivityLayer"/> class.
-        /// </summary>
-        protected WorkShiftActivityLayer()
-        {
-        }
     }
 }

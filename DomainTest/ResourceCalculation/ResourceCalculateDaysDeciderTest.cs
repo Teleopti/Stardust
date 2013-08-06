@@ -61,13 +61,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(_dayWithShift.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             Expect.Call(_dayWithShift.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_dayWithShift.AssignmentHighZOrder()).Return(dayAss).Repeat.Any();
+            Expect.Call(_dayWithShift.PersonAssignment()).Return(dayAss).Repeat.Any();
             Expect.Call(_dayWithShift.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, tz)).
                 Repeat.Any();
 
             Expect.Call(_dayWithNightShift.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             Expect.Call(_dayWithNightShift.IsScheduled()).Return(true).Repeat.Any();
-            Expect.Call(_dayWithNightShift.AssignmentHighZOrder()).Return(nightAss).Repeat.Any();
+            Expect.Call(_dayWithNightShift.PersonAssignment()).Return(nightAss).Repeat.Any();
             Expect.Call(_dayWithNightShift.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, tz)).
                 Repeat.Any();
 

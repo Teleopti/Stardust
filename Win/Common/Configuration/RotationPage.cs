@@ -87,13 +87,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitMessageBroker();
 
 			// Set HourMinutes to CellModels.
-			gridControlRotation.CellModels.Add(
-				"HourMinutesEmpty",
-				new TimeSpanHourMinuteCanBeEmptyCellModel(gridControlRotation.Model));
+		    gridControlRotation.CellModels.Add(
+		        "HourMinutesEmpty",
+		        new TimeSpanDurationCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
-			gridControlRotation.CellModels.Add(
-				"TimeOfDayCell",
-				new TimeSpanTimeOfDayCellModel(gridControlRotation.Model));
+		    gridControlRotation.CellModels.Add(
+		        "TimeOfDayCell",
+		        new TimeSpanTimeOfDayCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
 			InitGrid();
 			CreateColumns();
@@ -348,7 +348,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void ChangeToOverMidnight()
 		{
-			//bool lateStartSelected = _gridHelper.HasColumnSelected(_lateStartTimeColumn);
 			var earlyEndSelected = _gridHelper.HasColumnSelected(_earlyEndTimeColumn);
 			var lateEndSelected = _gridHelper.HasColumnSelected(_lateEndTimeColumn);
 
@@ -356,21 +355,32 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			ICollection<RotationRestrictionView> selectedList = _gridHelper.FindSelectedItems();
 			foreach (var view in selectedList)
 			{
-				string overnightTime;
-				if (earlyEndSelected)
+			    if (lateEndSelected)
+			    {
+			        if (lateEndTimeWillBeValid(view))
+			            view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
+			    }
+			    if (earlyEndSelected)
 				{
-					overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.EarlyEndTime);
-					view.EarlyEndTime = overnightTime;
+                    if (earlyStartTimeWillBeValid(view))
+                        view.EarlyEndTime = view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1));
 				}
-				if (!lateEndSelected) continue;
-				overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.LateEndTime);
-				view.LateEndTime = overnightTime;
 			}
 			// Refreshes the Grid.
 			RefreshRange(RangeCategory.TimeColumns);
 		}
 
-		private void RefreshRange(RangeCategory category)
+	    private static bool lateEndTimeWillBeValid(RotationRestrictionView view)
+	    {
+	        return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
+	    }
+
+	    private static bool earlyStartTimeWillBeValid(RotationRestrictionView view)
+	    {
+	        return view.EarlyEndTime.HasValue && view.EarlyEndTime.Value<TimeSpan.FromDays(1) && view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1)) <= view.LateEndTime.GetValueOrDefault(TimeSpan.FromDays(2));
+	    }
+
+	    private void RefreshRange(RangeCategory category)
 		{
 			var gridRange = _gridRangeDictionary[category];
 			foreach (var range in gridRange)
@@ -458,7 +468,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																									   UserTexts.Resources.ShiftCategory,
 																									   _shiftCategoryList,
 																									   "Description",
-																									   null,
 																									   typeof (
 																										   ShiftCategory
 																										   ));
@@ -467,7 +476,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_dayOffsColumn = new SFGridDropDownColumn<RotationRestrictionView, IDayOffTemplate>("DayOffTemplate",
 																								UserTexts.Resources.DayOff,
 																								_dayOffList,
-																								"Description", null,
+																								"Description", 
 																								typeof (DayOffTemplate));
 			_dayOffsColumn.QueryComboItems += DayOffsColumnQueryComboItems;
 			_gridColumns.Add(_dayOffsColumn);

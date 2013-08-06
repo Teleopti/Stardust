@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Dynamic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -13,9 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    /// <summary>
-    /// Helpe for request view
-    /// </summary>
     public class RequestPresenter : IRequestPresenter
     {
         private readonly IPersonRequestCheckAuthorization _authorization;
@@ -25,17 +20,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public RequestPresenter(IPersonRequestCheckAuthorization authorization)
         {
             _authorization = authorization;
-        }
-
-        /// <summary>
-        /// Sort list from specified expression
-        /// </summary>
-        /// <param name="adapterList"></param>
-        /// <param name="sortExpression"></param>
-        /// <returns></returns>
-        public static IList<PersonRequestViewModel> SortAdapters(IList<PersonRequestViewModel> adapterList, string sortExpression)
-        {
-            return adapterList.AsQueryable().OrderBy(sortExpression).ToList();
         }
 
         /// <summary>
@@ -305,7 +289,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var lstBusinessRuleResponse = Approve( _newBusinessRules);
             var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, _view, _overriddenBusinessRulesHolder);
             lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
-            if (lstBusinessRuleResponse.Count() == 0)
+            if (!lstBusinessRuleResponse.Any())
                 return true;
             // try again with overriden
             if (lstBusinessRuleResponseToOverride.Count > 0)

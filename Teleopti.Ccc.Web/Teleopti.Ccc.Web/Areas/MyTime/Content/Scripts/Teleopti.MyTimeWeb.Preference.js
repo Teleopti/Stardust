@@ -1,6 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.10.2.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
@@ -22,7 +22,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
-	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
 	var selectionViewModel = null;
@@ -84,11 +83,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				var templateToDelete = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == templateId; })[0];
 				addExtendedPreferenceFormViewModel.AvailableTemplates.remove(templateToDelete);
-				$("#Preference-template").selectbox(
-					{
-						refreshMenu: addExtendedPreferenceFormViewModel.AvailableTemplates()
-					});
-				_reset();
+			    addExtendedPreferenceFormViewModel.Reset();
 			}
 		});
 	}
@@ -97,6 +92,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		addExtendedPreferenceFormViewModel.ValidationError('');
 		delete preference.AvailableTemplates;
 		delete preference.SelectedTemplate;
+		delete preference.SelectedTemplateId;
 		var templateData = JSON.stringify(preference);
 
 		ajax.Ajax({
@@ -116,16 +112,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
 					return l.Text > r.Text ? 1 : -1;
 				});
-				var template = $("#Preference-template");
-				template.selectbox(
-					{
-						refreshMenu: addExtendedPreferenceFormViewModel.AvailableTemplates()
-					});
-				template.selectbox(
-					{
-						value: data.Value
-					});
-				addExtendedPreferenceFormViewModel.SelectedTemplate(data);
+				addExtendedPreferenceFormViewModel.SelectedTemplateId(data.Value);
 				addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(false);
 			}
 		});
@@ -169,116 +156,28 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
-		var template = $('#Preference-add-extended-form');
-	    
-		button.click(function (e) { e.preventDefault(); });
 
-		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax);
-		addExtendedTooltip = $('<div/>')
-			.qtip({
-				id: "add-extended",
-				content: {
-					text: template,
-					title: {
-						text: '&nbsp;',
-						button: 'Close'
-					}
-				},
-				position: {
-					target: button,
-					my: "left top",
-					at: "left bottom",
-					adjust: {
-						x: 11,
-						y: 0
-					}
-				},
-				show: {
-					target: button,
-					event: 'mousedown'
-				},
-				hide: {
-					target: button,
-					event: 'mousedown'
-				},
-				style: {
-					def: false,
-					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow preference-ui-tooltip',
-					tip: {
-						corner: "top left"
-					}
-				},
-				events: {
-					render: function () {
+	    var showMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true';
+		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax, showMeridian, _savePreferenceTemplate, _deletePreferenceTemplate, _setPreference, _isShiftCategorySelectedAsStandardPreference);
+		ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
+		_loadAvailableTemplates();
 
-						$('#Expend-Template').click(function () {
-						    addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
-						});
-						
-						$('#Template-save').click(function () {
-						    addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
-						});
-						
-						$('#Preference-extended-reset')
-							.click(function () {
-								_reset();
-							});
-						$('#Preference-extended-apply')
-							.click(function () {
-								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
-							});
-						$('#Preference-extended-save-template')
-							.click(function () {
-								_savePreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
-							});
-
-						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
-
-						$("#Preference-template")
-							.selectbox(
-								{
-									changed: function (event, ui) {
-										var selected = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == ui.item.value; })[0];
-										addExtendedPreferenceFormViewModel.SelectedTemplate(selected);
-									},
-									removeItem: function (event, ui) {
-									    $(this).mouseout();
-										_deletePreferenceTemplate(ui.value);
-									}
-								});
-
-						_loadAvailableTemplates();
-					}
-				}
-			});
+		button.click(function (e) {
+		    addExtendedPreferenceFormViewModel.ToggleAddPreferenceFormVisible();
+		    e.preventDefault();
+		});
 	    
 		button.removeAttr('disabled');
 	}
-
-	function _reset() {
-		addExtendedPreferenceFormViewModel.PreferenceId('');
-		addExtendedPreferenceFormViewModel.EarliestStartTime(undefined);
-		addExtendedPreferenceFormViewModel.LatestStartTime(undefined);
-		addExtendedPreferenceFormViewModel.EarliestEndTime(undefined);
-		addExtendedPreferenceFormViewModel.EarliestEndTimeNextDay(undefined);
-		addExtendedPreferenceFormViewModel.LatestEndTime(undefined);
-		addExtendedPreferenceFormViewModel.LatestEndTimeNextDay(undefined);
-		addExtendedPreferenceFormViewModel.MinimumWorkTime(undefined);
-		addExtendedPreferenceFormViewModel.MaximumWorkTime(undefined);
-		addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
-		addExtendedPreferenceFormViewModel.ValidationError(undefined);
-		addExtendedPreferenceFormViewModel.SelectedTemplate(undefined);
-		$("#Preference-template")
-			.selectbox({ value: '' });
-	};
-
+    
 	function _loadAvailableTemplates() {
 		ajax.Ajax({
 			url: "Preference/GetPreferenceTemplates",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				data = data || [];
+			    data = data || [];
+			    data.unshift({Text: '', Value: ''});
 				addExtendedPreferenceFormViewModel.AvailableTemplates(data);
 				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
 					return l.Text > r.Text ? 1 : -1;
@@ -287,10 +186,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
-
-	function _hideAddExtendedTooltip() {
-		addExtendedTooltip.qtip('toggle', false);
-	}
+    
+    function _isShiftCategorySelectedAsStandardPreference() {
+        return $('#Preference-Picker option:selected').data('preference-extended');
+    }
 
 	function _activateSelectable() {
 		$('#Preference-body-inner').calendarselectable();
@@ -529,10 +428,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initViewModels();
 		},
 		PreferencePartialDispose: function () {
-			_hideAddExtendedTooltip();
 			ajax.AbortAll();
 		    _cleanBindings();
-		}
+		},
+	    DeletePreferenceTemplate: function(templateId) {
+	        _deletePreferenceTemplate(templateId);
+	    }
 	};
 
 };

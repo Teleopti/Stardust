@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (var mainShiftLayer in mainShift.LayerCollection)
 				{
 					if (mainShiftLayer.Payload.AllowOverwrite) continue;
-					foreach (var personalLayer in personAssignment.PersonalLayers)
+					foreach (var personalLayer in personAssignment.PersonalLayers())
 					{
 						if (mainShiftLayer.Period.Intersect(personalLayer.Period)) return false;
 					}
 				}
 
-				foreach (var personalLayer in personAssignment.PersonalLayers)
+				foreach (var personalLayer in personAssignment.PersonalLayers())
 				{
 					var layer = new EditorActivityLayer(personalLayer.Payload, personalLayer.Period);
 					clone.LayerCollection.Add(layer);

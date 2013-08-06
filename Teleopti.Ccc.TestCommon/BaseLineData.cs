@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -51,30 +49,11 @@ namespace Teleopti.Ccc.TestCommon
             GroupPerson = groupPersonFactory.CreateGroupPerson(PersonList, BaseDateOnly, "GroupPerson", new Guid());
 
             SampleSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
-
             SamplePersonSkill = PersonSkillFactory.CreatePersonSkillWithSamePercent(SampleSkill);
-
             SchedulingOptions = new SchedulingOptions();
-
             SampleRuleSetBag = new RuleSetBag();
-            
             GroupPageOptions = new GroupPageOptions(PersonList );
-
-           
-
             Scenario  = new Scenario("test");
-
         }
-
-
-        public IGroupPerson GroupPersonOnDate(DateOnly dateOnly)
-        {
-            var groupPersonFactory = new GroupPersonFactory();
-            GroupPerson = groupPersonFactory.CreateGroupPerson(PersonList, dateOnly, "GroupPerson", new Guid());
-            return GroupPerson;
-        }
-
-
-
     }
 }

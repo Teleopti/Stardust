@@ -40,14 +40,6 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
             Dispose(false);
         }
 
-        protected virtual CommandBehavior CmdBehavior
-        {
-            get
-            {
-                return CommandBehavior.CloseConnection;
-            }
-        }
-
         public void AddProcParameter(IDbDataParameter parameter)
         {
             NotNull("parameter", parameter);
@@ -63,86 +55,10 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
             _procParam.Add(parameter);
         }
 
-        public void AddProcParameter(string parameterName, object value)
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("DatabaseAccess object disposed!");
-            }
-            AddProcParameter(new SqlParameter(parameterName, RuntimeHelpers.GetObjectValue(value)));
-        }
-
-        //private string buildConnectionString(string server, string db)
-        //{
-        //    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        //    builder.DataSource = server.Trim();
-        //    builder.InitialCatalog = db.Trim();
-        //    builder.IntegratedSecurity = false;
-        //    builder.UserID = "toptiUser";
-        //    builder.Password = "semtex315";
-        //    return builder.ConnectionString;
-        //}
-        public void Close()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("DatabaseAccess object disposed!");
-            }
-            Dispose();
-        }
-
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public IDataReader ExecuteDataReader()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("DatabaseAccess object disposed!");
-            }
-            //Trace.WriteLine("Prepare to get datareader - " + _commandText, "DatabaseAccess");
-            GrabConnection();
-            SetCommand();
-            setParams();
-            //Trace.WriteLine("Starting reading stream - " + _commandText, "DatabaseAccess");
-            return _cmd.ExecuteReader(CmdBehavior);
-        }
-
-        public DataSet ExecuteDataSet()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("DatabaseAccess object disposed!");
-            }
-            //Trace.WriteLine("Getting datatable - " + _commandText, "DatabaseAccess");
-            IDbDataAdapter adapter = new SqlDataAdapter();
-            DataSet dataSet = new DataSet();
-            dataSet.Locale = Thread.CurrentThread.CurrentCulture;
-            GrabConnection();
-            SetCommand();
-            setParams();
-            adapter.SelectCommand = _cmd;
-            adapter.Fill(dataSet);
-            //Trace.WriteLine("Finished getting datatable - " + _commandText, "DatabaseAccess");
-            return dataSet;
-        }
-
-        public int ExecuteNonQuery()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("DatabaseAccess object disposed!");
-            }
-            //Trace.WriteLine("Executing command - " + _commandText, "DatabaseAccess");
-            GrabConnection();
-            SetCommand();
-            setParams();
-            int num2 = _cmd.ExecuteNonQuery();
-            //Trace.WriteLine("Finished command - " + _commandText, "DatabaseAccess");
-            return num2;
         }
 
         public object ExecuteScalar()
@@ -151,12 +67,10 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
             {
                 throw new ObjectDisposedException("DatabaseAccess object disposed!");
             }
-            //Trace.WriteLine("Executing scalar command - " + _commandText, "DatabaseAccess");
             GrabConnection();
             SetCommand();
             setParams();
             object retVal = _cmd.ExecuteScalar();
-            //Trace.WriteLine("Finished executing scalar command - " + _commandText, "DatabaseAccess");
             return retVal;
         }
 
@@ -194,18 +108,8 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
             _cmd = new SqlCommand();
             _cmd.CommandText = _commandText;
             _cmd.Connection = _conn;
-            //_cmd.CommandType = CommandType.StoredProcedure;
             _cmd.CommandType = _commandType;
-            //_cmd.CommandTimeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
         }
-
-        //protected void SetProcName()
-        //{
-        //    if (!_commandText.StartsWith("dbo.",StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        _commandText = "dbo." + _commandText;
-        //    }
-        //}
 
         private void GrabConnection()
         {

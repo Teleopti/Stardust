@@ -31,21 +31,21 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
-			url: "Requests/ApproveShiftTrade/" + self.Id(),
+			url: "Requests/ApproveShiftTrade/" + self.EntityId(),
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
 				self.CanApproveAndDeny(true);
+
 			}
 		});
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	self.pixelPerMinute = ko.observable(0.3);
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
-			url: "Requests/DenyShiftTrade/" + self.Id(),
+			url: "Requests/DenyShiftTrade/" + self.EntityId(),
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
@@ -53,7 +53,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				self.CanApproveAndDeny(true);
 			}
 		});
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());

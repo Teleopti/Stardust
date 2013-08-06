@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.MessageBroker.Client
 {
@@ -35,22 +34,21 @@ namespace Teleopti.Interfaces.MessageBroker.Client
     	/// </remarks>
     	void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
 
-    	/// <summary>
-    	/// Sends schedule data.
-    	/// </summary>
-    	/// <param name="floor">The floor.</param>
-    	/// <param name="ceiling">The ceiling.</param>
-    	/// <param name="moduleId">The module id.</param>
-    	/// <param name="domainObjectId">The domain object id.</param>
-    	/// <param name="domainInterfaceType">Type of the domain interface.</param>
-    	/// <param name="updateType">Type of the update.</param>
-    	/// <param name="dataSource">Data source.</param>
-    	/// <param name="businessUnitId">Business unit id.</param>
-    	/// <remarks>
-    	/// Created by: ankarlp
-    	/// Created date: 12/06/2010
-    	/// </remarks>
-    	void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId);
+        /// <summary>
+        /// Sends schedule data.
+        /// </summary>
+        /// <param name="floor">The floor.</param>
+        /// <param name="ceiling">The ceiling.</param>
+        /// <param name="moduleId">The module id.</param>
+        /// <param name="domainObjectId">The domain object id.</param>
+        /// <param name="domainInterfaceType">Type of the domain interface.</param>
+        /// <param name="dataSource">Data source.</param>
+        /// <param name="businessUnitId">Business unit id.</param>
+        /// <remarks>
+        /// Created by: ankarlp
+        /// Created date: 12/06/2010
+        /// </remarks>
+        void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId);
 
         /// <summary>
         /// Instantiates the broker service.

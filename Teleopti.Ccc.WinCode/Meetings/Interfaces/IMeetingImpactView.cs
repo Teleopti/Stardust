@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
     	DateTime BestSlotSearchPeriodStart { get; }
 		DateTime BestSlotSearchPeriodEnd { get; }
     	DateOnly StartDate { get; }
-		DateOnly EndDate { get; }
 		TimeSpan StartTime { get; }
 		TimeSpan EndTime { get; }
     	void SetSearchStartDate(DateOnly startDate);
@@ -47,11 +46,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
         bool FindButtonEnabled { get; set; }
         void ScrollMeetingIntoView(int pos);
     	bool HasStartInterval();
-    	void NotifyMeetingTimeChanged();
     	void SetSlotStartTime(TimeSpan timeSpan);
 		void SetSlotEndTime(TimeSpan timeSpan);
     	void SetSlotEndDate(DateTime dateTime);
-    	void SetSlotStartDate(DateTime dateTime);
-    	//void RefreshMeetingControlOnUpdateView();
     }
 }

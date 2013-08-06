@@ -161,14 +161,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 		}
 
-		public MatrixDataForTest(IScheduleDayDataMapper scheduleDayDataMapper) : base(scheduleDayDataMapper)
-		{
-		}
-
 		public void SetTargetDaysOff(int value)
 		{
 			TargetDaysOff = value;
 		}
-
 	}
 }

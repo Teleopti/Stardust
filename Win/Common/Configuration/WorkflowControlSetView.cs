@@ -71,41 +71,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             var periodTypeDropDownColumn = new SFGridDropDownColumn
                 <AbsenceRequestPeriodModel, AbsenceRequestPeriodTypeModel>(
-                "PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters, "DisplayText", null,null);
+                "PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters, "DisplayText",null);
 
             columnList.Add(periodTypeDropDownColumn);
 
             var absenceDropdownColumn = new SFGridDropDownColumn
                 <AbsenceRequestPeriodModel, IAbsence>(
-                "Absence", Resources.Absence, " ", _presenter.RequestableAbsenceCollection, "Name", null, typeof(IAbsence));
+                "Absence", Resources.Absence, " ", _presenter.RequestableAbsenceCollection, "Name", typeof(IAbsence));
 
             columnList.Add(absenceDropdownColumn);
 
             var checkPersonAccountColumn =
                 new SFGridDynamicDropDownColumn<AbsenceRequestPeriodModel, IAbsenceRequestValidator>(
                     "PersonAccountValidator", Resources.CheckPersonAccount, " ", "PersonAccountValidatorList", "DisplayText",
-                    null, typeof(IAbsenceRequestValidator));
+                    typeof(IAbsenceRequestValidator));
 
             columnList.Add(checkPersonAccountColumn);
 
             var checkStaffingColumn =
                 new SFGridDynamicDropDownColumn<AbsenceRequestPeriodModel, IAbsenceRequestValidator>(
                     "StaffingThresholdValidator", Resources.CheckStaffing, " ", "StaffingThresholdValidatorList", "DisplayText",
-                    null, typeof(IAbsenceRequestValidator));
+                    typeof(IAbsenceRequestValidator));
 
             columnList.Add(checkStaffingColumn);
 
             var autoGrantColumn =
                 new SFGridDynamicDropDownColumn<AbsenceRequestPeriodModel, IProcessAbsenceRequest>(
                     "AbsenceRequestProcess", Resources.AutoGrant, " ", "AbsenceRequestProcessList", "DisplayText",
-                    null, typeof(IProcessAbsenceRequest));
+                    typeof(IProcessAbsenceRequest));
 
             columnList.Add(autoGrantColumn);
 
             columnList.Add(new DateOnlyColumn<AbsenceRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period));
             columnList.Add(new DateOnlyColumn<AbsenceRequestPeriodModel>("PeriodEndDate", Resources.End, Resources.Period));
-            columnList.Add(new SFGridIntegerCellWithIgnoreColumn<AbsenceRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling, null));
-            columnList.Add(new SFGridIntegerCellWithIgnoreColumn<AbsenceRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling,null));
+            columnList.Add(new SFGridIntegerCellWithIgnoreColumn<AbsenceRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling));
+            columnList.Add(new SFGridIntegerCellWithIgnoreColumn<AbsenceRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling));
             columnList.Add(new DateOnlyColumn<AbsenceRequestPeriodModel>("OpenStartDate", Resources.Start, Resources.Open));
             columnList.Add(new DateOnlyColumn<AbsenceRequestPeriodModel>("OpenEndDate", Resources.End, Resources.Open));
 
@@ -397,27 +397,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _gridHelper.SetSourceList(selectedItem.AbsenceRequestPeriodModels);
         }
 
-        public void Delete()
-        {
-             if (_presenter.SelectedModel == null) return;
-
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
-            string text = string.Format(
-                culture,
-                Resources.AreYouSureYouWantToDeleteItem,
-                _presenter.SelectedModel.Name
-                );
-
-            string caption = string.Format(culture, Resources.ConfirmDelete);
-            DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
-            if (response != DialogResult.Yes) return;
-            Cursor.Current = Cursors.WaitCursor;
-
-            _presenter.DeleteWorkflowControlSet();
-
-            Cursor.Current = Cursors.Default;
-        }
-
         /// <summary>
         /// Removes stored information used by control when done.
         /// </summary>
@@ -633,22 +612,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodSelected
         {
             get { return _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1); }
-        }
-
-        public bool HandlePasteWhenCellIsCopied()
-        {
-            ClipHandler<string> clipHandler = GridHelper.ConvertClipboardToClipHandlerString();
-
-            int columnsInGrid = gridControlAbsenceRequestOpenPeriods.ColCount -
-                                gridControlAbsenceRequestOpenPeriods.Cols.HeaderCount;
-            if (columnsInGrid != clipHandler.ColSpan())
-            {
-                // Cell (not row) is copied - use gridhelpers clipboard handling
-                _gridHelper.PasteFromClipboard();
-                return true;
-            }
-
-            return false;
         }
 
         public void SetClipboardText(string text)

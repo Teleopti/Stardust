@@ -15,12 +15,8 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
         void FormHeaderText(string headerText);
         void SetColors(Color color);
         bool IncludeScreenshot();
-        DialogResult DialogResult { get; }
-        void SendToBack();
-        void BringToFront();
         Rectangle ScreenRectangle();
         void ScreenshotFromImage(Bitmap bitmap);
         void ShowMessageBox(string message);
-        RightToLeft Rtl { get; }
     }
 }
