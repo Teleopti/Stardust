@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Globalization;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
@@ -9,16 +9,17 @@ namespace Teleopti.Ccc.Payroll
 {
     public static class FormatAppender
     {
-        private static readonly Type thisType = typeof(FormatAppender);
-        private static readonly Assembly assembly = thisType.Assembly;
+        private static readonly Type ThisType = typeof(FormatAppender);
+        private static readonly Assembly Assembly = ThisType.Assembly;
 
         public static IXPathNavigable AppendFormat(IXPathNavigable document, string fileName)
         {
-            XmlDocument formatDoc = new XmlDocument();
-            Stream stream =
-                assembly.GetManifestResourceStream(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                                 "{0}.{1}", thisType.Namespace, fileName));
-            if (stream == null) return document;
+            var formatDoc = new XmlDocument();
+            var stream =
+                Assembly.GetManifestResourceStream(string.Format(CultureInfo.InvariantCulture,
+                                                                 "{0}.{1}", ThisType.Namespace, fileName));
+            if (stream == null) 
+				return document;
 
             formatDoc.Load(stream);
             return AppendFormat(document, formatDoc);
@@ -30,23 +31,25 @@ namespace Teleopti.Ccc.Payroll
             var formatNavigator = formatDoc.CreateNavigator();
             if (navigator.HasChildren)
             {
-                Stream schemaStream =
-                    assembly.GetManifestResourceStream(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                                     "{0}.payroll-format.xsd", thisType.Namespace));
-                if (schemaStream == null) throw new InvalidOperationException("The Xml schema for payroll formats could not be loaded.");
-                XmlSchema schema =
+                var schemaStream =
+                    Assembly.GetManifestResourceStream(string.Format(CultureInfo.InvariantCulture,
+                                                                     "{0}.payroll-format.xsd", ThisType.Namespace));
+                if (schemaStream == null) 
+					throw new InvalidOperationException("The Xml schema for payroll formats could not be loaded.");
+
+                var schema =
                     XmlSchema.Read(schemaStream, (sender, e) => { throw e.Exception; });
 
-                XmlSchemaSet schemaSet = new XmlSchemaSet();
+                var schemaSet = new XmlSchemaSet();
                 schemaSet.Add(schema);
                 formatNavigator.CheckValidity(schemaSet, (sender, e) => { throw e.Exception; });
 
                 if (formatNavigator.HasChildren)
                 {
-                    XmlDocument documentFormat = new XmlDocument();
+                    var documentFormat = new XmlDocument();
                     documentFormat.Load(formatNavigator.ReadSubtree());
 
-                    XmlDocument documentContent = new XmlDocument();
+                    var documentContent = new XmlDocument();
                     documentContent.Load(navigator.ReadSubtree());
 
                     if (documentFormat.DocumentElement != null && 

@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Payroll
 			payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
 			payrollDt.Columns.Add("PartTimePercentageNumber", typeof (int));
 			payrollDt.Columns.Add("Date", typeof (DateTime));
-			payrollDt.Columns.Add("Start", typeof (DateTime));
-			payrollDt.Columns.Add("End", typeof (DateTime));
+			payrollDt.Columns.Add("StartDate", typeof (DateTime));
+			payrollDt.Columns.Add("EndDate", typeof (DateTime));
 			payrollDt.Columns.Add("PayrollCode", typeof (string));
 			payrollDt.Columns.Add("ContractTime", typeof (TimeSpan));
 			payrollDt.Columns.Add("WorkTime", typeof (TimeSpan));
