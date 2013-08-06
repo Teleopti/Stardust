@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private ISingleSkillDictionary _singleSkillDictionary;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public MoveTimeOptimizerCreator(
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			ISingleSkillDictionary singleSkillDictionary,
 			IPersonSkillProvider personSkillProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_singleSkillDictionary = singleSkillDictionary;
 			_personSkillProvider = personSkillProvider;
 		}
 
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator(_personSkillProvider), _personSkillProvider);
+					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider);
 
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);

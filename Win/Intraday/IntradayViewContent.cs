@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _backgroundWorkerResources.RunWorkerCompleted += _backgroundWorkerResources_RunWorkerCompleted;
             _backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new SingleSkillDictionary(), new PersonSkillProvider());
+			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new PersonSkillProvider());
             _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting);
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
             InitializeIntradayViewContent();

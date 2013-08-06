@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -61,13 +60,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
 					var personSkillProvider = new PersonSkillProvider();
-					var singleSkillDictionary = new SingleSkillDictionary();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
 																					new OccupiedSeatCalculator(),
 																					new NonBlendSkillCalculator(
 																						new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), singleSkillDictionary,
-																							new SingleSkillMaxSeatCalculator(personSkillProvider),personSkillProvider);
+                	                                                                		()), personSkillProvider);
 					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
 					{
 						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);

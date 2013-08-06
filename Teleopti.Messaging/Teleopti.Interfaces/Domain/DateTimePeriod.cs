@@ -104,8 +104,8 @@ namespace Teleopti.Interfaces.Domain
                 validateDateTime(startDateTime, endDateTime);
 
             period = new MinMax<DateTime>(startDateTime, endDateTime);
-	        _hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof (DateTimePeriod).FullName,
-	                                   startDateTime.Ticks, endDateTime.Ticks)).GetHashCode();
+			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Teleopti.Interfaces.Domain
             validateDateTime(startDateTime, endDateTime);
             period = new MinMax<DateTime>(startDateTime, endDateTime);
 			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   startDateTime.Ticks, endDateTime.Ticks)).GetHashCode();
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Teleopti.Interfaces.Domain
             period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
 
 			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   startDateTimeTemp.Ticks, startDateTimeTemp.Ticks)).GetHashCode();
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         #endregion

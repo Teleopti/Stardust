@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
         private INonBlendSkillImpactOnPeriodForProjection _target;
 		private IVisualLayerCollection _layerCollection1;
 		private IVisualLayerCollection _layerCollection2;
-		private IVisualLayerCollection _layerCollection3;
 		private ISkillStaffPeriod _skillStaffPeriod;
 		private IPerson _person1;
 		private IPerson _person2;

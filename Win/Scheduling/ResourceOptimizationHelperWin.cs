@@ -30,13 +30,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperWin"/> class.
 		/// </summary>
 		/// <param name="stateHolder">The state holder.</param>
+		/// <param name="personSkillProvider"></param>
 		/// <remarks>
 		/// Created by: henrika
 		/// Created date: 2008-05-27
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, ISingleSkillDictionary singleSkillDictionary, IPersonSkillProvider personSkillProvider)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, new SingleSkillMaxSeatCalculator(personSkillProvider), personSkillProvider)
+		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider)
+			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), personSkillProvider)
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
