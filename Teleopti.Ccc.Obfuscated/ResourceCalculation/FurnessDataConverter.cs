@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private IFurnessData _furnessData;
         private readonly IDividedActivityData _dividedActivityData;
 
-        private IDictionary<ISkill, int> _skillIndexRegister;
-        private IDictionary<string, int> _personIndexRegister;
+        private readonly IDictionary<ISkill, int> _skillIndexRegister = new Dictionary<ISkill, int>();
+        private readonly IDictionary<string, int> _personIndexRegister = new Dictionary<string, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FurnessDataConverter"/> class.
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         private void CreateSkillIndexRegister()
         {
-            _skillIndexRegister = new Dictionary<ISkill, int>();
+            _skillIndexRegister.Clear();
             int currentIndex = 0;
             foreach (ISkill key in _dividedActivityData.TargetDemands.Keys)
             {
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         private void CreatePersonIndexRegister()
         {
-            _personIndexRegister = new Dictionary<string, int>();
+            _personIndexRegister.Clear();
             int currentIndex = 0;
             foreach (var key in _dividedActivityData.PersonResources.Keys)
             {
@@ -85,10 +85,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// Converts the target demands to furness data ProductionDemand.
         /// </summary>
         private void ConvertTargetDemands()
-        {
-            foreach (ISkill key in _dividedActivityData.TargetDemands.Keys)
+		{
+			var productionDemand = _furnessData.ProductionDemand();
+            foreach (var keyPair in _dividedActivityData.TargetDemands)
             {
-                _furnessData.ProductionDemand()[_skillIndexRegister[key]] = _dividedActivityData.TargetDemands[key];
+	            productionDemand[_skillIndexRegister[keyPair.Key]] = keyPair.Value;
             }
         }
 
@@ -96,16 +97,18 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// Converts the absolut person resources to furness data ProducerResources.
         /// </summary>
         private void ConvertAbsolutPersonResources()
-        {
-            foreach (var key in _dividedActivityData.PersonResources.Keys)
+		{
+			var producerResources = _furnessData.ProducerResources();
+            foreach (var keyPair in _dividedActivityData.PersonResources)
             {
-                _furnessData.ProducerResources()[_personIndexRegister[key]] = _dividedActivityData.PersonResources[key];
-
+	            producerResources[_personIndexRegister[keyPair.Key]] = keyPair.Value;
             }
         }
 
         private void convertMatrixData()
-        {
+		{
+			var productivityMatrix = _furnessData.ProductivityMatrix();
+			var resourceMatrix = _furnessData.ResourceMatrix();
             foreach (var personKey in _dividedActivityData.PersonResources.Keys)
             {
                 int producerIndex = _personIndexRegister[personKey];
@@ -115,10 +118,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     double weightedSkillValue;
                     if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey].TryGetValue(skillKey, out weightedSkillValue))
                         weightedSkillValue = 0;
-                    _furnessData.ResourceMatrix()[producerIndex, productIndex] = weightedSkillValue;
+	                resourceMatrix[producerIndex, productIndex] = weightedSkillValue;
 
                     double value = _dividedActivityData.KeyedSkillResourceEfficiencies[personKey].ContainsKey(skillKey) ? 1 : 0;
-                    _furnessData.ProductivityMatrix()[producerIndex, productIndex] = value;
+	                productivityMatrix[producerIndex, productIndex] = value;
                 }
             }
         }
@@ -127,15 +130,20 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// Converts the person skill resource matrix back from FurnessData.
         /// </summary>
         private void convertPersonSkillResourceMatrixBack()
-        {
+		{
+			var resourceMatrix = _furnessData.ResourceMatrix();
             foreach (var personKey in _personIndexRegister.Keys)
             {
                 int producerIndex = _personIndexRegister[personKey];
-                foreach (ISkill skillKey in _skillIndexRegister.Keys)
+	            Dictionary<ISkill, double> skillValues;
+	            if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey, out skillValues)) continue;
+                foreach (var skillKeyPair in _skillIndexRegister)
                 {
-                    int productIndex = _skillIndexRegister[skillKey];
-                    if (_dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey].ContainsKey(skillKey))
-                        _dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey][skillKey] = _furnessData.ResourceMatrix()[producerIndex, productIndex];
+                    if (skillValues.ContainsKey(skillKeyPair.Key))
+					{
+						int productIndex = skillKeyPair.Value;
+	                    skillValues[skillKeyPair.Key] = resourceMatrix[producerIndex, productIndex];
+                    }
                 }
             }
         }

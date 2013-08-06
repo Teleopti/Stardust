@@ -354,7 +354,7 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
- 	<Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
+    <Compile Include="Scheduling\Restriction\OvertimeAvailabilityTest.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\MoveLayerVerticalTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftLayerTest.cs" />
@@ -975,7 +975,6 @@
     <Compile Include="ResourceCalculation\FurnessDataTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet1.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet2.cs" />
-    <Compile Include="ResourceCalculation\FurnessEvaluatorCollectionTest.cs" />
     <Compile Include="ResourceCalculation\OccupancyCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionaryTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizerTest.cs" />
