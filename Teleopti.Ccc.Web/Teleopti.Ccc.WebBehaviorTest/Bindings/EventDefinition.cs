@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			try
 			{
 				if (!Browser.IsStarted())
-					Browser.Start(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(25));
+					Browser.Start(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 
 				TestControllerMethods.BeforeTestRun();
 
