@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -29,20 +30,22 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+	    private readonly IPersonSkillProvider _personSkillProvider;
 
-    	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
+	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
             IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper, IPersonSkillProvider personSkillProvider)
 		{
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_personSkillProvider = personSkillProvider;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -52,16 +55,24 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 																		useOccupancyAdjustment,
 																		schedulingOptions.ConsiderShortBreaks);
+			
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
+	        using (new ResourceCalculationContext(resources))
+	        {
+		        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+		        doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+		                            resourceCalculateDelayer, rollbackService);
 
-            schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true, resourceCalculateDelayer, rollbackService);
+		        schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+		        doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+		                            resourceCalculateDelayer, rollbackService);
 
-            schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true, resourceCalculateDelayer, rollbackService);
+		        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 
-            schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-
-			return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false, resourceCalculateDelayer, rollbackService);
+		        return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
+		                                   resourceCalculateDelayer, rollbackService);
+	        }
         }
 
 
@@ -155,7 +166,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						if (breakIfPersonCannotSchedule)
 							return false;
 
-						//daysAndPersonsToExclude = AddDayAndPersonsToExclude(daysAndPersonsToExclude, theDay, person);
 						persons.Remove(person);
 					}
 
@@ -174,7 +184,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         persons = FilterPersonsOnSkill(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
 						if (persons.Count > 0)
 						{
-							//dateOnly = new DateOnly(theDay.LocalCurrentDate);
 							break;
 						}
 
@@ -185,12 +194,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			}
 			return everyPersonScheduled;
 		}
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts)
-        {
-            return GetAllPersons(selectedParts, false, new DateOnly());
-        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts, bool excludeStudentsWithEnoughHours, DateOnly onDate)

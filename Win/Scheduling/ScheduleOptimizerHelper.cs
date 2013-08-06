@@ -144,11 +144,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             DateOnlyPeriod selectedPeriod, 
             IScheduleService scheduleService)
         {
-            //if (matrixList == null) throw new ArgumentNullException("matrixList");
-            //if (dayOffTemplate == null) throw new ArgumentNullException("dayOffTemplate");
-            //if (scheduleService == null) throw new ArgumentNullException("scheduleService");
-            //if (matrixOriginalStateContainers == null) throw new ArgumentNullException("matrixOriginalStateContainers");
-
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
             ISchedulePartModifyAndRollbackService rollbackService =
@@ -162,7 +157,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     SchedulingStateHolder, 
                     _scheduleDayChangeCallback, 
                     new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
 
             IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
 
