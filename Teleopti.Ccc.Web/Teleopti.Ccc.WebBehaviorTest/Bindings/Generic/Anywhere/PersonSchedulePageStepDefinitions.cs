@@ -96,6 +96,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			if (!string.IsNullOrEmpty(fullDayAbsenceFormInfo.Absence))
 				Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type", fullDayAbsenceFormInfo.Absence);
+			else
+				// for robustness. cant understand why this is required. the callViewMethodWhenReady should solve it.
+				Browser.Interactions.AssertExists(".full-day-absence-form .absence-type:enabled");
 
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 
