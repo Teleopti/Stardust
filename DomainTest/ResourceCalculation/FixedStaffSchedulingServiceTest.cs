@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
 																 _daysOffSchedulingService,
-																 _resourceOptimizationHelper);
+																 _resourceOptimizationHelper,
+																 new PersonSkillProvider());
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -123,7 +125,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					_effectiveRestriction).Repeat.Any();
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-            
+			Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill> {SkillFactory.CreateSkill("Phone")});
+#pragma warning disable 612,618
+			Expect.Call(()=>schedules.ExtractAllScheduleData(null)).IgnoreArguments();
+#pragma warning restore 612,618
+
 			_mocks.ReplayAll();
 
             _schedulingOptions.UseShiftCategoryLimitations = false;
@@ -171,6 +177,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
+			Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill> {SkillFactory.CreateSkill("Phone")});
+#pragma warning disable 612,618
+			Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments();
+#pragma warning restore 612,618
 			_mocks.ReplayAll();
 
             _schedulingOptions.UseShiftCategoryLimitations = false;

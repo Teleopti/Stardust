@@ -15,22 +15,16 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
-		private readonly ISingleSkillDictionary _singleSkillDictionary;
-	    private readonly ISingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
-			ISingleSkillDictionary singleSkillDictionary,
-			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator,
 			IPersonSkillProvider personSkillProvider)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
-			_singleSkillDictionary = singleSkillDictionary;
-    		_singleSkillMaxSeatCalculator = singleSkillMaxSeatCalculator;
 			_personSkillProvider = personSkillProvider;
 		}
 
@@ -46,7 +40,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
 		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks
-			, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
+			, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
 		{
 			if (_stateHolder.TeamLeaderMode)
 				return;
@@ -58,9 +52,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			{
 				var relevantProjections = ResourceCalculationContext.Container(_personSkillProvider);
 
-				var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
-
-				if (!useSingleSkillCalculations && !ResourceCalculationContext.InContext)
+				if (!ResourceCalculationContext.InContext)
 				{
 					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.Skills.Min(s => s.DefaultResolution));
 					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
@@ -68,7 +60,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						                                                             localDate.AddDays(-1), localDate.AddDays(1)));
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks, toRemove, toAdd);
+				addAndRemoveScheduleDays(relevantProjections, toRemove, toAdd);
+
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks);
+			}
+		}
+
+		private void addAndRemoveScheduleDays(IResourceCalculationDataContainer relevantProjections, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
+		{
+			foreach (var scheduleDay in toRemove)
+			{
+				relevantProjections.RemoveScheduleDayFromContainer(scheduleDay,relevantProjections.MinSkillResolution);
+			}
+			foreach (var scheduleDay in toAdd)
+			{
+				relevantProjections.AddScheduleDayToContainer(scheduleDay, relevantProjections.MinSkillResolution);
 			}
 		}
 
@@ -80,8 +86,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		}
 
 		private void resourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
-		                                   DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks
-		                                   , IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
+		                                   DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();
@@ -100,7 +105,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			                                                          relevantProjections, new SingleSkillCalculator(),
 			                                                          useOccupancyAdjustment, _personSkillProvider);
 
-			schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
+			schedulingResultService.SchedulingResult(timePeriod);
 
 			if (considerShortBreaks)
 			{
@@ -108,11 +113,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				periodDistributionService.CalculateDay(relevantSkillStaffPeriods);
 			}
 
-			calculateMaxSeatsAndNonBlend(relevantProjections, localDate, toRemove, toAdd, timePeriod);
+			calculateMaxSeatsAndNonBlend(relevantProjections, localDate, timePeriod);
 		}
 
-		private void calculateMaxSeatsAndNonBlend(IResourceCalculationDataContainer relevantProjections, DateOnly localDate,
-		                                          IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd, DateTimePeriod timePeriod)
+		private void calculateMaxSeatsAndNonBlend(IResourceCalculationDataContainer relevantProjections, DateOnly localDate, DateTimePeriod timePeriod)
 		{
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods;
 			List<ISkill> ordinarySkills = new List<ISkill>();
@@ -125,15 +129,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
 				                                        ordinarySkills, timePeriod);
 
-			if (toRemove.IsEmpty() && toAdd.IsEmpty())
-			{
 				_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
-			}
-			else
-			{
-				_singleSkillMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
-			}
-
+			
 			ordinarySkills = new List<ISkill>();
 			foreach (var skill in _stateHolder.Skills)
 			{
@@ -166,34 +163,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			}
 
 			return result;
-		}
-
-		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
-		{
-			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
-
-			if (useSingleSkillCalculations)
-				useSingleSkillCalculations = AllIsSingleSkilled(toRemove);
-
-			if (useSingleSkillCalculations)
-				useSingleSkillCalculations = AllIsSingleSkilled(toAdd);
-
-			return useSingleSkillCalculations;
-		}
-
-		private bool AllIsSingleSkilled(IEnumerable<IScheduleDay> scheduleDays)
-		{
-			foreach (var scheduleDay in scheduleDays)
-			{
-				var person = scheduleDay.Person;
-				var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
-				{
-					return false;
-				}
-			}
-
-			return true;
 		}
 	}
 

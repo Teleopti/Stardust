@@ -67,6 +67,16 @@ namespace Teleopti.Interfaces.Domain
 				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
 			}
 		}
+
+		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainer resources, IScheduleDay scheduleDay, int minutesSplit)
+		{
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var resourceLayers = projection.ToResourceLayers(minutesSplit);
+			foreach (var resourceLayer in resourceLayers)
+			{
+				resources.RemoveResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
+			}
+		}
 	}
 
 	public interface IResourceCalculationDataContainer
@@ -81,6 +91,7 @@ namespace Teleopti.Interfaces.Domain
 		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
 		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
 		int MinSkillResolution { get; }
+		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 	}
 
 	public struct AffectedSkills

@@ -19,7 +19,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-    	private readonly ISingleSkillDictionary _singleSkillDictionary;
     	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
-        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
         	_daysOffSchedulingService = _container.Resolve<IDaysOffSchedulingService>();
 	        _personSkillProvider = _container.Resolve<IPersonSkillProvider>();
         }
@@ -93,7 +90,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      optimizerPreferences,
                                                                      rollbackService,
                                                                      SchedulingStateHolder,
-																	 _singleSkillDictionary,
 																	 _personSkillProvider);
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
@@ -131,7 +127,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              optimizerPreferences,
                                              rollbackService,
                                              SchedulingStateHolder,
-											 _singleSkillDictionary,
 											 _personSkillProvider);
 
             IList<IMoveTimeOptimizer> optimizers = creator.Create();
@@ -197,8 +192,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
@@ -220,10 +213,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
             var selectedPersons = ScheduleViewBase.AllSelectedPersons(unlockedSchedules);
-            var selectedPeriod = ScheduleViewBase.AllSelectedDates(unlockedSchedules);
-            var sorted = new List<DateOnly>(selectedPeriod);
-            sorted.Sort();
-            var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
+            var selectedPeriod = unlockedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, optimizationPreferences.Rescheduling, _container);
 
@@ -264,10 +255,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
 
-			var selectedPeriod = ScheduleViewBase.AllSelectedDates(allSelectedSchedules);
-            var sorted = new List<DateOnly>(selectedPeriod);
-            sorted.Sort();
-            var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
+			var selectedPeriod = allSelectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, schedulingOptions, _container);
 

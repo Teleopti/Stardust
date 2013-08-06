@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly IScheduleService _scheduleService;
     	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+	    private readonly IPersonSkillProvider _personSkillProvider;
 
-    	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
+	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
 			IDaysOffSchedulingService daysOffSchedulingService, 
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IPersonSkillProvider personSkillProvider)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			_scheduleService = scheduleService;
 			_daysOffSchedulingService = daysOffSchedulingService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_personSkillProvider = personSkillProvider;
 			_daysOffSchedulingService.DayScheduled += schedulerDayScheduled;
 		}
 
@@ -86,52 +89,57 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			                            into g
 			                            select new {g.Key, Values = g.ToList()}).ToDictionary(k => k.Key, v => v.Values);
 
-			var dates = GetAllDates(personDateDictionary);
-			var initialPersons = personDateDictionary.Keys;
-			foreach (DateOnly date in dates)
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
+			using (new ResourceCalculationContext(resources))
 			{
-				var persons = initialPersons.ToList();
-				IPerson person = GetRandomPerson(persons.ToArray());
-			    
-				while (person != null)
+				var dates = GetAllDates(personDateDictionary);
+				var initialPersons = personDateDictionary.Keys;
+				foreach (DateOnly date in dates)
 				{
-                    IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
-                    if (!schedulePart.IsScheduled())
-                    {
-                        var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-                        if (!virtualSchedulePeriod.IsValid)
-                        {
-                            persons.Remove(person);
-                            person = GetRandomPerson(persons.ToArray());
-                            continue;
-                        }
+					var persons = initialPersons.ToList();
+					IPerson person = GetRandomPerson(persons.ToArray());
 
-                        if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
-                        {
-	                        if (personDateDictionary[person].Contains(date))
-	                        {
-		                        var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
-			                        schedulePart, schedulingOptions);
+					while (person != null)
+					{
+						IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
+						if (!schedulePart.IsScheduled())
+						{
+							var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
+							if (!virtualSchedulePeriod.IsValid)
+							{
+								persons.Remove(person);
+								person = GetRandomPerson(persons.ToArray());
+								continue;
+							}
 
-		                        bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
-		                                                                                              schedulingOptions,
-		                                                                                              effectiveRestriction,
-		                                                                                              resourceCalculateDelayer,
-		                                                                                              null, rollbackService);
+							if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
+							{
+								if (personDateDictionary[person].Contains(date))
+								{
+									var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
+										schedulePart, schedulingOptions);
 
-		                        result = result && schedulePersonOnDayResult;
-		                        if (!result && breakIfPersonCannotSchedule)
-			                        return false;
+									bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
+									                                                                      schedulingOptions,
+									                                                                      effectiveRestriction,
+									                                                                      resourceCalculateDelayer,
+									                                                                      null, rollbackService);
 
-		                        var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
-		                        OnDayScheduled(eventArgs);
-		                        if (eventArgs.Cancel) return result;
-	                        }
-                        }
-                    }
+									result = result && schedulePersonOnDayResult;
+									if (!result && breakIfPersonCannotSchedule)
+										return false;
 
-					persons.Remove(person);
-					person = GetRandomPerson(persons.ToArray());
+									var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
+									OnDayScheduled(eventArgs);
+									if (eventArgs.Cancel) return result;
+								}
+							}
+						}
+
+						persons.Remove(person);
+						person = GetRandomPerson(persons.ToArray());
+					}
 				}
 			}
 			return result;

@@ -1209,17 +1209,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return ret;
         }
 
-        public static ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
-        {
-            ICollection<DateOnly> ret = new HashSet<DateOnly>();
-            foreach (IScheduleDay part in selectedSchedules)
-            {
-                DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
-                ret.Add(dateOnly);
-            }
-            return ret;
-        }
-
         public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
             var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);

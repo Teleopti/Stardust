@@ -65,6 +65,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			resources.AppendResource(key, skills, resourceLayer.Resource);
 		}
 
+		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
+		{
+			PeriodResource resources;
+			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
+			{
+				return;
+			}
+
+			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
+			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
+
+			resources.RemoveResource(key, skills, resourceLayer.Resource);
+		}
+
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
 		{
 			var skillKey = skill.Id.GetValueOrDefault();
@@ -182,6 +196,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							                                                 (guid, d) => d + skillEfficiency.Value);
 							                             return doubles;
 						                             });
+				}
+			}
+
+			public void RemoveResource(string key, SkillCombination skillCombination, double resource)
+			{
+				_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(0, 0), (s, d) => new PeriodResourceDetail(d.Count - 1, d.Resource - resource));
+
+				foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
+				{
+					_skillEffiencies.AddOrUpdate(key,
+												 new ConcurrentDictionary<Guid, double>(),
+												 (s, doubles) =>
+												 {
+													 doubles.AddOrUpdate(skillEfficiency.Key, skillEfficiency.Value,
+																		 (guid, d) => d - skillEfficiency.Value);
+													 return doubles;
+												 });
 				}
 			}
 
