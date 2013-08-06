@@ -32,8 +32,11 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
             {
                 if (Validate())
                 {
-                    _isAutoPosition = value;
-                    OnActivityTypeChanged();
+	                if (_isAutoPosition != value)
+	                {
+		                _isAutoPosition = value;
+		                OnActivityTypeChanged();
+	                }
                 }
             }
         }
