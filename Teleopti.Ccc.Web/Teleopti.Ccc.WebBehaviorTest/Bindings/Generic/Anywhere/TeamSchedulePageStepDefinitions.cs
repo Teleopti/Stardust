@@ -23,19 +23,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see person '(.*)'")]
 		public void ThenIShouldSeePerson(string personName)
 		{
-			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}')", personName));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".person:contains('{0}')", personName));
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}') .shift li", personName));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".person:contains('{0}') .shift li", personName));
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertNotExists(
+			Browser.Interactions.AssertNotExistsUsingJQuery(
 				string.Format(".person:contains('{0}')", personName), 
 				string.Format(".person:contains('{0}') .shift li", personName)
 				);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists("#team-selector");
 
 			var teams = table.CreateSet<TeamInfo>().ToArray();
-			teams.ForEach(t => Browser.Interactions.AssertExists("#team-selector option:contains('{0}')", t.Team));
+			teams.ForEach(t => Browser.Interactions.AssertExistsUsingJQuery("#team-selector option:contains('{0}')", t.Team));
 
 			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
 		}
