@@ -215,12 +215,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			Browser.Interactions.Click("#report-view-show-button");
 		}
 
-		[When(@"I close the skill-picker")]
-		public void WhenICloseTheSkillPicker()
-		{
-			Browser.Interactions.Click(".ui-popup-container a");
-		}
-
 		[Given(@"I view MobileReports")]
 		[When(@"I view MobileReports")]
 		public void WhenIEnterMobileReports()
@@ -240,7 +234,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			Browser.Interactions.Click("#sel-skill-button");
+			Browser.Interactions.Click("#report-settings-view.ui-page-active #sel-skill-button");
+		}
+
+		[When(@"I close the skill-picker")]
+		public void WhenICloseTheSkillPicker()
+		{
+			Browser.Interactions.Click(".ui-popup-container a:contains('Close')");
 		}
 
 		[When(@"I select a report")]
@@ -300,7 +300,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see the all skill item selected")]
 		public void ThenIShouldSeeTheAllSkillItemSelected()
 		{
-			Browser.Interactions.AssertExists("#sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
 		}
 	}
 }
