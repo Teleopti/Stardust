@@ -50,11 +50,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
-		public IsolationLevel IsolationLevel
-		{
-			get { return _isolationLevel; }
-		}
-
 		public int PersistPmUser(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("mart.pm_user_delete", _dataMartConnectionString);
@@ -436,18 +431,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_schedule_intraday_load]", parameterList,
-											  _dataMartConnectionString);
-		}
-
-		public int FillScheduleContractDataMart(DateTimePeriod period)
-		{
-			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_contract_load", parameterList,
 											  _dataMartConnectionString);
 		}
 
@@ -1656,20 +1639,4 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_schedule_forecast_skill", _dataMartConnectionString);
 		}
 	}
-
-	public class QueueWorkload
-	{
-		public QueueWorkload(int id, Guid? guid)
-		{
-			QueueAggId = id;
-			Workload = guid;
-		}
-
-		public int QueueAggId { get; set; }
-		public Guid? Workload { get; set; }
-
-
-	}
-
-
 }

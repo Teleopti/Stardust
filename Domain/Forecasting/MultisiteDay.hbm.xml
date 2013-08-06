@@ -72,9 +72,6 @@
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"
       not-null="true" foreign-key="FK_MultisiteDay_BusinessUnit"/>
-    <property name="IsDeleted"
-          type="boolean"
-          not-null="true"/>
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />
 		</class>

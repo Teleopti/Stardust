@@ -148,9 +148,4 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         #endregion
 
     }
-
-    public class TimeZoomItemViewModelTest
-    {
-        
-    }
 }

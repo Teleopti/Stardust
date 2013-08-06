@@ -9,27 +9,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class FilterOvertimeAvailabilityPresenter
 	{
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
-		private readonly List<IScheduleDay> _schedules = new List<IScheduleDay>(); 
+	    private readonly List<IScheduleDay> _schedules = new List<IScheduleDay>(); 
 
 		public FilterOvertimeAvailabilityPresenter(ISchedulerStateHolder schedulerStateHolder)
 		{
-			_schedulerStateHolder = schedulerStateHolder;
+		    _schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public void Initialize()
+		public void Filter(TimeSpan filterStartTime, TimeSpan filterEndTime, DateOnly value)
 		{
-			var persons = _schedulerStateHolder.FilteredPersonDictionary.Values;
-			foreach (var person in persons)
-			{
-				var loadedPeriod = _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-				var scheduleDays = _schedulerStateHolder.Schedules[person].ScheduledDayCollection(loadedPeriod);
-				_schedules.AddRange(scheduleDays);
-			}
-		}
-
-		public void Filter(TimeSpan filterStartTime, TimeSpan filterEndTime)
-		{
-			var filter = new OvertimeAvailabilityPersonFilter();
+            var persons = _schedulerStateHolder.FilteredPersonDictionary.Values;
+            foreach (var person in persons)
+            {
+                var scheduleDays = _schedulerStateHolder.Schedules[person].ScheduledDayCollection(new DateOnlyPeriod(value, value));
+                _schedules.AddRange(scheduleDays);
+            }
+            var filter = new OvertimeAvailabilityPersonFilter();
 			var filteredPersons = filter.GetFilterdPerson(_schedules, filterStartTime, filterEndTime);
 			_schedulerStateHolder.FilterPersonsOvertimeAvailability(filteredPersons);
 		}

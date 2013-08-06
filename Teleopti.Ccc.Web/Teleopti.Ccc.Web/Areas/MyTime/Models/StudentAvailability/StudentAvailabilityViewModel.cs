@@ -52,23 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 		public bool Editable { get; set; }
 	}
 
-	[Flags]
-	public enum DayState
-	{
-		None = 0,
-		Editable = 1,
-		Deletable = 2
-	}
-
 	public class AvailableDayViewModel : DayViewModelBase
 	{
-	}
-
-	public class ScheduledDayViewModel : DayViewModelBase
-	{
-		public string Title { get; set; }
-		public string TimeSpan { get; set; }
-		public string Summary { get; set; }
 	}
 
 	public class HeaderViewModel

@@ -8,19 +8,12 @@ using Teleopti.Ccc.AgentPortal.Helper;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {
-    public class SFGridColumnGridHelperEventArgs<T> : EventArgs
-    {
-        public T SourceEntity { get; set; }
-    }
-
     public class SFGridColumnGridHelper<T>
     {
         private readonly GridControl grid;
         private readonly ReadOnlyCollection<SFGridColumnBase<T>> _gridColumns;
         private readonly IList<T> _sourceList;
         private readonly Dictionary<string, ListSortDirection> _sortDirections;
-
-        public event EventHandler<SFGridColumnGridHelperEventArgs<T>> NewSourceEntityWanted;
 
         public IList<T> SourceList
         {
@@ -35,7 +28,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
             grid.QueryCellInfo += grid_QueryCellInfo;
             grid.SaveCellInfo += grid_SaveCellInfo;
-            //grid.QueryColWidth += grid_QueryColWidth;
             grid.QueryColCount += grid_QueryColCount;
             grid.QueryRowCount += grid_QueryRowCount;
             grid.KeyDown += grid_KeyDown;
@@ -58,14 +50,12 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
             grid.CurrentCell.MoveTo(grid.Rows.HeaderCount + 1, grid.Cols.HeaderCount + 1, GridSetCurrentCellOptions.SetFocus);
         }
 
-        #region Public Methods
-
         public IList<T> GetSelectedObjects()
         {
             List<T> list = new List<T>();
             GridRangeInfoList selectedRangeInfoList = grid.Model.Selections.GetSelectedRows(false, true);
             
-            if (selectedRangeInfoList.ActiveRange == GridRangeInfo.Table()) //Means that the whole grid is selected
+            if (selectedRangeInfoList.ActiveRange == GridRangeInfo.Table())
                 list.AddRange(_sourceList);
             
             foreach (GridRangeInfo gridRangeInfo in selectedRangeInfoList)
@@ -74,26 +64,11 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
                 {
                     int index = i + (grid.Rows.HeaderCount - (grid.Cols.HeaderCount + 1));
                     if(index>=0)
-                        list.Add(_sourceList[index]);//(T)grid[i,0].Tag);
+                        list.Add(_sourceList[index]);
                 }
             }
             return list;
         }
-
-        public T OnNewSourceEntityWanted()
-        {
-            SFGridColumnGridHelperEventArgs<T> args = new SFGridColumnGridHelperEventArgs<T>();
-            if (NewSourceEntityWanted != null)
-            {
-                NewSourceEntityWanted(this, args);
-            }
-
-            return args.SourceEntity;
-        }
-
-        #endregion
-
-        #region Grid Events
 
         internal void grid_KeyDown(object sender, KeyEventArgs e)
         {
@@ -110,17 +85,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
             if (ValidColumn(e.ColIndex))
                 _gridColumns[e.ColIndex].GetCellInfo(e, new ReadOnlyCollection<T>(_sourceList));
         }
-
-        //This makes the resizing fail?!?!?
-        //private void grid_QueryColWidth(object sender, GridRowColSizeEventArgs e)
-        //{
-        //    if (ValidColumn(e.Index))
-        //    {
-        //        if(e.Size==0)
-        //            e.Size = _gridColumns[e.Index].PreferredWidth;
-        //    }
-        //    e.Handled = true;
-        //}
 
         void grid_QueryRowCount(object sender, GridRowColCountEventArgs e)
         {
@@ -145,15 +109,9 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
         }
 
-        #endregion
-
-        #region Private
-
         private bool ValidCell(int columnIndex, int rowIndex)
         {
-            bool ret = false;
-            if (ValidColumn(columnIndex) && ValidRow(rowIndex))
-                ret = true;
+            bool ret = ValidColumn(columnIndex) && ValidRow(rowIndex);
 
             return ret;
         }
@@ -170,14 +128,10 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
         private static bool ValidRow(int rowIndex)
         {
-            bool ret = false;
-            if (rowIndex >= 0)
-                ret = true;
+            bool ret = rowIndex >= 0;
 
             return ret;
         }
-
-        #endregion
 
         public ListSortDirection SortDirection(string sortMember)
         {

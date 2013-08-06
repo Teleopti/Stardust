@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// Created by: robink
         /// Created date: 2008-06-18
         /// </remarks>
-        public ExternalLogOn(int acdLogOnMartId, int acdLogOnAggId, string acdLogOnOriginalId, string acdLogOnName, bool active)
+        public ExternalLogOn(int acdLogOnMartId, int acdLogOnAggId, string acdLogOnOriginalId, string acdLogOnName, bool active) : this()
         {
             _acdLogOnMartId = acdLogOnMartId;
             _acdLogOnAggId = acdLogOnAggId;

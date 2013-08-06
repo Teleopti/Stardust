@@ -539,24 +539,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             get { return ViewType.OrganizationTree; }
         }
-
-        /// <summary>
-        /// Enum ParentNodeType
-        /// </summary>
-        internal enum ParentNodeType
-        {
-            /// <summary>
-            /// BusinessUnit
-            /// </summary>
-            Bu,
-            /// <summary>
-            /// Site
-            /// </summary>
-            Site,
-            /// <summary>
-            /// All BUs & Sites
-            /// </summary>
-            All
-        }
     }
 }

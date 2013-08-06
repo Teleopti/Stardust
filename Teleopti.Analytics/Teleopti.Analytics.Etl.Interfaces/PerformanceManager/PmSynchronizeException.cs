@@ -6,10 +6,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.PerformanceManager
     [Serializable]
     public class PmSynchronizeException : Exception
     {
-        public PmSynchronizeException()
-        {
-        }
-
         public PmSynchronizeException(string message)
             : base(message)
         {

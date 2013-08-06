@@ -2,7 +2,7 @@
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
@@ -54,15 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			browserAssert(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
-		//public void AssertIsSatisfiedBy(string selector, Func<string,bool> verifyText)
-		//{
-		//	var element = _browser.Element(Find.BySelector(selector));
-		//	var elementText = element.Text;
-		//	var parsedText = DateTime.Parse(elementText);
-		//	var result = verifyText(elementText);
-
-		//	EventualAssert.That(() => verifyText(_browser.Element(Find.BySelector(selector)).Text), Is.True);
-		//}
 		public void AssertExists(string selector)
 		{
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
@@ -98,10 +89,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			//writer(tryOperation(() => Browser.Current.Text));
 		}
 
-		public void WaitUntilEnabled(string selector)
+		public void DumpUrl(Action<string> writer)
 		{
-			_browser.Element(Find.BySelector(selector)).WaitUntil<Element>(e=>e.Enabled);
+			writer(succeedOrIgnore(() => Browser.Current.Url));
 		}
+
+
 
 		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
 		{
@@ -135,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
-			EventualAssert.That(value, constraint, () => buildMessage(message));
+			EventualAssert.That(value, constraint, () => buildMessage(message), new WatiNIEExceptionCatcher());
 		}
 
 		private T browserOperation<T>(Func<T> operation, string message)
@@ -157,15 +150,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			builder.Append(" ");
 			DumpInfo(s => builder.Append(s));
 			return builder.ToString();
-		}
-	}
-
-	[Serializable()]
-	public class BrowserInteractionException : Exception
-	{
-		public BrowserInteractionException(string message, Exception innerException)
-			: base(message, innerException)
-		{
 		}
 	}
 }

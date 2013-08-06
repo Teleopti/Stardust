@@ -12,32 +12,16 @@ namespace Teleopti.Ccc.Domain.Common
         public const UInt32 DefaultSeed = 0xffffffff;
 
         private UInt32 hash;
-        private readonly UInt32 seed;
-        private readonly UInt32[] table;
         private static UInt32[] defaultTable;
-
-        public Crc32()
-        {
-            table = InitializeTable(DefaultPolynomial);
-            seed = DefaultSeed;
-            Initialize();
-        }
-
-        public Crc32(UInt32 polynomial, UInt32 seed)
-        {
-            table = InitializeTable(polynomial);
-            this.seed = seed;
-            Initialize();
-        }
 
         public override void Initialize()
         {
-            hash = seed;
+            hash = 0;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(table, hash, array, ibStart, cbSize);
+            hash = CalculateHash(null, hash, array, ibStart, cbSize);
         }
 
         protected override byte[] HashFinal()
@@ -55,16 +39,6 @@ namespace Teleopti.Ccc.Domain.Common
         public static UInt32 Compute(byte[] buffer)
         {
             return ~CalculateHash(InitializeTable(DefaultPolynomial), DefaultSeed, buffer, 0, buffer.Length);
-        }
-
-        public static UInt32 Compute(UInt32 seed, byte[] buffer)
-        {
-            return ~CalculateHash(InitializeTable(DefaultPolynomial), seed, buffer, 0, buffer.Length);
-        }
-
-        public static UInt32 Compute(UInt32 polynomial, UInt32 seed, byte[] buffer)
-        {
-            return ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);
         }
 
         private static UInt32[] InitializeTable(UInt32 polynomial)

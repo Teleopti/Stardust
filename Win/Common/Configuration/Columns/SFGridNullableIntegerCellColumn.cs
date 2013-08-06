@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     {
     	private readonly int _preferredWidth = 50;
        
-        public SFGridNullableIntegerCellColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        {
-        }
-
 		public SFGridNullableIntegerCellColumn(string bindingProperty, string headerText, int preferredWidth)
 			: base(bindingProperty, headerText)
 		{

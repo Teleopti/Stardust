@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Win.Intraday
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+			if (Scenario != null) Text = Text + " - " + Scenario.Description.Name;
             Cursor = Cursors.AppStarting;
             try
             {
@@ -252,8 +253,7 @@ namespace Teleopti.Ccc.Win.Intraday
         }
 
     	private void teleoptiToolStripGalleryViews_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
-        {
-			
+        {	
             if (!((IntradaySetting)_previousClickedGalleryItem.Tag).Name.Equals(_settingManager.DefaultSetting().Name)) 
                 _settingManager.UpdatePreviousDockingState();
 
@@ -325,7 +325,6 @@ namespace Teleopti.Ccc.Win.Intraday
                 var newSetting = _settingManager.DefaultSetting();
                 newSetting.Name = e.Value.Text;
                 _settingManager.Persist(newSetting.Name);
-                //_intradayViewContent.Settings.SaveIntradaySetting(intradaySetting);
             }
             catch (DataSourceException dataSourceException)
             {
@@ -489,7 +488,9 @@ namespace Teleopti.Ccc.Win.Intraday
             statusStripButtonServerUnavailable.Visible = false;
         }
 
-        public void SetChartButtons(bool enabled, AxisLocation location, ChartSeriesDisplayType type, Color color)
+	    public IScenario Scenario { get; set; }
+
+	    public void SetChartButtons(bool enabled, AxisLocation location, ChartSeriesDisplayType type, Color color)
         {
             _gridrowInChartSetting.SetButtons(enabled, location, type, color);
         }

@@ -5,14 +5,11 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -23,7 +20,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     public partial class ScheduleTagControl : BaseUserControl, ISettingPage
     {
         private List<IScheduleTag> _scheduleTags;
-        internal const int DefaultItemIndex = 0;
         private const short itemDifference = 1;
         private const short invalidItemIndex = -1;
         private const short firstItemIndex = 0;

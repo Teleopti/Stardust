@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
@@ -19,12 +17,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             get { return 100; }
         }
 
-		public RightToLeft RightToLeft { set; get; }
-
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
             object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-			e.Style.CellType = "HourMinutesEmpty"; //"TimeOfDayCell";
+			e.Style.CellType = "HourMinutesEmpty";
             e.Style.CellValue = value ?? null;
         }
 

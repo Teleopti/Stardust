@@ -7,32 +7,16 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
 {
-
-    /// <summary>
-    /// Defines the custom functionality of a  schedule dictionary.
-    /// </summary>
     public interface IScheduleDictionary : IDictionary<DateTime, IScheduleItemList>
     {
-
         void Fill(IList<ICustomScheduleAppointment> scheduleItemCollection);
-
-        void Fill(ICustomScheduleAppointment scheduleItem);
 
         IScheduleAppointmentList AllScheduleAppointments();
 
         IScheduleAppointmentList ScheduleAppointments(DateTimePeriodDto period, ScheduleAppointmentTypes scheduleItemType);
         
-        IList<ICustomScheduleAppointment> UnsavedAppointments();
-
-        IList<ICustomScheduleAppointment> UnsavedAppointments(ScheduleAppointmentTypes appointmentType, ScheduleAppointmentStatusTypes filterBy);
-
         void Clear(bool keepUnsavedScheduleItems);
 
-        void RemoveScheduleAppointment(ICustomScheduleAppointment sourceScheduleAppointment);
-
         IList<ICustomScheduleAppointment> Filter(ScheduleAppointmentStatusTypes appointmentStatusType);
-
-
     }
-
 }

@@ -22,13 +22,5 @@ namespace Teleopti.Interfaces.Domain
         bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList);
 
-		/// <summary>
-		/// Executes the specified matrix list.
-		/// </summary>
-		/// <param name="matrixList">The matrix list.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <returns></returns>
-		bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
-
     }
 }

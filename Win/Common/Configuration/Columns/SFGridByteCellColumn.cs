@@ -6,25 +6,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridByteCellColumn<T> : SFGridColumnBase<T>
     {
-        private readonly IComparer<T> _columnComparer;
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
-        }
-
         public override int PreferredWidth
         {
             get { return 50; }
         }
 
-        public SFGridByteCellColumn(string bindingProperty, string headerText, IComparer<T> columnComparer)
+        public SFGridByteCellColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         {
-            _columnComparer = columnComparer;
         }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)

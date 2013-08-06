@@ -192,15 +192,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return dCrit;
         }
 
-        /// <summary>
-        /// Loads the aggregate.
-        /// </summary>
-        /// <param name="id">The id.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-06-25
-        /// </remarks>
         public IPersonAbsence LoadAggregate(Guid id)
         {
             PersonAbsence retObj = Session.CreateCriteria(typeof(PersonAbsence))
@@ -210,14 +201,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 var initializer = new InitializeRootsPersonAbsence(new List<IPersonAbsence> {retObj});
                 initializer.Initialize();
-                //initializeAbsences(new List<IPersonAbsence> {retObj});
             }
             return retObj;
         }
-    }
-
-    public class Test
-    {
-        public Guid Id { get; set; }
     }
 }

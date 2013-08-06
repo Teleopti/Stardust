@@ -18,41 +18,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
         void DeleteSelected();
 
         /// <summary>
-        /// Renames this instance.
-        /// </summary>
-        void Rename();
-
-        /// <summary>
-        /// Sorts this instance.
-        /// </summary>
-        void Sort(SortingMode mode);
-
-        /// <summary>
-        /// Cuts this instance.
-        /// </summary>
-        void Cut();
-
-        /// <summary>
-        /// Copies this instance.
-        /// </summary>
-        void Copy();
-
-        /// <summary>
-        /// Pastes this instance.
-        /// </summary>
-        void Paste();
-
-        /// <summary>
-        /// Moves up.
-        /// </summary>
-        void MoveUp();
-
-        /// <summary>
-        /// Moves down.
-        /// </summary>
-        void MoveDown();
-
-        /// <summary>
         /// Reloads this instance.
         /// </summary>
         void Reload();

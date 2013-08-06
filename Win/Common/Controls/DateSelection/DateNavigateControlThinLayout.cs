@@ -49,12 +49,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        public void SetAvailableTimeSpan(DateOnlyPeriod dateTimePair)
-        {
-            dateTimePickerAdv1.SetAvailableTimeSpan(dateTimePair);
-            dateTimePickerAdv1.Value = dateTimePickerAdv1.MinValue;
-        }
-
         public void SetSelectedDate(DateOnly dateTime )
         {
             dateTimePickerAdv1.ValueChanged -= DropDownDateSelected;

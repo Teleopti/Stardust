@@ -56,32 +56,12 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public int RowCount { get; set; }
 
-        public int ColHeaders
-        {
-            get { return Grid.Cols.HeaderCount; }
-        }
-
-        public int RowHeaders
-        {
-            get { return Grid.Rows.HeaderCount; }
-        }
-
-        public bool IsRightToLeft
-        {
-            get { return Grid.RightToLeft == RightToLeft.Yes; }
-            set
-            {
-                if (value) Grid.RightToLeft = RightToLeft.Yes;
-                else Grid.RightToLeft = RightToLeft.No;
-            }
-        }
-
-        internal virtual bool ValidCell(int columnIndex, int rowIndex)
+        internal bool ValidCell(int columnIndex, int rowIndex)
         {
             return ValidColumn(columnIndex) && ValidRow(rowIndex);
         }
 
-        internal virtual bool ValidColumn(int columnIndex)
+        internal bool ValidColumn(int columnIndex)
         {
             bool ret = false;
             if ((columnIndex != -1) && (ColCount > 0))
@@ -91,7 +71,7 @@ namespace Teleopti.Ccc.Win.Shifts
             return ret;
         }
 
-        internal virtual bool ValidRow(int rowIndex)
+        internal bool ValidRow(int rowIndex)
         {
             return rowIndex >= 0;
         }
@@ -194,17 +174,7 @@ namespace Teleopti.Ccc.Win.Shifts
             return clipHandler;
         }
 
-        internal virtual void AddNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void InsertNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void AddNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void InsertNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void DeleteSelectedGridRows<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void ClipboardCopy()
+        internal void ClipboardCopy()
         {
             ClipHandler clipHandler = new ClipHandler();
             GridHelper.GridCopySelection(Grid, clipHandler, true);
@@ -212,10 +182,6 @@ namespace Teleopti.Ccc.Win.Shifts
         }
 
         protected virtual void Dispose(bool disposing) { }
-
-        public virtual void Sort(bool isAscending, int columnIndex)
-        {
-        }
 
         public IList<T> Sort<T>(ISortColumn<T> column,
                                 ReadOnlyCollection<T> collection,
@@ -363,14 +329,6 @@ namespace Teleopti.Ccc.Win.Shifts
         public void AddColumn(IColumn<TColumnType> column)
         {
             _gridColumns.Add(column);
-        }
-
-        /// <summary>
-        /// Sets the row count.
-        /// </summary>
-        public virtual void SetRowCount()
-        {
-            Grid.RowCount = ((ICommon<T>) Presenter).ModelCollection.Count;
         }
 
         internal override void KeyUp(KeyEventArgs e)

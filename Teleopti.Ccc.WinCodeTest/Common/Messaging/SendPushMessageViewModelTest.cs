@@ -174,8 +174,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             Assert.IsTrue(_target.ReplyOptions[0].Contains(UserTexts.Resources.Ok));
         }
 
-       
-
+        [Test]
         public void VerifyAllowDialogueReply()
         {
             Assert.IsTrue(_target.AllowDialogueReply, "should be true default");

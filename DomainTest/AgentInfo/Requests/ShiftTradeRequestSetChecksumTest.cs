@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 				scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(_scenario).Repeat.Any();
             _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
-            _mockRepository.StrictMock<IAuthorizationService>();
 			_target = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(scenarioRepository), _scheduleRepository);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();

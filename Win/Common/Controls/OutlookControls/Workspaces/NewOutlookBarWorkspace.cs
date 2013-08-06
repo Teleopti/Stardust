@@ -122,17 +122,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
             }
         }
 
-        public void SetSpecialModule()
-        {
-            var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
-            _presenter.SpecialModule = (string)selectedGroupBarItem.Tag;
-        }
-
-        public void OpenSpecialModule()
-        {
-           StartupModule(_presenter.SpecialModule);
-        }
-
         protected override void OnCreateControl()
         {
             base.OnCreateControl();

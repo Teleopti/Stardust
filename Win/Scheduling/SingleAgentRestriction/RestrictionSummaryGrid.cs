@@ -199,14 +199,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         {
         }
 
-        public void RegisterEvents()
-        {
-            PrepareViewStyleInfo += grid_PrepareViewStyleInfo;
-            CurrentCellDeactivated += grid_CurrentCellDeactivated;
-            CurrentCellActivated += grid_CurrentCellActivated;
-            CellClick += RestrictionSummaryGrid_CellClick;
-            SelectionChanged += RestrictionSummaryGridSelectionChanged;
-        }
         private void InitializeComponent()
         {
             ((ISupportInitialize)(this)).BeginInit();

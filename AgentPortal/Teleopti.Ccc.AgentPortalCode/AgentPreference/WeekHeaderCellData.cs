@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
         private readonly bool _invalid;
         private readonly bool _alert;
         private readonly int _weekNumber;
-        public WeekHeaderCellData(){}
-
+        
         public WeekHeaderCellData(bool invalid)
         {
             _invalid = invalid;

@@ -3,7 +3,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	public class WatiNSingleBrowserIEActivator : IBrowserActivator<IE>
+	public class WatiNSingleBrowserIEActivator : IBrowserActivator
 	{
 		private const string ProcessName = "iexplore";
 
@@ -16,7 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public IE Internal { get; set; }
 
-		public void Start()
+		public void SetTimeout(TimeSpan timeout)
+		{
+			Settings.WaitForCompleteTimeOut = Convert.ToInt32(timeout.TotalSeconds);
+			Settings.WaitUntilExistsTimeOut = Convert.ToInt32(timeout.TotalSeconds);
+		}
+
+		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
@@ -25,7 +31,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
+			SetTimeout(timeout);
 			StartBrowser();
+		}
+
+		public bool IsRunning()
+		{
+			return Internal != null;
 		}
 
 		private void StartBrowser()

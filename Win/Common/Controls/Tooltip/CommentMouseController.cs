@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
     /// </summary>
     public class CommentMouseController : IMouseController, IDisposable
     {
-        private const int _redCornerSize = 10;
         private const int _blackArrowSize = 5;
 
         private ContextMenu _contextMenu;
@@ -65,12 +64,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
                     }
                 }
             }
-        }
-
-        public Brush CornerBrush
-        {
-            get{return  _cornerBrush;}
-            set{ _cornerBrush = value;}
         }
 
         public int CommentCornerSize

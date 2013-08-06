@@ -7,7 +7,6 @@ namespace AnalysisServicesManager
     public class CubeSourceFormat
     {
         private string _pre;
-        private const string provider = "Provider=SQLNCLI.1;";
         private const string versionCommand = "select convert(char(20), serverproperty('ProductVersion'))";
 
         public CubeSourceFormat(string pre)

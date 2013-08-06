@@ -130,12 +130,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
         }
 
-        public virtual void OnTypeChanged(Type newType, T dataItem)
-        {
-        	var args = new TypeChangeEventArgs {NewType = newType, DataItem = dataItem};
-            OnTypeChanged(args);
-        }
-
         public virtual void OnTypeChanged(TypeChangeEventArgs args)
         {
         	var handler = TypeChanged;

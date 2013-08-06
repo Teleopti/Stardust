@@ -13,34 +13,20 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
             InitializeComponent();
         }
 
-        public OptionList(IEnumerable<string> optionList)
+        public void SetOptionItems(ICollection<string> value)
         {
             panel1.Controls.Clear();
-            foreach (string item in optionList)
+            _selected = "";
+            if (value.Count == 1)
+            {
+                IEnumerator<string> enumerator = value.GetEnumerator();
+                enumerator.MoveNext();
+                _selected = enumerator.Current;
+            }
+
+            foreach (string item in value)
             {
                 CreateRadioButton(item);
-            }
-        }
-
-        //Fix later
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly")]
-        public ICollection<string> OptionItems
-        {
-            set
-            {
-                panel1.Controls.Clear();
-                _selected = "";
-                if (value.Count == 1)
-                {
-                    IEnumerator<string> enumerator = value.GetEnumerator();
-                    enumerator.MoveNext();
-                    _selected = enumerator.Current;
-                }
-
-                foreach (string item in value)
-                {
-                    CreateRadioButton(item);
-                }
             }
         }
 

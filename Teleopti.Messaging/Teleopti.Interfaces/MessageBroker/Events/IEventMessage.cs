@@ -7,9 +7,8 @@ namespace Teleopti.Interfaces.MessageBroker.Events
     /// <summary>
     /// Event Message, is the acctual message sent as a Message or Receipt.
     /// </summary>
-    public interface IEventMessage : ISerializable, IComparable
+    public interface IEventMessage : IComparable
     {
-
         /// <summary>
         /// Each type of event has an ID.
         /// </summary>
@@ -26,31 +25,10 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         DateTime EventEndDate { get; set; }
         
         /// <summary>
-        /// The User ID.
-        /// Who raised the event?  
-        /// </summary>
-        int UserId { get; set; }
-
-        /// <summary>
-        /// Id of the raising process for this event message.
-        /// </summary>
-        int ProcessId { get; set; }
-
-        /// <summary>
         /// The module id within the process.
         /// </summary>
         Guid ModuleId { get; set; }
         
-        /// <summary>
-        /// The size of the package
-        /// </summary>
-        int PackageSize { get; set; }
-
-        /// <summary>
-        /// Is this message a heart beat?
-        /// </summary>
-        bool IsHeartbeat { get; set; }
-
         /// <summary>
         /// The 'Domain Object ID' for the Parent Object. The hibernate key for the parent domain object.
         /// The Parent is an object that rules the existance of a child. Forinstance IPersonalAssignment
@@ -106,12 +84,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         DateTime ChangedDateTime { get; set; }
 
         /// <summary>
-        /// Is this event message generated from the same process
-        /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Interprocess")]
-        bool IsInterprocess { get; set; }
-
-        /// <summary>
         /// Gets the reference object type cache.
         /// </summary>
         /// <value>The reference object type cache.</value>
@@ -122,12 +94,5 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// </summary>
         /// <value>The domain object type cache.</value>
         Type DomainObjectTypeCache { get; }
-
-        /// <summary>
-        /// Override of the ToString method
-        /// </summary>
-        /// <returns></returns>
-        String ToString();
-
     }
 }

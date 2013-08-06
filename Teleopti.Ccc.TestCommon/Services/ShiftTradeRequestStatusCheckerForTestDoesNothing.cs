@@ -11,11 +11,6 @@ namespace Teleopti.Ccc.TestCommon.Services
         {
         }
 
-    	public bool IsInBatchMode
-    	{
-			get { return false; }
-    	}
-
     	public void StartBatch(IEnumerable<IPersonRequest> personRequests)
     	{
     	}

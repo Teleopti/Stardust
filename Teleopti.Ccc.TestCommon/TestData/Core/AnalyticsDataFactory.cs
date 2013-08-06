@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private IEnumerable<T> QueryData<T>() { return from s in _analyticsSetups where typeof(T).IsAssignableFrom(s.GetType()) select (T)s; }
 
 		public IEnumerable<IAnalyticsDataSetup> Setups { get { return _analyticsSetups; } } 
-		public bool HasSetup<T>() { return QueryData<T>().Any(); }
 		public T Data<T>() { return QueryData<T>().SingleOrDefault(); }
 
 	}

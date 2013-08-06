@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gridControlMultiplicatorDefinition.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlMultiplicatorDefinition.Model));
 
             var sfGridDropDownColumn = new SFGridDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicatorDefinitionAdapter>(
-                    "MultiplicatorDefinitionType", Resources.Type, _multiplicatorDefinitionTypeCollection, "Name", null, typeof(MultiplicatorDefinitionAdapter));
+                    "MultiplicatorDefinitionType", Resources.Type, _multiplicatorDefinitionTypeCollection, "Name", typeof(MultiplicatorDefinitionAdapter));
 
             columnList.Add(sfGridDropDownColumn);
             columnList.Add(new SFGridDropDownEnumColumn<IMultiplicatorDefinitionViewModel, DayOfWeekAdapter, DayOfWeek>("DayOfWeek", Resources.DayOfWeek, _dayOfWeekAdapterCollection, "DisplayName", "DayOfWeek"));

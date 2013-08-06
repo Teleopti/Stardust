@@ -133,13 +133,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			possible.ShiftValue = 100;
 			_manualResetEvent.Set();
-
-			//Console.WriteLine("Resetting it manual");
-		}
-
-		public ManualResetEvent ManualResetEvent
-		{
-			get { return _manualResetEvent; }
 		}
 
 		public void Dispose()
@@ -157,7 +150,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_manualResetEvent = null;
 			}
 		}
-
-		
 	}
 }

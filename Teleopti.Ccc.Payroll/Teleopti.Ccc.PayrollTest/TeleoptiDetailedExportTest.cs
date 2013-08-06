@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -151,11 +152,13 @@ namespace Teleopti.Ccc.PayrollTest
 		    mocks.VerifyAll();
 	    }
 
+
+
 	    [Test]
 	    public void BatchingShouldNotHaveIntersection()
 	    {
-		    var mocks = new MockRepository();
-		    var schedulingService = mocks.DynamicMock<ITeleoptiSchedulingService>();
+		    var schedulingService = MockRepository.DynamicMock<ITeleoptiSchedulingService>();
+		    var personId = Guid.NewGuid();
 
 		    var payrollExportDto = new PayrollExportDto
 			    {
@@ -164,27 +167,73 @@ namespace Teleopti.Ccc.PayrollTest
 					    new DateOnly(2009, 2, 1),
 					    new DateOnly(2009, 2, 1))
 			    };
-		    for (var i = 0; i < 51; i++)
-			    payrollExportDto.PersonCollection.Add(new PersonDto());
 
-		    schedulingService.Expect(s => s.GetTeleoptiDetailedExportData(null, null, null, null))
+		    payrollExportDto.PersonCollection.Add(new PersonDto
+			    {
+				    Id = personId,
+				    EmploymentNumber = ""
+			    });
+		    for (var i = 0; i < 50; i++)
+			    payrollExportDto.PersonCollection.Add(new PersonDto
+				    {
+					    Id = Guid.NewGuid(),
+					    EmploymentNumber = ""
+				    });
+		    var multiplicatorDto = new MultiplicatorDto
+			    {
+				    PayrollCode = ""
+			    };
+
+		    schedulingService.Expect(s => s.GetAbsences(null))
 		                     .IgnoreArguments()
-		                     .Return(new List<PayrollBaseExportDto>
+		                     .Return(new List<AbsenceDto> {new AbsenceDto()});
+
+#pragma warning disable 612,618
+		    schedulingService.Expect(s => s.GetSchedulePartsForPersons(null, null, null, null))
+
+		                     .IgnoreArguments()
+		                     .Return(new List<SchedulePartDto>
 			                     {
-				                     new PayrollBaseExportDto(),
-				                     new PayrollBaseExportDto()
+				                     new SchedulePartDto
+					                     {
+						                     PersonId = personId,
+					                     }
 			                     });
-		    mocks.ReplayAll();
+
+		    schedulingService.Expect(s => s.GetPersonMultiplicatorDataForPersons(null, null, null, null))
+		                     .IgnoreArguments()
+		                     .Return(new List<MultiplicatorDataDto>
+			                     {
+				                     new MultiplicatorDataDto
+					                     {
+						                     PersonId = personId,
+						                     Date = new DateTime(),
+						                     Multiplicator = multiplicatorDto,
+						                     Amount = new TimeSpan()
+					                     }
+			                     });
+
+
+		    MockRepository.ReplayAll();
 
 		    Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
-		    var argumentsUsed =
-			    schedulingService.GetArgumentsForCallsMadeOn(s => s.GetTeleoptiDetailedExportData(null, null, null, null));
 
-		    var firstList = (PersonDto[]) argumentsUsed[0][0];
-		    var secondList = (PersonDto[]) argumentsUsed[1][0];
+		    var multiplicatorArgs =
+			    schedulingService.GetArgumentsForCallsMadeOn(s => s.GetPersonMultiplicatorDataForPersons(null, null, null, null));
+		    var firstBatchMultiplicatorAgentList = (PersonDto[]) multiplicatorArgs[0][0];
+		    var secondBatchMultiplicatorAgentListList = (PersonDto[]) multiplicatorArgs[1][0];
+		    var multiplicatorBatchIntersection =
+			    firstBatchMultiplicatorAgentList.Intersect(secondBatchMultiplicatorAgentListList);
 
-		    var intersection = firstList.Intersect(secondList);
-		    intersection.Count().Should().Be.EqualTo(0);
+		    var schedulePartArgs =
+			    schedulingService.GetArgumentsForCallsMadeOn(s => s.GetSchedulePartsForPersons(null, null, null, null));
+		    var firstBatchSchedulePartsAgentList = (PersonDto[]) schedulePartArgs[0][0];
+		    var secondBatchSchedulePartsAgentList = (PersonDto[]) schedulePartArgs[1][0];
+		    var schedulePartBatchIntersection = firstBatchSchedulePartsAgentList.Intersect(secondBatchSchedulePartsAgentList);
+
+		    multiplicatorBatchIntersection.Count().Should().Be.EqualTo(0);
+		    schedulePartBatchIntersection.Count().Should().Be.EqualTo(0);
+#pragma warning restore 612,618
 	    }
     }
 }

@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Common.Library
         {
             base.AddServices();
 
-            RootWorkItem.Services.AddNew<ProfileCatalogModuleInfoStore, IModuleInfoStore>();
             RootWorkItem.Services.AddNew<WorkspaceLocatorService, IWorkspaceLocatorService>();
             RootWorkItem.Services.Remove<IModuleEnumerator>();
             RootWorkItem.Services.Remove<IModuleLoaderService>();

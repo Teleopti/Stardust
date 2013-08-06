@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -38,7 +37,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 										   Guid.NewGuid(),
 										   Guid.Empty,
 										   typeof(IStatisticTask),
-										   DomainUpdateType.Insert,
 										   identity.DataSource.DataSourceName,
 										   Guid.Empty);
 				}

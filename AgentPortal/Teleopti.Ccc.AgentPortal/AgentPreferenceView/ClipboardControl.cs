@@ -35,35 +35,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             get { return toolStripSplitButtonPaste; }
         }
 
-        /// <summary>
-        /// add toolstripbuttons to the specialitemslist
-        /// </summary>
-        public IList<ToolStripItem> PasteSpecialItems
-        {
-            get { return _pasteSpecialItems; }
-        }
-
-
         private IList<ToolStripItem> _copySpecialItems;
 
-        /// <summary>
-        /// add toolstripbuttons to the specialitemslist
-        /// </summary>
-        public IList<ToolStripItem> CopySpecialItems
-        {
-            get { return _copySpecialItems; }
-        }
-
-
         private IList<ToolStripItem> _cutSpecialItems;
-
-        /// <summary>
-        /// add toolstripbuttons to the specialitemslist
-        /// </summary>
-        public IList<ToolStripItem> CutSpecialItems
-        {
-            get { return _cutSpecialItems; }
-        }
 
         #region public events
         /// <summary>
@@ -145,42 +119,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             }
             Refresh();
         }
-        /// <summary>
-        /// Sets the enabled state of the specified buttondroppdownitem.
-        /// </summary>
-        /// <param name="thisDropDown">this dropdown.</param>
-        /// <param name="thisTag">this tag.</param>
-        /// <param name="enabled">if set to <c>true</c> [enabled].</param>
-        /// <remarks>
-        /// Created by: ostenpe
-        /// Created date: 2008-08-20
-        /// </remarks>
-        public void SetButtonDropDownItemState(ClipboardAction thisDropDown, string thisTag, bool enabled)
-        {
-            switch (thisDropDown)
-            {
-                case ClipboardAction.Copy:
-                    SetEnabled(thisTag, enabled, _copySpecialItems );
-                    break;
-                case ClipboardAction.Cut:
-                    SetEnabled(thisTag, enabled, _cutSpecialItems);
-                    break;
-                case ClipboardAction.Paste:
-                    SetEnabled(thisTag, enabled, _pasteSpecialItems);
-                    break;
 
-            }
-            Refresh();
-        }
-
-        private static void SetEnabled(string thisTag, bool enabled, IEnumerable<ToolStripItem> list)
-        {
-            foreach (var c in list )
-            {
-                if (c.Tag.ToString() != thisTag) continue;
-                c.Enabled = enabled;
-            }
-        }
         #endregion
 
         #region internal events

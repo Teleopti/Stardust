@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.Win.Meetings
             if (handler != null)
             {
                 // Creates the event args.
-                var e = new AddressBookParticipantSelectionEventArgs(_presenter.AddressBookViewModel);
+                var e = new AddressBookParticipantSelectionEventArgs();
 
                 // Invokes the participant seleceted event
                 handler.Invoke(this, e);

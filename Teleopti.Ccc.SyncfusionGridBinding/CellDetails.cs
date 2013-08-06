@@ -45,15 +45,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			}
 		}
 
-		public bool IsFirstCell
-		{
-			get
-			{
-				return _gridStyleInfo.CellIdentity != null &&
-					   _gridStyleInfo.CellIdentity.ColIndex == 0 && _gridStyleInfo.CellIdentity.RowIndex == 0;
-			}
-		}
-
 		public bool IsContentCell
 		{
 			get

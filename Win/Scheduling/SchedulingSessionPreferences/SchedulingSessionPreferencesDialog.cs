@@ -65,12 +65,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (!DesignMode) SetTexts();
         }
 
-        public ISchedulingOptions CurrentOptions
-        {
-            get { return _schedulingOptions; }
-        }
-
-		private void loadPersonalSettings()
+        private void loadPersonalSettings()
 		{
 			try
 			{

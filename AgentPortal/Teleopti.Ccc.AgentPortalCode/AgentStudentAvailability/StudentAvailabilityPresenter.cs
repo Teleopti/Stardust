@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
             get { return _model.CellDataCollection; }
         }
 
-        public DateTime FirstDateOfPeriod
-        {
-            get { return _model.FirstDateCurrentPeriod; }
-        }
-
         public string PeriodInfo()
         {
             if (_model.LoggedOnPerson.WorkflowControlSet != null)

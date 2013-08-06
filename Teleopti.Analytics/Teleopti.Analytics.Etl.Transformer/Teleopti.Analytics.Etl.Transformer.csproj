@@ -198,7 +198,6 @@
     <Compile Include="Job\Steps\DimSiteJobStep.cs" />
     <Compile Include="Job\Steps\DimTeamJobStep.cs" />
     <Compile Include="Job\Steps\FactForecastWorkloadJobStep.cs" />
-    <Compile Include="Job\Steps\FactScheduleContractJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleJobStep.cs" />
     <Compile Include="Job\Steps\StageAbsenceJobStep.cs" />
     <Compile Include="Job\Steps\StageActivityJobStep.cs" />

@@ -10,7 +10,6 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -39,8 +38,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			_messageSender.Expect(
 				x =>
 				x.SendData(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<Guid>.Is.Anything,
-						   Arg<Guid>.Matches(g2 => g2 == Guid.Empty), Arg<Type>.Matches(t => t == typeof(IStatisticTask)),
-						   Arg<DomainUpdateType>.Matches(d => d == DomainUpdateType.Insert), Arg<string>.Is.Anything,
+						   Arg<Guid>.Matches(g2 => g2 == Guid.Empty), Arg<Type>.Matches(t => t == typeof(IStatisticTask)), Arg<string>.Is.Anything,
 				           Arg<Guid>.Is.Anything));
 
 			var target = new StatisticsUpdateNotificationJobStep(_jobParameters);

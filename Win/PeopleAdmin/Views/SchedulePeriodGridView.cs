@@ -1450,7 +1450,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		/// Created by: Dinesh Ranasinghe
 		/// Created date: 2008-07-31
 		/// </remarks>
-		internal override void CopySpecial<T>(object sender, T eventArgs)
+		internal void CopySpecial<T>(object sender, T eventArgs)
 		{
 			if (Grid.Model.CurrentCellInfo == null)
 			{
@@ -1526,7 +1526,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		/// Created by: Dinesh Ranasinghe
 		/// Created date: 2008-07-31
 		/// </remarks>
-		internal override void PasteSpecial<T>(object sender, T eventArgs)
+		internal void PasteSpecial<T>(object sender, T eventArgs)
 		{
 			GridRangeInfoList gridRangeInfoList = Grid.Model.Selections.Ranges;
 

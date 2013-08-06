@@ -39,27 +39,14 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         public static ViewConstructor Instance
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new ViewConstructor();
-
-                return _instance;
-            }
+            get { return _instance ?? (_instance = new ViewConstructor()); }
         }
 
-        public Control HostedView
-        {
-            get { return _hostedView; }
-        }
-
-       PreferenceView GetPreferenceView(IToggleButtonState parent)
+       private PreferenceView GetPreferenceView(IToggleButtonState parent)
        {
-           if (_preferenceView == null)
-               _preferenceView = new PreferenceView(parent);
-
-           return _preferenceView;
+           return _preferenceView ?? (_preferenceView = new PreferenceView(parent));
        }
+
         public Control BuildPortalView(ViewType type, Control container, IToggleButtonState parent)
         {
             if (_scheduleControl == null)

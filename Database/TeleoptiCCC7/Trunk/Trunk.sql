@@ -915,3 +915,11 @@ GO
 
 UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
 GO
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-07-18
+--Desc: Remove unused column for soft deletes
+---------------- 
+ALTER TABLE dbo.MultisiteDay DROP COLUMN IsDeleted
+GO

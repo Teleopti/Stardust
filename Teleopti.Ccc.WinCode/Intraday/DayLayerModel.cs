@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
-    public class DayLayerModel : DependencyObject, INotifyPropertyChanged
+    public class DayLayerModel : DependencyObject, INotifyPropertyChanged, IEditableObject
     {
         private readonly IPerson _person;
         private readonly DateTimePeriod _period;
@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private int _colorValue = 16777215;
         private double _staffingEffect;
         private DateTime _alarmStart;
+		private bool _isInEditMode;
 
         public DayLayerModel(IPerson person, DateTimePeriod period, ITeam team,
                              LayerViewModelCollection layerViewModelCollection,
@@ -39,17 +40,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _period = period;
         }
 
-        public ITeam Team
-        {
-            get { return _team; }
-        }
+	    public ITeam Team
+	    {
+		    get { return _team; }
+	    }
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+	    public IPerson Person
+	    {
+		    get { return _person; }
+	    }
 
-        public string CommonNameDescription
+	    public string CommonNameDescription
         {
             get { return _commonNameDescriptionSetting.BuildCommonNameDescription(_person); }
         }
@@ -59,11 +60,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _isPinned; }
             set
             {
-                if (_isPinned != value)
-                {
-                    _isPinned = value;
-                    notifyPropertyChanged("IsPinned");
-                }
+	            if (_isPinned == value) return;
+	            _isPinned = value;
+	            notifyPropertyChanged("IsPinned");
             }
         }
 
@@ -180,8 +179,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 notifyPropertyChanged("StaffingEffect");
             }
         }
-
-        public bool ShowNextActivity
+		
+		public bool ShowNextActivity
         {
             get { return (bool)GetValue(ShowNextActivityProperty); }
             set { SetValue(ShowNextActivityProperty, value); }
@@ -192,11 +191,24 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _period; }
         }
 
-        public static readonly DependencyProperty ShowNextActivityProperty =
+	    public bool EditLayer
+	    {
+		    get { return _editLayer; }
+		    set
+		    {
+			    if (_editLayer == value) return;
+			    _editLayer = value;
+				notifyPropertyChanged("EditLayer");
+		    }
+	    }
+
+	    public static readonly DependencyProperty ShowNextActivityProperty =
             DependencyProperty.Register("ShowNextActivity", typeof(bool), typeof(DayLayerModel),
                                         new UIPropertyMetadata(false));
 
-        public int HookedEvents()
+	    private bool _editLayer;
+
+	    public int HookedEvents()
         {
             var handler = PropertyChanged;
             if (handler == null)
@@ -217,5 +229,31 @@ namespace Teleopti.Ccc.WinCode.Intraday
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+		public bool IsInEditMode
+		{
+			get { return _isInEditMode; }
+			set
+			{
+				if (_isInEditMode == value) return;
+				_isInEditMode = value;
+				notifyPropertyChanged("IsInEditMode");
+			}
+		}
+
+		public void BeginEdit()
+		{
+			IsInEditMode = true;
+		}
+
+		public void EndEdit()
+		{
+			IsInEditMode = false;
+		}
+
+		public void CancelEdit()
+		{
+			IsInEditMode = false;
+		}
     }
 }

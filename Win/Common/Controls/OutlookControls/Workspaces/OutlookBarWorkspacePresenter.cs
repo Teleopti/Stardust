@@ -21,11 +21,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
             _view.StartupModule(_model.StartupModule);
         }
 
-        public void Add(OutlookBarInfo outlookBarSmartPartInfo)
-        {
-            _model.Add(outlookBarSmartPartInfo);
-        }
-
         public IList<OutlookBarInfo> GetItems()
         {
             return _model.ItemCollection;

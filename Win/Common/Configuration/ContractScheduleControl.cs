@@ -451,14 +451,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             handleDataSourceToControlTransfer();
         }
 
-        private IContractSchedule findEntity()
-        {
-            IContractSchedule contractSchedule = null;
-            if (comboBoxAdvScheduleCollection.SelectedValue != null)
-                contractSchedule = (IContractSchedule)comboBoxAdvScheduleCollection.SelectedItem;
-            return contractSchedule;
-        }
-
         private static string getDayNameShort(DayOfWeek day)
         {
             return CurrentUiCulture.DateTimeFormat.GetShortestDayName(day);

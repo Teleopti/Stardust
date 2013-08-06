@@ -9,7 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -318,7 +318,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the edit activity minimum and maximum fields")]
 		public void ThenIShouldNotSeeTheEditActivityMinimumAndMaximumFields()
 		{
-
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-min");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-max");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-end-time-min");

@@ -9,31 +9,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     public class SFGridDynamicDropDownColumn<T, TItem> : SFGridColumnBase<T> 
     {
         private readonly string _displayMember;
-        private readonly IComparer<T> _columnComparer;
         private readonly Type _baseClass;
         private readonly string _comboItemsProperty;
 
-        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string comboItemsProperty, string displayMember, IComparer<T> columnComparer, Type baseClass)
-            : this(bindingProperty, headerText,null, comboItemsProperty, displayMember, columnComparer, baseClass)
-        {
-        }
-
-        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, string comboItemsProperty, string displayMember, IComparer<T> columnComparer, Type baseClass)
+        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, string comboItemsProperty, string displayMember, Type baseClass)
             : base(bindingProperty, headerText)
         {
             GroupHeaderText = groupHeaderText;
             _comboItemsProperty = comboItemsProperty;
             _displayMember = displayMember;
-            _columnComparer = columnComparer;
             _baseClass = baseClass;
-        }
-
-        public override IComparer<T> ColumnComparer
-        {
-            get
-            {
-                return _columnComparer;
-            }
         }
 
         public override int PreferredWidth

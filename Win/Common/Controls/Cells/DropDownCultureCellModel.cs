@@ -1,8 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
+    [Serializable]
 	public class DropDownCultureCellModel : GridComboBoxCellModel
 	{
 		public DropDownCultureCellModel(GridModel grid)

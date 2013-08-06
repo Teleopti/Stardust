@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Helper;
 
@@ -40,8 +38,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
         {
             get { return _propertyReflectorHelper; }
         }
-
-        public event EventHandler<SFGridColumnCellChangedEventArgs<T>> CellChanged;
 
         public virtual int PreferredWidth 
         {
@@ -84,7 +80,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
                     {
                         T dataItem = dataItems[row];
                         SaveCellValue(e, dataItems, dataItem);
-                        OnCellChanged(dataItem);
                         e.Handled = true;    
                     }
                 }
@@ -92,15 +87,5 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
         }
 
         public abstract void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem);
-
-        public virtual void OnCellChanged(T dataItem)
-        {
-            if (CellChanged != null)
-            {
-                SFGridColumnCellChangedEventArgs<T> args = new SFGridColumnCellChangedEventArgs<T>(dataItem);
-                CellChanged(this, args);
-            }
-        }
-
     }
 }

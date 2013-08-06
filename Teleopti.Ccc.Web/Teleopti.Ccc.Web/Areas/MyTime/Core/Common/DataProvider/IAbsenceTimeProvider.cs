@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -19,15 +18,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		/// <param name="period"></param>
 		/// <returns></returns>
 		IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period);
-	}
-
-	public interface IAbsenceTimeDay
-	{
-		DateTime Date { get; set; }
-		
-		/// <summary>
-		/// Time in minutes
-		/// </summary>
-		double AbsenceTime { get; set; }
 	}
 }

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Schedules;
-using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
@@ -13,8 +10,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
     [Serializable]
     public class VisualProjectionColumnHeaderCellModel : GridHeaderCellModel
     {
-        private VisualProjection _cellValue;
-
         public VisualProjectionColumnHeaderCellModel(GridModel grid)
             : base(grid)
         {
@@ -23,12 +18,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
         protected VisualProjectionColumnHeaderCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-        }
-
-        protected internal VisualProjection CellValue
-        {
-            get { return _cellValue; }
-            set { _cellValue = value; }
         }
 
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)

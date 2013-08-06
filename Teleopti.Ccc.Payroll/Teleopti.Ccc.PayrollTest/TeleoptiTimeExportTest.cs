@@ -123,40 +123,56 @@ namespace Teleopti.Ccc.PayrollTest
             mocks.VerifyAll();
         }
 
-		[Test]
-		public void BatchingShouldNotHaveIntersection()
-		{
-			var mocks = new MockRepository();
-			var schedulingService = mocks.DynamicMock<ITeleoptiSchedulingService>();
+	    [Test]
+	    public void BatchingShouldNotHaveIntersection()
+	    {
+		    var schedulingService = MockRepository.DynamicMock<ITeleoptiSchedulingService>();
+		    var personId = Guid.NewGuid();
 
-			var payrollExportDto = new PayrollExportDto
-			{
-				TimeZoneId = "Utc",
-				DatePeriod = new DateOnlyPeriodDtoForPayrollTest(
-					new DateOnly(2009, 2, 1),
-					new DateOnly(2009, 2, 1))
-			};
-			for (var i = 0; i < 51; i++)
-				payrollExportDto.PersonCollection.Add(new PersonDto());
+		    var payrollExportDto = new PayrollExportDto
+			    {
+				    TimeZoneId = "Utc",
+				    DatePeriod = new DateOnlyPeriodDtoForPayrollTest(new DateOnly(2009, 2, 1), new DateOnly(2009, 2, 1))
+			    };
 
-			schedulingService.Expect(s => s.GetTeleoptiTimeExportData(null, null, null, null))
-							 .IgnoreArguments()
-							 .Return(new List<PayrollBaseExportDto>
+		    payrollExportDto.PersonCollection.Add(new PersonDto
+			    {
+				    Id = personId,
+				    EmploymentNumber = "",
+				    TimeZoneId = "Utc"
+			    });
+
+		    for (var i = 0; i < 50; i++)
+			    payrollExportDto.PersonCollection.Add(new PersonDto
+				    {
+					    Id = Guid.NewGuid(),
+					    EmploymentNumber = ""
+				    });
+
+#pragma warning disable 612,618
+		    schedulingService.Expect(s => s.GetSchedulePartsForPersons(null, null, null, null))
+		                     .IgnoreArguments()
+		                     .Return(new List<SchedulePartDto>
 			                     {
-				                     new PayrollBaseExportDto(),
-				                     new PayrollBaseExportDto()
+				                     new SchedulePartDto
+					                     {
+						                     PersonId = personId,
+						                     LocalPeriod = new DateTimePeriodDto(),
+						                     ContractTime = new DateTime()
+					                     }
 			                     });
-			mocks.ReplayAll();
+		    MockRepository.ReplayAll();
 
-			Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
-			var argumentsUsed =
-				schedulingService.GetArgumentsForCallsMadeOn(s => s.GetTeleoptiTimeExportData(null, null, null, null));
+		    Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
 
-			var firstList = (PersonDto[])argumentsUsed[0][0];
-			var secondList = (PersonDto[])argumentsUsed[1][0];
+		    var schedulePartArgs =
+			    schedulingService.GetArgumentsForCallsMadeOn(s => s.GetSchedulePartsForPersons(null, null, null, null));
+		    var firstBatchAgentList = (PersonDto[]) schedulePartArgs[0][0];
+		    var secondBatchAgentList = (PersonDto[]) schedulePartArgs[1][0];
+		    var batchIntersection = firstBatchAgentList.Intersect(secondBatchAgentList);
 
-			var intersection = firstList.Intersect(secondList);
-			intersection.Count().Should().Be.EqualTo(0);
-		}
+		    batchIntersection.Count().Should().Be.EqualTo(0);
+#pragma warning restore 612,618
+	    }
     }
 }
