@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -57,17 +58,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			assert(_browser.HasJQueryCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
+			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.HasNoJQueryCss(notExistsSelector, options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertContains(string selector, string text)
 		{
+			//assert(_browser.HasCss(selector, new Regex(text)), Is.True, "Failed to assert that " + selector + " contained text " + text);
 			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
 			eventualAssert(() => _browser.ExecuteScript(script), Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
 		}

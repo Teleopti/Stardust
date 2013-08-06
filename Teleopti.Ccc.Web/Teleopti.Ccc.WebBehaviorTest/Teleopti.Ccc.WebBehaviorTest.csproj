@@ -140,7 +140,6 @@
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\JQueryScript.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
