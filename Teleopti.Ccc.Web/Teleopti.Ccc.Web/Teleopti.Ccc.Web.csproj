@@ -210,6 +210,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\CalendarLinkId.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\CalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ICalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\ICalendarLinkSettingsPersisterAndProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\ShareCalendarController.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ISettingsPermissionViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsPermissionViewModelFactory.cs" />
@@ -371,8 +377,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\IPersonPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\PersonPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\IPersonPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimePeriodFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />

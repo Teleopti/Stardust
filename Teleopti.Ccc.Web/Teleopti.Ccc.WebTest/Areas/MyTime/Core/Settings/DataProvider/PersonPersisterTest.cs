@@ -9,9 +9,9 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 
-namespace Teleopti.Ccc.WebTest.Core.Settings
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.DataProvider
 {
 	[TestFixture]
 	public class PersonPersisterTest

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.Mapping
 {
 	[TestFixture]
 	public class SettingsViewModelMappingTest

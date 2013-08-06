@@ -1,0 +1,47 @@
+using System;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings
+{
+	[TestFixture]
+	public class CalendarLinkIdGeneratorTest
+	{
+		[Test]
+		public void ShouldGenerate()
+		{
+			var currentDataSource = MockRepository.GenerateMock<ICurrentDataSource>();
+			currentDataSource.Stub(x => x.CurrentName()).Return("test");
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = new Person();
+			var personId = Guid.NewGuid();
+			person.SetId(personId);
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var target = new CalendarLinkIdGenerator(currentDataSource, loggedOnUser);
+			var id = target.Generate();
+
+			id.Should().Be.EqualTo(Encryption.EncryptStringToBase64("test/" + personId, EncryptionConstants.Image1,
+			                                                        EncryptionConstants.Image2));
+		}
+
+		[Test]
+		public void ShouldParse()
+		{
+			var personId = Guid.NewGuid();
+			var id = Encryption.EncryptStringToBase64("test/" + personId, EncryptionConstants.Image1,
+			                                          EncryptionConstants.Image2);
+
+			var target = new CalendarLinkIdGenerator(null, null);
+			var result = target.Parse(id);
+			result.DataSourceName.Should().Be.EqualTo("test");
+			result.PersonId.Should().Be.EqualTo(personId);
+		}
+	}
+}

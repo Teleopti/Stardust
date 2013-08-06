@@ -1,17 +1,14 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -23,25 +20,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
-		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
-		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
+		private readonly ICalendarLinkSettingsPersisterAndProvider _calendarLinkSettingsPersisterAndProvider;
+		private readonly ICalendarLinkIdGenerator _calendarLinkIdGenerator;
 
-		public SettingsController(IMappingEngine mapper, 
-								  ILoggedOnUser loggedOnUser, 
-								  IModifyPassword modifyPassword, 
-								  IPersonPersister personPersister, 
-								  IPersonalSettingDataRepository personalSettingDataRepository, 
-								  ICurrentDataSource currentDataSource, 
-								  ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory)
+		public SettingsController(IMappingEngine mapper,
+								  ILoggedOnUser loggedOnUser,
+								  IModifyPassword modifyPassword,
+								  IPersonPersister personPersister,
+								  ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
+								  ICalendarLinkSettingsPersisterAndProvider calendarLinkSettingsPersisterAndProvider,
+								  ICalendarLinkIdGenerator calendarLinkIdGenerator)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
-			_personalSettingDataRepository = personalSettingDataRepository;
-			_currentDataSource = currentDataSource;
 			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
+			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
+			_calendarLinkIdGenerator = calendarLinkIdGenerator;
 		}
 
 		[EnsureInPortal]
@@ -102,23 +99,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public JsonResult SetCalendarLinkStatus(bool isActive)
 		{
-			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
-			var url = string.Empty;
-			if (isActive)
+			var calendarLinkViewModel = new CalendarLinkViewModel
 			{
-				var requestUrl = Request.Url.OriginalString;
-				var dataSourceName = _currentDataSource.CurrentName();
-				var userId = _loggedOnUser.CurrentUser().Id.Value;
-				var uniqueValue = dataSourceName + "/" + userId;
-				var encryptedUniqueValue = StringEncryption.Encrypt(uniqueValue);
-				url =
-					requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/SetCalendarLinkStatus", System.StringComparison.Ordinal)) +
-					"Share?id=" + Url.Encode(encryptedUniqueValue);
-			}
-			setting.IsActive = isActive;
-			setting.CalendarUrl = url;
-			_personalSettingDataRepository.PersistSettingValue(setting);
-			return Json(url);
+				IsActive =
+					_calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings { IsActive = isActive }).IsActive
+			};
+			if (calendarLinkViewModel.IsActive)
+				calendarLinkViewModel.Url = getCalendarUrl("SetCalendarLinkStatus");
+			return Json(calendarLinkViewModel);
 		}
 
 		[UnitOfWorkAction]
@@ -126,8 +114,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public JsonResult CalendarLinkStatus()
 		{
-			var setting = _personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
-			return Json(setting, JsonRequestBehavior.AllowGet);
+			var setting = _calendarLinkSettingsPersisterAndProvider.Get();
+			var calendarLinkViewModel = new CalendarLinkViewModel { IsActive = setting.IsActive };
+			if (calendarLinkViewModel.IsActive)
+				calendarLinkViewModel.Url = getCalendarUrl("CalendarLinkStatus");
+			return Json(calendarLinkViewModel, JsonRequestBehavior.AllowGet);
+		}
+
+		private string getCalendarUrl(string actionName)
+		{
+			var calendarId = _calendarLinkIdGenerator.Generate();
+			var requestUrl = Request.Url.OriginalString;
+			return requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/" + actionName, System.StringComparison.Ordinal)) +
+				"Share?id=" + Url.Encode(calendarId);
 		}
 	}
 }

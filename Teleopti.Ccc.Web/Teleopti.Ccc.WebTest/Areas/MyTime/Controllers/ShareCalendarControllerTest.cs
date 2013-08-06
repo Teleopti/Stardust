@@ -9,7 +9,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -17,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -38,6 +38,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		private IPersonalSettingDataRepository _personalSettingDataRepository;
 		private IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private IPermissionProvider _permissionProvider;
+		private ICalendarLinkIdGenerator _calendarLinkIdGenerator;
+		private const string calendarlinkid = "calendarLinkId";
+		private const string dataSourceName = "Main";
 
 		[SetUp]
 		public void Setup()
@@ -51,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_unitOfWork)).Return(_personRepository);
 			_dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			_dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName("Main")).Return(_dataSource);
+			_dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
 			_now = MockRepository.GenerateMock<INow>();
 			_now.Stub(x => x.DateOnly()).Return(DateOnly.Today);
 			_personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
@@ -59,11 +62,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			_roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
 			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			_calendarLinkIdGenerator = MockRepository.GenerateMock<ICalendarLinkIdGenerator>();
+			
 		}
 
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
+			
 			var person = PersonFactory.CreatePersonWithGuid("first", "last");
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_personalSettingDataRepository.Stub(
@@ -83,12 +89,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
 			                   .Return(true);
+			
 			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
-
-			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, deserializer, _now, _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider))
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Return(new CalendarLinkId
 			{
-				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
-				var result = target.iCal(id);
+				DataSourceName = dataSourceName,
+				PersonId = person.Id.Value
+			});
+
+			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, deserializer, _now, _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider, _calendarLinkIdGenerator))
+			{
+				var result = target.iCal(calendarlinkid);
 				_currentPrincipalContext.AssertWasCalled(x => x.SetCurrentPrincipal(person, _dataSource, null));
 				_roleToPrincipalCommand.AssertWasCalled(
 					x => x.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, _unitOfWork, _personRepository));
@@ -100,27 +111,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorIfUrlInvalid()
 		{
-			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null, null, null, null))
-			{
-				var response = MockRepository.GenerateStub<FakeHttpResponse>();
-				var context = new FakeHttpContext("/");
-				context.SetResponse(response);
-				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
-				var id = StringEncryption.Encrypt("Main" + "/" + Guid.NewGuid().ToString()).Substring(2);
-				var result = target.iCal(id);
-				result.Content.Should().Contain("Invalid url");
-			}
-		}
-
-		[Test]
-		public void ShouldReturnNullIfPersonNotFound()
-		{
-			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null, null, null, null))
-			{
-				var id = StringEncryption.Encrypt("Main" + "/" + Guid.NewGuid().ToString());
-				var result = target.iCal(id);
-				result.Should().Be.Null();
-			}
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Throw(new FormatException());
+			var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider,
+			                                         new NewtonsoftJsonDeserializer<ExpandoObject>(), null, null, null, null,
+													 _calendarLinkIdGenerator);
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+			var result = target.iCal(calendarlinkid);
+			result.Content.Should().Contain("Invalid url");
 		}
 
 		[Test]
@@ -129,14 +129,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = PersonFactory.CreatePersonWithGuid("first", "last");
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-							   .Return(false);
+			                   .Return(false);
 
-			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null, _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider))
-			{
-				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
-				var result = target.iCal(id);
-				result.Content.Should().Contain("No permission");
-			}
+			var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider,
+			                                         new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+													 _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider, _calendarLinkIdGenerator);
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Return(new CalendarLinkId
+				{
+					DataSourceName = dataSourceName,
+					PersonId = person.Id.Value
+				});
+			var result = target.iCal(calendarlinkid);
+			result.Content.Should().Contain("No permission");
 		}
 
 		[Test]
@@ -146,20 +150,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
-										 .Return(new CalendarLinkSettings
-										 {
-											 IsActive = false
-										 });
-			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(_personalSettingDataRepository);
+			                              .Return(new CalendarLinkSettings
+				                              {
+					                              IsActive = false
+				                              });
+			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork))
+			                  .Return(_personalSettingDataRepository);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-							   .Return(true);
+			                   .Return(true);
 
-			using (var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider, new NewtonsoftJsonDeserializer<ExpandoObject>(), null, _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider))
-			{
-				var id = StringEncryption.Encrypt("Main" + "/" + person.Id.Value.ToString());
-				var result = target.iCal(id);
-				result.Content.Should().Contain("inactive");
-			}
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Return(new CalendarLinkId
+				{
+					DataSourceName = dataSourceName,
+					PersonId = person.Id.Value
+				});
+
+			var target = new ShareCalendarController(_repositoryFactory, _dataSourcesProvider,
+			                                         new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+			                                         _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider,
+			                                         _calendarLinkIdGenerator);
+			var result = target.iCal(calendarlinkid);
+			result.Content.Should().Contain("inactive");
 		}
 	}
 }

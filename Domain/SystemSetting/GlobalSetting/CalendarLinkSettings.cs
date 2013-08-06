@@ -7,6 +7,5 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	public class CalendarLinkSettings : SettingValue
 	{
 		public bool IsActive { get; set; }
-		public string CalendarUrl { get; set; }
 	}
 }
