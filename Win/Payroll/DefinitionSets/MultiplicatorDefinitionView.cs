@@ -60,17 +60,16 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 
             // Add cellmodels
             gridControlMultiplicatorDefinition.CellModels.Add("DateTimeCellModel", new DateTimeCellModel(gridControlMultiplicatorDefinition.Model));
-            gridControlMultiplicatorDefinition.CellModels.Add("HourMinutes", new TimeSpanHourMinutesCellModel(gridControlMultiplicatorDefinition.Model));
-            gridControlMultiplicatorDefinition.CellModels.Add("ExtendedHourMinutes", new ExtendedTimeSpanHourMinutesCellModel(gridControlMultiplicatorDefinition.Model));
+            gridControlMultiplicatorDefinition.CellModels.Add("HourMinutes", new TimeSpanTimeOfDayCellModel(gridControlMultiplicatorDefinition.Model));
             gridControlMultiplicatorDefinition.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlMultiplicatorDefinition.Model));
 
             var sfGridDropDownColumn = new SFGridDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicatorDefinitionAdapter>(
-                    "MultiplicatorDefinitionType", Resources.Type, _multiplicatorDefinitionTypeCollection, "Name", null, typeof(MultiplicatorDefinitionAdapter));
+                    "MultiplicatorDefinitionType", Resources.Type, _multiplicatorDefinitionTypeCollection, "Name", typeof(MultiplicatorDefinitionAdapter));
 
             columnList.Add(sfGridDropDownColumn);
             columnList.Add(new SFGridDropDownEnumColumn<IMultiplicatorDefinitionViewModel, DayOfWeekAdapter, DayOfWeek>("DayOfWeek", Resources.DayOfWeek, _dayOfWeekAdapterCollection, "DisplayName", "DayOfWeek"));
             columnList.Add(new SFGridHourMinutesColumn<IMultiplicatorDefinitionViewModel>("StartTime", Resources.StartTime));
-            columnList.Add(new SFGridExtendedHourMinutesColumn<IMultiplicatorDefinitionViewModel>("EndTime", 100, Resources.EndTime));
+            columnList.Add(new SFGridHourMinutesColumn<IMultiplicatorDefinitionViewModel>("EndTime", Resources.EndTime));
             columnList.Add(new SFGridDateTimeColumn<IMultiplicatorDefinitionViewModel>("FromDate", Resources.From, 100));
             columnList.Add(new SFGridDateTimeColumn<IMultiplicatorDefinitionViewModel>("ToDate", Resources.To, 100));
             columnList.Add(new SFGridDynamicDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicator>("Multiplicator", Resources.Multiplicator, "MultiplicatorCollection", "Description", null, typeof(Multiplicator)));

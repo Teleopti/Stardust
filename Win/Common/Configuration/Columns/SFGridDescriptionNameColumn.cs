@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridDescriptionNameColumn<T> : SFGridColumnBase<T>
     {
+        private readonly int _textWidth;
+        private readonly bool _isReadOnly;
+
         public SFGridDescriptionNameColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         { }
-
-        private readonly int _textWidth;
-        private readonly bool _isReadOnly;
 
         public SFGridDescriptionNameColumn(string bindingProperty, string headerText, int textWidth, bool isReadOnly)
             : base(bindingProperty, headerText)
@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             _textWidth = textWidth;
             _isReadOnly = isReadOnly;
         }
+
         public override int PreferredWidth
         {
             get { return (_textWidth > 0) ? _textWidth : 150; }
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             if (_isReadOnly)
                 return;
 
-            if (e.Style.CellValue.GetType() != typeof(Description))
+            if (!(e.Style.CellValue is Description))
                 return;
 
             var description = (Description)e.Style.CellValue;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         {
             Description description;
             object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-            if (value.GetType() == typeof(Description))
+            if (value is Description)
                 description = (Description)value;
             else
                 description = new Description(value.ToString(), System.String.Empty);

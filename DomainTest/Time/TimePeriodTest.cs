@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         [SetUp]
         public void Setup()
         {
-            _start = TimeFactory.CreateTimeSpan(10);
-            _end = TimeFactory.CreateTimeSpan(12);
+            _start = TimeSpan.FromHours(10);
+            _end = TimeSpan.FromHours(12);
             _per = new TimePeriod(_start, _end);
         }
 
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(_per.Equals(TimeFactory.CreateTimePeriod(10, 12)));
             Assert.IsFalse(
                 _per.Equals(
-                    new TimePeriod(TimeFactory.CreateTimeSpan(10),
-                                   TimeFactory.CreateTimeSpan(12).Add(new TimeSpan(1)))));
+                    new TimePeriod(TimeSpan.FromHours(10),
+                                   TimeSpan.FromHours(12).Add(new TimeSpan(1)))));
             Assert.IsFalse(new TimePeriod().Equals(null));
             Assert.AreEqual(_per, (object) _per);
             Assert.IsFalse(new TimeSpan().Equals(3));

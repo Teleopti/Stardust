@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridColumns.Add(new SFGridRowHeaderColumn<ISite>(string.Empty));
 			gridColumns.Add(new SFGridDescriptionNameColumn<ISite>("Description", Resources.Name));
 			gridColumns.Add(new SFGridNullableIntegerCellColumn<ISite>("MaxSeats", Resources.MaxSeats, 100));
-			SFGridColumnBase<ISite>.AppendAuditColumns(gridColumns);
+            gridColumns.AppendAuditColumns();
 
             return new ReadOnlyCollection<SFGridColumnBase<ISite>>(gridColumns);
         }

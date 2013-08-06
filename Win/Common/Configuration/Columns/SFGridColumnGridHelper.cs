@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         private readonly List<T> _originalCopy = new List<T>();
         private readonly int _rowHeaders;
 		private readonly int _colHeaders;
-        private bool _allowExtendedCopyPaste;
         public event EventHandler<SFGridColumnGridHelperEventArgs<T>> NewSourceEntityWanted;
         public event EventHandler PasteFromClipboardFinished;
 
@@ -89,17 +88,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             get { return _sourceList; }
         }
 
-        public bool AllowExtendedCopyPaste
-        {
-            get
-            {
-                return _allowExtendedCopyPaste;
-            }
-            set
-            {
-                _allowExtendedCopyPaste = value;
-            }
-        }
+        public bool AllowExtendedCopyPaste { get; set; }
 
         public T FindSelectedItem()
         {
@@ -109,7 +98,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         public ReadOnlyCollection<T> FindSelectedItems()
         {
             var list = new List<T>();
-            //GridRangeInfoList rangeList = _grid.Selections.GetSelectedRows(false, true);
             foreach (GridRangeInfo range in _grid.Selections)
             {
                 list.AddRange(GetItemsForRange(range, _colHeaders));
@@ -218,9 +206,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
                     count = range.Height;
                     res = true;
                     break;
-
-                default:
-                    break;
             }
 
             return res;
@@ -244,9 +229,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
                         case GridRangeInfoType.Cells:
                         case GridRangeInfoType.Cols:
                             colFound = colIndex >= range.Left && colIndex <= range.Right;
-                            break;
-
-                        default:
                             break;
                     }
 
@@ -298,11 +280,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         	PasteFromClipboard(rep, true);
         }
 
-        public void InsertFromClipboard(IRepository<T> rep)
-        {
-            PasteFromClipboard(rep, true);
-        }
-
         public void PasteFromClipboard()
         {
             PasteFromClipboard(null, false);
@@ -336,7 +313,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             }
 
             IGridPasteAction<string> pasteAction;
-            if (_allowExtendedCopyPaste)
+            if (AllowExtendedCopyPaste)
                 pasteAction = new ExtendedTextPasteAction();
             else
                 pasteAction = new SimpleTextPasteAction();
@@ -449,9 +426,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
         private bool ValidCell(int columnIndex, int rowIndex)
         {
-            bool ret = false;
-            if (ValidColumn(columnIndex) && ValidRow(rowIndex))
-                ret = true;
+            bool ret = ValidColumn(columnIndex) && ValidRow(rowIndex);
 
             return ret;
         }
@@ -468,9 +443,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
         private bool ValidRow(int rowIndex)
         {
-            bool ret = false;
-            if (rowIndex >= _rowHeaders)
-                ret = true;
+            bool ret = rowIndex >= _rowHeaders;
 
             return ret;
         }

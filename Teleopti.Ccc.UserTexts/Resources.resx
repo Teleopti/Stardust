@@ -5360,7 +5360,7 @@ Availability</value>
     <comment>the text "New part time percentage " for settings page</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>General View: user details</value>
+    <value>Can not save!</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
@@ -11334,10 +11334,10 @@ These options are activated:
     <comment>Not enough budget allowance.</comment>
   </data>
   <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
-    <value>Your absence request has been denied. You can not send request for the requested period this time.</value>
+    <value>Your Request has been denied. Date Period not open for sending requests.</value>
   </data>
   <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
-    <value>Your absence request has been denied. You can not apply for request for the requested period at this time. Period will be open for requests from {0}.</value>
+    <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>Critical Understaffing on : {0} at </value>
@@ -11464,6 +11464,13 @@ Reduce the complexity to use these shifts.</value>
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>
   </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>The team block period is not in legal state.</value>
+    <comment>When the period is not in legal state (you can see that in agent info)</comment>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Please select at least one of the options "Shift Category", "Start Time" or "Same Shift" in  Block scheduling.</value>
+  </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
     <comment>Absence request has been denied. Some days in the requested period are not open for requests.</comment>
@@ -11545,5 +11552,116 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="TotalChatTime" xml:space="preserve">
     <value>Total chat time</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filter Overtime Availability</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Current page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Find</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Find Next</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Find Text In Report</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>First Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Last Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Next</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Next Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>No more matches found.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>of</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Page Setup</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Page Width</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Previous Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Print Layout</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Print</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stop Rendering</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text not found.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total Pages</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Whole Page</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connection to database timed out, try to limit your search conditions.</value>
+    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Fulfilled</value>
+    <comment>Fulfilled</comment>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Fulfillment (%)</value>
+    <comment>Fulfillment (%)</comment>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Must Haves</value>
+    <comment>Must Haves</comment>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Unfulfilled</value>
+    <comment>Unfulfilled</comment>
   </data>
 </root>

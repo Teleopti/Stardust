@@ -8,24 +8,6 @@ namespace Teleopti.Messaging.Core
 {
     public class FramerUtility : IFramerUtility
     {
-
-        public byte[] ReadEnd(Stream source)
-        {
-            int nextByte;
-            // If the stream has already ended, return null
-            if ((nextByte = source.ReadByte()) == -1)
-                return null;
-
-            List<byte> byteList = new List<byte>(Consts.MaxWireLength);
-            {
-                do
-                {
-                    byteList.Add((byte) nextByte);
-                } while ((nextByte = source.ReadByte()) != -1); // Stop on EOS
-                return byteList.ToArray(); // Received at least one byte
-            }
-        }
-
         public byte[] NextToken(Stream input, byte[] delimiter)
         {
             int nextByte;

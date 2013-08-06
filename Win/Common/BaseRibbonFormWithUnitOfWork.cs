@@ -70,43 +70,6 @@ namespace Teleopti.Ccc.Win.Common
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseFormWithUnitOfWork"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <remarks>
-        /// Created by: robink, copied by östen
-        /// Created date: 2008-01-02
-        /// </remarks>
-        protected BaseRibbonFormWithUnitOfWork(IUnitOfWork unitOfWork)
-           {
-            if (DesignMode ||
-                !StateHolderReader.IsInitialized) return;
-
-            if (unitOfWork != null)
-            {
-                _objectsWithOwnUow.Add(this, unitOfWork);
-            }
-        }
-        /// <summary>
-        /// Changes the object's unit of work.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="theUnitOfWork">The unit of work.</param>
-        /// <remarks>
-        /// Created by: robink,copied by östen
-        /// Created date: 2008-01-15
-        /// </remarks>
-        protected void ChangeObjectsUnitOfWork(object value, IUnitOfWork theUnitOfWork)
-        {
-            if (_objectsWithOwnUow.ContainsKey(value))
-            {
-                if (_objectsWithOwnUow[value] != theUnitOfWork)
-                    _objectsWithOwnUow[value].Dispose();
-                _objectsWithOwnUow[value] = theUnitOfWork;
-                if (value == this) _formUowCreatedHere = false;
-            }
-        }
-        /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Form.Closed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
@@ -170,18 +133,6 @@ namespace Teleopti.Ccc.Win.Common
                 item.Value.Dispose();
             }
             _objectsWithOwnUow.Clear();
-        }
-
-        protected void RemoveUnitOfWork(object value)
-        {
-            lock (_objectsWithOwnUow)
-            {
-                if (_objectsWithOwnUow.ContainsKey(value))
-                {
-                    _objectsWithOwnUow[value].Dispose();
-                    _objectsWithOwnUow.Remove(value);
-                }
-            }
         }
 
         /// <summary>

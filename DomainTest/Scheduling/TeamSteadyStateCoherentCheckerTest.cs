@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment2);
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment2);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_personAssignment1.Period).Return(_dateTimePeriod1);
 				Expect.Call(_personAssignment2.Period).Return(_dateTimePeriod1);
 			}
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment2);
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment2);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_personAssignment1.Period).Return(_dateTimePeriod1);
 				Expect.Call(_personAssignment2.Period).Return(_dateTimePeriod2);
 			}

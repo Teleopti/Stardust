@@ -96,13 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				LazyLoadingManager.Initialize(changeInfo.UpdatedBy);
 		}
 
-		public void RemoveMessageFromQueue(IEventMessage message)
-		{
-			_messageQueue.Remove(message);
-			NotifyMessageQueueSize();
-		}
-
-		public void ReassociateDataWithAllPeople()
+	    public void ReassociateDataWithAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);

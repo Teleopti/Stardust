@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Analytics.Etl.Transformer;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             return workloadDay;
         }
 
-        public static IList<ISkillDay> CreateSkillDayCollection(DateOnlyPeriod period, ISkill skill)
+        public static IList<ISkillDay> CreateSkillDayCollection(DateOnlyPeriod period, ISkill skill, DateTime updatedOnDateTime)
         {
             IList<ISkillDay> skillDayCollection = new List<ISkillDay>();
             for (var dt = period.StartDate; dt <= period.EndDate; dt = dt.AddDays(1))
@@ -37,6 +38,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             foreach (ISkillDay skillDay in skillDayCollection)
             {
+				RaptorTransformerHelper.SetUpdatedOn(skillDay, updatedOnDateTime);
                 PrepareSkillDay(skillDay, period);
             }
 

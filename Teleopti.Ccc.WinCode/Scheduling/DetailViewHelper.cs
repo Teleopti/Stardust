@@ -20,10 +20,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// The height of the absence rectangle
         /// </summary>
         public const int AbsenceHeight = 6;
-        /// <summary>
-        /// The space between the absence rectangles
-        /// </summary>
-        public const int AbsenceSpace = 2;
 
         /// <summary>
         /// Gets the abs and dayOff rect.

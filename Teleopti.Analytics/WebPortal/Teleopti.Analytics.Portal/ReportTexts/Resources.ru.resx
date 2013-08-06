@@ -274,13 +274,13 @@
     <value>Сценарий:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Доля несостоявшихся звонков без учета кратковременных вызывов (%)</value>
+    <value>Доля несостоявшихся звонков без учета кратковременных вызовов (%)</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
     <value>Доля несостоявшихся вызовов (%)</value>
   </data>
   <data name="ResAnswerRatePercent" xml:space="preserve">
-    <value>Доля отвеченных вызывов (%)</value>
+    <value>Доля отвеченных вызовов (%)</value>
   </data>
   <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
     <value>Средняя скорость ответа (с)</value>
@@ -984,5 +984,35 @@
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Дата по (начало смен):</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Соедениние с базой данных прервано из-за превышения лимита времени, попробуйте ограничить условия поиска.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Удовлетворено</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Удовлетворено (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Обязательные предпочтения</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Отклонено</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Доступность по оператору</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Доступные дни</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Доступное время</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Запланированные дни</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Утилизация</value>
   </data>
 </root>

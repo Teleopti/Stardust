@@ -43,8 +43,6 @@ namespace Teleopti.Ccc.Win.Shifts
             _gridConstructor.FlushCache();
             _gridConstructor.BuildGridView(ShiftCreatorViewType.General, 
                                            ExplorerPresenter.GeneralPresenter.GeneralTemplatePresenter);
-            //_currentGridView = ShiftCreatorViewType.General;
-
         }
 
         /// <summary>
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
                 view.Grid.QueryCellInfo += (gridWorkShifts_QueryCellInfo);
                 view.Grid.SaveCellInfo += (gridWorkShifts_SaveCellInfo);
-                view.Grid.ClipboardPaste += (gridWorkShifts_ClipboardPaste);
+                view.Grid.Model.ClipboardPaste += (gridWorkShifts_ClipboardPaste);
                 view.Grid.SelectionChanged += (gridWorkShifts_SelectionChanged);
                 view.Grid.KeyUp += (gridWorkShifts_KeyUp);
                 view.Grid.KeyDown += (gridWorkShifts_KeyDown);
@@ -129,6 +127,10 @@ namespace Teleopti.Ccc.Win.Shifts
         private void gridWorkShifts_ClipboardPaste(object sender, GridCutPasteEventArgs e)
         {
             _gridConstructor.View.ClipboardPaste(e);
+            foreach (GridRangeInfo selectedRange in _gridConstructor.View.Grid.Model.SelectedRanges)
+            {
+                _gridConstructor.View.Grid.RefreshRange(selectedRange);
+            }
             e.Handled = true;
         }
 

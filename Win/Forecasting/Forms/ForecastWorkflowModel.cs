@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return _outliers; }
         }
 
-        public IList<DateOnlyPeriod> SelectedHistoricTemplatePeriod
-        {
-            get { return _selectedHistoricTemplatePeriod; }
-        }
-        
         public DateOnlyPeriod CompareHistoricPeriod
         {
             get { return _compareHistoricPeriod; }
@@ -221,11 +216,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             InitializeWorkloadDaysWithoutOutliers();
             var taskOwnerHelper = new TaskOwnerHelper(_workloadDaysWithoutOutliers);
             return taskOwnerHelper.CreateYearTaskOwnerPeriods(CultureInfo.CurrentCulture.Calendar);
-        }
-
-        public void SetValidatedVolumeDays(IList<IValidatedVolumeDay> days)
-        {
-            _validatedVolumeDays = new List<IValidatedVolumeDay>(days);
         }
 
         public void LoadWorkloadDayTemplates(IList<DateOnlyPeriod> dates)

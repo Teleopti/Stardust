@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
+﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common;
 using System.Collections.ObjectModel;
 
@@ -15,37 +10,19 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
         private int _maxLength;
         private string _headerText;
-        private string _bindingProperty;
         private string _groupHeaderText;
 
-
-        public EditableTextColumn(string bindingProperty, int maxLength, string headerText)
+        public EditableTextColumn(string bindingProperty, int maxLength, string headerText) : base(bindingProperty,100)
         {
             _maxLength = maxLength;
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
         }
 
-        public EditableTextColumn(string bindingProperty, int maxLength, string headerText, string groupHeaderText)
+        public EditableTextColumn(string bindingProperty, int maxLength, string headerText, string groupHeaderText) : this(bindingProperty,maxLength,headerText)
         {
             _maxLength = maxLength;
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _groupHeaderText = groupHeaderText;
-        }
-
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -62,17 +39,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             e.Handled = true;
         }
 
-        #region Set Up Headers
-
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -82,20 +48,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             else
             {
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 OnCellDisplayChanged(dataItem, e);
             }
         }
 
-        /// <summary>
-        /// Sets up multiple headers.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpMultipleHeaders(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0)
@@ -106,13 +63,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             else if (e.RowIndex == 1 && e.ColIndex > 0)
             {
                 e.Style.CellValue = _headerText;
-
             }
             else
             {
                 T dataItem = dataItems[e.RowIndex - 2];
                 e.Style.BackColor = System.Drawing.Color.Gray;
-                object cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object cellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
 
                 if (cellValue == null)
                     e.Style.CellType = "Static";
@@ -124,9 +80,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
         }
 
-        #endregion
-
-
         public override void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (string.IsNullOrEmpty(_groupHeaderText))
@@ -137,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                         return;
 
                     T dataItem = dataItems[e.RowIndex - 1];
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                    _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                     OnCellChanged(dataItem, e);
                     e.Handled = true;
                 }
@@ -150,12 +103,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                         return;
 
                     T dataItem = dataItems[e.RowIndex - 2];
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                    _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                     OnCellChanged(dataItem, e);
                     e.Handled = true;
                 }
             }
-
         }
     }
 }

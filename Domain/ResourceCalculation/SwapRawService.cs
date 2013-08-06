@@ -89,16 +89,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static bool copyData(IScheduleDay scheduleDay, ISchedulePart tempDay)
+		private static bool copyData(IScheduleDay scheduleDay, IScheduleDay tempDay)
 		{
 			var hasSwapData = false;
 
 			InParameter.NotNull("scheduleDay", scheduleDay);
 			InParameter.NotNull("tempDay", tempDay);
 
-			if (scheduleDay.PersonAssignmentCollection().Any())
+			if (scheduleDay.PersonAssignmentCollectionDoNotUse().Any())
 			{
-				var personAssignment = scheduleDay.AssignmentHighZOrder();
+				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment.ShiftCategory != null)
 				{
 					tempDay.AddMainShift(scheduleDay.GetEditorShift());

@@ -8,11 +8,6 @@ namespace Teleopti.Analytics.Etl.Common.JobLog
     {
         private readonly IJobLogRepository _repository;
 
-        public EtlJobLog()
-        {
-
-        }
-
         public EtlJobLog(IJobLogRepository rep)
         {
             _repository = rep;
@@ -44,11 +39,6 @@ namespace Teleopti.Analytics.Etl.Common.JobLog
         public void Persist(IJobResult jobResult)
         {
             _repository.SaveLogPost(this, jobResult);
-        }
-
-        public void AddJobStep(IJobStepResult jobStepResult)
-        {
-            _repository.AddJobStep(this, jobStepResult);
         }
 
         public int ScheduleId { get; private set; }

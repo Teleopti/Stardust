@@ -20,13 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InParameter.EnsureNoSecondsInPeriod(period);
 		}
 
-		/// <summary>
-		/// Used by nhibernate to reconstitute from datasource
-		/// </summary>
-		protected ActivityLayer()
-		{
-		}
-
 		public override DateTimePeriod Period
 		{
 			get { return base.Period; }

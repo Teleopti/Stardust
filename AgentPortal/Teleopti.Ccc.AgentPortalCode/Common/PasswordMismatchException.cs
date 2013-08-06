@@ -13,26 +13,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="PasswordMismatchException"/> class.
         /// </summary>
-        public PasswordMismatchException()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PasswordMismatchException"/> class.
-        /// </summary>
         /// <param name="message">The message.</param>
         public PasswordMismatchException(string message)
             : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PasswordMismatchException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        public PasswordMismatchException(string message, Exception innerException)
-            : base(message, innerException)
         {
         }
 

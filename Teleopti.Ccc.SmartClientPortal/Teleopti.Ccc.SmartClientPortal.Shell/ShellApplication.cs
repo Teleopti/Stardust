@@ -5,9 +5,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
-using System.Xaml;
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
+using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.Win.Forecasting;
 using log4net.Config;
 using MbCache.Configuration;
@@ -19,13 +20,10 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.SmartClientPortal.Common.Constants;
-using Teleopti.Ccc.SmartClientPortal.Common.Library;
 using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
 using Teleopti.Ccc.Win.Grouping;
 using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Main;
@@ -170,19 +168,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             return found;
         }
 
-        protected override void BeforeShellCreated()
-        {
-            base.BeforeShellCreated();
-        }
-
         /// <summary>
         /// Sets the extension site registration after the SmartClientShell has been created.
         /// </summary>
         protected override void AfterShellCreated()
         {
             base.AfterShellCreated();
-            //never used
-            //RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainMenu, Shell.MainMenuStrip);
+
             RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainStatus, Shell.MainStatusStrip);
         }
 

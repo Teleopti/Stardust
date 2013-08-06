@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     public class TemplateMultisitePeriodGridRow : GridRow
     {
         private readonly RowManager<TemplateMultisitePeriodGridRow, ITemplateMultisitePeriod> _rowManager;
-        private readonly int _maxLength;
         private readonly IChildSkill _childSkill;
 
         public TemplateMultisitePeriodGridRow(RowManager<TemplateMultisitePeriodGridRow, ITemplateMultisitePeriod> rowManager, string cellType, 
@@ -19,13 +18,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         {
             _rowManager = rowManager;
             _childSkill = childSkill;
-        }
-
-        public TemplateMultisitePeriodGridRow(RowManager<TemplateMultisitePeriodGridRow, ITemplateMultisitePeriod> rowManager, string cellType,
-                                              string displayMember, string rowHeaderText, IChildSkill childSkill, int maxLength)
-            : this(rowManager, cellType, displayMember, rowHeaderText, childSkill)
-        {
-            _maxLength = maxLength;
         }
 
         public override void QueryCellInfo(CellInfo cellInfo)
@@ -51,7 +43,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 }
                 cellInfo.Style.CellType = CellType;
                 cellInfo.Style.CellValue = GetValue(multisitePeriod);
-                cellInfo.Style.MaxLength = _maxLength;
             }
         }
 

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
-				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixesForMemberAndDate(person, dateOnly);
+				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixForMemberAndDate(person, dateOnly);
 				if (matrix == null)
 					continue;
 

@@ -2,8 +2,8 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.Win.Main;
-using Teleopti.Common.UI.OutlookControls.Workspaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 

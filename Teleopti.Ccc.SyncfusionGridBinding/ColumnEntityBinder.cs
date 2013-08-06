@@ -71,11 +71,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			}
 		}
 
-		public void RefreshEntities()
-		{
-			BeforeUpdate();
-			AfterUpdate();
-		}
 		private static void Weekend(CellDetails cellDetails, object date)
 		{
 			if (WeekendOrWeekday(date))

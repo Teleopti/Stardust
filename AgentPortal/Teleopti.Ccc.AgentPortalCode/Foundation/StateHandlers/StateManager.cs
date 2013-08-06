@@ -25,18 +25,6 @@
         }
 
         /// <summary>
-        /// Clears the session.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public override void ClearSession()
-        {
-            _sessionData = null;
-        }
-
-        /// <summary>
         /// Gets the session scope data.
         /// </summary>
         /// <value>The session scope data.</value>

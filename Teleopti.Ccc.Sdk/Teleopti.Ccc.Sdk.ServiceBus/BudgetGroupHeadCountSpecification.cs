@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -15,24 +13,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (BudgetGroupHeadCountSpecification));
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IBudgetDayRepository _budgetDayRepository;
-        private readonly ISkillDayRepository _skillDayRepository;
         private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-        public BudgetGroupHeadCountSpecification(ISchedulingResultStateHolder schedulingResultStateHolder,
-                                                 IScenarioRepository scenarioRepository,
+        public BudgetGroupHeadCountSpecification(IScenarioRepository scenarioRepository,
                                                  IBudgetDayRepository budgetDayRepository,
-                                                 ISkillDayRepository skillDayRepository,
                                                  IScheduleProjectionReadOnlyRepository
                                                      scheduleProjectionReadOnlyRepository)
         {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
             _scenarioRepository = scenarioRepository;
             _budgetDayRepository = budgetDayRepository;
-            _skillDayRepository = skillDayRepository;
             _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
         }
 
@@ -80,18 +71,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     return false;
             }
             return true;
-        }
-
-        private bool isSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
-        {
-            var scenario = _scenarioRepository.LoadDefaultScenario();
-            var skillDays = _skillDayRepository.FindRange(new DateOnlyPeriod(date, date), skills.ToList(), scenario);
-
-            if (skillDays != null && skillDays.Count > 0)
-            {
-                return skillDays.Any(skillDay => skillDay.OpenForWork.IsOpen);
-            }
-            return false;
         }
     }
 }

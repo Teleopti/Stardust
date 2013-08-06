@@ -10,17 +10,26 @@
 Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var requestViewModel = null;
+	var weekStart = 3;
+	ajax.Ajax({
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				weekStart = data.WeekStart;
+			}
+	});
 
 	function _addTextRequestClick() {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest);
+		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
 		_initEditSection(requestViewModel);
 		requestViewModel.AddTextRequest();
 	}
 
 	function _addAbsenceRequestClick() {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest);
+		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
 		_initEditSection(requestViewModel);
 		requestViewModel.AddAbsenceRequest();
 	}
@@ -84,7 +93,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		}
 		else {
-			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest);
+			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
 			requestViewModel.IsUpdate(true);
 			requestViewModel.TypeEnum(data.TypeEnum);
 		}
@@ -127,9 +136,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _fillFormData(data) {
 	    requestViewModel.Subject(data.Subject);
 	    requestViewModel.Message(data.Text);
-		requestViewModel.DateTo(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
+		requestViewModel.DateFrom(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
 		requestViewModel.TimeFrom(data.RawTimeFrom);
-		requestViewModel.DateFrom(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+		requestViewModel.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
 		requestViewModel.TimeTo(data.RawTimeTo);
 		requestViewModel.EntityId(data.Id);
 	    requestViewModel.AbsenceId(data.PayloadId);
@@ -160,8 +169,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 })(jQuery);
 
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod) {
-
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod,firstDayOfWeek) {
 	var self = this;
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
 	self.TextRequestHeaderVisible = ko.observable(false);
@@ -208,7 +216,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.DenyReason = ko.observable();
     self.IsEditable = ko.observable(true);
     self.IsNewInProgress = ko.observable(false);
-
+    self.weekStart = ko.observable(firstDayOfWeek); 
     self.IsTimeInputEnabled = ko.computed(function () {
         return !self.IsFullDay() && self.IsEditable();
     });

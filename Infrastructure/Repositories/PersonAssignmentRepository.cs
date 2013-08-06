@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -53,16 +54,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             foreach (var personList in persons.Batch(400))
             {
-				var multi = Session.CreateMultiCriteria();
                 var personArray = personList.ToArray();
-                var criterias = personAssignmentCriteriaLoader(period, scenario);
-                foreach (var criteria in criterias)
-                {
-                    criteria.Add(Restrictions.In("ass.Person", personArray));
-                    multi.Add(criteria);
-                }
-                var result = multi.List();
-                retList.AddRange(CollectionHelper.ToDistinctGenericCollection<IPersonAssignment>(result[0]));
+                var crit = personAssignmentCriteriaLoader(period, scenario);
+	            crit.Add(Restrictions.In("ass.Person", personArray));
+                retList.AddRange(crit.List<IPersonAssignment>());
             }
 
             return retList;
@@ -71,31 +66,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario)
         {
             InParameter.NotNull("scenario", scenario);
-            var multi = Session.CreateMultiCriteria();
-            personAssignmentCriteriaLoader(period, scenario).ForEach(c=>multi.Add(c));
-			using(PerformanceOutput.ForOperation("Loading personassignments"))
-            return CollectionHelper.ToDistinctGenericCollection<IPersonAssignment>(multi.List()[0]);
+            var crit = personAssignmentCriteriaLoader(period, scenario);
+	        using (PerformanceOutput.ForOperation("Loading personassignments"))
+		        return crit.List<IPersonAssignment>();
         }
 
-        private IEnumerable<ICriteria> personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
+        private ICriteria personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
-	        var assWithMain = Session.CreateCriteria(typeof (PersonAssignment), "ass")
-	                                 .SetFetchMode("MainLayers", FetchMode.Join);
-
-            var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-										.SetFetchMode("PersonalLayers", FetchMode.Join);
-
-            var assWithOvertime = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                    .SetFetchMode("OvertimeShiftCollection", FetchMode.Join);
-
-            var overWithLayers = Session.CreateCriteria(typeof(OvertimeShift))
-                        .CreateAlias("Parent", "ass")
-                        .SetFetchMode("LayerCollection", FetchMode.Join);
-
-            var ret = new[] { assWithMain, assWithPers, assWithOvertime, overWithLayers };
-            ret.ForEach(crit => addScenarioAndFilterClauses(crit, scenario, period));
-            ret.ForEach(addBuClauseToNonRootQuery);
-            return ret;
+	        var assCriteria = Session.CreateCriteria(typeof (PersonAssignment), "ass")
+	                                 .SetFetchMode("ShiftLayers", FetchMode.Join)
+																	 .SetResultTransformer(Transformers.DistinctRootEntity);
+					addScenarioAndFilterClauses(assCriteria, scenario, period);
+					addBuClauseToNonRootQuery(assCriteria);
+            return assCriteria;
         }
 
         private static void addBuClauseToNonRootQuery(ICriteria criteria)
@@ -124,11 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IPersonAssignment LoadAggregate(Guid id)
         {
             IPersonAssignment ass = Session.CreateCriteria(typeof(PersonAssignment))
-                        .SetFetchMode("PersonalShiftCollection", FetchMode.Join)
-                        .SetFetchMode("PersonalShiftCollection.LayerCollection", FetchMode.Join)
-                        .SetFetchMode("MainLayers", FetchMode.Join)
-                        .SetFetchMode("OvertimeShiftCollection", FetchMode.Join)
-                        .SetFetchMode("OvertimeShiftCollection.LayerCollection", FetchMode.Join)
+												.SetFetchMode("ShiftLayers", FetchMode.Join)
                         .Add(Restrictions.Eq("Id", id))
                         .UniqueResult<IPersonAssignment>();
             if (ass != null)

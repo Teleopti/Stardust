@@ -36,11 +36,6 @@ BEGIN TRY
 	DECLARE @Login					nvarchar(200)
 	DECLARE @securityadmin			int
 	
-	--init
-	SELECT @securityadmin	= CASE WHEN IS_SRVROLEMEMBER('securityadmin') = 1 THEN 1 ELSE 0 END
-		  
-	--Try to add the Windows login provided from WISE
-	IF @securityadmin = 1
 	BEGIN
 		PRINT '	Creating Windows login for: $(WINLOGIN). Working ...'
 		
@@ -56,9 +51,6 @@ BEGIN TRY
 		END
 		PRINT '	Creating Windows login for: $(WINLOGIN). Finished'
 	END
-	ELSE
-		PRINT 'WARNING: Cannot create server login under the current credetials!'
-
 END TRY
 BEGIN CATCH
 	DECLARE	@ErrorMessage			NVARCHAR(4000)

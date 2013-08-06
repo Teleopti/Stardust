@@ -339,7 +339,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public DateTimePeriod? GetMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
         {
-            if (schedulePart.PersonMeetingCollection().Count == 0 && schedulePart.PersonAssignmentCollection().Count == 0)
+					var ass = schedulePart.PersonAssignment();
+            if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
             {
                 return null;
             }
@@ -354,9 +355,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 period = period.Value.MaximumPeriod(personMeeting.Period);
             }
 
-            if (schedulePart.PersonAssignmentCollection().Count > 0)
+            if (ass!=null)
             {
-                foreach (var personalLayer in schedulePart.PersonAssignmentCollection()[0].PersonalLayers)
+                foreach (var personalLayer in ass.PersonalLayers())
                 {
                     if (!period.HasValue)
                         period = personalLayer.Period;
@@ -387,7 +388,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (period.HasValue)
             {
                 var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollection();
+                var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
                 int cntBefore = shiftList.Count;
                 IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
                 foreach (IShiftProjectionCache t in shiftList)
@@ -519,7 +520,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();
-            var personAssignments = part.PersonAssignmentCollection();
+            var personAssignments = part.PersonAssignmentCollectionDoNotUse();
             var cnt = shiftList.Count;
 
 	        if (meetings.Count == 0 && personAssignments.Count == 0)
@@ -547,7 +548,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             foreach (var personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalLayers.Any(l => l.Period.Intersect(layer.Period)))
+                if (personAssignment.PersonalLayers().Any(l => l.Period.Intersect(layer.Period)))
                     return true;
             }
             return false;

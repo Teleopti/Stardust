@@ -95,6 +95,35 @@ INNER JOIN mart.fact_schedule fs
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
 WHERE fs.business_unit_id = @business_unit_id
+
+--another special delete for newly deleted midnight shifts, where the next day is now occupied with existing shifts overlapping the old (Mobily problems))
+DELETE fs
+FROM Stage.stg_schedule stg
+INNER JOIN
+	mart.dim_person		dp
+ON
+	stg.person_code		=			dp.person_code
+	AND --trim
+		(
+				(stg.shift_start	>= dp.valid_from_date)
+
+			AND
+				(stg.shift_start < dp.valid_to_date)
+		)
+INNER JOIN mart.dim_date dd
+	ON dd.date_date = stg.schedule_date
+	AND dd.date_id = @start_date_id --startdate
+INNER JOIN mart.dim_scenario ds
+	ON stg.scenario_code = ds.scenario_code
+INNER JOIN mart.fact_schedule fs
+	ON dd.date_id = fs.schedule_date_id
+	
+	AND dp.person_id = fs.person_id
+	AND stg.interval_id = fs.interval_id
+	AND ds.scenario_id = fs.scenario_id
+	WHERE fs.business_unit_id = @business_unit_id
+		AND convert(smalldatetime,floor(convert(decimal(18,8),shift_start ))) = @start_date
+
 /*
 DELETE FROM mart.fact_schedule
 WHERE shift_startdate_id between @start_date_id AND @end_date_id

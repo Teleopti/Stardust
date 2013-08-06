@@ -12,32 +12,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly int _maxLength;
         private readonly string _headerText;
     	private readonly bool _stripTooLongText;
-    	private readonly string _bindingProperty;
         
-        public EditableNotEmptyTextColumn(string bindingProperty, int maxLength, string headerText)
-			: this(bindingProperty, maxLength, headerText,false)
-		{}
-
-		public EditableNotEmptyTextColumn(string bindingProperty, int maxLength, string headerText, bool stripTooLongText)
+		public EditableNotEmptyTextColumn(string bindingProperty, int maxLength, string headerText, bool stripTooLongText) : base(bindingProperty,100)
 		{
 			_maxLength = maxLength;
 			_headerText = headerText;
 			_stripTooLongText = stripTooLongText;
-			_bindingProperty = bindingProperty;
 		}
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
-        }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
@@ -45,15 +26,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -63,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (IsContentRow(e.RowIndex,dataItems.Count))
             {
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 OnCellDisplayChanged(dataItem, e);
             }
         }
@@ -79,7 +51,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                     return;
 
                 T dataItem = dataItems[e.RowIndex - 1];
-                _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                 OnCellChanged(dataItem, e);
                 e.Handled = true;
             }

@@ -112,13 +112,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest, rangeList);
                 Assert.AreEqual((row*col), pasteActionForTest.CalledTimes);
 
-                //pasteActionForTest.RetValue = "clip for test";
-                //pasteActionForTest.CalledTimes = 0;
                 IList<string> list = _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest,
                                                                         rangeList);
                 Assert.AreEqual(0, list.Count);
 
-                pasteActionForTest.RetValue = "clip for test";
+                pasteActionForTest.SetRetValue("clip for test");
                 list = _testPasteBehavior.DoPaste<string>(gridControl, handler, pasteActionForTest, rangeList);
                 Assert.AreEqual(4, list.Count);
             }
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(null);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
-	                Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
+	                Expect.Call(part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
                 }
 
@@ -313,19 +311,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         private T _retValue;// = true;
         private int _calledTimes;
 
-        internal T RetValue
+        internal void SetRetValue(T value)
         {
-            get { return _retValue; }
-            set { _retValue = value; }
+            _retValue = value;
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value")]
         internal int CalledTimes
         {
             get { return _calledTimes; }
-            set { _calledTimes = 0; }
         }
 
-      
         public T Paste(GridControl gridControl,  Clip<T> clip, int rowIndex, int columnIndex)
         {
             _calledTimes++;

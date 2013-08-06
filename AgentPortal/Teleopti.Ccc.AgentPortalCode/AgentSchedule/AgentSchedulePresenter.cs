@@ -17,6 +17,12 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
     {
         private readonly ClipHandler<ICustomScheduleAppointment> _scheduleClipHandler;
 
+        public AgentSchedulePresenter(IAgentScheduleViewBase view, AgentScheduleStateHolder stateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler)
+            : base(view, stateHolder)
+        {
+            _scheduleClipHandler = clipHandler;
+        }
+
         public ClipHandler<ICustomScheduleAppointment> ScheduleClipHandler
         {
             get { return _scheduleClipHandler; }
@@ -90,67 +96,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                 Thread.Sleep(rnd.Next(7,13)*1000);
                 return GetSchedulePart(dateOnlyDto, ++attemptNumber);
             }
-        }
-
-        /// <summary>
-        /// Persists the schedule appointment.
-        /// </summary>
-        /// <param name="appointmentType">Type of the appointment.</param>
-        /// <param name="dto">The dto.</param>
-        /// <param name="changedMinuteLength">The changed no ofminitues.</param>
-        public void PersistScheduleAppointment(ScheduleAppointmentTypes appointmentType, Dto dto, double changedMinuteLength)
-        {
-            switch (appointmentType)
-            {
-                case ScheduleAppointmentTypes.Request:
-                    PersonRequestDto personRequest = dto as PersonRequestDto;
-                    if (personRequest != null)
-                    {
-                        personRequest.Request.Period.UtcStartTime = personRequest.Request.Period.UtcStartTime.AddMinutes(changedMinuteLength);
-                        personRequest.Request.Period.UtcEndTime = personRequest.Request.Period.UtcEndTime.AddMinutes(changedMinuteLength);
-
-                        //Update PersonRequest
-                        if (personRequest.Request is AbsenceRequestDto)
-                            SdkServiceHelper.SchedulingService.SavePersonAbsenceRequest(personRequest);
-                        else
-                            SdkServiceHelper.SchedulingService.SavePersonRequest(personRequest);
-                    }
-                    break;
-            }
-
-            View.Refresh(true);
-        }
-
-        /// <summary>
-        /// Persists all unsaved schedule appointments in Schedule dcitionary
-        /// </summary>
-        public void PersistScheduleAppointments()
-        {
-            View.Refresh(true);
-        }
-
-        public void DeleteScheduleAppointment(ICustomScheduleAppointment scheduleAppointment)
-        {
-            switch (scheduleAppointment.AppointmentType)
-            {
-                case ScheduleAppointmentTypes.Request:
-                    scheduleAppointment.Status = ScheduleAppointmentStatusTypes.Deleted;
-                    PersonRequestDto personRequest = scheduleAppointment.Tag as PersonRequestDto;
-                    if (personRequest != null)
-                    {
-                        if(personRequest.CanDelete)
-                            SdkServiceHelper.SchedulingService.DeletePersonRequest(personRequest);
-                    }
-                    AgentScheduleStateHolder.Instance().OnStateChange(ScheduleAppointmentStatusTypes.Deleted, scheduleAppointment.Tag as PersonRequestDto);
-                    View.Refresh(true);
-                    break;
-            }
-        }
-
-        public AgentSchedulePresenter(IAgentScheduleViewBase view, AgentScheduleStateHolder stateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler)
-            : base(view, stateHolder)
-        {
-            _scheduleClipHandler = clipHandler;
         }
     }
 }

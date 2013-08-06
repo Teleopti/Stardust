@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.DBConverter
             : base(connectionString)
         { }
 
-        protected AvailabilityConverterHelper() { }
-
         public IList<DataRow> LoadAllAvailability()
         {
             return ReadData("SELECT core_id, periods, date_from, emp_id FROM t_core_times");

@@ -134,7 +134,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             ((NumericReadOnlyCellModel) _gridControl.CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
 			((PercentReadOnlyCellModel)_gridControl.CellModels["PercentReadOnlyCell"]).NumberOfDecimals = 1;
-			((PercentFromPercentReadOnlyCellModel)_gridControl.CellModels["PercenFromPercentReadOnlyCellModel"]).NumberOfDecimals = 1;
 
             _gridRows.Clear();
             _gridRows.Add(new IntervalHeaderGridRow(_intervals));

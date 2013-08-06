@@ -1,27 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Diagnostics;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using System.Linq;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
     public class ColorPickerCellModel:DropDownCellStaticModel
     {
-        private Color _cellValue;
-
         public ColorPickerCellModel(GridModel grid) : base(grid)
         {
             AllowFloating = false;
@@ -33,19 +26,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
         }
 
-        protected internal Color CellValue
-        {
-            get { return _cellValue; }
-            set { _cellValue = value; }
-        }
+        protected internal Color CellValue { get; set; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            //Hmm...
             info.AddValue("Text", GetActiveText(Grid.CurrentCellInfo.RowIndex, Grid.CurrentCellInfo.ColIndex));
             base.GetObjectData(info, context);
         }
@@ -57,7 +44,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public static Color ColorFromString(string text)
         {
-            //toTest = Color.FromName(text);
             object obj = null;
             try
             {
@@ -77,9 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 Trace.WriteLine("ColorPickerCellModel: String could not be parsed to Color");
             }
          
-            
-
-            if ((obj != null) && (obj is Color))
+            if (obj is Color)
             {
                 return (Color)obj;
             }

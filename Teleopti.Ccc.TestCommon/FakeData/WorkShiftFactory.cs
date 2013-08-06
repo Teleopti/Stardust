@@ -34,16 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return retObj;
         }
 
-        public static WorkShift CreateWorkShiftWithId(TimeSpan start, TimeSpan end, IActivity activity)
-        {
-            WorkShift retObj = new WorkShift(new ShiftCategory("for test"));
-            ((IEntity)retObj).SetId(Guid.NewGuid());
-            retObj.LayerCollection.Add(
-                new WorkShiftActivityLayer(activity,
-                                           DateTimePeriodForWorkShift(start, end)));
-            return retObj;
-        }
-
         public static DateTimePeriod DateTimePeriodForWorkShift(TimeSpan start, TimeSpan end)
         {
             return new DateTimePeriod(WorkShift.BaseDate.Add(start),

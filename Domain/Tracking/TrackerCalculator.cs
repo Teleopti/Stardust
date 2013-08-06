@@ -7,12 +7,6 @@ namespace Teleopti.Ccc.Domain.Tracking
 {
     public class TrackerCalculator : ITrackerCalculator
     {
-
-        public TimeSpan CalculateTotalTimeOnScheduleDay(IPayload payload, IScheduleDay scheduleDay)
-        {
-            return CalculateTotalTimeOnScheduleDays(payload, new List<IScheduleDay> {scheduleDay});
-        }
-
         public TimeSpan CalculateTotalTimeOnScheduleDays(IPayload payload, IList<IScheduleDay> scheduleDays)
         {
             double totalMinutes = 0;

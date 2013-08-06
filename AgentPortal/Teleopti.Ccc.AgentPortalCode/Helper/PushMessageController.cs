@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             return new PushMessageController(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson);
         }
 
-        public static PushMessageController CreatePushMessageHelper(PersonDto affectedPerson)
-        {
-            return new PushMessageController(affectedPerson);
-        }
-
         private PushMessageController(PersonDto affectedPerson)
         {
             _affectedPerson = affectedPerson;

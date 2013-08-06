@@ -90,9 +90,9 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
-    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.4.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
+    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.5.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.4\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.5\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.Core">
       <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
@@ -207,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserInfoController.cs" />
     <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
@@ -333,7 +334,6 @@
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\Message\MessageForm.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />
@@ -829,6 +829,8 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
+    <Content Include="Content\jquery\jquery-1.10.2.js" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.css" />
@@ -957,9 +959,6 @@
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
     <Content Include="Content\bootstrap\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap.min.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.min.js" />
     <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\Scripts\jquery.validate.js" />
     <Content Include="Content\Scripts\jquery.validate.min.js" />
@@ -993,10 +992,14 @@
       <Link>customTimeoutSettings.config.notinuse</Link>
     </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.map" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1006,7 +1009,6 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
   </ItemGroup>
   <ItemGroup>

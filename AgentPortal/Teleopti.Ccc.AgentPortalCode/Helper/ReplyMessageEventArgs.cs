@@ -4,31 +4,16 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
     public class ReplyMessageEventArgs : EventArgs
     {
-        private string _textMessage;
-        private string _optionChecked;
-        private MessagePresenterObject _messagePresenterObject;
-
         public ReplyMessageEventArgs(string textMessage, string optionChecked, MessagePresenterObject messagePresenterObject)
         {
-            _textMessage = textMessage;
-            _optionChecked = optionChecked;
-            _messagePresenterObject = messagePresenterObject;
+            TextMessage = textMessage;
+            OptionChecked = optionChecked;
+            PresenterObject = messagePresenterObject;
         }
 
-        public string TextMessage
-        {
-            get { return _textMessage; }
-        }
+        public string TextMessage { get; private set; }
 
-        public string OptionChecked
-        {
-            get { return _optionChecked; }
-        }
-
-        public MessagePresenterObject PresenterObject
-        {
-            get { return _messagePresenterObject; }
-            set { _messagePresenterObject = value; }
-        }
+        public string OptionChecked { get; private set; }
+        public MessagePresenterObject PresenterObject { get; private set; }
     }
 }

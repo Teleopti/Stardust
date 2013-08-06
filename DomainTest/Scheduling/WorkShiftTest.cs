@@ -117,12 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(workShift.Projection.ContractTime(), endTimeLate.Subtract(startTime),"Verify ContractTime in projection");
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(WorkShiftActivityLayer)));
-        }
-
         [Test]
         public void VerifyProjectionRunsOnlyOnce()
         {

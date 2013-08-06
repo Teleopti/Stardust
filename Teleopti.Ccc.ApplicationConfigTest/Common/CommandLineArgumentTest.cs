@@ -169,12 +169,5 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             Assert.AreEqual(CultureInfo.GetCultureInfo("en-US"), commandLineArgument.CultureInfo);
             Assert.IsFalse(commandLineArgument.ConvertMode);
         }
-
-        public void VerifyCanFailOnMissingMandatory()
-        {
-            //BusinessUnit
-            //From to date
-
-        }
     }
 }

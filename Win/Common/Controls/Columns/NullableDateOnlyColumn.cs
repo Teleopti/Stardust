@@ -13,31 +13,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private readonly string _headerText;
-        private readonly string _bindingProperty;
         private readonly DateTimeFormatInfo _dtfi;
         
  
-        public NullableDateOnlyColumn(string bindingProperty, string headerText)
+        public NullableDateOnlyColumn(string bindingProperty, string headerText) : base(bindingProperty,100)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
+            
+            _dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
 
-            CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.LCID, false);
-            _dtfi = ci.DateTimeFormat;
-
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -55,7 +39,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 e.Style.CellValueType = typeof(DateTime);
                 T dataItem = dataItems[e.RowIndex - 1];
 
-                DateOnly? value = _propertyReflector.GetValue(dataItem, _bindingProperty) as DateOnly?;
+                DateOnly? value = _propertyReflector.GetValue(dataItem, BindingProperty) as DateOnly?;
                 DateTime? dateTimeValue = null;
                 if (value.HasValue) dateTimeValue = value.Value;
                 e.Style.CellValue = dateTimeValue;
@@ -75,12 +59,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 DateTime dt;
                 DateOnly? dateOnly = null;
 
-                if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
+                if (e.Style.CellValue is DateTime)
+                {
+                    dateOnly = new DateOnly((DateTime) e.Style.CellValue);
+                }
+                else if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
                 {
                     dateOnly = new DateOnly(dt);
                 }
                 T dataItem = dataItems[e.RowIndex - 1];
-                _propertyReflector.SetValue(dataItem, _bindingProperty, dateOnly);
+                _propertyReflector.SetValue(dataItem, BindingProperty, dateOnly);
                 OnCellChanged(dataItem, e);
                 e.Handled = true;
             }

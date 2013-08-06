@@ -9,10 +9,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
     {
         private TimePeriod _timePeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
 
-        public SFGridScheduleAdherenceColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        { }
-
         public SFGridScheduleAdherenceColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)
         { }

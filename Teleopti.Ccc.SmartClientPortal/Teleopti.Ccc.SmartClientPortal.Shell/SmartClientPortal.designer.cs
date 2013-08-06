@@ -22,7 +22,6 @@
 //----------------------------------------------------------------------------------------
 
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Common.UI.OutlookControls.Workspaces;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {

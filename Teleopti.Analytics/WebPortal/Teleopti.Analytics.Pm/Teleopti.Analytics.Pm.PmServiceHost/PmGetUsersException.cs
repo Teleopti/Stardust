@@ -6,17 +6,8 @@ namespace Teleopti.Analytics.PM.PMServiceHost
     [Serializable]
     public class PmGetUsersException : Exception
     {
-        public PmGetUsersException()
-        {
-        }
-
         public PmGetUsersException(string message)
             : base(message)
-        {
-        }
-
-        public PmGetUsersException(string message, Exception innerException)
-            : base(message, innerException)
         {
         }
 

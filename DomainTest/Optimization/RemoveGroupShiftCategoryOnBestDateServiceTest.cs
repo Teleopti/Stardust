@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
-                Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.Once();
+                Expect.Call(_schedulePart.PersonAssignment()).Return(assignment).Repeat.Once();
 				Expect.Call(assignment.ShiftCategory).Return(ShiftCategoryFactory.CreateShiftCategory("yy")).Repeat.Once();
             }
 
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart.PersonAssignment()).Return(assignment).Repeat.AtLeastOnce();
 			Expect.Call(assignment.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
         }
     }

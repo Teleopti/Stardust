@@ -5,21 +5,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
     public class SFGridVisualizeColumn<T> : SFGridColumnBase<T>
     {
-        private readonly int _preferredWidth;
-
         public SFGridVisualizeColumn(string bindingProperty, string headerText)
             : base(bindingProperty, headerText)
         { }
 
-        public SFGridVisualizeColumn(string bindingProperty, int preferredWidth, string headerText)
-            : base(bindingProperty, headerText)
-        {
-            _preferredWidth = preferredWidth;
-        }
-
         public override int PreferredWidth
         {
-            get { return _preferredWidth; }
+            get { return 0; }
         }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, 

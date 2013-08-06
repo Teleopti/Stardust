@@ -40,17 +40,6 @@ namespace Teleopti.Interfaces
         /// Creates the message.
         /// </summary>
         /// <param name="address">The address.</param>
-        /// <param name="filePath">The file path.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-09-23
-        /// </remarks>
-        void CreateMessage(string address, string filePath);
-
-        /// <summary>
-        /// Creates the message.
-        /// </summary>
-        /// <param name="address">The address.</param>
         /// <param name="filePaths">The file path.</param>
         /// <remarks>
         /// Created by: zoet

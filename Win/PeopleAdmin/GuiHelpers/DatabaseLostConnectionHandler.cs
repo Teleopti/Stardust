@@ -12,13 +12,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 view.ShowDialog();
             }
         }
-
-        public static void ShowConnectionLostOperationAbort(Exception exception)
-        {
-            using (var view = new SimpleExceptionHandlerView(exception, UserTexts.Resources.OpenTeleoptiCCC, UserTexts.Resources.ServerUnavailable))
-            {
-                view.ShowDialog();
-            }
-        }
     }
 }

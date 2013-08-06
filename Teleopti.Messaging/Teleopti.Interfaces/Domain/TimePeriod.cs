@@ -271,10 +271,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public string ToShortTimeString()
         {
-            DateTime dtStart = DateTime.MinValue.Add(StartTime);
-            DateTime dtEnd = DateTime.MinValue.Add(EndTime);
-            String shortTimeString = dtStart.ToShortTimeString() + " - " + dtEnd.ToShortTimeString();
-            return shortTimeString;
+            return TimeHelper.TimeOfDayFromTimeSpan(StartTime) + " - " + TimeHelper.TimeOfDayFromTimeSpan(EndTime);
         }
 
         ///<summary>
@@ -285,10 +282,7 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         public string ToShortTimeString(IFormatProvider culture)
         {
-            DateTime dtStart = DateTime.MinValue.Add(StartTime);
-            DateTime dtEnd = DateTime.MinValue.Add(EndTime);
-            String shortTimeString = dtStart.ToString("t", culture) + " - " + dtEnd.ToString("t", culture);
-            return shortTimeString;
+            return TimeHelper.TimeOfDayFromTimeSpan(StartTime, culture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(EndTime, culture);
         }
 
         #endregion
