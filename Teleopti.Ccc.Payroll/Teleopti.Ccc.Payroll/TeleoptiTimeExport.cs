@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Payroll
 			payrollDt.Columns.Add("StartDate", typeof (DateTime));
 			payrollDt.Columns.Add("EndDate", typeof (DateTime));
 			payrollDt.Columns.Add("ShiftCategoryName", typeof (string));
-			payrollDt.Columns.Add("Time", typeof (TimeSpan));
+			payrollDt.Columns.Add("ContractTime", typeof(TimeSpan));
 			payrollDt.Columns.Add("WorkTime", typeof (TimeSpan));
 			payrollDt.Columns.Add("PaidTime", typeof (TimeSpan));
 			payrollDt.Columns.Add("AbsencePayrollCode", typeof (string));

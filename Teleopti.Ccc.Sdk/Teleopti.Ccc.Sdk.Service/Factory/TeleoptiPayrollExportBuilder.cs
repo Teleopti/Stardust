@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
 			var projection = new ProjectionProvider().Projection(scheduleDay);
-
+			
 			if (isDayEmpty(scheduleDay, projection))
 				yield break;
 
@@ -61,12 +61,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				payrollTimeExportDataDto.DayOffPayrollCode = dayOff.DayOff.PayrollCode;
 			}
+			
 			else
 			{
-				var absence = scheduleDay.PersonAbsenceCollection().FirstOrDefault();
-				if (absence != null)
-					payrollTimeExportDataDto.AbsencePayrollCode = absence.Layer.Payload.PayrollCode;
-				
+				if (schedulePartDto.IsFullDayAbsence)
+				{
+					var absence = schedulePartDto.PersonAbsenceCollection.FirstOrDefault();
+					if (absence != null)
+						payrollTimeExportDataDto.AbsencePayrollCode = absence.AbsenceLayer.Absence.PayrollCode;
+				}
+
 				var personAssignment = scheduleDay.PersonAssignment();
 				if (havePersonAssignmentAndShiftCategory(personAssignment))
 					payrollTimeExportDataDto.ShiftCategoryName = personAssignment.ShiftCategory.Description.Name;
@@ -92,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			       !scheduleDay.PersonDayOffCollection().Any() &&
 			       !scheduleDay.PersonAbsenceCollection(false).Any();
 		}
-
+		
 		public IList<PayrollBaseExportDto> BuildDetailedExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();

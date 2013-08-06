@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
@@ -11,86 +12,92 @@ namespace Teleopti.Ccc.PayrollFormatter
 
         protected static string FormatNodeValue(ItemFormat itemFormat, string value)
         {
-            value = ApplyTypeAndFormat(itemFormat, value);
-            value = ApplyQuotes(itemFormat, value);
-            value = ApplyAlignAndFill(itemFormat, value);
-            value = ApplyLength(itemFormat, value);
+            value = applyTypeAndFormat(itemFormat, value);
+            value = applyQuotes(itemFormat, value);
+            value = applyAlignAndFill(itemFormat, value);
+            value = applyLength(itemFormat, value);
             
             return value;
         }
 
         public virtual string FileSuffix { get { return "txt"; } }
 
-        private static string ApplyLength(ItemFormat format, string value)
+        private static string applyLength(ItemFormat format, string value)
         {
             if (format.Length>0 && value.Length>format.Length)
             {
-                if (format.Align == Align.Right)
-                {
-                    value = value.Substring(value.Length - format.Length);
-                }
-                else
-                {
-                    value = value.Substring(0, format.Length);
-                }
+	            value = format.Align == Align.Right
+		                    ? value.Substring(value.Length - format.Length)
+		                    : value.Substring(0, format.Length);
             }
             return value;
         }
 
-        private static string ApplyAlignAndFill(ItemFormat format, string value)
+        private static string applyAlignAndFill(ItemFormat format, string value)
         {
             if (format.Length > 0)
             {
-                if (format.Align == Align.Right)
-                    value = value.PadLeft(format.Length, format.Fill);
-                else
-                    value = value.PadRight(format.Length, format.Fill);
+	            value = format.Align == Align.Right
+		                    ? value.PadLeft(format.Length, format.Fill)
+		                    : value.PadRight(format.Length, format.Fill);
             }
             return value;
         }
 
-        private static string ApplyQuotes(ItemFormat format, string value)
+        private static string applyQuotes(ItemFormat format, string value)
         {
             if (format.Quote)
             {
-                value = string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}{1}{0}", "\"", value);
+                value = string.Format(CultureInfo.InvariantCulture, "{0}{1}{0}", "\"", value);
             }
             return value;
         }
 
-        private static string ApplyTypeAndFormat(ItemFormat format, string value)
+        private static string applyTypeAndFormat(ItemFormat format, string value)
         {
-            if (format.XmlType.Contains("date"))
+            if (format.XmlType.Equals("date"))
             {
                 if (value.Length > 0)
                 {
-                    DateTime localDate = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
+                    var localDate = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
                     if (string.IsNullOrEmpty(format.Format))
                         value = localDate.ToShortDateString();
                     else
-                        value = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                        value = string.Format(CultureInfo.InvariantCulture,
                                               "{0:" + format.Format + "}", localDate);
                 }
             }
-            if (format.XmlType.Contains("time"))
+			if (format.XmlType.Equals("dateTime"))
+			{
+				if (value.Length > 0)
+				{
+					var localdateTime = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
+					if (string.IsNullOrEmpty(format.Format))
+						value = localdateTime.ToString("u");
+					else
+						value = string.Format(CultureInfo.InvariantCulture,
+						                      "{0:" + format.Format + "}", localdateTime);
+				}
+			}
+            if (format.XmlType.Equals("time"))
             {
                 if (value.Length > 0)
                 {
-                    TimeSpan timeSpan = XmlConvert.ToTimeSpan(value);
+                    var timeSpan = XmlConvert.ToTimeSpan(value);
                     if (string.IsNullOrEmpty(format.Format))
                         value = timeSpan.ToString();
                     else
                     {
-                        int hours = (int) Math.Floor(timeSpan.TotalHours);
+                        var hours = (int) Math.Floor(timeSpan.TotalHours);
                         value = format.Format;
                         value = value.Replace("hh",
-                                              hours.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                              hours.ToString(CultureInfo.InvariantCulture));
                         value = value.Replace("HH",
-                                              hours.ToString("00", System.Globalization.CultureInfo.InvariantCulture));
+                                              hours.ToString("00", CultureInfo.InvariantCulture));
                         value = value.Replace("mm",
-                                              timeSpan.Minutes.ToString("00",System.Globalization.CultureInfo.InvariantCulture));
+                                              timeSpan.Minutes.ToString("00",CultureInfo.InvariantCulture));
                         value = value.Replace("ss",
-                                              timeSpan.Seconds.ToString("00",System.Globalization.CultureInfo.InvariantCulture));
+                                              timeSpan.Seconds.ToString("00",CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -98,11 +105,11 @@ namespace Teleopti.Ccc.PayrollFormatter
             {
                 if (value.Length > 0)
                 {
-                    decimal decimalValue = XmlConvert.ToDecimal(value);
+                    var decimalValue = XmlConvert.ToDecimal(value);
                     if (string.IsNullOrEmpty(format.Format))
-                        value = decimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        value = decimalValue.ToString(CultureInfo.InvariantCulture);
                     else
-                        value = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                        value = string.Format(CultureInfo.InvariantCulture,
                                               "{0:" + format.Format + "}", decimalValue);
                 }
             }
@@ -110,11 +117,11 @@ namespace Teleopti.Ccc.PayrollFormatter
             {
                 if (value.Length > 0)
                 {
-                    double doubleValue = XmlConvert.ToDouble(value);
+                    var doubleValue = XmlConvert.ToDouble(value);
                     if (string.IsNullOrEmpty(format.Format))
-                        value = doubleValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        value = doubleValue.ToString(CultureInfo.InvariantCulture);
                     else
-                        value = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                        value = string.Format(CultureInfo.InvariantCulture,
                                               "{0:" + format.Format + "}", doubleValue);
                 }
             }
