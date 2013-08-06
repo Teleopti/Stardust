@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -67,23 +68,44 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				var person = personRepository.Get(publishedId);
 				if (person == null)
 					return null;
-				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
-				_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
-				if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
+
+				if (!checkPermission(uow, dataSource, personRepository, person))
 					return Content("No permission for calendar sharing", "text/plain");
 
-				var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
-				var calendarLinkSettings = personalSettingDataRepository.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person,
-																						  new CalendarLinkSettings());
-				if (!calendarLinkSettings.IsActive)
+				if (!getCalendarLinkSettings(uow, person).IsActive)
 					return Content("Calendar sharing inactive", "text/plain");
-				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(-60),
-																		   _now.DateOnly().AddDays(180), publishedId);
+
+				var scheduleDays = getScheduleDays(uow, publishedId);
 				if (scheduleDays == null || scheduleDays.IsEmpty())
 					return null;
 				return Content(generateCalendar(scheduleDays), "text/plain");
 			}
+		}
+
+		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(IUnitOfWork uow, Guid publishedId)
+		{
+			var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
+			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(-60),
+			                                                              _now.DateOnly().AddDays(180), publishedId);
+			return scheduleDays;
+		}
+
+		private CalendarLinkSettings getCalendarLinkSettings(IUnitOfWork uow, IPerson person)
+		{
+			var personalSettingDataRepository = 
+				_repositoryFactory.CreatePersonalSettingDataRepository(uow);
+			var calendarLinkSettings =
+				personalSettingDataRepository.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings());
+			return calendarLinkSettings;
+		}
+
+		private bool checkPermission(IUnitOfWork uow, IDataSource dataSource, IPersonRepository personRepository, IPerson person)
+		{
+			_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
+			_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
+			bool hasPermission =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar);
+			return hasPermission;
 		}
 
 		private string generateCalendar(IEnumerable<PersonScheduleDayReadModel> scheduleDays)
@@ -95,20 +117,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				dynamic shift = _deserializer.DeserializeObject(scheduleDay.Shift);
 				if (shift == null)
 					continue;
-				var layers = shift.Projection as IEnumerable<dynamic>;
-				foreach (var layer in layers)
-				{
-					var evt = iCal.Create<Event>();
-
-					evt.Start = new iCalDateTime(layer.Start);
-					evt.End = new iCalDateTime(layer.End);
-					evt.Summary = layer.Title;
-				}
+				generateCalendarEvent(iCal, shift);
 			}
 
 			var serializer = new iCalendarSerializer();
 			var icsContent = serializer.SerializeToString(iCal);
 			return icsContent;
+		}
+
+		private static void generateCalendarEvent(iCalendar iCal, dynamic shift)
+		{
+			var layers = shift.Projection as IEnumerable<dynamic>;
+			foreach (var layer in layers)
+			{
+				var evt = iCal.Create<Event>();
+
+				evt.Start = new iCalDateTime(layer.Start);
+				evt.End = new iCalDateTime(layer.End);
+				evt.Summary = layer.Title;
+			}
 		}
 	}
 }
