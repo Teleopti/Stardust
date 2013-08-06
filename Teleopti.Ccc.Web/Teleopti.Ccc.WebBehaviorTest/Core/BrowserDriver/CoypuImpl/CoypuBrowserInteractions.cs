@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.HasNoJQueryCss(notExistsSelector, options()), Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			assert(_browser.HasNoJQueryCss(notExistsSelector, options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertContains(string selector, string text)
