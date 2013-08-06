@@ -89,6 +89,8 @@
     </Compile>
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -128,7 +130,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />

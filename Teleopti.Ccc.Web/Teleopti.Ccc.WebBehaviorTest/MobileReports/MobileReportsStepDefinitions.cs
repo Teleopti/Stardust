@@ -270,12 +270,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenISelectASkill()
 		{
 			var skillId = UserFactory.User().UserData<ThreeSkills>().Skill2Id;
-			Browser.Interactions.Javascript(line =>
-				{
-					line("var el = $('#sel-skill');");
-					line("el.val('{0}').attr('selected', true).siblings('option').removeAttr('selected');");
-					line("el.selectmenu('refresh', true);");
-				}, skillId);
+			var script = "var el = $('#sel-skill');" +
+			             "el.val('" + skillId + "').attr('selected', true).siblings('option').removeAttr('selected');" +
+			             "el.selectmenu('refresh', true);";
+			Browser.Interactions.Javascript(script, skillId);
 		}
 
 		[When(@"I select the all skills item")]
