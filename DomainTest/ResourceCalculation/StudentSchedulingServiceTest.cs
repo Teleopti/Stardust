@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
 	    private IPersonSkillProvider _personSkillProvider;
+	    private ISkill _skill1;
+	    private ISkill _skill2;
 
 	    [SetUp]
         public void Setup()
@@ -34,13 +36,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
         	_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            _timeZoneInfo = (zone);
+			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-        	_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-	        _personSkillProvider = new PersonSkillProvider();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_skill1 = SkillFactory.CreateSkill("Skill 1");
+			_skill2 = SkillFactory.CreateSkill("Skill 2");
+			_personSkillProvider = new PersonSkillProvider();
 			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder,
 				_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
         	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
@@ -65,9 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var date12 = new DateOnly(2009, 2, 3);
             IList<DateOnly> dateOnlys = new List<DateOnly> { date11, date12 };
 
-            var skill = _mocks.StrictMock<ISkill>();
-            var skill2 = _mocks.StrictMock<ISkill>();
-
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
             var skillDay1 = _mocks.StrictMock<ISkillDay>();
             var skillDay2 = _mocks.StrictMock<ISkillDay>();
 
@@ -104,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var preferences = new OptimizerOriginalPreferences();
             preferences.SchedulingOptions.UseShiftCategoryLimitations = false;
 
-    
             var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             
             using (_mocks.Record())
@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(person.Equals(person2)).Return(false).Repeat.Any();
                 Expect.Call(skillDay1.CurrentDate).Return(date11).Repeat.AtLeastOnce();
                 Expect.Call(skillDay2.CurrentDate).Return(date12).Repeat.AtLeastOnce();
-                Expect.Call(skillDay1.Skill).Return(skill).Repeat.AtLeastOnce();
-                Expect.Call(skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.Skill).Return(_skill2).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
                 Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
 
@@ -150,16 +150,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
                 Expect.Call(personPeriod2.PersonSkillCollection).Return(personSkills2).Repeat.AtLeastOnce();
 
-                Expect.Call(personSkill.Skill).Return(skill).Repeat.AtLeastOnce();
-                Expect.Call(skill.Equals(skill)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(skill2.Equals(skill)).Return(false).Repeat.AtLeastOnce();
-
-                Expect.Call(personSkill2.Skill).Return(skill2).Repeat.AtLeastOnce();
-                Expect.Call(skill2.Equals(skill2)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(skill.Equals(skill2)).Return(false).Repeat.AtLeastOnce();
+                Expect.Call(personSkill.Skill).Return(_skill1).Repeat.AtLeastOnce();
+                Expect.Call(personSkill2.Skill).Return(_skill2).Repeat.AtLeastOnce();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, preferences.SchedulingOptions)).Return(
             		_effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
-			    Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
+				Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill> { _skill1 }).Repeat.AtLeastOnce();
+#pragma warning disable 612,618
+				Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments().Repeat.AtLeastOnce();
+#pragma warning restore 612,618
            }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
@@ -261,12 +261,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var date12 = new DateOnly(2009, 2, 3);
             IList<DateOnly> dateOnlies = new List<DateOnly> { date11, date12 };
 
-            var skill2 = _mocks.StrictMock<ISkill>();
             var skillDay1 = _mocks.StrictMock<ISkillDay>();
             var skillDay2 = _mocks.StrictMock<ISkillDay>();
 
             IList<ISkillDay> lst = new List<ISkillDay> { skillDay1, skillDay2 };
 
+	        var schedules = _mocks.StrictMock<IScheduleDictionary>();
             var part1 = _mocks.StrictMock<IScheduleDay>();
             var part2 = _mocks.StrictMock<IScheduleDay>();
             var person = _mocks.StrictMock<IPerson>();
@@ -283,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var preferences = new OptimizerOriginalPreferences();
             preferences.SchedulingOptions.UseShiftCategoryLimitations = false;
             
-            var skill1 = _mocks.StrictMock<ISkill>();
             var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
             using (_mocks.Record())
@@ -300,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date12, _timeZoneInfo)).Repeat.AtLeastOnce();
                 Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(skillDay2.CurrentDate).Return(date12).Repeat.AtLeastOnce();
-                Expect.Call(skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.Skill).Return(_skill2).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
                 Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
                 Expect.Call(skillStaffPeriod.Payload).Return(payload).Repeat.AtLeastOnce();
@@ -310,14 +309,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(skillDay2.ForecastedIncomingDemand).Return(new TimeSpan(200, 0, 0)).Repeat.AtLeastOnce();
                 Expect.Call(person.PersonPeriods(new DateOnlyPeriod())).Return(personPeriods).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-                Expect.Call(personSkill.Skill).Return(skill1).Repeat.AtLeastOnce();
-                Expect.Call(skill1.Equals(skill2)).Return(false).Repeat.AtLeastOnce();
-                Expect.Call(personSkill2.Skill).Return(skill2).Repeat.AtLeastOnce();
-                Expect.Call(skill2.Equals(skill2)).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(personSkill.Skill).Return(_skill1).Repeat.AtLeastOnce();
+                Expect.Call(personSkill2.Skill).Return(_skill2).Repeat.AtLeastOnce();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, preferences.SchedulingOptions)).Return(
 					_effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
-                }
+                Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>{_skill1});
+	            Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules);
+#pragma warning disable 612,618
+	            Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments();
+#pragma warning restore 612,618
+            }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
 												_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
