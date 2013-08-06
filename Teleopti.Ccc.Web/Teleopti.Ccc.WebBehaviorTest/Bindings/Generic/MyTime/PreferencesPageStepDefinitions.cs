@@ -318,7 +318,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the edit activity minimum and maximum fields")]
 		public void ThenIShouldNotSeeTheEditActivityMinimumAndMaximumFields()
 		{
-
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-min");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-max");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-end-time-min");
