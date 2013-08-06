@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				_browser.ExecuteScript(JQueryScript.WhenFoundOrThrow(_selector, "return;"));
 				return true;
 			}
-			catch (MissingHtmlException ex)
+			catch (InvalidOperationException ex)
 			{
 				return false;
 			}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				_browser.ExecuteScript(JQueryScript.WhenNotFoundOrThrow(_selector, "return;"));
 				return true;
 			}
-			catch (MissingHtmlException ex)
+			catch (InvalidOperationException ex)
 			{
 				return false;
 			}
