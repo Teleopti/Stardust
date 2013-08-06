@@ -266,7 +266,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         },
         AddItemAtTop: function (request,isProcessing) {
         	pageViewModel.AddRequest(request, isProcessing);
-            _unbind();
         },
         Dispose: function() {
             _unbind();
