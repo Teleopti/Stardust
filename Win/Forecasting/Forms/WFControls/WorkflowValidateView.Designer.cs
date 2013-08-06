@@ -1,4 +1,6 @@
-﻿using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
+﻿using System;
+using System.Windows.Forms;
+using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 {
@@ -33,401 +35,408 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowValidateView));
-            this.xpTaskBar1 = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
-            this.xpTaskBarBoxSelectPeriod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
-            this.gradientPanelSelectPeriod = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.buttonAdvCancelLoad = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.dateSelectionFromToHistorical = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-            this.dateSelectionFromToTarget = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-            this.xpTaskBarBoxDeviations = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
-            this.gradientPanelDeviations = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelDeviationAfterTaskTime = new System.Windows.Forms.Label();
-            this.labelDeviationTaskTime = new System.Windows.Forms.Label();
-            this.percentTextBoxTasks = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
-            this.labelDeviationTasks = new System.Windows.Forms.Label();
-            this.percentTextBoxDeviationTaskTime = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
-            this.percentTextBoxDeviationAfterTaskTime = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
-            this.xpTaskBarBoxSpecialEvents = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
-            this.gradientPanelSpecialEvents = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.outlierBoxControl = new Teleopti.Ccc.Win.Common.Controls.OutlierBox();
-            this.splitContainerAdv2 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.backgroundWorkerStatistics = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorkerValidationPeriod = new System.ComponentModel.BackgroundWorker();
-            ((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).BeginInit();
-            this.xpTaskBar1.SuspendLayout();
-            this.xpTaskBarBoxSelectPeriod.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSelectPeriod)).BeginInit();
-            this.gradientPanelSelectPeriod.SuspendLayout();
-            this.xpTaskBarBoxDeviations.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelDeviations)).BeginInit();
-            this.gradientPanelDeviations.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxTasks)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationTaskTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationAfterTaskTime)).BeginInit();
-            this.xpTaskBarBoxSpecialEvents.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSpecialEvents)).BeginInit();
-            this.gradientPanelSpecialEvents.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).BeginInit();
-            this.splitContainerAdv2.Panel2.SuspendLayout();
-            this.splitContainerAdv2.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // xpTaskBar1
-            // 
-            this.xpTaskBar1.AutoSize = true;
-            this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSelectPeriod);
-            this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxDeviations);
-            this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSpecialEvents);
-            this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
-            this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
-            this.xpTaskBar1.Name = "xpTaskBar1";
-            this.xpTaskBar1.Size = new System.Drawing.Size(170, 600);
-            this.xpTaskBar1.TabIndex = 1;
-            // 
-            // xpTaskBarBoxSelectPeriod
-            // 
-            this.xpTaskBarBoxSelectPeriod.BackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxSelectPeriod.Controls.Add(this.gradientPanelSelectPeriod);
-            this.xpTaskBarBoxSelectPeriod.HeaderBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxSelectPeriod.HeaderImageIndex = -1;
-            this.xpTaskBarBoxSelectPeriod.HitTaskBoxArea = false;
-            this.xpTaskBarBoxSelectPeriod.HotTrackColor = System.Drawing.Color.Empty;
-            this.xpTaskBarBoxSelectPeriod.ItemBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxSelectPeriod.Location = new System.Drawing.Point(0, 0);
-            this.xpTaskBarBoxSelectPeriod.Name = "xpTaskBarBoxSelectPeriod";
-            this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 230;
-            this.xpTaskBarBoxSelectPeriod.ShowCollapseButton = false;
-            this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(170, 258);
-            this.xpTaskBarBoxSelectPeriod.TabIndex = 0;
-            this.xpTaskBarBoxSelectPeriod.TabStop = false;
-            this.xpTaskBarBoxSelectPeriod.Text = "xxSelectHistoricalData";
-            // 
-            // gradientPanelSelectPeriod
-            // 
-            this.gradientPanelSelectPeriod.AutoSize = true;
-            this.gradientPanelSelectPeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.gradientPanelSelectPeriod.Controls.Add(this.buttonAdvCancelLoad);
-            this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToHistorical);
-            this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToTarget);
-            this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 26);
-            this.gradientPanelSelectPeriod.Name = "gradientPanelSelectPeriod";
-            this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(166, 230);
-            this.gradientPanelSelectPeriod.TabIndex = 0;
-            // 
-            // buttonAdvCancelLoad
-            // 
-            this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowValidateView));
+			this.xpTaskBar1 = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
+			this.xpTaskBarBoxSelectPeriod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
+			this.gradientPanelSelectPeriod = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+			this.buttonAdvCancelLoad = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.dateSelectionFromToHistorical = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.dateSelectionFromToTarget = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.xpTaskBarBoxDeviations = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
+			this.gradientPanelDeviations = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelDeviationAfterTaskTime = new System.Windows.Forms.Label();
+			this.labelDeviationTaskTime = new System.Windows.Forms.Label();
+			this.percentTextBoxTasks = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
+			this.labelDeviationTasks = new System.Windows.Forms.Label();
+			this.percentTextBoxDeviationTaskTime = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
+			this.percentTextBoxDeviationAfterTaskTime = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
+			this.xpTaskBarBoxSpecialEvents = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
+			this.gradientPanelSpecialEvents = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+			this.outlierBoxControl = new Teleopti.Ccc.Win.Common.Controls.OutlierBox();
+			this.splitContainerAdv2 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.backgroundWorkerStatistics = new System.ComponentModel.BackgroundWorker();
+			this.backgroundWorkerValidationPeriod = new System.ComponentModel.BackgroundWorker();
+			((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).BeginInit();
+			this.xpTaskBar1.SuspendLayout();
+			this.xpTaskBarBoxSelectPeriod.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelSelectPeriod)).BeginInit();
+			this.gradientPanelSelectPeriod.SuspendLayout();
+			this.xpTaskBarBoxDeviations.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelDeviations)).BeginInit();
+			this.gradientPanelDeviations.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxTasks)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationTaskTime)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationAfterTaskTime)).BeginInit();
+			this.xpTaskBarBoxSpecialEvents.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelSpecialEvents)).BeginInit();
+			this.gradientPanelSpecialEvents.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).BeginInit();
+			this.splitContainerAdv2.Panel2.SuspendLayout();
+			this.splitContainerAdv2.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// xpTaskBar1
+			// 
+			this.xpTaskBar1.AutoSize = true;
+			this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
+			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSelectPeriod);
+			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxDeviations);
+			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSpecialEvents);
+			this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
+			this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
+			this.xpTaskBar1.Name = "xpTaskBar1";
+			this.xpTaskBar1.Size = new System.Drawing.Size(170, 600);
+			this.xpTaskBar1.TabIndex = 1;
+			// 
+			// xpTaskBarBoxSelectPeriod
+			// 
+			this.xpTaskBarBoxSelectPeriod.BackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSelectPeriod.Controls.Add(this.gradientPanelSelectPeriod);
+			this.xpTaskBarBoxSelectPeriod.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSelectPeriod.HeaderImageIndex = -1;
+			this.xpTaskBarBoxSelectPeriod.HitTaskBoxArea = false;
+			this.xpTaskBarBoxSelectPeriod.HotTrackColor = System.Drawing.Color.Empty;
+			this.xpTaskBarBoxSelectPeriod.ItemBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSelectPeriod.Location = new System.Drawing.Point(0, 0);
+			this.xpTaskBarBoxSelectPeriod.Name = "xpTaskBarBoxSelectPeriod";
+			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 232;
+			this.xpTaskBarBoxSelectPeriod.ShowCollapseButton = false;
+			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(170, 260);
+			this.xpTaskBarBoxSelectPeriod.TabIndex = 0;
+			this.xpTaskBarBoxSelectPeriod.TabStop = false;
+			this.xpTaskBarBoxSelectPeriod.Text = "xxSelectHistoricalData";
+			// 
+			// gradientPanelSelectPeriod
+			// 
+			this.gradientPanelSelectPeriod.AutoSize = true;
+			this.gradientPanelSelectPeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.gradientPanelSelectPeriod.Controls.Add(this.buttonAdvCancelLoad);
+			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToHistorical);
+			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToTarget);
+			this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 26);
+			this.gradientPanelSelectPeriod.Name = "gradientPanelSelectPeriod";
+			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(166, 232);
+			this.gradientPanelSelectPeriod.TabIndex = 0;
+			// 
+			// buttonAdvCancelLoad
+			// 
+			this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
-            this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 201);
-            this.buttonAdvCancelLoad.Name = "buttonAdvCancelLoad";
-            this.buttonAdvCancelLoad.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-            this.buttonAdvCancelLoad.Size = new System.Drawing.Size(160, 26);
-            this.buttonAdvCancelLoad.TabIndex = 4;
-            this.buttonAdvCancelLoad.Text = "xxxCancelLoading";
-            this.buttonAdvCancelLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAdvCancelLoad.UseVisualStyle = true;
-            this.buttonAdvCancelLoad.Visible = false;
-            this.buttonAdvCancelLoad.Click += new System.EventHandler(this.buttonAdvCancelLoad_Click);
-            this.buttonAdvCancelLoad.MouseEnter += new System.EventHandler(this.buttonAdvCancelLoad_MouseEnter);
-            this.buttonAdvCancelLoad.MouseLeave += new System.EventHandler(this.buttonAdvCancelLoad_MouseLeave);
-            // 
-            // dateSelectionFromToHistorical
-            // 
-            this.dateSelectionFromToHistorical.BackColor = System.Drawing.Color.Transparent;
-            this.dateSelectionFromToHistorical.ButtonApplyText = "xxApply";
-            this.dateSelectionFromToHistorical.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dateSelectionFromToHistorical.HideNoneButtons = false;
-            this.dateSelectionFromToHistorical.LabelDateSelectionText = "xxCompareWith";
-            this.dateSelectionFromToHistorical.LabelDateSelectionToText = "xxTo";
-            this.dateSelectionFromToHistorical.Location = new System.Drawing.Point(0, 101);
-            this.dateSelectionFromToHistorical.Name = "dateSelectionFromToHistorical";
-            this.dateSelectionFromToHistorical.NoneButtonText = "xxNone";
-            this.dateSelectionFromToHistorical.NullString = "xxNoDateIsSelected";
-            this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(166, 129);
-            this.dateSelectionFromToHistorical.TabIndex = 3;
-            this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
-            this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
-            this.dateSelectionFromToHistorical.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodStart")));
-            this.dateSelectionFromToHistorical.ValueChanged += new System.EventHandler(this.dateSelectionFromToHistorical_ValueChanged);
-            this.dateSelectionFromToHistorical.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromToHistorical_ButtonClicked_novalidation);
-            // 
-            // dateSelectionFromToTarget
-            // 
-            this.dateSelectionFromToTarget.BackColor = System.Drawing.Color.Transparent;
-            this.dateSelectionFromToTarget.ButtonApplyText = "xxApplyTargetPeriod";
-            this.dateSelectionFromToTarget.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dateSelectionFromToTarget.HideNoneButtons = false;
-            this.dateSelectionFromToTarget.LabelDateSelectionText = "xxValidationPeriod";
-            this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
-            this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 0);
-            this.dateSelectionFromToTarget.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
-            this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
-            this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
-            this.dateSelectionFromToTarget.ShowApplyButton = false;
-            this.dateSelectionFromToTarget.Size = new System.Drawing.Size(166, 103);
-            this.dateSelectionFromToTarget.TabIndex = 2;
-            this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
-            this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
-            this.dateSelectionFromToTarget.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodStart")));
-            this.dateSelectionFromToTarget.ValueChanged += new System.EventHandler(this.dateSelectionFromToTarget_ValueChanged);
-            // 
-            // xpTaskBarBoxDeviations
-            // 
-            this.xpTaskBarBoxDeviations.Controls.Add(this.gradientPanelDeviations);
-            this.xpTaskBarBoxDeviations.HeaderBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxDeviations.HeaderImageIndex = -1;
-            this.xpTaskBarBoxDeviations.HitTaskBoxArea = false;
-            this.xpTaskBarBoxDeviations.HotTrackColor = System.Drawing.Color.Empty;
-            this.xpTaskBarBoxDeviations.ItemBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 258);
-            this.xpTaskBarBoxDeviations.Name = "xpTaskBarBoxDeviations";
-            this.xpTaskBarBoxDeviations.PreferredChildPanelHeight = 120;
-            this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(170, 150);
-            this.xpTaskBarBoxDeviations.TabIndex = 1;
-            this.xpTaskBarBoxDeviations.TabStop = false;
-            this.xpTaskBarBoxDeviations.Text = "xxDeviations";
-            // 
-            // gradientPanelDeviations
-            // 
-            this.gradientPanelDeviations.AutoSize = true;
-            this.gradientPanelDeviations.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.gradientPanelDeviations.Controls.Add(this.tableLayoutPanel1);
-            this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 28);
-            this.gradientPanelDeviations.Name = "gradientPanelDeviations";
-            this.gradientPanelDeviations.Size = new System.Drawing.Size(166, 120);
-            this.gradientPanelDeviations.TabIndex = 0;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel1.Controls.Add(this.labelDeviationAfterTaskTime, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.labelDeviationTaskTime, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.percentTextBoxTasks, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.labelDeviationTasks, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.percentTextBoxDeviationTaskTime, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.percentTextBoxDeviationAfterTaskTime, 1, 2);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(166, 120);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // labelDeviationAfterTaskTime
-            // 
-            this.labelDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelDeviationAfterTaskTime.AutoSize = true;
-            this.labelDeviationAfterTaskTime.Location = new System.Drawing.Point(3, 87);
-            this.labelDeviationAfterTaskTime.Name = "labelDeviationAfterTaskTime";
-            this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(102, 26);
-            this.labelDeviationAfterTaskTime.TabIndex = 5;
-            this.labelDeviationAfterTaskTime.Text = "xxDeviationACWColon";
-            // 
-            // labelDeviationTaskTime
-            // 
-            this.labelDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelDeviationTaskTime.AutoSize = true;
-            this.labelDeviationTaskTime.Location = new System.Drawing.Point(3, 47);
-            this.labelDeviationTaskTime.Name = "labelDeviationTaskTime";
-            this.labelDeviationTaskTime.Size = new System.Drawing.Size(100, 26);
-            this.labelDeviationTaskTime.TabIndex = 3;
-            this.labelDeviationTaskTime.Text = "xxDeviationTalkTimeColon";
-            // 
-            // percentTextBoxTasks
-            // 
-            this.percentTextBoxTasks.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.percentTextBoxTasks.BackGroundColor = System.Drawing.SystemColors.Window;
-            this.percentTextBoxTasks.DoubleValue = 0D;
-            this.percentTextBoxTasks.Location = new System.Drawing.Point(122, 10);
-            this.percentTextBoxTasks.MaxValue = 100D;
-            this.percentTextBoxTasks.MinValue = -100D;
-            this.percentTextBoxTasks.Name = "percentTextBoxTasks";
-            this.percentTextBoxTasks.NullString = "0,00 %";
-            this.percentTextBoxTasks.OverflowIndicatorToolTipText = null;
-            this.percentTextBoxTasks.PercentDecimalDigits = 0;
-            this.percentTextBoxTasks.Size = new System.Drawing.Size(45, 20);
-            this.percentTextBoxTasks.TabIndex = 5;
-            this.percentTextBoxTasks.Text = "0 %";
-            this.percentTextBoxTasks.Validated += new System.EventHandler(this.percentTextBoxTasks_Validated);
-            // 
-            // labelDeviationTasks
-            // 
-            this.labelDeviationTasks.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelDeviationTasks.AutoSize = true;
-            this.labelDeviationTasks.Location = new System.Drawing.Point(3, 7);
-            this.labelDeviationTasks.MaximumSize = new System.Drawing.Size(100, 0);
-            this.labelDeviationTasks.Name = "labelDeviationTasks";
-            this.labelDeviationTasks.Size = new System.Drawing.Size(99, 26);
-            this.labelDeviationTasks.TabIndex = 1;
-            this.labelDeviationTasks.Text = "xxDeviationCallsColon";
-            // 
-            // percentTextBoxDeviationTaskTime
-            // 
-            this.percentTextBoxDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.percentTextBoxDeviationTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
-            this.percentTextBoxDeviationTaskTime.DoubleValue = 0D;
-            this.percentTextBoxDeviationTaskTime.Location = new System.Drawing.Point(122, 50);
-            this.percentTextBoxDeviationTaskTime.MaxValue = 100D;
-            this.percentTextBoxDeviationTaskTime.MinValue = -100D;
-            this.percentTextBoxDeviationTaskTime.Name = "percentTextBoxDeviationTaskTime";
-            this.percentTextBoxDeviationTaskTime.NullString = "0,00 %";
-            this.percentTextBoxDeviationTaskTime.OverflowIndicatorToolTipText = null;
-            this.percentTextBoxDeviationTaskTime.PercentDecimalDigits = 0;
-            this.percentTextBoxDeviationTaskTime.Size = new System.Drawing.Size(45, 20);
-            this.percentTextBoxDeviationTaskTime.TabIndex = 6;
-            this.percentTextBoxDeviationTaskTime.Text = "0 %";
-            this.percentTextBoxDeviationTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationTaskTime_Validated);
-            // 
-            // percentTextBoxDeviationAfterTaskTime
-            // 
-            this.percentTextBoxDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.percentTextBoxDeviationAfterTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
-            this.percentTextBoxDeviationAfterTaskTime.DoubleValue = 0D;
-            this.percentTextBoxDeviationAfterTaskTime.Location = new System.Drawing.Point(122, 90);
-            this.percentTextBoxDeviationAfterTaskTime.MaxValue = 100D;
-            this.percentTextBoxDeviationAfterTaskTime.MinValue = -100D;
-            this.percentTextBoxDeviationAfterTaskTime.Name = "percentTextBoxDeviationAfterTaskTime";
-            this.percentTextBoxDeviationAfterTaskTime.NullString = "0,00 %";
-            this.percentTextBoxDeviationAfterTaskTime.OverflowIndicatorToolTipText = null;
-            this.percentTextBoxDeviationAfterTaskTime.PercentDecimalDigits = 0;
-            this.percentTextBoxDeviationAfterTaskTime.Size = new System.Drawing.Size(45, 20);
-            this.percentTextBoxDeviationAfterTaskTime.TabIndex = 7;
-            this.percentTextBoxDeviationAfterTaskTime.Text = "0 %";
-            this.percentTextBoxDeviationAfterTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationAfterTaskTime_Validated);
-            // 
-            // xpTaskBarBoxSpecialEvents
-            // 
-            this.xpTaskBarBoxSpecialEvents.Controls.Add(this.gradientPanelSpecialEvents);
-            this.xpTaskBarBoxSpecialEvents.HeaderBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxSpecialEvents.HeaderImageIndex = -1;
-            this.xpTaskBarBoxSpecialEvents.HitTaskBoxArea = false;
-            this.xpTaskBarBoxSpecialEvents.HotTrackColor = System.Drawing.Color.Empty;
-            this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.SystemColors.Control;
-            this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 408);
-            this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
-            this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 100;
-            this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(170, 130);
-            this.xpTaskBarBoxSpecialEvents.TabIndex = 7;
-            this.xpTaskBarBoxSpecialEvents.TabStop = false;
-            this.xpTaskBarBoxSpecialEvents.Text = "xxSpecialEvents";
-            // 
-            // gradientPanelSpecialEvents
-            // 
-            this.gradientPanelSpecialEvents.AutoSize = true;
-            this.gradientPanelSpecialEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.gradientPanelSpecialEvents.Controls.Add(this.outlierBoxControl);
-            this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 28);
-            this.gradientPanelSpecialEvents.Name = "gradientPanelSpecialEvents";
-            this.gradientPanelSpecialEvents.Size = new System.Drawing.Size(166, 100);
-            this.gradientPanelSpecialEvents.TabIndex = 1;
-            // 
-            // outlierBoxControl
-            // 
-            this.outlierBoxControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.outlierBoxControl.Location = new System.Drawing.Point(0, 0);
-            this.outlierBoxControl.Name = "outlierBoxControl";
-            this.outlierBoxControl.Size = new System.Drawing.Size(166, 100);
-            this.outlierBoxControl.TabIndex = 8;
-            this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControl_AddOutlier);
-            this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_DeleteOutlier);
-            this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_UpdateOutlier);
-            // 
-            // splitContainerAdv2
-            // 
-            this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerAdv2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerAdv2.Name = "splitContainerAdv2";
-            // 
-            // splitContainerAdv2.Panel1
-            // 
-            this.splitContainerAdv2.Panel1.AutoSize = true;
-            this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
-            // 
-            // splitContainerAdv2.Panel2
-            // 
-            this.splitContainerAdv2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
-            this.splitContainerAdv2.Panel2.Controls.Add(this.xpTaskBar1);
-            this.splitContainerAdv2.Size = new System.Drawing.Size(1060, 600);
-            this.splitContainerAdv2.SplitterDistance = 885;
-            this.splitContainerAdv2.SplitterWidth = 5;
-            this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
-            this.splitContainerAdv2.TabIndex = 0;
-            this.splitContainerAdv2.TabStop = false;
-            this.splitContainerAdv2.Text = "splitContainerAdv7";
-            this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2_DoubleClick);
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 100);
-            this.tableLayoutPanel2.TabIndex = 0;
-            // 
-            // backgroundWorkerStatistics
-            // 
-            this.backgroundWorkerStatistics.WorkerSupportsCancellation = true;
-            // 
-            // backgroundWorkerValidationPeriod
-            // 
-            this.backgroundWorkerValidationPeriod.WorkerSupportsCancellation = true;
-            // 
-            // WorkflowValidateView
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainerAdv2);
-            this.Name = "WorkflowValidateView";
-            this.Size = new System.Drawing.Size(1060, 600);
-            ((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).EndInit();
-            this.xpTaskBar1.ResumeLayout(false);
-            this.xpTaskBarBoxSelectPeriod.ResumeLayout(false);
-            this.xpTaskBarBoxSelectPeriod.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSelectPeriod)).EndInit();
-            this.gradientPanelSelectPeriod.ResumeLayout(false);
-            this.xpTaskBarBoxDeviations.ResumeLayout(false);
-            this.xpTaskBarBoxDeviations.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelDeviations)).EndInit();
-            this.gradientPanelDeviations.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxTasks)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationTaskTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationAfterTaskTime)).EndInit();
-            this.xpTaskBarBoxSpecialEvents.ResumeLayout(false);
-            this.xpTaskBarBoxSpecialEvents.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSpecialEvents)).EndInit();
-            this.gradientPanelSpecialEvents.ResumeLayout(false);
-            this.splitContainerAdv2.Panel2.ResumeLayout(false);
-            this.splitContainerAdv2.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).EndInit();
-            this.splitContainerAdv2.ResumeLayout(false);
-            this.splitContainerAdv2.PerformLayout();
-            this.ResumeLayout(false);
+			this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
+			this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 201);
+			this.buttonAdvCancelLoad.Name = "buttonAdvCancelLoad";
+			this.buttonAdvCancelLoad.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvCancelLoad.Size = new System.Drawing.Size(160, 26);
+			this.buttonAdvCancelLoad.TabIndex = 4;
+			this.buttonAdvCancelLoad.Text = "xxxCancelLoading";
+			this.buttonAdvCancelLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.buttonAdvCancelLoad.UseVisualStyle = true;
+			this.buttonAdvCancelLoad.Visible = false;
+			this.buttonAdvCancelLoad.Click += new System.EventHandler(this.buttonAdvCancelLoad_Click);
+			this.buttonAdvCancelLoad.MouseEnter += new System.EventHandler(this.buttonAdvCancelLoad_MouseEnter);
+			this.buttonAdvCancelLoad.MouseLeave += new System.EventHandler(this.buttonAdvCancelLoad_MouseLeave);
+			// 
+			// dateSelectionFromToHistorical
+			// 
+			this.dateSelectionFromToHistorical.BackColor = System.Drawing.Color.Transparent;
+			this.dateSelectionFromToHistorical.ButtonApplyText = "xxApply";
+			this.dateSelectionFromToHistorical.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.dateSelectionFromToHistorical.HideNoneButtons = false;
+			this.dateSelectionFromToHistorical.LabelDateSelectionText = "xxCompareWith";
+			this.dateSelectionFromToHistorical.LabelDateSelectionToText = "xxTo";
+			this.dateSelectionFromToHistorical.Location = new System.Drawing.Point(0, 103);
+			this.dateSelectionFromToHistorical.Name = "dateSelectionFromToHistorical";
+			this.dateSelectionFromToHistorical.NoneButtonText = "xxNone";
+			this.dateSelectionFromToHistorical.NullString = "xxNoDateIsSelected";
+			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(166, 129);
+			this.dateSelectionFromToHistorical.TabIndex = 3;
+			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
+			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
+			this.dateSelectionFromToHistorical.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodStart")));
+			this.dateSelectionFromToHistorical.ValueChanged += new System.EventHandler(this.dateSelectionFromToHistorical_ValueChanged);
+			this.dateSelectionFromToHistorical.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromToHistorical_ButtonClicked_novalidation);
+			// 
+			// dateSelectionFromToTarget
+			// 
+			this.dateSelectionFromToTarget.BackColor = System.Drawing.Color.Transparent;
+			this.dateSelectionFromToTarget.ButtonApplyText = "xxApplyTargetPeriod";
+			this.dateSelectionFromToTarget.Dock = System.Windows.Forms.DockStyle.Top;
+			this.dateSelectionFromToTarget.HideNoneButtons = false;
+			this.dateSelectionFromToTarget.LabelDateSelectionText = "xxValidationPeriod";
+			this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
+			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 0);
+			this.dateSelectionFromToTarget.Margin = new System.Windows.Forms.Padding(4);
+			this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
+			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
+			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
+			this.dateSelectionFromToTarget.ShowApplyButton = false;
+			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(166, 103);
+			this.dateSelectionFromToTarget.TabIndex = 2;
+			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
+			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
+			this.dateSelectionFromToTarget.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodStart")));
+			this.dateSelectionFromToTarget.ValueChanged += new System.EventHandler(this.dateSelectionFromToTarget_ValueChanged);
+			// 
+			// xpTaskBarBoxDeviations
+			// 
+			this.xpTaskBarBoxDeviations.Controls.Add(this.gradientPanelDeviations);
+			this.xpTaskBarBoxDeviations.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxDeviations.HeaderImageIndex = -1;
+			this.xpTaskBarBoxDeviations.HitTaskBoxArea = false;
+			this.xpTaskBarBoxDeviations.HotTrackColor = System.Drawing.Color.Empty;
+			this.xpTaskBarBoxDeviations.ItemBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 260);
+			this.xpTaskBarBoxDeviations.Name = "xpTaskBarBoxDeviations";
+			this.xpTaskBarBoxDeviations.PreferredChildPanelHeight = 120;
+			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(170, 150);
+			this.xpTaskBarBoxDeviations.TabIndex = 1;
+			this.xpTaskBarBoxDeviations.TabStop = false;
+			this.xpTaskBarBoxDeviations.Text = "xxDeviations";
+			// 
+			// gradientPanelDeviations
+			// 
+			this.gradientPanelDeviations.AutoSize = true;
+			this.gradientPanelDeviations.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.gradientPanelDeviations.Controls.Add(this.tableLayoutPanel1);
+			this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 28);
+			this.gradientPanelDeviations.Name = "gradientPanelDeviations";
+			this.gradientPanelDeviations.Size = new System.Drawing.Size(166, 120);
+			this.gradientPanelDeviations.TabIndex = 0;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+			this.tableLayoutPanel1.Controls.Add(this.labelDeviationAfterTaskTime, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.labelDeviationTaskTime, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.percentTextBoxTasks, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.labelDeviationTasks, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.percentTextBoxDeviationTaskTime, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.percentTextBoxDeviationAfterTaskTime, 1, 2);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(166, 120);
+			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// labelDeviationAfterTaskTime
+			// 
+			this.labelDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelDeviationAfterTaskTime.AutoSize = true;
+			this.labelDeviationAfterTaskTime.Location = new System.Drawing.Point(3, 87);
+			this.labelDeviationAfterTaskTime.Name = "labelDeviationAfterTaskTime";
+			this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(102, 26);
+			this.labelDeviationAfterTaskTime.TabIndex = 5;
+			this.labelDeviationAfterTaskTime.Text = "xxDeviationACWColon";
+			// 
+			// labelDeviationTaskTime
+			// 
+			this.labelDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelDeviationTaskTime.AutoSize = true;
+			this.labelDeviationTaskTime.Location = new System.Drawing.Point(3, 47);
+			this.labelDeviationTaskTime.Name = "labelDeviationTaskTime";
+			this.labelDeviationTaskTime.Size = new System.Drawing.Size(100, 26);
+			this.labelDeviationTaskTime.TabIndex = 3;
+			this.labelDeviationTaskTime.Text = "xxDeviationTalkTimeColon";
+			// 
+			// percentTextBoxTasks
+			// 
+			this.percentTextBoxTasks.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.percentTextBoxTasks.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxTasks.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.percentTextBoxTasks.DoubleValue = 0D;
+			this.percentTextBoxTasks.Location = new System.Drawing.Point(122, 10);
+			this.percentTextBoxTasks.MaxValue = 100D;
+			this.percentTextBoxTasks.MinValue = -100D;
+			this.percentTextBoxTasks.Name = "percentTextBoxTasks";
+			this.percentTextBoxTasks.NullString = "0,00 %";
+			this.percentTextBoxTasks.OverflowIndicatorToolTipText = null;
+			this.percentTextBoxTasks.PercentDecimalDigits = 0;
+			this.percentTextBoxTasks.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxTasks.TabIndex = 5;
+			this.percentTextBoxTasks.Text = "0 %";
+			this.percentTextBoxTasks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxTasks_OnKeyUp);
+			this.percentTextBoxTasks.Validated += new System.EventHandler(this.percentTextBoxTasks_Validated);
+			// 
+			// labelDeviationTasks
+			// 
+			this.labelDeviationTasks.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelDeviationTasks.AutoSize = true;
+			this.labelDeviationTasks.Location = new System.Drawing.Point(3, 7);
+			this.labelDeviationTasks.MaximumSize = new System.Drawing.Size(100, 0);
+			this.labelDeviationTasks.Name = "labelDeviationTasks";
+			this.labelDeviationTasks.Size = new System.Drawing.Size(99, 26);
+			this.labelDeviationTasks.TabIndex = 1;
+			this.labelDeviationTasks.Text = "xxDeviationCallsColon";
+			// 
+			// percentTextBoxDeviationTaskTime
+			// 
+			this.percentTextBoxDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.percentTextBoxDeviationTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxDeviationTaskTime.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.percentTextBoxDeviationTaskTime.DoubleValue = 0D;
+			this.percentTextBoxDeviationTaskTime.Location = new System.Drawing.Point(122, 50);
+			this.percentTextBoxDeviationTaskTime.MaxValue = 100D;
+			this.percentTextBoxDeviationTaskTime.MinValue = -100D;
+			this.percentTextBoxDeviationTaskTime.Name = "percentTextBoxDeviationTaskTime";
+			this.percentTextBoxDeviationTaskTime.NullString = "0,00 %";
+			this.percentTextBoxDeviationTaskTime.OverflowIndicatorToolTipText = null;
+			this.percentTextBoxDeviationTaskTime.PercentDecimalDigits = 0;
+			this.percentTextBoxDeviationTaskTime.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxDeviationTaskTime.TabIndex = 6;
+			this.percentTextBoxDeviationTaskTime.Text = "0 %";
+			this.percentTextBoxDeviationTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationTaskTime_OnKeyUp);
+			this.percentTextBoxDeviationTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationTaskTime_Validated);
+			// 
+			// percentTextBoxDeviationAfterTaskTime
+			// 
+			this.percentTextBoxDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.percentTextBoxDeviationAfterTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxDeviationAfterTaskTime.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.percentTextBoxDeviationAfterTaskTime.DoubleValue = 0D;
+			this.percentTextBoxDeviationAfterTaskTime.Location = new System.Drawing.Point(122, 90);
+			this.percentTextBoxDeviationAfterTaskTime.MaxValue = 100D;
+			this.percentTextBoxDeviationAfterTaskTime.MinValue = -100D;
+			this.percentTextBoxDeviationAfterTaskTime.Name = "percentTextBoxDeviationAfterTaskTime";
+			this.percentTextBoxDeviationAfterTaskTime.NullString = "0,00 %";
+			this.percentTextBoxDeviationAfterTaskTime.OverflowIndicatorToolTipText = null;
+			this.percentTextBoxDeviationAfterTaskTime.PercentDecimalDigits = 0;
+			this.percentTextBoxDeviationAfterTaskTime.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxDeviationAfterTaskTime.TabIndex = 7;
+			this.percentTextBoxDeviationAfterTaskTime.Text = "0 %";
+			this.percentTextBoxDeviationAfterTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationAfterTaskTime_OnKeyUp);
+			this.percentTextBoxDeviationAfterTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationAfterTaskTime_Validated);
+			// 
+			// xpTaskBarBoxSpecialEvents
+			// 
+			this.xpTaskBarBoxSpecialEvents.Controls.Add(this.gradientPanelSpecialEvents);
+			this.xpTaskBarBoxSpecialEvents.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSpecialEvents.HeaderImageIndex = -1;
+			this.xpTaskBarBoxSpecialEvents.HitTaskBoxArea = false;
+			this.xpTaskBarBoxSpecialEvents.HotTrackColor = System.Drawing.Color.Empty;
+			this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 410);
+			this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
+			this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 100;
+			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(170, 130);
+			this.xpTaskBarBoxSpecialEvents.TabIndex = 7;
+			this.xpTaskBarBoxSpecialEvents.TabStop = false;
+			this.xpTaskBarBoxSpecialEvents.Text = "xxSpecialEvents";
+			// 
+			// gradientPanelSpecialEvents
+			// 
+			this.gradientPanelSpecialEvents.AutoSize = true;
+			this.gradientPanelSpecialEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.gradientPanelSpecialEvents.Controls.Add(this.outlierBoxControl);
+			this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 28);
+			this.gradientPanelSpecialEvents.Name = "gradientPanelSpecialEvents";
+			this.gradientPanelSpecialEvents.Size = new System.Drawing.Size(166, 100);
+			this.gradientPanelSpecialEvents.TabIndex = 1;
+			// 
+			// outlierBoxControl
+			// 
+			this.outlierBoxControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.outlierBoxControl.Location = new System.Drawing.Point(0, 0);
+			this.outlierBoxControl.Name = "outlierBoxControl";
+			this.outlierBoxControl.Size = new System.Drawing.Size(166, 100);
+			this.outlierBoxControl.TabIndex = 8;
+			this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControl_AddOutlier);
+			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_DeleteOutlier);
+			this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_UpdateOutlier);
+			// 
+			// splitContainerAdv2
+			// 
+			this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainerAdv2.Location = new System.Drawing.Point(0, 0);
+			this.splitContainerAdv2.Name = "splitContainerAdv2";
+			// 
+			// splitContainerAdv2.Panel1
+			// 
+			this.splitContainerAdv2.Panel1.AutoSize = true;
+			this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			// 
+			// splitContainerAdv2.Panel2
+			// 
+			this.splitContainerAdv2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainerAdv2.Panel2.Controls.Add(this.xpTaskBar1);
+			this.splitContainerAdv2.Size = new System.Drawing.Size(1060, 600);
+			this.splitContainerAdv2.SplitterDistance = 885;
+			this.splitContainerAdv2.SplitterWidth = 5;
+			this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+			this.splitContainerAdv2.TabIndex = 0;
+			this.splitContainerAdv2.TabStop = false;
+			this.splitContainerAdv2.Text = "splitContainerAdv7";
+			this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2_DoubleClick);
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 100);
+			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// backgroundWorkerStatistics
+			// 
+			this.backgroundWorkerStatistics.WorkerSupportsCancellation = true;
+			// 
+			// backgroundWorkerValidationPeriod
+			// 
+			this.backgroundWorkerValidationPeriod.WorkerSupportsCancellation = true;
+			// 
+			// WorkflowValidateView
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.splitContainerAdv2);
+			this.Name = "WorkflowValidateView";
+			this.Size = new System.Drawing.Size(1060, 600);
+			((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).EndInit();
+			this.xpTaskBar1.ResumeLayout(false);
+			this.xpTaskBarBoxSelectPeriod.ResumeLayout(false);
+			this.xpTaskBarBoxSelectPeriod.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelSelectPeriod)).EndInit();
+			this.gradientPanelSelectPeriod.ResumeLayout(false);
+			this.xpTaskBarBoxDeviations.ResumeLayout(false);
+			this.xpTaskBarBoxDeviations.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelDeviations)).EndInit();
+			this.gradientPanelDeviations.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxTasks)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationTaskTime)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.percentTextBoxDeviationAfterTaskTime)).EndInit();
+			this.xpTaskBarBoxSpecialEvents.ResumeLayout(false);
+			this.xpTaskBarBoxSpecialEvents.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gradientPanelSpecialEvents)).EndInit();
+			this.gradientPanelSpecialEvents.ResumeLayout(false);
+			this.splitContainerAdv2.Panel2.ResumeLayout(false);
+			this.splitContainerAdv2.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).EndInit();
+			this.splitContainerAdv2.ResumeLayout(false);
+			this.splitContainerAdv2.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 
-        #endregion
+	    #endregion
 
         private Syncfusion.Windows.Forms.Tools.XPTaskBar xpTaskBar1;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv2;
