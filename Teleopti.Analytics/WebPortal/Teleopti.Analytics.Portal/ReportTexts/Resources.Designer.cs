@@ -1304,6 +1304,24 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fulfilled.
+        /// </summary>
+        public static string ResFulfilled {
+            get {
+                return ResourceManager.GetString("ResFulfilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fulfillment (%).
+        /// </summary>
+        public static string ResFulfillmentPercent {
+            get {
+                return ResourceManager.GetString("ResFulfillmentPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grand Total.
         /// </summary>
         public static string ResGrandTotal {
@@ -1642,6 +1660,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResMonthSeptember {
             get {
                 return ResourceManager.GetString("ResMonthSeptember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must Haves.
+        /// </summary>
+        public static string ResMustHaves {
+            get {
+                return ResourceManager.GetString("ResMustHaves", resourceCulture);
             }
         }
         
@@ -2731,6 +2758,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResTuesday {
             get {
                 return ResourceManager.GetString("ResTuesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfulfilled.
+        /// </summary>
+        public static string ResUnfulfilled {
+            get {
+                return ResourceManager.GetString("ResUnfulfilled", resourceCulture);
             }
         }
         
