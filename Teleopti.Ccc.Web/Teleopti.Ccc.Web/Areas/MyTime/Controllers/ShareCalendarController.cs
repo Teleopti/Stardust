@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					return Content("No permission for calendar sharing", "text/plain");
 
 				var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
-				var calendarLinkSettings = personalSettingDataRepository.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings());
+				var calendarLinkSettings = new CalendarLinkSettingsPersisterAndProvider(personalSettingDataRepository).GetByOwner(person);
 				if (!calendarLinkSettings.IsActive)
 					return Content("Calendar sharing inactive", "text/plain");
 

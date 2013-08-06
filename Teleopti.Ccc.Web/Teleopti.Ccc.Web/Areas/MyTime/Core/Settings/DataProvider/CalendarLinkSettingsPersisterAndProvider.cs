@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 {
@@ -25,5 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 		{
 			return _personalSettingDataRepository.FindValueByKey(calendarLinkKey, new CalendarLinkSettings());
 		}
+
+		public CalendarLinkSettings GetByOwner(IPerson person)
+		{
+			return _personalSettingDataRepository.FindValueByKeyAndOwnerPerson(calendarLinkKey, person, new CalendarLinkSettings());
+		}
+
 	}
 }

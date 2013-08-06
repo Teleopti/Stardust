@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 {
@@ -6,5 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 	{
 		CalendarLinkSettings Persist(CalendarLinkSettings isActive);
 		CalendarLinkSettings Get();
+		CalendarLinkSettings GetByOwner(IPerson person);
 	}
 }
