@@ -57,41 +57,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			Assert.That(_browser.HasJQueryCss(selector, options()));
+			assert(_browser.HasJQueryCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			Assert.That(_browser.HasNoJQueryCss(notExistsSelector, options()));
+			assert(_browser.HasNoJQueryCss(notExistsSelector, options()), Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertContains(string selector, string text)
 		{
 			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
-			browserAssert(() => _browser.ExecuteScript(script), Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
+			eventualAssert(() => _browser.ExecuteScript(script), Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertNotContains(string selector, string text)
 		{
 			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
-			browserAssert(() => _browser.ExecuteScript(script), Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
+			eventualAssert(() => _browser.ExecuteScript(script), Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void AssertUrlContains(string url)
 		{
-			browserAssert(() => _browser.Location.ToString(), Is.StringContaining(url), "Failed to assert that current url contains " + url);
+			eventualAssert(() => _browser.Location.ToString(), Is.StringContaining(url), "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
 			AssertUrlContains(urlContains);
-			browserAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
+			eventualAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			browserAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			eventualAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
 		public void DumpInfo(Action<string> writer)
@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			writer(" Url: ");
 			writer(_browser.Location.ToString());
 			writer(" Html: ");
-			writer(_browser.FindCss("body").Text);
+			writer(succeedOrIgnore(() => _browser.ExecuteScript("return $('body').html();")));
+			//writer(_browser.FindCss("body").Text);
 		}
 
 		public void DumpUrl(Action<string> writer)
@@ -111,6 +112,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 
 
+
+		private static string succeedOrIgnore(Func<string> operation)
+		{
+			try
+			{
+				return operation();
+			}
+			catch (Exception)
+			{
+				return "Failed";
+			}
+		}
 
 		private Options options()
 		{
@@ -124,7 +137,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			return result;
 		}
 
-		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
+		private void assert<T>(T value, Constraint constraint, string message)
+		{
+			try
+			{
+				Assert.That(value, constraint);
+			}
+			catch (AssertionException)
+			{
+				Assert.Fail(buildMessage(message));
+			}
+		}
+
+		private void eventualAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
 			EventualAssert.That(value, constraint, () => buildMessage(message), new SeleniumExceptionCatcher());
 		}
