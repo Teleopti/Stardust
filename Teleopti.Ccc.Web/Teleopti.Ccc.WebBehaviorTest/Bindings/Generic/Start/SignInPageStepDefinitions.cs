@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 
 		public void SelectApplicationTestDataSource()
 		{
-			Browser.Interactions.Click("#DataSources .application a:contains(TestData)");
+			Browser.Interactions.ClickContaining("#DataSources .application a", "TestData");
 		}
 
 		public void SelectWindowsTestDataSource()
 		{
-			Browser.Interactions.Click("#DataSources .windows a:contains(TestData)");
+			Browser.Interactions.ClickContaining("#DataSources .windows a", "TestData");
 		}
 
 		private void SignInApplication(string username, string password)

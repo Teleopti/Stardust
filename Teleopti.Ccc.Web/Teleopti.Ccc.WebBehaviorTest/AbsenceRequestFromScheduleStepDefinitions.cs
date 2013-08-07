@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see an absence type called (.*) in droplist")]
 		public void ThenIShouldSeeAAbsenceTypeCalledVacationInDroplist(string name)
 		{
-			Browser.Interactions.AssertContains(".request-new-absence option", name);
+			Browser.Interactions.AssertFirstContains(".request-new-absence option", name);
 		}
 
         [Then(@"I should see my existing inputs for date '(.*)'")]

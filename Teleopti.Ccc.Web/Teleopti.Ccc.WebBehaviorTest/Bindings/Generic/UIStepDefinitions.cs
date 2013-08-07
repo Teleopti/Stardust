@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click( the)? ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
 		{
-			Browser.Interactions.Click(string.Format(".{0}:contains('{1}')", cssClass.Name, text));
+			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
 
 		// I should see the message 'an error message'
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void ThenIShouldSeeTheMessage(CssClass cssClass, LocalizedText text)
 		{
-			Browser.Interactions.AssertContains("." + cssClass.Name, text.Text);
+			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}
 
 	}

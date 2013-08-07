@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			Browser.Interactions.AssertContains("div.asm-info-canvas-column-current", TestData.ActivityPhone.Description.Name);
+			Browser.Interactions.AssertFirstContains("div.asm-info-canvas-column-current", TestData.ActivityPhone.Description.Name);
 		}
 
 		[Then(@"I should not see a current activity")]

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var position = table.Rows[0][1];
 
 			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
-			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
+			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
 		}
 
 		[When(@"I click send request button")]
@@ -81,24 +81,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var request = UserFactory.User().UserData<ExistingTextRequest>();
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
 				request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-message", position),
 				request.PersonRequest.GetMessage(new NoFormatting()));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
 		}
@@ -199,20 +199,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
-			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MissingSubject);
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MissingSubject);
 		}
 
         [Then(@"I should see texts describing too long text error")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.MessageTooLong);
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MessageTooLong);
         }
 
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			Browser.Interactions.AssertContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
 		}
 
 		[Then(@"I should not see any requests in the list")]
