@@ -139,7 +139,9 @@
     </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TeleoptiActivitiesExportFormat.xml" />
+    <EmbeddedResource Include="TeleoptiActivitiesExportFormat.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TeleoptiDetailedExportFormat.xml" />

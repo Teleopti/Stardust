@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.PayrollFormatter
 
         private static string applyTypeAndFormat(ItemFormat format, string value)
         {
-            if (format.XmlType.Equals("date"))
+            if (format.XmlType.Contains("date"))
             {
                 if (value.Length > 0)
                 {
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.PayrollFormatter
                                               "{0:" + format.Format + "}", localDate);
                 }
             }
-			if (format.XmlType.Equals("dateTime"))
+			if (format.XmlType.Contains("fullTime"))
 			{
 				if (value.Length > 0)
 				{
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.PayrollFormatter
 						                      "{0:" + format.Format + "}", localdateTime);
 				}
 			}
-            if (format.XmlType.Equals("time"))
+            if (format.XmlType.Contains("time"))
             {
                 if (value.Length > 0)
                 {
