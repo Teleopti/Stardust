@@ -72,6 +72,8 @@ namespace Teleopti.Ccc.PayrollFormatter
 				if (value.Length > 0)
 				{
 					var localdateTime = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
+					if (localdateTime == new DateTime())
+						return "";
 					if (string.IsNullOrEmpty(format.Format))
 						value = localdateTime.ToString("u");
 					else
