@@ -210,12 +210,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\CalendarLinkId.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\CalendarLinkIdGenerator.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\ICalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkIdGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\ICalendarLinkSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\ShareCalendarController.cs" />

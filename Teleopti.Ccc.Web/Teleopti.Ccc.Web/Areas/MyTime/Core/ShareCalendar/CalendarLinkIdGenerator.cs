@@ -2,10 +2,11 @@
 using System.Web;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {
 	public class CalendarLinkIdGenerator : ICalendarLinkIdGenerator
 	{

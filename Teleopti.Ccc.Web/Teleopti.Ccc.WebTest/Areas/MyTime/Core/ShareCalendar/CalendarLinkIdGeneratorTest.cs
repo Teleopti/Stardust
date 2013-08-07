@@ -6,10 +6,11 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 {
 	[TestFixture]
 	public class CalendarLinkIdGeneratorTest
