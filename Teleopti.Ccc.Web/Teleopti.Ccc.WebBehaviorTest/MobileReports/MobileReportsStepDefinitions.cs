@@ -298,8 +298,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see the all skill item selected")]
 		public void ThenIShouldSeeTheAllSkillItemSelected()
 		{
-			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
-			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("#report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("#report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
 		}
 	}
 }
