@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			_browser.FindCss(selector, options()).Click();
+			_browser.FindCss(selector, options()).Click(options());
 		}
 
 		public void ClickContaining(string selector, string text)
 		{
-			_browser.FindCss(selector, text, options());
+			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
 		}
 
 		public void AssertExists(string selector)
@@ -73,17 +73,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertAnyContains(string selector, string text)
 		{
-			assert(_browser.HasCss(selector, text, options()), Is.True, "Could not find element matching selector " + selector + " with text " + text);
+			assert(_browser.HasCss(selector, new Regex(Regex.Escape(text)), options()), Is.True, "Could not find element matching selector " + selector + " with text " + text);
 		}
 
 		public void AssertFirstContains(string selector, string text)
 		{
-			assert(_browser.FindCss(selector, options()).HasContent(text), Is.True, "Failed to assert that " + selector + " contained text " + text);
+			assert(_browser.FindCss(selector, options()).HasContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertFirstNotContains(string selector, string text)
 		{
-			assert(_browser.FindCss(selector, options()).HasNoContent(text), Is.True, "Failed to assert that " + selector + " did not contain text " + text);
+			assert(_browser.FindCss(selector, options()).HasNoContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void AssertUrlContains(string url)
