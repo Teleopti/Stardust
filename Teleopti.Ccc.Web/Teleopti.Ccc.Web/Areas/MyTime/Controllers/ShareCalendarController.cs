@@ -50,44 +50,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public ContentResult iCal(string id)
 		{
-			CalendarLinkId calendarLinkId;
 			try
 			{
-				calendarLinkId = _calendarLinkIdGenerator.Parse(id);
-			}
-			catch (Exception ex)
-			{
-				if (ex is FormatException || ex is CryptographicException)
+				var calendarLinkId = _calendarLinkIdGenerator.Parse(id);
+
+				//// EXTRA: move all this code into its own class
+				var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(calendarLinkId.DataSourceName);
+
+				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					Response.TrySkipIisCustomErrors = true;
-					Response.StatusCode = 400;
-					return Content("Invalid url", "text/plain");
+					var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+					var person = personRepository.Get(calendarLinkId.PersonId);
+
+					_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
+					_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
+					if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
+						return Content("No permission for calendar sharing", "text/plain");
+
+					var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
+					var calendarLinkSettings =
+						new CalendarLinkSettingsPersisterAndProvider(personalSettingDataRepository).GetByOwner(person);
+					if (!calendarLinkSettings.IsActive)
+						return Content("Calendar sharing inactive", "text/plain");
+
+					var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
+					var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(-60),
+					                                                              _now.DateOnly().AddDays(180), calendarLinkId.PersonId);
+
+					return Content(generateCalendar(scheduleDays), "text/plain");
 				}
-				throw;
 			}
-
-			//// EXTRA: move all this code into its own class
-			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(calendarLinkId.DataSourceName);
-
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			catch (FormatException)
 			{
-				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.Get(calendarLinkId.PersonId);
-
-				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
-				_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
-				if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-					return Content("No permission for calendar sharing", "text/plain");
-
-				var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
-				var calendarLinkSettings = new CalendarLinkSettingsPersisterAndProvider(personalSettingDataRepository).GetByOwner(person);
-				if (!calendarLinkSettings.IsActive)
-					return Content("Calendar sharing inactive", "text/plain");
-
-				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(-60), _now.DateOnly().AddDays(180), calendarLinkId.PersonId);
-
-				return Content(generateCalendar(scheduleDays), "text/plain");
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return Content("Invalid url", "text/plain");
+			}
+			catch (CryptographicException)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return Content("Invalid url", "text/plain");
 			}
 		}
 

@@ -17,18 +17,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings
 			_loggedOnUser = loggedOnUser;
 		}
 
-		private const string spilter = "/";
+		private const string splitter = "/";
 
 		public string Generate()
 		{
-			return Encryption.EncryptStringToBase64(_currentDataSource.CurrentName() + spilter + _loggedOnUser.CurrentUser().Id.Value, EncryptionConstants.Image1,
+			return Encryption.EncryptStringToBase64(_currentDataSource.CurrentName() + splitter + _loggedOnUser.CurrentUser().Id.Value, EncryptionConstants.Image1,
 			                                        EncryptionConstants.Image2);
 		}
 
 		public CalendarLinkId Parse(string encryptedId)
 		{
 			var dataSourceNameAndPersonId = Encryption.DecryptStringFromBase64(encryptedId, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			var pos = dataSourceNameAndPersonId.LastIndexOf(spilter, StringComparison.Ordinal);
+			var pos = dataSourceNameAndPersonId.LastIndexOf(splitter, StringComparison.Ordinal);
 			var dataSourceName = dataSourceNameAndPersonId.Substring(0, pos);
 			var personId = new Guid(dataSourceNameAndPersonId.Substring(pos + 1));
 			return new CalendarLinkId
