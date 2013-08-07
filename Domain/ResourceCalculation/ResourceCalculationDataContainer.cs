@@ -220,9 +220,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				var count = 0d;
 				var resource = 0d;
+				var skillKeyString = skillKey.ToString();
 				foreach (var pair in _resourceDictionary)
 				{
-					if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKey.ToString())))
+					if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
 					{
 						double currentResource = pair.Value.Resource;
 						ConcurrentDictionary<Guid, double> effiencies;
@@ -244,9 +245,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				var count = 0d;
 				var resource = 0d;
+				var skillKeyString = skillKey.ToString();
 				foreach (var pair in _resourceDictionary)
 				{
-					if (activityKeys.Any(a => pair.Key.StartsWith(a)) && pair.Key.Contains(skillKey.ToString()))
+					if (pair.Key.Contains(skillKeyString) && activityKeys.Any(a => pair.Key.StartsWith(a)))
 					{
 						double currentResource = pair.Value.Resource;
 						ConcurrentDictionary<Guid, double> effiencies;
