@@ -117,6 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+	<data name="ResFulfilled" xml:space="preserve">
+    <value>Fulfilled</value>
+    <comment>Fulfilled</comment>
+  </data>
+	<data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Fulfillment (%)</value>
+    <comment>Fulfillment (%)</comment>
+  </data>
+	<data name="ResMustHaves" xml:space="preserve">
+    <value>Must Haves</value>
+    <comment>Must Haves</comment>
+  </data>
+	<data name="ResUnfulfilled" xml:space="preserve">
+    <value>Unfulfilled</value>
+    <comment>Unfulfilled</comment>
+  </data>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Collapse</value>
   </data>

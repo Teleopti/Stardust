@@ -1,7 +1,6 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using WatiN.Core;
+﻿using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
+namespace Teleopti.Ccc.WebBehaviorTest.Core.Legacy
 {
 	public static class EventualElementWaits
 	{

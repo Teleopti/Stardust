@@ -1,11 +1,10 @@
 using System;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using WatiN.Core.Native;
 using WatiN.Core.Native.InternetExplorer;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
+namespace Teleopti.Ccc.WebBehaviorTest.Core.Legacy
 {
 	public static class ElementExtensions
 	{

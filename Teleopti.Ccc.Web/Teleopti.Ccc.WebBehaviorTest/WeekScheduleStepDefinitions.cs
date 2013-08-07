@@ -4,8 +4,9 @@ using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
@@ -92,8 +93,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the weekschedule date-picker")]
 		public void WhenIOpenTheWeekscheduleDate_Picker()
 		{
-			Browser.Interactions.WaitUntilEnabled(".icon-th");
-			Browser.Interactions.Click(".icon-th");
+			Browser.Interactions.Click(".icon-th:enabled");
 		}
 
 		[Then(@"I should see '(.*)' as the first day in the calender")]

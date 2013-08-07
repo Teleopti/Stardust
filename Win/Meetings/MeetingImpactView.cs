@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			dateTimePickerAdvStartSlotPeriod.ValueChanged += DateTimePickerAdvStartSlotPeriodValueChanged;
 			Paint += MeetingImpactViewPaint;
 
-			office2007OutlookTimePickerStartSlotPeriod.Text = Resources.ZeroZeroColonZeroZero;
-			office2007OutlookTimePickerEndSlotPeriod.Text = Resources.ZeroZeroColonZeroZero;
+            office2007OutlookTimePickerStartSlotPeriod.Text = dateTimePickerAdvStartSlotPeriod.MinValue.ToShortTimeString();
+            office2007OutlookTimePickerEndSlotPeriod.Text = dateTimePickerAdvEndSlotPeriod.MinValue.ToShortTimeString();
 
 		}
 

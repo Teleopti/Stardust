@@ -5043,7 +5043,7 @@ tillgänglighet</value>
     <comment>Early warning</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>Generell vy: användaruppgifter</value>
+    <value>Kan inte spara!</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
@@ -11003,10 +11003,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Tillgänglighet per agent</value>
-  </data>
-  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
-    <value>Nekad</value>
-    <comment>Translation for enum status Autodenied for requests</comment>
   </data>
   <data name="RequestStatusDtoAutodenied" xml:space="preserve">
     <value>Nekad</value>

@@ -6,7 +6,8 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -372,7 +373,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static void AssertAgentIsNotDisplayed(string name)
 		{
 			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name, false);
-			EventualAssert.That(() => agent.Exists, Is.False, () => name + " found");
+			EventualAssert.That(() => agent.Exists, Is.False);
 		}
 
 	}

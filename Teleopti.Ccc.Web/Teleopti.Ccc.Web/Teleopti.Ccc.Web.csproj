@@ -829,6 +829,8 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
+    <Content Include="Content\jquery\jquery-1.10.2.js" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.css" />
@@ -957,9 +959,6 @@
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
     <Content Include="Content\bootstrap\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap.min.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.min.js" />
     <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\Scripts\jquery.validate.js" />
     <Content Include="Content\Scripts\jquery.validate.min.js" />
@@ -997,10 +996,10 @@
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.map" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1010,7 +1009,6 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
   </ItemGroup>
   <ItemGroup>

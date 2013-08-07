@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Payroll
                 {
                     PayrollExportFeedback.ReportProgress(progress, "Loading schedules...");
 
-                    var currentAgents = payrollExport.PersonCollection.Take(BatchSize).ToArray();
+                    var currentAgents = payrollExport.PersonCollection.Skip(i).Take(BatchSize).ToArray();
                     var personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 #pragma warning disable 612,618
                     ICollection<SchedulePartDto> scheduleParts =

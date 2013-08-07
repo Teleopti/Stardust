@@ -93,7 +93,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type", fullDayAbsenceFormInfo.Absence);
+
+			if (!string.IsNullOrEmpty(fullDayAbsenceFormInfo.Absence))
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type", fullDayAbsenceFormInfo.Absence);
+			else
+				// for robustness. cant understand why this is required. the callViewMethodWhenReady should solve it.
+				Browser.Interactions.AssertExists(".full-day-absence-form .absence-type:enabled");
+
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 
 			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture));

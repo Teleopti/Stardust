@@ -133,15 +133,21 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowYesNoMessage(IWin32Window owner, string text, string caption)
         {
-			LocalizationProvider.Provider = new Localizer();
-            return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
-                                                               MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
-                                                               (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-                                                                   RightToLeftDisplay)
-                                                                   ? MessageBoxOptions.RtlReading |
-                                                                     MessageBoxOptions.RightAlign
-                                                                   : 0);
+	        return ShowYesNoMessage(owner, text, caption, MessageBoxDefaultButton.Button2);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+		public static DialogResult ShowYesNoMessage(IWin32Window owner, string text, string caption, MessageBoxDefaultButton defaultButton)
+		{
+			LocalizationProvider.Provider = new Localizer();
+			return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
+															   MessageBoxButtons.YesNo, MessageBoxIcon.Question, defaultButton,
+															   (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
+																   RightToLeftDisplay)
+																   ? MessageBoxOptions.RtlReading |
+																	 MessageBoxOptions.RightAlign
+																   : 0);
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowConfirmationMessage(string text, string caption)
