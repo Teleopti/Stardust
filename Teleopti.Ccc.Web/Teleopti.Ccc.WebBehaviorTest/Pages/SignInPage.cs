@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectBusinessUnitByName(string name)
 		{
-			Document.Element(Find.BySelector("li a:contains('" + name + "')")).EventualClick();
+			Core.Browser.Interactions.ClickContaining("li a", name);
 		}
 
 		public void ClickBusinessUnitOkButton()

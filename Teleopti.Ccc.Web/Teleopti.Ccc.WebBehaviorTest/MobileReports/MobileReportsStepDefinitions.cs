@@ -73,14 +73,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void ThenIShouldSeeAReportForNextDate()
 		{
 			var expected = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
 			var expected = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a table")]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see friendly error message")]
 		public void ThenIShouldSeeFriendlyErrorMessage()
 		{
-			Browser.Interactions.AssertContains("#error-view", "No access");
+			Browser.Interactions.AssertFirstContains("#error-view", "No access");
 		}
 
 		[Then(@"I should see ReportSettings")]
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains("#sel-skill-menu", Resources.All);
+			Browser.Interactions.AssertFirstContains("#sel-skill-menu", Resources.All);
 			Browser.Interactions.AssertExists("#report-settings-type-graph:checked");
 			Browser.Interactions.AssertExists("#report-settings-type-table:not(:checked)");
 			Browser.Interactions.AssertExists("#report-settings-interval-week:not(:checked)");
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
 			var skillName = UserFactory.User().UserData<ThreeSkills>().Skill2Name;
-			Browser.Interactions.AssertContains("#sel-skill-button", skillName);
+			Browser.Interactions.AssertFirstContains("#sel-skill-button", skillName);
 		}
 
 		[Then(@"I should only see reports i have access to")]
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		{
 			// before click next date, make sure current is today
 			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-next");
 		}
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			_clickedDateInDatePicker = DateOnly.Today.AddDays(2);
 			if (_clickedDateInDatePicker.Month != DateOnly.Today.Month)
 				_clickedDateInDatePicker = DateOnly.Today.AddDays(-2);
-			Browser.Interactions.Click(".ui-datebox-griddate.ui-btn-up-d:contains('" + _clickedDateInDatePicker.Day + "')");
+			Browser.Interactions.ClickContaining(".ui-datebox-griddate.ui-btn-up-d", _clickedDateInDatePicker.Day.ToString());
 		}
 
 		[When(@"I click previous date")]
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		{
 			// before click previous date, make sure current is today
 			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-prev");
 		}
 
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I close the skill-picker")]
 		public void WhenICloseTheSkillPicker()
 		{
-			Browser.Interactions.Click(".ui-popup-container a:contains('Close')");
+			Browser.Interactions.ClickContaining(".ui-popup-container a", "Close");
 		}
 
 		[When(@"I select a report")]
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			Browser.Interactions.AssertContains(".report-table>tbody>tr>td", Resources.DayOfWeekSunday);
+			Browser.Interactions.AssertFirstContains(".report-table>tbody>tr>td", Resources.DayOfWeekSunday);
 		}
 
 		[Then(@"I should see the all skill item selected")]

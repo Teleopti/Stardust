@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see '(.*)' as the first day in the calender")]
 		public void ThenIShouldSeeAsTheFirstDayInTheCalender(string day)
 		{
-			Browser.Interactions.AssertContains(".datepicker-days th.dow:nth-child(1)", day);
+			Browser.Interactions.AssertFirstContains(".datepicker-days th.dow:nth-child(1)", day);
 		}
 
 

@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var position = table.Rows[0][1];
 
 			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
-			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
-			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
+			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
+			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
 		}
 
 		[Then(@"I should not be able to input values for absence request at position '(.*)' in the list")]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheAbsenceRequestContainingAtPositionInTheList(string absence, int position)
 		{
 			Browser.Interactions.AssertExists(".request-body");
-			Browser.Interactions.AssertContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
+			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
 		}
 
 		[Then(@"I should see the absence request's values at position '(.*)' in the list")]
@@ -84,28 +84,28 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var request = UserFactory.User().UserData<ExistingAbsenceRequest>();
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
 				request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-message", position),
 				request.PersonRequest.GetMessage(new NoFormatting()));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-type", position),
 				request.AbsenceRequest.Absence.Description.Name);
 			
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
 				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				string.Format(".request-list .request:nth-child({0}) .request-edit-message", position),
 				request.PersonRequest.GetMessage(new NoFormatting()));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-absence option:checked", position),
 				request.AbsenceRequest.Absence.Description.Name);
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				string.Format(".request-list .request:nth-child({0}) .request-edit-timeto", position),
 				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
 
-			Browser.Interactions.AssertContains(
+			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-fullday checkbox:checked", position),
 				request.AbsenceRequest.Absence.Description.Name);
 		}

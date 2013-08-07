@@ -17,7 +17,7 @@
 
 		public static void AssertNotExistsUsingJQuery(this IBrowserInteractions interactions, string existsSelector, string notExistsSelector, params object[] args)
 		{
-			interactions.AssertExistsUsingJQuery(existsSelector);
+			interactions.AssertExistsUsingJQuery(existsSelector, args);
 
 			notExistsSelector = f(notExistsSelector, args);
 			var jquery = dollar(notExistsSelector);
@@ -28,6 +28,20 @@
 			             f("throw \"Found element with selector '{0}' using jquery although I shouldnt \";", notExistsSelector) +
 			             "}";
 			interactions.AssertJavascriptResultContains(script, "notfound");
+		}
+
+		public static void ClickUsingJQuery(this IBrowserInteractions interactions, string selector, params object[] args)
+		{
+			selector = f(selector, args);
+			var jquery = dollar(selector);
+			var script = f("var jq = {0};", jquery) +
+						 "if (jq.length > 0) {" +
+						 "jq.click();" + 
+						 "return 'clicked';" +
+						 "} else {" +
+						 f("throw \"Cannot find element with selector '{0}' using jquery \";", selector) +
+						 "}";
+			interactions.AssertJavascriptResultContains(script, "clicked");
 		}
 
 		public static void AssertInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, string value)
