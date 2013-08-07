@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\CalendarLinkIdGeneratorTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ShareCalendarControllerTest.cs" />

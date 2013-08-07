@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
@@ -22,15 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPersonPersister _personPersister;
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 		private readonly ICalendarLinkSettingsPersisterAndProvider _calendarLinkSettingsPersisterAndProvider;
-		private readonly ICalendarLinkIdGenerator _calendarLinkIdGenerator;
+		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
 
 		public SettingsController(IMappingEngine mapper,
-								  ILoggedOnUser loggedOnUser,
-								  IModifyPassword modifyPassword,
-								  IPersonPersister personPersister,
-								  ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
-								  ICalendarLinkSettingsPersisterAndProvider calendarLinkSettingsPersisterAndProvider,
-								  ICalendarLinkIdGenerator calendarLinkIdGenerator)
+		                          ILoggedOnUser loggedOnUser,
+		                          IModifyPassword modifyPassword,
+		                          IPersonPersister personPersister,
+		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
+		                          ICalendarLinkSettingsPersisterAndProvider calendarLinkSettingsPersisterAndProvider,
+		                          ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_personPersister = personPersister;
 			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
 			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
-			_calendarLinkIdGenerator = calendarLinkIdGenerator;
+			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 		}
 
 		[EnsureInPortal]
@@ -99,14 +98,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public JsonResult SetCalendarLinkStatus(bool isActive)
 		{
-			var calendarLinkViewModel = new CalendarLinkViewModel
-			{
-				IsActive =
-					_calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings { IsActive = isActive }).IsActive
-			};
-			if (calendarLinkViewModel.IsActive)
-				calendarLinkViewModel.Url = getCalendarUrl("SetCalendarLinkStatus");
-			return Json(calendarLinkViewModel);
+			var settings = _calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings {IsActive = isActive});
+			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "SetCalendarLinkStatus"));
 		}
 
 		[UnitOfWorkAction]
@@ -114,19 +107,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public JsonResult CalendarLinkStatus()
 		{
-			var setting = _calendarLinkSettingsPersisterAndProvider.Get();
-			var calendarLinkViewModel = new CalendarLinkViewModel { IsActive = setting.IsActive };
-			if (calendarLinkViewModel.IsActive)
-				calendarLinkViewModel.Url = getCalendarUrl("CalendarLinkStatus");
-			return Json(calendarLinkViewModel, JsonRequestBehavior.AllowGet);
-		}
-
-		private string getCalendarUrl(string actionName)
-		{
-			var calendarId = _calendarLinkIdGenerator.Generate();
-			var requestUrl = Request.Url.OriginalString;
-			return requestUrl.Substring(0, requestUrl.LastIndexOf("Settings/" + actionName, System.StringComparison.Ordinal)) +
-				"Share?id=" + Url.Encode(calendarId);
+			var settings = _calendarLinkSettingsPersisterAndProvider.Get();
+			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "CalendarLinkStatus"),
+			            JsonRequestBehavior.AllowGet);
 		}
 	}
 }

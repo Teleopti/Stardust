@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -27,16 +28,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings
 			var target = new CalendarLinkIdGenerator(currentDataSource, loggedOnUser);
 			var id = target.Generate();
 
-			id.Should().Be.EqualTo(Encryption.EncryptStringToBase64("test/" + personId, EncryptionConstants.Image1,
-			                                                        EncryptionConstants.Image2));
+			id.Should().Be.EqualTo(HttpServerUtility.UrlTokenEncode(Encryption.EncryptStringToBytes("test/" + personId, EncryptionConstants.Image1,
+			                                                        EncryptionConstants.Image2)));
 		}
 
 		[Test]
 		public void ShouldParse()
 		{
 			var personId = Guid.NewGuid();
-			var id = Encryption.EncryptStringToBase64("test/" + personId, EncryptionConstants.Image1,
-			                                          EncryptionConstants.Image2);
+			var id = HttpServerUtility.UrlTokenEncode(Encryption.EncryptStringToBytes("test/" + personId, EncryptionConstants.Image1,
+			                                          EncryptionConstants.Image2));
 
 			var target = new CalendarLinkIdGenerator(null, null);
 			var result = target.Parse(id);

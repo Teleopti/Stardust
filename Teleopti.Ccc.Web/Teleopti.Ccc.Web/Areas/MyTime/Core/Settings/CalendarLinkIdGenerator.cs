@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
@@ -21,13 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings
 
 		public string Generate()
 		{
-			return Encryption.EncryptStringToBase64(_currentDataSource.CurrentName() + splitter + _loggedOnUser.CurrentUser().Id.Value, EncryptionConstants.Image1,
-			                                        EncryptionConstants.Image2);
+			return HttpServerUtility.UrlTokenEncode(Encryption.EncryptStringToBytes(_currentDataSource.CurrentName() + splitter + _loggedOnUser.CurrentUser().Id.Value, EncryptionConstants.Image1,
+			                                        EncryptionConstants.Image2));
 		}
 
 		public CalendarLinkId Parse(string encryptedId)
 		{
-			var dataSourceNameAndPersonId = Encryption.DecryptStringFromBase64(encryptedId, EncryptionConstants.Image1, EncryptionConstants.Image2);
+			var dataSourceNameAndPersonId = Encryption.DecryptStringFromBytes(HttpServerUtility.UrlTokenDecode(encryptedId),
+			                                                                  EncryptionConstants.Image1,
+			                                                                  EncryptionConstants.Image2);
 			var pos = dataSourceNameAndPersonId.LastIndexOf(splitter, StringComparison.Ordinal);
 			var dataSourceName = dataSourceNameAndPersonId.Substring(0, pos);
 			var personId = new Guid(dataSourceNameAndPersonId.Substring(pos + 1));

@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Web;
-using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -24,8 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var setting = personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = IsActive;
 			SharingUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
-								  HttpUtility.UrlEncode(
-									  Encryption.EncryptStringToBase64("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2));
+								  HttpServerUtility.UrlTokenEncode(
+									  Encryption.EncryptStringToBytes("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2));
 
 			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
 			personalSettingData.SetValue(setting);
