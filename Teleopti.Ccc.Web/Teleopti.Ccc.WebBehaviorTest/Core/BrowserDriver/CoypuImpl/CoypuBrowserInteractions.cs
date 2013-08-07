@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Click(string selector)
 		{
-			var script = JQueryScript.WhenFoundOrThrow(selector, "{0}.click();");
-			retryJavascript(script);
+			_browser.FindCss(selector, options()).Click();
 		}
 
 		public void AssertExists(string selector)
@@ -69,15 +68,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertContains(string selector, string text)
 		{
-			//assert(_browser.HasCss(selector, new Regex(text)), Is.True, "Failed to assert that " + selector + " contained text " + text);
-			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
-			eventualAssert(() => _browser.ExecuteScript(script), Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
+			assert(_browser.FindCss(selector, options()).HasContent(text), Is.True, "Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertNotContains(string selector, string text)
 		{
-			var script = JQueryScript.WhenFoundOrThrow(selector, "return {0}.text();");
-			eventualAssert(() => _browser.ExecuteScript(script), Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
+			assert(_browser.FindCss(selector, options()).HasNoContent(text), Is.True, "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void AssertUrlContains(string url)
@@ -104,7 +100,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			writer(_browser.Location.ToString());
 			writer(" Html: ");
 			writer(succeedOrIgnore(() => _browser.ExecuteScript("return $('body').html();")));
-			//writer(_browser.FindCss("body").Text);
 		}
 
 		public void DumpUrl(Action<string> writer)
