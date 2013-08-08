@@ -42,10 +42,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// <summary>
         /// Refreshes the specified reload data.
         /// </summary>
-        /// <param name="reloadData">if set to <c>true</c> [reload data].</param>
-        public override void Refresh(bool reloadData)
+        public override void Refresh()
         {
-            base.Refresh(reloadData);
+            base.Refresh();
            
             _scheduleControl.Cursor = Cursors.WaitCursor;
             SetDataSource();
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         public override void SetColorTheme(ScheduleAppointmentColorTheme colorTheme) 
         {
             base.SetColorTheme(colorTheme);
-            Refresh(false);
+            Refresh();
         }
 
         public void PersistScheduleAppointment(ScheduleAppointmentTypes appointmentType, Dto dto, double changedMinuteLength)
@@ -225,7 +224,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                         }
                     }
                 }
-                Refresh(true);
+                Refresh();
             }
         }
 
@@ -276,7 +275,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             Presenter = new AgentSchedulePresenter(this, scheduleStateHolder, clipHandler);
             _scheduleControl = scheduleControl;
 		    _legendLoader = legendLoader;
-		    IsNeedToReloadData = true;
         }
 
         /// <summary>
