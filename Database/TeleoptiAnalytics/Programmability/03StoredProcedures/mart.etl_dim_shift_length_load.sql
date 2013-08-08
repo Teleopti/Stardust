@@ -24,16 +24,12 @@ INSERT INTO mart.dim_shift_length
 	shift_length_id, 
 	shift_length_m, 
 	shift_length_h, 
-	shift_length_group_id, 
-	shift_length_group_name, 
 	datasource_id
 	)
 SELECT 
 	shift_length_id				= -1, 
 	shift_length_m				= -1, 
-	shift_length_h				= -1, 
-	shift_length_group_id		= -1, 
-	shift_length_group_name		= 'Not Defined', 
+	shift_length_h				= -1,  
 	datasource_id				= 1
 WHERE NOT EXISTS (SELECT * FROM mart.dim_shift_length where shift_length_id = -1)
 
@@ -60,13 +56,7 @@ WHERE
 UPDATE mart.dim_shift_length
 SET 
 	shift_length_h				= convert(float,dim_shift_length.shift_length_m)/60,
-	shift_length_group_id		= g.shift_length_group_id,
-	shift_length_group_name		= g.shift_length_group_name,
-	update_date					= getdate()
-FROM
-	Mart.sys_shift_length_group g	
-WHERE 
-	mart.dim_shift_length.shift_length_m between min_length_m and max_length_m
+	update_date					= getdate()	
 
 GO
 

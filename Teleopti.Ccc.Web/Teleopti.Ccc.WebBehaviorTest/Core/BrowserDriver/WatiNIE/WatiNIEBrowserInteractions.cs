@@ -2,7 +2,6 @@
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
@@ -36,14 +35,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		public void Click(string selector)
 		{
 			validateSelector(selector);
-			_browser.Element(Find.BySelector(selector)).EventualClick();
+			var element = _browser.Element(Find.BySelector(selector));
+			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+			element.WaitUntil<Element>(e => e.Enabled);
+			element.ClickNoWait();
 		}
 
 		public void ClickContaining(string selector, string text)
 		{
 			validateSelector(selector);
 			selector = string.Format(selector + ":contains('{0}')", text);
-			_browser.Element(Find.BySelector(selector)).EventualClick();
+			var element = _browser.Element(Find.BySelector(selector));
+			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+			element.WaitUntil<Element>(e => e.Enabled);
+			element.ClickNoWait();
 		}
 
 		public void AssertUrlContains(string url)
