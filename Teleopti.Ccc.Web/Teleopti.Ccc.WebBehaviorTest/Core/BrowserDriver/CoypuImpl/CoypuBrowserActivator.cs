@@ -2,7 +2,6 @@
 using Coypu;
 using Coypu.Drivers.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
-			// todo: clear the cache!
 			var configuration = new SessionConfiguration
 				{
 					AppHost = "about:blank",
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					WaitBeforeClick = TimeSpan.Zero,
 					RetryInterval = retry,
 					Timeout = timeout,
-					Driver = typeof(ChromeWebDriverWithProfile),
+					Driver = typeof(ChromeWebDriverWithNewProfile),
 					//Driver = typeof(SeleniumWebDriver),
 					//Browser = Coypu.Drivers.Browser.InternetExplorer,
 					//Browser = Coypu.Drivers.Browser.Firefox,
@@ -36,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				};
 			// to get chrome to be fast, disable automatic detection of proxy settings. odd, but it works:
 			// http://stackoverflow.com/questions/16179808/chromedriver-is-extremely-slow-on-a-specific-machine-using-selenium-grid-and-ne
+			// maybe try this: http://stackoverflow.com/questions/5570004/how-to-change-lan-settings-proxy-configuration-programmatically
 			_browser = new BrowserSession(configuration);
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
@@ -67,16 +66,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		}
 	}
 
-	public class ChromeWebDriverWithProfile : SeleniumWebDriver
+	public class ChromeWebDriverWithNewProfile : SeleniumWebDriver
 	{
-		public ChromeWebDriverWithProfile(Coypu.Drivers.Browser browser)
+		public ChromeWebDriverWithNewProfile(Coypu.Drivers.Browser browser)
 			: base(CustomProfileDriver(), browser)
 		{
 		}
 
 		private static ChromeDriver CustomProfileDriver()
 		{
-			var profilePath = System.IO.Path.Combine(Environment.CurrentDirectory, "ChromeWebDriverProfile");
+			var profilePath = System.IO.Path.Combine(Environment.CurrentDirectory, Guid.NewGuid() + ".ChromeWebDriverProfile");
 			var options = new ChromeOptions();
 			options.AddArgument(string.Format("--user-data-dir={0}", profilePath));
 			return new ChromeDriver(options);
