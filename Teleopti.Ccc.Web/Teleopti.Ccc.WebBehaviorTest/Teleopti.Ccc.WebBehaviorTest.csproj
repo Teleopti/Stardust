@@ -97,6 +97,7 @@
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
@@ -198,7 +199,6 @@
     <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
     <Compile Include="Core\Legacy\EventualElementActions.cs" />
     <Compile Include="Core\BrowserDriver\Timeouts.cs" />
-    <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>

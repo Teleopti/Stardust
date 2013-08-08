@@ -59,7 +59,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			browserAssert(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			object value = "";
+			browserAssert(() =>
+				{
+					value = runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript);
+					return value;
+				}, 
+				Is.StringContaining(text), 
+				() => "Failed to assert that javascript " + javascript + " returned a value containing " + text + ". Last value returned was " + value);
 		}
 
 		public void AssertExists(string selector)
@@ -149,6 +156,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			{
 				throw new BrowserInteractionException(buildMessage(message), ex);
 			}
+		}
+
+		private void browserAssert<T>(Func<T> value, Constraint constraint, Func<string> message)
+		{
+			EventualAssert.That(value, constraint, () => buildMessage(message()), new WatiNIEExceptionCatcher());
 		}
 
 		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
