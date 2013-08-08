@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -109,9 +110,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool scheduleAttempts(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
-			var hasDayCannotBeScheduled = false;
+			var allSelectedDaysAreScheduled = false;
 			IShiftCategory shiftCategoryToBeBlocked = null;
-			while (!hasDayCannotBeScheduled)
+			while (!allSelectedDaysAreScheduled)
 			{
 				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
 				                                                                               schedulingOptions);
@@ -139,10 +140,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						                      selectedPeriod);
 						suggestedShiftProjectionCache = null;
 					}
-					if (!TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, day))
-						hasDayCannotBeScheduled = true;
 				}
-				if (hasDayCannotBeScheduled)
+				allSelectedDaysAreScheduled = selectedPeriod.DayCollection()
+					              .Where(x => teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Contains(x))
+					              .All(x => TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, x));
+				if (!allSelectedDaysAreScheduled)
 				{
 					if (shiftCategoryToBeBlocked != null)
 					{
@@ -150,6 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						if (!schedulingOptions.NotAllowedShiftCategories.Contains(shiftCategoryToBeBlocked))
 							schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
 					}
+					else return false;
 				}
 			}
 			return true;
@@ -283,8 +286,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
-			var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
-			restriction = restriction.Combine(openHourRestriction);
+			//This code has timezone problem
+			//var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+			//restriction = restriction.Combine(openHourRestriction);
 
 			// (should we cover for max seats here?) 
 			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,

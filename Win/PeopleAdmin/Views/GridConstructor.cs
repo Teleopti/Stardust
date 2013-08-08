@@ -27,12 +27,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         PersonAvailabilityView
     };
 
-    public enum RotationType
-    {
-        PersonRotation,
-        PersonAvailability
-    };
-
     public class GridConstructor : Component
     {
         private FilteredPeopleHolder _filteredPeopleHolder;
@@ -66,16 +60,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         public ViewType CurrentView
         {
             get { return _currentView; }
-        }
-
-        public Dictionary<ViewType, GridViewBase> ViewCache
-        {
-            get { return _viewCache; }
-        }
-
-        public void SetFilteredPeople(FilteredPeopleHolder filteredPeopleHolder)
-        {
-            _filteredPeopleHolder = filteredPeopleHolder;
         }
 
         public void BuildGridView(ViewType type)
@@ -114,35 +98,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                     _view.CreateContextMenu();
                 _view.PrepareView();
                 _view.MergeHeaders();
-                _view.Grid.EndUpdate();
-            }
-
-        }
-
-        public void BuildGridViewForRendering(ViewType type)
-        {
-            // Sets the current view
-            _currentView = type;
-
-            CacheGridView(type);
-            _view = _viewCache[type];
-
-            IsCached = false;
-
-        	var handler = GridViewChanged;
-            if (handler != null) handler(_view, EventArgs.Empty);
-
-            if (!IsCached)
-            {
-                _view.Grid.BeginUpdate();
-
-                _view.ClearView();
-                _view.CreateHeaders();
-                if (!_readOnly)
-                    _view.CreateContextMenu();
-                _view.PrepareView();
-                _view.MergeHeaders();
-
                 _view.Grid.EndUpdate();
             }
         }
@@ -253,17 +208,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             wrappedTabPage.ThemesEnabled = false;
 
             return wrappedTabPage;
-        }
-
-        public static void WrapWithTabPage(GridControl grid, TabPageAdv wrappedTabPage)
-        {
-            // 
-            // wrappedTabPage
-            // 
-            grid.Dock = DockStyle.Fill;
-            wrappedTabPage.Controls.Add(grid);
-            wrappedTabPage.ImageIndex = 0;
-            wrappedTabPage.ThemesEnabled = false;
         }
 
         public static void WrapWithTabPageExternal(GridControl grid, TabPageAdv wrappedTabPageExternal, TableLayoutPanel tableLayoutPanel1)

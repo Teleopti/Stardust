@@ -150,48 +150,9 @@ namespace Teleopti.Analytics.Parameters
 			return ret;
 		}
 
-		public int SaveNewName(string name, int id, Guid personCode)
-		{
-			var cmd = new SqlCommand {CommandText = "p_webx2_save_setting_name", CommandType = CommandType.StoredProcedure};
-
-		    cmd.Parameters.AddWithValue("@person_code", personCode);
-            cmd.Parameters.AddWithValue("@name", name);
-            SqlParameter p = cmd.Parameters.AddWithValue("@id", id);
-			p.Direction = ParameterDirection.InputOutput;
-
-			cmd.Connection = _connection;
-			if (_connection.State != ConnectionState.Open)
-			{
-				_connection.Open();
-			}
-			cmd.ExecuteNonQuery();
-			_connection.Close();
-
-			return (int) p.Value;
-		}
-
-		public void DeleteSavedReport(int id)
-		{
-		var cmd = new SqlCommand {CommandText = "p_webx2_delete_saved", CommandType = CommandType.StoredProcedure};
-
-		    cmd.Parameters.AddWithValue("@id", id);
-			cmd.Connection = _connection;
-			if (_connection.State != ConnectionState.Open)
-			{
-				_connection.Open();
-			}
-			cmd.ExecuteNonQuery();
-			_connection.Close();
-		}
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public void SaveUserSetting(Guid componentId, Guid personCode, string parameter, int savedId, string setting)
 		{
-			//			SqlParameter param;
-//			if (Disposed == true)
-//			{
-//				Throw New ObjectDisposedException("LoadControlData");
-//			}
 			var cmd = new SqlCommand {CommandText = "mart.report_user_setting_save", CommandType = CommandType.StoredProcedure};
 
 		    cmd.Parameters.AddWithValue("@person_code", personCode);

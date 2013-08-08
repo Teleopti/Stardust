@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
         private IList<IMultiplicator> _sourceList;
         private IMultiplicatorRepository _multiplicatorRep;
         private IList<MultiplicatorTypeView> _multiplicatorTypeViewCollection;
-        private const string DoubleSpace = "  ";
         private const int EmptySourceCount = 0;
         private const int ColumnListCountMappingValue = 1;
         private const int EmptyHeaderCount = 0;
@@ -162,9 +161,9 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
         {
             gridColumns.Add(new SFGridDescriptionNameColumn<T>("Description", Resources.Name));
             gridColumns.Add(new SFGridDescriptionShortNameColumn<T>("Description", Resources.ShortName, 100, false, 2));
-            gridColumns.Add(new SFGridColorPickerColumn<T>("DisplayColor", Resources.Color, null));
+            gridColumns.Add(new SFGridColorPickerColumn<T>("DisplayColor", Resources.Color));
             gridColumns.Add(new SFGridReadOnlyEnumColumn<T>("MultiplicatorType", Resources.MultiplicatorType));
-            gridColumns.Add(new SFGridNumericCellColumn<T>("MultiplicatorValue", Resources.MultiplicatorValue, null, "DoubleCell",50));
+            gridColumns.Add(new SFGridNumericCellColumn<T>("MultiplicatorValue", Resources.MultiplicatorValue, "DoubleCell",50));
             gridColumns.Add(new SFGridEditableTextColumn<T>("ExportCode", 20, Resources.ExportCode){AllowEmptyValue = true});
 
         }
@@ -203,22 +202,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
             if (!IsDataAvailable())
             {
                 gridMultiplicator.CurrentCell.MoveTo(DefaultCellRowIndex, DefaultCellColumnIndex);
-            }
-        }
-
-        public virtual void Paste(Clip clip, int rowIndex, int columnIndex)
-        {
-            if (columnIndex == int.MinValue)
-            {
-                throw new ArgumentOutOfRangeException("columnIndex", "columnIndex must be larger than Int32.MinValue");
-            }
-
-            GridStyleInfo gridStyleInfo = gridMultiplicator[rowIndex, columnIndex];
-            var clipValue = (string)clip.ClipObject;
-
-            if (clipValue.Length <= gridStyleInfo.MaxLength || gridStyleInfo.MaxLength == 0)
-            {
-                gridStyleInfo.ApplyFormattedText(clipValue);
             }
         }
 

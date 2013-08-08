@@ -468,7 +468,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																									   UserTexts.Resources.ShiftCategory,
 																									   _shiftCategoryList,
 																									   "Description",
-																									   null,
 																									   typeof (
 																										   ShiftCategory
 																										   ));
@@ -477,7 +476,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_dayOffsColumn = new SFGridDropDownColumn<RotationRestrictionView, IDayOffTemplate>("DayOffTemplate",
 																								UserTexts.Resources.DayOff,
 																								_dayOffList,
-																								"Description", null,
+																								"Description", 
 																								typeof (DayOffTemplate));
 			_dayOffsColumn.QueryComboItems += DayOffsColumnQueryComboItems;
 			_gridColumns.Add(_dayOffsColumn);

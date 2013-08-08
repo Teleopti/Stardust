@@ -112,19 +112,19 @@
     </Reference>
     <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Microsoft.Practices.CompositeUI.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Practices.CompositeUI.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Practices.CompositeUI.W.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.CompositeUI.WPF, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Microsoft.Practices.CompositeUI.WPF.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Practices.CompositeUI.W.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Practices.ObjectBuilder.1.0.0\lib\3.5\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -196,8 +196,6 @@
     <Compile Include="Common\Library\Services\ActionCatalogService.cs" />
     <Compile Include="Common\Library\Services\DependentModuleLoaderService.cs" />
     <Compile Include="Common\Library\Services\IDependentModuleInfo.cs" />
-    <Compile Include="Common\Library\Services\IModuleInfoStore.cs" />
-    <Compile Include="Common\Library\Services\ProfileCatalogModuleInfoStore.cs" />
     <Compile Include="Common\Library\Services\WorkspaceLocatorService.cs" />
     <Compile Include="Common\Library\SmartClientApplication.cs" />
     <Compile Include="Common\Library\Services\EmptyDependentModuleEnumerator.cs" />
@@ -358,10 +356,6 @@
     <ProjectReference Include="..\..\Win\Teleopti.Ccc.Win.csproj">
       <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
       <Name>Teleopti.Ccc.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Common.UI.OutlookControls\Teleopti.Common.UI.OutlookControls.csproj">
-      <Project>{6B653594-DC38-409A-B76E-2CB4C6A36EB0}</Project>
-      <Name>Teleopti.Common.UI.OutlookControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92D88C7B-2401-4BC2-8F89-B919DBC6D143}</Project>

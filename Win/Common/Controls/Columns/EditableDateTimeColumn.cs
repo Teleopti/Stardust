@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private string _headerText;
-        private bool _allowNull;
         private DateTimeFormatInfo _dtfi;
 
         public EditableDateTimeColumn(string bindingProperty, string headerText)
@@ -21,11 +20,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             _headerText = headerText;
 
             _dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
-        }
-
-        public EditableDateTimeColumn(string bindingProperty, string headerText, bool allowNull) : this(bindingProperty,headerText)
-        {
-            _allowNull = allowNull;
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -62,7 +56,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     dt = dateFromParse;
                 }
 
-                if (!_allowNull && !dt.HasValue)
+                if (!dt.HasValue)
                 {
                     dt = DateTime.MinValue;
                 }

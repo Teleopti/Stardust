@@ -173,18 +173,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.Invalidate();
         }
 
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IActivityTimeLimiterViewModel> result = Sort((ISortColumn<IActivityTimeLimiterViewModel>)GridColumns[columnIndex],
-                    Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
         public override void Add()
         {
             AddNewLimiter();

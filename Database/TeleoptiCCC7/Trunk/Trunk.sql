@@ -917,6 +917,14 @@ UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,We
 GO
 
 ----------------  
+--Name: Robin Karlsson
+--Date: 2013-07-18
+--Desc: Remove unused column for soft deletes
+---------------- 
+ALTER TABLE dbo.MultisiteDay DROP COLUMN IsDeleted
+GO
+
+---------------- 
 --Name: tamasb, kunning
 --Date: 2013-06-24 
 --Desc: add new appliation function MyTimeWeb/ShareCalendar

@@ -1,14 +1,18 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WpfControls.Controls.Layers;
 using Teleopti.Ccc.WpfControls.Controls.Time.Timeline;
 using Teleopti.Interfaces.Domain;
+using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 {
@@ -18,13 +22,19 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
     /// <remarks>
     /// Henrik 2009-07-20: Move as much logic to the viewmodel as possible
     /// </remarks>
-    public partial class RealTimeScheduleView : UserControl
+    public partial class RealTimeScheduleView
     {
         public RealTimeScheduleView()
         {
             InitializeComponent();
             DataContextChanged += (RealTimeScheduleView_DataContextChanged);
         }
+
+		static RealTimeScheduleView()
+		{
+			Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline),
+															   new FrameworkPropertyMetadata { DefaultValue = 30 });
+		}
 
         private void RealTimeScheduleView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -160,5 +170,30 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
         }
 
         #endregion
+
+	    private void CheckBox_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+	    {
+		    var checkbox = sender as CheckBox;
+		    if (checkbox != null)
+			    checkbox.IsChecked = !checkbox.IsChecked;
+		    e.Handled = true;
+	    }
+
+	    private void RealTimeDataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
+	    {
+		    var column = e.Column;
+		    ListSortDirection sortDirection;
+		    if (column.SortDirection.HasValue)
+			    sortDirection = column.SortDirection == ListSortDirection.Ascending
+				                     ? ListSortDirection.Descending
+									 : ListSortDirection.Ascending;
+			else
+				sortDirection = ListSortDirection.Ascending;
+		    
+			var sortDescription = new SortDescription(column.SortMemberPath, sortDirection);
+		    column.SortDirection = sortDirection;
+		    Model.SetSortDescription(sortDescription);
+		    e.Handled = true;
+	    }
     }
 }

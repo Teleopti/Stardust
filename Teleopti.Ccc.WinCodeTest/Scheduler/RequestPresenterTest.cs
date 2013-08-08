@@ -105,35 +105,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
         [Test]
-        public void VerifySortAdapters()
-        {
-            const string sortExpression = "Message ASC, Name DESC";
-            IList<PersonRequestViewModel> list = RequestPresenter.SortAdapters(_requestViewAdapters, sortExpression);
-
-            Assert.AreEqual(_request3, list[0]);
-            Assert.AreEqual(_request1, list[1]);
-            Assert.AreEqual(_request2, list[2]);
-        }
-
-        [Test]
         public void VerifyFilterAdapters()
         {
 	        var filterExpression = new List<string>();
             
-			//string filterExpression = "Seniority>-1";
-			//filterExpression += " And ";
-			//filterExpression += "StatusText=" + '"' + UserTexts.Resources.Pending + '"';
-			//filterExpression += " And ";
-			//filterExpression += "RequestType=" + '"' + "Absence" + '"';
-
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
             Assert.AreEqual(3, list.Count);
-
-			//filterExpression = "Seniority>-1";
-			//filterExpression += " And ";
-			//filterExpression += "StatusText=" + '"' + UserTexts.Resources.Approved + '"';
-			//filterExpression += " And ";
-			//filterExpression += "RequestType=" + '"' + "Absence" + '"';
 
             list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
             Assert.AreEqual(3, list.Count);

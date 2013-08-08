@@ -835,25 +835,9 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.VerticalThumbTrack = true;
             gridControl.Model.Options.WrapCellBehavior = GridWrapCellBehavior.WrapRow;
             gridControl.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
-            //gridControl.ResizeColsBehavior = GridResizeCellsBehavior.None;
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
             gridControl.Properties.MarkRowHeader = true;
             gridControl.Properties.MarkColHeader = true;
-        }
-
-        public static void GridStyles(GridListControl gridControl)
-        {
-            gridControl.ThemesEnabled = true;
-            gridControl.GridVisualStyles = GridVisualStyles.Office2007Blue;
-            gridControl.Properties.GridLineColor = Color.FromArgb(((208)), ((215)), ((229)));
-            gridControl.BorderStyle = BorderStyle.FixedSingle;
-            gridControl.BackColor = SystemColors.Window;
-            gridControl.Dock = DockStyle.Fill;
-            gridControl.Properties.GridLineColor = Color.FromArgb(208, 215, 229);
-            gridControl.Grid.RowHeights.ResizeToFit(GridRangeInfo.Table());
-            gridControl.AutoSize = true;
-            gridControl.Grid.Dock = DockStyle.Fill;
-            gridControl.FillLastColumn = true;
         }
 
         #endregion
@@ -999,17 +983,6 @@ namespace Teleopti.Ccc.Win.Common
                 gridControl.Selections.Clear();
                 gridControl.Selections.Add(dataOnlyGridRangeInfo);
             }
-        }
-
-        //TODO kolla om denna kan er鋞ta ovans錯nde "handleSelectAll"
-        public static void SelectAll(GridControl grid)
-        {
-            int top = grid.Rows.HeaderCount + 1;
-            int left = grid.Cols.HeaderCount + 1;
-            int right = grid.ColCount;
-            int bottom = grid.RowCount;
-            grid.Selections.Clear();
-            grid.Selections.SelectRange(GridRangeInfo.Cells(top, left, bottom, right), true);
         }
 
         #endregion

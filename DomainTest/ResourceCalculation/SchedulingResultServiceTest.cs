@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -14,17 +13,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class SchedulingResultServiceTest
 	{
-		#region Variables
-
 		private SchedulingResultService _target;
 		private PersonAssignmentListContainer _personAssignmentListContainer;
 		private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
 		private DateTimePeriod _inPeriod;
 		private MockRepository _mocks;
-
-		#endregion
-
-		#region Setup
 
 		[SetUp]
 		public void Setup()
@@ -41,40 +34,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				new SingleSkillDictionary());
 		}
 
-		#endregion
-
-		#region Constructor tests
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public static IDictionary<ISkill, IList<ISkillDay>> CreateSkillDaysFromSkillStaffPeriodDictionary(MockRepository mocks, ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary)
-		{
-			IDictionary<ISkill, IList<ISkillDay>> skillDaysDic = new Dictionary<ISkill, IList<ISkillDay>>();
-			foreach (var pair in skillStaffPeriodDictionary)
-			{
-				var skillDays = new List<ISkillDay>();
-				foreach (var skillStaffPeriod in pair.Value)
-				{
-					ISkillDay skillDay = mocks.StrictMock<ISkillDay>();
-					Expect.Call(skillDay.Skill).Return(pair.Key).Repeat.Any();
-					Expect.Call(skillDay.CurrentDate).Return(new DateOnly(skillStaffPeriod.Key.StartDateTime.Date)).Repeat.Any();
-					Expect.Call(skillDay.SkillStaffPeriodCollection).Return(
-						new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod.Value }))
-						.Repeat.Any();
-					skillDays.Add(skillDay);
-				}
-
-				skillDaysDic.Add(pair.Key, skillDays);
-			}
-			return skillDaysDic;
-		}
-
 		[Test]
 		public void VerifyConstructorOverload2()
 		{
 			Assert.IsNotNull(_target);
 		}
-
-		#endregion
 
 		[Test]
 		public void VerifySchedulingResultWithoutPeriod()
@@ -105,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
 							0.001);
 		}
-
 
 		[Test]
 		public void VerifySchedulingPeriodDoNotIntersectSkillStaffPeriod()

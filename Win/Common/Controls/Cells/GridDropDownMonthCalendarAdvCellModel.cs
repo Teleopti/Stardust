@@ -177,12 +177,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return base.GetFormattedText(style, value, textInfo);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static object GetValueFromStyle(GridStyleInfo style)
-        {
-            return GetValueFromStyle(style, style.CellValue);
-        }
-
         private static object GetValueFromStyle(GridStyleInfo style, object value)
         {
             if (!(value is DateTime))

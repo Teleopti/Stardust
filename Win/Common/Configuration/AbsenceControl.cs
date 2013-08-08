@@ -194,7 +194,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             createColumnsForAbsenceGrid(gridColumns);
 
-            gridColumns.AppendAuditColumns();
+			// append audit columns
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedBy", Resources.CreatedBy));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedTimeInUserPerspective", Resources.CreatedOn));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedBy", Resources.UpdatedBy));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
 
             gridControlAbsences.RowCount = gridRowCount();
             gridControlAbsences.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
@@ -223,7 +227,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var shortName = new SFGridDescriptionShortNameColumn<AbsenceView>("Description", Resources.ShortName, 150, false, 2)
                             	{AllowEmptyValue = true};
         	gridColumns.Add(shortName);
-            gridColumns.Add(new SFGridColorPickerColumn<AbsenceView>("DisplayColor", Resources.Color, null));
+            gridColumns.Add(new SFGridColorPickerColumn<AbsenceView>("DisplayColor", Resources.Color));
 
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("InContractTime", Resources.IsContractTime));
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("InWorkTime", Resources.IsWorkTime));
@@ -233,11 +237,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 var payrollColumn = new SFGridEditableTextColumn<AbsenceView>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
                 gridColumns.Add(payrollColumn);
             }
-            gridColumns.Add(new SFGridByteCellColumn<AbsenceView>("Priority", Resources.Priority, null));
+            gridColumns.Add(new SFGridByteCellColumn<AbsenceView>("Priority", Resources.Priority));
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Requestable", Resources.UseForRequests));
             //TODO: Get header "Tracker" from resource files.
             var trackerColumn = new SFGridDropDownColumn<AbsenceView, TrackerView>("Tracker", Resources.TrackerType, _trackerAdopterCollection,
-                                                      "Description", null, typeof(TrackerView))
+                                                      "Description", typeof(TrackerView))
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Confidential", Resources.Confidential));

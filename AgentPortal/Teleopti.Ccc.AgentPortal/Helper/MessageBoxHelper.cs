@@ -41,17 +41,6 @@ namespace Teleopti.Ccc.AgentPortal.Helper
                                                             : 0);
         }
 
-        public static void ShowInformationMessage(string text, string caption)
-        {
-			MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,
-                                                        MessageBoxButtons.OK, MessageBoxIcon.Information,
-                                                        MessageBoxDefaultButton.Button1,
-                                                        CultureInfo.CurrentCulture.TextInfo.IsRightToLeft
-                                                            ? MessageBoxOptions.RtlReading |
-                                                              MessageBoxOptions.RightAlign
-                                                            : 0);
-        }
-
         public static DialogResult ShowConfirmationMessage(string text, string caption)
         {
 			return MessageBoxAdv.Show(string.Concat(text, DoubleSpaces), caption,

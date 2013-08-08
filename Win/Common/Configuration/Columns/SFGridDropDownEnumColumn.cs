@@ -10,12 +10,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         private readonly IList<TComboItem> _comboItems;
         private readonly string _displayMember, _valueMember;
 
-        public SFGridDropDownEnumColumn(string bindingProperty, string headerText, IList<TComboItem> comboItems, string displayMember)
-            : base(bindingProperty, headerText)
-        {
-            _comboItems = comboItems;
-            _displayMember = displayMember;
-        }
         public SFGridDropDownEnumColumn(string bindingProperty, string headerText, IList<TComboItem> comboItems, string displayMember, string valueMember)
             : base(bindingProperty, headerText)
         {

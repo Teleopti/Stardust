@@ -148,16 +148,6 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        public ListView FunctionPersonsList
-        {
-            get { return listViewFunctionPersons; }
-        }
-
-        public ListView FunctionRolesList
-        {
-            get { return listViewFunctionRoles; }
-        }
-
         public void ShowDataSourceException(Infrastructure.Foundation.DataSourceException dataSourceException)
         {
             using (var view = new SimpleExceptionHandlerView(dataSourceException,

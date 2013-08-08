@@ -256,26 +256,11 @@ namespace Teleopti.Ccc.DatabaseConverterTest.Helpers
             return new FillupShift(ScheduleType, actLayerList);
         }
 
-        /// <summary>
-        /// Creates an Absence
-        /// </summary>
         public global::Domain.Absence Absence(string name, string shortName, bool useCountRules)
         {
             return
                 new global::Domain.Absence(1, name, shortName, true, Color.DodgerBlue, true, useCountRules, false, true, true,
                                            null);
-        }
-
-
-        /// <summary>
-        /// Creates an availability
-        /// </summary>
-        public AgentLimitation AgentLimitation()
-        {
-            AgentLimitation agLimitation = new AgentLimitation(new CccListCollection<OpenLayer>());
-            agLimitation.CoreTime = new OpenLayer(new global::Domain.TimePeriod(new TimeSpan(15, 0, 0), new TimeSpan(19, 0, 0)));
-
-            return agLimitation;
         }
 
         private void Setup()

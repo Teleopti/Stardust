@@ -6,8 +6,9 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -77,8 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() =>
 								Browser.Current.Title.Contains(Resources.AgentScheduleMessenger), 
-								Is.True,
-								() => string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
+								Is.True);
 		}
 
 		[When(@"My schedule between '(.*)' to '(.*)' change")]

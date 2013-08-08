@@ -264,23 +264,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-        internal override void DeleteSelectedGridRows<T>(object sender, T eventArgs)
-        {
-            DeleteSelected();
-
-        }
-
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IActivityViewModel> result = Sort( (ISortColumn<IActivityViewModel>)  GridColumns[columnIndex], Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IActivityViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
         private void MoveUp<T>(object sender, T args)
         {
             HandleMove(delegate(IList<int> selectedList, int adapterCount)

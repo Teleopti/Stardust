@@ -131,15 +131,11 @@ namespace Teleopti.Ccc.WinCode.Common
 
         CommonNameDescriptionSetting CommonNameDescription { get; }
 
-        CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; }
-
         /// <summary>
         /// Check if there are any changed requests
         /// </summary>
         /// <returns></returns>
         bool ChangedRequests();
-
-        void ClearReferredShiftTradeRequests();
 
         /// <summary>
         /// Gets the default segment length

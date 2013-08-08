@@ -182,18 +182,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
             return new TimePeriod(minTime, maxTime);
         }
 
-        public TimeSpan PeriodTargetTime()
-        {
-            if (_cellDataCollection.Count > 0)
-            {
-                foreach (var studentAvailabilityCellData in _cellDataCollection.Values)
-                {
-                    return studentAvailabilityCellData.PeriodTarget;
-                }
-            }
-            return TimeSpan.Zero;
-        }
-
         public bool PeriodIsValid()
         {
             if (_cellDataCollection.Count > 0)

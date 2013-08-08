@@ -107,27 +107,6 @@ namespace Teleopti.Ccc.DomainTest.Security
         /// <summary>
         /// Makes the base class method testable.
         /// </summary>
-        /// <param name="definedFunctions">The defined functions.</param>
-        /// <param name="databaseFunctions">The database functions.</param>
-        /// <returns></returns>
-        public IEnumerable<IApplicationFunction> DeletedDefinedApplicationFunctions(ICollection<IApplicationFunction> definedFunctions, IEnumerable<IApplicationFunction> databaseFunctions)
-        {
-            return base.DeletedRaptorApplicationFunctions(definedFunctions, databaseFunctions);
-        }
-
-        /// <summary>
-        /// Makes the base class method testable.
-        /// </summary>
-        /// <param name="applicationFunctions">All application functions.</param>
-        /// <returns></returns>
-        public IList<IApplicationFunction> FilterExistingDefinedApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions)
-        {
-            return base.FilterExistingDefinedRaptorApplicationFunctions(applicationFunctions);
-        }
-
-        /// <summary>
-        /// Makes the base class method testable.
-        /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="applicationFunction">The application function.</param>
         public new void AddApplicationFunctionToRepository(IApplicationFunctionRepository repository, IApplicationFunction applicationFunction)

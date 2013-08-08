@@ -310,23 +310,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         internal virtual void AddNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
 
-        internal virtual void InsertNewGridRow<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void InsertNewGridColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void DeleteOptionalColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void ChangeOptionalColumn<T>(object sender, T eventArgs) where T : EventArgs { }
-
         internal virtual void AddNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
 
-        internal virtual void InsertNewGridRowFromClipboard<T>(object sender, T eventArgs) where T : EventArgs { }
-
         internal virtual void DeleteSelectedGridRows<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void CopySpecial<T>(object sender, T eventArgs) where T : EventArgs { }
-
-        internal virtual void PasteSpecial<T>(object sender, T eventArgs) where T : EventArgs { }
 
         internal virtual void ViewDataSaved<T>(object sender, T eventArgs) where T : EventArgs { }
 

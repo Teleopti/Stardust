@@ -53,34 +53,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         }
 
         /// <summary>
-        /// Determines whether [has person period duplicates] [the specified person periods].
-        /// </summary>
-        /// <param name="personPeriods">The person periods.</param>
-        /// <returns>
-        /// 	<c>true</c> if [has person period duplicates] [the specified person periods]; otherwise, 
-        /// <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-07-04
-        /// </remarks>
-        public static bool HasPersonPeriodDuplicates(IList<PersonPeriod> personPeriods)
-        {
-            Dictionary<DateOnly, PersonPeriod> y = new Dictionary<DateOnly, PersonPeriod>();
-
-            foreach (PersonPeriod test in personPeriods)
-            {
-                if (y.ContainsKey(test.StartDate))
-                {
-                    return true;
-                }
-                y.Add(test.StartDate, test);
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Determines whether [has person period duplicates2] [the specified person periods].
         /// </summary>
         /// <param name="personPeriods">The person periods.</param>
@@ -178,36 +150,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
 
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Validates the person account is not duplicate.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Savani Nirasha
-        /// Created date: 9/4/2008
-        /// </remarks>
-        public static string ValidatePersonAccountIsNotDuplicate(FilteredPeopleHolder filteredPeopleHolder)
-        {
-
-            for (int i = 0; i < filteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Count; i++)
-            {
-
-                Dictionary<DateOnly, IAccount> y = new Dictionary<DateOnly, IAccount>();
-
-                foreach (IAccount personAccount in filteredPeopleHolder.
-                    PersonAccountGridViewAdaptorCollection[i].Parent.AllPersonAccounts())
-                {
-                    if (y.ContainsKey(personAccount.StartDate))
-                    {
-                        return filteredPeopleHolder.PersonAccountGridViewAdaptorCollection[i].FullName;
-                    }
-                    y.Add(personAccount.StartDate, personAccount);
-                }
-            }
-            return string.Empty;
-
         }
 
         /// <summary>
@@ -524,27 +466,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		}
 
         /// <summary>
-        /// Bolds the column.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="propertyReflector">The property reflector.</param>
-        /// <param name="formatProperty">The format property.</param>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-24
-        /// </remarks>
-        public static void BoldColumn<T>(PropertyReflector propertyReflector, string formatProperty, T dataItem,
-            GridQueryCellInfoEventArgs e)
-        {
-            if ((bool)propertyReflector.GetValue(dataItem, formatProperty))
-            {
-                e.Style.Font.Bold = true;
-            }
-        }
-
-        /// <summary>
         /// Determines whether [is can bold] [the specified period].
         /// </summary>
         /// <param name="period">The period.</param>
@@ -563,18 +484,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             if (personPeriodChildGridViewCollection != null && period != null)
             {
-                try
+                PersonPeriodChildModel model =
+                    personPeriodChildGridViewCollection.FirstOrDefault(p => p.ContainedEntity.Id == period.Id);
+                if (model != null)
                 {
-                    PersonPeriodChildModel model = personPeriodChildGridViewCollection.
-                        Where(p => p.ContainedEntity.Id == period.Id).Single();
                     canBold = model.CanBold;
                 }
-                catch(InvalidOperationException)
-                {
-                    //Henrik 2009-01-28:
-                    //Can bold is still false because no elements matched single()
-                }
-               
             }
 
             return canBold;

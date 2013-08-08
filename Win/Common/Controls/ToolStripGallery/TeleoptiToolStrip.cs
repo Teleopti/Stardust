@@ -16,17 +16,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
         }
 
         /// <summary>
-        /// Constructor of the TeleoptiToolStrip class
-        /// </summary>
-        /// <param name="containers"></param>
-        public TeleoptiToolStrip(params IContainer[] containers)
-        {
-            InitializeComponent();
-            if (containers.Length == 0)
-                containers[0].Add(this);
-        }
-
-        /// <summary>
         /// ToolStripDropDownDirection Property
         /// </summary>
         public ToolStripDropDownDirection DropDownDirection

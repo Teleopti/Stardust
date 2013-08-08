@@ -31,24 +31,10 @@ namespace Teleopti.Ccc.Domain.Tracking
             if (account != null) RefreshAndAddToCache(account, unitOfWork);
         }
 
-        public void Refresh(IAccount account, ISchedule schedule, IUnitOfWork unitOfWork)
-        {
-            if (account != null) RefreshAndAddToCache(account, schedule, unitOfWork);
-        }
-
-        private void RefreshAndAddToCache(IAccount account, ISchedule schedule, IUnitOfWork unitOfWork)
-        {
-            account.CalculateUsed(_repositoryFactory.CreateScheduleRepository(unitOfWork), schedule, _scenario);
-            //account.CalculateBalanceIn();
-
-            _refreshedAccounts.Add(account);
-        }
-
         private void RefreshAndAddToCache(IAccount account, IUnitOfWork unitOfWork)
         {
             account.CalculateUsed(_repositoryFactory.CreateScheduleRepository(unitOfWork), null, _scenario);
-            //account.CalculateBalanceIn();
-
+            
             _refreshedAccounts.Add(account);
         }
     }

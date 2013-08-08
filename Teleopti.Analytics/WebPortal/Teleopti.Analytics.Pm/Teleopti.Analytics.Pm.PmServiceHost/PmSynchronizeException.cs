@@ -6,17 +6,8 @@ namespace Teleopti.Analytics.PM.PMServiceHost
     [Serializable]
     public class PmSynchronizeException : Exception
     {
-        public PmSynchronizeException()
-        {
-        }
-
         public PmSynchronizeException(string message)
             : base(message)
-        {
-        }
-
-        public PmSynchronizeException(string message, Exception innerException)
-            : base(message, innerException)
         {
         }
 

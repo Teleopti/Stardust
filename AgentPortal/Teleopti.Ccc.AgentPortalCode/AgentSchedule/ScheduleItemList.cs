@@ -13,13 +13,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             _scheduleItemCollection = new List<ICustomScheduleAppointment>();
         }
 
-        public ScheduleItemList(IList<ICustomScheduleAppointment> scheduleItemCollection)
-        {
-            _scheduleItemCollection = scheduleItemCollection;
-        }
-
-        #region IScheduleItemList Members
-
         public IList<ICustomScheduleAppointment> ScheduleItemCollection
         {
             get 
@@ -102,7 +95,5 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
 
             return nextScheduleItem;
         }
-
-        #endregion
     }
 }

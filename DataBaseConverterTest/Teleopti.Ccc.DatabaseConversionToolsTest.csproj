@@ -191,7 +191,6 @@
     <Compile Include="FakeOldEntityRuleSetBagTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\AgentDayFactory.cs" />
-    <Compile Include="Helpers\AgentWorkruleFactory.cs" />
     <Compile Include="Helpers\ConverterEventHelper.cs" />
     <Compile Include="Helpers\PropertyCounter.cs" />
     <Compile Include="Helpers\SkillDayFactory.cs" />

@@ -53,7 +53,7 @@ namespace Teleopti.Messaging.SignalR
 			return true;
 		}
 
-		public IMessageFilterManager FilterManager { get; set; }
+	    private IMessageFilterManager FilterManager { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
@@ -65,11 +65,6 @@ namespace Teleopti.Messaging.SignalR
 				_wrapper.StopListening();
 				_wrapper = null;
 			}
-		}
-
-		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
 		}
 
 	    private IEnumerable<Notification> CreateNotifications(string dataSource, string businessUnitId,
@@ -386,23 +381,9 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public int Initialized { get; set; }
-
-		public int RemotingPort { get; set; }
-
-		public int Threads { get; set; }
-
-		public int UserId { get; set; }
-
-		public int MessagingPort { get; set; }
-
-		public string Server { get; set; }
-
 		public string ConnectionString { get; set; }
 
-		public Guid SubscriberId { get; set; }
-
-		public bool IsTypeFilterApplied { get; set; }
+	    private bool IsTypeFilterApplied { get; set; }
 
 		public bool IsInitialized
 		{
@@ -412,40 +393,8 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public event EventHandler<EventMessageArgs> EventMessageHandler;
-
-		public void InvokeEventMessageHandler(EventMessageArgs e)
-		{
-			EventHandler<EventMessageArgs> handler = EventMessageHandler;
-			if (handler != null) handler(this, e);
-		}
-
-		public event EventHandler<UnhandledExceptionEventArgs> ExceptionHandler;
-
-		public void InvokeExceptionHandler(UnhandledExceptionEventArgs e)
-		{
-			EventHandler<UnhandledExceptionEventArgs> handler = ExceptionHandler;
-			if (handler != null) handler(this, e);
-		}
-
-		public bool Restart()
-		{
-			StopMessageBroker();
-			StartMessageBroker();
-			return true;
-		}
-
-		public void SendReceipt(IEventMessage message)
-		{
-		}
-
-		public void InternalLog(Exception exception)
-		{
-			Logger.Error("Internal log error.", exception);
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void InvokeEventHandlers(EventMessage eventMessage, string[] routes)
+		private void InvokeEventHandlers(EventMessage eventMessage, string[] routes)
 		{
 			foreach (var route in routes)
 			{

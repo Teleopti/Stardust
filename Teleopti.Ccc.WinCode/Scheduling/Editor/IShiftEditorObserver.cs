@@ -22,14 +22,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         void EditorUpdateCommandExecuted(IScheduleDay part);
         
         /// <summary>
-        /// Occurs when [selection changed].
-        /// </summary>
-        /// <remarks>
-        /// The selected layer changes
-        /// </remarks>
-        void EditorSelectionChanged(IScheduleDay part);
-
-        /// <summary>
         /// Occurs when [add activity].
         /// </summary>
         void EditorAddActivity(IScheduleDay part, DateTimePeriod? period);

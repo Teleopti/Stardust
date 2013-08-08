@@ -6,11 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-    public interface IAuthorizationProvider
-    {
-        IAuthorizationService AuthorizationService { get; }
-    }
-
     /// <summary>
     /// This one is used to avoid creating all possible instances for every instance of the SDK.
     /// </summary>
@@ -20,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         IPersonRequestFactory CreatePersonRequestFactory(ILifetimeScope lifetimeScope);
         LicenseFactory CreateLicenseFactory();
         IAssembler<IPerson, PersonDto> CreatePersonAssembler();
-        PersonsFromLoadOptionFactory CreatePersonsFromLoadOptionFactory(ILifetimeScope lifetimeScope);
         PublicNoteTypeFactory CreatePublicNoteTypeFactory();
         ScheduleMailFactory CreateScheduleMailFactory(ILifetimeScope lifetimeScope);
         IAssembler<IPreferenceDay, PreferenceRestrictionDto> CreatePreferenceDayAssembler();
@@ -63,11 +57,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			return _container.Resolve<IAssembler<IPushMessageDialogue, PushMessageDialogueDto>>();
 		}
-
-        public PersonsFromLoadOptionFactory CreatePersonsFromLoadOptionFactory(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.Resolve<PersonsFromLoadOptionFactory>();
-        }
 
         public PublicNoteTypeFactory CreatePublicNoteTypeFactory()
         {

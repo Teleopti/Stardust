@@ -8,13 +8,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class ApplicationRoleFactory
     {
-
-        /// <summary>
-        /// Creates an application role.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="description">The description.</param>
-        /// <returns></returns>
         public static ApplicationRole CreateRole(string name, string description)
         {
             ApplicationRole role = new ApplicationRole();
@@ -23,10 +16,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return role;
         }
 
-        /// <summary>
-        /// Creates a structure of application roles and functions.
-        /// </summary>
-        /// <returns></returns>
         public static IList<IApplicationRole> CreateApplicationRolesAndFunctionsStructure()
         {
             IList<IApplicationRole> resultList = new List<IApplicationRole>();
@@ -45,11 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return resultList;
         }
 
-
-        /// <summary>
-        /// Creates a list of all the build in Application Roles.
-        /// </summary>
-        /// <returns></returns>
         public static IList<IApplicationRole> CreateShippedRoles(
             out IApplicationRole administratorRole, 
             out IApplicationRole agentRole,
@@ -67,10 +51,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return resultList;
         }
 
-        /// <summary>
-        /// Creates a list of all the shipped Application Roles.
-        /// </summary>
-        /// <returns></returns>
         public static IList<IApplicationRole> CreateShippedRoles()
         {
             IList<IApplicationRole> resultList = new List<IApplicationRole>();
@@ -80,20 +60,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             resultList.Add(CreateRole(ShippedApplicationRoleNames.SiteManagerRole, ShippedApplicationRoleNames.SiteManagerRole));
             resultList.Add(CreateRole(ShippedApplicationRoleNames.TeamLeaderRole, ShippedApplicationRoleNames.TeamLeaderRole));
             return resultList;
-        }
-
-        /// <summary>
-        /// Creates the roles for system role application role mapper test.
-        /// </summary>
-        /// <returns></returns>
-        public static IList<IApplicationRole> CreateRolesForSystemRoleApplicationRoleMapperTest()
-        {
-            List<IApplicationRole> roles = new List<IApplicationRole>();
-            IApplicationRole adAdmin = CreateRole("Admin", "Administrator Description");
-            IApplicationRole adTfsUser = CreateRole("TfsUser", "Tfs User Desciption");
-            roles.Add(adAdmin);
-            roles.Add(adTfsUser);
-            return roles;
         }
     }
 }

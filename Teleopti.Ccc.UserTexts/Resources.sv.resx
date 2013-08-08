@@ -5043,7 +5043,7 @@ tillgänglighet</value>
     <comment>Early warning</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>Generell vy: användaruppgifter</value>
+    <value>Kan inte spara!</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
@@ -11008,10 +11008,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Nekad</value>
     <comment>Translation for enum status Autodenied for requests</comment>
   </data>
-  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
-    <value>Nekad</value>
-    <comment>Translation for enum status Autodenied for requests</comment>
-  </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Din frånvaroförfrågan har avslagits. Några dagar i den aktuella perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar gällande följande period: {0}.</value>
   </data>
@@ -11092,5 +11088,93 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="FilterOvertimeAvailability" xml:space="preserve">
     <value>Filtrera tillgänglighet för övertid</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Aktuell sida</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exportera</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Hitta</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Hitta nästa</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Hitta text i rapporten</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Första sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Sista sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Nästa</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Nästa sida</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Inga fler förekomster hittades.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>av</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sidinställningar</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Sidbredd</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Förra sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Utskriftsformat</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Skriv ut</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Ladda om</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Sluta generera rapport</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texten hittades inte.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Sidor totalt</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Hela sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zooma</value>
+    <comment>Report Viewer Toolbar</comment>
   </data>
 </root>

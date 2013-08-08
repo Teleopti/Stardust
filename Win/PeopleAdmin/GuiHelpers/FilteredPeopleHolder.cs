@@ -182,11 +182,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _selectedPeoplePeriodGridData; }
         }
 
-        public ReadOnlyCollection<IPersonRotation> NewPersonRotationCollection
-        {
-            get { return new ReadOnlyCollection<IPersonRotation>(_newPersonRotationCollection); }
-        }
-
         public void AddNewPersonRotation(IPersonRotation personRotation)
         {
             InParameter.NotNull("personRotation", personRotation);
@@ -206,11 +201,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
 
             return isDeleted;
-        }
-
-        public ReadOnlyCollection<IPersonAvailability> NewPersonAvailabilityCollection
-        {
-            get { return new ReadOnlyCollection<IPersonAvailability>(_newPersonAvailabilityCollection); }
         }
 
         public void AddNewPersonAvailability(IPersonAvailability personAvailability)
@@ -310,21 +300,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 return trackerCollection;
             }
-        }
-
-        public void AddAbsence(IAbsence absence)
-        {
-            InParameter.NotNull("absence", absence);
-
-            if (!_filteredAbsenceCollection.Contains(absence))
-            {
-                _filteredAbsenceCollection.Add(absence);
-            }
-        }
-
-        public void RemoveAbsence(IAbsence absence)
-        {
-                _filteredAbsenceCollection.Remove(absence);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
@@ -514,14 +489,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         private void LoadTeams()
         {
-            //_teamBindingCollection.Clear();
             _siteTeamBindingCollection.Clear();
             var repository = new TeamRepository(UnitOfWork);
             var list = repository.FindAllTeamByDescription().ToList();
             
             foreach (ITeam item in list)
             {
-                // _teamBindingCollection.Add(item);
                 _siteTeamBindingCollection.Add(EntityConverter.ConvertToOther<ITeam, SiteTeamModel>(item));
             }
         }
@@ -806,21 +779,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void DeletePersonPeriod(int rowIndex, int personPeriodIndex)
-        {
-            IPerson personFiltered = _personPeriodGridViewCollection[rowIndex].Parent;
-
-        	IOrderedEnumerable<IPersonPeriod> sorted = personFiltered.PersonPeriodCollection.OrderByDescending(n2 => n2.StartDate);
-            IList<IPersonPeriod> personPeriodSortedCollection = sorted.ToList();
-
-            IPersonPeriod personPeriod = personPeriodSortedCollection[personPeriodIndex];
-
-            if (personPeriod != null)
-            {
-                personFiltered.DeletePersonPeriod(personPeriod);
-            }
-        }
-
         public void DeletePersonPeriod(int rowIndex, IPersonPeriod personPeriod)
         {
             if (personPeriod == null) return;
@@ -838,21 +796,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             IPerson filteredPerson = _personPeriodGridViewCollection[rowIndex].Parent;
 
             filteredPerson.RemoveAllSchedulePeriods();
-        }
-
-        public void DeleteSchedulePeriod(int rowIndex, int schedulePeriodIndex)
-        {
-            IPerson personFiltered = _schedulePeriodGridViewCollection[rowIndex].Parent;
-
-        	IOrderedEnumerable<ISchedulePeriod> sorted = personFiltered.PersonSchedulePeriodCollection.OrderByDescending(n2 => n2.DateFrom);
-            IList<ISchedulePeriod> schdulePeriodSortedCollection = sorted.ToList();
-
-            ISchedulePeriod schedulePeriod = schdulePeriodSortedCollection[schedulePeriodIndex];
-
-            if (schedulePeriod != null)
-            {
-                personFiltered.RemoveSchedulePeriod(schedulePeriod);
-            }
         }
 
         public void DeleteSchedulePeriod(int rowIndex, DateOnly selectedDate)
@@ -986,21 +929,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         }
 
-        public void UpdateParentPersonAccountAfterAdding(int index)
-        {
-            var accounts = _personAccountGridViewAdaptorCollection[index].Parent;
-
-            //fråga kineserna. fel här
-            IAccount account = accounts.Find(SelectedDate).LastOrDefault();
-
-            if (account != null)
-            {
-                _personAccountGridViewAdaptorCollection.RemoveAt(index);
-                _personAccountGridViewAdaptorCollection.Insert(index, new PersonAccountModel(_refreshService, accounts, account, _commonNameDescription));
-            }
-        }
-
-
         public void GetParentSchedulePeriodWhenUpdated(int rowIndex)
         {
             IPerson personFiltered = _schedulePeriodGridViewCollection[rowIndex].Parent;
@@ -1073,21 +1001,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				_budgetGroupBindingCollection.Add(budgetGroup);
 			}
 		}
-
-        public void AddPersonRotation(IPersonRotation personRotation, int parentRowIndex)
-        {
-            var rep = new PersonRotationRepository(UnitOfWork);
-
-            if (personRotation != null)
-            {
-                rep.Add(personRotation);
-                if (ParentPersonRotationCollection[parentRowIndex] == null)
-                {
-                    _parentPersonRotationCollection[parentRowIndex] = personRotation;
-                }
-                _allPersonRotationCollection.Add(personRotation);
-            }
-        }
 
         public void MarkForRemove(IPerson person)
         {
@@ -1350,35 +1263,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return new ReadOnlyCollection<RolesModel>(_rolesViewAdapterCollection); }
         }
 
-        public void LoadOptionalColumnsGridData()
-        {
-            //remove current association from Uow.
-            foreach (IOptionalColumn oc in _optionalColumnCollection)
-            {
-                UnitOfWork.Remove(oc);
-            }
-            //Load latest optional columns & values 
-           
-           IOptionalColumnRepository optionalColumnRepository =new OptionalColumnRepository(UnitOfWork);
-           _optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
-            
-
-            //Add to filtered ppl collection.
-            foreach (PersonGeneralModel gridData in _filteredPeopleGridData)
-            {
-                gridData.SetOptionalColumns(_optionalColumnCollection);
-            }
-        }
-
         private void LoadSettings()
         {
-			//using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			//{
-			//	ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
-
-			//	_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-			//}
-
 	        IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
 			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
 			_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
@@ -1678,11 +1564,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void ReassociateOptionalColumnCollection()
-        {
-            UnitOfWork.Reassociate(_optionalColumnCollection);
-        }
-
         public void GetParentPersonPeriods()
         {
         	_personPeriodGridViewCollection.Clear();
@@ -1696,18 +1577,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         		                                              _commonNameDescription);
         		_personPeriodGridViewCollection.Add(personPeriodModel);
         	}
-        }
-
-        public void UpdateParentAfterAdding(int index)
-        {
-            IPerson filteredPerson = _personPeriodGridViewCollection[index].Parent;
-
-            _personPeriodGridViewCollection[index] = new PersonPeriodModel(SelectedDate,
-                                                                                     filteredPerson,
-                                                                                     _personSkillCollection,
-                                                                                     _externalLogOnCollection,
-                                                                                     _siteTeamBindingCollection,
-                                                                                     _commonNameDescription);
         }
 
         public void GetParentPersonPeriodWhenUpdated(int rowIndex)
@@ -1780,21 +1649,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         }
 
         public void SetSortedSchedulePeriodFilteredList(IList<SchedulePeriodModel> result)
-        {
-            _schedulePeriodGridViewCollection = result.ToList();
-        }
-
-        public void SetSortedPeopleFilteredList(IEnumerable<PersonGeneralModel> result)
-        {
-            _filteredPeopleGridData = result.ToList();
-        }
-
-        public void SetSortedPersonPeriodFilteredList(IEnumerable<PersonPeriodModel> result)
-        {
-            _personPeriodGridViewCollection = result.ToList();
-        }
-
-        public void SetSortedSchedulePeriodFilteredList(IEnumerable<SchedulePeriodModel> result)
         {
             _schedulePeriodGridViewCollection = result.ToList();
         }

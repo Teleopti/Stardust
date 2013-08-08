@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports.Grid
     {
         private readonly GridControl grid;
         private readonly IList<ScheduleGridColumnBase<T>> _gridColumns;
-        private List<T> _sourceList;
+        private readonly List<T> _sourceList;
         internal int RowCount { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports.Grid
             //overrride standard
             grid.ResizeColsBehavior = GridResizeCellsBehavior.ResizeSingle;
         }
-
-        #region Grid Events
 
         void grid_KeyDown(object sender, KeyEventArgs e)
         {
@@ -67,15 +65,9 @@ namespace Teleopti.Ccc.AgentPortal.Reports.Grid
                 _gridColumns[e.ColIndex].SaveCellInfo(e, new ReadOnlyCollection<T>(_sourceList));
         }
 
-        #endregion
-
-        #region Private
-
         private bool validCell(int columnIndex, int rowIndex)
         {
-            bool ret = false;
-            if (validColumn(columnIndex) && validRow(rowIndex))
-                ret = true;
+            bool ret = validColumn(columnIndex) && validRow(rowIndex);
 
             return ret;
         }
@@ -92,19 +84,9 @@ namespace Teleopti.Ccc.AgentPortal.Reports.Grid
 
         private static bool validRow(int rowIndex)
         {
-            bool ret = false;
-            if (rowIndex >= 0)
-                ret = true;
+            bool ret = rowIndex >= 0;
 
             return ret;
-        }
-
-        #endregion
-
-        public void UpdateDataSource(IList<T> updatedList)
-        {
-            _sourceList = new List<T>(updatedList);
-            RowCount = _sourceList.Count;
         }
     }
 }

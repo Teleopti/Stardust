@@ -215,30 +215,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 			return valid;
 		}
 
-		protected static bool IsOvernight(string time)
-		{
-			bool retValue = string.IsNullOrEmpty(time);
-
-			if (!retValue)
-			{
-				retValue = time.IndexOf("+", StringComparison.CurrentCultureIgnoreCase) > -1;
-			}
-
-			return retValue;
-		}
-
-		/// <summary>
-		/// Changes the specified time into an overnight time.
-		/// </summary>
-		/// <param name="time">A time reference.</param>
-		/// <returns></returns>
-		public static string ToOvernight(string time)
-		{
-			if (!IsOvernight(time)) time += "+1";
-
-			return time;
-		}
-
 		/// <summary>
 		/// Gets the representing week of the day.
 		/// </summary>

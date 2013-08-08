@@ -38,11 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// I click 'add full day absence'
 		// *NOT* I click 'remove' on absence named 'Vacation'
 		[When(@"I click '([a-z|\s]*)'")]
-		public void WhenIClickClass(CssClass cssClass)
+		public void WhenIClickButtonWithClass(CssClass cssClass)
 		{
-			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
+			// enforcing button because of :enabled selector.
+			// if its clickable, it has to be enabled after initialization for robustness
+			// probably have to reevaluate this decision later
+			Browser.Interactions.Click(string.Format("button.{0}:enabled", cssClass.Name));
 		}
-
 
 
 		// I click agent 'mathias stenbom'

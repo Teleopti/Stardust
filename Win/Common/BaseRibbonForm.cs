@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Common.UI.OutlookControls.Workspaces;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -108,6 +107,11 @@ namespace Teleopti.Ccc.Win.Common
         {
             return ViewBase.ShowYesNoMessage(this, text, caption);
         }
+
+		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+		{
+			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
+		}
 
         public void ShowInformationMessage(string text, string caption)
         {
