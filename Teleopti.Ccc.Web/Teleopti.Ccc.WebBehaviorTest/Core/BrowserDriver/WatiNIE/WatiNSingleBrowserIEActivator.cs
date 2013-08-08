@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.MakeNewIeInstanceVisible = true;
 			SetTimeout(timeout);
 			StartBrowser();
-			_interactions = new WatiNIEBrowserInteractions(Internal);
 		}
 
 		public bool IsRunning()
@@ -50,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Internal.ClearCache();
 			Internal.ClearCookies();
 			Internal.BringToFront();
+			_interactions = new WatiNIEBrowserInteractions(Internal);
 		}
 
 		public void NotifyBeforeTestRun()
