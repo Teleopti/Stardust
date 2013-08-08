@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
+﻿using System.Globalization;
+using Teleopti.Ccc.UserTexts;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class BrowserInteractionsJQueryExtensions
 	{
@@ -62,7 +65,22 @@
 			interactions.AssertJavascriptResultContains(js, "not visible but existing");
 		}
 
-
+		public static void AssertFirstContainsResourceTextUsingJQuery(this IBrowserInteractions interactions, string selector, string resourceText)
+		{
+			var english = Resources.ResourceManager.GetString(resourceText, new CultureInfo("en-US"));
+			var swedish = Resources.ResourceManager.GetString(resourceText, new CultureInfo("sv-SE"));
+			var jquery = dollar(selector);
+			var script = f("var jq = {0};", jquery) +
+						 "if (jq.length > 0) {" +
+						 "var text = jq.first().text();" +
+						 f("if (text.indexOf('{0}') > -1) return 'found';", english.JSEncode()) +
+						 f("if (text.indexOf('{0}') > -1) return 'found';", swedish.JSEncode()) +
+						 f("throw \"Cannot find element with selector '{0}' that contains text '{1}' or '{2}' using jquery \";", selector, english, swedish) +
+						 "} else {" +
+						 f("throw \"Cannot find element with selector '{0}' that contains text '{1}' or '{2}' using jquery \";", selector, english, swedish) +
+						 "}";
+			interactions.AssertJavascriptResultContains(script, "found");
+		}
 
 
 		private static string dollar(string selector)
