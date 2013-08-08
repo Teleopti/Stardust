@@ -36,8 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			if (!(Browser.Current.Url.Contains("/Authentication")))
-				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			SignInApplication(userName, TestData.CommonPassword);
 		}
