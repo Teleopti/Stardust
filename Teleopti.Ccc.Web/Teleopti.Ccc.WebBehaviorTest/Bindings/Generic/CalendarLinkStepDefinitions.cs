@@ -27,8 +27,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			};
 			UserFactory.User().Setup(calendarLinkConfigurable);
 		}
-
-
 	}
-
 }

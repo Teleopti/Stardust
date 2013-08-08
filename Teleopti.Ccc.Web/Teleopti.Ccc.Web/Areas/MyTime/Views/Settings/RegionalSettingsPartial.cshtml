@@ -23,8 +23,8 @@
     {
 	    <div class="clearfix">
 		    <div class="btn-group">
-			    <a class="btn btn-large share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</a>
-			    <a class="btn btn-large revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</a>
+			    <button class="btn btn-large share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+			    <button class="btn btn-large revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
 		    </div>
 		    <!-- ko if: CalendarSharingActive() -->
 		    <label>@Resources.ShareMyCalendarHint</label>

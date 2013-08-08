@@ -40,14 +40,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			catch (PermissionException)
 			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
 				return Content("No permission for calendar sharing", "text/plain");
 			}
 			catch (InvalidOperationException)
 			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
 				return Content("Calendar sharing inactive", "text/plain");
 			}
 		}
