@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             var control = panelSchedule.Controls[0] as ScheduleControl;
             if (control != null)
             {
-                ((IAgentScheduleViewBase)control.ScheduleView).Refresh(true);
+                ((IAgentScheduleViewBase)control.ScheduleView).Refresh();
             }
             Cursor = Cursors.Default;
         }
