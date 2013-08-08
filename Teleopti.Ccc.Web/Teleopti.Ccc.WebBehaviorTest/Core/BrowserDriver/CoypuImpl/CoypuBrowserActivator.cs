@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			if (_browser == null) return;
 			_browser.Dispose();
 			_browser = null;
+			_interactions = null;
 		}
 
 		public void NotifyBeforeTestRun()
