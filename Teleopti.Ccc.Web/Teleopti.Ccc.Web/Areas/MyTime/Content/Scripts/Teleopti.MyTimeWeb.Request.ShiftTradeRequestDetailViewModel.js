@@ -33,11 +33,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.ajax.Ajax({
 			url: "Requests/ApproveShiftTrade/" + self.EntityId(),
 			dataType: "json",
+			cache: false,
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
 				self.CanApproveAndDeny(true);
-
 			}
 		});
 	};
@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data,false);
-				self.CanApproveAndDeny(true);
+				self.CanApproveAndDeny(false);
 			}
 		});
 	};
