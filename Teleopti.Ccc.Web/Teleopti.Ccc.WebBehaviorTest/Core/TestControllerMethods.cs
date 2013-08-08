@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
@@ -82,8 +83,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
+			Thread.Sleep(500);
+			//Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			//Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 		}
 
 		public static void TestMessage(string message)

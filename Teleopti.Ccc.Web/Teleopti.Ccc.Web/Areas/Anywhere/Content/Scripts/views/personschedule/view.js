@@ -5,14 +5,16 @@ define([
 		'subscriptions',
 		'helpers',
 		'text!templates/personschedule/view.html',
-        'resizeevent'
+        'resizeevent',
+        'pagelog'
 	], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
 		view,
-	    resize
+	    resize,
+	    log
 	) {
 
 	    var personSchedule;
@@ -20,6 +22,8 @@ define([
 		return {
 			initialize: function (options) {
 
+			    log.log("initialize");
+			    
 				options.renderHtml(view);
 
 				personSchedule = new personScheduleViewModel();
@@ -30,9 +34,12 @@ define([
 			    
 				ko.applyBindings(personSchedule, options.bindingElement);
 
+				log.log("/initialize");
 			},
 		    
 			display: function(options) {
+
+			    log.log("display");
 
 			    var deferred = $.Deferred();
 
@@ -50,13 +57,16 @@ define([
 					options.id,
 					helpers.Date.ToServer(personSchedule.Date()),
 					function (data) {
+					    log.log("subscribePersonSchedule");
 					    resize.notify();
 					    personSchedule.SetData(data);
 					    personSchedule.Loading(false);
 					    deferred.resolve();
+					    log.log("/subscribePersonSchedule");
 					}
 				);
 
+			    log.log("/display");
 			    return deferred.promise();
 			},
 
@@ -70,7 +80,9 @@ define([
             },
 			
             addfulldayabsence: function(options) {
+                log.log("addfulldayabsence");
                 personSchedule.AddingFullDayAbsence(true);
+                log.log("/addfulldayabsence");
             },
 			
             setDateFromTest: function (date) {
