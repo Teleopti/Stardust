@@ -155,7 +155,6 @@
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
-    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
