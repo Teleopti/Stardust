@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class SingleSkillCalculatorTest
 	{
 		private ISingleSkillCalculator _target;
-		private IResourceCalculationDataContainer _emptyContainer;
+		private IResourceCalculationDataContainerWithSingleOperation _emptyContainer;
 
 		[SetUp]
 		public void Setup()
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 	public static class VisualLayerCollectionTestExtensions
 	{
-		public static IResourceCalculationDataContainer ToResourceContainer(this IVisualLayerCollection visualLayerCollection, DateOnly day, int minutesPerInterval)
+		public static IResourceCalculationDataContainerWithSingleOperation ToResourceContainer(this IVisualLayerCollection visualLayerCollection, DateOnly day, int minutesPerInterval)
 		{
 			var resourceLayers = visualLayerCollection.ToResourceLayers(minutesPerInterval);
 			var result = new ResourceCalculationDataContainer(new PersonSkillProvider());
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		public static void AppendToResourceContainer(this IVisualLayerCollection visualLayerCollection,
-													 IResourceCalculationDataContainer container, DateOnly day, int minutesPerInterval)
+													 IResourceCalculationDataContainerWithSingleOperation container, DateOnly day, int minutesPerInterval)
 		{
 			var resourceLayers = visualLayerCollection.ToResourceLayers(minutesPerInterval);
 			

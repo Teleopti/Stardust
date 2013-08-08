@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules);
-			using (new ResourceCalculationContext(resources))
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
 				                      _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min(), _stateHolder.DaysToRecalculate.Max());
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
-			using (new ResourceCalculationContext(resources))
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
 				                      _stateHolder.DaysToRecalculate);

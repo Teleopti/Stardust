@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private IActivityDivider _activityDivider;
 	    private IPersonSkillProvider _personSkillProvider;
-	    private IResourceCalculationDataContainer _resources;
+		private IResourceCalculationDataContainerWithSingleOperation _resources;
 
 	    [SetUp]
         public void Setup()

@@ -50,9 +50,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
-				var relevantProjections = ResourceCalculationContext.Container(_personSkillProvider);
+				var relevantProjections =
+					ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container(
+						() => new ResourceCalculationDataContainer(_personSkillProvider));
 
-				if (!ResourceCalculationContext.InContext)
+				if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
 				{
 					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.Skills.Min(s => s.DefaultResolution));
 					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
@@ -66,7 +68,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			}
 		}
 
-		private void addAndRemoveScheduleDays(IResourceCalculationDataContainer relevantProjections, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
+		private void addAndRemoveScheduleDays(IResourceCalculationDataContainerWithSingleOperation relevantProjections, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
 		{
 			foreach (var scheduleDay in toRemove)
 			{
@@ -102,8 +104,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				                                        ordinarySkills, timePeriod);
 
 			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills,
-			                                                          relevantProjections, new SingleSkillCalculator(),
-			                                                          useOccupancyAdjustment, _personSkillProvider);
+			                                                          relevantProjections, useOccupancyAdjustment, _personSkillProvider);
 
 			schedulingResultService.SchedulingResult(timePeriod);
 
@@ -166,16 +167,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		}
 	}
 
-	public class ResourceCalculationContext : IDisposable
+	public class ResourceCalculationContext<T> : IDisposable where T : class
 	{
-		[ThreadStatic] private static IResourceCalculationDataContainer _container;
+		[ThreadStatic]
+		private static T _container;
 
-		public static IResourceCalculationDataContainer Container(IPersonSkillProvider personSkillProvider)
+		public static T Container(Func<T> createContainer)
 		{
-			return _container ?? new ResourceCalculationDataContainer(personSkillProvider);
+			return _container ?? createContainer();
 		}
 
-		public ResourceCalculationContext(IResourceCalculationDataContainer resources)
+		public ResourceCalculationContext(T resources)
 		{
 			_container = resources;
 		}

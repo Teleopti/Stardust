@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private PersonAssignmentListContainer _testContainer;
         private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
 	    private IPersonSkillProvider _personSkillProvider;
-	    private IResourceCalculationDataContainer _resources;
+		private IResourceCalculationDataContainerWithSingleOperation _resources;
 
 	    [SetUp]
         public void Setup()

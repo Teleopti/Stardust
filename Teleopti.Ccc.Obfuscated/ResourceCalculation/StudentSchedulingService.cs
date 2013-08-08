@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
-	        using (new ResourceCalculationContext(resources))
+	        using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 	        {
 		        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 		        doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,

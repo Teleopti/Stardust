@@ -58,7 +58,7 @@ namespace Teleopti.Interfaces.Domain
 			}
 		}
 
-		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainer resources, IScheduleDay scheduleDay, int minutesSplit)
+		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
 		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 			var resourceLayers = projection.ToResourceLayers(minutesSplit);
@@ -68,7 +68,7 @@ namespace Teleopti.Interfaces.Domain
 			}
 		}
 
-		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainer resources, IScheduleDay scheduleDay, int minutesSplit)
+		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
 		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 			var resourceLayers = projection.ToResourceLayers(minutesSplit);
@@ -79,19 +79,21 @@ namespace Teleopti.Interfaces.Domain
 		}
 	}
 
+	public interface IResourceCalculationDataContainerWithSingleOperation : IResourceCalculationDataContainer
+	{
+		void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
+		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
+	}
+
 	public interface IResourceCalculationDataContainer
 	{
 		void Clear();
 		bool HasItems();
 
-		void AddResources(IPerson person, DateOnly personDate,ResourceLayer resourceLayer);
-
 		Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period);
-		bool AllIsSingleSkill();
 		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
 		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
 		int MinSkillResolution { get; }
-		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 	}
 
 	public struct AffectedSkills

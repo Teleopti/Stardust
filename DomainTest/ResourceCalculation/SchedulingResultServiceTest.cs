@@ -18,14 +18,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private PersonAssignmentListContainer _personAssignmentListContainer;
 		private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
 		private DateTimePeriod _inPeriod;
-		private MockRepository _mocks;
 		private PersonSkillProvider _personSkillProvider;
-		private IResourceCalculationDataContainer _resources;
+		private IResourceCalculationDataContainerWithSingleOperation _resources;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_inPeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 15, 00, DateTimeKind.Utc));
 			_personAssignmentListContainer = PersonAssignmentFactory.CreatePersonAssignmentListForActivityDividerTest();
 			_skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
 				_resources,
-				new SingleSkillCalculator(),
 				false,
 				_personSkillProvider);
 		}
@@ -96,7 +93,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 												  _personAssignmentListContainer.AllSkills,
 												  new ResourceCalculationDataContainer(_personSkillProvider), 
-												  new SingleSkillCalculator(),
 												  false,
 												  _personSkillProvider);
 			Assert.IsNotNull(_target);
@@ -117,80 +113,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
 				_resources,
-				new SingleSkillCalculator(),
 				false,
 				_personSkillProvider);
 
 			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
 			Assert.AreEqual(outDic, _skillStaffPeriods);
-		}
-
-		[Test]
-		public void ShouldNotUseSingleSkillCalculationOnNoInputDays()
-		{
-			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-
-			var res = _target.UseSingleSkillCalculations(toRemove, toAdd);
-			Assert.IsFalse(res);
-		}
-
-		[Test]
-		public void ShouldNotUseSingleSkillCalculationsWhenToRemoveIsNotSingleSkilled()
-		{
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			
-			using (_mocks.Record())
-			{
-			}
-
-			using (_mocks.Playback())
-			{
-				var res = _target.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsFalse(res);
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "AddIs"), Test]
-		public void ShouldNotUseSingleSkillCalculationsWhenToAddIsNotSingleSkilled()
-		{
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-
-			using (_mocks.Record())
-			{
-			}
-
-			using (_mocks.Playback())
-			{
-				var res = _target.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsFalse(res);
-			}
-		}
-
-		[Test]
-		public void ShouldUseSingleSkillCalculationsWhenToAddAndToRemoveIsSingleSkilled()
-		{
-			_target = new SchedulingResultService(_skillStaffPeriods, _personAssignmentListContainer.AllSkills, _resources, new SingleSkillCalculator(), false, _personSkillProvider);
-			var toAdd = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-			var toRemove = _mocks.DynamicMock<IResourceCalculationDataContainer>();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(toAdd.HasItems()).Return(true);
-				Expect.Call(toAdd.AllIsSingleSkill()).Return(true);
-				Expect.Call(toRemove.AllIsSingleSkill()).Return(true);
-			}
-
-			using (_mocks.Playback())
-			{
-				var res = _target.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsTrue(res);
-			}
 		}
 	}
 }

@@ -5,24 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
+	public class ResourceCalculationDataContainerFromStorage : IResourceCalculationDataContainer
 	{
-		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IDictionary<DateTimePeriod, PeriodResource> _dictionary = new Dictionary<DateTimePeriod, PeriodResource>();
-		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
+		private readonly IDictionary<string, IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
 		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>();
-		
-		private int _minSkillResolution = 60;
 
-		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider)
-		{
-			_personSkillProvider = personSkillProvider;
-		}
-
-		public int MinSkillResolution
-		{
-			get { return _minSkillResolution; }
-		}
+		public int MinSkillResolution { get; private set; }
 
 		public void Clear()
 		{
@@ -34,51 +23,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _dictionary.Count > 0;
 		}
 
-		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
+		public void AddResources(ResourcesFromStorage resources)
 		{
-			PeriodResource resources;
-			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
-			{
-				resources = new PeriodResource();
-				_dictionary.Add(resourceLayer.Period, resources);
-			}
+			var command = new TransformResourcesFromStorageCommand(resources);
+			command.Execute();
 
-			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
-			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
-			if (!_skills.ContainsKey(skills.Key))
-			{
-				if (skills.Skills.Any())
-				{
-					int minResolution = skills.Skills.Min(s => s.DefaultResolution);
-					if (minResolution < MinSkillResolution)
-					{
-						_minSkillResolution = minResolution;
-					}
-				}
-				_skills.Add(skills.Key,skills.Skills);
-			}
-			if (resourceLayer.RequiresSeat)
-			{
-				_activityRequiresSeat.Add(resourceLayer.PayloadId);
-			}
-			resources.AppendResource(key, skills, 1d, resourceLayer.Resource);
+			resources.Transfer(_skills, _activityRequiresSeat, _dictionary);
+			MinSkillResolution = resources.MinSkillResolution;
 		}
 
-		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
-		{
-			PeriodResource resources;
-			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
-			{
-				return;
-			}
-
-			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
-			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
-
-			resources.RemoveResource(key, skills, resourceLayer.Resource);
-		}
-
-		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
+		public Tuple<double, double> SkillResources(ISkill skill, DateTimePeriod period)
 		{
 			var skillKey = skill.Id.GetValueOrDefault();
 			var activityKey = string.Empty;
@@ -150,12 +104,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 									}
 								}
 								value = new AffectedSkills
-									{
-										Skills = skills,
-										Resource = value.Resource + pair.Resource.Resource,
-										Count = value.Count + pair.Resource.Count,
-										SkillEffiencies = pair.Effiencies
-									};
+								{
+									Skills = skills,
+									Resource = value.Resource + pair.Resource.Resource,
+									Count = value.Count + pair.Resource.Count,
+									SkillEffiencies = pair.Effiencies
+								};
 							}
 							else
 							{

@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -47,7 +45,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 																										   skillDaysDictionary))
 				{
 					ISchedulingResultService schedulingResultService =
-						new SchedulingResultService(schedulingResultStateHolder, skills, new SingleSkillCalculator(), false, new PersonSkillProvider());
+						new SchedulingResultService(schedulingResultStateHolder, skills, false, new PersonSkillProvider());
 					DateTimePeriod visiblePeriod = scheduleDictionary.Period.VisiblePeriod;
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
 						new ScheduleForecastSkillResourceCalculation(skillDaysDictionary, schedulingResultService,
