@@ -11,10 +11,10 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {
@@ -53,23 +53,37 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRepository.Get(calendarLinkId.PersonId);
 
-				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
-				_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
-				if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-					throw new PermissionException("No permission for calendar sharing");
+				checkPermission(person, dataSource, uow, personRepository);
+				checkStatus(uow, person);
 
-				var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
-				var calendarLinkSettings =
-					new CalendarLinkSettingsPersisterAndProvider(personalSettingDataRepository).GetByOwner(person);
-				if (!calendarLinkSettings.IsActive)
-					throw new InvalidOperationException("Calendar sharing inactive");
-
-				var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-				var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(start),
-				                                                              _now.DateOnly().AddDays(end), calendarLinkId.PersonId);
-
+				var scheduleDays = getScheduleDays(calendarLinkId, uow);
 				return generateCalendar(scheduleDays);
 			}
+		}
+
+		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow)
+		{
+			var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
+			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(start),
+			                                                              _now.DateOnly().AddDays(end), calendarLinkId.PersonId);
+			return scheduleDays;
+		}
+
+		private void checkStatus(IUnitOfWork uow, IPerson person)
+		{
+			var personalSettingDataRepository = _repositoryFactory.CreatePersonalSettingDataRepository(uow);
+			var calendarLinkSettings =
+				new CalendarLinkSettingsPersisterAndProvider(personalSettingDataRepository).GetByOwner(person);
+			if (!calendarLinkSettings.IsActive)
+				throw new InvalidOperationException("Calendar sharing inactive");
+		}
+
+		private void checkPermission(IPerson person, IDataSource dataSource, IUnitOfWork uow, IPersonRepository personRepository)
+		{
+			_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
+			_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
+			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
+				throw new PermissionException("No permission for calendar sharing");
 		}
 
 		private string generateCalendar(IEnumerable<PersonScheduleDayReadModel> scheduleDays)
