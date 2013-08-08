@@ -232,9 +232,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual double TotalTasks
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalTasks; }
+                return _totalTasks;
+            }
         }
 
         /// <summary>
@@ -602,7 +604,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             RecalculateDailyAverageCampaignTimes();
             RecalculateDailyStatisticTasks();
             RecalculateDailyAverageStatisticTimes();
-            
+
             _initialized = true;
         }
 
@@ -642,8 +644,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (averageAfterTaskTimeTicks == 0) averageAfterTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
                 ValueDistributor.DistributeTaskTimes(
                     ((double)value.Ticks / averageAfterTaskTimeTicks),
-                    TaskOwnerDayOpenCollection(), 
-                    TaskFieldToDistribute.AverageAfterTaskTime);
+                    TaskOwnerDayOpenCollection(),
+                    TaskFieldToDistribute.AverageAfterTaskTime, value.Ticks);
 
                 _averageAfterTaskTime = value;
 
@@ -656,7 +658,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void checkIsLoaded()
         {
-            if (!IsLoaded) 
+            if (!IsLoaded)
                 throw new InvalidOperationException("The workload period must contain workload days before using this operation.");
         }
 
@@ -684,7 +686,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 ValueDistributor.DistributeTaskTimes(
                     ((double)value.Ticks / averageTaskTimeTicks),
                     TaskOwnerDayOpenCollection(),
-                    TaskFieldToDistribute.AverageTaskTime);
+                    TaskFieldToDistribute.AverageTaskTime, value.Ticks);
 
                 _averageTaskTime = value;
 
@@ -763,7 +765,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     IsOpenForIncomingWork =
                         _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork),
-                    IsOpen = _taskOwnerDayCollection.Any(wd=>wd.OpenForWork.IsOpen)
+                    IsOpen = _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpen)
                 };
             }
         }
@@ -852,9 +854,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public double TotalStatisticCalculatedTasks
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalStatisticCalculatedTasks; }
+                return _totalStatisticCalculatedTasks;
+            }
         }
 
         /// <summary>
@@ -867,9 +871,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public double TotalStatisticAnsweredTasks
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalStatisticAnsweredTasks; }
+                return _totalStatisticAnsweredTasks;
+            }
         }
 
         /// <summary>
@@ -882,9 +888,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public double TotalStatisticAbandonedTasks
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalStatisticAbandonedTasks; }
+                return _totalStatisticAbandonedTasks;
+            }
         }
 
         /// <summary>
@@ -897,9 +905,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public TimeSpan TotalStatisticAverageTaskTime
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalStatisticAverageTaskTime; }
+                return _totalStatisticAverageTaskTime;
+            }
         }
 
         /// <summary>
@@ -912,9 +922,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public TimeSpan TotalStatisticAverageAfterTaskTime
         {
-            get {
+            get
+            {
                 if (!_initialized) Initialize();
-                return _totalStatisticAverageAfterTaskTime; }
+                return _totalStatisticAverageAfterTaskTime;
+            }
         }
 
         /// <summary>
@@ -1079,7 +1091,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void checkIfIsClosed()
         {
-            if (!OpenForWork.IsOpen) 
+            if (!OpenForWork.IsOpen)
                 throw new InvalidOperationException("Workload day must be open.");
         }
 

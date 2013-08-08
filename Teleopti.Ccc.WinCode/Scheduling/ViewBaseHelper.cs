@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         ///  Created by: Ola
         ///  Created date: 2008-08-25    
         /// /// </remarks>
-        public static string GetToolTipBusinessRuleConflicts(ISchedulePart cell)
+				public static string GetToolTipBusinessRuleConflicts(IScheduleDay cell)
         {
             StringBuilder sb = new StringBuilder();
             int longest = 0;
@@ -118,25 +118,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="cell"></param>
         /// <returns></returns>
-        public static string GetToolTipConflictingAssignments(ISchedulePart cell)
+				public static string GetToolTipConflictingAssignments(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+					//todo: probably another type of conflict information here if schedules are overlapping
+						//StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> conflicts = cell.PersonAssignmentConflictCollection;
-            if (conflicts.Count > 0)
-            {
-                foreach (IPersonAssignment pa in conflicts)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-                    if(pa.ShiftCategory != null)
-                        sb.Append(pa.ShiftCategory.Description.Name);             //name
-                    sb.Append("  ");
-                    sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
-                }
-            }
+						//IList<IPersonAssignment> conflicts = cell.PersonAssignmentConflictCollection;
+						//if (conflicts.Count > 0)
+						//{
+						//		foreach (IPersonAssignment pa in conflicts)
+						//		{
+						//				if (sb.Length > 0) sb.AppendLine();
+						//				if(pa.ShiftCategory != null)
+						//						sb.Append(pa.ShiftCategory.Description.Name);             //name
+						//				sb.Append("  ");
+						//				sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
+						//		}
+						//}
 
-            if (sb.Length > 0)
-                return string.Format(CultureInfo.CurrentUICulture, "{0}{1}({2})",UserTexts.Resources.OverlappningShifts, Environment.NewLine, sb);
+						//if (sb.Length > 0)
+						//		return string.Format(CultureInfo.CurrentUICulture, "{0}{1}({2})",UserTexts.Resources.OverlappningShifts, Environment.NewLine, sb);
             return string.Empty;
         }
 
@@ -174,36 +175,36 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
-            if (asses.Count > 0)
-            {
-                foreach (IPersonAssignment pa in asses)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-                    if(pa.ShiftCategory != null)
-                        sb.Append(pa.ShiftCategory.Description.Name);             //name
-                    sb.Append("  ");
-                    sb.Append(ToLocalStartEndTimeString(pa.Period,scheduleDay.TimeZone));      //time
+            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
+	        if (asses.Count > 0)
+	        {
+		        foreach (IPersonAssignment pa in asses)
+		        {
+			        if (sb.Length > 0)
+				        sb.AppendLine();
+			        if (pa.ShiftCategory != null)
+				        sb.Append(pa.ShiftCategory.Description.Name); //name
+			        sb.Append("  ");
+			        sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
 
-                    foreach(PersonalShift ps in pa.PersonalShiftCollection) 
-                    {
-                        sb.AppendLine();
-                        sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-                        foreach (ActivityLayer layer in ps.LayerCollection)
-                        {
-                            sb.AppendLine();
-                            sb.Append("    ");
-                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).Name);                                  //name
-                            sb.Append(": ");
-                            sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone));             //time
-                        }
-                    }
-                }
-            }
+			        foreach (var layer in pa.PersonalLayers())
+			        {
+				        sb.AppendLine();
+				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
 
-            return sb.ToString();
+				        sb.AppendLine();
+				        sb.Append("    ");
+				        sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+					        //name
+				        sb.Append(": ");
+				        sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone)); //time
+			        }
+		        }
+	        }
+
+	        return sb.ToString();
         }
 
         /// <summary>
@@ -236,7 +237,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="cell"></param>
         /// <returns></returns>
-        public static string GetToolTipMeetings(ISchedulePart cell)
+				public static string GetToolTipMeetings(IScheduleDay cell)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -249,7 +250,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             	sb.Append(ToLocalStartEndTimeString(personMeeting.Period, cell.TimeZone));
 
                 if (personMeeting.Optional)
-                    sb.AppendFormat(" ({0})", UserTexts.Resources.Optional);
+                    sb.AppendFormat(" ({0})", Resources.Optional);
             }
 
             return sb.ToString();
@@ -285,7 +286,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         /// <param name="cell"></param>
         /// <returns></returns>
-        public static string GetToolTipDayOff(ISchedulePart cell)
+				public static string GetToolTipDayOff(IScheduleDay cell)
         {
 			StringBuilder sb = new StringBuilder();
         	var culture = TeleoptiPrincipal.Current.Regional.Culture;
@@ -713,7 +714,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <param name="part">The part.</param>
         /// <param name="layerCollection">The layer collection.</param>
         /// <returns></returns>
-        public static DisplayMode GetAbsenceDisplayMode(IPersonAbsence pa, ISchedulePart part, IVisualLayerCollection layerCollection)
+				public static DisplayMode GetAbsenceDisplayMode(IPersonAbsence pa, IScheduleDay part, IVisualLayerCollection layerCollection)
         {
             DateTimePeriod period = pa.Layer.Period;
             DateTimePeriod datePeriod = part.Period;
@@ -746,7 +747,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <param name="pa">The pa.</param>
         /// <param name="part">The part.</param>
         /// <returns></returns>
-        public static DisplayMode GetAssignmentDisplayMode(IPeriodized pa, ISchedulePart part)
+				public static DisplayMode GetAssignmentDisplayMode(IPeriodized pa, IScheduleDay part)
         {
             DateTimePeriod period = pa.Period;
             DateTimePeriod datePeriod = part.Period;
@@ -779,7 +780,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             string periodText = string.Empty;
             string timeText = string.Empty;
 
-            IPersonAssignment pa = schedulePart.AssignmentHighZOrder();
+            IPersonAssignment pa = schedulePart.PersonAssignment();
 
             if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
             {

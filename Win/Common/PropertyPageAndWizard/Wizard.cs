@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 {
-    public partial class Wizard : BaseRibbonForm
+    public partial class Wizard : BaseDialogForm
     {
         private readonly IAbstractPropertyPages _propertyPages;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
             splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
             splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
             gradientPanel1.BackgroundColor = ColorHelper.WizardHeaderBrush;
+			
             }
 
         public Wizard(IAbstractPropertyPages propertyPages) : this()

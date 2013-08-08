@@ -1,8 +1,10 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -20,21 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void Setup()
         {
             target = new LayerCollection<IActivity>();
-        }
-
-        /// <summary>
-        /// Verifies the parent works.
-        /// </summary>
-        [Test]
-        public void VerifyParentWorksWhenLayerIsAdded()
-        {
-	        var dummyShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("hopp"),
-	                                                                  new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-            var actLay =
-                new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
-                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-            dummyShift.LayerCollection.Add(actLay);
-            Assert.AreSame(dummyShift, actLay.Parent);
         }
 
         /// <summary>

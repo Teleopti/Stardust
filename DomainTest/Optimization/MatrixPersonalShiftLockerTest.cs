@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -21,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
         private IPersonAssignment _personAssignment;
-        private IPersonalShift _personalShift;
         private IList<IScheduleMatrixPro> _scheduleMatrixList;
 
         [SetUp]
@@ -34,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_scheduleDay1 = _mockRepository.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mockRepository.StrictMock<IScheduleDay>();
 			_personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-			_personalShift = _mockRepository.StrictMock<IPersonalShift>();
             _scheduleMatrixList = new List<IScheduleMatrixPro>{ _scheduleMatrix };
             _target = new MatrixPersonalShiftLocker(_scheduleMatrixList);
         }
@@ -52,15 +48,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalShiftCollection).Return(
-                    new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift>()));
+                Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
+	            Expect.Call(_personAssignment.PersonalLayers()).Return(new List<IPersonalShiftLayer>());
 
                 Expect.Call(_scheduleDayPro2.DaySchedulePart())
                     .Return(_scheduleDay2);
-                Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(_personAssignment.PersonalShiftCollection).Return(
-                    new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> {_personalShift}));
+                Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
+								Expect.Call(_personAssignment.PersonalLayers()).Return(new List<IPersonalShiftLayer> {MockRepository.GenerateMock<IPersonalShiftLayer>()});
                 Expect.Call(_scheduleDayPro2.Day)
                     .Return(new DateOnly(lockDate))
                     .Repeat.Times(2);
@@ -84,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.AssignmentHighZOrder())
+                Expect.Call(_scheduleDay1.PersonAssignment())
                     .Return(null).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())

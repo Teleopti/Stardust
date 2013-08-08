@@ -263,6 +263,7 @@
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
+    <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
@@ -462,6 +463,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\PolicyForPassword.xml" />
+    <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_Sw_Forecasts.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_En_St.txt" />

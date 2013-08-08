@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				foreach (IScheduleDay addedSchedule in toAdd)
 				{
 					
-					var removedPersonAssignment = addedSchedule.AssignmentHighZOrder();
+					var removedPersonAssignment = addedSchedule.PersonAssignment();
 					if (removedPersonAssignment == null)
 						continue;
 					IVisualLayerCollection collection = removedPersonAssignment.ProjectionService().CreateProjection();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				IList<IVisualLayerCollection> removedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay removedSchedule in toRemove)
 				{
-				    var addedPersonAssignment = removedSchedule.AssignmentHighZOrder();
+				    var addedPersonAssignment = removedSchedule.PersonAssignment();
                     if (addedPersonAssignment == null) continue;
                     IVisualLayerCollection collection = addedPersonAssignment.ProjectionService().CreateProjection();
 					removedVisualLayerCollections.Add(collection);

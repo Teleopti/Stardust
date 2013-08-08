@@ -108,10 +108,8 @@
     <Compile Include="FakeData\LicenseDataFactory.cs" />
     <Compile Include="FakeData\MultiplicatorDefinitionSetFactory.cs" />
     <Compile Include="FakeData\MultiplicatorFactory.cs" />
-    <Compile Include="FakeData\OvertimeShiftFactory.cs" />
     <Compile Include="FakeData\PartTimePercentageFactory.cs" />
     <Compile Include="FakeData\PersonAbsenceFactory.cs" />
-    <Compile Include="FakeData\PersonalShiftFactory.cs" />
     <Compile Include="FakeData\PersonAssignmentFactory.cs" />
     <Compile Include="FakeData\PersonContractFactory.cs" />
     <Compile Include="FakeData\PersonDayOffFactory.cs" />

@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 if (!studentAvailabilityDays.IsEmpty())
                     dto.StudentAvailabilityDay = _studentAvailabilityDayAssembler.DomainEntityToDto(studentAvailabilityDays.First());
 
-                var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
+                var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
                 var personMeetingCollection = scheduleDay.PersonMeetingCollection();
 
                 var significant = scheduleDay.SignificantPartForDisplay();

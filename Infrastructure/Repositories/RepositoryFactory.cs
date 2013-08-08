@@ -248,6 +248,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new StudentAvailabilityDayRepository(unitOfWork);
         }
 
+        public IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork)
+        {
+            return new OvertimeAvailabilityRepository(unitOfWork );
+        }
+
         public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)
         {
             return new WorkShiftRuleSetRepository(unitOfWork);

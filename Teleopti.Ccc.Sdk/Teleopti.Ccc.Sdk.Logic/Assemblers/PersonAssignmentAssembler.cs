@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     {
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
         private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
-        private readonly IActivityLayerAssembler<IPersonalShiftActivityLayer> _personalActivityLayerAssembler;
+        private readonly IActivityLayerAssembler<IPersonalShiftLayer> _personalActivityLayerAssembler;
         private readonly IOvertimeLayerAssembler _overtimeShiftLayerAssembler;
 
-        public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftActivityLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
+        public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
         {
             _shiftCategoryRepository = shiftCategoryRepository;
             _mainActivityLayerAssembler = mainActivityLayerAssembler;
@@ -34,17 +34,22 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             };
 					if (entity.ShiftCategory != null)
 					{
-						retDto.MainShift = CreateMainShiftDto(entity.MainShiftLayers, entity.ShiftCategory, entity.Person);						
+						retDto.MainShift = CreateMainShiftDto(entity.MainLayers(), entity.ShiftCategory, entity.Person);						
 					}
-            foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)
-            {
-                retDto.PersonalShiftCollection.Add(CreatePersonalShiftDto(personalShift, entity.Person));
-            }
-            foreach (IOvertimeShift overtimeShift in entity.OvertimeShiftCollection)
-            {
-                retDto.OvertimeShiftCollection.Add(CreateOvertimeShiftDto(overtimeShift, entity.Person));
-            }
+	        var personalLayers = entity.PersonalLayers();
+					if (personalLayers.Any())
+					{
+						var personalShift = CreatePersonalShiftDto(personalLayers, entity.Person);
+						retDto.PersonalShiftCollection.Add(personalShift);
+					}
+	        var overtimeLayers = entity.OvertimeLayers();
+					if (overtimeLayers.Any())
+					{
+						var overtimeShift = CreateOvertimeShiftDto(overtimeLayers, entity.Person);
+						retDto.OvertimeShiftCollection.Add(overtimeShift);
+					}
 
+            
             return retDto;
         }
 
@@ -67,10 +72,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             foreach (var persShiftDto in dto.PersonalShiftCollection)
             {
-                IPersonalShift shift = new PersonalShift();
-                shift.SetId(persShiftDto.Id);
-                addLayersToPersonalShift(shift, persShiftDto.LayerCollection);
-                assignment.AddPersonalShift(shift);
+	            var layersDomain = _personalActivityLayerAssembler.DtosToDomainEntities(persShiftDto.LayerCollection);
+	            foreach (var layer in layersDomain)
+	            {
+		            assignment.AddPersonalLayer(layer.Payload, layer.Period);
+	            }
             }
         }
 
@@ -78,10 +84,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             foreach (var overtimeShiftDto in dto.OvertimeShiftCollection)
             {
-                IOvertimeShift shift = new OvertimeShift();
-                shift.SetId(overtimeShiftDto.Id);
-                assignment.AddOvertimeShift(shift);
-                addLayersToOvertimeShift(shift, overtimeShiftDto.LayerCollection.OfType<OvertimeLayerDto>());
+							var layersDomain = _overtimeShiftLayerAssembler.DtosToDomainEntities(overtimeShiftDto.LayerCollection.OfType<OvertimeLayerDto>());
+	            foreach (var layer in layersDomain)
+	            {
+		            assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+	            }
             }
         }
 
@@ -95,17 +102,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	            _mainActivityLayerAssembler.DtosToDomainEntities(dto.MainShift.LayerCollection).ForEach(layers.Add);
 							assignment.SetMainShiftLayers(layers, shiftCategory);
             }
-        }
-
-        //merge this one with addLaysersToMainshift when we only have one type of activitylayer
-        private void addLayersToPersonalShift(IPersonalShift personalShift, IEnumerable<ActivityLayerDto> layerDtos)
-        {
-            _personalActivityLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(personalShift.LayerCollection.Add);
-        }
-
-        private void addLayersToOvertimeShift(IOvertimeShift overtimeShift, IEnumerable<OvertimeLayerDto> layerDtos)
-        {
-            _overtimeShiftLayerAssembler.DtosToDomainEntities(layerDtos).ForEach(overtimeShift.LayerCollection.Add);
         }
 
         private MainShiftDto CreateMainShiftDto(IEnumerable<IMainShiftLayer> mainShiftLayers, IShiftCategory shiftCategory, IPerson shiftOwner)
@@ -124,25 +120,23 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return retDto;
         }
 
-        private ShiftDto CreatePersonalShiftDto(IPersonalShift personalShift, IPerson shiftOwner)
+        private ShiftDto CreatePersonalShiftDto(IEnumerable<IPersonalShiftLayer> personalLayers, IPerson shiftOwner)
         {
             ShiftDto retDto = new ShiftDto();
-            retDto.Id = personalShift.Id.Value;
 
             _personalActivityLayerAssembler.SetCurrentPerson(shiftOwner);
-            var layers = _personalActivityLayerAssembler.DomainEntitiesToDtos(personalShift.LayerCollection.OfType<IPersonalShiftActivityLayer>());
+            var layers = _personalActivityLayerAssembler.DomainEntitiesToDtos(personalLayers);
             layers.ForEach(retDto.LayerCollection.Add);
 
             return retDto;
         }
 
-        private ShiftDto CreateOvertimeShiftDto(IOvertimeShift overtimeShift, IPerson shiftOwner)
+        private ShiftDto CreateOvertimeShiftDto(IEnumerable<IOvertimeShiftLayer> overtimeLayers, IPerson shiftOwner)
         {
             ShiftDto retDto = new ShiftDto();
-            retDto.Id = overtimeShift.Id.Value;
             
             _overtimeShiftLayerAssembler.SetCurrentPerson(shiftOwner);
-            var layers = _overtimeShiftLayerAssembler.DomainEntitiesToDtos(overtimeShift.LayerCollection.OfType<IOvertimeShiftActivityLayer>());
+						var layers = _overtimeShiftLayerAssembler.DomainEntitiesToDtos(overtimeLayers);
             layers.ForEach(retDto.LayerCollection.Add);
 
             return retDto;

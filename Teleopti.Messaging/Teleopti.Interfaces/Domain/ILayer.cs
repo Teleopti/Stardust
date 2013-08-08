@@ -1,12 +1,6 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
-	/// 
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public interface IPersistedLayer<T> : ILayer<T>, IAggregateEntity
-	{ }
-	/// <summary>
 	/// Base class for all layers
 	/// </summary>
 	/// <typeparam name="T">The type of the "payload"</typeparam>

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -54,6 +55,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			outlookTimePickerStartTime.SelectedIndexChanged += OutlookTimePickerStartTimeSelectedIndexChanged;
 			outlookTimePickerEndTime.SelectedIndexChanged += OutlookTimePickerEndTimeSelectedIndexChanged;
 
+            dateTimePickerAdvEndDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            dateTimePickerAdvStartDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
             

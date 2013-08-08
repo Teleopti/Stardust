@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Expect.Call(_part.PersonDayOffCollection()).Return(dayOffCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
-			Expect.Call(_part.PersonAssignmentCollection()).Return(assCollection).Repeat.AtLeastOnce();
+			Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(assCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
 
 			_mocks.ReplayAll();

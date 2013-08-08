@@ -46,7 +46,8 @@
     	public const string ViewRestrictedScenario = "0061";
     	public const string ModifyRestrictedScenario = "0062";
     	public const string ViewActiveAgents = "0086";
-        
+        public const string OvertimeAvailability = "0087";
+
         // PersonAdmin
         public const string ModifyPersonNameAndPassword = "0007";
         public const string ModifyGroupPage = "0037";

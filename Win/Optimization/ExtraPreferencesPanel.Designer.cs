@@ -1,34 +1,34 @@
 ﻿namespace Teleopti.Ccc.Win.Optimization
 {
-	partial class ExtraPreferencesPanel
-	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class ExtraPreferencesPanel
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShift"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShift"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
+        private void InitializeComponent()
+        {
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxTeamBlockPerBlockScheduling = new System.Windows.Forms.CheckBox();
@@ -253,7 +253,7 @@
 			// checkBoxTeamBlockSameShift
 			// 
 			this.checkBoxTeamBlockSameShift.AutoSize = true;
-			this.checkBoxTeamBlockSameShift.Enabled = false;
+	        this.checkBoxTeamBlockSameShift.Enabled = false;
 			this.checkBoxTeamBlockSameShift.Location = new System.Drawing.Point(33, 82);
 			this.checkBoxTeamBlockSameShift.Name = "checkBoxTeamBlockSameShift";
 			this.checkBoxTeamBlockSameShift.Size = new System.Drawing.Size(84, 17);
@@ -319,8 +319,8 @@
 			// 
 			// trackBar1
 			// 
-			this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.trackBar1.BackColor = System.Drawing.SystemColors.Window;
 			this.trackBar1.Location = new System.Drawing.Point(6, 15);
 			this.trackBar1.Maximum = 100;
@@ -384,32 +384,32 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupPageOnCompareWith)).EndInit();
 			this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-		private System.Windows.Forms.CheckBox checkBoxTeams;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnTeams;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TrackBar trackBar1;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnCompareWith;
-		private System.Windows.Forms.Label labelCompareWith;
-		private System.Windows.Forms.Label labelFairness;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.CheckBox checkBoxTeams;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnTeams;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnCompareWith;
+        private System.Windows.Forms.Label labelCompareWith;
+        private System.Windows.Forms.Label labelFairness;
 		private System.Windows.Forms.CheckBox checkBoxCommonCategory;
 		private System.Windows.Forms.CheckBox checkBoxCommonStart;
 		private System.Windows.Forms.CheckBox checkBoxCommonEnd;
-		private System.Windows.Forms.CheckBox checkBoxKeepWeekEndsTogether;
-		private System.Windows.Forms.CheckBox checkBoxCommonActivity;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
-		private System.Windows.Forms.CheckBox checkBoxTeamBlockPerBlockScheduling;
-		private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShiftCategory;
-		private System.Windows.Forms.CheckBox checkBoxSameStartTime;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
-		private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShift;
-	}
+        private System.Windows.Forms.CheckBox checkBoxKeepWeekEndsTogether;
+        private System.Windows.Forms.CheckBox checkBoxCommonActivity;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockPerBlockScheduling;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShiftCategory;
+        private System.Windows.Forms.CheckBox checkBoxSameStartTime;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShift;
+    }
 }

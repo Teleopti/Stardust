@@ -12,26 +12,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private string _headerText;
-        private string _bindingProperty;
-
-        public PercentageCellColumnForSchedulePeriod(string bindingProperty, string headerText)
+        private readonly string _headerText;
+        
+        public PercentageCellColumnForSchedulePeriod(string bindingProperty, string headerText) : base(bindingProperty,110)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 110; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -41,15 +26,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -64,7 +40,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 e.Style.CellType = GridCellModelConstants.CellTypePercentCell;
 
                 T dataItem = dataItems[e.RowIndex - 1];
-                object obj = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object obj = _propertyReflector.GetValue(dataItem, BindingProperty);
 
                 Percent value = (Percent)obj;
 
@@ -92,7 +68,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 if (value.Value < -1 || value.Value > 1)
                     return;
                 
-                _propertyReflector.SetValue(dataItem, _bindingProperty, value);
+                _propertyReflector.SetValue(dataItem, BindingProperty, value);
                 OnCellChanged(dataItem, e);
                 e.Handled = true;
             }

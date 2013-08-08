@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollection())
+                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
                 {
                     if (ass.ShiftCategory != null)
                     {

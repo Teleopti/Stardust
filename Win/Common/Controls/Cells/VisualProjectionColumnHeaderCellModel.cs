@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;

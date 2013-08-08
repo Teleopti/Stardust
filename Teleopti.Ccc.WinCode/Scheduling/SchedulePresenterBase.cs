@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool TryModify(IList<IScheduleDay> scheduleParts, IScheduleTag scheduleTag);
 
         void UpdateRestriction();
+	    void UpdateOvertimeAvailability();
         void UpdateNoteFromEditor();
         void UpdatePublicNoteFromEditor();
         void UpdateFromEditor();
@@ -330,21 +331,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void ApplyGridSort()
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
-
+		
 			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			if (IsAscendingSort)
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType) _currentSortColumn), comparer).ToList();
+			}
 			else
-				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			{
+				sortedFilteredPersonDictionary = SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType) _currentSortColumn), comparer).ToList();	
+			}
 
-
-			SchedulerState.FilteredPersonDictionary.Clear();
+			SchedulerState.FilteredAgentsDictionary.Clear();
 			foreach (var keyValuePair in sortedFilteredPersonDictionary)
 			{
-				SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
 			}
+
 		}
 
         /// <summary>
@@ -356,6 +361,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             // Resort _schedulerState.FilteredPersonDictionary
             List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
+
             if (_currentSortColumn != column || !_isAscendingSort)
             {
                 // removed as bugfix: 15718
@@ -366,9 +372,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
-                
+
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
+		 
                 IsAscendingSort = true;
             }
             else
@@ -381,24 +389,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 // added as bugfix: 15718
                 CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-                sortedFilteredPersonDictionary =
-                    SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
- 
+		
+				sortedFilteredPersonDictionary =
+					SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+
                 IsAscendingSort = false;
             }
             _currentSortColumn = column;
             SortCommand = new NoSortCommand(_schedulerState);
 
-            if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredPersonDictionary))
-            {
-                return false;
-            }
+			if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredAgentsDictionary))
+			{
+				return false;
+			}
 
-            SchedulerState.FilteredPersonDictionary.Clear();
-            foreach (var keyValuePair in sortedFilteredPersonDictionary)
-            {
-                SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
-            }
+			SchedulerState.FilteredAgentsDictionary.Clear();
+			foreach (var keyValuePair in sortedFilteredPersonDictionary)
+			{
+				SchedulerState.FilteredAgentsDictionary.Add(keyValuePair);
+			}
 
             return true;
         }
@@ -489,8 +498,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, localDate.Date, true, false, daySchedule);
-                    //set zorder
-                    SetAssignmentZorder(daySchedule);
                 }
             }
         }
@@ -514,20 +521,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         internal static bool IsInsidePersonPeriod(IScheduleDay schedulePart)
         {
             return (schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly) != null);
-        }
-
-        //To ensure that visible assignment is still on top if we change other assignments on that day
-        internal static void SetAssignmentZorder(IScheduleDay part)
-        {
-            //check if we have set the zorder on any assignment
-            var personAssignments = part.PersonAssignmentCollection();
-            IPersonAssignment assignmentWithZOrderSet = personAssignments.FirstOrDefault(pa => pa.ZOrder != DateTime.MinValue);
-
-            //if we havent set zorder we set first to have highest zorder
-            IPersonAssignment firstPersonAssignment = personAssignments.FirstOrDefault();
-            if (assignmentWithZOrderSet == null && firstPersonAssignment != null)
-                firstPersonAssignment.ZOrder = DateTime.MinValue.AddTicks(1);
-
         }
 
         /// <summary>
@@ -714,13 +707,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         #endregion
 
 
-        protected void FilterSchedulePart(ISchedulePart schedulePart)
+				protected void FilterSchedulePart(IScheduleDay schedulePart)
         {
             if (_schedulePartFilter == SchedulePartFilter.Meetings)
             {
                 schedulePart.Clear<IPersonAbsence>();
                 schedulePart.Clear<IPersonAssignment>();
-                schedulePart.PersonAssignmentConflictCollection.Clear();
                 schedulePart.Clear<IPersonDayOff>();
                 schedulePart.BusinessRuleResponseCollection.Clear();
             }
@@ -780,7 +772,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
             foreach (IScheduleDay part in scheduleParts)
             {
-                foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }
@@ -844,6 +836,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             undoRedoContainer.CommitBatch();
             LastUnsavedSchedulePart = null;
         }
+		
+		public void UpdateOvertimeAvailability()
+        {
+            if (LastUnsavedSchedulePart == null) return;
+            IList<IScheduleDay> theParts =  new List<IScheduleDay> { LastUnsavedSchedulePart };
+
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+            undoRedoContainer.CreateBatch("Saving overtime availability");
+
+            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
+
+            undoRedoContainer.CommitBatch();
+            LastUnsavedSchedulePart = null;
+        }
 
         public void UpdateNoteFromEditor()
         {
@@ -879,7 +885,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             try
             {
-                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollection())
+                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollectionDoNotUse())
                 {
                     assignment.CheckRestrictions();
                 }

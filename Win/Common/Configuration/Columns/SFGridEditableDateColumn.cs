@@ -59,12 +59,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         		_propertyReflector.SetValue(currentItem, _bindingProperty, null);
                 
         	DateTime dt;
-
-        	if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
-        	{
-        		_propertyReflector.SetValue(currentItem, _bindingProperty, dt);
-        		OnCellChanged(currentItem);
+            bool parseResult = true;
+            if (e.Style.CellValue is DateTime)
+            {
+                dt = (DateTime) e.Style.CellValue;
+            }
+        	else
+            {
+                parseResult = (DateTime.TryParse(e.Style.CellValue.ToString(), out dt));
         	}
+            if (parseResult)
+            {
+                _propertyReflector.SetValue(currentItem, _bindingProperty, dt);
+            }
         	e.Handled = true;
         }
     }

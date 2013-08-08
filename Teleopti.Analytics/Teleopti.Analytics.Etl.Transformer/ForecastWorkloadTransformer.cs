@@ -102,6 +102,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             dataRow["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
             dataRow["insert_date"] = _insertDateTime;
             dataRow["update_date"] = _insertDateTime;
+			dataRow["datasource_update_date"] = skillDay.UpdatedOn;
 
             switch (skill.SkillType.ForecastSource)
             {

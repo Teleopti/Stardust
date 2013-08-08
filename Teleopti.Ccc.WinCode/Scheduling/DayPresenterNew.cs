@@ -143,8 +143,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, _selectedDate.Date, true, false, daySchedule);
-                    //set zorder
-                    SetAssignmentZorder(daySchedule);
                 }
             }
         }

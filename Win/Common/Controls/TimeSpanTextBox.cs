@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private void parse(string text)
         {
             TimeSpan timeValue;
-            if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
+			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text, _maximumValue, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
             {
                 if (timeValue > _maximumValue)
                 {

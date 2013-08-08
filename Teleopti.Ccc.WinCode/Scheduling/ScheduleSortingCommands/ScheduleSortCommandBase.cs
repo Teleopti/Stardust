@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
             _dayOff = new List<IPerson>();
             _empty = new List<IPerson>();
 
-            foreach (var person in _schedulerState.FilteredPersonDictionary.Values)
+            foreach (var person in _schedulerState.FilteredAgentsDictionary.Values)
             {
                 IScheduleDay scheduleDay = _schedulerState.Schedules[person].ScheduledDay(dateOnly);
                 SchedulePartView significant = scheduleDay.SignificantPart();
@@ -68,26 +68,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 
         protected void MergeLists()
         {
-            _schedulerState.FilteredPersonDictionary.Clear();
+			_schedulerState.FilteredAgentsDictionary.Clear();
             foreach (var projection in Projections)
             {
                 if (projection.Person.Id != null)
-                    _schedulerState.FilteredPersonDictionary.Add(projection.Person.Id.Value, projection.Person);
+                    _schedulerState.FilteredAgentsDictionary.Add(projection.Person.Id.Value, projection.Person);
             }
             foreach (var projection in Absence)
             {
                 if (projection.Person.Id != null)
-                    _schedulerState.FilteredPersonDictionary.Add(projection.Person.Id.Value, projection.Person);
+                    _schedulerState.FilteredAgentsDictionary.Add(projection.Person.Id.Value, projection.Person);
             }
             foreach (var person in _dayOff)
             {
                 if (person.Id != null)
-                    _schedulerState.FilteredPersonDictionary.Add(person.Id.Value, person);
+                    _schedulerState.FilteredAgentsDictionary.Add(person.Id.Value, person);
             }
             foreach (var person in _empty)
             {
                 if (person.Id != null)
-                    _schedulerState.FilteredPersonDictionary.Add(person.Id.Value, person);
+                    _schedulerState.FilteredAgentsDictionary.Add(person.Id.Value, person);
             }
         }
     }

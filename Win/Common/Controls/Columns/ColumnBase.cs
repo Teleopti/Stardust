@@ -9,21 +9,19 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
     public abstract class ColumnBase<T> : IColumn<T>, ISortColumn<T>
     {
+        protected ColumnBase(string bindingProperty, int preferredWidth)
+        {
+            BindingProperty = bindingProperty;
+            PreferredWidth = preferredWidth;
+        }
+
         public event EventHandler<ColumnCellChangedEventArgs<T>> CellChanged;
         public event EventHandler<ColumnCellDisplayChangedEventArgs<T>> CellDisplayChanged;
 
-        public abstract int PreferredWidth { get; }
+        public int PreferredWidth { get; private set; }
 
-        public virtual string BindingProperty { get { return string.Empty; } }
+        public string BindingProperty { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the column comparer.
-        /// </summary>
-        /// <value>The column comparer.</value>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 8/13/2008
-        /// </remarks>
         public virtual IComparer<T> ColumnComparer { get; set; }
 
         public SortCompare<T> SortCompare { get; set; }
@@ -80,10 +78,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 ColumnCellDisplayChangedEventArgs<T> args = new ColumnCellDisplayChangedEventArgs<T>(dataItem, e);
                 handler(this, args);
             }
-        }
-
-        public virtual void CellsChanging(GridCellsChangingEventArgs e)
-        {
         }
     }
 }

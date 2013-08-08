@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created by: robink
         /// Created date: 2007-12-13
         /// </remarks>
-        public static void DistributeTaskTimes(double changeAsPercent, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute)
+        public static void DistributeTaskTimes(double changeAsPercent, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, Double originalValue)
         {
-            DistributeTaskTimes(changeAsPercent,TimeSpan.Zero,targets,taskFieldToDistribute,DistributionType.ByPercent);
+            DistributeTaskTimes(changeAsPercent, TimeSpan.Zero, targets, taskFieldToDistribute, DistributionType.ByPercent, originalValue);
         }
 
         /// <summary>
@@ -81,22 +81,23 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created by: robink
         /// Created date: 2008-08-25
         /// </remarks>
-        public static void DistributeTaskTimes(double changeAsPercent, TimeSpan newTime, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, DistributionType distributionType)
+        public static void DistributeTaskTimes(double changeAsPercent, TimeSpan newTime, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, DistributionType distributionType, double originalValue)
         {
-            if (newTime<TimeSpan.Zero) throw new ArgumentOutOfRangeException("newTime","The new time cannot be negative. Use TimeSpan.Zero instead.");
+            if (newTime < TimeSpan.Zero) throw new ArgumentOutOfRangeException("newTime", "The new time cannot be negative. Use TimeSpan.Zero instead.");
             IList<ITaskOwner> typedTargets = targets.OfType<ITaskOwner>().ToList();
 
             int numberOfTargets = typedTargets.Count();
             if (numberOfTargets == 0) return;
 
-            PropertyInfo property = typeof(ITaskOwner).GetProperty(taskFieldToDistribute.ToString()); 
+            PropertyInfo property = typeof(ITaskOwner).GetProperty(taskFieldToDistribute.ToString());
             foreach (ITaskOwner owner in typedTargets)
             {
                 long averageTaskTimeTicks = ((TimeSpan)property.GetValue(owner, null)).Ticks;
                 if (distributionType == DistributionType.ByPercent)
                 {
                     if (averageTaskTimeTicks == 0)
-                        averageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
+                        averageTaskTimeTicks = (long)originalValue;  //TimeSpan.FromSeconds(1).Ticks;
+                    else
                     averageTaskTimeTicks = (long)(averageTaskTimeTicks * changeAsPercent);
                 }
                 else

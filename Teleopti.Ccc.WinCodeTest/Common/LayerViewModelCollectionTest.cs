@@ -113,16 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void VerifyTotalDateTimePeriodWithNoItems()
-        {
-            IScheduleDay part = new SchedulePartFactoryForDomain().CreatePart();
-            target.AddFromSchedulePart(part);
-            Assert.AreEqual(part.Period, target.TotalDateTimePeriod(true));
-            Assert.AreEqual(part.Period, target.TotalDateTimePeriod(false));
-            mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyCanSupplyNullAsSchedulePart()
         {
             target.AddFromSchedulePart(null);
@@ -349,15 +339,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 
 	        var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
-			var overtime = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period, multi);
-	        var personal = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period);
+			var overtime = new OvertimeShiftLayer(ActivityFactory.CreateActivity("activity"), period, multi);
+	        var personal = new PersonalShiftLayer(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainShiftLayers.First(), assignment, null, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainShiftLayers.Last(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainLayers().First(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainLayers().Last(), assignment, null, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null, null, null);
-			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null);
+			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null,null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
 						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
@@ -403,7 +393,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainShiftLayers.Single();
+			var theLayer = part.PersonAssignment().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 	        removeService.Expect(r => r.Remove(part, theLayer));
@@ -519,6 +509,56 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
 		[Test]
+		public void TotalDateTimePeriod_WhenIncludeAbsenceIsFalse_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
+		{
+			IScheduleDay part = _partFactory
+			 .AddAbsence()
+			 .AddMainShiftLayer()
+			 .CreatePart();
+			target.AddFromSchedulePart(part);
+
+			var expectedStart = part.PersonAssignmentCollectionDoNotUse().Min(p => p.Period.StartDateTime);
+			var expectedEnd = part.PersonAssignmentCollectionDoNotUse().Max(p => p.Period.EndDateTime);
+			var totalPeriod = target.TotalDateTimePeriod(false);
+
+			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
+			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
+		}
+
+		[Test]
+		public void TotalDateTimePeriod_WhenIncludeAbsenceIsTrue_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
+		{
+			IScheduleDay part = _partFactory
+			 .AddAbsence()
+			 .AddMainShiftLayer()
+			 .CreatePart();
+			target.AddFromSchedulePart(part);
+
+			var allPeriods =
+				part.PersonAssignmentCollectionDoNotUse()
+					.Select(p => p.Period)
+					.Union(part.PersonAbsenceCollection().Select(p => p.Period))
+					.ToList();
+
+			var expectedStart = allPeriods.Min(p => p.StartDateTime);
+			var expectedEnd = allPeriods.Max(p => p.EndDateTime);
+
+			var totalPeriod = target.TotalDateTimePeriod(true);
+
+			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
+			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
+		}
+
+		[Test]
+		public void TotalDateTimePeriod_WhenNoLayers_ShouldBeEqualToThePartsPeriod()
+		{
+			IScheduleDay part = new SchedulePartFactoryForDomain().CreatePart();
+			target.AddFromSchedulePart(part);
+			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(true));
+			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(false));
+		}
+
+		[Test]
 		public void ReplaceScheduleLayer_WhenMainshiftLayerIsChanged_ShouldBeCalledWithThatLayer()
 		{
 			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
@@ -530,7 +570,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.AssignmentHighZOrder().MainShiftLayers.Single();
+			var theLayer = part.PersonAssignment().MainLayers().Single();
 			var theLayerViewModel = target.Single();
 
 			var newPayload = ActivityFactory.CreateActivity("new");

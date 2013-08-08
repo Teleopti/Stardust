@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                     String symbol = String.Empty;
                     Color color2 = Color.White;
                     
-                    if (scheduleDay.PersonAssignmentCollection().Count > 0)
+                    if (scheduleDay.PersonAssignmentCollectionDoNotUse().Count > 0)
                     {
                         if (significantPart == SchedulePartView.MainShift)
                         {
-                            IPersonAssignment pa = scheduleDay.AssignmentHighZOrder();
+                            IPersonAssignment pa = scheduleDay.PersonAssignment();
 
                             if (pa != null)
                             {

@@ -16,25 +16,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         private readonly string _bindingProperty;
 		private IComparer<T> _columnComparer;
 
-        public OptionalColumn(string bindingProperty, int maxLength, string headerText)
+        public OptionalColumn(string bindingProperty, int maxLength, string headerText) : base(bindingProperty,100)
         {
             _maxLength = maxLength;
             _headerText = headerText;
             _bindingProperty = bindingProperty;
             _columnComparer = new OptionalColumnComparer<T>(_bindingProperty);
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override IComparer<T> ColumnComparer
@@ -56,7 +43,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             if (e.RowIndex == 0 && e.ColIndex > 0)
             {
                 e.Style.CellValue = _headerText;
-                //e.Style.Control.ContextMenuStrip.Items.Clear();
             }
             else
             {

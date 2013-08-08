@@ -316,6 +316,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             {
                 getPersonAccountAbsenceType();
             }
+
+			if (_gridConstructor.CurrentView == ViewType.GeneralView)
+			{
+				((GeneralGridView)view).ResetChangeLogonDataCheck();
+			}
         }
 
         private IAbsence getPersonAccountAbsenceType()
@@ -782,6 +787,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             //why isn't this in the panel?
             if (type == typeof(SchedulePeriodGridView))
                 _gridConstructor.View.SetView(shiftCategoryLimitationView);
+
+			shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
 
             LoadTrackerDescriptions();
             _filteredPeopleHolder.ResetRolesViewAdapterCollection();

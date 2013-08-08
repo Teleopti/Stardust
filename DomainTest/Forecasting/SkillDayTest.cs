@@ -1194,6 +1194,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
             _skillDay.SetCalculatedStaffCollection(newSkillStaffPeriods);
             newSkillStaffPeriods.BatchCompleted();
+			skillStaffPeriod.SetSkillDay(_skillDay);
             skillStaffPeriod.CalculateStaff();
             Assert.AreEqual(skillStaffPeriod.ForecastedIncomingDemand(), _skillDay.ForecastedIncomingDemand);
         }
@@ -1206,6 +1207,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
             skillStaffPeriod.Payload.Shrinkage = new Percent(0.2);
+			skillStaffPeriod.SetSkillDay(_skillDay);
             skillStaffPeriod.CalculateStaff();
 
             var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
@@ -1236,6 +1238,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
             _skillDay.SetCalculatedStaffCollection(newSkillStaffPeriods);
             newSkillStaffPeriods.BatchCompleted();
+			skillStaffPeriod.SetSkillDay(_skillDay);
             skillStaffPeriod.CalculateStaff();
             Assert.AreEqual(TimeSpan.FromMinutes(skillStaffPeriod.ForecastedDistributedDemand * skillStaffPeriod.Period.ElapsedTime().TotalMinutes), _skillDay.ForecastedDistributedDemand);
         }
@@ -1248,6 +1251,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 new Task(10d, TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(35)),
                 ServiceAgreement.DefaultValues());
             skillStaffPeriod.Payload.Shrinkage = new Percent(0.2);
+			skillStaffPeriod.SetSkillDay(_skillDay);
             skillStaffPeriod.CalculateStaff();
 
             var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });

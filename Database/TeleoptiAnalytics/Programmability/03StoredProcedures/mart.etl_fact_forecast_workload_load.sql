@@ -43,6 +43,13 @@ SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 
 -----------------------------------------------------------------------------------
 -- Delete rows
+-- only the scenarios we have fetched
+CREATE TABLE #scenarios(id int)
+INSERT INTO #scenarios SELECT DISTINCT scenario_id FROM mart.dim_scenario ds 
+INNER JOIN
+	Stage.stg_forecast_workload stg
+ON
+	stg.scenario_code = ds.scenario_code
 
 /*Get business unit id*/
 DECLARE @business_unit_id int
@@ -51,7 +58,7 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 DELETE FROM mart.fact_forecast_workload
 WHERE date_id between @start_date_id AND @end_date_id
 AND business_unit_id = @business_unit_id
-
+AND scenario_id IN (SELECT id FROM #scenarios)
 
 /*
 DELETE FROM mart.fact_forecast_workload

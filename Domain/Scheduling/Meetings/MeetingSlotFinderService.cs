@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                 {
                     allAvailable = false;
                 }
-                else if (part.PersonAssignmentCollection().Count > 0)
+                else if (part.PersonAssignmentCollectionDoNotUse().Count > 0)
                 {
                     var proj = part.ProjectionService().CreateProjection();
                     var absenceLayerList = proj.FilterLayers<IAbsence>();
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
         private static TimeSpan GetLocalStartDateTime(IScheduleDay part, TimeSpan localStartDateTime, ref TimeSpan localEndDateTime)
         {
-            var scheduleStart = part.PersonAssignmentCollection();
+            var scheduleStart = part.PersonAssignmentCollectionDoNotUse();
             if (scheduleStart.Count <= 0) return localStartDateTime;
             foreach (IPersonAssignment t in scheduleStart)
             {

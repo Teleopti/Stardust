@@ -129,11 +129,31 @@ namespace Teleopti.Ccc.Win.Grouping
 				treeViewAdvMainTabTree.Nodes.AddRange((TreeNodeAdv[])treeNodeAdv);
 				if (ShowCheckBoxes)
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
+
+				if(CheckParentNodesOnResetTree && treeViewAdvMainTabTree.Nodes.Count > 0)
+					checkParents(treeViewAdvMainTabTree.Nodes[0]);
+
 				treeViewAdvMainTabTree.EndUpdate();
 				treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
 			}
             
         }
+
+
+		private void checkParents(TreeNodeAdv startNode)
+		{
+			foreach (TreeNodeAdv node in startNode.Nodes)
+			{
+				if (node.Nodes.Count > 0) checkParents(node);
+				if (!node.Checked) continue;
+				if (node.Parent.CheckState == CheckState.Checked) continue;
+
+				var childCount = node.Parent.GetNodeCount(false);
+				var checkedChilds = node.Parent.Nodes.Cast<TreeNodeAdv>().Count(parentChildNode => parentChildNode.Checked);
+
+				node.Parent.CheckState = childCount == checkedChilds ? CheckState.Checked : CheckState.Indeterminate;
+			}
+		}
 
 
         public void ModifyGroupPage(Guid id)
@@ -276,8 +296,14 @@ namespace Teleopti.Ccc.Win.Grouping
         public bool ShowCheckBoxes
         {
             get { return treeViewAdvMainTabTree.ShowCheckBoxes; }
-            set { treeViewAdvMainTabTree.ShowCheckBoxes = value; }
+            set
+            {
+	            treeViewAdvMainTabTree.ShowCheckBoxes = value;
+	            CheckParentNodesOnResetTree = value;
+            }
         }
+
+		public bool CheckParentNodesOnResetTree { get; set; }
 
         public bool ShowDateSelection
         {

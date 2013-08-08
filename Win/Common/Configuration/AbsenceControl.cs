@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     public partial class AbsenceControl : BaseUserControl, ISettingPage
     {
         private SFGridColumnGridHelper<AbsenceView> _gridColumnHelper;
-        private readonly IDictionary<GridType, object> _sourceList;
+        private readonly List<AbsenceView> _sourceList = new List<AbsenceView>();
         private readonly TypedBindingCollection<ITracker> _trackerCollection = new TypedBindingCollection<ITracker>();
         private readonly TypedBindingCollection<TrackerView> _trackerAdopterCollection =
             new TypedBindingCollection<TrackerView>();
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             InitializeComponent();
 
-            _sourceList = new Dictionary<GridType, object>();
             _absenceViewsToBeDeleted = new List<AbsenceView>();
 
             // Loads the tracker collection
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             Cursor.Current = Cursors.WaitCursor;
 
             // Sets the row index to 0 when there's no data available in the source
-            setSelectedCellWhenNoSourceAvailable<AbsenceView>(GridType.Absence);
+            setSelectedCellWhenNoSourceAvailable();
             _gridColumnHelper.Add(null);
             gridControlAbsences.Invalidate();
 
@@ -101,69 +98,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-
-
-        #region Grouping Absence
-
-        /// <remarks>
-        /// Currently we are not providing the absence grouping. 
-        /// Therefore these code has been commented.
-        /// </remarks>
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            //Cursor.Current = Cursors.WaitCursor;
-
-            //// Sets the row index to 0 when there's no data available in the source
-            //SetSelectedCellWhenNoSourceAvailable<GroupingAbsence>(GridType.GroupingAbsence);
-
-            //GroupingAbsenceRepository groupingAbsenceRepository = new GroupingAbsenceRepository(unitOfWork);
-            //_gridCoulmnHelperBase.GetSFGridColumnGridHelper<GroupingAbsence>(gridGroupingAbsences).Add(groupingAbsenceRepository);
-
-            //gridGroupingAbsences.Invalidate();
-
-            //Cursor.Current = Cursors.Default;
-        }
-
-        /// <remarks>
-        /// Currently we are not providing the absence grouping. 
-        /// Therefore these code has been commented.
-        /// </remarks>
-        private void buttonAdv1_Click(object sender, EventArgs e)
-        {
-            //Cursor.Current = Cursors.WaitCursor;
-            //IList<int> _selectedList = GetSelectedRowsToBeDeleted(GridType.GroupingAbsence);
-
-            //if (ShowMyErrorMessage(UserTexts.Resources.DeleteSelectedRowsQuestionmark, "Message") == DialogResult.Yes)
-            //{
-            //    GroupingAbsenceRepository ga = new GroupingAbsenceRepository(unitOfWork);
-            //    if (_selectedList != null && _selectedList.Count > 0)
-            //    {
-            //        IList<GroupingAbsence> _source = GetSource<GroupingAbsence>(GridType.GroupingAbsence);
-            //        IList<GroupingAbsence> _toBeDeleted = new List<GroupingAbsence>();
-            //        for (int i = 0; i <= (_selectedList.Count - 1); i++)
-            //        {
-            //            _toBeDeleted.Add(_source[_selectedList[i]]);
-            //        }
-
-            //        foreach (GroupingAbsence _groupingAbsence in _toBeDeleted)
-            //        {
-            //            _source.Remove(_groupingAbsence);
-            //            ga.Remove(_groupingAbsence);
-            //        }
-
-            //        gridGroupingAbsences.RowCount = _source.Count;
-            //    }
-            //}
-
-            //gridGroupingAbsences.Invalidate();
-            //Cursor.Current = Cursors.Default;
-        }
-
-        #endregion
-
         private int GetNextAbsenceId()
         {
-            var absenceList = (IList<AbsenceView>)_sourceList[GridType.Absence];
+            var absenceList = _sourceList;
             int parsedValue; 
             var sortedArray = (from q in
                                    ((from p in absenceList
@@ -199,11 +136,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void deleteSelectedAbsence()
         {
-            // Gets the source data collection and grid type
-            const GridType gridType = GridType.Absence;
-            IList<AbsenceView> source = getSource<AbsenceView>(gridType);
-
-        	if (!isReadyToDelete(source)) return;
+            if (!isReadyToDelete(_sourceList)) return;
         	IList<AbsenceView> itemsToDelete =
         		_gridColumnHelper.FindSelectedItems();
 
@@ -212,83 +145,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         		if (absenceView.Id.HasValue)
         			_absenceViewsToBeDeleted.Add(absenceView); // Only add items to deleted list if they exist in db.
 
-        		source.Remove(absenceView);
+        		_sourceList.Remove(absenceView);
         	}
 
-        	invalidateGrid<AbsenceView>(gridType);
+        	invalidateGrid();
         }
 
-
-
-        #region Grouping Absence
-
-        // Need to uncomment this when we are provigng absence grouping
-
-        ///// <summary>
-        ///// Gets the next group absence ID.
-        ///// </summary>
-        ///// <returns></returns>
-        ///// <remarks>
-        ///// Created by: 
-        ///// Created date: 
-        ///// </remarks>
-        //private int GetNextGroupAbsenceID()
-        //{
-        //    IList<GroupingAbsence> groupAbsenceList = (IList<GroupingAbsence>)_sourceList[GridType.GroupingAbsence];
-        //    int[] sortedArray = (from q in
-        //                             ((from p in groupAbsenceList
-        //                               where p.Description.Name.Contains(NewEntityeName)
-        //                               select p.Description.Name
-        //                               .Replace(LessThanChar, string.Empty)
-        //                               .Replace(GreaterThanChar, string.Empty)
-        //                               .Replace(NewEntityeName, string.Empty)
-        //                               .Replace(SpaceChar, string.Empty)).ToList())
-        //                         where string.IsNullOrEmpty(q) == false
-        //                         select Int32.Parse(q, CultureInfo.CurrentUICulture)).ToArray();
-
-        //    return GetNextID(sortedArray);
-        //}
-
-        ///// <summary>
-        ///// Creates the group absence.
-        ///// </summary>
-        ///// <returns></returns>
-        ///// <remarks>
-        ///// Created by: 
-        ///// Created date: 
-        ///// </remarks>
-        //private GroupingAbsence CreateGroupAbsence()
-        //{
-        //    // Formats the name.
-        //    int nextCount = GetNextGroupAbsenceID();
-        //    string name = GetNewEntityName(NewEntityeName, nextCount);
-        //    GroupingAbsence newGroupAnsence = new GroupingAbsence(name);
-
-        //    return newGroupAnsence;
-        //}
-
-        #endregion
-
-        private void invalidateGrid<T>(GridType gridType)
+        private void invalidateGrid()
         {
             // Gets the data source
-            IList<T> source = getSource<T>(gridType);
-
-        	if (source == null) return;
-        	var grid = getGridControl(gridType);
-
-        	grid.RowCount = source.Count;
-        	grid.Invalidate();
+            gridControlAbsences.RowCount = _sourceList.Count;
+        	gridControlAbsences.Invalidate();
         }
 
-        private GridControl getGridControl(GridType gridType)
-        {
-        	var grid = gridType == GridType.Absence ? gridControlAbsences : gridControlGroupingAbsences;
-
-        	return grid;
-        }
-
-		private bool isReadyToDelete<T>(ICollection<T> source)
+		private bool isReadyToDelete(ICollection<AbsenceView> source)
         {
             var isReady = false;
 
@@ -304,46 +174,32 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             return isReady;
         }
 
-        private static bool isDataAvailable<T>(ICollection<T> source)
+        private static bool isDataAvailable(ICollection<AbsenceView> source)
         {
             return (source != null) && (source.Count > EmptySourceCount);
         }
 
-        private ReadOnlyCollection<SFGridColumnBase<T>> configureGrid<T>(GridType type)
+        private ReadOnlyCollection<SFGridColumnBase<AbsenceView>> configureGrid()
         {
             // Holds he column list for the grid control
-            IList<SFGridColumnBase<T>> gridColumns = new List<SFGridColumnBase<T>>();
+            IList<SFGridColumnBase<AbsenceView>> gridColumns = new List<SFGridColumnBase<AbsenceView>>();
             // Gets the relevant grid control
-            var gridControl = getGridControl(type);
-
-            // Adds the cell models to the grid control
-            addCellmodels(gridControl);
-            // Set the header count for the grid control
-            gridControl.Rows.HeaderCount = EmptyHeaderCount;
-            // Adds the header column for the grid control
-            gridColumns.Add(new SFGridRowHeaderColumn<T>(string.Empty));
-
-            switch (type)
-            {
-                case GridType.GroupingAbsence:
-                    createColumnsForGroupingAbsenceGrid(gridColumns);
-                    break;
-
-                case GridType.Absence:
-                    createColumnsForAbsenceGrid(gridColumns);
-                    break;
-            }
-
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("CreatedBy", Resources.CreatedBy));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("CreatedTimeInUserPerspective", Resources.CreatedOn));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("UpdatedBy", Resources.UpdatedBy));
-            gridColumns.Add(new SFGridReadOnlyTextColumn<T>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
             
+            // Adds the cell models to the grid control
+            addCellmodels(gridControlAbsences);
+            // Set the header count for the grid control
+            gridControlAbsences.Rows.HeaderCount = EmptyHeaderCount;
+            // Adds the header column for the grid control
+            gridColumns.Add(new SFGridRowHeaderColumn<AbsenceView>(string.Empty));
 
-            gridControl.RowCount = gridRowCount(type);
-            gridControl.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
+            createColumnsForAbsenceGrid(gridColumns);
 
-            return new ReadOnlyCollection<SFGridColumnBase<T>>(gridColumns);
+            gridColumns.AppendAuditColumns();
+
+            gridControlAbsences.RowCount = gridRowCount();
+            gridControlAbsences.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
+
+            return new ReadOnlyCollection<SFGridColumnBase<AbsenceView>>(gridColumns);
         }
 
         private static void addCellmodels(GridControl gridControl)
@@ -361,70 +217,43 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         }
 
-        private void createColumnsForAbsenceGrid<T>(ICollection<SFGridColumnBase<T>> gridColumns)
+        private void createColumnsForAbsenceGrid(ICollection<SFGridColumnBase<AbsenceView>> gridColumns)
         {
-            gridColumns.Add(new SFGridDescriptionNameColumn<T>("Description", Resources.Name));
-            var shortName = new SFGridDescriptionShortNameColumn<T>("Description", Resources.ShortName, 150, false, 2)
+            gridColumns.Add(new SFGridDescriptionNameColumn<AbsenceView>("Description", Resources.Name));
+            var shortName = new SFGridDescriptionShortNameColumn<AbsenceView>("Description", Resources.ShortName, 150, false, 2)
                             	{AllowEmptyValue = true};
         	gridColumns.Add(shortName);
-            gridColumns.Add(new SFGridColorPickerColumn<T>("DisplayColor", Resources.Color, null));
+            gridColumns.Add(new SFGridColorPickerColumn<AbsenceView>("DisplayColor", Resources.Color, null));
 
-            gridColumns.Add(new SFGridCheckBoxColumn<T>("InContractTime", Resources.IsContractTime));
-            gridColumns.Add(new SFGridCheckBoxColumn<T>("InWorkTime", Resources.IsWorkTime));
-            gridColumns.Add(new SFGridCheckBoxColumn<T>("InPaidTime", Resources.IsPaidTime));
+            gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("InContractTime", Resources.IsContractTime));
+            gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("InWorkTime", Resources.IsWorkTime));
+            gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("InPaidTime", Resources.IsPaidTime));
             if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
             {
-                var payrollColumn = new SFGridEditableTextColumn<T>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
+                var payrollColumn = new SFGridEditableTextColumn<AbsenceView>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
                 gridColumns.Add(payrollColumn);
             }
-            gridColumns.Add(new SFGridByteCellColumn<T>("Priority", Resources.Priority, null));
-            gridColumns.Add(new SFGridCheckBoxColumn<T>("Requestable", UserTexts.Resources.UseForRequests));
+            gridColumns.Add(new SFGridByteCellColumn<AbsenceView>("Priority", Resources.Priority, null));
+            gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Requestable", Resources.UseForRequests));
             //TODO: Get header "Tracker" from resource files.
-            var trackerColumn = new SFGridDropDownColumn<T, TrackerView>("Tracker", Resources.TrackerType, _trackerAdopterCollection,
+            var trackerColumn = new SFGridDropDownColumn<AbsenceView, TrackerView>("Tracker", Resources.TrackerType, _trackerAdopterCollection,
                                                       "Description", null, typeof(TrackerView))
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);
-            gridColumns.Add(new SFGridCheckBoxColumn<T>("Confidential", Resources.Confidential));
+            gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Confidential", Resources.Confidential));
         }
 
-        private static void createColumnsForGroupingAbsenceGrid<T>(ICollection<SFGridColumnBase<T>> gridColumns)
+        private int gridRowCount()
         {
-            gridColumns.Add(new SFGridDescriptionNameColumn<T>("Description", Resources.Name));
-            gridColumns.Add(new SFGridDescriptionNameColumn<T>("Description", Resources.ShortName));
-        }
-
-        private int gridRowCount(GridType gridType)
-        {
-            // Gets the relevant grid control
-            var gridControl = getGridControl(gridType);
-
-            var sourceListCount = EmptySourceCount;
-            var gridHeaderCount = gridControl.Rows.HeaderCount;
-
-            switch (gridType)
-            {
-                case GridType.GroupingAbsence:
-                    var activityList = (IList<GroupingAbsence>)_sourceList[gridType];
-                    sourceListCount = activityList.Count;
-                    break;
-
-                case GridType.Absence:
-                    var groupingActivityList = (IList<AbsenceView>)_sourceList[gridType];
-                    sourceListCount = groupingActivityList.Count;
-                    break;
-            }
+            var sourceListCount = _sourceList.Count;
+            var gridHeaderCount = gridControlAbsences.Rows.HeaderCount;
 
             return (sourceListCount + gridHeaderCount);
         }
 
         private void loadSourceList()
         {
-            using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var groupingAbsenceRepository = new GroupingAbsenceRepository(myUow);
-                _sourceList.Add(GridType.GroupingAbsence, groupingAbsenceRepository.LoadAll());
-            }
-            _sourceList.Add(GridType.Absence, getAbsenceViews());
+            _sourceList.AddRange(getAbsenceViews());
         }
 
         private static IList<AbsenceView> getAbsenceViews()
@@ -465,12 +294,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             return repository.FindAbsenceTrackerUsedByPersonAccount();
         }
 
-        private List<T> getSource<T>(GridType gridType)
-        {
-            var source = (List<T>)_sourceList[gridType];
-            return source;
-        }
-
         private static int getNextId(int[] array)
         {
             var nextId = ItemIdMappingIndex;
@@ -509,14 +332,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             return string.Format(CultureInfo.InvariantCulture, NewAbsenceNameFormat, name, itemIndex);
         }
 
-        private void setSelectedCellWhenNoSourceAvailable<T>(GridType gridType)
+        private void setSelectedCellWhenNoSourceAvailable()
         {
-            // Gets the source
-            IList<T> source = getSource<T>(gridType);
-
-        	if (isDataAvailable(source)) return;
-        	var grid = getGridControl(gridType);
-        	grid.CurrentCell.MoveTo(DefaultCellRowIndex, DefaultCellColumnIndex);
+            if (isDataAvailable(_sourceList)) return;
+        	gridControlAbsences.CurrentCell.MoveTo(DefaultCellRowIndex, DefaultCellColumnIndex);
         }
 
         private void handlePaste(ClipHandler clipHandler, GridRangeInfo range, int cellRangeIndex, int row)
@@ -557,10 +376,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         protected override void SetCommonTexts()
         {
             base.SetCommonTexts();
-            toolTip1.SetToolTip(buttonAdv1, Resources.Delete);
             toolTip1.SetToolTip(buttonAdvDeleteAbsence, Resources.Delete);
             toolTip1.SetToolTip(buttonAdvAddAbsence, Resources.AddAbsence);
-            toolTip1.SetToolTip(btnAdd, Resources.AddGroupingAbsence);
         }
 
         public void InitializeDialogControl()
@@ -577,16 +394,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
-            tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-
             tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
             labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            if (labelSubHeader2 != null) labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-
-            gridControlGroupingAbsences.BackColor = ColorHelper.GridControlGridInteriorColor();
-            gridControlGroupingAbsences.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
+            labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 
             gridControlAbsences.BackColor = ColorHelper.GridControlGridInteriorColor();
             gridControlAbsences.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
@@ -595,14 +405,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void LoadControl()
         {
-            GridHelper.GridStyle(gridControlGroupingAbsences);
             loadSourceList();
 
-            var absenceColumns = configureGrid<AbsenceView>(GridType.Absence);
+            var absenceColumns = configureGrid();
 
             _gridColumnHelper = new SFGridColumnGridHelper<AbsenceView>(gridControlAbsences,
                                absenceColumns,
-                               getSource<AbsenceView>(GridType.Absence)) {AllowExtendedCopyPaste = true};
+                               _sourceList) {AllowExtendedCopyPaste = true};
 
         	_gridColumnHelper.NewSourceEntityWanted += columnGridHelperNewSourceEntityWanted;
         }
@@ -611,7 +420,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             discardInvalidChanges();
             Persist();
-            invalidateGrid<AbsenceView>(GridType.Absence);
+            invalidateGrid();
         }
 
         public void Unload()
@@ -648,7 +457,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     repository.Remove(absenceView.ContainedOriginalEntity);
                 } 
                 
-                foreach (var absenceView in getSource<AbsenceView>(GridType.Absence))
+                foreach (var absenceView in _sourceList)
                 {
                     if (!absenceView.Id.HasValue)
                     {
@@ -668,7 +477,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 }
 
                 uow.PersistAll();
-                foreach (var absenceView in getSource<AbsenceView>(GridType.Absence))
+                foreach (var absenceView in _sourceList)
                 {
                     absenceView.ResetAbsenceState(null, absenceView.IsTrackerDisabled);
                 }
@@ -678,34 +487,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void columnGridHelperNewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<AbsenceView> e)
         {
             e.SourceEntity = createAbsence();
-        }
-
-
-
-        #region  Grouping absence
-
-        //private void ColumnGridHelper_NewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<GroupingAbsence> e)
-        //{
-        //    //GroupingAbsence groupingAbsence = new GroupingAbsence("xx<New>");
-        //    //groupingAbsence.Description = new Description("Default", "Default");
-        //    //e.SourceEntity = groupingAbsence;
-        //    e.SourceEntity = CreateGroupAbsence();
-        //}
-
-        #endregion
-
-
-        enum GridType
-        {
-            /// <summary>
-            /// Group absence grid type.
-            /// </summary>
-            GroupingAbsence,
-
-            /// <summary>
-            /// Absence grid type.
-            /// </summary>
-            Absence,
         }
 
         public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
@@ -720,7 +501,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void discardInvalidChanges()
         {
             var persistedList = getAbsenceViews();
-            var workingList = getSource<AbsenceView>(GridType.Absence);
+            var workingList = _sourceList;
             var hasDiscarded = false;
 
             foreach (var absenceView in workingList)
@@ -741,7 +522,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void AbsenceControlLayout(object sender, LayoutEventArgs e)
         {
             gridControlAbsences.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-            gridControlGroupingAbsences.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
     }
 }

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class OptionSplit : IOption
 	{
 		public string Value { get { return "-"; } }
-		public string Text { get { return "-"; } }
+		public string Text { get { return string.Empty; } }
 		public string Color { get { return null; } }
 	}
 

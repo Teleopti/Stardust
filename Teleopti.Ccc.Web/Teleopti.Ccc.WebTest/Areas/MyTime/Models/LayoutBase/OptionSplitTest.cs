@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.LayoutBase
 		{
 			var splitButtonSplitter = new OptionSplit();
 			splitButtonSplitter.Value.Should().Be.EqualTo("-");
-			splitButtonSplitter.Text.Should().Be.EqualTo("-");
+			splitButtonSplitter.Text.Should().Be.EqualTo(string.Empty);
 		}
 	}
 }

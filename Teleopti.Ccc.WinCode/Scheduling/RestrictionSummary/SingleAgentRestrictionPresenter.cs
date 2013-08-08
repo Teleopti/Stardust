@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             GC.SuppressFinalize(this);
         }
 
-        public void SetSelection(ISchedulePart schedulePart)
+				public void SetSelection(IScheduleDay schedulePart)
         {
             int rowIndex = _numberOfHeaders;
 

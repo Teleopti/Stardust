@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var virtualSchedulePeriods =
                 _virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDaysList);
             var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDaysList).ToList();
-
             foreach (IVirtualSchedulePeriod schedulePeriod in virtualSchedulePeriods)
             {
                 if (schedulePeriod.IsValid)
@@ -53,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     var person = schedulePeriod.Person;
                     IScheduleRange currentSchedules = rangeClones[person];
                     var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+                    var oldResponseCount = oldResponses.Count();
                     foreach (PersonWeek personWeek in personWeeks)
                     {
                         foreach (DateOnly day in personWeek.Week.DayCollection())
@@ -74,11 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         {
                             foreach (PersonWeek personWeek in personWeeks)
                             {
-                                //foreach (DateOnly day in personWeek.Week.DayCollection())
-                                //{
-                                //    oldResponses.Remove(createResponse(person, day, "remove", typeof(WeekShiftCategoryLimitationRule)));
-                                //}
-
+                                
                                 // vi måste kanske gör ngt annat om en vecka ligger i 2 olika schemaperioder (kan ju ha helt olika regler)
                                 if (personWeek.Week.Intersection(scheduleDateOnlyPeriod) != null && personWeek.Person.Equals(person))
                                 {
@@ -99,10 +95,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             }
                         }
                     }
+                    var newResponseCount = responseList.Count();
+                    if (newResponseCount <= oldResponseCount)
+                        responseList = new HashSet<IBusinessRuleResponse>();
                 }
             }
-
-            return responseList;
+         return responseList;
         }
 
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)

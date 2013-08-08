@@ -261,8 +261,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridEditableTextColumn<ShiftCategoryModel>(ShortName, 2, Resources.ShortName));
             gridColumns.Add(new SFGridColorPickerColumn<ShiftCategoryModel>(DisplayColor, Resources.Color, null));
 
-            SFGridColumnBase<ShiftCategoryModel>.AppendAuditColumns(gridColumns);
-
+            gridColumns.AppendAuditColumns();
 
             return new ReadOnlyCollection<SFGridColumnBase<ShiftCategoryModel>>(gridColumns);
         }
