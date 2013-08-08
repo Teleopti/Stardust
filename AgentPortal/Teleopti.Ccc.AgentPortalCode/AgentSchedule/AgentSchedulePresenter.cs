@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                     break;
             }
 
-            View.Refresh(true);
+            View.Refresh();
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         /// </summary>
         public void PersistScheduleAppointments()
         {
-            View.Refresh(true);
+            View.Refresh();
         }
 
         public void DeleteScheduleAppointment(ICustomScheduleAppointment scheduleAppointment)
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                             SdkServiceHelper.SchedulingService.DeletePersonRequest(personRequest);
                     }
                     AgentScheduleStateHolder.Instance().OnStateChange(ScheduleAppointmentStatusTypes.Deleted, scheduleAppointment.Tag as PersonRequestDto);
-                    View.Refresh(true);
+                    View.Refresh();
                     break;
             }
         }
