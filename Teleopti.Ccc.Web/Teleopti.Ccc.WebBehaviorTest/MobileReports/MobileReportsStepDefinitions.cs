@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
@@ -58,15 +59,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see a report")]
 		public void ThenIShouldSeAReport()
 		{
-			Browser.Interactions.AssertExists("#report-view.ui-page-active");
-			Browser.Interactions.AssertNotExists("#report-view.ui-page-active", ".ui-mobile-viewport-transitioning");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active");
 		}
 
 		[Then(@"I should see a graph")]
 		public void ThenIShouldSeeAGraph()
 		{
-			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-holder");
-			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-canvas");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active #report-graph-holder");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active #report-graph-canvas");
 		}
 
 		[Then(@"I should see a report for next date")]
@@ -98,8 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see ReportSettings")]
 		public void ThenIShouldSeeReportSettings()
 		{
-			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active");
-			Browser.Interactions.AssertNotExists("#report-settings-view.ui-page-active", ".ui-mobile-viewport-transitioning");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active");
 		}
 
 		[Then(@"I should see ReportSettings with default value")]
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
 			SelectGetAnsweredAndAbondonedReport();
-			Browser.Interactions.Click("#report-settings-interval-week");
+			Browser.Interactions.Click("#report-settings-interval-week + label");
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -212,7 +211,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I click View Report Button")]
 		public void WhenIClickViewReportButton()
 		{
-			Browser.Interactions.Click("#report-view-show-button");
+			Browser.Interactions.Click("body:not(.ui-mobile-viewport-transitioning) #report-view-show-button");
 		}
 
 		[Given(@"I view MobileReports")]
@@ -234,7 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			Browser.Interactions.Click("#report-settings-view.ui-page-active #sel-skill-button");
+			Browser.Interactions.Click("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-button");
 		}
 
 		[When(@"I close the skill-picker")]
@@ -271,8 +270,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		{
 			var skillId = UserFactory.User().UserData<ThreeSkills>().Skill2Id;
 			var script = "var el = $('#sel-skill');" +
-			             "el.val('" + skillId + "').attr('selected', true).siblings('option').removeAttr('selected');" +
-			             "el.selectmenu('refresh', true);";
+						 "el.val('" + skillId + "').attr('selected', true).siblings('option').removeAttr('selected');" +
+						 "el.selectmenu('refresh', true);";
 			Browser.Interactions.Javascript(script, skillId);
 		}
 
@@ -298,8 +297,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see the all skill item selected")]
 		public void ThenIShouldSeeTheAllSkillItemSelected()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery("#report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
-			Browser.Interactions.AssertExistsUsingJQuery("#report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
 		}
 	}
 }
