@@ -89,7 +89,10 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
     <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
     <Compile Include="CalendarShare.feature.cs">
@@ -137,7 +140,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
@@ -161,7 +164,6 @@
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
-    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
@@ -193,7 +195,6 @@
     <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
     <Compile Include="Core\Legacy\EventualElementActions.cs" />
     <Compile Include="Core\BrowserDriver\Timeouts.cs" />
-    <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]
 		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated(int messages, string model)
 		{
-			Browser.Interactions.AssertExists(".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
-			Browser.Interactions.AssertExists(".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
+			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
+			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
 		}
 
 		[Then(@"I should see that the test run has finished")]

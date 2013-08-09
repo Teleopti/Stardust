@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
@@ -58,32 +56,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoSiteHomePage()
 		{
 			GoToWaitForCompleted("", new ApplicationStartupTimeout(), new BustCache());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMyTime()
 		{
 			GoToWaitForCompleted("MyTime", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReports()
 		{
 			GoToWaitForCompleted("MobileReports", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoGlobalSignInPage()
 		{
 			GoToWaitForCompleted("Authentication", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
-
 		}
 
 		public static void GotoMobileReportsSignInPage(string hash)
 		{
 			GoToWaitForCompleted("MobileReports/Authentication" + hash, new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReportsPage()
@@ -211,13 +203,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GoToPerformanceTool()
 		{
 			GoToWaitForUrlAssert("PerformanceTool", "PerformanceTool", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnywhere()
 		{
 			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnywhereTeamSchedule()
