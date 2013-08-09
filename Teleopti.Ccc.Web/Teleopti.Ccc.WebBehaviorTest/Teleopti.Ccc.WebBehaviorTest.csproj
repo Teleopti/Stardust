@@ -92,6 +92,7 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
