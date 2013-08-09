@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IActualAgentHandler : IRtaDataHandlerCache
 	{
-		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, RtaStateGroupLight state);
+		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, Guid state);
 		IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
 		                           DateTime timestamp,
 		                           TimeSpan timeInState);
@@ -105,11 +105,14 @@ namespace Teleopti.Ccc.Rta.Server
 				ReceivedTime = timestamp
 			};
 
+
 			if (state != null)
 			{
 				newState.State = state.StateGroupName;
-				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId, state);
+				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId, state.StateGroupId);
 			}
+			else
+				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId, Guid.Empty);
 
 			if (foundAlarm != null)
 			{
@@ -160,6 +163,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return newState;
 		}
 
+
 		private void saveToDataStore(IEnumerable<IActualAgentState> states)
 		{
 			var actualAgentStates = states as List<IActualAgentState> ?? states.ToList();
@@ -179,7 +183,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, RtaStateGroupLight state)
+		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId, Guid state)
 		{
 			LoggingSvc.InfoFormat("Getting alarm for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
 			LoggingSvc.Info("Loading activity alarms.");
@@ -189,7 +193,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (activityAlarms.TryGetValue(localPayloadId, out list))
 			{
-				var alarm = list.SingleOrDefault(s => s.StateGroupId == state.StateGroupId);
+				var alarm = list.SingleOrDefault(s => s.StateGroupId == state);
 				if (alarm != null)
 					LoggingSvc.InfoFormat("Found alarm: {1}, alarmId: {0}", alarm.AlarmTypeId, alarm.Name);
 				else

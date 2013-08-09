@@ -196,9 +196,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(_reader);
 
 			_reader.Expect(r => r.Read()).Return(true);
-			_reader.Expect(r => r.GetOrdinal("StateGroupName")).Return(0);
+			_reader.Expect(r => r.GetOrdinal("StateGroupName")).Return(0).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(0)).Return(false);
 			_reader.Expect(r => r.GetString(0)).Return("stateGroupName");
-			_reader.Expect(r => r.GetOrdinal("StateGroupId")).Return(1);
+			_reader.Expect(r => r.GetOrdinal("StateGroupId")).Return(1).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(1)).Return(false);
 			_reader.Expect(r => r.GetGuid(1)).Return(_guid);
 			_reader.Expect(r => r.GetOrdinal("AlarmTypeId")).Return(2);
 			_reader.Expect(r => r.GetGuid(2)).Return(_guid);

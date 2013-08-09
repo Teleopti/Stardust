@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Rta.Server
 								t.DisplayColor,t.StaffingEffect, t.ThresholdTime--, sg.BusinessUnit BusinessUnitId
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id
-								INNER JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id
+								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id
 								ORDER BY Activity";
 			var stateGroups = new List<RtaAlarmLight>();
 			using (
@@ -213,17 +213,24 @@ namespace Teleopti.Ccc.Rta.Server
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					var stateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName"));
-					var stateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId"));
+					var stateGroupName = "";
+					var stateGroupId = Guid.Empty;
+					var activityId = Guid.Empty;
+					
+					if (!reader.IsDBNull(reader.GetOrdinal("StateGroupName")))
+						stateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName"));
+					
+					if (!reader.IsDBNull(reader.GetOrdinal("StateGroupId")))
+						stateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId"));
+
+					if (!reader.IsDBNull(reader.GetOrdinal("ActivityId")))
+						activityId = reader.GetGuid(reader.GetOrdinal("ActivityId"));
+					
 					var alarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId"));
 					var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
 					var displayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"));
-					var activityId = Guid.Empty;
-					if (!reader.IsDBNull(reader.GetOrdinal("ActivityId")))
-						activityId = reader.GetGuid(reader.GetOrdinal("ActivityId"));
 					var thresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime"));
 					var name = reader.GetString(reader.GetOrdinal("Name"));
-
 					var rtaAlarmLight = new RtaAlarmLight
 					                    	{
 					                    		DisplayColor = displayColor,
