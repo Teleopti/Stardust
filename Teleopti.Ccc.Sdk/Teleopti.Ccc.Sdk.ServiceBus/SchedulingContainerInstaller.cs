@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
 			builder.RegisterType<TeleoptiRtaServiceClient>().As<ITeleoptiRtaService>().SingleInstance();
 			builder.RegisterType<SingleSkillMaxSeatCalculator>().As<ISingleSkillMaxSeatCalculator>();
+			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)
