@@ -57,19 +57,24 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			cache: false,
 			async: false,
 			success: function () {
-				_testMessage(message);
-			},
-			error: function (r) {
-				if (r.status == 401 || r.status == 403) {
-					_testMessage(message);
-				}
+			    $.ajax({
+			        url: _settings.startBaseUrl + 'Menu/Applications',
+			        global: false,
+			        cache: false,
+			        async: false,
+			        success: function () { },
+			        error: function (r) {
+			            if (r.status == 403) //forbidden = not logged in
+			                _testMessage(message);
+			        }
+			    });
 			}
 		});
 	}
 
 	return {
 		Init: function (settings) {
-			_settings = settings;
+		    _settings = settings;
 		},
 		TestMessage: function (message) {
 		    _testMessage(message);

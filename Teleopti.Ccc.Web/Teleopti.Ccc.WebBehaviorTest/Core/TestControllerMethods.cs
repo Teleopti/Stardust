@@ -78,9 +78,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Cookie is expired!");
-			// waiting a while for the cookie to take hold in IE.
-			// possible to assert it?
-			Thread.Sleep(200);
 		}
 
 		public static void TestMessage(string message)
