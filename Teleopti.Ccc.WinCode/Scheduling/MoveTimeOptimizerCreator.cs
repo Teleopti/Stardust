@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new OccupiedSeatCalculator();
 
 				INonBlendSkillCalculator nonBlendSkillCalculator =
-					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
+					new NonBlendSkillCalculator();
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider);

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
 					skillStaffPeriod.Payload.CalculatedUsedSeats = result;
 				}
-				
 			}
 		}
 	}

@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
 				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
 
-				INonBlendSkillCalculator nonBlendSkillCalculator =
-					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
+				INonBlendSkillCalculator nonBlendSkillCalculator = new NonBlendSkillCalculator();
 
 				IDeleteSchedulePartService deleteSchedulePartService =
 					new DeleteSchedulePartService(_schedulingResultStateHolder);

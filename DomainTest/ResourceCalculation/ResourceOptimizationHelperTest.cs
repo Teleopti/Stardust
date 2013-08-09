@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
 			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
-													 new NonBlendSkillCalculator(
-														 new NonBlendSkillImpactOnPeriodForProjection()),
+													 new NonBlendSkillCalculator(),
 														 _personSkillProvider);
 		}
 

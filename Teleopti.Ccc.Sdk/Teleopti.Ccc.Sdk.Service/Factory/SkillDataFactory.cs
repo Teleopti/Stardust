@@ -23,15 +23,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
 			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
-			TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScenarioRepository scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
-				IScenario requestedScenario = scenarioRepository.LoadDefaultScenario();
+				var scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
+				var requestedScenario = scenarioRepository.LoadDefaultScenario();
 
-				DateTimePeriod period = PreparePeriod(timeZoneInfo, dateOnlyDto);
-				DateTimePeriod periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
-
+				var period = PreparePeriod(timeZoneInfo, dateOnlyDto);
+				var periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
+				var dateOnlyPeriodForResourceCalc = periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo);
+					
 				IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
 				using (SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
 				{
@@ -57,15 +58,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 																					(
 																						unitOfWork)));
 					loader.Execute(requestedScenario, periodForResourceCalc,
-								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
+								   personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true));
 
 					var personSkillProvider = new PersonSkillProvider();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
 																					new OccupiedSeatCalculator(),
-																					new NonBlendSkillCalculator(
-																						new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), personSkillProvider);
-					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
+																					new NonBlendSkillCalculator(), personSkillProvider);
+					foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 					{
 						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
 					}

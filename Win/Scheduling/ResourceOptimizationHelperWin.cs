@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), personSkillProvider)
+			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider)
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;

@@ -36,25 +36,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
 				foreach (var resourceLayer in resources)
 				{
-					removeResourceFromInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.PayloadId,combination), resourceLayer.Period);
+					removeResourceFromInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId,combination));
 				}
 
 				resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
 				foreach (var resourceLayer in resources)
 				{
-					addResourceToInterval(resourceLayer.Resource, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), resourceLayer.Period);
+					addResourceToInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId, combination));
 				}
 			}
 		}
 
-		private void addResourceToInterval(double resource, ActivitySkillsCombination activitySkillsCombination, DateTimePeriod period)
+		private void addResourceToInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination)
 		{
+
 			//update resources set resource = resource + resource where combination_id = x and startdatetime = period.startdatetime and enddatetime = period.enddatetime
 			//or
 			//insert into resources (resource, combination_id = x,startdatetime = period.startdatetime, enddatetime = period.enddatetime)
 		}
 
-		private void removeResourceFromInterval(double resource, ActivitySkillsCombination activitySkillsCombination, DateTimePeriod period)
+		private void removeResourceFromInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination)
 		{
 			//update resources set resource = resource - resource where combination_id = x and startdatetime = period.startdatetime and enddatetime = period.enddatetime
 		}
@@ -65,6 +66,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	//- Person deleted
 	//- Person period date changes
 	//- Person period skill changes
+	//- Person team changes
+	//- Activity requires seat changed
+	//- Team site changes
 
 	public static class ProjectionChangedEventLayerExtensions
 	{

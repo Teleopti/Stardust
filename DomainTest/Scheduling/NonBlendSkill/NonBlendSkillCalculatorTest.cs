@@ -13,14 +13,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 	{
 		private MockRepository _mocks;
 		private INonBlendSkillCalculator _target;
-		private INonBlendSkillImpactOnPeriodForProjection _nonBlendSkillImpactOnPeriodForProjection;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_nonBlendSkillImpactOnPeriodForProjection = _mocks.StrictMock<INonBlendSkillImpactOnPeriodForProjection>();
-			_target = new NonBlendSkillCalculator(_nonBlendSkillImpactOnPeriodForProjection);
+			_target = new NonBlendSkillCalculator();
 		}
 
 		[Test]
