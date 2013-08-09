@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
@@ -60,15 +61,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			}
 		}
 
+		public void Assert<T>(T value, Constraint constraint, string message)
+		{
+			try
+			{
+				NUnit.Framework.Assert.That(value, constraint);
+			}
+			catch (AssertionException)
+			{
+				NUnit.Framework.Assert.Fail(buildCompleteErrorMessage(message));
+			}
+		}
+
 		public void EventualAssert<T>(Func<T> value, Constraint constraint, Func<string> message)
 		{
-			Core.BrowserDriver.EventualAssert.That(value, constraint, () => buildCompleteErrorMessage(message()), _exceptionCatcher);
+			BrowserDriver.EventualAssert.That(value, constraint, () => buildCompleteErrorMessage(message()), _exceptionCatcher);
 		}
 
 		public void EventualAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
-			Core.BrowserDriver.EventualAssert.That(value, constraint, () => buildCompleteErrorMessage(message), _exceptionCatcher);
+			BrowserDriver.EventualAssert.That(value, constraint, () => buildCompleteErrorMessage(message), _exceptionCatcher);
 		}
+
+
 
 
 
