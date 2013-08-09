@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             {
                 _scheduleStateHolder.VisualizingScheduleAppointmentTypes &= ~filterType;
             }
-            _view.Refresh(true);
+            _view.Refresh();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
@@ -58,29 +59,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see a report")]
 		public void ThenIShouldSeAReport()
 		{
-			Browser.Interactions.AssertExists("#report-view.ui-page-active");
-			Browser.Interactions.AssertNotExists("#report-view.ui-page-active", ".ui-mobile-viewport-transitioning");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active");
 		}
 
 		[Then(@"I should see a graph")]
 		public void ThenIShouldSeeAGraph()
 		{
-			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-holder");
-			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-canvas");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active #report-graph-holder");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-view.ui-page-active #report-graph-canvas");
 		}
 
 		[Then(@"I should see a report for next date")]
 		public void ThenIShouldSeeAReportForNextDate()
 		{
 			var expected = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
 			var expected = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a table")]
@@ -92,21 +92,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see friendly error message")]
 		public void ThenIShouldSeeFriendlyErrorMessage()
 		{
-			Browser.Interactions.AssertContains("#error-view", "No access");
+			Browser.Interactions.AssertFirstContains("#error-view", "No access");
 		}
 
 		[Then(@"I should see ReportSettings")]
 		public void ThenIShouldSeeReportSettings()
 		{
-			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active");
-			Browser.Interactions.AssertNotExists("#report-settings-view.ui-page-active", ".ui-mobile-viewport-transitioning");
+			Browser.Interactions.AssertExists("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active");
 		}
 
 		[Then(@"I should see ReportSettings with default value")]
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertContains("#sel-skill-menu", Resources.All);
+			Browser.Interactions.AssertFirstContains("#sel-skill-menu", Resources.All);
 			Browser.Interactions.AssertExists("#report-settings-type-graph:checked");
 			Browser.Interactions.AssertExists("#report-settings-type-table:not(:checked)");
 			Browser.Interactions.AssertExists("#report-settings-interval-week:not(:checked)");
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
 			var skillName = UserFactory.User().UserData<ThreeSkills>().Skill2Name;
-			Browser.Interactions.AssertContains("#sel-skill-button", skillName);
+			Browser.Interactions.AssertFirstContains("#sel-skill-button", skillName);
 		}
 
 		[Then(@"I should only see reports i have access to")]
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
 			SelectGetAnsweredAndAbondonedReport();
-			Browser.Interactions.Click("#report-settings-interval-week");
+			Browser.Interactions.Click("#report-settings-interval-week + label");
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		{
 			// before click next date, make sure current is today
 			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-next");
 		}
 
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			_clickedDateInDatePicker = DateOnly.Today.AddDays(2);
 			if (_clickedDateInDatePicker.Month != DateOnly.Today.Month)
 				_clickedDateInDatePicker = DateOnly.Today.AddDays(-2);
-			Browser.Interactions.Click(".ui-datebox-griddate.ui-btn-up-d:contains('" + _clickedDateInDatePicker.Day + "')");
+			Browser.Interactions.ClickContaining(".ui-datebox-griddate.ui-btn-up-d", _clickedDateInDatePicker.Day.ToString());
 		}
 
 		[When(@"I click previous date")]
@@ -205,20 +204,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		{
 			// before click previous date, make sure current is today
 			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-prev");
 		}
 
 		[When(@"I click View Report Button")]
 		public void WhenIClickViewReportButton()
 		{
-			Browser.Interactions.Click("#report-view-show-button");
-		}
-
-		[When(@"I close the skill-picker")]
-		public void WhenICloseTheSkillPicker()
-		{
-			Browser.Interactions.Click(".ui-popup-container a");
+			Browser.Interactions.Click("body:not(.ui-mobile-viewport-transitioning) #report-view-show-button");
 		}
 
 		[Given(@"I view MobileReports")]
@@ -240,7 +233,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			Browser.Interactions.Click("#sel-skill-button");
+			Browser.Interactions.Click("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-button");
+		}
+
+		[When(@"I close the skill-picker")]
+		public void WhenICloseTheSkillPicker()
+		{
+			Browser.Interactions.ClickContaining(".ui-popup-container a", "Close");
 		}
 
 		[When(@"I select a report")]
@@ -270,12 +269,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenISelectASkill()
 		{
 			var skillId = UserFactory.User().UserData<ThreeSkills>().Skill2Id;
-			Browser.Interactions.Javascript(line =>
-				{
-					line("var el = $('#sel-skill');");
-					line("el.val('{0}').attr('selected', true).siblings('option').removeAttr('selected');");
-					line("el.selectmenu('refresh', true);");
-				}, skillId);
+			var script = "var el = $('#sel-skill');" +
+						 "el.val('" + skillId + "').attr('selected', true).siblings('option').removeAttr('selected');" +
+						 "el.selectmenu('refresh', true);";
+			Browser.Interactions.Javascript(script, skillId);
 		}
 
 		[When(@"I select the all skills item")]
@@ -294,13 +291,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			Browser.Interactions.AssertContains(".report-table>tbody>tr>td", Resources.DayOfWeekSunday);
+			Browser.Interactions.AssertFirstContains(".report-table>tbody>tr>td", Resources.DayOfWeekSunday);
 		}
 
 		[Then(@"I should see the all skill item selected")]
 		public void ThenIShouldSeeTheAllSkillItemSelected()
 		{
-			Browser.Interactions.AssertExists("#sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-button:contains('{0}')", Resources.All);
+			Browser.Interactions.AssertExistsUsingJQuery("body:not(.ui-mobile-viewport-transitioning) #report-settings-view.ui-page-active #sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
 		}
 	}
 }

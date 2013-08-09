@@ -151,15 +151,21 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 selectedViewModel.Initialize(request);
             }
 
-            ajax.Ajax({
-                url: selectedViewModel.Link(),
-                dataType: "json",
-                type: 'GET',
-                success: function (data) {
-                	selectedViewModel.Initialize(data, isProcessing);
-                    self.Requests.unshift(selectedViewModel);
-                }
-            });
+            if (isProcessing) {
+                selectedViewModel.Initialize(request, false);
+                self.Requests.unshift(selectedViewModel);
+            }
+            else {
+                ajax.Ajax({
+                    url: selectedViewModel.Link(),
+                    dataType: "json",
+                    type: 'GET',
+                    success: function(data) {
+                        selectedViewModel.Initialize(data, isProcessing);
+                        self.Requests.unshift(selectedViewModel);
+                    }
+                });
+            }
         };
 
         self.LoadPage = function () {

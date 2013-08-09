@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
 		public void ThenIShouldSeeThatRequestAtPositionInTheListWasDeniedWithReason(int position, string reason)
 		{
-			Browser.Interactions.AssertContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
+			Browser.Interactions.AssertFirstContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
 		}
 
 		[Then(@"I should see request form with subject '(.*)'")]
