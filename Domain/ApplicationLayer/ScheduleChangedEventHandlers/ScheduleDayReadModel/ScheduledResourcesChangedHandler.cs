@@ -5,18 +5,22 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
 	public class ScheduledResourcesChangedHandler : IHandleEvent<ProjectionChangedEvent>
 	{
 		private readonly IPersonRepository _personRepository;
+		private readonly ISkillRepository _skillRepository;
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private const int configurableIntervalLength = 15;
+		private int configurableIntervalLength = 15;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
 
-		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, IPersonSkillProvider personSkillProvider)
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IPersonSkillProvider personSkillProvider)
 		{
 			_personRepository = personRepository;
+			_skillRepository = skillRepository;
 			_personSkillProvider = personSkillProvider;
 		}
 
@@ -27,9 +31,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)
 			{
-				
+				Logger.WarnFormat("No person was found with the id {0}",@event.PersonId);
+				return;
 			}
 
+			configurableIntervalLength = _skillRepository.MinimumResolution();
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var combination = _personSkillProvider.SkillsOnPersonDate(person, new DateOnly(scheduleDay.Date));
