@@ -29,6 +29,9 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @isIntraday bit = 0,
 @is_delayed_job bit = 0
 AS
+-- temporary part of #24257 we can't just use the updated schedules to know if we should do anything
+-- there could be updated statistcs too, maybe we can do both, update today and yesterday AND other days with changed schedules
+set @isIntraday = 0
 
 --Execute one delayed jobs, if any
 if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_delayed_job=1
