@@ -18,37 +18,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public object Javascript(string javascript)
 		{
-			return browserOperation(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), "Failed to execute javascript " + javascript);
+			return browserRetryingOperation(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), "Failed to execute javascript " + javascript);
 		}
 
 		public void GoToWaitForCompleted(string uri)
 		{
-			browserOperation(() => _browser.GoTo(uri), "Failed to goto url " + uri + " and wait for completion");
+			browserRetryingOperation(() => _browser.GoTo(uri), "Failed to goto url " + uri + " and wait for completion");
 		}
 
 		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
 		{
-			browserOperation(() => _browser.GoToNoWait(uri), "Failed to goto url " + uri + " without waiting");
+			browserRetryingOperation(() => _browser.GoToNoWait(uri), "Failed to goto url " + uri + " without waiting");
 			AssertUrlContains(assertUrlContains);
 		}
 
 		public void Click(string selector)
 		{
 			validateSelector(selector);
-			var element = _browser.Element(Find.BySelector(selector));
-			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
-			element.WaitUntil<Element>(e => e.Enabled);
-			element.ClickNoWait();
+			browserOperation(() =>
+				{
+					var element = _browser.Element(Find.BySelector(selector));
+					element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+					element.WaitUntil<Element>(e => e.Enabled);
+					element.ClickNoWait();
+				}, "Failed to click " + selector);
 		}
 
 		public void ClickContaining(string selector, string text)
 		{
 			validateSelector(selector);
 			selector = string.Format(selector + ":contains('{0}')", text);
-			var element = _browser.Element(Find.BySelector(selector));
-			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
-			element.WaitUntil<Element>(e => e.Enabled);
-			element.ClickNoWait();
+			browserOperation(() =>
+				{
+					var element = _browser.Element(Find.BySelector(selector));
+					element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+					element.WaitUntil<Element>(e => e.Enabled);
+					element.ClickNoWait();
+				}, "Failed to click " + selector);
 		}
 
 		public void AssertUrlContains(string url)
@@ -155,7 +161,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		{
 			try
 			{
+				operation.Invoke();
+			}
+			catch (Exception ex)
+			{
+				throw new BrowserInteractionException(buildMessage(message), ex);
+			}
+		}
+
+		private void browserRetryingOperation(Action operation, string message)
+		{
+			try
+			{
 				Retrying.Action(operation, exceptionCatcher);
+			}
+			catch (Exception ex)
+			{
+				throw new BrowserInteractionException(buildMessage(message), ex);
+			}
+		}
+
+		private T browserRetryingOperation<T>(Func<T> operation, string message)
+		{
+			try
+			{
+				return Retrying.Action(operation, exceptionCatcher);
 			}
 			catch (Exception ex)
 			{
@@ -171,18 +201,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
 			EventualAssert.That(value, constraint, () => buildMessage(message), new WatiNIEExceptionCatcher());
-		}
-
-		private T browserOperation<T>(Func<T> operation, string message)
-		{
-			try
-			{
-				return Retrying.Action(operation, exceptionCatcher);
-			}
-			catch (Exception ex)
-			{
-				throw new BrowserInteractionException(buildMessage(message), ex);
-			}
 		}
 
 		private string buildMessage(string message)
