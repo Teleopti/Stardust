@@ -162,6 +162,7 @@
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
+    <Compile Include="Notification\ISignificantChangeChecker.cs" />
     <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
+			builder.RegisterType<ScheduledResourcesReadModelStorage>().As<IScheduledResourcesReadModelStorage>().SingleInstance();
 		}
 
     	private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

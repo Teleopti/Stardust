@@ -113,8 +113,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				                                 : activityPeriod.EndDateTime;
 	        return ((DateTime)nextActivityDateTime).ToLocalTime();
         }
-        
-        public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
+
+		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
+		{
+			var uow = _currentUnitOfWork.Current();
+
+			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"SELECT * FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
+										.SetGuid("ScenarioId", scenarioId)
+										.SetGuid("PersonId", personId)
+										.SetDateTime("Date", date)
+										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ProjectionChangedEventLayer)))
+										.List<ProjectionChangedEventLayer>();
+	    }
+
+	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {
             var uow = _currentUnitOfWork.Current();
 
@@ -154,15 +167,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	}
 
-    public class ActivityPeriod
-    {
-	public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-          
-        
-    }
+	public class ActivityPeriod
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+	}
 
-    public class AbsenceRequestInfo
+	public class AbsenceRequestInfo
     {
         public int NumberOfRequests { get; set; }
         public DateTime BelongsToDate { get; set; }
