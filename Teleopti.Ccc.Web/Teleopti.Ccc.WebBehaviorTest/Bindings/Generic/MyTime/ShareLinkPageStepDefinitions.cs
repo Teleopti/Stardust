@@ -11,26 +11,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"Someone should not see ical calendar")]
 		public void ThenSomeoneShouldNotSeeIcalCalendar()
 		{
-			Browser.Interactions.AssertNotContains("body", "VCALENDAR");
+			Browser.Interactions.AssertFirstNotContains("body", "VCALENDAR");
 		}
 
 		[Then(@"Someone should see ical calendar with")]
 		public void ThenSomeoneShouldSeeIcalCalendarWith(Table table)
 		{
-			Browser.Interactions.AssertContains("body", "VCALENDAR");
+			Browser.Interactions.AssertFirstContains("body", "VCALENDAR");
 			var item = table.CreateInstance<IcsCalendarItem>();
-			Browser.Interactions.AssertContains("body", item.SUMMARY);
-			Browser.Interactions.AssertContains("body", item.DTSTART);
-			Browser.Interactions.AssertContains("body", item.DTEND);
+			Browser.Interactions.AssertFirstContains("body", item.SUMMARY);
+			Browser.Interactions.AssertFirstContains("body", item.DTSTART);
+			Browser.Interactions.AssertFirstContains("body", item.DTEND);
 		}
 
 		[Then(@"Someone should not see ical calendar with")]
 		public void ThenSomeoneShouldNotSeeIcalCalendarWith(Table table)
 		{
-			Browser.Interactions.AssertContains("body", "VCALENDAR");
+			Browser.Interactions.AssertFirstContains("body", "VCALENDAR");
 			var item = table.CreateInstance<IcsCalendarItem>();
-			Browser.Interactions.AssertNotContains("body", item.DTSTART);
-			Browser.Interactions.AssertNotContains("body", item.DTEND);
+			Browser.Interactions.AssertFirstNotContains("body", item.DTSTART);
+			Browser.Interactions.AssertFirstNotContains("body", item.DTEND);
 		}
 
 		public class IcsCalendarItem
