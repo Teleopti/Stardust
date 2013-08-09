@@ -2,7 +2,6 @@
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
@@ -35,7 +34,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void Click(string selector)
 		{
-			_browser.Element(Find.BySelector(selector)).EventualClick();
+			validateSelector(selector);
+			var element = _browser.Element(Find.BySelector(selector));
+			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+			element.WaitUntil<Element>(e => e.Enabled);
+			element.ClickNoWait();
+		}
+
+		public void ClickContaining(string selector, string text)
+		{
+			validateSelector(selector);
+			selector = string.Format(selector + ":contains('{0}')", text);
+			var element = _browser.Element(Find.BySelector(selector));
+			element.WaitUntilExists(Convert.ToInt32(Timeouts.Timeout.TotalSeconds));
+			element.WaitUntil<Element>(e => e.Enabled);
+			element.ClickNoWait();
 		}
 
 		public void AssertUrlContains(string url)
@@ -51,29 +64,48 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			browserAssert(() => runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			object value = "";
+			browserAssert(() =>
+				{
+					value = runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(javascript);
+					return value;
+				}, 
+				Is.StringContaining(text), 
+				() => "Failed to assert that javascript " + javascript + " returned a value containing " + text + ". Last value returned was " + value);
 		}
 
 		public void AssertExists(string selector)
 		{
+			validateSelector(selector);
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
+			validateSelector(existsSelector);
+			validateSelector(notExistsSelector);
 			AssertExists(existsSelector);
 			browserAssert(() => _browser.Element(Find.BySelector(notExistsSelector)).Exists, Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
-		public void AssertContains(string selector, string text)
+		public void AssertAnyContains(string selector, string text)
 		{
+			validateSelector(selector);
+			selector = string.Format(selector + ":contains('{0}')", text);
+			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
+		}
+
+		public void AssertFirstContains(string selector, string text)
+		{
+			validateSelector(selector);
 			// use assertExists(selector:contains(text)) here instead?
 			// should be faster with better compatibility.
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
 		}
 
-		public void AssertNotContains(string selector, string text)
+		public void AssertFirstNotContains(string selector, string text)
 		{
+			validateSelector(selector);
 			browserAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
@@ -95,6 +127,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		}
 
 
+		private void validateSelector(string selector)
+		{
+			if (selector.Contains(":contains("))
+				throw new Exception(":contains() selector should not be used, but was used in " + selector);
+		}
 
 		private object runJavascriptAndAvoidWatiNsIncorrectEscapingInItsEvalFunction(string javascript)
 		{
@@ -124,6 +161,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			{
 				throw new BrowserInteractionException(buildMessage(message), ex);
 			}
+		}
+
+		private void browserAssert<T>(Func<T> value, Constraint constraint, Func<string> message)
+		{
+			EventualAssert.That(value, constraint, () => buildMessage(message()), new WatiNIEExceptionCatcher());
 		}
 
 		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
