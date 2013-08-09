@@ -26,11 +26,13 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			const int chunkTimeSpan = 30;
 		    var affectedRows = 0;
             var includedTodayUtc = JobParameters.DefaultTimeZone.SafeConvertTimeToUtc(DateTime.Today.AddDays(1).AddMilliseconds(-1));
+            var includedYesterdayUtc = JobParameters.DefaultTimeZone.SafeConvertTimeToUtc(DateTime.Today.AddDays(-1));
 
-
-			if (JobCategoryDatePeriod.StartDateUtc > includedTodayUtc)
+            // should we really do this check now when this is in the JobCategoryType.AgentStatistics
+            // if we choose to update in future so what???
+			if (JobCategoryDatePeriod.StartDateUtc > includedTodayUtc && !_isIntraday)
 				return affectedRows;
-
+            
 			var toDate = JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1) > includedTodayUtc
 			                      ? includedTodayUtc.AddDays(chunkTimeSpan)
 			                      : JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1).AddDays(chunkTimeSpan);
@@ -47,6 +49,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					endDateTime = startDateTime.AddDays(chunkTimeSpan).AddMilliseconds(-1);
 
 				var period = new DateTimePeriod(startDateTime, endDateTime);
+                // part of #24257 
+                if(_isIntraday)
+                    period = new DateTimePeriod(includedYesterdayUtc, includedTodayUtc);
 
 				affectedRows += _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(period,
 																							   RaptorTransformerHelper.CurrentBusinessUnit, 
