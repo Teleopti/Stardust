@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             string message = null;
             string weekDayName;
 
-			string currentDateFormat = string.Format(cultureInfo, currentDate.ToShortDateString(cultureInfo));
+			string currentDateFormat = currentDate.ToShortDateString(cultureInfo);
 
             //if new and existing both are OFF days
             if ((newReadModel == null && existingReadModel == null) || (newReadModel == null && existingReadModel.Workday == false) || (existingReadModel == null && newReadModel.Workday == false))
@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             }
 
 			weekDayName = cultureInfo.DateTimeFormat.GetDayName(newReadModel.StartDateTime.DayOfWeek);
-			string startDateTime = string.Format(cultureInfo, newReadModel.StartDateTime.ToShortTimeString().ToString(cultureInfo));
-			string endDateTime = string.Format(cultureInfo, newReadModel.EndDateTime.ToShortTimeString().ToString(cultureInfo));
+			string startDateTime = newReadModel.StartDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
+			string endDateTime = newReadModel.EndDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
                
             // if existingReadModel is NULL and new read model is NOT NULL  (From OFF Day to a working day)
             if (existingReadModel==null)
