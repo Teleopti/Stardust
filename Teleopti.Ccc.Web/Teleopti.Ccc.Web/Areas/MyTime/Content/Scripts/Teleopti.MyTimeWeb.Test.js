@@ -18,23 +18,38 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Test = (function ($) {
 	var _settings = {};
 	var _messages = [];
-
+	var _displayEnabled = false;
+    
 	function _testMessage(message) {
 		_messages.push(message);
-	}
+		if (_displayEnabled)
+		    _displayMessage(message);
+    }
 
-	function _popTestMessages() {
-		var messages = "";
-		var page = $('#page');
+	function _getTestMessages() {
+	    var messages = "";
+	    _displayEnable();
 		for (var i = 0; i < _messages.length; i++) {
 		    var message = _messages[i];
-		    page.append(message + "</ br>");
 		    messages = messages + message;
 		}
-	    _messages = [];
 		return messages;
 	}
 
+    function _displayEnable() {
+        if (!_displayEnabled) {
+            _displayEnabled = true;
+            for (var i = 0; i < _messages.length; i++) {
+                var message = _messages[i];
+                _displayMessage(message);
+            }
+        }
+    }
+    
+    function _displayMessage(message) {
+        $('#page').append(message).append($('<br>'));
+    }
+    
 	function _expireMyCookie(message) {
 		$.ajax({
 			url: _settings.startBaseUrl + 'Test/ExpireMyCookie',
@@ -57,10 +72,10 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			_settings = settings;
 		},
 		TestMessage: function (message) {
-			_testMessage(message);
+		    _testMessage(message);
 		},
-		PopTestMessages: function () {
-			return _popTestMessages();
+		GetTestMessages: function () {
+		    return _getTestMessages();
 		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);
