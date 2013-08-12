@@ -90,6 +90,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 return _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).LoadAggregate(id);
             }
+            if(typeof(IOvertimeAvailability).IsAssignableFrom(scheduleDataType))
+            {
+                return _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).LoadAggregate(id);
+            }
             if (!typeof(IPersistableScheduleData).IsAssignableFrom(scheduleDataType))
                 throw new ArgumentException("Only IPersistableScheduleData types are allowed");
             throw new NotImplementedException("Missing repository definition for type " + scheduleDataType);
@@ -121,13 +125,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, period, scenario));
                 addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, period, scenario));
                 addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, period, scenario));
+               
 
 				// ugly to be safe to get all
 				// roger risk att det smäller om man för med grejer utanför laddad period??? (longPeriod)
 				DateOnlyPeriod longDateOnlyPeriod =
 					new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
 									   new DateOnly(period.EndDateTime.AddDays(1)));
-				
+               
 				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
 
                 if(scheduleDictionaryLoadOptions.LoadNotes)
@@ -146,6 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					addStudentAvailabilityDays(retDic,
 											   _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
 												   Find(longDateOnlyPeriod, people));
+                    addOvertimeAvailability(retDic, _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).Find(longDateOnlyPeriod, people));
 					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
 					{
 						addPersonAvailabilities(period, retDic, people);
@@ -156,6 +162,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             retDic.TakeSnapshot();
             return retDic;
         }
+
+        private void addOvertimeAvailability(IScheduleDictionary retDic, IList<IOvertimeAvailability> availabilityDays)
+        {
+            foreach (var availabilityDay in availabilityDays)
+            {
+                ((ScheduleRange)retDic[availabilityDay.Person]).Add(availabilityDay);
+            }
+        }
+
 
         public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
         {
@@ -171,13 +186,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                                    <IPersistableScheduleData>());
             using(TurnoffPermissionScope.For(retDic))
             {
-                foreach (DateTimePeriod p in searchPeriods)
-                {
-                    addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario),false,people);
-                }                
+				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), false, people);
+				foreach (DateTimePeriod p in searchPeriods)
+				{
+					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
+					addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
+				}
             }
 
             return retDic[person];
@@ -236,6 +251,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					addStudentAvailabilityDays(scheduleDictionary,
 													_repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
 																	.Find(longDateOnlyPeriod, visiblePersons));
+                    addOvertimeAvailability(scheduleDictionary, _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
 	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
 	                {
 		                addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);

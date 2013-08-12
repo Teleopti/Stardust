@@ -289,5 +289,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetInt32("defaultResolution", defaultResolution)
                 .List<ISkill>();
         }
+
+	    public int MinimumResolution()
+	    {
+		    return Session.CreateCriteria<Skill>()
+				.SetProjection(Projections.Min("DefaultResolution"))
+				.UniqueResult<int>();
+	    }
     }
 }

@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			IPersonAssignment assignment2 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 			IPersonAssignment assignment3 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 
-            assignment1.SetMainShiftLayers(new List<IMainShiftActivityLayerNew>{new MainShiftActivityLayerNew(activity, new DateTimePeriod())}, fm);
-						assignment2.SetMainShiftLayers(new List<IMainShiftActivityLayerNew> { new MainShiftActivityLayerNew(activity, new DateTimePeriod()) }, fm);
-						assignment3.SetMainShiftLayers(new List<IMainShiftActivityLayerNew> { new MainShiftActivityLayerNew(activity, new DateTimePeriod()) }, da);
+            assignment1.SetMainShiftLayers(new List<IMainShiftLayer>{new MainShiftLayer(activity, new DateTimePeriod())}, fm);
+						assignment2.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, new DateTimePeriod()) }, fm);
+						assignment3.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, new DateTimePeriod()) }, da);
 
             using (_mockRepository.Record())
             {

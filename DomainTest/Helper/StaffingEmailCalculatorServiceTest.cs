@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
                             Math.Round(
                                 _calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _tasks,
                                                                              _averageHandlingTime, _periodLength,
-                                                                             _minOcc, _maxOcc), 3));
+                                                                             _minOcc, _maxOcc,1), 3));
         }
 
         [Test]

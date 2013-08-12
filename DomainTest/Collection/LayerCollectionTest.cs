@@ -1,8 +1,10 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -28,11 +30,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyParentWorksWhenLayerIsAdded()
         {
-	        var dummyShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("hopp"),
-	                                                                  new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+	        var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
+	        var dummyShift = OvertimeShiftFactory.CreateOvertimeShift(new Activity("d"),
+	                                                                  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+	                                                                  defSet,
+	                                                                  new PersonAssignment(new Person(), new Scenario("d"),
+	                                                                                       new DateOnly(2000, 1, 1)));
             var actLay =
-                new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
-                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+                new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
+                                                        new DateTimePeriod(2000, 1, 1, 2002, 1, 1),
+																												defSet);
             dummyShift.LayerCollection.Add(actLay);
             Assert.AreSame(dummyShift, actLay.Parent);
         }
@@ -87,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyValidTypeCouldBeAdded()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
+            var mainShift = new WorkShift(new ShiftCategory("#"));
             mainShift.LayerCollection.Add(
-                new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"),
+                new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"),
                                                         new DateTimePeriod()));
         }
 
@@ -99,10 +106,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyValidTypeCouldBeRemoved()
         {
-            MainShiftActivityLayer newMainShift =
-                new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod());
+            var newMainShift =
+                new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod());
 
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
+						var mainShift = new WorkShift(new ShiftCategory("#"));
             mainShift.LayerCollection.Add(newMainShift);
 
             mainShift.LayerCollection.Remove(newMainShift);
@@ -118,9 +125,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void CanClearLayerCollection()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+            mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
 
             Assert.AreEqual(2, mainShift.LayerCollection.Count);
             mainShift.LayerCollection.Clear();
@@ -131,11 +138,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void CanAddLayerAtIndexedPosition()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
 
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
 
             mainShift.LayerCollection.Insert(0, layer);
             Assert.AreEqual(mainShift.LayerCollection[0],layer);
@@ -145,11 +152,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void CanMoveUpLayer()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
 
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
 
             mainShift.LayerCollection.Add(layer);
             mainShift.LayerCollection.MoveUpLayer(layer);
@@ -160,12 +167,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void CannotMoveUpFirstLayer()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
 
             mainShift.LayerCollection.Add(layer);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
 
             ((LayerCollection<IActivity>)mainShift.LayerCollection).MoveUpLayer(layer);
             Assert.AreEqual(mainShift.LayerCollection[0], layer);
@@ -175,11 +182,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void CanMoveDownLayer()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
             mainShift.LayerCollection.Add(layer);
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
 
             Assert.IsTrue(mainShift.LayerCollection.CanMoveDownLayer(layer));
             ((LayerCollection<IActivity>)mainShift.LayerCollection).MoveDownLayer(layer);
@@ -190,11 +197,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void CannotMoveDownLayerLastLayer()
         {
-            MainShift mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
+					var mainShift = new WorkShift(new ShiftCategory("#"));
+
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+					mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("er"), new DateTimePeriod()));
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
             mainShift.LayerCollection.Add(layer);
 
             ((LayerCollection<IActivity>)mainShift.LayerCollection).MoveDownLayer(layer);
@@ -205,15 +212,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyCanMoveUp()
         {
-            var mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
+					var mainShift = new WorkShift(new ShiftCategory("#"));
 
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
-            MainShiftActivityLayer layerNotInCollection = new MainShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
+					var layerNotInCollection = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
 
             mainShift.LayerCollection.Add(layer);
             Assert.IsFalse(mainShift.LayerCollection.CanMoveUpLayer(layer), "Cannot move, only one layer");
 
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
             Assert.IsFalse(mainShift.LayerCollection.CanMoveUpLayer(layer), "Cannot move, top layer");
 
             mainShift.LayerCollection.MoveDownLayer(layer);
@@ -226,15 +233,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyCanMoveDown()
         {
-            var mainShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
+					var mainShift = new WorkShift(new ShiftCategory("#"));
 
-            MainShiftActivityLayer layer = new MainShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
-            MainShiftActivityLayer layerNotInCollection = new MainShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
+					var layer = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("index0"), new DateTimePeriod());
+					var layerNotInCollection = new WorkShiftActivityLayer(ActivityFactory.CreateActivity("tre"), new DateTimePeriod());
             
             mainShift.LayerCollection.Add(layer);
             Assert.IsFalse(mainShift.LayerCollection.CanMoveDownLayer(layer), "Cannot move, only one layer");
 
-            mainShift.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
+						mainShift.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hj"), new DateTimePeriod()));
             Assert.IsTrue(mainShift.LayerCollection.CanMoveDownLayer(layer));
 
             mainShift.LayerCollection.MoveDownLayer(layer);

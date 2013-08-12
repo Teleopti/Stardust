@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -83,11 +84,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_activity, _period));
+			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Playback())
 			{
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].PersonalShiftCollection.Count.Should().Be.EqualTo(0);
+				scheduleDay.PersonAssignmentCollection()[0].PersonalLayers.Should().Be.Empty();
 			}
 		}
 
@@ -115,11 +116,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(_activity, _period));
+			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-
+            
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelPersonalActivityCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].PersonalShiftCollection.Count.Should().Be.EqualTo(0);
+				scheduleDay.PersonAssignmentCollection()[0].PersonalLayers.Should().Be.Empty();
 			}
 		}
 	}

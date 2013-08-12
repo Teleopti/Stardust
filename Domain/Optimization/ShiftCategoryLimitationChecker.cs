@@ -153,12 +153,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             int categoryCounter = 0;
             datesWithCategory = new List<DateOnly>();
-            foreach (var dateOnly in schedulePeriodDates.DayCollection())
+            foreach (var part in personRange.ScheduledDayCollection(schedulePeriodDates))
             {
-                IScheduleDay part = personRange.ScheduledDay(dateOnly);
                 if (IsThisDayCorrectCategory(part, shiftCategoryLimitation.ShiftCategory))
                 {
-                    datesWithCategory.Add(dateOnly);
+                    datesWithCategory.Add(part.DateOnlyAsPeriod.DateOnly);
                     categoryCounter++;
                 }
             }
@@ -186,12 +185,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             datesWithCategory = new List<DateOnly>();
             int categoryCounter = 0;
-            foreach (var dateOnly in queryWeek.DayCollection())
+            foreach (var part in personRange.ScheduledDayCollection(queryWeek))
             {
-                IScheduleDay part = personRange.ScheduledDay(dateOnly);
                 if (IsThisDayCorrectCategory(part, shiftCategoryLimitation.ShiftCategory))
                 {
-                    datesWithCategory.Add(dateOnly);
+                    datesWithCategory.Add(part.DateOnlyAsPeriod.DateOnly);
                     categoryCounter++;
                 }
             }

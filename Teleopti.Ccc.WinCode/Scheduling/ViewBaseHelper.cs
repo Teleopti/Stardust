@@ -174,36 +174,36 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollection();
-            if (asses.Count > 0)
-            {
-                foreach (IPersonAssignment pa in asses)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-                    if(pa.ShiftCategory != null)
-                        sb.Append(pa.ShiftCategory.Description.Name);             //name
-                    sb.Append("  ");
-                    sb.Append(ToLocalStartEndTimeString(pa.Period,scheduleDay.TimeZone));      //time
+	        if (asses.Count > 0)
+	        {
+		        foreach (IPersonAssignment pa in asses)
+		        {
+			        if (sb.Length > 0)
+				        sb.AppendLine();
+			        if (pa.ShiftCategory != null)
+				        sb.Append(pa.ShiftCategory.Description.Name); //name
+			        sb.Append("  ");
+			        sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
 
-                    foreach(PersonalShift ps in pa.PersonalShiftCollection) 
-                    {
-                        sb.AppendLine();
-                        sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-                        foreach (ActivityLayer layer in ps.LayerCollection)
-                        {
-                            sb.AppendLine();
-                            sb.Append("    ");
-                            sb.Append(layer.Payload.ConfidentialDescription(pa.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).Name);                                  //name
-                            sb.Append(": ");
-                            sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone));             //time
-                        }
-                    }
-                }
-            }
+			        foreach (var layer in pa.PersonalLayers)
+			        {
+				        sb.AppendLine();
+				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
 
-            return sb.ToString();
+				        sb.AppendLine();
+				        sb.Append("    ");
+				        sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+					        //name
+				        sb.Append(": ");
+				        sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone)); //time
+			        }
+		        }
+	        }
+
+	        return sb.ToString();
         }
 
         /// <summary>
@@ -261,6 +261,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static string GetToolTipOvertime(IScheduleDay cell)
         {
+	        if (!dayHasOvertime(cell)) return string.Empty;
+
             StringBuilder sb = new StringBuilder();
 
             var proj = cell.ProjectionService().CreateProjection();
@@ -280,7 +282,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return sb.ToString();
         }
 
-        /// <summary>
+	    private static bool dayHasOvertime(IScheduleDay cell)
+	    {
+		    return cell.PersonAssignmentCollection().Any(p => p!=null && p.OvertimeShiftCollection.Count > 0);
+	    }
+
+	    /// <summary>
         /// Get tooltip for absences
         /// </summary>
         /// <param name="cell"></param>

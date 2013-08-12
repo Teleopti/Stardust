@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -9,14 +8,13 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses"), TestFixture]
-    class ShiftCategoryPeriodValueExtractorThreadTest : IDisposable
+    public class ShiftCategoryPeriodValueExtractorThreadTest : IDisposable
     {
         private MockRepository _mocks;
         private ISchedulingOptions _schedulingOptions;

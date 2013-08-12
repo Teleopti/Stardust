@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -13,6 +14,7 @@ namespace Teleopti.Interfaces.Domain
     {
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
+	    private readonly int _hashCode;
 
         #region Properties
 
@@ -102,6 +104,8 @@ namespace Teleopti.Interfaces.Domain
                 validateDateTime(startDateTime, endDateTime);
 
             period = new MinMax<DateTime>(startDateTime, endDateTime);
+			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -113,6 +117,8 @@ namespace Teleopti.Interfaces.Domain
         {
             validateDateTime(startDateTime, endDateTime);
             period = new MinMax<DateTime>(startDateTime, endDateTime);
+			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -151,6 +157,9 @@ namespace Teleopti.Interfaces.Domain
 
             validateDateTime(startDateTimeTemp, endDateTimeTemp);
             period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
+
+			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
+						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         #endregion
@@ -429,8 +438,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public override int GetHashCode()
         {
-            return (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}",GetType().FullName,
-                    StartDateTime.Ticks, EndDateTime.Ticks)).GetHashCode();
+            return _hashCode;
         }
 
         /// <summary>
@@ -528,10 +536,10 @@ namespace Teleopti.Interfaces.Domain
 
             DateTime intersectStart = intersectPeriod.StartDateTime;
             DateTime intersectEnd = intersectPeriod.EndDateTime;
-            DateTime start = this.period.Minimum;
+            DateTime start = period.Minimum;
             if (intersectStart > start)
                 start = intersectStart;
-            DateTime end = this.period.Maximum;
+            DateTime end = period.Maximum;
             if (intersectEnd < end)
                 end = intersectEnd;
             return new DateTimePeriod(start, end, false);
@@ -709,35 +717,23 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Merges two lists of DataTimePeriods into one.
+        /// Merges a list lists of DataTimePeriods into one.
         /// </summary>
-        /// <param name="list1">The list1.</param>
-        /// <param name="list2">The list2.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: micke, algorithm by Tamas
         /// Created date: 2009-01-26
         /// </remarks>
-        public static IList<DateTimePeriod> MergeLists(IList<DateTimePeriod> list1, IList<DateTimePeriod> list2)
+        public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
-            IList<DateTimePeriod> ret = new List<DateTimePeriod>();
-
-            if(list1.Count == 0)
-                return list2;
-
-            if(list2.Count == 0)
-                return list1;
+	        if (!periods.Any())
+		        return Enumerable.Empty<DateTimePeriod>();
+            var ret = new List<DateTimePeriod>();
 
             List<DateTime> startTimes = new List<DateTime>();
             List<DateTime> endTimes = new List<DateTime>();
 
-            foreach (var dateTimePeriod in list1)
-            {
-                startTimes.Add(dateTimePeriod.StartDateTime);
-                endTimes.Add(dateTimePeriod.EndDateTime);
-            }
-
-            foreach (var dateTimePeriod in list2)
+            foreach (var dateTimePeriod in periods)
             {
                 startTimes.Add(dateTimePeriod.StartDateTime);
                 endTimes.Add(dateTimePeriod.EndDateTime);

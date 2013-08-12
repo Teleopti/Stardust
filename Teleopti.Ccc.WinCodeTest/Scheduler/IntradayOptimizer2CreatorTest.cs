@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
-		private ISingleSkillDictionary _singleSkillDictionary;
+		private IPersonSkillProvider _personSkillProvider;
 
 		[SetUp]
 		public void Setup()
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_singleSkillDictionary = new SingleSkillDictionary();
+			_personSkillProvider = new PersonSkillProvider();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 				_workShiftContainerList,
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _singleSkillDictionary);
+												   _personSkillProvider);
 		}
 
 		[Test]

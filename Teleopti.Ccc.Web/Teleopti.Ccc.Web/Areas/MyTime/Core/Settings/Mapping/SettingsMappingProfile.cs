@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 	{
 		protected override void Configure()
 		{
-			CreateMap<CultureInfo, CultureViewModel>();
+			CreateMap<CultureInfo, CultureViewModel>()
+				.ForMember(d => d.id, o => o.MapFrom(s => s.LCID))
+				.ForMember(d => d.text, o => o.MapFrom(s => s.DisplayName));
 
 			CreateMap<IPerson, SettingsViewModel>()
 				.ForMember(d => d.ChoosenCulture, o =>
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 				.ForMember(d => d.Cultures, o => o.MapFrom(s => allCulturesSortedByNamePlusBrowserDefault()))
 				.AfterMap((source, target) =>
 				          	{
-				          		var browserDefault = new CultureViewModel {LCID = -1, DisplayName = Resources.BrowserDefault};
+				          		var browserDefault = new CultureViewModel {id = -1, text = Resources.BrowserDefault};
 									if(target.ChoosenCulture==null)
 										target.ChoosenCulture = browserDefault;
 									if (target.ChoosenUiCulture == null)

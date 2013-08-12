@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Helper
             return 0;
         }
 
-        public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy)
+        public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks)
         {
 			return TeleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
         }

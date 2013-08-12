@@ -109,14 +109,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay(),new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoWeekSchedulePageNoWait()
 		{
-			GoToWaitForCompleted("MyTime#Schedule/Week", 
-				new ApplicationStartupTimeout());
+			GoToWaitForCompleted("MyTime#Schedule/Week",
+                new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -207,8 +207,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-
-
+		public static void GoToPerformanceTool()
+		{
+			GoToWaitForUrlAssert("PerformanceTool", "PerformanceTool", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+		}
 
 		public static void GotoAnywhere()
 		{

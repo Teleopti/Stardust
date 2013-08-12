@@ -2,6 +2,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     var rep = _repositoryFactory.CreateLicenseStatusRepository(uow);
-                    var status = rep.LoadAll().First();
-                    return new LicenseStatusXml(XDocument.Parse(status.XmlString));
+                    ILicenseStatus status = rep.LoadAll().FirstOrDefault();
+	                return status == null ? new LicenseStatusXml() : new LicenseStatusXml(XDocument.Parse(status.XmlString));
                 }
             }
         }
@@ -60,7 +61,11 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
         public ILicenseService XmlLicenseService(int numberOfActiveAgents)
         {
-            return new XmlLicenseService(_repositoryFactory.CreateLicenseRepository(_unitOfWorkFactory.CreateAndOpenUnitOfWork()), numberOfActiveAgents);
+	        using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+	        {
+				return new XmlLicenseService(_repositoryFactory.CreateLicenseRepository(uow), numberOfActiveAgents);
+	        }
+            
         }
     }
 }

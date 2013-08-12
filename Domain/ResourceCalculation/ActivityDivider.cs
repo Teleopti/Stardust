@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
                                                              IAffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
-														   IList<IFilteredVisualLayerCollection> filteredProjections,
+														   IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
     }
 
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
-			IList<IFilteredVisualLayerCollection> filteredProjections,
+			IResourceCalculationDataContainer filteredProjections,
             DateTimePeriod periodToCalculate)
         {
             var dividedActivity = new DividedActivityData();
@@ -42,69 +41,68 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
             }
 
-            foreach (var layerColl in filteredProjections)
-            {
-                var currentPerson = layerColl.Person;
-            	var projectionStart = layerColl.OriginalProjectionPeriod.GetValueOrDefault(periodToCalculate).StartDateTime;
-            	var projectionStartDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(projectionStart,
-            	                                                        currentPerson.PermissionInformation.DefaultTimeZone
-            	                                                        	()));
-                double traff = relativPersonResource(layerColl,activity,periodToCalculate);
-                if (traff > 0)
-                {
-                    var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
-                    var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
-                    var personSkillResourceRow = new Dictionary<ISkill, double>();
+	        var periodResources = filteredProjections.AffectedResources(activity, periodToCalculate);
+	        foreach (var periodResource in periodResources)
+	        {
+				if (periodResource.Value.Resource == 0) continue;
+		        var skills = periodResource.Value.Skills;
+				var headCount = periodResource.Value.Count;
 
-                    ICollection<IPersonSkill> affectedPersonSkills =
-                        affectedPersonSkillService.Execute(currentPerson, activity, projectionStartDate);
+				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
+				var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
+				var personSkillResourceRow = new Dictionary<ISkill, double>();
 
-                    foreach (IPersonSkill personSkill in affectedPersonSkills)
-                    {
-                        ISkill skill = personSkill.Skill;
+				foreach (var skill in skills)
+				{
+					var intervalPart = ((double) filteredProjections.MinSkillResolution/skill.DefaultResolution);
+					var traff = periodResource.Value.Resource*intervalPart;
 
-                        double skillEfficiencyValue = personSkill.SkillPercentage.Value;
-
-                        double personSkillResourceValue = traff;
-                        double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
-                        double relativePersonSkillResourceValue = traff*bitwiseSkillEfficiencyValue;
-
-                        relativePersonSkillResourceRow.Add(skill, relativePersonSkillResourceValue);
-                        personSkillResourceRow.Add(skill, personSkillResourceValue);
-                        personSkillEfficiencyRow.Add(skill, skillEfficiencyValue);
-
-                        // add to sum also
-                        double currentRelativePersonSkillResourceValue;
-                        if (dividedActivity.RelativePersonSkillResourcesSum.TryGetValue(skill,out currentRelativePersonSkillResourceValue))
-                        {
-                            dividedActivity.RelativePersonSkillResourcesSum[skill] = currentRelativePersonSkillResourceValue + relativePersonSkillResourceValue;
-                        }
-                        else
-                        {
-                            dividedActivity.RelativePersonSkillResourcesSum.Add(skill, relativePersonSkillResourceValue);
-                        }
-
-                    }
-
-					if (!dividedActivity.PersonSkillEfficiencies.ContainsKey(currentPerson))
+					double skillEfficiencyValue;
+					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue))
 					{
-						dividedActivity.PersonSkillEfficiencies.Add(currentPerson, personSkillEfficiencyRow);
-						dividedActivity.WeightedRelativePersonSkillResources.Add(currentPerson, personSkillResourceRow);
-						dividedActivity.RelativePersonSkillResources.Add(currentPerson, relativePersonSkillResourceRow);
-						dividedActivity.RelativePersonResources.Add(currentPerson, traff);
-
-						double targetResourceValue = elapsedToCalculate.TotalMinutes * traff;
-						dividedActivity.PersonResources.Add(currentPerson, targetResourceValue);
+						skillEfficiencyValue = intervalPart;
 					}
-                }
-            }
+					else
+					{
+						skillEfficiencyValue = (skillEfficiencyValue/headCount)*intervalPart;
+					}
+
+					double personSkillResourceValue = traff;
+					double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
+					double relativePersonSkillResourceValue = traff * bitwiseSkillEfficiencyValue;
+
+					relativePersonSkillResourceRow.Add(skill, relativePersonSkillResourceValue);
+					personSkillResourceRow.Add(skill, personSkillResourceValue);
+					personSkillEfficiencyRow.Add(skill, skillEfficiencyValue);
+
+					// add to sum also
+					double currentRelativePersonSkillResourceValue;
+					if (dividedActivity.RelativePersonSkillResourcesSum.TryGetValue(skill, out currentRelativePersonSkillResourceValue))
+					{
+						dividedActivity.RelativePersonSkillResourcesSum[skill] = currentRelativePersonSkillResourceValue + relativePersonSkillResourceValue;
+					}
+					else
+					{
+						dividedActivity.RelativePersonSkillResourcesSum.Add(skill, relativePersonSkillResourceValue);
+					}
+				}
+
+				if (!dividedActivity.KeyedSkillResourceEfficiencies.ContainsKey(periodResource.Key))
+				{
+					dividedActivity.KeyedSkillResourceEfficiencies.Add(periodResource.Key, personSkillEfficiencyRow);
+					dividedActivity.WeightedRelativeKeyedSkillResourceResources.Add(periodResource.Key, personSkillResourceRow);
+					dividedActivity.RelativeKeyedSkillResourceResources.Add(periodResource.Key, relativePersonSkillResourceRow);
+					dividedActivity.RelativePersonResources.Add(periodResource.Key, periodResource.Value.Resource);
+
+					double targetResourceValue = elapsedToCalculate.TotalMinutes * periodResource.Value.Resource;
+					dividedActivity.PersonResources.Add(periodResource.Key, targetResourceValue);
+				}
+	        }
 
             return dividedActivity;
         }
 
-        #region Private methods
-
-        private static double? skillDayDemand(ISkill skill, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
+	    private static double? skillDayDemand(ISkill skill, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
             double retVal = 0;
             ISkillStaffPeriodDictionary skillStaffPeriods;
@@ -158,21 +156,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             return distinctList;
         }
-
-        private static double relativPersonResource(IVisualLayerCollection layers, IActivity activity, DateTimePeriod periodToCalculate)
-        {
-            double totalSeconds = 0;
-
-            foreach (IVisualLayer layer in layers.FilterLayers(activity))
-            {
-                totalSeconds += layer.Period.Intersection(periodToCalculate).Value.ElapsedTime().TotalSeconds;
-            }
-
-            return totalSeconds / periodToCalculate.ElapsedTime().TotalSeconds;
-        }
-
- 
-        #endregion
-
     }
 }

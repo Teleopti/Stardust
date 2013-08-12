@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Common;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-		public static void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList)
+		public static void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
 			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();
@@ -67,10 +68,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			noMainShiftLocker.Execute();
 			IMatrixMultipleShiftsLocker matrixMultipleShiftsLocker = new MatrixMultipleShiftsLocker(matrixList);
 			matrixMultipleShiftsLocker.Execute();
+			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
+			matrixUnselectedDaysLocker.Execute();
+
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizerPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
+        public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container, DateOnlyPeriod selectedPeriod)
         {
             var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
             var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
@@ -91,6 +95,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             noMainShiftLocker.Execute();
 			IMatrixShiftsNotAvailibleLocker matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
 			matrixShiftsNotAvailibleLocker.Execute(matrixList);
+	        var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
+			matrixUnselectedDaysLocker.Execute();
         }
 
 		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)

@@ -262,6 +262,8 @@
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
+    <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />

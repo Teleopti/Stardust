@@ -30,8 +30,11 @@ define([
                 return time.format(resources.TimeFormatForMoment);
             });
 
-            this.SetLayers = function(layers, timeline, date) {
-                self.Layers([]);
+	        this.ClearLayers = function() {
+	        	self.Layers([]);
+	        };
+	        
+            this.AddLayers = function(layers, timeline, date) {
                 var newItems = ko.utils.arrayMap(layers, function(p) {
                     return new layer(timeline, p, date);
                 });

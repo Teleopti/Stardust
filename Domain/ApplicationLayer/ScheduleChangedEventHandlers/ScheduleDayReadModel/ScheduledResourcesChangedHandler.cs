@@ -1,0 +1,111 @@
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using log4net;
+
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
+{
+	public class ScheduledResourcesChangedHandler : IHandleEvent<ProjectionChangedEvent>
+	{
+		private readonly IPersonRepository _personRepository;
+		private readonly ISkillRepository _skillRepository;
+		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
+		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
+		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly IPublishEventsFromEventHandlers _bus;
+		private int configurableIntervalLength = 15;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
+
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		{
+			_personRepository = personRepository;
+			_skillRepository = skillRepository;
+			_readModelFinder = readModelFinder;
+			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
+			_personSkillProvider = personSkillProvider;
+			_bus = bus;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "0")]
+		public void Handle(ProjectionChangedEvent @event)
+		{
+			var person = _personRepository.Get(@event.PersonId);
+			if (person == null)
+			{
+				Logger.WarnFormat("No person was found with the id {0}", @event.PersonId);
+				return;
+			}
+
+			configurableIntervalLength = _skillRepository.MinimumResolution();
+			foreach (var scheduleDay in @event.ScheduleDays)
+			{
+				var date = new DateOnly(scheduleDay.Date);
+				var combination = _personSkillProvider.SkillsOnPersonDate(person, date);
+
+				if (!@event.IsInitialLoad)
+				{
+					var oldSchedule = _readModelFinder.ForPerson(date, @event.PersonId, @event.ScenarioId);
+					var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
+					foreach (var resourceLayer in oldResources)
+					{
+						removeResourceFromInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), combination);
+					}
+				}
+
+				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
+				foreach (var resourceLayer in resources)
+				{
+					addResourceToInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), combination);
+				}
+			}
+
+			_bus.Publish(new ScheduledResourcesChangedEvent
+				{
+					BusinessUnitId = @event.BusinessUnitId,
+					Datasource = @event.Datasource,
+					IsDefaultScenario = @event.IsDefaultScenario,
+					IsInitialLoad = @event.IsInitialLoad,
+					PersonId = @event.PersonId,
+					ScenarioId = @event.ScenarioId,
+					ScheduleDays = @event.ScheduleDays,
+					Timestamp = @event.Timestamp
+				});
+		}
+
+		private void addResourceToInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination, SkillCombination combination)
+		{
+			var resourceId = _scheduledResourcesReadModelStorage.AddResources(resourceLayer.PayloadId, resourceLayer.RequiresSeat,
+			                                                 activitySkillsCombination.GenerateKey(), resourceLayer.Period,
+			                                                 resourceLayer.Resource, 1);
+			foreach (var skillEfficiency in combination.SkillEfficiencies)
+			{
+				_scheduledResourcesReadModelStorage.AddSkillEfficiency(resourceId,skillEfficiency.Key,skillEfficiency.Value);
+			}
+		}
+
+		private void removeResourceFromInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination, SkillCombination combination)
+		{
+			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, activitySkillsCombination.GenerateKey(),
+			                                                    resourceLayer.Period, resourceLayer.Resource, 1);
+			if (!resourceId.HasValue) return;
+
+			foreach (var skillEfficiency in combination.SkillEfficiencies)
+			{
+				_scheduledResourcesReadModelStorage.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Key, skillEfficiency.Value);
+			}
+		}
+	}
+
+	//Other cases to handle:
+	//- Person terminated
+	//- Person deleted
+	//- Person period date changes
+	//- Person period skill changes
+	//- Person team changes
+	//- Activity requires seat changed
+	//- Team site changes
+}

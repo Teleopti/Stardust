@@ -1,187 +1,423 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Globalization
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
+@using Teleopti.Interfaces.Domain
 @model PreferenceViewModel
 @{
 	Layout = null;
 }
 
-<div class="pd5 information-panel ui-corner-all">
-	<div id="Preference-period-feedback-view">
-		<div>
-			<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
+<div class="navbar">
+    <div class="navbar-inner">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn" data-bind="click: previousPeriod"><i class="icon-arrow-left"></i></button>
+                <input data-bind="value: displayDate" type="text" class="span2" readonly="readonly"/>
+                <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
+                <button class="btn" data-bind="click: nextPeriod"><i class="icon-arrow-right"></i></button>
+            </div>
+        </form>
+        <ul class="nav">
+            <li class="divider-vertical"></li>
+            @if (Model.ExtendedPreferencesPermission)
+            {
+                <li><a href="#" id="Preference-add-extended-button"><i class="icon-edit"></i>&nbsp;@Resources.Preference</a></li>
+            }
+            else
+            {
+                <li><div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var option in Model.Options.PreferenceOptions)
+                                                                           {
+                                                                               @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+                                                                           }]">
+                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+                     
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
+                            <!-- ko if: Value != '-' -->
+                            <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+                            <!-- /ko -->
+                            <!-- ko if: Value == '-' -->
+                            <li class="divider"></li>
+                            <!-- /ko -->
+                        </ul>
+                    </div></li>
+            }
+            <li><a data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
+            <li class="divider-vertical"></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
+            <li data-bind="if: mustHaveEnabled"><a  data-bind="click: removeMustHave"><i class="icon-minus"></i></a></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="icon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
+            <li data-bind="if: mustHaveEnabled"><a  data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="icon-plus"></i></a></li>
+        </ul>
+    </div>
+</div>
+<div class="alert" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
+    <div>
+        <!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
 		
-			<!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: PossibleResultContractTimeUpper() < TargetContractTimeLower() || TargetContractTimeUpper() < PossibleResultContractTimeLower() -->
-			<span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
-			<!-- /ko -->
-		</div>
-		<div>
-			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
-			<!-- ko if: PossibleResultDaysOff() > TargetDaysOffUpper() || PossibleResultDaysOff() < TargetDaysOffLower()-->
-			<span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
-			<!-- /ko -->
-		</div>
-	</div>
-	<div id="Preference-period">
-		@if (Model.PreferencePeriod == null)
-		{
-			@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-		}
-		else
-		{
-			@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-			@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-		}
-	</div>
+        <!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: PreferenceTimeIsOutOfRange -->
+        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <!-- /ko -->
+    </div>
+    <div>
+        <!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+        <!-- ko if: PreferenceDaysOffIsOutOfRange-->
+        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <!-- /ko -->
+    </div>
+    <p></p>
+    <div>
+            @if (Model.PreferencePeriod == null)
+            {
+                @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+            }
+            else
+            {
+                @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+                @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+            }
+    </div>
 </div>
 
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
 		
-	<div id="Preference-body-inner" class="body-calendarview-inner clearfix">
-		<ul class="weekdays">
-			@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
-			{
-				<li>@weekDayName.Title</li>
-			}
-		</ul>
-		@foreach (WeekViewModel week in Model.Weeks)
-		{
-			<ul class="calendarview-week" onselectstart="return false;">
-				<li>
-					<div>
+    <div id="Preference-body-inner" class="body-calendarview-inner clearfix">
+        <ul class="weekdays">
+            @foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
+            {
+                <li>@weekDayName.Title</li>
+            }
+        </ul>
+        @foreach (WeekViewModel week in Model.Weeks)
+        {
+            <ul class="calendarview-week" onselectstart="return false;">
+                <li>
+                    <div>
 
-					</div>
-				</li>
-				@foreach (DayViewModel day in week.Days)
-				{
-					<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName">
-						<div>
-							<div class="day-header">
-								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
-							</div>
-							<div class="day-content pdt10" data-bind="style: { borderLeftColor: Color }">
-									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+                    </div>
+                </li>
+                @foreach (DayViewModel day in week.Days)
+                {
+                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
+                        <div>
+                            <div class="day-header">
+                                <span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
+                            </div>
+                            <div class="day-content pdt10" data-bind="style: { borderLeftColor: Color() }">
+                                <img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
 									<!-- ko if: HasAjaxError -->
-									<h2 class="error" data-bind="text: AjaxError"></h2>
-									<!-- /ko -->
+                                <h2 class="error" data-bind="text: AjaxError"></h2>
+                                <!-- /ko -->
 
-									<div class="preference">
-										<span class="displayinline-block">
-											<div class="preference-indicator"/>
-											<div class="preference-indicator">
-												<div class="heart-small preference-must-have" data-bind="css: {'icon': MustHave}"></div>
-											</div>
-											<div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
-											<div class="preference-indicator">
-												<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
-												<div class="extended-panel" style="display: none">
-													<div class="extended-part">
-														<div class="extended-part-title" data-bind="text: ExtendedTitle"></div>
-														<div class="time-limitation icon leftarrow truncate" data-bind="text: StartTimeLimitation"></div>
-														<div class="time-limitation icon rightarrow truncate" data-bind="text: EndTimeLimitation"></div>
-														<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: WorkTimeLimitation"></div>
-													</div>
-													<div class="extended-part">
-														<div class="extended-part-title" data-bind="text: Activity"></div>
-														<div class="time-limitation icon leftarrow truncate" data-bind="text: ActivityStartTimeLimitation"></div>
-														<div class="time-limitation icon rightarrow truncate" data-bind="text: ActivityEndTimeLimitation"></div>
-														<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
-													</div>
-												</div>
-											</div>
-											<div class="preference-indicator">
+                                <div class="preference">
+                                    <span class="displayinline-block">
+                                        <div class="preference-indicator"/>
+                                        <div class="preference-indicator">
+                                            <div class="heart-small preference-must-have" data-bind="css: {'icon': MustHave}"></div>
+                                        </div>
+                                        <div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
+                                        <div class="preference-indicator">
+                                            <div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
+                                            <div class="extended-panel" style="display: none">
+                                                <div class="extended-part">
+                                                    <div class="extended-part-title" data-bind="text: ExtendedTitle"></div>
+                                                    <div class="time-limitation icon leftarrow truncate" data-bind="text: StartTimeLimitation"></div>
+                                                    <div class="time-limitation icon rightarrow truncate" data-bind="text: EndTimeLimitation"></div>
+                                                    <div class="time-limitation icon doublearrow-blue truncate" data-bind="text: WorkTimeLimitation"></div>
+                                                </div>
+                                                <div class="extended-part">
+                                                    <div class="extended-part-title" data-bind="text: Activity"></div>
+                                                    <div class="time-limitation icon leftarrow truncate" data-bind="text: ActivityStartTimeLimitation"></div>
+                                                    <div class="time-limitation icon rightarrow truncate" data-bind="text: ActivityEndTimeLimitation"></div>
+                                                    <div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="preference-indicator">
 												<!-- ko if: HasPersonalShiftsOrMeetings -->
-												<div class="icon meeting-small">
-												</div>
-												<div class="meeting-tooltip" style="display: none">
+                                            <div class="icon meeting-small">
+                                            </div>
+                                            <div class="meeting-tooltip" style="display: none">
 													<!-- ko if: HasMeetings -->
-													<table>
-														<thead>@Resources.Meetings</thead>
-														<tbody data-bind="foreach: Meetings">
-															<tr>
-																	<td data-bind="text: TimeSpan"></td>
-															</tr>
-															<tr>
-																<td>
-																	<div class="preference-tooltip-subject">
-																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
-																	</div>
-																</td>
-																<!-- ko if: IsOptional -->
-																<td>(@Resources.Optional)</td>
-																<!-- /ko -->
-															</tr>
-														</tbody>
-													</table>
-													<!-- /ko -->
+                                                <table>
+                                                    <thead>@Resources.Meetings</thead>
+                                                    <tbody data-bind="foreach: Meetings">
+                                                        <tr>
+                                                            <td data-bind="text: TimeSpan"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="preference-tooltip-subject">
+                                                                    <label class="preference-tooltip-font" data-bind="text : Subject"></label>
+                                                                </div>
+                                                            </td>
+                                                            <!-- ko if: IsOptional -->
+                                                            <td>(@Resources.Optional)</td>
+                                                            <!-- /ko -->
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- /ko -->
 													<!-- ko if: HasPersonalShifts -->
-													<table>
-														<thead>@Resources.PersonalShift</thead>
-														<tbody data-bind="foreach: PersonalShifts">
-															<tr>
-																<td data-bind="text: Subject"></td>
-																<td>:</td>
-																<td data-bind="text: TimeSpan"></td>
-															</tr>
-														</tbody>
-													</table>
-													<!-- /ko -->
-												</div>
-												<!-- /ko -->
-											</div>
-										</span>
-									</div>
+                                                <table>
+                                                    <thead>@Resources.PersonalShift</thead>
+                                                    <tbody data-bind="foreach: PersonalShifts">
+                                                        <tr>
+                                                            <td data-bind="text: Subject"></td>
+                                                            <td>:</td>
+                                                            <td data-bind="text: TimeSpan"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- /ko -->
+                                            </div>
+                                            <!-- /ko -->
+                                        </div>
+                                    </span>
+                                </div>
 
 									<!-- ko if: HasDayOff -->
-									<div class="dayoff" data-bind="text: DayOff"></div>
-									<!-- /ko -->
+                                <div class="dayoff" data-bind="text: DayOff"></div>
+                                <!-- /ko -->
 
 									<!-- ko if: HasAbsence -->
-									<div class="absence" data-bind="text: Absence"></div>
-									<!-- /ko -->
+                                <div class="absence" data-bind="text: Absence"></div>
+                                <!-- /ko -->
 
 									<!-- ko if: HasPersonAssignmentShiftCategory -->
-									<div class="scheduled">
-										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
-										<strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>
-										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
+                                <div class="scheduled">
+                                    <span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
+                                    <strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>
+                                    <span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
+                                </div>
+                                <!-- /ko -->
+                                @if (day.InPeriod)
+                                {
+                                    <!-- ko if: Feedback -->
+                                    <!-- ko if: DisplayFeedbackError -->
+                                    <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+                                    <!-- /ko -->
+                                    <!-- ko if: DisplayFeedback -->
+                                    <div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
+                                    <div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
+                                    <div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+
+
+	
+				@{
+					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
+					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
+					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
+					            select new Option
+						            {
+							            Value = value,
+							            Text = text
+						            };
+					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
+					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
+					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+					                  select new Option
+						                  {
+							                  Value = value,
+							                  Text = text
+						                  };
+				}
+
+					<div id="Preference-add-extended-form" class="displaynone"> 
+						<div class="ml5" data-bind="visible: AvailableTemplates().length>0">
+							<span>[</span><span id="Expend-Template" class="collapse-sign" data-bind="text: IsTemplateDetailsVisible()?'-':'+'"></span><span>]</span>
+							<select id="Preference-template" data-bind="options: AvailableTemplates, optionsText: 'Text', optionsValue:'Value', optionsCaption: '&nbsp;'" title="@Resources.ExtendedPreferencesTemplate" class="displayinline-block ml5">
+							</select>
+						</div>
+						<div data-bind="visible: IsTemplateDetailsVisible()">
+							<hr data-bind="visible: AvailableTemplates().length>0"/>
+							<div class="ml10">
+								<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
+									<option value="" data-preference-extended="true">&nbsp;</option>
+									<option value="-">-</option>
+									@foreach (var option in Model.Options.PreferenceOptions)
+									{
+										<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
+									}
+								</select>
+						    
+								<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
+									<div class="mt5">
+										<div class="time-limitation-label icon leftarrow"></div>
+										<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<span class="ml20"></span>
+										<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
 									</div>
-									<!-- /ko -->
-								@if (day.InPeriod)
-								{
-									<!-- ko if: Feedback -->
-									<!-- ko if: DisplayFeedbackError -->
-									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
-									<!-- /ko -->
-									<!-- ko if: DisplayFeedback -->
-									<div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
-									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
-									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
-									<!-- /ko -->
-									<!-- /ko -->
-								}
+									<div>
+										<div class="time-limitation-label icon rightarrow"></div>
+										<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+										<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+									</div>
+									<div>
+										<div class="time-limitation-label icon doublearrow-blue"></div>
+										<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in timeLengths)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<span class="ml20"></span> 
+										<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in timeLengths)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+									</div>
+									<hr/>
+									<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
+										<option value="">&nbsp;</option>
+										<option value="-">-</option>
+										@foreach (var option in Model.Options.ActivityOptions)
+										{
+											<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+										}
+									</select>
+								</div>
+								<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+									<div>
+										<div class="time-limitation-label icon leftarrow"></div>
+										<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.EarliestStartTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<span class="ml20"></span>
+										<select id="Preference-extended-activity-start-time-maximum" class="time-input" data-bind="combobox: ActivityLatestStartTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.LatestStartTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+									</div>
+									<div>
+										<div class="time-limitation-label icon rightarrow"></div>
+										<select id="Preference-extended-activity-end-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestEndTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.EarliestEndTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<span class="ml20"></span>
+										<select id="Preference-extended-activity-end-time-maximum" class="time-input" data-bind="combobox: ActivityLatestEndTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.LatestEndTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in times)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+									</div>
+									<div>
+										<div class="time-limitation-label icon doublearrow-blue"></div>
+										<select id="Preference-extended-activity-time-minimum" class="time-input" data-bind="combobox: ActivityMinimumTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.MinTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in timeLengths)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+										<span class="ml20"></span>
+										<select id="Preference-extended-activity-time-maximum" class="time-input" data-bind="combobox: ActivityMaximumTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.MaxTime">
+											<option value="">&nbsp;</option>
+											@foreach (var timeSpan in timeLengths)
+											{
+												<option value="@timeSpan.Value">@timeSpan.Text</option>
+											}
+										</select>
+									</div>
+								</div>
+							
+								<div class="mt10 floatleft">
+									<div id="Template-save">
+										<span>[</span><span class="collapse-sign" data-bind="text: IsSaveAsNewTemplate()?'-':'+'"></span><span>]</span>
+										<label class="ml5">
+											@Resources.SaveAsTemplate
+										</label>
+									</div>
+									<div id="Template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
+										<input id="Template-name-input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
+										<button id="Preference-extended-save-template" class="ml5">@Resources.Save</button>
+									</div>
+								</div>
 							</div>
 						</div>
-					</li>
-				}
-			</ul>
-		}
-	</div>
-</div>
+		   
+						<div class="clearleftfloat">
+							<button id="Preference-extended-reset" class="ml25 mt10 mb5 floatleft">@Resources.Reset</button>
+							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
+						</div>
+						<div>
+							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>
+							<div class="clearboth"></div>
+						</div>
+					</div>

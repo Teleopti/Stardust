@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IScheduleMatrixPro> matrixList =
                 matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container);
+            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
 
             IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
                                                   where ((IDeleteTag)item).IsDeleted == false
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);  //this one handles userlocks as well
-			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container, selectedPeriod);
 
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -472,7 +472,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 									   _container.Resolve<IRestrictionAggregator>(),
 									   _container.Resolve<IWorkShiftFilterService>(), 
 									   teamScheduling,
-									   _container.Resolve<IWorkShiftSelector>());
+									   _container.Resolve<IWorkShiftSelector>(),
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -546,7 +547,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                        _container.Resolve<IRestrictionAggregator>(),
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
-                                       _container.Resolve<IWorkShiftSelector>());
+                                       _container.Resolve<IWorkShiftSelector>(),
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);

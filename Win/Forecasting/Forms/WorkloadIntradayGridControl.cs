@@ -15,20 +15,23 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     public class WorkloadIntradayGridControl : BaseIntradayGridControl
     {
-        private RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> _rowManagerTemplateTaskPeriod;
+	    private readonly ISkillType _skillType;
+	    private RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> _rowManagerTemplateTaskPeriod;
 
         protected RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> RowManagerTemplateTaskPeriod
         {
             get { return _rowManagerTemplateTaskPeriod; }
         }
 
-        public WorkloadIntradayGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerPeriodHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ChartSettings chartSettings)
+        public WorkloadIntradayGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerPeriodHelper, TimeZoneInfo timeZone, 
+			int resolution, AbstractDetailView owner, ChartSettings chartSettings, ISkillType skillType)
             : base(taskOwner, taskOwnerPeriodHelper, timeZone, resolution, owner, ((IWorkloadDayBase)taskOwner).Workload.Skill.SkillType.DisplayTimeSpanAsMinutes, chartSettings)
         {
-            _rowManagerTemplateTaskPeriod = new RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod>(this, Intervals, Resolution);
+	        _skillType = skillType;
+	        _rowManagerTemplateTaskPeriod = new RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod>(this, Intervals, Resolution);
         }
 
-    	protected override void MergeSplit(ModifyCellOption options)
+	    protected override void MergeSplit(ModifyCellOption options)
         {
             GridRangeInfoList rangelist;
 
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             if (Owner != null)
             {
-                if (Owner.SkillType.ForecastSource != ForecastSource.InboundTelephony)
+				if (Owner.SkillType.ForecastSource != ForecastSource.InboundTelephony && Owner.SkillType.ForecastSource != ForecastSource.Chat)
                 {
                     TextManager manager = new TextManager(Owner.SkillType);
 
@@ -164,89 +167,90 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void InboundTelephonyRows()
         {
+			var manager = new TextManager(_skillType);
             TemplateTaskPeriodGridRow gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                                               "NumericWorkloadIntradayTaskLimitedCell",
-                                                                              "Tasks", UserTexts.Resources.Calls,
+																			  "Tasks", manager.WordDictionary["Tasks"],
                                                                               9);
             gridRow.ChartSeriesSettings = ConfigureSetting("Tasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "PercentWithNegativeCell",
                                                     "CampaignTasks",
-                                                    UserTexts.Resources.CampaignCallsPercentSign);
+													manager.WordDictionary["CampaignTasks"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("CampaignTasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "PositiveTimeSpanTotalSecondsCell",
-                                                    "AverageTaskTime", UserTexts.Resources.TalkTime);
+													"AverageTaskTime", manager.WordDictionary["AverageTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("AverageTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "PercentWithNegativeCell",
                                                     "CampaignTaskTime",
-                                                    UserTexts.Resources.CampaignTalkTimePercentSign);
+													manager.WordDictionary["CampaignTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("CampaignTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                     "PositiveTimeSpanTotalSecondsCell",
                                                     "AverageAfterTaskTime",
-                                                    UserTexts.Resources.ACW);
+													manager.WordDictionary["AverageAfterTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("AverageAfterTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "PercentWithNegativeCell",
                                                     "CampaignAfterTaskTime",
-                                                    UserTexts.Resources.CampaignACWPercentSign);
+													manager.WordDictionary["CampaignAfterTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("CampaignAfterTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "NumericReadOnlyCell",
-                                                    "TotalTasks", UserTexts.Resources.TotalCalls);
+													"TotalTasks", manager.WordDictionary["TotalTasks"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalTasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                     "TimeSpanTotalSecondsReadOnlyCell",
-                                                    "TotalAverageTaskTime", UserTexts.Resources.TotalTalkTime);
+													"TotalAverageTaskTime", manager.WordDictionary["TotalAverageTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalAverageTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                     "TimeSpanTotalSecondsReadOnlyCell",
-                                                    "TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
+													"TotalAverageAfterTaskTime", manager.WordDictionary["TotalAverageAfterTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalAverageAfterTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "NumericReadOnlyCell",
                                                     "TotalStatisticCalculatedTasks",
-                                                    UserTexts.Resources.CalculatedCalls);
+													manager.WordDictionary["TotalStatisticCalculatedTasks"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalStatisticCalculatedTasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "NumericReadOnlyCell",
                                                     "TotalStatisticAbandonedTasks",
-                                                    UserTexts.Resources.AbandonedCalls);
+													manager.WordDictionary["TotalStatisticAbandonedTasks"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalStatisticAbandonedTasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod, "NumericReadOnlyCell",
                                                     "TotalStatisticAnsweredTasks",
-                                                    UserTexts.Resources.AnsweredCalls);
+													manager.WordDictionary["TotalStatisticAnsweredTasks"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalStatisticAnsweredTasks");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                     "TimeSpanTotalSecondsReadOnlyCell",
                                                     "TotalStatisticAverageTaskTime",
-                                                    UserTexts.Resources.TalkTime);
+													manager.WordDictionary["TotalStatisticAverageTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalStatisticAverageTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
 
             gridRow = new TemplateTaskPeriodGridRow(_rowManagerTemplateTaskPeriod,
                                                     "TimeSpanTotalSecondsReadOnlyCell",
                                                     "TotalStatisticAverageAfterTaskTime",
-                                                    UserTexts.Resources.ACW);
+													manager.WordDictionary["TotalStatisticAverageAfterTaskTime"]);
             gridRow.ChartSeriesSettings = ConfigureSetting("TotalStatisticAverageAfterTaskTime");
             GridRows.Add(_rowManagerTemplateTaskPeriod.AddRow(gridRow));
         }

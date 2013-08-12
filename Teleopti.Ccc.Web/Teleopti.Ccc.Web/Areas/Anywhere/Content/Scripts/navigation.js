@@ -15,8 +15,11 @@ define([
             GotoPersonSchedule: function (id, date) {
                 window.location.hash = 'personschedule/' + id + '/' + toDateString(date);
             },
-            GotoPersonScheduleAddFullDayAbsenceForm: function(id, date) {
-                window.location.hash = 'personschedule/' + id + '/' + toDateString(date) + "/addfulldayabsence";
+            GotoPersonScheduleWithoutHistory: function (id, date) {
+            	window.location.replace('#personschedule/' + id + '/' + toDateString(date))	;
+            },
+            GotoPersonScheduleAddFullDayAbsenceForm: function (id, date) {
+            	window.location.replace('#personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence');
             },
             GoToTeamSchedule: function(id, date, skill) {
             	window.location.hash = 'teamschedule/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : '');

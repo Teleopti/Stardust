@@ -12,18 +12,18 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     public class OccupancyCalculator
     {
         private readonly IDictionary<ISkill, ISkillStaffPeriod> _relevantSkillStaffPeriods;
-        private readonly PersonSkillDictionary _relativePersonSkillResources;
+        private readonly KeyedSkillResourceDictionary _relativeKeyedSkillResourceResources;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OccupancyCalculator"/> class.
         /// </summary>
         /// <param name="relevantSkillStaffPeriods">The relevant skill staff periods.</param>
-        /// <param name="relativePersonSkillResources">The relative person skill resources.</param>
+        /// <param name="relativeKeyedSkillResourceResources">The relative person skill resources.</param>
         public OccupancyCalculator(IDictionary<ISkill, ISkillStaffPeriod> relevantSkillStaffPeriods,
-                                   PersonSkillDictionary relativePersonSkillResources)
+                                   KeyedSkillResourceDictionary relativeKeyedSkillResourceResources)
         {
             _relevantSkillStaffPeriods = relevantSkillStaffPeriods;
-            _relativePersonSkillResources = relativePersonSkillResources;
+            _relativeKeyedSkillResourceResources = relativeKeyedSkillResourceResources;
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             IList<SkillCollectionKey> skillcombinations = CreateCalculatedSkillCollectionKeys();
 
-            foreach (KeyValuePair<IPerson, Dictionary<ISkill, double>> personSkillValues in _relativePersonSkillResources)
+            foreach (KeyValuePair<string, Dictionary<ISkill, double>> personSkillValues in _relativeKeyedSkillResourceResources)
             {
-                SkillCollectionKey key = _relativePersonSkillResources.SkillCombination(personSkillValues.Key);
+                SkillCollectionKey key = _relativeKeyedSkillResourceResources.SkillCombination(personSkillValues.Key);
                 int index = skillcombinations.IndexOf(key);
                 if (index > -1)
                 {
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IList<SkillCollectionKey> ret = new List<SkillCollectionKey>();
 
             //Step the list and create combined SkillStaffPeriods
-            foreach (SkillCollectionKey skillCollectionKey in _relativePersonSkillResources.UniqueSkillCombinations())
+            foreach (SkillCollectionKey skillCollectionKey in _relativeKeyedSkillResourceResources.UniqueSkillCombinations())
             {
                 var listToCombine = new List<ISkillStaffPeriod>();
                 foreach (ISkill skill in skillCollectionKey.SkillCollection)
@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         new SkillStaffPeriod(combinedSkillStaffPeriod.Period, combinedSkillStaffPeriod.Payload.TaskData,
                                              newSeviceAgreement, combinedSkillStaffPeriod.StaffingCalculatorService);
                     newSkillStaffPeriod.Payload.Shrinkage = combinedSkillStaffPeriod.Payload.Shrinkage;
+					newSkillStaffPeriod.SetSkillDay(combinedSkillStaffPeriod.SkillDay);
                     newSkillStaffPeriod.CalculateStaff();
                     skillCollectionKey.VirtualSkillStaffPeriod = newSkillStaffPeriod;
 

@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-03-03
     /// </remarks>
-    public interface IWorkShift : IShift
+	public interface IWorkShift : ILayerCollectionOwner<IActivity>, ICloneableEntity<IWorkShift>, IProjectionSource
     {
         /// <summary>
         /// Gets the shift category.

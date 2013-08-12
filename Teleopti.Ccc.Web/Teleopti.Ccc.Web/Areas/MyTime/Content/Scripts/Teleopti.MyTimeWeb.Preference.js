@@ -1,13 +1,14 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.10.2.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
+/// <reference path="../../../../Content/moment/moment.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -24,7 +25,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
-	var mustHaveCountViewModel = null;
+	var selectionViewModel = null;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
 
@@ -35,12 +36,21 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	if (ajax.CallWhenAllAjaxCompleted)
 		callWhenAjaxIsCompleted = ajax.CallWhenAllAjaxCompleted;
 
-
-
 	function _initPeriodSelection() {
-		var rangeSelectorId = '#PreferenceDateRangeSelector';
 		var periodData = $('#Preference-body').data('mytime-periodselection');
-		portal.InitPeriodSelection(rangeSelectorId, periodData);
+	    selectionViewModel.displayDate(periodData.Display);
+	    selectionViewModel.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
+	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
+	    selectionViewModel.setCurrentDate(moment(periodData.Date));
+
+	    var availablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
+	    selectionViewModel.availablePreferences(availablePreferences);
+
+	    if (availablePreferences && availablePreferences.length > 0) {
+	        selectionViewModel.selectedPreference(availablePreferences[0]);
+	    }
+
+	    ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
 	}
 
 	function _initSplitButton() {
@@ -52,24 +62,20 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 	}
 
-	function _initDeleteButton() {
-		$('#Preference-delete-button')
-			.click(function () {
-				_hideExtendedPanels();
-				var promises = [];
-				$('#Preference-body-inner .ui-selected')
-					.each(function (index, cell) {
-						var date = $(cell).data('mytime-date');
-						var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
-						promises.push(promise);
-					});
-				$.when.apply(null, promises)
-					.done(function () { periodFeedbackViewModel.LoadFeedback(); });
-			})
-			.removeAttr('disabled');
-	}
-	
-	function _deletePreferenceTemplate(templateId) {
+    function _deletePreference() {
+        _hideExtendedPanels();
+        var promises = [];
+        $('#Preference-body-inner .ui-selected')
+            .each(function(index, cell) {
+                var date = $(cell).data('mytime-date');
+                var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
+                promises.push(promise);
+            });
+        $.when.apply(null, promises)
+            .done(function() { periodFeedbackViewModel.LoadFeedback(); });
+    }
+
+    function _deletePreferenceTemplate(templateId) {
 		ajax.Ajax({
 			url: "Preference/PreferenceTemplate/" + templateId,
 			dataType: "json",
@@ -164,6 +170,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
+	    
+		button.click(function (e) { e.preventDefault(); });
+
 		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax);
 		addExtendedTooltip = $('<div/>')
 			.qtip({
@@ -186,11 +195,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				show: {
 					target: button,
-					event: 'click'
+					event: 'mousedown'
 				},
 				hide: {
 					target: button,
-					event: 'click'
+					event: 'mousedown'
 				},
 				style: {
 					def: false,
@@ -203,25 +212,22 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					render: function () {
 
 						$('#Expend-Template').click(function () {
-							addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
+						    addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
 						});
 						
 						$('#Template-save').click(function () {
-							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
+						    addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
 						});
 						
 						$('#Preference-extended-reset')
-							.button()
 							.click(function () {
 								_reset();
 							});
 						$('#Preference-extended-apply')
-							.button()
 							.click(function () {
 								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 						$('#Preference-extended-save-template')
-							.button()
 							.click(function () {
 								_savePreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
@@ -245,6 +251,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
+	    
 		button.removeAttr('disabled');
 	}
 
@@ -279,21 +286,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				$("#Preference-template").selectbox({ refreshMenu: data });
 			}
 		});
-	}
-
-	function _initMustHaveButton() {
-		$('#Preference-must-have-button')
-			.click(function () {
-				_setMustHave(true);
-			})
-			.removeAttr("disabled")
-			;
-		$('#Preference-must-have-delete-button')
-			.click(function () {
-				_setMustHave(false);
-			})
-			.removeAttr("disabled")
-			;
 	}
 
 	function _hideAddExtendedTooltip() {
@@ -374,27 +366,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    });
 	};
 
-	function _initMustHaves() {
-	    mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel();
-	    
-	    var mustHaveButton = $('#Preference-must-have-button');
-	    if (mustHaveButton.length > 0) {
-	        mustHaveButton.attr("data-bind", "class: MustHaveClass");
-	        ko.applyBindings(mustHaveCountViewModel, mustHaveButton[0]);
-	    }
-
-	    var mustHaveTextElement = $('#Preference-must-have-numbers');
-	    if (mustHaveTextElement.length > 0) {
-	        mustHaveTextElement.attr("data-bind", "text: MustHaveText");
-	        ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
-	    }
-    }
-
 	function _initViewModels(loader) {
-		var date = portal ? portal.CurrentFixedDate() : null;
+	    var date = portal ? portal.CurrentFixedDate() : null;
+	    if (date == null)
+	        date = moment().startOf('day').format('YYYY-MM-DD');
+	    var dayViewModels = {};
 
-		var dayViewModels = {};
-		var dayViewModelsInPeriod = {};
+	    var dayViewModelsInPeriod = {};
+
 		$('li[data-mytime-date]').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
 			dayViewModel.ReadElement(element);
@@ -408,17 +387,20 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
+		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _setPreference, _deletePreference);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
-	    
-        if(mustHaveCountViewModel != null)
-		    mustHaveCountViewModel.SetData(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
-	    
+
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
-		if (periodFeedbackElement)
+		if (periodFeedbackElement) {
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-        
+
+		}
+			
 		loader = loader || function (call) { call(); };
 		loader(function () {
+
+			if (preferencesAndScheduleViewModel) {
+
 			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
 				.done(function () {
 					loadingStarted = true;
@@ -430,14 +412,19 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
-						callWhenAjaxIsCompleted(completelyLoaded);
+					    selectionViewModel.enableDateSelection();
 					});
 				});
+			}
+			callWhenAjaxIsCompleted(function() {
+				readyForInteraction();
+				completelyLoaded();
+			});
 		});
 	}
 
 	function _soon(call) {
-		setTimeout(function () { call(); }, 300);
+		setTimeout(function () { call(); }, 0);
 	}
 
 	function _initExtendedPanels() {
@@ -492,14 +479,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    if (periodFeedbackElement)
 	        ko.cleanNode(periodFeedbackElement);
 
-	    if (periodFeedbackViewModel) {
-	    	periodFeedbackViewModel.DayViewModels = {};
-	    	periodFeedbackViewModel = null;
+	    var mustHaveButton = $('#Preference-must-have-button');
+	    if (mustHaveButton.length > 0) {
+	        ko.cleanNode(mustHaveButton[0]);
 	    }
-	    if (preferencesAndScheduleViewModel) {
-	    	preferencesAndScheduleViewModel.DayViewModels = {};
-	    	preferencesAndScheduleViewModel = null;
+
+	    var mustHaveTextElement = $('#Preference-must-have-numbers');
+	    if (mustHaveTextElement.length > 0) {
+	        ko.cleanNode(mustHaveTextElement[0]);
 	    }
+
+	    var navbarElement = $('div.navbar');
+	    if (navbarElement.length > 1) {
+	        ko.cleanNode(navbarElement[1]);
+	    }
+
+	    if (selectionViewModel && selectionViewModel.subscription) {
+	        selectionViewModel.subscription.dispose();
+	    }
+	    selectionViewModel = null;
+	    periodFeedbackViewModel = null;
+	    preferencesAndScheduleViewModel = null;
 	}
 
 	return {
@@ -508,27 +508,25 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				Teleopti.MyTimeWeb.Preference.PreferencePartialInit,
 				Teleopti.MyTimeWeb.Preference.PreferencePartialDispose
 			);
-			_initSplitButton();
-			_initDeleteButton();
-			_initAddExtendedButton();
-			_initMustHaveButton();
-		    _initMustHaves();
-		},
-		InitViewModels: function () {
-			_initViewModels();
 		},
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
+			
 			if (!$('#Preference-body').length) {
 				readyForInteraction();
 				completelyLoaded();
 				return;
 			}
+			_initSplitButton();
+			_initAddExtendedButton();
+			_initViewModels(_soon);
 			_initPeriodSelection();
 			_initExtendedPanels();
 			
-			_initViewModels(_soon);
+		},
+		InitViewModels: function () {
+			_initViewModels();
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();

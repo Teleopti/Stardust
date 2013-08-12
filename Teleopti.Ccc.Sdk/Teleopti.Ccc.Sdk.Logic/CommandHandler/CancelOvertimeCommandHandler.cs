@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             		}
             	}
 
-				_saveSchedulePartService.Save(scheduleDay, rules);
+                _saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

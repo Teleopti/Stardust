@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var target = new EventsMessageSender(MockRepository.GenerateMock<IEventsPublisher>());
 			var root = MockRepository.GenerateMock<IAggregateRootWithEvents>();
+			root.Stub(x => x.PopAllEvents()).Return(Enumerable.Empty<IEvent>());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
 			target.Execute(roots);

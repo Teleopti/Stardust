@@ -1,4 +1,6 @@
-﻿Feature: Text request from schedule
+﻿@ignore
+#Ignored for now because this is going to be redesigned before merged to main
+Feature: Text request from schedule
 	In order to make requests to my superior
 	As an agent
 	I want to be able to submit requests as text

@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="toRemove">To remove.</param>
 		/// <param name="toAdd">To add.</param>
     	void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks,
-								   IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd);
+								   IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd);
 
     	/// <summary>
     	/// Creates the skill skill staff dictionary on skills.
@@ -46,12 +46,7 @@ namespace Teleopti.Interfaces.Domain
     		ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills,
     		DateTimePeriod keyPeriod);
 
-        /// <summary>
-        /// Adds the resources to non blend and max seat.
-        /// </summary>
-        /// <param name="mainShift">The main shift.</param>
-        /// <param name="person">The person.</param>
-        /// <param name="dateOnly">The date only.</param>
-        void AddResourcesToNonBlendAndMaxSeat(IMainShift mainShift, IPerson person, DateOnly dateOnly);
+	    void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
+	                                               DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks);
     }
 }

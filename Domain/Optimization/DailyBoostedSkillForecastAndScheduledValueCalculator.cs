@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _schedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>(skill.AggregateSkills), skillStaffPeriod.Period);
                 foreach (var staffPeriod in skillStaffPeriods)
                 {
-                    var thisSkill = CalculateSkillStaffPeriodForecastAndScheduledValue(((ISkillDay)staffPeriod.Parent).Skill, staffPeriod);
+                    var thisSkill = CalculateSkillStaffPeriodForecastAndScheduledValue(staffPeriod.SkillDay.Skill, staffPeriod);
                     ret.ForecastValue += thisSkill.ForecastValue;
                     ret.ScheduleValue += thisSkill.ScheduleValue;
                 }
@@ -73,9 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private static DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
         {
-            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                TeleoptiPrincipal.Current.Regional.TimeZone);
+            return new DateOnlyPeriod(scheduleDay, scheduleDay).ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
         }
 
         private static ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)

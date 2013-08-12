@@ -286,7 +286,6 @@
     <Compile Include="Common\Models\DataModelForTest.cs" />
     <Compile Include="Common\Models\DataModelWithDataErrorInfoTest.cs" />
     <Compile Include="Common\ModifySelectionPresenterTest.cs" />
-    <Compile Include="Common\MoveableLayerViewModelTest.cs" />
     <Compile Include="Common\OpenPeriodModeTest.cs" />
     <Compile Include="Common\OpenPeriodSpecificationTest.cs" />
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
@@ -558,7 +557,17 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
+    <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />
+    <Compile Include="Scheduler\AgentOvertimeAvailabilityAddCommandTest.cs" />
+    <Compile Include="Scheduler\OvertimeAvailabilityCreatorTest.cs" />
+    <Compile Include="Scheduler\AgentOvertimeAvailabilityEditCommandTest.cs" />
+    <Compile Include="Scheduler\AgentOvertimeAvailabilityPresenterTest.cs" />
+    <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
+    <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityAddCommandTest.cs" />
+    <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityEditCommandTest.cs" />
+    <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />

@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.OnlineReporting;
-using Teleopti.Ccc.OnlineReporting.Model;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
@@ -258,14 +257,11 @@ namespace Teleopti.Ccc.Win.Reporting
             parameters.Add(new ReportDataParameter("param_agents", agents));
             parameters.Add(new ReportDataParameter("param_activities", UserTexts.Resources.All));
 
-            DateOnly dateFrom = new DateOnly(3000, 12, 31);
-            DateOnly dateTo = new DateOnly();
-            foreach (var dateOnly in ScheduleViewBase.AllSelectedDates(selectedSchedules))
-            {
-                if (dateOnly < dateFrom) dateFrom = dateOnly;
-                if (dateOnly > dateTo) dateTo = dateOnly;
-            }
-            parameters.Add(new ReportDataParameter("param_date_from", dateFrom.ToShortDateString(culture)));
+	        var dates = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+            DateOnly dateFrom = dates.FirstOrDefault();
+            DateOnly dateTo = dates.LastOrDefault();
+            
+			parameters.Add(new ReportDataParameter("param_date_from", dateFrom.ToShortDateString(culture)));
             parameters.Add(new ReportDataParameter("param_date_to", dateTo.ToShortDateString(culture)));
             parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.Current.Regional.TimeZone.StandardName));
         }

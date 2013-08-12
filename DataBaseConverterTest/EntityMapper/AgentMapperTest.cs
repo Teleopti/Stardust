@@ -289,18 +289,19 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 
         private ICccListCollection<AgentSkill> CreateSkillCollection()
         {
+	        var type = SkillTypeFactory.CreateSkillType();
             ObjectPairCollection<global::Domain.Skill, ISkill> agentSkillPairs = new ObjectPairCollection<Skill, ISkill>();
             Skill oldSkill =
                 new Skill(77, global::Domain.SkillType.InboundTelephony, "theSkill", "", new Color(), null, null, null,
                           false, true, null, null, 3);
-            Domain.Forecasting.Skill newSkill = new Domain.Forecasting.Skill("theSkill", "", Color.Red, 15, null);
+			Domain.Forecasting.Skill newSkill = new Domain.Forecasting.Skill("theSkill", "", Color.Red, 15, type);
             ((IEntity)newSkill).SetId(Guid.NewGuid());
             agentSkillPairs.Add(oldSkill, newSkill);
 
             Skill oldDeletedSkill =
                 new Skill(77, global::Domain.SkillType.InboundTelephony, "theSkill", "", new Color(), null, null, null,
                           true, true, null, null, 3);
-            Domain.Forecasting.Skill newDeletedSkill = new Domain.Forecasting.Skill("theSkill", "", Color.Red, 15, null);
+			Domain.Forecasting.Skill newDeletedSkill = new Domain.Forecasting.Skill("theSkill", "", Color.Red, 15, type);
             ((IEntity)newDeletedSkill).SetId(Guid.NewGuid());
             ((IDeleteTag)newDeletedSkill).SetDeleted();
             agentSkillPairs.Add(oldDeletedSkill, newDeletedSkill);

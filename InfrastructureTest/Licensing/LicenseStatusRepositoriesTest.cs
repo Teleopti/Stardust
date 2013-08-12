@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateLicenseRepository(uow)).Return(licenseRep);
             Expect.Call(licenseRep.LoadAll()).Return(new List<ILicense>());
+			Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             var serv = _target.XmlLicenseService(0);
             Assert.That(serv, Is.Not.Null);

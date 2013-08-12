@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -94,6 +96,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void update()
         {
+	        timerRefresh.Enabled = false;
+
             if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod && _dateIsSelected)
             {
                 updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
@@ -113,6 +117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
             {
+				timerRefresh.Enabled = true;
                 updatePersonInfo(_selectedPerson);
                 return;
             }
@@ -295,7 +300,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             handleRotations(extractor.RotationList);
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
-            createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
+
+	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability))
+	        {
+		        createAndAddItem(listViewRestrictions, Resources.OvertimeAvailability, "", 1);
+		        var scheduleDay = getScheduleDay(person, dateOnly, state);
+		        if (scheduleDay != null) handleOvertimeAvailabilities(scheduleDay.OvertimeAvailablityCollection());
+	        }
+
+	        createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
             handlePreferences(extractor.PreferenceList);
             createAndAddItem(listViewRestrictions, Resources.ShiftCategoryLimitations, "", 1);
             handleShiftCategoryLimitations(person, dateOnly);
@@ -448,6 +461,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
+		private IScheduleDay getScheduleDay(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+		{
+			IScheduleDay schedulePart = null;
+			var scheduleRange = state.Schedules[person];
+			if (scheduleRange != null) schedulePart = scheduleRange.ScheduledDay(dateOnly);
+			
+			return schedulePart;
+		}
+
+		private void handleOvertimeAvailabilities(IEnumerable<IOvertimeAvailability> overtimeAvailabilityList)
+		{
+			foreach (var overtimeAvailability in overtimeAvailabilityList)
+			{
+				addOvertimeAvailability(overtimeAvailability, 2);
+			}
+		}
+
+
         private void handlePreferences(IEnumerable<IPreferenceRestriction> preferenceList)
         {
            foreach (IPreferenceRestriction restriction in preferenceList)
@@ -495,6 +526,26 @@ namespace Teleopti.Ccc.Win.Scheduling
                 createAndAddItem(listViewRestrictions, Resources.MaxWorkTime, restrictionBase.WorkTimeLimitation.EndTimeString, indent);
             }
         }
+
+		private void addOvertimeAvailability(IOvertimeAvailability overtimeAvailability, int indent)
+		{
+			if (overtimeAvailability.StartTime.HasValue)
+			{
+				var startTime = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)overtimeAvailability.StartTime, CultureInfo.CurrentCulture);
+				createAndAddItem(listViewRestrictions, Resources.EarliestStartTime, startTime, indent);
+			}
+
+			if (overtimeAvailability.EndTime.HasValue)
+			{
+				var endTime = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)overtimeAvailability.EndTime, CultureInfo.CurrentCulture);
+				createAndAddItem(listViewRestrictions, Resources.LatestEndTime, endTime, indent);
+			}
+
+			if (overtimeAvailability.NotAvailable)
+			{
+				createAndAddItem(listViewRestrictions, Resources.Available, (!overtimeAvailability.NotAvailable).ToString(CultureInfo.CurrentCulture), 2);	
+			}
+		}
 
         private void updatePersonPeriodData(IPerson person, DateOnly dateOnly)
         {
@@ -705,6 +756,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (person == null) return;
             var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
             item.Font = item.Font.ChangeToBold();
+	        var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             listViewPerson.Items.Add(item);
             createAndAddItem(listViewPerson, Resources.Email, person.Email ?? "", 2);
             createAndAddItem(listViewPerson, Resources.EmployeeNo, person.EmploymentNumber ?? "", 2);
@@ -715,10 +767,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             //{
             //    createAndAddItem(listViewPerson, applicationRole.Name, "", 2);
             //}
+
             createAndAddItem(listViewPerson, Resources.WorkflowControlSet,
                              person.WorkflowControlSet != null ? person.WorkflowControlSet.Name : "", 2);
-            
-            createAndAddItem(listViewPerson, Resources.TimeZone, person.PermissionInformation.DefaultTimeZone().DisplayName, 2);
+
+			createAndAddItem(listViewPerson, Resources.TimeZone, timeZoneInfo.DisplayName, 2);
+			createAndAddItem(listViewPerson, Resources.LocalTime, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo).ToShortTimeString(), 2);
             createAndAddItem(listViewPerson, Resources.WorkWeekStartsAt, DayOfWeekDisplay.ListOfDayOfWeek.SingleOrDefault(day => day.DayOfWeek == person.FirstDayOfWeek).DisplayName, 2);
             createAndAddItem(listViewPerson, Resources.TerminalDate,
                              person.TerminalDate != null ? person.TerminalDate.Value.ToShortDateString(CultureInfo.CurrentCulture) : "", 2);
@@ -763,6 +817,15 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void AgentInfo_FromLoad(object sender, EventArgs e)
         {
             initializeFairnessTab();
+	        timerRefresh.Interval = 2000;
         }
+
+		private void timerRefreshTick(object sender, EventArgs e)
+		{
+			if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
+			{
+				updatePersonInfo(_selectedPerson);
+			}
+		}
     }
 }

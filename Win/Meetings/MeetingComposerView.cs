@@ -115,12 +115,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			}
 			if (_currentView is MeetingImpactView)
 			{
-				var meetingGeneralView = _meetingDetailViews[0] as MeetingGeneralView;
-				if (meetingGeneralView != null)
-				{
-					start = meetingGeneralView.GetStartTimeText;
-					end = meetingGeneralView.GetEndTimeText;
-				}
+				start = (_currentView as MeetingImpactView).GetStartTimeText;
+				end = (_currentView as MeetingImpactView).GetEndTimeText;
 				
 			}
 			TimeSpan startTime;

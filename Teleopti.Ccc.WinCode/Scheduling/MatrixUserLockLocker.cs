@@ -25,33 +25,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 var currentPerson = matrix.Person;
 
-                IList<DateOnly> dates = new List<DateOnly>();
+	            bool personIncluded = scheduleDays.Any(scheduleDay => scheduleDay.Person.Equals(currentPerson));
 
-                foreach (var scheduleDay in scheduleDays)
-                {
-                    if (scheduleDay.Person.Equals(currentPerson))
-                        dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                }
-
-				setUserLockedDaysInMatrix(matrix, _gridlockManager);
-				if(dates.Count > 0)
+	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
+				if(personIncluded)
 #pragma warning disable 612,618
 					matrix.SelectedPeriod = selectedPeriod;
 #pragma warning restore 612,618
             }
         }
 
-		private static void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, IGridlockManager gridlockManager)
-        {
-            var currentPerson = matrix.Person;
+		private static void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, DateOnlyPeriod selectedPeriod, IGridlockManager gridlockManager)
+		{
+			var currentPerson = matrix.Person;
 
-            foreach (var dayPro in matrix.EffectivePeriodDays)
-            {
-                var day = dayPro.Day;
-                var locks = gridlockManager.Gridlocks(currentPerson, day);
-                if (locks != null && locks.Count != 0)
-                    matrix.LockPeriod(new DateOnlyPeriod(day, day));
-            }
-        }
+			foreach (var dayPro in matrix.EffectivePeriodDays)
+			{
+				var day = dayPro.Day;
+
+				if (selectedPeriod.Contains(day))
+					matrix.UnlockPeriod(new DateOnlyPeriod(day, day));
+
+				var locks = gridlockManager.Gridlocks(currentPerson, day);
+				if (locks != null && locks.Count != 0)
+					matrix.LockPeriod(new DateOnlyPeriod(day, day));
+			}
+		}
     }
 }

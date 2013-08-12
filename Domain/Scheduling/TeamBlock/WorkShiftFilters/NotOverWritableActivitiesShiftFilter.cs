@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			foreach (var personAssignment in personAssignments)
 			{
-				if (personAssignment.PersonalShiftCollection.Any(
-					x => x.LayerCollection.Any(l => l.Period.Intersect(layer.Period))))
+				if (personAssignment.PersonalLayers.Any(l => l.Period.Intersect(layer.Period)))
 					return true;
 			}
 			return false;

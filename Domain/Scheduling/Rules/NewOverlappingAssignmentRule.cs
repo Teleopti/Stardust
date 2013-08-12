@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -29,22 +30,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var responseList = new HashSet<IBusinessRuleResponse>();
             if (!ForDelete)
             {
-                foreach (IScheduleDay day in scheduleDays)
-                {
-                    var person = day.Person;
-                    var currentSchedules = rangeClones[person];
-                    var dateToCheck = day.DateOnlyAsPeriod.DateOnly;
-                    var daysToCheck = currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1)));
+				var groupedByPerson = scheduleDays.GroupBy(s => s.Person);
 
-                    var periodToValidate = new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1))
-                        .ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-                    foreach (var scheduleDay in daysToCheck)
+				foreach (var scheduleDay in groupedByPerson)
+				{
+					if (!scheduleDay.Any()) continue;
+					var period = new DateOnlyPeriod(scheduleDay.Min(s => s.DateOnlyAsPeriod.DateOnly).AddDays(-1),
+													scheduleDay.Max(s => s.DateOnlyAsPeriod.DateOnly).AddDays(1));
+					var currentSchedules = rangeClones[scheduleDay.Key];
+					var daysToCheck =
+						currentSchedules.ScheduledDayCollection(period);
+				
+                    var periodToValidate = period.ToDateTimePeriod(scheduleDay.Key.PermissionInformation.DefaultTimeZone());
+                    foreach (var dayToCheck in daysToCheck)
                     {
-                        foreach (var conflict in scheduleDay.PersonAssignmentConflictCollection)
+						foreach (var conflict in dayToCheck.PersonAssignmentConflictCollection)
                         {
                             if (periodToValidate.Intersect(conflict.Period))
                             {
-                                IBusinessRuleResponse response = CreateResponse(person, scheduleDay.DateOnlyAsPeriod.DateOnly, UserTexts.Resources.BusinessRuleOverlappingErrorMessage2,
+                                IBusinessRuleResponse response = CreateResponse(scheduleDay.Key, dayToCheck.DateOnlyAsPeriod, UserTexts.Resources.BusinessRuleOverlappingErrorMessage2,
                                                                                 typeof(NewOverlappingAssignmentRule));
 
                                 responseList.Add(response);
@@ -57,12 +61,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private IBusinessRuleResponse CreateResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+        private IBusinessRuleResponse CreateResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dateOnlyPeriod) { Overridden = !HaltModify };
+            var dop = new DateOnlyPeriod(dateOnly.DateOnly, dateOnly.DateOnly);
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, dateOnly.Period(), person, dop) { Overridden = !HaltModify };
             return response;
         }
     }

@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly bool _considerShortBreaks;
 		private DateOnly? _lastDate;
 		private int _counter = 1;
+		private readonly List<IScheduleDay> _addedSchedules = new List<IScheduleDay>();
+		private readonly List<IScheduleDay> _removedSchedules = new List<IScheduleDay>(); 
 
 		public ResourceCalculateDelayer(
 			IResourceOptimizationHelper resourceOptimizationHelper, 
@@ -48,20 +50,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					DateTimePeriod period = dateTimePeriod.Value;
 					if (period.StartDateTime.Date != period.EndDateTime.Date)
-						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, removedSchedules, addedSchedules);
+						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
 				}
 				return true;
 			}
 
 			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value, _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value, _useOccupancyAdjustment, _considerShortBreaks, _removedSchedules, _addedSchedules);
 				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
 				_lastDate = scheduleDateOnly;
 				_counter = 1;
+				_addedSchedules.Clear();
+				_removedSchedules.Clear();
 
 				return true;
 			}
+
+			_addedSchedules.AddRange(addedSchedules);
+			_removedSchedules.AddRange(removedSchedules);
 
 			_counter++;
 			return false;
