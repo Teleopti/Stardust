@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         }
 
         [Test]
-        public void VerifyExecuteExitsWithTrueWhenAllSolversReturnsTrue()
+        public void VerifyExecuteExitsWithFalseWhenAllSolversReturnsTrue()
         {
             IList<IDayOffBackToLegalStateSolver> solvers = new List<IDayOffBackToLegalStateSolver>();
             IDayOffBackToLegalStateSolver s1 = _mocks.StrictMock<IDayOffBackToLegalStateSolver>();
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
             using (_mocks.Record())
             {
-                Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 2);
+                Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s1.ResolverDescriptionKey).Return("hej").Repeat.Once();
-                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 2);
+                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s2.ResolverDescriptionKey).Return("hupp").Repeat.Once();
             }
@@ -124,22 +124,17 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             solvers.Add(s1);
             solvers.Add(s2);
 
+	        const int maxIteration = 1;
+
             using (_mocks.Record())
             {
-                Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                //Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(1);
-                //Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(1);
-                Expect.Call(s1.ResolverDescriptionKey).Return("").Repeat.Once();
-                Expect.Call(s2.ResolverDescriptionKey).Return("").Repeat.Once();
+				Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
+				Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
+				Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
+				Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
+
+                Expect.Call(s1.ResolverDescriptionKey).Return("hej").Repeat.Once();
+                Expect.Call(s2.ResolverDescriptionKey).Return("hupp").Repeat.Once();
 
             }
 
@@ -151,6 +146,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             }
 
             Assert.IsFalse(result);
+			Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hej"));
+			Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hupp"));
         }
 
 
