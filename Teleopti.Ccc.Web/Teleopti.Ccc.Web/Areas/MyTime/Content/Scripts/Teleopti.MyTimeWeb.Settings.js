@@ -51,15 +51,18 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         ko.applyBindings(vm, $('#page')[0]);
     };
 
-    function _partialInit() {
+    function _partialInit(readyForInteraction, completelyLoaded) {
         vm = new settingsViewModel();
-        _loadCultures();
-	    _getCalendarLinkStatus();
+	    $.when(_loadCultures(), _getCalendarLinkStatus())
+		    .done(function() {
+		    	readyForInteraction();
+			    completelyLoaded();
+		    });
         _bindData();
 	}
 
 	function _loadCultures() {
-	    ajax.Ajax({
+	    return ajax.Ajax({
 	        url: "Settings/Cultures",
 	        dataType: "json",
 	        type: "GET",
@@ -98,9 +101,12 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 	
 	function _getCalendarLinkStatus() {
-		ajax.Ajax({
+		if ($(".share-my-calendar").length == 0)
+			return null;
+		return ajax.Ajax({
 			url: "Settings/CalendarLinkStatus",
 			contentType: 'application/json; charset=utf-8',
+			dataType: "json",
 			type: "GET",
 			success: function (data, textStatus, jqXHR) {
 				ajax.CallWhenAllAjaxCompleted(function () {
@@ -117,7 +123,8 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _setCalendarLinkStatus(isActive) {
 	    ajax.Ajax({
 	    	url: "Settings/SetCalendarLinkStatus",
-	        contentType: 'application/json; charset=utf-8',
+	    	contentType: 'application/json; charset=utf-8',
+	    	dataType: "json",
 	        type: "POST",
 	        data: JSON.stringify({IsActive: isActive}),
 	        success: function (data, textStatus, jqXHR) {
@@ -137,11 +144,8 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			_init();
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
-
 		    $('#Test-Picker').select2();
-		    _partialInit();
-		    readyForInteraction();
-		    completelyLoaded();
+		    _partialInit(readyForInteraction, completelyLoaded);
 		}
 	};
 })(jQuery);
