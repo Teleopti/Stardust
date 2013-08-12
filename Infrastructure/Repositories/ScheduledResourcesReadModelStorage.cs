@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
-		public void AddResources(Guid activityId, bool activityRequiresSeat, string skills, DateTimePeriod period, double resources, double heads)
+		public long AddResources(Guid activityId, bool activityRequiresSeat, string skills, DateTimePeriod period, double resources, double heads)
 		{
-			_unitOfWork.Session().CreateSQLQuery("exec ReadModel.AddResources @Activity=:Activity,@ActivityRequiresSeat=:ActivityRequiresSeat,@Skills=:Skills,@PeriodStart=:PeriodStart,@PeriodEnd=:PeriodEnd,@Resources=:Resources,@Heads=:Heads")
+			return _unitOfWork.Session().CreateSQLQuery("exec ReadModel.AddResources @Activity=:Activity,@ActivityRequiresSeat=:ActivityRequiresSeat,@Skills=:Skills,@PeriodStart=:PeriodStart,@PeriodEnd=:PeriodEnd,@Resources=:Resources,@Heads=:Heads")
 			           .SetGuid("Activity", activityId)
 			           .SetBoolean("ActivityRequiresSeat", activityRequiresSeat)
 			           .SetString("Skills", skills)
@@ -24,19 +24,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			           .SetDateTime("PeriodEnd", period.EndDateTime)
 			           .SetDouble("Resources", resources)
 			           .SetDouble("Heads", heads)
-			           .ExecuteUpdate();
+			           .UniqueResult<long>();
 		}
 
-		public void RemoveResources(Guid activityId, string skills, DateTimePeriod period, double resources, double heads)
+		public void AddSkillEfficiency(long resourceId, Guid skillId, double efficiency)
 		{
-			_unitOfWork.Session().CreateSQLQuery("exec ReadModel.RemoveResources @Activity=:Activity,@Skills=:Skills,@PeriodStart=:PeriodStart,@PeriodEnd=:PeriodEnd,@Resources=:Resources,@Heads=:Heads")
+			_unitOfWork.Session().CreateSQLQuery("exec ReadModel.AddSkillEfficiency @ResourceId=:ResourceId,@SkillId=:SkillId,@Efficiency=:Efficiency")
+					   .SetInt64("ResourceId", resourceId)
+					   .SetGuid("SkillId", skillId)
+					   .SetDouble("Efficiency", efficiency)
+					   .ExecuteUpdate();
+		}
+
+		public void RemoveSkillEfficiency(long resourceId, Guid skillId, double efficiency)
+		{
+			_unitOfWork.Session().CreateSQLQuery("exec ReadModel.RemoveSkillEfficiency @ResourceId=:ResourceId,@SkillId=:SkillId,@Efficiency=:Efficiency")
+					   .SetInt64("ResourceId", resourceId)
+					   .SetGuid("SkillId", skillId)
+					   .SetDouble("Efficiency", efficiency)
+					   .ExecuteUpdate();
+		}
+
+		public long? RemoveResources(Guid activityId, string skills, DateTimePeriod period, double resources, double heads)
+		{
+			return _unitOfWork.Session().CreateSQLQuery("exec ReadModel.RemoveResources @Activity=:Activity,@Skills=:Skills,@PeriodStart=:PeriodStart,@PeriodEnd=:PeriodEnd,@Resources=:Resources,@Heads=:Heads")
 			           .SetGuid("Activity", activityId)
 			           .SetString("Skills", skills)
 			           .SetDateTime("PeriodStart", period.StartDateTime)
 			           .SetDateTime("PeriodEnd", period.EndDateTime)
 			           .SetDouble("Resources", resources)
 			           .SetDouble("Heads", heads)
-			           .ExecuteUpdate();
+					   .UniqueResult<long?>();
 		}
 	}
 }
