@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = service.Swap(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-            Assert.AreEqual(0, retList[0].PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
