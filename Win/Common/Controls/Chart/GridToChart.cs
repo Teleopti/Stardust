@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
+using Syncfusion.Grouping;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using System.Globalization;
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         private bool _showGridLines = true;
         private readonly IList<DateTime> _dateRange = new List<DateTime>();
         private  WorkingInterval _workingInterval;
+		private readonly IDictionary<ChartSeries, bool> _cachedSeriesVisibility = new Dictionary<ChartSeries, bool>(); 
 
         private GridToChart()
         {
@@ -232,7 +235,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
             {
                 chartControl1.Series.ResetCache(chartSerie);
             }
-            
+            chartSerie.AppearanceChanged += ChartSerieOnAppearanceChanged;
             GridToChart_SizeChanged(null, null);
             chartControl1.Series.EndUpdate();
             //Stupid chart have to do this HERE to make the 
@@ -241,6 +244,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
             chartControl1.PrimaryYAxis.Range.Min = 0;
             chartControl1.PrimaryXAxis.ValueType = ChartValueType.DateTime;
 			FixOutOfMemoryProblem();
+			
+			foreach (var axis in chartControl1.Axes
+				.Cast<ChartAxis>()
+				.Where(a => a.ValueType == ChartValueType.Double))
+				ZoomYAxis(chartControl1.PrimaryXAxis.VisibleRange, axis);
         }
 
 		private void FixOutOfMemoryProblem()
@@ -309,16 +317,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
            }
         }
 
-        /// <summary>
-        /// the chart and the grid is implemented completely different in different forms
-        /// in t
-        /// </summary>
-        /// <param name="date">The date.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: ostenpe
-        /// Created date: 2008-11-04
-        /// </remarks>
         private int  GetColumnFromDate(DateTime date)
         {
             int i = 0;
@@ -356,6 +354,105 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
 
             return 0;
         }
+
+	    private void ChartSerieOnAppearanceChanged(object sender, EventArgs e)
+	    {
+		    var xInfo = chartControl1.PrimaryXAxis.VisibleRange;
+		    var serie = sender as ChartSeries;
+		    if (serie == null)
+			    return;
+
+		    if (!IsThisFirstTimeRunningForThisChange(serie))
+			    return;
+
+		    ZoomYAxis(xInfo, serie.ActualYAxis);
+		    AddOrUpdateVisibleDictionary(serie);
+	    }
+
+	    private bool IsThisFirstTimeRunningForThisChange(ChartSeries serie)
+	    {
+		    if (_cachedSeriesVisibility.ContainsKey(serie))
+			    return _cachedSeriesVisibility[serie] != serie.Visible;
+		 
+			_cachedSeriesVisibility.Add(serie, serie.Visible);
+		    return true;
+	    }
+
+	    private void ZoomYAxis(MinMaxInfo xInfo, ChartAxis axis)
+	    {
+		    var max = GetHighestYValueForYAxis(xInfo, axis);
+		    var roundedMinMax = GetRoundedMinMax(max);
+
+		    axis.RoundingPlaces = max > 3
+			                          ? 0
+			                          : 2;
+		    axis.Range = roundedMinMax;
+	    }
+
+	    private double GetHighestYValueForYAxis(MinMaxInfo xInfo, ChartAxis axis)
+	    {
+		    var visibleSeriesOnCurrentYAxis = chartControl1.Series
+		                                                   .Cast<ChartSeries>()
+		                                                   .Where(serie => serie.ActualYAxis == axis &&
+		                                                                   serie.Visible)
+		                                                   .ToList();
+		    var max = double.MinValue;
+		    var engine = new Engine();
+		    foreach (var points in visibleSeriesOnCurrentYAxis.Select(s => s.Points))
+		    {
+			    engine.SetSourceList(points);
+			    var recordFilterDescriptor = new RecordFilterDescriptor("X", FilterLogicalOperator.And, new[]
+				    {
+					    new FilterCondition(FilterCompareOperator.GreaterThanOrEqualTo, xInfo.Min),
+					    new FilterCondition(FilterCompareOperator.LessThanOrEqualTo, xInfo.Max)
+				    });
+			    engine.TableDescriptor.RecordFilters.Add(recordFilterDescriptor);
+
+			    foreach (var record in engine.Table.FilteredRecords)
+			    {
+				    var yValues = (double[]) record["YValues"];
+				    var recordMax = yValues[0];
+				    max = recordMax > max ? recordMax : max;
+			    }
+		    }
+		    max = max > 0 ? max : 1;
+		    return max;
+	    }
+
+	    private static MinMaxInfo GetRoundedMinMax(double value)
+	    {
+		    var roundedStep = CalculateInterval(value, 0.1);
+		    roundedStep = roundedStep.Equals(0)
+			                  ? 1
+			                  : roundedStep;
+
+		    var roundedValue = (((int) Math.Round(value/roundedStep))*roundedStep);
+		    roundedValue = roundedValue.Equals(0)
+			                   ? 1
+			                   : roundedValue;
+
+		    return new MinMaxInfo(0, roundedValue + roundedStep, roundedStep);
+	    }
+
+	    private static double CalculateInterval(double value, double increment)
+	    {
+		    if (value < 6*increment)
+			    return 1*increment;
+		    if (value < 12*increment)
+			    return 2*increment;
+		    if (value <= 30*increment)
+			    return 5*increment;
+		    return CalculateInterval(value, increment*10);
+	    }
+
+	    private void AddOrUpdateVisibleDictionary(ChartSeries serie)
+		{
+			if (_cachedSeriesVisibility.ContainsKey(serie))
+				_cachedSeriesVisibility[serie] = serie.Visible;
+			else
+				_cachedSeriesVisibility.Add(serie, serie.Visible);
+
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "Gridlines"), Browsable(false)]
         public bool ShowGridlines
