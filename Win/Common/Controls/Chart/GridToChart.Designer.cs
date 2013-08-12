@@ -15,6 +15,9 @@
         {
             if (disposing)
             {
+				if (chartControl1 != null)
+					foreach (Syncfusion.Windows.Forms.Chart.ChartSeries series in chartControl1.Series)
+						series.AppearanceChanged -= ChartSerieOnAppearanceChanged;
                 if (components!=null)
                     components.Dispose();
                 if (_secYAxis != null)
