@@ -250,7 +250,6 @@ namespace Teleopti.Ccc.Domain.Collection
                 if (isScenarioRestrictedAndNotPermitted(authorization))
                     return lstErrors;
 
-                scheduleParts.ForEach(p => p.RemoveEmptyAssignments());
                 if (treatScheduleAsWriteProtected(scheduleParts, authorization))
                     return lstErrors;
 
