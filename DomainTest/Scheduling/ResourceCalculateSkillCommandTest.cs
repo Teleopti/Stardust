@@ -19,13 +19,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ISkillLoaderDecider _skillLoadDecider;
         private ISkillDayLoadHelper _skillDayLoadHelper;
         private IPersonRepository _personRepository;
-        private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private ISkillRepository _skillRepository;
         private IWorkloadRepository _workloadRepository;
         private IScheduleRepository _scheduleRepository;
-        private IPersonProvider _personProvider;
+	    private IScheduledResourcesReadModelStorage _storage;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -33,12 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _skillLoadDecider = _mocks.DynamicMock<ISkillLoaderDecider>();
             _skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
             _personRepository = _mocks.DynamicMock<IPersonRepository>();
-            _personAbsenceAccountRepository = _mocks.DynamicMock<IPersonAbsenceAccountRepository>();
             _skillRepository = _mocks.DynamicMock<ISkillRepository>();
             _workloadRepository = _mocks.DynamicMock<IWorkloadRepository>();
             _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
-            _personProvider = _mocks.DynamicMock<IPersonProvider>();
-            _target = new ResourceCalculateSkillCommand(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleRepository, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper, p => _personProvider);
+            _storage = _mocks.DynamicMock<IScheduledResourcesReadModelStorage>();
+            _target = new ResourceCalculateSkillCommand(_personRepository, _skillRepository, _workloadRepository, _storage, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                _target.Execute(scenario, period, skill);
+                _target.Execute(scenario, period, skill, new ResourceCalculationDataContainerFromStorage());
             }
         }
     }

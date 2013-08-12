@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -50,7 +51,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = factory.CreateViewModel(skillId, dateTime);
 
 			result.ForecastedHours.Should().Be.EqualTo(2.5);
-			calculateSkillCommand.AssertWasCalled(x => x.Execute(scenario, new DateOnlyPeriod(dateTime, dateTime).ToDateTimePeriod(skill.TimeZone), skill));
+			calculateSkillCommand.AssertWasCalled(
+				x =>
+				x.Execute(Arg<IScenario>.Is.Equal(scenario),
+				          Arg<DateTimePeriod>.Is.Equal(new DateOnlyPeriod(dateTime, dateTime).ToDateTimePeriod(skill.TimeZone)),
+				          Arg<ISkill>.Is.Equal(skill),
+				          Arg<ResourceCalculationDataContainerFromStorage>.Is.Anything));
 		}
 
 		[Test]

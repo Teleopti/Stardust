@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Interfaces.Domain
 {
 	public class ResourceCalculationContext<T> : IDisposable where T : class
 	{

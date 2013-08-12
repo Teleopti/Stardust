@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 {
-
 	public class ResourceOptimizationHelper : IResourceOptimizationHelper
 	{
 		private readonly ISchedulingResultStateHolder _stateHolder;

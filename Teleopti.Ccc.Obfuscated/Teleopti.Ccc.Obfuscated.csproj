@@ -108,7 +108,6 @@
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessValueCalculator.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalculationContext.cs" />
     <Compile Include="ResourceCalculation\ScheduleMatrixValueCalculatorPro.cs" />
     <Compile Include="ResourceCalculation\ScheduleMatrixValueCalculatorProFactory.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingService.cs" />

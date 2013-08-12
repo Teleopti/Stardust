@@ -127,7 +127,7 @@
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
-	<Compile Include="Domain\IOvertimeAvailability.cs" />
+    <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -575,6 +575,7 @@
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\RequestType.cs" />
+    <Compile Include="Domain\ResourceCalculationContext.cs" />
     <Compile Include="Domain\ResourceLayer.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITimeLayer.cs" />

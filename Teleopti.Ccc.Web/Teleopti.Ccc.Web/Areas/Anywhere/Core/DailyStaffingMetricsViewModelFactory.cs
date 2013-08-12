@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -30,10 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var skill = _skillRepository.Load(skillId);
 			var dateOnly = new DateOnly(date);
-			
-			_calculateSkillCommand.Execute(_currentScenario.Current(), new DateOnlyPeriod(dateOnly,dateOnly).ToDateTimePeriod(skill.TimeZone), skill);
 
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+			var resourceCalculationDataContainer = new ResourceCalculationDataContainerFromStorage();
+			_calculateSkillCommand.Execute(_currentScenario.Current(), new DateOnlyPeriod(dateOnly,dateOnly).ToDateTimePeriod(skill.TimeZone), skill, resourceCalculationDataContainer);
+
+			_resourceOptimizationHelper.ResourceCalculateDate(resourceCalculationDataContainer, dateOnly, true, true);
 
 			var skillDay = _stateHolder.SkillDays[skill].First(d => d.CurrentDate == dateOnly);
 			var sumOfForecastedHours = skillDay.ForecastedIncomingDemand;

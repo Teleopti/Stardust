@@ -56,10 +56,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (!combinationDictionary.TryGetValue(resourcesForCombinationFromStorage.ActivitySkillCombinationId, out combination)) continue;
 
 				PeriodResource periodResource;
-				if (!_dictionary.TryGetValue(resourcesForCombinationFromStorage.Period, out periodResource))
+				var period = new DateTimePeriod(resourcesForCombinationFromStorage.PeriodStart,
+				                                resourcesForCombinationFromStorage.PeriodEnd);
+				if (!_dictionary.TryGetValue(period, out periodResource))
 				{
 					periodResource = new PeriodResource();
-					_dictionary.Add(resourcesForCombinationFromStorage.Period,periodResource);
+					_dictionary.Add(period, periodResource);
 				}
 
 				var foundEfficiencies =
