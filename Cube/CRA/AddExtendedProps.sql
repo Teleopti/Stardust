@@ -3,7 +3,7 @@
 --DROP DATABASE [TeleoptiAnalytics-root]
 
 --Create db from root:
---DBManager.exe -S. -DTeleoptiAnalytics-root -OTeleoptiAnalytics -E -Ldummy:dummy -C –T
+--DBManager.exe -S. -DTeleoptiAnalytics-root -OTeleoptiAnalytics -E -Ldummy:dummy -C –T -F"C:\Data\main\database"
 
 USE [TeleoptiAnalytics-root]
 GO
@@ -685,8 +685,6 @@ EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_queue_excluded,@level2name =datasource_id,@value ='One for each logobject_id.the source (database,log_object,application instance), from where data was extracted.'
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_scenario,@level2name =is_deleted,@value ='Deleted flag'
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_shift_category,@level2name =is_deleted,@value ='Deleted flag'
-EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_shift_length,@level2name =shift_length_group_id,@value ='Shift length groupid'
-EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_shift_length,@level2name =shift_length_group_name,@value ='Shift length group name'
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_skill,@level2name =is_deleted,@value ='Deleted flag'
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_team,@level2name =scorecard_id,@value ='ID representing the score card assigned to the team'
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_time_zone,@level2name =to_be_deleted,@value ='Deleted flag'
