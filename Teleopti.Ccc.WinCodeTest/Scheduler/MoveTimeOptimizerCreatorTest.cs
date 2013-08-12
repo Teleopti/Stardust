@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _personSkillProvider);
+												   _personSkillProvider, new CurrentTeleoptiPrincipal());
 		}
 
 		[Test]

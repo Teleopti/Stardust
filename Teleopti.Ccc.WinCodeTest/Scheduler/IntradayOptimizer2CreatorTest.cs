@@ -3,6 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -50,13 +52,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_personSkillProvider = new PersonSkillProvider();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
-				_workShiftContainerList,
-												   _decisionMaker,
-												   _scheduleService,
-												   optimizerPreferences,
-												   _rollbackService,
-												   _schedulingResultStateHolder,
-												   _personSkillProvider);
+			                                        _workShiftContainerList,
+			                                        _decisionMaker,
+			                                        _scheduleService,
+			                                        optimizerPreferences,
+			                                        _rollbackService,
+			                                        _schedulingResultStateHolder,
+			                                        _personSkillProvider, _mocks.DynamicMock<ICurrentTeleoptiPrincipal>());
 		}
 
 		[Test]

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IPersonSkillProvider personSkillProvider)
+			IPersonSkillProvider personSkillProvider,
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_personSkillProvider = personSkillProvider;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		/// <summary>
@@ -78,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator();
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider);
+					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider, _currentTeleoptiPrincipal);
 
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);

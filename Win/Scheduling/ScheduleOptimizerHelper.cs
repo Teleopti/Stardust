@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      optimizerPreferences,
                                                                      rollbackService,
                                                                      SchedulingStateHolder,
-																	 _personSkillProvider);
+																	 _personSkillProvider, new CurrentTeleoptiPrincipal());
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
             IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              optimizerPreferences,
                                              rollbackService,
                                              SchedulingStateHolder,
-											 _personSkillProvider);
+											 _personSkillProvider, new CurrentTeleoptiPrincipal());
 
             IList<IMoveTimeOptimizer> optimizers = creator.Create();
             IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

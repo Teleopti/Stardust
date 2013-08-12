@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
 			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
-														 _personSkillProvider);
+														 _personSkillProvider,
 														 new CurrentTeleoptiPrincipal());
 		}
 

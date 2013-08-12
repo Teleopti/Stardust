@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleProjectionReadOnlyUpdater>().As<IHandleEvent<ProjectionChangedEvent>>();
+			builder.RegisterType<ScheduleProjectionReadOnlyUpdater>().As<IHandleEvent<ScheduledResourcesChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ScheduledResourcesChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
