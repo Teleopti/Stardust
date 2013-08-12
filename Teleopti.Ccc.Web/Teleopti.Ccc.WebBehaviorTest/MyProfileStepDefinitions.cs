@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
+		[When(@"I view my settings")]
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{

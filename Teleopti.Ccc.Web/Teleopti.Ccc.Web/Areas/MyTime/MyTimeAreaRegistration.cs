@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 			mapRoute.DataTokens["area"] = "Start";
 
 			context.MapRoute(
+				"MyTime-calendar",
+				"MyTime/Share",
+				new { controller = "ShareCalendar", action = "iCal" }
+				);
+
+			context.MapRoute(
 				"MyTime-date-route",
 				"MyTime/{controller}/{action}/{year}/{month}/{day}",
 				new {},

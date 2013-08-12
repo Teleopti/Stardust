@@ -114,6 +114,8 @@
 		public const string ExtendedPreferencesWeb = "0079";
 		public const string ShiftTradeRequestsWeb = "0083";
 		public const string ViewAllGroupPages = "0084";
+		public const string ShareCalendar = "0087";
+
 
 		// Mobile Reports
 		public const string MobileReports = "0074";

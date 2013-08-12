@@ -87,12 +87,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
+    <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
+    <Compile Include="CalendarShare.feature.cs">
+      <DependentUpon>CalendarShare.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -585,6 +594,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="CalendarShare.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>

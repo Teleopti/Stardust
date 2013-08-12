@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = true;
                 TeleoptiCccMobileReportsEnabled = true;
 				TeleoptiCccSmsLinkEnabled = true;
+	            TeleoptiCccCalendarLinkEnabled = true;
 				TeleoptiCccVersion8Enabled = true;
             }
 
@@ -211,7 +212,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
-			public bool TeleoptiCccVersion8Enabled { get; private set; }
+	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -267,6 +269,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
                 TeleoptiCccMobileReportsEnabled = false;
 				TeleoptiCccSmsLinkEnabled = false;
+	            TeleoptiCccCalendarLinkEnabled = false;
 				TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
@@ -320,7 +323,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
-			public bool TeleoptiCccVersion8Enabled { get; private set; }
+	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -378,6 +382,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
                 TeleoptiCccMobileReportsEnabled = false;
             	TeleoptiCccSmsLinkEnabled = false;
+	            TeleoptiCccCalendarLinkEnabled = false;
             	TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
@@ -431,7 +436,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
-			public bool TeleoptiCccVersion8Enabled { get; private set; }
+	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 

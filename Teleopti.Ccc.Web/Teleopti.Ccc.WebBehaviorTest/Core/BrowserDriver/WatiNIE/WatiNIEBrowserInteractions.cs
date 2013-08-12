@@ -122,6 +122,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_helper.DumpUrl(writer, () => _browser.Url);
 		}
 
+		public string Value(string selector)
+		{
+			return _browser.Element(Find.BySelector(selector)).Text;
+		}
+		
 		private void validateSelector(string selector)
 		{
 			if (selector.Contains(":contains("))
