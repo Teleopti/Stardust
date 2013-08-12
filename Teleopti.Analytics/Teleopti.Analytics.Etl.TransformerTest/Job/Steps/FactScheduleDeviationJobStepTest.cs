@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
@@ -55,37 +54,5 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			_repository.VerifyAllExpectations();
 		}
-
-	
-
-		
-
-		
-        [Test]
-        public void ShouldLoadYesterdayAndTodayOnIntraday()
-        {
-            var startDate = DateTime.SpecifyKind(DateTime.Now.Date.AddDays(-2), DateTimeKind.Local);
-            _jobCategoryDates.Add(startDate, startDate.AddDays(10), JobCategoryType.AgentStatistics);
-            var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
-
-            var jobHelper = new JobHelper(_repository, null, null);
-            jobParameters.Helper = jobHelper;
-
-            var expectedPeriod = new DateTimePeriod(_timeZone.SafeConvertTimeToUtc(startDate.AddDays(1)), _timeZone.SafeConvertTimeToUtc(startDate.AddDays(3).AddMilliseconds(-1)));
-            _repository.Expect(x => x.FillScheduleDeviationDataMart(expectedPeriod, RaptorTransformerHelper.CurrentBusinessUnit, _timeZone, true)).Constraints(
-                                                                    Rhino.Mocks.Constraints.Is.Equal(expectedPeriod),
-                                                                    Rhino.Mocks.Constraints.Is.Matching<IBusinessUnit>(b => b.Id == RaptorTransformerHelper.CurrentBusinessUnit.Id),
-                                                                    Rhino.Mocks.Constraints.Is.Matching<TimeZoneInfo>(t => t.Id == _timeZone.Id),
-                                                                    Rhino.Mocks.Constraints.Is.Equal(true)
-                                                                    ).Return(0);
-
-            var target = new FactScheduleDeviationJobStep(jobParameters, true);
-            var result = target.Run(new List<IJobStep>(), null, null,false);
-            result.JobStepException.Should().Be.Null();
-
-            _repository.VerifyAllExpectations();
-
-        }
-
 	}
 }
