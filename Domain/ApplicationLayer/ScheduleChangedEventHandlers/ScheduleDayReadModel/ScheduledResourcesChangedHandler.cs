@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private int configurableIntervalLength = 15;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_personSkillProvider = personSkillProvider;
 			_bus = bus;
+			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)
 			{
-				Logger.WarnFormat("No person was found with the id {0}",@event.PersonId);
+				Logger.WarnFormat("No person was found with the id {0}", @event.PersonId);
 				return;
 			}
 
