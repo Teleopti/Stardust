@@ -13,6 +13,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
 
+	var pageLog = function(message) {
+		$("#body-bottom").append($('<br>')).append(message);
+	};
+	
     var settingsViewModel = function() {
         var self = this;
 
@@ -51,33 +55,23 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         ko.applyBindings(vm, $('#page')[0]);
     };
 
-    function _partialInit(readyForInteraction, completelyLoaded) {
-        vm = new settingsViewModel();
-	    $.when(_loadCultures(), _getCalendarLinkStatus())
-		    .done(function() {
-		    	readyForInteraction();
-			    completelyLoaded();
-		    });
-        _bindData();
-	}
-
 	function _loadCultures() {
-	    return ajax.Ajax({
+		pageLog("_loadCultures");
+		return ajax.Ajax({
 	        url: "Settings/Cultures",
 	        dataType: "json",
 	        type: "GET",
 	        global: false,
 	        cache: false,
 	        success: function (data, textStatus, jqXHR) {
-	            vm.cultures(data.Cultures);
+	        	pageLog("_loadCultures.success");
+	        	vm.cultures(data.Cultures);
 	            vm.avoidReload = true;
 	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
 	            vm.selectedCulture(data.ChoosenCulture.id);
 	            vm.avoidReload = false;
 		        vm.culturesLoaded(true);
-	        },
-	        error: function(e) {
-	            //console.log(e);
+		        pageLog("/_loadCultures.success");
 	        }
 	    });
 	}
@@ -101,21 +95,25 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 	
 	function _getCalendarLinkStatus() {
+		pageLog("_getCalendarLinkStatus");
 		if ($(".share-my-calendar").length == 0)
 			return null;
+		pageLog("_getCalendarLinkStatus.ajax");
 		return ajax.Ajax({
 			url: "Settings/CalendarLinkStatus",
 			contentType: 'application/json; charset=utf-8',
 			dataType: "json",
 			type: "GET",
 			success: function (data, textStatus, jqXHR) {
-				ajax.CallWhenAllAjaxCompleted(function () {
-					vm.CalendarSharingActive(data.IsActive);
-					vm.CalendarUrl(data.Url);
-				});
+				pageLog("_getCalendarLinkStatus.success");
+				vm.CalendarSharingActive(data.IsActive);
+				vm.CalendarUrl(data.Url);
+				pageLog("/_getCalendarLinkStatus.success");
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
+				pageLog("_getCalendarLinkStatus.error");
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				pageLog("/_getCalendarLinkStatus.error");
 			}
 		});
 	}
@@ -128,10 +126,8 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	        type: "POST",
 	        data: JSON.stringify({IsActive: isActive}),
 	        success: function (data, textStatus, jqXHR) {
-	        	ajax.CallWhenAllAjaxCompleted(function () {
-	        		vm.CalendarSharingActive(data.IsActive);
-	        		vm.CalendarUrl(data.Url);
-	            });
+	        	vm.CalendarSharingActive(data.IsActive);
+	        	vm.CalendarUrl(data.Url);
 	        },
 	        error: function (jqXHR, textStatus, errorThrown) {
 	            Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -141,11 +137,23 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	return {
 		Init: function () {
+			pageLog("Init");
 			_init();
+			pageLog("/Init");
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
-		    $('#Test-Picker').select2();
-		    _partialInit(readyForInteraction, completelyLoaded);
+			pageLog("PartialInit");
+			$('#Test-Picker').select2();
+		    vm = new settingsViewModel();
+		    $.when(_loadCultures(), _getCalendarLinkStatus())
+				.done(function () {
+					pageLog("done");
+					readyForInteraction();
+					completelyLoaded();
+					pageLog("/done");
+				});
+		    _bindData();
+		    pageLog("/PartialInit");
 		}
 	};
 })(jQuery);
@@ -233,9 +241,9 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     }
 
     return {
-        Init: function () {
+    	Init: function () {
             _init();
-        },
+    	},
         PartialInit: function (readyForInteraction, completelyLoaded) {
             _partialInit();
             readyForInteraction();
