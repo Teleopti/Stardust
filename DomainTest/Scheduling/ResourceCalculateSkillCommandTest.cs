@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
             var scenario = _mocks.StrictMock<IScenario>();
 
-            var skills = new List<ISkill> { SkillFactory.CreateSkill("test") };
-            var skill = SkillFactory.CreateSkill("test");
+			var skill = SkillFactory.CreateSkill("test");
+            var skills = new List<ISkill> { skill };
             var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
             using (_mocks.Record())
