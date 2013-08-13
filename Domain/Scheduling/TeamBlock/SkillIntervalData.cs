@@ -5,32 +5,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ISkillIntervalData
 	{
-		double ForecastedDemand { get; set; }
+		double ForecastedDemand { get; }
 		DateTimePeriod Period { get; }
-		double CurrentHeads { get; set; }
-		double? MaximumHeads { get; set; }
-        double? MinimumHeads { get; set; }
-		double CurrentDemand { get; set; }
-        double BoostedValue { get; set; }
+		double CurrentHeads { get; }
+		double? MaximumHeads { get; }
+        double? MinimumHeads { get; }
+		double CurrentDemand { get; }
+        double MinMaxBoostFactor { get; set; }
 		TimeSpan Resolution();
 	}
 
 	public class SkillIntervalData : ISkillIntervalData
 	{
-		private readonly DateTimePeriod _period;
-
-        public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
+		public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
 		{
-			_period = period;
+			Period = period;
 			ForecastedDemand = forecastedDemand;
 			CurrentDemand = currentDemand;
 			CurrentHeads = currentHeads;
 			MinimumHeads = minimumHeads;
 			MaximumHeads = maximumHeads;
-            BoostedValue = calculateBoostedValue();
+            MinMaxBoostFactor = calculateMinMaxBoostFactor();
 		}
 
-	    private double calculateBoostedValue()
+	    private double calculateMinMaxBoostFactor()
 	    {
 	        double minHeadValue = 0;
 	        double maxHeadValue = 0;
@@ -47,22 +45,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return minHeadValue + maxHeadValue;
 	    }
 
-	    public double ForecastedDemand { get; set; }
+	    public double ForecastedDemand { get; private set; }
 
-		public DateTimePeriod Period
-		{
-			get { return _period; }
-		}
+		public DateTimePeriod Period { get; private set; }
 
-		public double CurrentHeads { get; set; }
+		public double CurrentHeads { get; private set; }
 
-        public double? MaximumHeads { get; set; }
+        public double? MaximumHeads { get; private set; }
 
-        public double? MinimumHeads { get; set; }
+        public double? MinimumHeads { get; private set; }
 
-		public double CurrentDemand { get; set; }
+		public double CurrentDemand { get; private set; }
 
-        public double BoostedValue { get; set; }
+        public double MinMaxBoostFactor { get; set; }
 
 		public TimeSpan Resolution()
 		{

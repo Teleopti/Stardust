@@ -467,12 +467,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
                 Assert.AreEqual(result.Count, 6);
-                Assert.AreEqual(result[0].BoostedValue , -3);
-                Assert.AreEqual(result[1].BoostedValue, 1);
-                Assert.AreEqual(result[2].BoostedValue, -3);
-                Assert.AreEqual(result[3].BoostedValue, -1);
-                Assert.AreEqual(result[4].BoostedValue, 0);
-                Assert.AreEqual(result[5].BoostedValue, 3);
+                Assert.AreEqual(result[0].MinMaxBoostFactor , -3);
+				Assert.AreEqual(result[1].MinMaxBoostFactor, 1);
+				Assert.AreEqual(result[2].MinMaxBoostFactor, -3);
+				Assert.AreEqual(result[3].MinMaxBoostFactor, -1);
+				Assert.AreEqual(result[4].MinMaxBoostFactor, 0);
+				Assert.AreEqual(result[5].MinMaxBoostFactor, 3);
             }
         }
 
