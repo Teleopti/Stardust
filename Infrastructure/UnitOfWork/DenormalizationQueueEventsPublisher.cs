@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Publish(IEnumerable<IEvent> events)
 		{
-			_saver.Execute(new EventsPackageMessage {Events = events});
+			_saver.Execute(new EventsPackageMessage {Events = events.SetMessageDetail()});
 			_notifier.Notify();
 		}
 	}

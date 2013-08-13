@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 
 			// simply publish the schedule changed event so that the read model is updated
-			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
+			assignment.ScheduleChanged();
 
 			assignmentRepository.Add(assignment);
 		}

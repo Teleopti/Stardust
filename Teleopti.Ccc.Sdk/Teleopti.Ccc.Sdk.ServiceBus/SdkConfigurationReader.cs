@@ -174,13 +174,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Notify()
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-			_serviceBus.Invoke().Send(new ProcessDenormalizeQueue
-			                          	{
-			                          		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-			                          		Datasource = identity.DataSource.Application.Name,
-			                          		Timestamp = DateTime.UtcNow
-			                          	});
+			var message = new ProcessDenormalizeQueue();
+			message.SetMessageDetail();
+			_serviceBus.Invoke().Send(message);
 		}
 	}
 }

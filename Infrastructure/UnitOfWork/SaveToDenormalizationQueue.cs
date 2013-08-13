@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -17,12 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Execute<T>(T message) where T : IRaptorDomainMessageInfo
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
-
-			message.BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
-			message.Datasource = identity.DataSource.Application.Name;
-			message.Timestamp = DateTime.UtcNow;
-
+			message.SetMessageDetail();
 			_runSql.Create(
 				"INSERT INTO dbo.DenormalizationQueue (BusinessUnit,Timestamp,[Message],Type) VALUES (:BusinessUnit,:Timestamp,:Message,:Type)")
 				.SetDateTime("Timestamp", message.Timestamp)
@@ -32,5 +25,4 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Execute();
 		}
 	}
-
 }

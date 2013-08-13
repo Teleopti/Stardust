@@ -9,16 +9,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{
-		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentScenario _scenario;
 		private readonly IWriteSideRepository<IPerson> _personRepository;
 		private readonly IWriteSideRepository<IAbsence> _absenceRepository;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 
-		public AddFullDayAbsenceCommandHandler(ICurrentDataSource dataSource, ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IScheduleRepository scheduleRepository)
+		public AddFullDayAbsenceCommandHandler(ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IScheduleRepository scheduleRepository)
 		{
-			_dataSource = dataSource;
 			_scenario = scenario;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
-			personAbsence.FullDayAbsence(_dataSource.CurrentName(), person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime);
+			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime);
 
 			_personAbsenceRepository.Add(personAbsence);
 		}

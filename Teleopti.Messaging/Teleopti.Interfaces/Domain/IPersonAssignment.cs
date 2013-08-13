@@ -82,7 +82,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
-		void ScheduleChanged(string dataSource);
+		void ScheduleChanged();
 
 	    bool RemoveLayer(IMainShiftLayer layer);
 	    bool RemoveLayer(IPersonalShiftLayer layer);

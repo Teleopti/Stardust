@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -20,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ISkillDayLoadHelper _skillDayLoadHelper;
         private ISkillRepository _skillRepository;
         private IWorkloadRepository _workloadRepository;
-        private IScheduleRepository _scheduleRepository;
 	    private IScheduledResourcesReadModelStorage _storage;
 
 	    [SetUp]
@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
             _skillRepository = _mocks.DynamicMock<ISkillRepository>();
             _workloadRepository = _mocks.DynamicMock<IWorkloadRepository>();
-            _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
             _storage = _mocks.DynamicMock<IScheduledResourcesReadModelStorage>();
             _target = new ResourceCalculateSkillCommand(_skillRepository, _workloadRepository, _storage, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper);
         }
@@ -42,27 +41,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
             var scenario = _mocks.StrictMock<IScenario>();
-            var person = PersonFactory.CreatePerson();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var personsInOrganizationProvider = _mocks.StrictMock<IPersonProvider>();
-            var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
 
             var skills = new List<ISkill> { SkillFactory.CreateSkill("test") };
             var skill = SkillFactory.CreateSkill("test");
-            var peopleInOrganization = new List<IPerson> { person };
             var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
             using (_mocks.Record())
             {
                 Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-                Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
-                    ().Return(scheduleDictionary);
                 Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
                 _skillLoadDecider.Execute(scenario, period, skill);
-                Expect.Call(_skillLoadDecider.FilterPeople(peopleInOrganization)).Return(0);
                 Expect.Call(_skillLoadDecider.FilterSkills(skills)).Return(0);
                 Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario)).Return(
                     new Dictionary<ISkill, IList<ISkillDay>>());
+	            Expect.Call(_storage.ForPeriod(period, skills))
+	                  .Return(new ResourcesFromStorage(Enumerable.Empty<ResourcesForCombinationFromStorage>(),
+	                                                   Enumerable.Empty<ActivitySkillCombinationFromStorage>(),
+	                                                   Enumerable.Empty<SkillEfficienciesFromStorage>(), skills));
             }
             using (_mocks.Playback())
             {
