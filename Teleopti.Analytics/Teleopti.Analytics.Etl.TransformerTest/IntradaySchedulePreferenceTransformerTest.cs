@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 	    [SetUp]
         public void Setup()
         {
-            _target = new IntradaySchedulePreferenceTransformer(96);
+            _target = new IntradaySchedulePreferenceTransformer();
 	        _mocks = new MockRepository();
 		    _scenario = new Scenario("name");
 			_scenario.SetId(Guid.NewGuid());

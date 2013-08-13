@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         [SetUp]
         public void Setup()
         {
-            _target = new SchedulePreferenceTransformer(96);
+            _target = new SchedulePreferenceTransformer();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
