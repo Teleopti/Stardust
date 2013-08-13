@@ -47,5 +47,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			Assert.AreEqual(3.5, _target.ForecastedDemand);
 		}
+
+        [Test]
+        public void CalculateBoostedValueTestA()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2,4 );
+            Assert.AreEqual(1,skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueTestB()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 2, 4);
+            Assert.AreEqual(-1, skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueTestC()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 6, 1);
+            Assert.AreEqual(-2, skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueTestD()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2, 2);
+            Assert.AreEqual(1, skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueWithNullMinimum()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 6, null, 5);
+            Assert.AreEqual(-2, skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueWithNullMaximum()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 6, 5, null);
+            Assert.AreEqual(0, skillIntervalData.BoostedValue);
+        }
+
+        [Test]
+        public void CalculateBoostedValueWithAllNull()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 3, null, null);
+            Assert.AreEqual(0, skillIntervalData.BoostedValue);
+        }
 	}
 }

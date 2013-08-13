@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		double? MaximumHeads { get; set; }
         double? MinimumHeads { get; set; }
 		double CurrentDemand { get; set; }
+        double BoostedValue { get; set; }
 		TimeSpan Resolution();
 	}
 
@@ -26,9 +27,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			CurrentHeads = currentHeads;
 			MinimumHeads = minimumHeads;
 			MaximumHeads = maximumHeads;
+            BoostedValue = calculateBoostedValue();
 		}
 
-		public double ForecastedDemand { get; set; }
+	    private double calculateBoostedValue()
+	    {
+	        double minHeadValue = 0;
+	        double maxHeadValue = 0;
+            if (MinimumHeads.HasValue)
+	        {
+	            if (CurrentHeads < MinimumHeads.Value)
+	                minHeadValue =  (MinimumHeads.Value - CurrentHeads);
+	        }
+            if (MaximumHeads.HasValue)
+            {
+                if (CurrentHeads >= MaximumHeads.Value)
+                    maxHeadValue = MaximumHeads.Value - (CurrentHeads + 1);
+            }
+	        return minHeadValue + maxHeadValue;
+	    }
+
+	    public double ForecastedDemand { get; set; }
 
 		public DateTimePeriod Period
 		{
@@ -42,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public double? MinimumHeads { get; set; }
 
 		public double CurrentDemand { get; set; }
+
+        public double BoostedValue { get; set; }
 
 		public TimeSpan Resolution()
 		{
