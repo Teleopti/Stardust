@@ -72,7 +72,7 @@
         @Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
         <!-- /ko -->
         <!-- ko if: PreferenceTimeIsOutOfRange -->
-        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <span class="icon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
         <!-- /ko -->
     </div>
     <div>
@@ -84,7 +84,7 @@
         <!-- /ko -->
         @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
         <!-- ko if: PreferenceDaysOffIsOutOfRange-->
-        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <span class="icon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
         <!-- /ko -->
     </div>
     <p></p>
@@ -101,9 +101,9 @@
     </div>
 </div>
 
-<div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
+<div id="Preference-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
 		
-    <div id="Preference-body-inner" class="body-calendarview-inner clearfix">
+    <div id="Preference-body-inner" class="well clearfix pd0">
         <ul class="weekdays">
             @foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
             {
@@ -123,10 +123,10 @@
                     <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
                         <div>
                             <div class="day-header">
-                                <span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
+                                <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
                             </div>
-                            <div class="day-content border-left pdt10" data-bind="style: { borderLeftColor: Color() }">
-                                <img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+                            <div class="day-content border-left pdt10">
+                                <img data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
                                 <!-- ko if: HasAjaxError -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
                                 <!-- /ko -->
@@ -135,7 +135,7 @@
                                     <span class="displayinline-block">
                                         <div class="preference-indicator"/>
                                         <div class="preference-indicator">
-                                            <div class="heart-small preference-must-have" data-bind="css: {'icon': MustHave}"></div>
+                                            <div class="preference-must-have" data-bind="css: {'icon-heart': MustHave}"></div>
                                         </div>
                                         <div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
                                         <div class="preference-indicator">
@@ -143,21 +143,23 @@
                                             <div class="extended-panel" style="display: none">
                                                 <div class="extended-part">
                                                     <div class="extended-part-title" data-bind="text: ExtendedTitle"></div>
-                                                    <div class="time-limitation icon leftarrow truncate" data-bind="text: StartTimeLimitation"></div>
-                                                    <div class="time-limitation icon rightarrow truncate" data-bind="text: EndTimeLimitation"></div>
-                                                    <div class="time-limitation icon doublearrow-blue truncate" data-bind="text: WorkTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-step-backward" data-bind="text: StartTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-step-forward" data-bind="text: EndTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-resize-horizontal" data-bind="text: WorkTimeLimitation"></div>
                                                 </div>
                                                 <div class="extended-part">
                                                     <div class="extended-part-title" data-bind="text: Activity"></div>
-                                                    <div class="time-limitation icon leftarrow truncate" data-bind="text: ActivityStartTimeLimitation"></div>
-                                                    <div class="time-limitation icon rightarrow truncate" data-bind="text: ActivityEndTimeLimitation"></div>
-                                                    <div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-step-backward" data-bind="text: ActivityStartTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-step-forward" data-bind="text: ActivityEndTimeLimitation"></div>
+                                                    <div class="time-limitation arrow-icon icon-resize-horizontal" data-bind="text: ActivityTimeLimitation"></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="preference-indicator">
                                             <!-- ko if: HasPersonalShiftsOrMeetings -->
-                                            <div class="icon meeting-small">
+                                            <div class="icon-user">
+                                                <div class="ml10 icon-user">
+                                                </div>
                                             </div>
                                             <div class="meeting-tooltip" style="display: none">
                                                 <!-- ko if: HasMeetings -->
@@ -207,10 +209,10 @@
                                 <!-- /ko -->
 
                                 <!-- ko if: HasPersonAssignmentShiftCategory -->
-                                <div class="scheduled">
-                                    <span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
-                                    <strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>
-                                    <span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
+                                <div class="scheduled day-content-text">
+                                    <span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentShiftCategory"></span>
+                                    <strong class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentTimeSpan"></strong>
+                                    <span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentContractTime"></span>
                                 </div>
                                 <!-- /ko -->
                                 @if (day.InPeriod)
@@ -220,9 +222,9 @@
                                     <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
                                     <!-- /ko -->
                                     <!-- ko if: DisplayFeedback -->
-                                    <div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
-                                    <div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
-                                    <div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
+                                    <div class="possible-start-times time-limitation arrow-icon icon-step-backward" data-bind="text: PossibleStartTimes"></div>
+                                    <div class="possible-end-times time-limitation arrow-icon icon-step-forward" data-bind="text: PossibleEndTimes"></div>
+                                    <div class="possible-contract-times time-limitation arrow-icon icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 }
