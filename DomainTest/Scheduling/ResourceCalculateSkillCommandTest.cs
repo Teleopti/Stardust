@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private ISkillLoaderDecider _skillLoadDecider;
         private ISkillDayLoadHelper _skillDayLoadHelper;
-        private IPersonRepository _personRepository;
         private ISkillRepository _skillRepository;
         private IWorkloadRepository _workloadRepository;
         private IScheduleRepository _scheduleRepository;
@@ -31,12 +30,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _schedulingResultStateHolder = new SchedulingResultStateHolder();
             _skillLoadDecider = _mocks.DynamicMock<ISkillLoaderDecider>();
             _skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
-            _personRepository = _mocks.DynamicMock<IPersonRepository>();
             _skillRepository = _mocks.DynamicMock<ISkillRepository>();
             _workloadRepository = _mocks.DynamicMock<IWorkloadRepository>();
             _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
             _storage = _mocks.DynamicMock<IScheduledResourcesReadModelStorage>();
-            _target = new ResourceCalculateSkillCommand(_personRepository, _skillRepository, _workloadRepository, _storage, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper);
+            _target = new ResourceCalculateSkillCommand(_skillRepository, _workloadRepository, _storage, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -57,7 +55,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (_mocks.Record())
             {
                 Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-                Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
                 Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
                     ().Return(scheduleDictionary);
                 Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
