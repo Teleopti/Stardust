@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.DumpUrl(s => Log.Info("Am at: " + s));
 			Log.Info("Browsing to: " + args.Uri);
 
-			gotoAction.Invoke(args.Uri.AbsoluteUri);
+			gotoAction.Invoke(args.Uri.ToString());
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(args));
 

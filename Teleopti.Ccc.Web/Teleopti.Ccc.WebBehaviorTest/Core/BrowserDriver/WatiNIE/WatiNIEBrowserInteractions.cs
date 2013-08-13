@@ -125,11 +125,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		{
 			writer(succeedOrIgnore(() => Browser.Current.Url));
 		}
-
-		public string Value(string selector)
-		{
-			return _browser.Element(Find.BySelector(selector)).Text;
-		}
 		
 		private void validateSelector(string selector)
 		{
