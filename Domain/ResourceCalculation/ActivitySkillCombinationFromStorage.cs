@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		public int Id { get; set; }
 		public Guid Activity { get; set; }
-		public string SkillCombination { get; set; }
+		public string Skills { get; set; }
 		public bool ActivityRequiresSeat { get; set; }
 	}
 }

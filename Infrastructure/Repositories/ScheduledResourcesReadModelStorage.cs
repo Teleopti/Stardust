@@ -72,7 +72,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var resources =
 				_currentUnitOfWork.Session()
 				                  .CreateSQLQuery(
-					                  "SELECT Id,ActivitySkillCombinationId,Resources,Heads,PeriodStart,PeriodEnd FROM ReadModel.ScheduledResources WHERE PeriodStart<:Max AND PeriodEnd>:Min")
+									  "SELECT Id,ActivitySkillCombinationId,Resources,Heads,PeriodStart,PeriodEnd FROM ReadModel.ScheduledResources WHERE PeriodStart<:Max AND PeriodEnd>:Min")
+									  .SetDateTime("Min", period.StartDateTime)
+									  .SetDateTime("Max",period.EndDateTime)
 				                  .SetResultTransformer(Transformers.AliasToBean<ResourcesForCombinationFromStorage>())
 				                  .List<ResourcesForCombinationFromStorage>();
 			
@@ -80,6 +82,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				_currentUnitOfWork.Session()
 				                  .CreateSQLQuery(
 					                  "SELECT e.ParentId,e.SkillId,e.Amount FROM ReadModel.PeriodSkillEfficiencies e INNER JOIN ReadModel.ScheduledResources s ON s.Id=e.ParentId WHERE s.PeriodStart<:Max AND s.PeriodEnd>:Min")
+									  .SetDateTime("Min", period.StartDateTime)
+									  .SetDateTime("Max", period.EndDateTime)
 				                  .SetResultTransformer(Transformers.AliasToBean<SkillEfficienciesFromStorage>())
 				                  .List<SkillEfficienciesFromStorage>();
 

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void ExtractSkillCombinations()
 		{
-			var skillCombinationKeys = _activitySkillCombination.Select(a => a.SkillCombination).Distinct();
+			var skillCombinationKeys = _activitySkillCombination.Select(a => a.Skills).Distinct();
 			foreach (var skillCombinationKey in skillCombinationKeys)
 			{
 				_skills.Add(skillCombinationKey, skillsFromKey(skillCombinationKey));
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (!combinationDictionary.TryGetValue(resourcesForCombinationFromStorage.ActivitySkillCombinationId, out combination)) continue;
 
 				PeriodResource periodResource;
-				var period = new DateTimePeriod(resourcesForCombinationFromStorage.PeriodStart,
-				                                resourcesForCombinationFromStorage.PeriodEnd);
+				var period = new DateTimePeriod(DateTime.SpecifyKind(resourcesForCombinationFromStorage.PeriodStart,DateTimeKind.Utc),
+												DateTime.SpecifyKind(resourcesForCombinationFromStorage.PeriodEnd, DateTimeKind.Utc));
 				if (!_dictionary.TryGetValue(period, out periodResource))
 				{
 					periodResource = new PeriodResource();
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					_skillEfficiencies.Where(s => s.ParentId == resourcesForCombinationFromStorage.ActivitySkillCombinationId)
 					                  .ToDictionary(k => k.SkillId, v => v.Amount);
 
-				periodResource.AppendResource(combination.Activity.ToString() + "|" + combination.SkillCombination,
-				                              new SkillCombination(combination.SkillCombination, new ISkill[0], new DateOnlyPeriod(),
+				periodResource.AppendResource(combination.Activity.ToString() + "|" + combination.Skills,
+											  new SkillCombination(combination.Skills, new ISkill[0], new DateOnlyPeriod(),
 				                                                   foundEfficiencies), resourcesForCombinationFromStorage.Heads, resourcesForCombinationFromStorage.Resources);
 			}
 		}

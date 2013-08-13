@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
 					foreach (var resourceLayer in oldResources)
 					{
-						removeResourceFromInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), combination);
+						removeResourceFromInterval(resourceLayer, combination);
 					}
 				}
 
 				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
 				foreach (var resourceLayer in resources)
 				{
-					addResourceToInterval(resourceLayer, new ActivitySkillsCombination(resourceLayer.PayloadId, combination), combination);
+					addResourceToInterval(resourceLayer, combination);
 				}
 			}
 
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				});
 		}
 
-		private void addResourceToInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination, SkillCombination combination)
+		private void addResourceToInterval(ResourceLayer resourceLayer, SkillCombination combination)
 		{
 			var resourceId = _scheduledResourcesReadModelStorage.AddResources(resourceLayer.PayloadId, resourceLayer.RequiresSeat,
-			                                                 activitySkillsCombination.GenerateKey(), resourceLayer.Period,
+			                                                 combination.Key, resourceLayer.Period,
 			                                                 resourceLayer.Resource, 1);
 			foreach (var skillEfficiency in combination.SkillEfficiencies)
 			{
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			}
 		}
 
-		private void removeResourceFromInterval(ResourceLayer resourceLayer, ActivitySkillsCombination activitySkillsCombination, SkillCombination combination)
+		private void removeResourceFromInterval(ResourceLayer resourceLayer, SkillCombination combination)
 		{
-			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, activitySkillsCombination.GenerateKey(),
+			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, combination.Key,
 			                                                    resourceLayer.Period, resourceLayer.Resource, 1);
 			if (!resourceId.HasValue) return;
 
