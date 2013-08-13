@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             _skillBIntervalDataList = new List<ISkillIntervalData> { _skillBIntervalData1, _skillBIntervalData2, _skillBIntervalData3, _skillBIntervalData4 };
 
+
             _multipleSkillIntervalDataList = new List<IList<ISkillIntervalData>> { _skillAIntervalDataList, _skillBIntervalDataList };
             using (_mock.Record())
             {
@@ -429,6 +430,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             }
         }
+
+
+        [Test]
+        public void ShouldAggregateBoostedValueCorrectly()
+        {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            //for skill A
+            _skillAIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 10, 5, 2, 0, 0); //bosted value should b -3
+            _skillAIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(15), startDateTime.AddMinutes(30)), 10, 5, 1, 2, 4); //bosted value should b 1
+            _skillAIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(30), startDateTime.AddMinutes(45)), 20, 15, 4, 2, 4); //bosted value should b -1
+            _skillAIntervalData4 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 0, 2, 4); //bosted value should b 2
+
+            _skillAIntervalDataList = new List<ISkillIntervalData> { _skillAIntervalData1, _skillAIntervalData2, _skillAIntervalData3, _skillAIntervalData4 };
+
+
+            //for skill B
+            _skillBIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(30), startDateTime.AddMinutes(45)), 10, 5, 6, null, 5); //bosted value should b -2
+            _skillBIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 6, null, 5);//bosted value should b -2
+            _skillBIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(60), startDateTime.AddMinutes(75)), 10, 5, 6, null, 5);//bosted value should b -2
+            _skillBIntervalData4 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(75), startDateTime.AddMinutes(90)), 20, 15, 0, 2, 4);//bosted value should b 2
+
+            _skillBIntervalDataList = new List<ISkillIntervalData> { _skillBIntervalData1, _skillBIntervalData2, _skillBIntervalData3, _skillBIntervalData4 };
+
+            //for skill c
+            var skillCIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(30), startDateTime.AddMinutes(45)), 10, 5, 0, null, null);//bosted value should b 0
+            var skillCIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 0, 0, 0);//bosted value should b -1
+            var skillCIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(60), startDateTime.AddMinutes(75)), 10, 5, 0, 2, 4);//bosted value should b 2
+            var skillCIntervalData4 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(75), startDateTime.AddMinutes(90)), 20, 15, 1, 2, 2);//bosted value should b 1
+
+            var skillCIntervalDataList = new List<ISkillIntervalData> { skillCIntervalData1, skillCIntervalData2, skillCIntervalData3, skillCIntervalData4 };
+
+            _multipleSkillIntervalDataList = new List<IList<ISkillIntervalData>> { _skillAIntervalDataList, _skillBIntervalDataList,skillCIntervalDataList  };
+
+            using (_mock.Playback())
+            {
+                var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
+                Assert.AreEqual(result.Count, 6);
+                Assert.AreEqual(result[0].BoostedValue , -3);
+                Assert.AreEqual(result[1].BoostedValue, 1);
+                Assert.AreEqual(result[2].BoostedValue, -3);
+                Assert.AreEqual(result[3].BoostedValue, -1);
+                Assert.AreEqual(result[4].BoostedValue, 0);
+                Assert.AreEqual(result[5].BoostedValue, 3);
+            }
+        }
+
 
     }
 
