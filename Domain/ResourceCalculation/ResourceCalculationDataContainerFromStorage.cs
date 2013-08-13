@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _dictionary.Count > 0;
 		}
 
-		public void AddResources(ResourcesFromStorage resources)
+		public void AddResources(ResourcesFromStorage resources, int minSkillResolution)
 		{
 			var command = new TransformResourcesFromStorageCommand(resources);
 			command.Execute();
 
 			resources.Transfer(_skills, _activityRequiresSeat, _dictionary);
-			MinSkillResolution = resources.MinSkillResolution;
+			MinSkillResolution = minSkillResolution;
 		}
 
 		public Tuple<double, double> SkillResources(ISkill skill, DateTimePeriod period)

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				skills.ForEach(_schedulingResultStateHolder.Skills.Add);
 
 			var result = _storage.ForPeriod(period, allSkills);
-			resourceCalculationDataContainer.AddResources(result);
+			resourceCalculationDataContainer.AddResources(result, _skillRepository.MinimumResolution());
 
 		    _schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);

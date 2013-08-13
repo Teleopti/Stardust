@@ -24,11 +24,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_allSkills = allSkills;
 		}
 
-		public int MinSkillResolution
-		{
-			get { return _allSkills.Any() ? _allSkills.Min(s => s.DefaultResolution) : 15; }
-		}
-
 		public void ExtractActivityRequiresSeat()
 		{
 			var activities = _activitySkillCombination.Where(a => a.ActivityRequiresSeat).Select(a => a.Activity).Distinct();
