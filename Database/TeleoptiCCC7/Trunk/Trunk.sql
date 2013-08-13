@@ -954,7 +954,7 @@ SELECT @ParentForeignId = '0065'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0087' --Foreign id of the function > hardcoded	
+SELECT @ForeignId = '0088' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'ShareCalendar' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'xxShareCalendar' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
