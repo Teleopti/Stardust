@@ -14,7 +14,6 @@ left outer join fn_listextendedproperty (NULL, 'schema', 'mart', 'table', defaul
 where s.name = 'mart'		
 and (t.name like 'bridge%' or t.name like 'dim%' or t.name like 'fact%')		
 and (ep.value is null or ep.value = '')
-and t.name <> 'dim_person_category_type'
 order by t.name
 
 
@@ -50,7 +49,6 @@ left outer join sys.extended_properties ep
 where s.name = 'mart'		
 and (t.name like 'bridge%' or t.name like 'dim%' or t.name like 'fact%')		
 and (convert(nvarchar(500),ep.value) is null or convert(nvarchar(500),ep.value)='')
-and t.name <> 'dim_person_category_type'
 --and convert(nvarchar(500),ep.value) is null
 order by t.name,c.column_id
 
