@@ -6,8 +6,9 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
 			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-			Browser.Interactions.AssertContains("#Request-add-loaded-date", dateAsSwedishString);
+			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
 
 		private static void gotoAddRequestToday()
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Browser.Interactions.Click(".shifttrade-request-add");
-			Browser.Interactions.AssertContains("#Request-add-loaded-date", "20"); //date 20xx-xx-xx
+			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", "20"); //date 20xx-xx-xx
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -143,13 +144,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see my details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
 		{
-			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule .shift-trade-dayoff-name", dayOffText);
+			Browser.Interactions.AssertFirstContains(".shift-trade-swap-detail-schedule .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see other details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
 		{
-			Browser.Interactions.AssertContains(".shift-trade-swap-detail-schedule-to .shift-trade-dayoff-name", dayOffText);
+			Browser.Interactions.AssertFirstContains(".shift-trade-swap-detail-schedule-to .shift-trade-dayoff-name", dayOffText);
 		}
 
 		[Then(@"I should see details with a schedule to")]
@@ -168,13 +169,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
-			Browser.Interactions.AssertContains(".request-data-subject", subject);
+			Browser.Interactions.AssertFirstContains(".request-data-subject", subject);
 		}
 
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
-			Browser.Interactions.AssertContains(".request-text", message);
+			Browser.Interactions.AssertFirstContains(".request-text", message);
 		}
 
 		[When(@"I enter subject '(.*)'")]

@@ -19,7 +19,11 @@ namespace Teleopti.Ccc.Win.Intraday
                 {
                 	components.Dispose();
                 }
-
+				if (gradientPanelContent != null)
+				{
+					gradientPanelContent.Dispose();
+					gradientPanelContent = null;
+				}
                 if (_intradayViewContent != null)
                 {
                     _intradayViewContent.Dispose();

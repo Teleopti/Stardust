@@ -1,4 +1,5 @@
-﻿using NHibernate.Criterion;
+﻿using System;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
@@ -7,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class PersonalSettingDataRepository : SettingDataRepository, IPersonalSettingDataRepository
+	public class PersonalSettingDataRepository : SettingDataRepository, IPersonalSettingDataRepository
     {
         public PersonalSettingDataRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -24,6 +25,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	    }
 
+				public override bool ValidateUserLoggedOn
+				{
+					get
+					{
+						return false;
+					}
+				}
+
         public override ISettingData FindByKey(string key)
         {
 
@@ -33,6 +42,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .SetCacheable(true)
                         .UniqueResult<ISettingData>();
         }
+
+		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
+		{
+
+			var data = Session.CreateCriteria(typeof(PersonalSettingData))
+						.Add(Restrictions.Eq("Key", key))
+						.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
+						.SetCacheable(true)
+						.UniqueResult<ISettingData>();
+
+            return data.GetValue(defaultValue);
+
+		}
 
         public T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue
         {

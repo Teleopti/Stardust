@@ -474,9 +474,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
         }
 
+	    private DateTime _lastClickSaved;
         private void toolStripButtonMainSave_Click(object sender, EventArgs e)
         {
             if(_readOnly) return;
+			// bloody syncfusion bug that fires click event twice in quick access toolbar
+			if (_lastClickSaved.AddSeconds(1) > DateTime.Now) return;
+	        _lastClickSaved = DateTime.Now;
             Cursor.Current = Cursors.WaitCursor;
 
             //Set current cell out of focus to make changes reflect to the data.
@@ -494,7 +498,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 }
 
                 if (!_gridConstructor.View.ValidateBeforeSave())
-                    return;
+                {
+					_lastClickSaved = DateTime.Now;
+	                return;
+                }
 
                 Persist();
             }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Payroll;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -107,6 +109,58 @@ namespace Teleopti.Ccc.PayrollTest
             Assert.IsNull(xmlNodeList);
 
             mocks.VerifyAll();
-        } 
+        }
+
+	    [Test]
+	    public void BatchingShouldNotHaveIntersection()
+	    {
+		    var schedulingService = MockRepository.DynamicMock<ITeleoptiSchedulingService>();
+		    var personId = Guid.NewGuid();
+
+		    var payrollExportDto = new PayrollExportDto
+			    {
+				    TimeZoneId = "Utc",
+				    DatePeriod = new DateOnlyPeriodDtoForPayrollTest(new DateOnly(2009, 2, 1), new DateOnly(2009, 2, 1))
+			    };
+
+		    payrollExportDto.PersonCollection.Add(new PersonDto
+			    {
+				    Id = personId,
+				    EmploymentNumber = "",
+				    TimeZoneId = "Utc"
+			    });
+
+		    for (var i = 0; i < 50; i++)
+			    payrollExportDto.PersonCollection.Add(new PersonDto
+				    {
+					    Id = Guid.NewGuid(),
+					    EmploymentNumber = ""
+				    });
+
+#pragma warning disable 612,618
+		    schedulingService.Expect(s => s.GetSchedulePartsForPersons(null, null, null, null))
+		                     .IgnoreArguments()
+		                     .Return(new List<SchedulePartDto>
+			                     {
+				                     new SchedulePartDto
+					                     {
+						                     PersonId = personId,
+						                     LocalPeriod = new DateTimePeriodDto(),
+						                     ContractTime = new DateTime()
+					                     }
+			                     });
+		    MockRepository.ReplayAll();
+
+		    Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
+
+		    var schedulePartArgs =
+			    schedulingService.GetArgumentsForCallsMadeOn(s => s.GetSchedulePartsForPersons(null, null, null, null));
+		    var firstBatchAgentList = (PersonDto[]) schedulePartArgs[0][0];
+		    var secondBatchAgentList = (PersonDto[]) schedulePartArgs[1][0];
+		    var batchIntersection = firstBatchAgentList.Intersect(secondBatchAgentList);
+
+		    batchIntersection.Count().Should().Be.EqualTo(0);
+#pragma warning restore 612,618
+	    }
     }
 }

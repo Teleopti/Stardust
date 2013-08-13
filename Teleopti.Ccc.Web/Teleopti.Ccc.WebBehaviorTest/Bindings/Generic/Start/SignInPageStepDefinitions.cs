@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 
 		public void SelectApplicationTestDataSource()
 		{
-			Browser.Interactions.Click("#DataSources .application a:contains(TestData)");
+			Browser.Interactions.ClickContaining("#DataSources .application a", "TestData");
 		}
 
 		public void SelectWindowsTestDataSource()
 		{
-			Browser.Interactions.Click("#DataSources .windows a:contains(TestData)");
+			Browser.Interactions.ClickContaining("#DataSources .windows a", "TestData");
 		}
 
 		private void SignInApplication(string username, string password)
@@ -36,8 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			if (!(Browser.Current.Url.Contains("/Authentication")))
-				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			SignInApplication(userName, TestData.CommonPassword);
 		}
@@ -56,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
-			Pages.Pages.SignInPage.SignInWindows();
+			Browser.Interactions.Click("#Login-button");
 		}
 
 		[When(@"I select application logon data source")]
@@ -81,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I select business unit '(.*)'")]
 		public void WhenISelectBusinessUnit(string businessUnit)
 		{
-			Pages.Pages.SignInPage.SelectBusinessUnitByName(businessUnit);
+			Browser.Interactions.ClickContaining("li a", businessUnit);
 		}
 
 		[When(@"I sign in again")]
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should see a log on error '(.*)'")]
 		public void ThenIShouldSeeALogOnError(string resourceText)
 		{
-			EventualAssert.That(() => Pages.Pages.SignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceConstraint(resourceText));
+			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Signin-error", resourceText);
 		}
 
 		[Then(@"I should see the sign in page")]
@@ -157,5 +155,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SignInApplication(userName, newPassword);
 		}
 
+
+
+
+
+
+		[When(@"I click skip button")]
+		public void WhenIClickSkipButton()
+		{
+			Browser.Interactions.Click("#Skip-button");
+		}
+
+		[Then(@"I should not see skip button")]
+		public void ThenIShouldNotSeeSkipButton()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Skip-button");
+		}
+		
+		[When(@"I change my password with")]
+		public void WhenIChangeMyPasswordWith(Table table)
+		{
+			var password = table.CreateInstance<PasswordConfigurable>();
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#New-password", password.Password);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Confirm-new-password", password.ConfirmedPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Old-password", password.OldPassword);
+			Browser.Interactions.Click("#Change-password-button");
+		}
+
+		[Then(@"I should see change password page with warning '(.*)'")]
+		public void ThenIShouldSeeChangePasswordPageWithWarning(string resourceText)
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery("#PasswordExpireSoon");
+			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#PasswordExpireSoon", resourceText);
+		}
+
+		[Then(@"I should see must change password page with warning '(.*)'")]
+		public void ThenIShouldSeeMustChangePasswordPageWithWarning(string resourceText)
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery("#PasswordAlreadyExpired");
+			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#PasswordAlreadyExpired", resourceText);
+		}
+
+		[Then(@"I should see an error '(.*)'")]
+		public void ThenIShouldSeeAnError(string resourceText)
+		{
+			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Password-change-error", resourceText);
+		}
 	}
 }

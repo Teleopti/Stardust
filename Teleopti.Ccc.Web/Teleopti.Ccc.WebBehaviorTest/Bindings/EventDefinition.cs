@@ -1,7 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -24,14 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			try
 			{
 				if (!Browser.IsStarted())
-					Browser.Start();
+					Browser.Start(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 
 				TestControllerMethods.BeforeTestRun();
 
 				TestSiteConfigurationSetup.RecycleApplication();
 
 				log4net.Config.XmlConfigurator.Configure();
-				Timeouts.Set(TimeSpan.FromSeconds(10));
 
 				TestDataSetup.CreateDataSource();
 

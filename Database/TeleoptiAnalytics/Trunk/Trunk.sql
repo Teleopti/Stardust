@@ -287,3 +287,26 @@ CREATE TABLE [stage].[stg_schedule_updated_ShiftStartDateUTC](
 )
 GO
 
+----------------  
+--Name: Ola
+--Date: 2013-08-06
+--Desc: #19606 - Remove obsolete datamart tables
+-----------------
+alter table mart.dim_shift_length
+drop DF_dim_shift_length_shift_length_group_id,  DF_dim_shift_length_shift_length_group_name
+GO
+alter table mart.dim_shift_length
+drop column shift_length_group_id, shift_length_group_name
+GO
+DELETE FROM [mart].[report_control] WHERE control_id in(16,17)
+GO
+DROP TABLE [mart].[sys_shift_length_group]
+GO
+DROP TABLE [mart].[dim_person_category_type]
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_person_category_get]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[report_control_person_category_get]
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_person_category_type_get]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[report_control_person_category_type_get]
+GO

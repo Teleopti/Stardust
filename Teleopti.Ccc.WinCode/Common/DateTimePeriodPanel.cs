@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Limits the childrens visuallayout. If not set to default, the item will only show within the period
         /// The Property is set on the object, not the panel!
         /// </summary>
+        /// <remarks>
         /// Created by: henrika
         /// Created date: 2008-02-27
         /// </remarks>

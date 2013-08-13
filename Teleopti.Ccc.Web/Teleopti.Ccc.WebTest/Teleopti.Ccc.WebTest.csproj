@@ -134,6 +134,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGeneratorTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ShareCalendarControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\UserInfoControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationControllerTest.cs" />
@@ -210,10 +215,11 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\RespondToShiftTradeTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsPermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
-    <Compile Include="Core\Settings\PersonPersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
     <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
@@ -249,7 +255,7 @@
     <Compile Include="Core\Requests\Mapping\AbsenceRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSenderTest.cs" />
-    <Compile Include="Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />

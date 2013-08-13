@@ -28,6 +28,7 @@
 						<Setter Property="Background" Value="{StaticResource RaptorDisabledSelectionGradientBrush}" />
 						<Setter Property="ToolTip" Value="xxTheRequestIsNotWithinOpenedScheduledPeriod"/>
 						<Setter Property="Foreground" Value="Gray"/>
+						<Setter Property="IsHitTestVisible" Value="False" />
 					</Trigger>
 
 					<Trigger Property="IsMouseOver" Value="True">

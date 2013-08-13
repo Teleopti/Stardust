@@ -15,6 +15,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
@@ -2553,7 +2554,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
 				if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot)
-					new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
+					new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
 				else
 					ViewBase.ShowInformationMessage(this, string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled,
 						_scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
@@ -6547,8 +6548,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updateShiftEditor();
 		}
 
+		private DateTime _lastclickLabels;
 		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
+			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
+			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;
+			_lastclickLabels = DateTime.Now;
+
 			toolStripButtonShowTexts.Checked = !toolStripButtonShowTexts.Checked;
 			_showRibbonTexts = toolStripButtonShowTexts.Checked;
 			setShowRibbonTexts();
@@ -6900,8 +6906,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void showRequestAllowanceView()
 		{
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0
-									 ? _requestView.SelectedAdapters().First().PersonRequest
-									 : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+				                     ? _requestView.SelectedAdapters().First().PersonRequest
+				                     : _schedulerState.PersonRequests.FirstOrDefault(
+					                     r =>
+					                     r.Request is AbsenceRequest &&
+					                     _schedulerState.RequestedPeriod.Period().Contains(r.Request.Period));
+
 			if (defaultRequest == null)
 			{
 				var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);

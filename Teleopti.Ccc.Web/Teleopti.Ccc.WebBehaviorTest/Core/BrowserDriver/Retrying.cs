@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {

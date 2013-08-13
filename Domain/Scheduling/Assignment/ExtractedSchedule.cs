@@ -328,15 +328,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Clear<IOvertimeAvailability>();
 		}
 
-        public void RemoveEmptyAssignments()
-        {
-	        foreach (var assignment in PersonAssignmentCollectionDoNotUse())
-	        {
-		        if (!assignment.PersonalLayers().Any() && !assignment.OvertimeLayers().Any() && assignment.ShiftCategory == null)
-			        Remove(assignment);
-	        }
-        }
-
 	    private void MergeStudentAvailabilityRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
@@ -541,8 +532,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (highAss != null)
 				highAss.ClearMainLayers();
-
-			RemoveEmptyAssignments();
 		}
 
 	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
@@ -657,7 +646,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (ass != null)
             {
                 ass.ClearPersonalLayers();
-                RemoveEmptyAssignments();
             }
         }
 
