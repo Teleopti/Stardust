@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			var platformId = Guid.Empty;
-			var stateCode = "Unknown";
+			var stateCode = string.Empty;
 			
 			LoggingSvc.InfoFormat("Getting readmodel for person: {0}", personId);
 			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState CreateAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
 			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId)
 		{
-			RtaAlarmLight foundAlarm = null;
+			RtaAlarmLight foundAlarm;
 			var scheduleLayer = scheduleLayers.FirstOrDefault();
 			var nextLayer = scheduleLayers.LastOrDefault();
 			var state = ResolveStateGroupId(platformTypeId, stateCode, businessUnitId);
@@ -102,7 +102,8 @@ namespace Teleopti.Ccc.Rta.Server
 				StateCode = stateCode,
 				AlarmStart = timestamp,
 				PlatformTypeId = platformTypeId,
-				ReceivedTime = timestamp
+				ReceivedTime = timestamp,
+				StateStart = DateTime.UtcNow
 			};
 
 
@@ -221,9 +222,21 @@ namespace Teleopti.Ccc.Rta.Server
 				if (foundstate != null)
 					return foundstate;
 			}
+			else if (!string.IsNullOrEmpty(stateCode))
+			{
+				LoggingSvc.InfoFormat("Could not find state: {0}, on platform {1} adding it to database", stateCode, platformTypeId);
+				ActualAgentDataHandler.AddNewRtaState(stateCode, platformTypeId);
+				LoggingSvc.Info("Clearing cache for StateGroups");
+				invalidateStateGroupCache();
+			}
 
 			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
 			return null;
+		}
+
+		private void invalidateStateGroupCache()
+		{
+			_mbCacheFactory.Invalidate(ActualAgentDataHandler, x => x.StateGroups(), false);
 		}
 
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
