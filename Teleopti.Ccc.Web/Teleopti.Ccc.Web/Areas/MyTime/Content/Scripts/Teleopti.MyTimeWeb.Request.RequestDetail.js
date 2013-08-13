@@ -70,7 +70,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
-					_displayValidationError(data, model);
+					model.ErrorMessage(data.Errors.join('</br>'));
+					model.ShowError(true);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -107,11 +108,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		}
 	}
     
-	function _displayValidationError(data, model) {
-	    model.ErrorMessage(data.Errors.join('</br>'));
-	    model.ShowError(true);
-	}
-
 	function _getFormData(model) {
 	    var absenceId = model.AbsenceId();
 		if (absenceId == undefined) {
