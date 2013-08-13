@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(workflowControlSet);
 		}
 
+		[Given(@"'(.*)' has the workflow control set '(.*)'")]
 		[Given(@"(.*) have the workflow control set '(.*)'")]
 		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string userName, string name)
 		{

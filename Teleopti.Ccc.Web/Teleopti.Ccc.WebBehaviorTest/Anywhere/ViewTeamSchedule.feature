@@ -13,7 +13,16 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
+	And there is a role with
+	| Field                      | Value                        |
+	| Name                       | Role Cannot View Unpublished |
+	| Access to team             | Team green                   |
+	| Access to Anywhere         | true                         |
 	And 'Pierre Baldi' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
+	And 'John Smith' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
@@ -29,6 +38,14 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
+	And there is a workflow control set with
+	| Field                      | Value                   |
+	| Name                       | Published schedule 0809 |
+	| Schedule published to date | 2013-08-09              |
+	And there is a workflow control set with
+	| Field                      | Value                   |
+	| Name                       | Published schedule 0810 |
+	| Schedule published to date | 2013-08-10              |
 	
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
@@ -42,6 +59,41 @@ Scenario: View team schedule
 	| Lunch 3 hours after start | true             |
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
+
+@ignore
+Scenario: Only view published schedule
+	Given I have the role 'Role Cannot View Unpublished'
+	And 'Pierre Baldi' has the workflow control set 'Published schedule 0810'
+	And 'John Smith' has the workflow control set 'Published schedule 0809'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
+	And 'John Smith' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
+	When I view schedules for '2013-08-10'
+	Then I should see schedule for 'Pierre Baldi'
+	And I should see 'John Smith' with no schedule 
+
+@ignore
+Scenario: View unpublished schedule when permitted
+	Given I have the role 'Role Can View Unpublished'
+	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
+	When I view schedules for '2013-08-10'
+	Then I should see schedule for 'Pierre Baldi'
+
 	
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'

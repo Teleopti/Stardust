@@ -29,6 +29,14 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
+	And there is a workflow control set with
+	| Field                      | Value                   |
+	| Name                       | Published schedule 0809 |
+	| Schedule published to date | 2013-08-09              |
+	And there is a workflow control set with
+	| Field                      | Value                   |
+	| Name                       | Published schedule 0810 |
+	| Schedule published to date | 2013-08-10              |
 	
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
@@ -42,6 +50,42 @@ Scenario: View shift
 	| Lunch start time | 2012-12-02 11:30 |
 	| Lunch end time   | 2012-12-02 12:15 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
+	Then I should see these shift layers
+	| Start time | End time | Color  |
+	| 08:00      | 11:30    | Green  |
+	| 11:30      | 12:15    | Yellow |
+	| 12:15      | 17:00    | Green  |
+
+@ignore
+Scenario: Cannot view schedule when not published
+	Given I have the role 'Role Cannot View Unpublished'
+	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
+	And 'Pierre Baldi' have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2013-08-10 08:00 |
+	| End time         | 2013-08-10 17:00 |
+	| Lunch activity   | Lunch            |
+	| Lunch start time | 2013-08-10 11:30 |
+	| Lunch end time   | 2013-08-10 12:15 |
+	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
+	Then I should not see any shift
+
+@ignore
+Scenario: View unpublished schedule when permitted
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
+	And 'Pierre Baldi' have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2013-08-10 08:00 |
+	| End time         | 2013-08-10 17:00 |
+	| Lunch activity   | Lunch            |
+	| Lunch start time | 2013-08-10 11:30 |
+	| Lunch end time   | 2013-08-10 12:15 |
+	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
 	Then I should see these shift layers
 	| Start time | End time | Color  |
 	| 08:00      | 11:30    | Green  |
