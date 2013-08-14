@@ -211,6 +211,7 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
