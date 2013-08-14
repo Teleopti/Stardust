@@ -7,12 +7,17 @@ Background:
 	Given there is a team with
 	| Field | Value            |
 	| Name  | Team green	   |
-	And I have a role with
+	And there is a role with
 	| Field                      | Value               |
 	| Name                       | Anywhere Team Green |
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
+	And there is a role with
+	| Field              | Value                   |
+	| Name               | Cannot View Unpublished |
+	| Access to team     | Team green              |
+	| Access to Anywhere | true                    |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
@@ -30,13 +35,9 @@ Background:
 	| Name  | Phone |
 	| Color | Green |
 	And there is a workflow control set with
-	| Field                      | Value                   |
-	| Name                       | Published schedule 0809 |
-	| Schedule published to date | 2013-08-09              |
-	And there is a workflow control set with
-	| Field                      | Value                   |
-	| Name                       | Published schedule 0810 |
-	| Schedule published to date | 2013-08-10              |
+	| Field                      | Value                      |
+	| Name                       | Schedule published to 0809 |
+	| Schedule published to date | 2013-08-09                 |
 	
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
@@ -58,8 +59,8 @@ Scenario: View shift
 
 @ignore
 Scenario: Cannot view schedule when not published
-	Given I have the role 'Role Cannot View Unpublished'
-	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
+	Given I have the role 'Cannot View Unpublished'
+	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
 	And 'Pierre Baldi' have a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -75,7 +76,7 @@ Scenario: Cannot view schedule when not published
 @ignore
 Scenario: View unpublished schedule when permitted
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
+	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
 	And 'Pierre Baldi' have a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
