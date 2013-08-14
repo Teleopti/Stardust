@@ -13,7 +13,7 @@
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
-		<!-- <NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies> -->
+		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
 
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
@@ -358,6 +358,7 @@
 			WorkingDirectory="$(CCNetWorkingDirectory)"
 			RegisterProfiler="true"
 			ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
+			IncludeAssemblies="$(NCoverAssemblies)"
 			/>
 	</Target>
 	
