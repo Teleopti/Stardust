@@ -6,7 +6,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod,firstDayOfWeek) {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek) {
 	var self = this;
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
 	self.TextRequestHeaderVisible = ko.observable(false);
@@ -17,7 +17,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.DateTo = ko.observable(moment().startOf('day'));
     self.TimeFromInternal = ko.observable($('#Request-detail-default-start-time').text());
     self.TimeToInternal = ko.observable($('#Request-detail-default-end-time').text());
-    self.DateFormat = ko.observable($('#Request-detail-datepicker-format').val().toUpperCase());
+    self.DateFormat = ko.observable();
     self.TimeFrom = ko.computed({
         read: function() {
             if (self.IsFullDay()) {

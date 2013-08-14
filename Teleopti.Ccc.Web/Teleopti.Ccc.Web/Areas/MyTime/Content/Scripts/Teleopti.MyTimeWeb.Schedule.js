@@ -1,11 +1,11 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.RequestViewModel.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -26,56 +26,68 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
+	var weekStart = 3;
+    
+	ajax.Ajax({
+	    url: 'UserInfo/Culture',
+	    dataType: "json",
+	    type: 'GET',
+	    success: function (data) {
+	        weekStart = data.WeekStart;
+	    }
+	});
 
-	function _initTooltip() {
-			var addTextRequest = $('.show-request');
-			addTextRequestTooltip = $('<div />').qtip({
+	//function _initTooltip() {
+	//		var addTextRequest = $('.show-request');
+	//		addTextRequestTooltip = $('<div />').qtip({
 
-				content: {
-					text: $('#Schedule-addRequest-section'),
-					title: {
-						text: $('#Schedule-addRequest-title'),
-						button: $('#Schedule-addRequest-cancel-button').text()
-					}
-				},
-				position: {
-					target: 'event',
-					my: 'middle left',
-					at: 'middle right',
-					viewport: $(window),
-					adjust: {
-						x: 5
-					}
-				},
-				events: {
-					show: function (event, api) {
-						var date = $(event.originalEvent.target).closest('ul').attr('data-mytime-date');
-						Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
-					}
-				},
-				show: {
-					target: addTextRequest,
-					event: 'click'
-				},
-				hide: {
-					target: $("#page"),
-					event: 'mousedown'
-				},
-				style: {
-					def: false,
-					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-					tip: true
-				}
+	//			content: {
+	//				text: $('#Schedule-addRequest-section'),
+	//				title: {
+	//					text: $('#Schedule-addRequest-title'),
+	//					button: $('#Schedule-addRequest-cancel-button').text()
+	//				}
+	//			},
+	//			position: {
+	//				target: 'event',
+	//				my: 'middle left',
+	//				at: 'middle right',
+	//				viewport: $(window),
+	//				adjust: {
+	//					x: 5
+	//				}
+	//			},
+	//			events: {
+	//				show: function (event, api) {
+	//					var date = $(event.originalEvent.target).closest('ul').attr('data-mytime-date');
+	//					Teleopti.MyTimeWeb.Schedule.Request.ClearFormData(date);
+	//				}
+	//			},
+	//			show: {
+	//				target: addTextRequest,
+	//				event: 'click'
+	//			},
+	//			hide: {
+	//				target: $("#page"),
+	//				event: 'mousedown'
+	//			},
+	//			style: {
+	//				def: false,
+	//				classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+	//				tip: true
+	//			}
 
-			});
+	//		});
 		
-	}
+	//}
 
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
-		_initTooltip();
-		Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+	    vm.requestViewModel.DateFormat(datePickerFormat);
+		//_initTooltip();
+		//Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		$('.body-weekview-inner').show();
 		completelyLoaded();
 	}
@@ -92,7 +104,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}, 1000);
 	}
 
-	var WeekScheduleViewModel = function (userTexts) {
+	var WeekScheduleViewModel = function (userTexts, addRequestViewModel) {
 		var self = this;
 		self.userTexts = userTexts;
 		self.textPermission = ko.observable();
@@ -109,8 +121,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.displayDate = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
+	    self.datePickerFormat = ko.observable();
 
-		self.selectedDate = ko.observable(moment().startOf('day'));
+	    self.selectedDate = ko.observable(moment().startOf('day'));
+	    
+	    self.requestViewModel = addRequestViewModel;
 
 		self.setCurrentDate = function (date) {
 		    self.selectedDate(date);
@@ -135,8 +150,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		    
 		};
-	    
-		self.requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
@@ -151,6 +164,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.setCurrentDate(moment(data.PeriodSelection.Date));
 		    self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 		    self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
+		    self.datePickerFormat(data.DatePickerFormat);
 		    
 			var styleToSet = {};
 			$.each(data.Styles, function (key, value) {
@@ -263,7 +277,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		    }	
 	    });
 
-	
+		self.showAddRequestForm = function () {
+		    parent.requestViewModel.DateFrom(moment(self.date()));
+		    parent.requestViewModel.DateTo(moment(self.date()));
+		    parent.requestViewModel.IsNewInProgress(true);
+		};
 	};
 	var LayerViewModel = function (layer, parent) {
 		var self = this;
@@ -440,7 +458,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             vm.timeLines([]);
             vm = null;
         }
-    }
+	}
+    
+	function _successAddingRequest() {
+	    
+	}
 
 	return {
 		Init: function () {
@@ -454,8 +476,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts) {
-		    vm = new WeekScheduleViewModel(userTexts);
-		    Teleopti.MyTimeWeb.Schedule.Request.Init(vm.requestViewModel);
+		    var addRequestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart);
+		    addRequestViewModel.AddRequestCallback = _successAddingRequest;
+		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel);
 			ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {

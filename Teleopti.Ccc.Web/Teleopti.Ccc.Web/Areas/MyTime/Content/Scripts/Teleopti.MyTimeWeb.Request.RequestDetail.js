@@ -5,6 +5,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.RequestViewModel.js"/>
 
 Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -19,9 +20,19 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			}
 	});
 
+	function _addItemAtTop(data) {
+	    Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+	}
+    
+    function _datePickerFormat() {
+        return $('#Request-detail-datepicker-format').val().toUpperCase();
+    }
+
 	function _addTextRequestClick() {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
+		requestViewModel.AddRequestCallback = _addItemAtTop;
+	    requestViewModel.DateFormat(_datePickerFormat());
 		_initEditSection(requestViewModel);
 		requestViewModel.AddTextRequest();
 	}
@@ -29,6 +40,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _addAbsenceRequestClick() {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
+		requestViewModel.DateFormat(_datePickerFormat());
 		_initEditSection(requestViewModel);
 		requestViewModel.AddAbsenceRequest();
 	}
@@ -48,7 +60,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	        ko.cleanNode(element);
 	        ko.applyBindings(requestViewModel, element);
 	    }
-		
 	}
 
 	function _addRequest(model, successCallback) {
@@ -60,11 +71,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			type: "POST",
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
-			    Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			    model.IsNewInProgress(false);
-
 			    if (successCallback != undefined)
-			        successCallback();
+			        successCallback(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
@@ -93,7 +102,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		}
 		else {
-			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
+		    requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, _datePickerFormat());
 			requestViewModel.IsUpdate(true);
 			requestViewModel.TypeEnum(data.TypeEnum);
 		}
@@ -159,6 +168,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		HideNewTextOrAbsenceRequestView: function() {
 		    requestViewModel.IsNewInProgress(false);
+		},
+		AddTextOrAbsenceRequest: function (model, successCallback) {
+		    _addRequest(model, successCallback);
 		}
 	};
 })(jQuery);
