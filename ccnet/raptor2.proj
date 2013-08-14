@@ -369,6 +369,7 @@
 				OutputReport="$(CoverageReports)"
 				CoverageDataPaths="$(CCNetWorkingDirectory)\NcoverResult\*.ncov"
 				MinimumCoverage="0"
+				SatisfactoryCoverage="$(SatisfactoryCoverage)"
 				MaxFailedToShow="150"
 				ReportInvalidFiles="true">
 		</NCoverReporting>
