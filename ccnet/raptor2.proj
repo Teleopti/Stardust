@@ -52,20 +52,25 @@
 				<Format>Xml</Format>
 				<OutputPath>$(CCNetWorkingDirectory)\symbolmodule.xml</OutputPath>
 			</Report>
-			<!-- <Report>
-				<ReportType>SymbolModuleNamespaceClass</ReportType>
-				<Format>Xml</Format>
-				<OutputPath>$(CCNetWorkingDirectory)\SymbolModuleNamespaceClass.xml</OutputPath>
-			</Report>-->
 		</CoverageReports>
 		<MinimumCoverage>
 			<Threshold>
 				<CoverageMetric>SymbolCoverage</CoverageMetric>
 				<Type>Assembly</Type>
-				<Value>95</Value>
+				<Value>0</Value>
 				<Pattern>.*</Pattern>
 			</Threshold>
 		</MinimumCoverage>
+		<SatisfactoryCoverage>
+			<Threshold>
+				<CoverageMetric>SymbolCoverage</CoverageMetric>
+				<Value>0</Value>
+			</Threshold>
+			<Threshold>
+				<CoverageMetric>BranchCoverage</CoverageMetric>
+				<Value>0</Value>
+			</Threshold>
+		</SatisfactoryCoverage>
 	</PropertyGroup>
 
 	<ItemGroup>
