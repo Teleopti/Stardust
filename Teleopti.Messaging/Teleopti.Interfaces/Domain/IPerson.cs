@@ -299,5 +299,6 @@ namespace Teleopti.Interfaces.Domain
 	    void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod period);
 
 	    void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod);
+	    void ChangeTeam(ITeam team, IPersonPeriod personPeriod);
     }
 }

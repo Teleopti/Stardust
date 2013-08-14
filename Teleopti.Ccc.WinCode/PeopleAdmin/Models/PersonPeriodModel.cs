@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private readonly CommonNameDescriptionSetting _commonNameDescription;
         private readonly IList<IPersonSkill> _personSkillCollection;
         private readonly IList<SiteTeamModel> _siteTeamAdapterCollection;
-        private SiteTeamModel _siteTeamModel;
         private readonly ExternalLogOnParser _externalLogOnParser;
     	private readonly PersonSkillStringParser _personSkillStringParser;
 
@@ -84,23 +83,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 {
 	                Parent.ChangePersonPeriodStartDate(value.Value, _currentPeriod);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the current team.
-        /// </summary>
-        /// <value>The current team.</value>
-        public ITeam Team
-        {
-            get
-            {
-                if (_currentPeriod != null) return _currentPeriod.Team;
-                return null;
-            }
-            set
-            {
-                if (_currentPeriod != null) _currentPeriod.Team = value;
             }
         }
 
@@ -365,24 +347,18 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (_currentPeriod != null)
                 {
-                    List<SiteTeamModel> siteTeamAdapterCollection =
-                                                  _siteTeamAdapterCollection.Where(s => s.Team ==
-                                                  _currentPeriod.Team &&
-                                                  s.Site == _currentPeriod.Team.Site).ToList();
-
-                    if (!siteTeamAdapterCollection.IsEmpty())
-                    {
-                        _siteTeamModel = siteTeamAdapterCollection.First();
-                    }
+	                return
+		                _siteTeamAdapterCollection.FirstOrDefault(
+			                s => s.Team == _currentPeriod.Team && s.Site == _currentPeriod.Team.Site);
                 }
-                return _siteTeamModel;
+                return null;
             }
             set
             {
 				if (value != null && _currentPeriod != null)
-                {
-                    _currentPeriod.Team = value.Team;
-                }
+				{
+					Parent.ChangeTeam(value.Team, _currentPeriod);
+				}
             }
         }
 

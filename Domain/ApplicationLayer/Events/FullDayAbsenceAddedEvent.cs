@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
@@ -52,10 +53,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	}
 
 	[Serializable]
-	public class PersonPeriodStartDateChanged : RaptorDomainEvent
+	public class PersonPeriodStartDateChangedEvent : RaptorDomainEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateTime OldStartDate { get; set; }
 		public DateTime NewStartDate { get; set; }
+	}
+
+	[Serializable]
+	public class PersonPeriodRemovedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+	}
+
+	[Serializable]
+	public class PersonPeriodAddedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+	}
+
+	[Serializable]
+	public class PersonTeamChangedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid? OldTeam { get; set; }
+		public Guid? NewTeam { get; set; }
 	}
 }

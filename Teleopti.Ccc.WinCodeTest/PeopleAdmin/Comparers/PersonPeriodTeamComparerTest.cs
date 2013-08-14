@@ -9,13 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 {
-    /// <summary>
-    /// Test class for the PersonPeriodTeamComparer class of the wincode.
-    /// </summary>
-    /// <remarks>
-    /// Created By: madhurangap
-    /// Created Date: 29-07-2008
-    /// </remarks>
     [TestFixture]
     public class PersonPeriodTeamComparerTest
     {
@@ -23,68 +16,58 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		private PersonPeriodModel _personPeriodModel;
         private PersonPeriodTeamComparer personPeriodTeamComparer;
 		private int result;
-        private SchedulePeriodComparerTestHelper helper = new SchedulePeriodComparerTestHelper();
+        private readonly SchedulePeriodComparerTestHelper helper = new SchedulePeriodComparerTestHelper();
 
-        /// <summary>
-        /// Tests the init.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [SetUp]
         public void Setup()
         {
             helper.SetFirstTarget();
             helper.SetSecondtarget();
 
-            IList<IPersonSkill> personSkillCollection = new List<IPersonSkill>();
+	        IList<IPersonSkill> personSkillCollection = new List<IPersonSkill>
+		        {
+			        PersonSkillFactory.CreatePersonSkill("_skill1", 1),
+			        PersonSkillFactory.CreatePersonSkill("_skill2", 1),
+			        PersonSkillFactory.CreatePersonSkill("_skill3", 1)
+		        };
 
-            personSkillCollection.Add(PersonSkillFactory.CreatePersonSkill("_skill1", 1));
-            personSkillCollection.Add(PersonSkillFactory.CreatePersonSkill("_skill2", 1));
-            personSkillCollection.Add(PersonSkillFactory.CreatePersonSkill("_skill3", 1));
+	        _target = new PersonPeriodModel(helper.universalTime3, helper.person, personSkillCollection, null,
+	                                        new List<SiteTeamModel>
+		                                        {
+			                                        new SiteTeamModel {ContainedEntity = helper._personPeriod3.Team}
+		                                        }, null);
 
-            _target = new PersonPeriodModel(new DateOnly(helper.universalTime3.Date), helper.person, personSkillCollection, null, null, null);
+	        personSkillCollection = new List<IPersonSkill>
+		        {
+			        PersonSkillFactory.CreatePersonSkill("_skill4", 1),
+			        PersonSkillFactory.CreatePersonSkill("_skill5", 1),
+			        PersonSkillFactory.CreatePersonSkill("_skill6", 1)
+		        };
 
-            IList<IPersonSkill> personSkillCollection1 = new List<IPersonSkill>();
-
-            personSkillCollection1.Add(PersonSkillFactory.CreatePersonSkill("_skill4", 1));
-            personSkillCollection1.Add(PersonSkillFactory.CreatePersonSkill("_skill5", 1));
-            personSkillCollection1.Add(PersonSkillFactory.CreatePersonSkill("_skill6", 1));
-
-            _personPeriodModel =
-                new PersonPeriodModel(new DateOnly(helper.universalTime3.Date), helper.person1, personSkillCollection1, null, null, null);
+	        _personPeriodModel = new PersonPeriodModel(helper.universalTime3, helper.person1, personSkillCollection, null,
+	                                                   new List<SiteTeamModel>
+		                                                   {
+			                                                   new SiteTeamModel
+				                                                   {
+					                                                   ContainedEntity = helper._personPeriod6.Team
+				                                                   }
+		                                                   }, null);
         }
 
-        /// <summary>
-        /// Tests the dispose.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [TearDown]
         public void TestDispose()
         {
-            // Sets teh objects to null
             _target = null;
             _personPeriodModel = null;
 
             personPeriodTeamComparer = null;
         }
 
-        /// <summary>
-        /// Verifies the compare method with null values for all parameters.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodWithAllNull()
         {
-            _target.Team = null;
-            _personPeriodModel.Team = null;
+            _target.SiteTeam = null;
+            _personPeriodModel.SiteTeam = null;
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -94,19 +77,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             Assert.AreEqual(0, result);
         }
 
-        /// <summary>
-        /// Verifies the compare method with null value for the first parameter.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodWithFirstNull()
         {
-            _target.Team = null;
-            _personPeriodModel.Team = new Team();
-            _personPeriodModel.Team.Description = new Description("Test A");
+            _target.SiteTeam = null;
+            _personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -116,19 +91,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             Assert.AreEqual(-1, result);
         }
 
-        /// <summary>
-        /// Verifies the compare method with null value for the second parameter.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodWithSecondNull()
         {
-            _target.Team = new Team();
-            _target.Team.Description = new Description("Test A");
-            _personPeriodModel.Team = null;
+            _target.SiteTeam.Team.Description = new Description("Test A");
+            _personPeriodModel.SiteTeam = null;
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -138,20 +105,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             Assert.AreEqual(1, result);
         }
 
-        /// <summary>
-        /// Verifies the compare method with a for the first parameter.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodAscending()
         {
-            _target.Team = new Team();
-            _target.Team.Description = new Description("Test A");
-            _personPeriodModel.Team = new Team();
-            _personPeriodModel.Team.Description = new Description("Test B");
+			_target.SiteTeam.Team.Description = new Description("Test A");
+			_personPeriodModel.SiteTeam.Team.Description = new Description("Test B");
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -161,20 +119,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             Assert.AreEqual(-1, result);
         }
 
-        /// <summary>
-        /// Verifies the compare method with a for teh second parameter.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodDescending()
         {
-            _target.Team = new Team();
-            _target.Team.Description = new Description("Test B");
-            _personPeriodModel.Team = new Team();
-            _personPeriodModel.Team.Description = new Description("Test A");
+			_target.SiteTeam.Team.Description = new Description("Test B");
+			_personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -184,20 +133,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             Assert.AreEqual(1, result);
         }
 
-        /// <summary>
-        /// Verifies the compare method with same role for both parameters.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
         [Test]
         public void VerifyCompareMethodWithSecondWithSame()
         {
-            _target.Team = new Team();
-            _target.Team.Description = new Description("Test A");
-            _personPeriodModel.Team = new Team();
-            _personPeriodModel.Team.Description = new Description("Test A");
+			_target.SiteTeam.Team.Description = new Description("Test A");
+			_personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();

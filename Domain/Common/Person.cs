@@ -50,9 +50,7 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual ITeam MyTeam(DateOnly theDate)
         {
             IPersonPeriod per = Period(theDate);
-            if (per == null) return null;
-
-            return per.Team;
+            return per == null ? null : per.Team;
         }
 
         public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
@@ -95,6 +93,28 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
+		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
+		{
+			Guid? teamBefore = null;
+			Guid? teamAfter = null;
+			if (personPeriod.Team != null)
+			{
+				teamBefore = personPeriod.Team.Id;
+			}
+			if (team != null)
+			{
+				teamAfter = team.Id;
+			}
+			personPeriod.Team = team;
+			AddEvent(new PersonTeamChangedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					StartDate = personPeriod.StartDate,
+					OldTeam = teamBefore,
+					NewTeam = teamAfter
+				});
+		}
+
         public virtual Name Name
         {
             get { return _name; }
@@ -110,7 +130,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-                
                 return new ReadOnlyCollection<IPersonPeriod>(InternalPersonPeriodCollection.ToList());
             }
         }
@@ -175,6 +194,8 @@ namespace Teleopti.Ccc.Domain.Common
             {
                 period.SetParent(this);
                 _personPeriodCollection.Add(period.StartDate, period);
+
+				AddEvent(new PersonPeriodAddedEvent{PersonId = Id.GetValueOrDefault(),StartDate = period.StartDate.Date});
             }
         }
 
@@ -202,6 +223,8 @@ namespace Teleopti.Ccc.Domain.Common
         {
             InParameter.NotNull("period", period);
             _personPeriodCollection.Remove(period.StartDate);
+
+			AddEvent(new PersonPeriodRemovedEvent{PersonId = Id.GetValueOrDefault(), StartDate = period.StartDate.Date});
         }
 
 		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
@@ -216,7 +239,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
-			AddEvent(new PersonPeriodStartDateChanged
+			AddEvent(new PersonPeriodStartDateChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),
 					NewStartDate = startDate.Date,

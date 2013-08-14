@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 if (existPersonPeriod != null)
                 {
-                    affectedId = updateExistingPersonPeriod(command, existPersonPeriod, uow);
+                    affectedId = updateExistingPersonPeriod(command, person, existPersonPeriod, uow);
                 }
                 else
                 {
@@ -113,12 +113,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             return newPersonPeriod.Id;
         }
 
-        private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPersonPeriod existPersonPeriod,
+        private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPerson person, IPersonPeriod existPersonPeriod,
                                                  IUnitOfWork uow)
         {
             if (command.Team != null)
             {
-                existPersonPeriod.Team = _teamRepository.Get(command.Team.Id.GetValueOrDefault());
+				person.ChangeTeam(_teamRepository.Get(command.Team.Id.GetValueOrDefault()), existPersonPeriod);
                 checkBusinessUnitConsistency(existPersonPeriod.Team.Site);
             }
             if (command.PersonContract != null)
