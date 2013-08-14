@@ -27,29 +27,30 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
 
-			var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
-			if (schedule != null)
+			var schedules = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
+			if (schedules != null)
 			{
 				return
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-						? schedule
-						: filterPublishedScheduleForTeamAndDate(teamId, date, schedule);
+						? schedules
+						: filterPublishedScheduleForTeamAndDate(teamId, date, schedules);
 			}
 			return new List<PersonScheduleDayReadModel>();
 		}
 
-		private IEnumerable<PersonScheduleDayReadModel> filterPublishedScheduleForTeamAndDate(Guid teamId, DateTime date, IEnumerable<PersonScheduleDayReadModel> schedule)
+		// *!* we might use here the Specification model SatisfiedBy method for the schedule read model
+		private IEnumerable<PersonScheduleDayReadModel> filterPublishedScheduleForTeamAndDate(Guid teamId, DateTime date, IEnumerable<PersonScheduleDayReadModel> schedules)
 		{
 			var result = new List<PersonScheduleDayReadModel>();
 			var persons = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId,
 																			 DefinedRaptorApplicationFunctionPaths
 																				 .SchedulesAnywhere);
-			foreach (var personScheduleDayReadModel in schedule)
+			foreach (var personScheduleDay in schedules)
 			{
-				var person = (from p in persons where (p.Id == personScheduleDayReadModel.PersonId) select p).FirstOrDefault();
+				var person = (from p in persons where (p.Id == personScheduleDay.PersonId) select p).FirstOrDefault();
 
 				if (person != null && IsSchedulePublished(date, person))
-					result.Add(personScheduleDayReadModel);
+					result.Add(personScheduleDay);
 			}
 			return result;
 		}
