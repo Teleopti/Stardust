@@ -582,10 +582,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
             _sendEventEvery = optimizerPreferences.Advanced.RefreshScreenInterval;
 
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone),
-				                   OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
 
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
