@@ -610,14 +610,14 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     string resourceKey = reportDto.ReportName.Substring(2, reportDto.ReportName.Length - 2);
                     string localizedResourceText = Resources.ResourceManager.GetString(resourceKey);
-                    if (!string.IsNullOrEmpty(localizedResourceText))
-                    {
-                        item.Text = localizedResourceText;
-                        item.Tag = reportDto;
-                        item.Click += ToolStripMenuSomeReportClick;
+                    if(string.IsNullOrEmpty(localizedResourceText)) localizedResourceText = reportDto.ReportName;
+                    
+                    item.Text = localizedResourceText;
+                    item.Tag = reportDto;
+                    item.Click += ToolStripMenuSomeReportClick;
 
-                        toolStripSplitButtonReport.DropDownItems.Add(item);
-                    }
+                    toolStripSplitButtonReport.DropDownItems.Add(item);
+                    
                 }
             }
 
