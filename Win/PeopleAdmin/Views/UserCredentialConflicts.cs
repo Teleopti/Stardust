@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             foreach (var sameUserCredentialOnOther in sameUserCredentialOnOthers)
             {
                 count ++;
-                var group = new ListViewGroup(UserTexts.Resources.Conflict + " " + count);
+                var group = new ListViewGroup(UserTexts.Resources.ErrorMsgDuplicateUserCredentials);
                 listViewConflicts.Groups.Add(group);
                 var item = createItem(sameUserCredentialOnOther.Person);
                 item.Group = group;

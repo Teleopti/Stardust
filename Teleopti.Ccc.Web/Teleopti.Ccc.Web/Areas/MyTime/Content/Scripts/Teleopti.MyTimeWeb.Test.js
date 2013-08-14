@@ -18,22 +18,38 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Test = (function ($) {
 	var _settings = {};
 	var _messages = [];
-
+	var _displayEnabled = false;
+    
 	function _testMessage(message) {
 		_messages.push(message);
-	}
+		if (_displayEnabled)
+		    _displayMessage(message);
+    }
 
-	function _popTestMessages() {
-		var messages = _messages;
-		_messages = [];
-		var page = $('#page');
-		for (var i = 0; i < messages.length; i++) {
-			var message = messages[i];
-			page.append(message + "</ br>");
+	function _getTestMessages() {
+	    var messages = "";
+	    _displayEnable();
+		for (var i = 0; i < _messages.length; i++) {
+		    var message = _messages[i];
+		    messages = messages + message;
 		}
 		return messages;
 	}
 
+    function _displayEnable() {
+        if (!_displayEnabled) {
+            _displayEnabled = true;
+            for (var i = 0; i < _messages.length; i++) {
+                var message = _messages[i];
+                _displayMessage(message);
+            }
+        }
+    }
+    
+    function _displayMessage(message) {
+        $('#page').append(message).append($('<br>'));
+    }
+    
 	function _expireMyCookie(message) {
 		$.ajax({
 			url: _settings.startBaseUrl + 'Test/ExpireMyCookie',
@@ -41,25 +57,30 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			cache: false,
 			async: false,
 			success: function () {
-				_testMessage(message);
-			},
-			error: function (r) {
-				if (r.status == 401 || r.status == 403) {
-					_testMessage(message);
-				}
+			    $.ajax({
+			        url: _settings.startBaseUrl + 'Menu/Applications',
+			        global: false,
+			        cache: false,
+			        async: false,
+			        success: function () { },
+			        error: function (r) {
+			            if (r.status == 403) //forbidden = not logged in
+			                _testMessage(message);
+			        }
+			    });
 			}
 		});
 	}
 
 	return {
 		Init: function (settings) {
-			_settings = settings;
+		    _settings = settings;
 		},
 		TestMessage: function (message) {
-			_testMessage(message);
+		    _testMessage(message);
 		},
-		PopTestMessages: function () {
-			return _popTestMessages();
+		GetTestMessages: function () {
+		    return _getTestMessages();
 		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);

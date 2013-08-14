@@ -47,13 +47,21 @@
                 <Setter Property="BorderBrush" Value="Transparent"/>
                 <Setter Property="Padding" Value="5"/>
             </Trigger>
-            <!--<!-Workaround->
-            <DataTrigger Binding="{Binding Path=DisplayColor, Converter={StaticResource isNullConverter}}" Value="False">
-                <Setter Property="Background" Value="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}}"/>
-            </DataTrigger>-->
         </Style.Triggers> 
     </Style>
 
+	<!-- Style for IntradayCells, NonClickable-->
+	<Style x:Key="UnclickableCellStyle" TargetType="{x:Type Controls:DataGridCell}" BasedOn="{StaticResource CellStyle}">
+		<Setter Property="IsHitTestVisible" Value="False" />
+	</Style>
+	
+	<!-- Style for Intraday PinnedCell -->
+	<Style x:Key="PinnedCellStyle" TargetType="{x:Type Controls:DataGridCell}" BasedOn="{StaticResource CellStyle}">
+		<Setter Property="IsHitTestVisible" Value="true"/>
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="IsSelected" Value="False"/>
+	</Style>
+	
     <!--Standard rowstyle for grids-->
     <Style x:Key="RowStyle" TargetType="{x:Type Controls:DataGridRow}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -61,12 +69,6 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Opacity" Value="100"/>
         <Setter Property="Background" Value="Transparent"/>
-        <!--<Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Trigger>
-        </Style.Triggers>-->
     </Style>
 
     <!--Standard rowstyle for rta grid-->
@@ -74,11 +76,10 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
                 <Setter Property="Background" Value="{Binding Path=Color, Converter={StaticResource colorConverter}}"/>
-            </DataTrigger>
-            <!--<Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Trigger>-->
+			</DataTrigger>
+			<Trigger Property="IsSelected" Value="True">
+				<Setter Property="FontWeight" Value="Bold"/>
+			</Trigger>
         </Style.Triggers>
     </Style>
 

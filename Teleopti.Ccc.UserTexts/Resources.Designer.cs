@@ -7753,7 +7753,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General View: user details.
+        ///   Looks up a localized string similar to Can not save!.
         /// </summary>
         public static string ErrorMsgCaptionDuplicateUserCredentials {
             get {
@@ -19236,6 +19236,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revoke.
+        /// </summary>
+        public static string Revoke {
+            get {
+                return ResourceManager.GetString("Revoke", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Right axis.
         /// </summary>
         public static string RightAxis {
@@ -21165,6 +21174,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeveralValues {
             get {
                 return ResourceManager.GetString("SeveralValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share Calendar.
+        /// </summary>
+        public static string ShareCalendar {
+            get {
+                return ResourceManager.GetString("ShareCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share my calendar.
+        /// </summary>
+        public static string ShareMyCalendar {
+            get {
+                return ResourceManager.GetString("ShareMyCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc..
+        /// </summary>
+        public static string ShareMyCalendarHint {
+            get {
+                return ResourceManager.GetString("ShareMyCalendarHint", resourceCulture);
             }
         }
         

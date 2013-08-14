@@ -16,7 +16,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
+			{
+				this.Load -= new System.EventHandler(this.GridRowInChartSettingButtons_Load);
+				this.checkBox1.CheckedChanged -= new System.EventHandler(this.checkBox1_CheckedChanged);
+				this.buttonAdvRightAxis.Click -= new System.EventHandler(this.buttonAdvRightAxis_Click);
+				this.buttonAdvBar.Click -= new System.EventHandler(this.buttonAdvBar_Click);
+				this.buttonAdvLine.Click -= new System.EventHandler(this.buttonAdvLine_Click);
                 components.Dispose();
             }
             base.Dispose(disposing);

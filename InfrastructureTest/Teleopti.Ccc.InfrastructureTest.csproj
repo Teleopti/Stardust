@@ -258,7 +258,7 @@
     <Compile Include="Repositories\EtlReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
-    <Compile Include="Repositories\PersonScheduleDayReadModelStorageTest.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelFinderTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />
@@ -268,6 +268,7 @@
     <Compile Include="Repositories\PersonAssignmentCascadeDeleteTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRequestReadOnlyRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelPersisterTest.cs" />
     <Compile Include="Repositories\PersonSelectorReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PublicNoteRepositoryTest.cs" />
     <Compile Include="Repositories\AvailableDataRepositoryTest.cs" />

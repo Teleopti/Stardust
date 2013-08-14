@@ -111,15 +111,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
 			var allSelectedDaysAreScheduled = false;
-			IShiftCategory shiftCategoryToBeBlocked = null;
 			while (!allSelectedDaysAreScheduled)
 			{
 				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
 				                                                                               schedulingOptions);
 				if (suggestedShiftProjectionCache == null && !(schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling))
 					return false;
+				IShiftCategory shiftCategoryToBeBlocked;
 				if (suggestedShiftProjectionCache != null)
 					shiftCategoryToBeBlocked = suggestedShiftProjectionCache.TheWorkShift.ShiftCategory;
+				else shiftCategoryToBeBlocked = null;
 				//need to refactor the code alot i dont like these ifs probably split it into classes
 				foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 				{
@@ -151,6 +152,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						_teamBlockClearer.ClearTeamBlock(schedulingOptions, _rollbackService, teamBlockInfo);
 						if (!schedulingOptions.NotAllowedShiftCategories.Contains(shiftCategoryToBeBlocked))
 							schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
+					}
+					else
+					{
+						_rollbackService.Rollback();
+						return false;
 					}
 				}
 			}

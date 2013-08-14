@@ -389,11 +389,6 @@ namespace Teleopti.Interfaces.Domain
 				void DeleteOvertimeAvailability();
 
 				/// <summary>
-				/// Removes the empty assignments.
-				/// </summary>
-				void RemoveEmptyAssignments();
-
-				/// <summary>
 				/// Deletes a schedulenote.
 				/// </summary>
 				void DeleteNote();

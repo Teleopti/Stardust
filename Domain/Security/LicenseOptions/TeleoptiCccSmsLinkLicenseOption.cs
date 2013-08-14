@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		{
 		}
 
-		public override void EnableApplicationFunctions(System.Collections.Generic.IList<Interfaces.Domain.IApplicationFunction> allApplicationFunctions)
+		public override void EnableApplicationFunctions(IList<Interfaces.Domain.IApplicationFunction> allApplicationFunctions)
 		{
 			EnabledApplicationFunctions.Clear();
 		}

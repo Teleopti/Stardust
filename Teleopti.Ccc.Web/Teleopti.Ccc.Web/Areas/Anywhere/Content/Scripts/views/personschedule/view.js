@@ -34,6 +34,8 @@ define([
 		    
 			display: function(options) {
 
+			    var deferred = $.Deferred();
+
 			    var date = moment(options.date, 'YYYYMMDD');
 			    
 			    if (personSchedule.Id() == options.id && personSchedule.Date().diff(date) == 0)
@@ -51,9 +53,11 @@ define([
 					    resize.notify();
 					    personSchedule.SetData(data);
 					    personSchedule.Loading(false);
+					    deferred.resolve();
 					}
 				);
 
+			    return deferred.promise();
 			},
 
             dispose: function(options) {

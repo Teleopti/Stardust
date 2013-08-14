@@ -18,8 +18,8 @@
 
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		
-		<vs2008ide>c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe</vs2008ide>
-		<AsDBDeploy>c:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
+		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
+		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 
 		<AzureDeploy>false</AzureDeploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
@@ -76,6 +76,8 @@
 	</ItemGroup>
 
 	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop">
+		<Message Importance="high" Text="Cleaning up repo using hg purge --all" />
+		<exec Command="hg purge --all" />
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -104,10 +106,10 @@
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
-    <Target Name="BuildSSASXmla" Condition="Exists('$(vs2008ide)') And Exists('$(AsDBDeploy)')">
+    <Target Name="BuildSSASXmla" Condition="Exists('$(vs2020ide)') And Exists('$(AsDBDeploy)')">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />
-		<Exec Command="&quot;$(vs2008ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log.txt&quot;" />
+		<Exec Command="&quot;$(vs2020ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log.txt&quot;" />
 		<Message Text="Building dwproj-file. Done!" Importance="high" />
 
 		<Message Text="Creating XMLA ..." Importance="high" />

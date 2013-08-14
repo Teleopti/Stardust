@@ -5,7 +5,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -24,21 +23,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see person '(.*)'")]
 		public void ThenIShouldSeePerson(string personName)
 		{
-			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}')", personName));
+			Browser.Interactions.AssertAnyContains(".person", personName);
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}') .shift li", personName));
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertNotExists(
-				string.Format(".person:contains('{0}')", personName), 
-				string.Format(".person:contains('{0}') .shift li", personName)
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				".person:contains('{0}')",
+				".person:contains('{0}') .shift li",
+				personName
 				);
 		}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists("#team-selector");
 
 			var teams = table.CreateSet<TeamInfo>().ToArray();
-			teams.ForEach(t => Browser.Interactions.AssertExists("#team-selector option:contains('{0}')", t.Team));
+			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#team-selector option", t.Team));
 
 			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
 		}

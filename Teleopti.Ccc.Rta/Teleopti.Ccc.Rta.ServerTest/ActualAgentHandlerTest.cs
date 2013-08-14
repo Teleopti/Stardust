@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, rtaStateGroupLight);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, rtaStateGroupLight.StateGroupId);
 			_mock.VerifyAll();
 			Assert.That(result, Is.EqualTo(_rtaAlarmLight));
 		}
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, _businessUnitId, new RtaStateGroupLight());
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, _businessUnitId, Guid.Empty);
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, new RtaStateGroupLight());
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, Guid.Empty);
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}
@@ -365,7 +365,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime);
 			Assert.That(result.AlarmName, Is.EqualTo(string.Empty));
-			Assert.That(result.StateStart, Is.EqualTo(new DateTime(1900, 01 ,01, 00, 00, 00, 000, DateTimeKind.Utc)));
 			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
 			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
 			_mock.VerifyAll();

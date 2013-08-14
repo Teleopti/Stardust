@@ -9,7 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -133,13 +133,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertContains(".musthave-max",mustHave.ToString());
+            Browser.Interactions.AssertFirstContains(".musthave-max",mustHave.ToString());
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertContains(".musthave-current", mustHave.ToString());
+            Browser.Interactions.AssertFirstContains(".musthave-current", mustHave.ToString());
 		}
 
 		[Then(@"I should not see the extended preference button")]
@@ -179,10 +179,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			public string Value { get; set; }
 		}
+
 		[Then(@"I should see add extended preferences panel with error 'Invalid time startTime'")]
 		public void ThenIShouldSeeAddExtendedPreferencesPanelWithError()
 		{
-			Browser.Interactions.AssertExists(string.Format(".preference-error-panel:contains('{0}')", string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
+			Browser.Interactions.AssertAnyContains(".preference-error-panel", string.Format(Resources.InvalidTimeValue, Resources.StartTime));
 		}
 
 		[When(@"I input extended preference fields with")]
@@ -318,7 +319,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the edit activity minimum and maximum fields")]
 		public void ThenIShouldNotSeeTheEditActivityMinimumAndMaximumFields()
 		{
-
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-min");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-start-time-max");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".preference-activity-end-time-min");

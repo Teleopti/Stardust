@@ -2,7 +2,7 @@
 require.config({
 
 	paths: {
-		jquery: '../../../../Content/Scripts/jquery-1.9.1',
+	    jquery: '../../../../Content/jquery/jquery-1.10.2',
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		moment: '../../../../Content/moment/moment',

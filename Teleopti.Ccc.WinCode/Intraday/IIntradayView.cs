@@ -37,5 +37,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         void ReloadScheduleDayInEditor(IPerson person);
         void ShowBackgroundDataSourceError();
         void HideBackgroundDataSourceError();
+		IScenario Scenario { get; set; }
     }
 }

@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var startTime = DateTime.MaxValue;
 			var endTime = DateTime.MinValue;
-			var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
+			var personAssignment = scheduleDay.PersonAssignment();
 
-			foreach (var personAssignment in personAssignments)
+			if (personAssignment != null)
 			{
 				var personAssignmentStartDateTime = personAssignment.Period.StartDateTime;
 				var personAssignmentEndDateTime = personAssignment.Period.EndDateTime;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					endTime = personAssignmentEndDateTime;
 				}
 			}
-			if (personAssignments.Count < 1)
+			else
 			{
 				startTime = scheduleDay.Period.StartDateTime;
 				endTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);

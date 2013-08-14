@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.WinCode.Intraday
 {
     public interface IDayLayerViewModel : INotifyPropertyChanged
     {
-        void Refresh(DateTime timestamp);
+		void RefreshElapsedTime(DateTime timestamp);
         void RefreshProjection(IPerson person);
         void UnregisterMessageBrokerEvent();
-
         void OnScheduleModified(object sender, ModifyEventArgs e);
-
+	    void InitializeRows();
         ICollection<DayLayerModel> Models { get; }
         void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period);
+	    void SetCurrentSortDescription(SortDescription sortDescription);
     }
 }
