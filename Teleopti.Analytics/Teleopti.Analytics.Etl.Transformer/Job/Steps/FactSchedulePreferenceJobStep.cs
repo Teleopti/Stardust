@@ -30,8 +30,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					return rows;
 				}
 
-	        var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(JobCategoryDatePeriod.StartDateUtc),
-	                                                new DateOnly(JobCategoryDatePeriod.EndDateUtc));
+	        var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(JobCategoryDatePeriod.StartDateLocal),
+	                                                new DateOnly(JobCategoryDatePeriod.EndDateLocal));
 
             return
                 _jobParameters.Helper.Repository.FillFactSchedulePreferenceMart(dateOnlyPeriod,
