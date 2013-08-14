@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -204,6 +205,49 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
+
+		//henke: todo
+		[Then(@"I should see a indication that the request is referred")]
+		public void ThenIShouldSeeAIndicationThatTheRequestIsReferred()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		//henke: todo
+		[Then(@"I should see a indication that the request is pending")]
+		public void ThenIShouldSeeAIndicationThatTheRequestIsPending()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		//henke: todo
+		[Given(@"My schedule for '(.*)' has been changed")]
+		public void GivenMyScheduleForHasBeenChanged(DateTime date)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		//henke: todo
+		[When(@"I click on shifttrade resend button")]
+		public void WhenIClickOnShifttradeResendButton()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		//henke: todo
+		[When(@"I click on shifttrade cancel button")]
+		public void WhenIClickOnShifttradeCancelButton()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		//henke: todo
+		[Then(@"I should not see any requests")]
+		public void ThenIShouldNotSeeAnyRequests()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 
 	}
 }
