@@ -30,10 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var schedules = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
 			if (schedules != null)
 			{
+				// *!* USAGE IS SOMETHING LIKE THIS
+				// var published = publishedScheduleSpecification<PersonScheduleDayReadModel>(teamId, date)
 				return
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
 						? schedules
+						// schedules.FindAll(published)
 						: filterPublishedScheduleForTeamAndDate(teamId, date, schedules);
+
 			}
 			return new List<PersonScheduleDayReadModel>();
 		}
