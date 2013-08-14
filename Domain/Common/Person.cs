@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -13,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class Person : AggregateRoot, IPerson, IDeleteTag
+    public class Person : AggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
     {
         private Name _name;
         private readonly IPermissionInformation _permissionInformation;
@@ -46,11 +47,6 @@ namespace Teleopti.Ccc.Domain.Common
             _firstDayOfWeek = DayOfWeek.Monday; //1
         }
 
-        /// <summary>
-        /// Gets the person's team at the given time.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <returns></returns>
         public virtual ITeam MyTeam(DateOnly theDate)
         {
             IPersonPeriod per = Period(theDate);
@@ -59,11 +55,6 @@ namespace Teleopti.Ccc.Domain.Common
             return per.Team;
         }
 
-        /// <summary>
-        /// Collects all the persons in the IBusinessUnitHierarchy entity.
-        /// </summary>
-        /// <value></value>
-        /// <returns>All persons in the hierarchy.</returns>
         public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
         {
             IList<IPerson> ret = new List<IPerson>();
@@ -72,54 +63,49 @@ namespace Teleopti.Ccc.Domain.Common
             return new ReadOnlyCollection<IPerson>(ret);
         }
 
-        /// <summary>
-        /// Terminal date
-        /// </summary>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-04
-        /// </remarks>
         public virtual DateOnly? TerminalDate
         {
             get { return _terminalDate; }
-            set { _terminalDate = value; }
+            set
+            {
+	            if (_terminalDate != value)
+	            {
+		            var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
+		            _terminalDate = value;
+					var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?)null;
+
+					if (valueBefore.HasValue && !valueAfter.HasValue)
+					{
+						AddEvent(new PersonReactivatedEvent
+							{
+								PersonId = Id.GetValueOrDefault(),
+								PreviousTerminationDate = valueBefore.Value
+							});
+					}
+					else
+					{
+						AddEvent(new PersonTerminatedEvent
+							{
+								PersonId = Id.GetValueOrDefault(),
+								PreviousTerminationDate = valueBefore,
+								TerminationDate = valueAfter.Value
+							});
+					}
+	            }
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-28
-        /// </remarks>
         public virtual Name Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
-        /// <summary>
-        /// Gets the permission related information.
-        /// </summary>
-        /// <value>The permission information.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-28
-        /// </remarks>
         public virtual IPermissionInformation PermissionInformation
         {
             get { return _permissionInformation; }
         }
 
-        /// <summary>
-        /// Gets or sets the person period collecion. Sorted, earliest first.
-        /// </summary>
-        /// <value>The person period collecion.</value>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-09
-        /// </remarks>
         public virtual IList<IPersonPeriod> PersonPeriodCollection
         {
             get
@@ -129,14 +115,6 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        /// <summary>
-        /// Gets the internal person period collection. Note! This is added to improve performance where person periods are needed within this class.
-        /// </summary>
-        /// <value>The internal person period collection.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2010-01-08
-        /// </remarks>
         private IEnumerable<IPersonPeriod> InternalPersonPeriodCollection
         {
             get
@@ -150,57 +128,28 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-                //Todo! Shouldn't this one be dependent on the terminal date as well?
-                //var terminalDateOrMax = TerminalDate.GetValueOrDefault(MaxDate);
-                //return _personSchedulePeriodCollection.Values.Where(p => p.DateFrom <= terminalDateOrMax);
                 return _personSchedulePeriodCollection.Values;
             }
         }
 
-        /// <summary>
-        /// Gets the person schedule period collection
-        /// </summary>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-07
-        /// </remarks>
         public virtual IList<ISchedulePeriod> PersonSchedulePeriodCollection
         {
 
             get { return new ReadOnlyCollection<ISchedulePeriod>(InternalSchedulePeriodCollection.ToList()); }
         }
 
-        /// <summary>
-        /// Gets or sets the email.
-        /// </summary>
-        /// <value>The email.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-29
-        /// </remarks>
         public virtual string Email
         {
             get { return _email; }
             set { _email = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the note.
-        /// </summary>
-        /// <value>The note.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-01-22
-        /// </remarks>
         public virtual string Note
         {
             get { return _note; }
             set { _note = value; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this person is an agent.
-        /// </summary>
         public virtual bool IsAgent(DateOnly theDate)
         {
             return (Period(theDate) != null);
@@ -218,16 +167,6 @@ namespace Teleopti.Ccc.Domain.Common
             set { _employmentNumber = value; }
         }
 
-
-
-        /// <summary>
-        /// Adds the person period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-09
-        /// </remarks>
         public virtual void AddPersonPeriod(IPersonPeriod period)
         {
             InParameter.NotNull("period", period);
@@ -239,15 +178,19 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        public virtual bool IsOkToAddPersonPeriod(DateOnly dateOnly)
-        {
-            return !_personPeriodCollection.ContainsKey(dateOnly);
-        }
+		public virtual void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod)
+		{
+			InParameter.NotNull("schedulePeriod", schedulePeriod);
 
-        public virtual bool IsOkToAddSchedulePeriod(DateOnly dateOnly)
-        {
-            return !_personSchedulePeriodCollection.ContainsKey(dateOnly);
-        }
+			var startDateBefore = schedulePeriod.DateFrom;
+			_personSchedulePeriodCollection.Remove(startDateBefore);
+			while (_personSchedulePeriodCollection.ContainsKey(startDate))
+			{
+				startDate = startDate.AddDays(1);
+			}
+			schedulePeriod.DateFrom = startDate;
+			_personSchedulePeriodCollection.Add(startDate, schedulePeriod);
+		}
 
         public virtual void RemoveSchedulePeriod(ISchedulePeriod period)
         {
@@ -261,6 +204,26 @@ namespace Teleopti.Ccc.Domain.Common
             _personPeriodCollection.Remove(period.StartDate);
         }
 
+		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("personPeriod", personPeriod);
+
+			var startDateBefore = personPeriod.StartDate;
+			_personPeriodCollection.Remove(startDateBefore);
+			while (_personPeriodCollection.ContainsKey(startDate))
+			{
+				startDate = startDate.AddDays(1);
+			}
+			personPeriod.StartDate = startDate;
+			_personPeriodCollection.Add(startDate, personPeriod);
+			AddEvent(new PersonPeriodStartDateChanged
+				{
+					PersonId = Id.GetValueOrDefault(),
+					NewStartDate = startDate.Date,
+					OldStartDate = startDateBefore.Date
+				});
+		}
+
         public virtual void AddSchedulePeriod(ISchedulePeriod period)
         {
             InParameter.NotNull("period", period);
@@ -269,7 +232,6 @@ namespace Teleopti.Ccc.Domain.Common
             period.SetParent(this);
             _personSchedulePeriodCollection.Add(period.DateFrom, period);
         }
-
 
         public virtual IPersonPeriod Period(DateOnly dateOnly)
         {
@@ -326,51 +288,16 @@ namespace Teleopti.Ccc.Domain.Common
             return retList;
         }
 
-        /// <summary>
-        /// Removes all person periods.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-02
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-02
-        /// </remarks>
         public virtual void RemoveAllPersonPeriods()
         {
             _personPeriodCollection.Clear();
         }
 
-
-
-        /// <summary>
-        /// Removes all schedule periods.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-03
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-03
-        /// </remarks>
         public virtual void RemoveAllSchedulePeriods()
         {
             _personSchedulePeriodCollection.Clear();
         }
 
-
-        /// <summary>
-        /// Returns the person period for a specific date.
-        /// If no period is found, null is returned.
-        /// </summary>
-        /// <param name="dateOnly"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-07
-        /// </remarks>
         public virtual ISchedulePeriod SchedulePeriod(DateOnly dateOnly)
         {
             ISchedulePeriod period = null;
@@ -420,29 +347,13 @@ namespace Teleopti.Ccc.Domain.Common
 			return schedulePeriod.DateFrom;
 		}
 
-        /// <summary>
-        /// Determines whether the specified date is terminated.
-        /// </summary>
-        /// <param name="dateOnly">The date.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified date is terminated; otherwise, <c>false</c>.
-        /// </returns>
         private bool isTerminated(DateOnly dateOnly)
         {
-            if (_terminalDate.HasValue)
-            {
-                if (dateOnly > _terminalDate)
-                    return true;
-            }
-            return false;
+	        if (!_terminalDate.HasValue) return false;
+
+	        return dateOnly > _terminalDate;
         }
 
-
-        /// <summary>
-        /// Gets the person schedule periods within a period
-        /// </summary>
-        /// <param name="timePeriod"></param>
-        /// <returns></returns>
         public virtual IList<ISchedulePeriod> PersonSchedulePeriods(DateOnlyPeriod timePeriod)
         {
             IList<ISchedulePeriod> retList = new List<ISchedulePeriod>();
@@ -503,31 +414,16 @@ namespace Teleopti.Ccc.Domain.Common
 			return retList.OrderBy(s => s.DateFrom.Date).ToList();
 		}
 
-        /// <summary>
-        /// Gets the next period
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
         public virtual IPersonPeriod NextPeriod(IPersonPeriod period)
         {
             return InternalPersonPeriodCollection.OrderBy(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate > period.StartDate);
         }
 
-        /// <summary>
-        /// Gets the previous period
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
         public virtual IPersonPeriod PreviousPeriod(IPersonPeriod period)
         {
             return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate < period.StartDate);
         }
 
-        /// <summary>=
-        /// Gets the next schedule period
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
         public virtual ISchedulePeriod NextSchedulePeriod(ISchedulePeriod period)
         {
             ISchedulePeriod ret = null;
@@ -549,22 +445,6 @@ namespace Teleopti.Ccc.Domain.Common
             return ret;
         }
 
-        /// <summary>
-        /// Gets the person rotation day restriction.
-        /// </summary>
-        /// <param name="personRestrictions">The person restrictions.</param>
-        /// <param name="currentDate">The date.</param>
-        /// <returns></returns>
-        /// ///
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-09-11
-        /// /// </remarks>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-11    
-        /// /// </remarks>
         public virtual IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate)
         {
             // filter on person
@@ -692,16 +572,6 @@ namespace Teleopti.Ccc.Domain.Common
             return new VirtualSchedulePeriod(this, dateOnly, splitChecker);
         }
 
-        /// <summary>
-        /// Gets the person availability day restriction.
-        /// </summary>
-        /// <param name="personRestrictions">The person restrictions.</param>
-        /// <param name="currentDate">The current date.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-10-20
-        /// </remarks>
         public virtual IAvailabilityRestriction GetPersonAvailabilityDayRestriction(IEnumerable<IPersonAvailability> personRestrictions, DateOnly currentDate)
         {
             // filter on person
@@ -783,6 +653,7 @@ namespace Teleopti.Ccc.Domain.Common
             _applicationAuthenticationInfo = null;
            
             _isDeleted = true;
+			AddEvent(new PersonDeletedEvent{PersonId=Id.GetValueOrDefault()});
         }
 
 		public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection

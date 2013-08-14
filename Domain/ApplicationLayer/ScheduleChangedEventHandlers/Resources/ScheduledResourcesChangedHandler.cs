@@ -1,12 +1,12 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using log4net;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
 	public class ScheduledResourcesChangedHandler : IHandleEvent<ProjectionChangedEvent>
 	{
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private int configurableIntervalLength = 15;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
 
-		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
 		{
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_bus = bus;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "0")]
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			var person = _personRepository.Get(@event.PersonId);
@@ -101,11 +99,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	}
 
 	//Other cases to handle:
-	//- Person terminated
-	//- Person deleted
+	//- Person terminated -
+	//- Person deleted -
 	//- Person period date changes
 	//- Person period skill changes
 	//- Person team changes
-	//- Activity requires seat changed
-	//- Team site changes
+	//+ Activity requires seat changed
+	//- Team site changes -
 }

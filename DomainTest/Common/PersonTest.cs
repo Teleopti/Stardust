@@ -72,13 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(newBuiltIn, _target.BuiltIn);
         }
 
-        /// <summary>
-        /// Determines whether this instance [can add person period].
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-09
-        /// </remarks>
         [Test]
         public void CanAddPersonPeriod()
         {
@@ -97,6 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
         }
+
         [Test]
         public void CannotAddPersonPeriod()
         {
@@ -179,6 +173,21 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(0, _target.PersonPeriodCollection.Count());
         }
 
+		[Test]
+		public void ShouldSetNextAvailableDateForPersonPeriodOnDateChange()
+		{
+			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+			IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(1));
+			IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(10));
+
+			_target.AddPersonPeriod(personPeriod1);
+			_target.AddPersonPeriod(personPeriod2);
+			_target.AddPersonPeriod(personPeriod3);
+
+			_target.ChangePersonPeriodStartDate(DateOnly.Today,personPeriod3);
+
+			personPeriod3.StartDate.Should().Be.EqualTo(DateOnly.Today.AddDays(2));
+		}
 
         [Test]
         public void VerifyRemoveAllSchedulePeriods()
@@ -715,24 +724,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyCanCheckIfPersonPeriodWithThisStartDateOnlyCanBeAdded()
-        {
-            DateOnly dateOnly = new DateOnly(2009, 12, 1);
-            Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
-            _target.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
-            Assert.IsFalse(_target.IsOkToAddPersonPeriod(dateOnly));
-        }
-
-        [Test]
-        public void VerifyCanCheckIfSchedulePeriodWithThisStartDateOnlyCanBeAdded()
-        {
-            var dateOnly = new DateOnly(2009, 12, 1);
-            Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
-            _target.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(dateOnly));
-            Assert.IsFalse(_target.IsOkToAddSchedulePeriod(dateOnly));
-        }
-
-        [Test]
         public void ShouldCheckPersonHasPersonPeriodBeforeGetContractTime()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
@@ -743,7 +734,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void ShouldGetContractTimeFromContract()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
-            Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
                 new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromContract },
@@ -757,8 +747,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void ShouldGetContractTimeFromSchedulePeriod()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
-            Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
-            Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
                 new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
@@ -775,8 +763,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void ShouldGetContractTimeFromVirtualSchedulePeriod()
         {
             var dateOnly = new DateOnly(2012, 7, 1);
-            Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
-            Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var contractSchedule = new ContractSchedule("Test1");
             var week = new ContractScheduleWeek();

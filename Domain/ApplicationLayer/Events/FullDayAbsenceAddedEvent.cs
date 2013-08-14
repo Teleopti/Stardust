@@ -20,4 +20,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string OldValue { get; set; }
 		public string NewValue { get; set; }
 	}
+
+	[Serializable]
+	public class TeamChangedEvent : RaptorDomainEvent
+	{
+		public Guid TeamId { get; set; }
+		public string Property { get; set; }
+		public string OldValue { get; set; }
+		public string NewValue { get; set; }
+	}
+
+	[Serializable]
+	public class PersonTerminatedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime? PreviousTerminationDate { get; set; }
+		public DateTime TerminationDate { get; set; }
+	}
+	
+	[Serializable]
+	public class PersonReactivatedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime PreviousTerminationDate { get; set; }
+	}
+
+	[Serializable]
+	public class PersonDeletedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+	}
+
+	[Serializable]
+	public class PersonPeriodStartDateChanged : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime OldStartDate { get; set; }
+		public DateTime NewStartDate { get; set; }
+	}
 }

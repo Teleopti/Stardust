@@ -89,5 +89,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return new ResourcesFromStorage(resources,combinations,efficiencies,allSkills);
 		}
+
+		public void ActivityUpdated(Guid activityId, bool requiresSeat)
+		{
+			_currentUnitOfWork.Session()
+							  .CreateSQLQuery(
+								  "UPDATE ReadModel.ActivitySkillCombination SET ActivityRequiresSeat=:requiresSeat WHERE Activity=:Activity")
+							  .SetBoolean("RequiresSeat",requiresSeat)
+							  .SetGuid("Activity",activityId)
+							  .ExecuteUpdate();
+		}
 	}
 }

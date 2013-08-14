@@ -43,16 +43,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (value != ContainedEntity.StartDate)
                 {
-                    var currentPeriod = Parent.Period(value);
-                    if (currentPeriod!=null &&
-                        currentPeriod.StartDate == value)
-                    {
-                        PeriodDate = value.AddDays(1);
-                        return;
-                    }
-                    Parent.DeletePersonPeriod(ContainedEntity);
-                    ContainedEntity.StartDate = value;
-                    Parent.AddPersonPeriod(ContainedEntity);
+					Parent.ChangePersonPeriodStartDate(value,ContainedEntity);
                 }
             }
         }

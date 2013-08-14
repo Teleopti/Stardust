@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddSkillEfficiency(long resourceId, Guid skillId, double efficiency);
 		void RemoveSkillEfficiency(long resourceId, Guid skillId, double efficiency);
 		ResourcesFromStorage ForPeriod(DateTimePeriod period, IEnumerable<ISkill> allSkills);
+		void ActivityUpdated(Guid activityId, bool requiresSeat);
 	}
 }
