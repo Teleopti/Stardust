@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemFindMatching = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemAgentInfo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewPointTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLoggedOnUserTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemSortBy = new System.Windows.Forms.ToolStripMenuItem();
@@ -442,6 +443,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemViewHistory,
             this.toolStripMenuItemAgentInfo,
             this.toolStripMenuItemViewPointTimeZone,
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent,
             this.toolStripMenuItemSortBy,
             this.toolStripSeparator1,
             this.toolStripMenuItemUnlock,
@@ -648,6 +650,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemAgentInfo.Size = new System.Drawing.Size(298, 22);
 			this.toolStripMenuItemAgentInfo.Text = "xxAgentInfo";
 			this.toolStripMenuItemAgentInfo.Click += new System.EventHandler(this.toolStripButtonAgentInfo_Click);
+			// 
+			// toolStripMenuItemAgentInfo
+			// 
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent.Name = "toolStripMenuItemSwitchToViewPointOfSelectedAgent";
+			this.SetShortcut(this.toolStripMenuItemSwitchToViewPointOfSelectedAgent, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent.Size = new System.Drawing.Size(298, 22);
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent.Text = "xxSwitchToViewPointOfSelectedAgent";
+			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent.Click += new System.EventHandler(this.toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click);
 			// 
 			// toolStripMenuItemViewPointTimeZone
 			// 
@@ -3379,6 +3389,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCutSpecial;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAgentInfo;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSwitchToViewPointOfSelectedAgent;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripResultView;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemDay;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemIntraday;

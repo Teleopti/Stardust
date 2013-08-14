@@ -2089,6 +2089,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
+
+			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Count > 0;
 		}
 
 		private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
@@ -7119,6 +7121,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//preparation for future pbi
 		}
 
+		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
+		{
+			var scheduleDay = _scheduleView.SelectedSchedules().First();
+			TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone == downItem.Tag);
+			}
+			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
+			{
+				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
+			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
+			_grid.Invalidate();
+			_grid.Refresh();
+			updateSelectionInfo(_scheduleView.SelectedSchedules());
+			updateShiftEditor();
+			drawSkillGrid();
+			reloadChart();
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
