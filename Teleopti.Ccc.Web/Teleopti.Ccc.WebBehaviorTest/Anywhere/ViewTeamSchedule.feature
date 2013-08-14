@@ -22,10 +22,6 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
-	And 'John Smith' has a person period with
-	| Field      | Value      |
-	| Team       | Team green |
-	| Start date | 2012-12-01 |
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -63,6 +59,10 @@ Scenario: View team schedule
 @ignore
 Scenario: Only view published schedule
 	Given I have the role 'Role Cannot View Unpublished'
+	And 'John Smith' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
 	And 'Pierre Baldi' has the workflow control set 'Published schedule 0810'
 	And 'John Smith' has the workflow control set 'Published schedule 0809'
 	And 'Pierre Baldi' have a shift with
@@ -83,7 +83,7 @@ Scenario: Only view published schedule
 
 @ignore
 Scenario: View unpublished schedule when permitted
-	Given I have the role 'Role Can View Unpublished'
+	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has the workflow control set 'Published schedule 0809'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
