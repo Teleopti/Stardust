@@ -312,6 +312,15 @@ DROP PROCEDURE [mart].[report_control_person_category_type_get]
 GO
 
 ----------------  
+--Name: Erik S
+--Date: 2013-08-13
+--Desc: PBI12246
+-----------------
+TRUNCATE TABLE stage.stg_schedule_preference
+ALTER TABLE stage.stg_schedule_preference
+DROP COLUMN interval_id
+
+----------------  
 --Name: David
 --Date: 2013-08-14
 --Desc: #12446 - convert UTC date to agent local date
