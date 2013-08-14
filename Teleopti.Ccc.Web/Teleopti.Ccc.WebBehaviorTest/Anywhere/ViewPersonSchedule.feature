@@ -57,7 +57,6 @@ Scenario: View shift
 	| 11:30      | 12:15    | Yellow |
 	| 12:15      | 17:00    | Green  |
 
-@ignore
 Scenario: Cannot view schedule when not published
 	Given I have the role 'Cannot View Unpublished'
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
@@ -73,7 +72,6 @@ Scenario: Cannot view schedule when not published
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
 	Then I should not see any shift
 
-@ignore
 Scenario: View unpublished schedule when permitted
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
