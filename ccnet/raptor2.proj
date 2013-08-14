@@ -79,8 +79,6 @@
 	</ItemGroup>
 
 	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop">
-		<Message Importance="high" Text="Cleaning up repo using hg purge --all" />
-		<exec Command="hg purge --all" />
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
