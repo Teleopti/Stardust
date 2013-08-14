@@ -469,8 +469,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.AreEqual(result.Count, 6);
                 Assert.AreEqual(result[0].BoostedValue , -3);
                 Assert.AreEqual(result[1].BoostedValue, 1);
-                Assert.AreEqual(result[2].BoostedValue, -3);
-                Assert.AreEqual(result[3].BoostedValue, -1);
+                Assert.AreEqual(result[2].BoostedValue, -2);
+                Assert.AreEqual(result[3].BoostedValue, 0);
                 Assert.AreEqual(result[4].BoostedValue, 0);
                 Assert.AreEqual(result[5].BoostedValue, 3);
             }
