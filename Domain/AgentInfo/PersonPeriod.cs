@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml;
 using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_personContract = personContract;
 			_team = team;
 			_personSkillCollection = new HashedSet<IPersonSkill>();
-			_personMaxSeatSkillCollection = new List<IPersonSkill>();
 			_externalLogOnCollection = new HashedSet<IExternalLogOn>();
 			_startDate = startDate;
 		}
