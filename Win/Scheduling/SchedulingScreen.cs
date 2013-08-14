@@ -6733,6 +6733,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 			updateShiftEditor();
 			drawSkillGrid();
+			reloadChart();
 		}
 
 		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
