@@ -13,9 +13,7 @@
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
-		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
-
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		
 		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
@@ -357,8 +355,10 @@
 			CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
 			WorkingDirectory="$(CCNetWorkingDirectory)"
 			RegisterProfiler="true"
-			ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
-			IncludeAssemblies="$(NCoverAssemblies)"
+			IncludeAssemblies="Teleopti.*"
+			ExcludeAssemblies=".*Test"
+			ExcludeFiles=".*.Designer.cs"
+			OnlyAssembliesWithSource="true"
 			/>
 	</Target>
 	
@@ -370,8 +370,8 @@
 				OutputPath="$(CCNetWorkingDirectory)"
 				OutputReport="$(CoverageReports)"
 				CoverageDataPaths="$(CCNetWorkingDirectory)\NcoverResult\*.ncov"
-				MinimumCoverage="$(MinimumCoverage)"
-				MaxFailedToShow="50"
+				MinimumCoverage="0"
+				MaxFailedToShow="150"
 				ReportInvalidFiles="true">
 		</NCoverReporting>
 
