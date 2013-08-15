@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(".person", personName);
 		}
 
+		[Then(@"I should see '(.*)' with schedule")]
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
 		}
 
+		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
