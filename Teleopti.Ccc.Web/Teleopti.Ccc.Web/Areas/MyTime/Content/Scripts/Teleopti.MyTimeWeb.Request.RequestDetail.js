@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		requestViewModel.AddRequestCallback = _addItemAtTop;
 	    requestViewModel.DateFormat(_datePickerFormat());
 		_initEditSection(requestViewModel);
-		requestViewModel.AddTextRequest();
+		requestViewModel.AddTextRequest(true);
 	}
 
 	function _addAbsenceRequestClick() {
@@ -42,7 +42,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart);
 		requestViewModel.DateFormat(_datePickerFormat());
 		_initEditSection(requestViewModel);
-		requestViewModel.AddAbsenceRequest();
+		requestViewModel.AddAbsenceRequest(true);
 	}
 
 	function _initTemporary() {

@@ -42,6 +42,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             self.TimeToInternal(value);
         }
     });
+
     self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
     self.TypeEnum = ko.observable(0);
     self.ShowError = ko.observable(false);
@@ -76,21 +77,30 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
         self.DateTo(moment(new Date(year, month - 1, day)));
     }
 	
-    self.AddTextRequest = function () {
+    self.AddTextRequest = function (useDefaultDates) {
         self.IsNewInProgress(true);
 		self.TypeEnum(0);
 		self.TextRequestHeaderVisible(true);
 		self.AbsenceRequestHeaderVisible(false);
 		self.IsFullDay(false);
-		_setDefaultDates();
+		if (useDefaultDates != undefined && useDefaultDates === true) {
+		    _setDefaultDates();
+        }
     };
 
-    self.AddAbsenceRequest = function () {
+    self.AddAbsenceRequest = function (useDefaultDates) {
         self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.TextRequestHeaderVisible(false);
 		self.AbsenceRequestHeaderVisible(true);
 		self.IsFullDay(true);
-	    _setDefaultDates();
-	};
+		if (useDefaultDates != undefined && useDefaultDates === true) {
+		    _setDefaultDates();
+		}
+    };
+
+    self.CancelAddingNewRequest = function() {
+
+        self.IsNewInProgress(false);
+    };
 };

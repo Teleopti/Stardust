@@ -235,5 +235,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			                                     string.Format(
 				                                     ".request-list .request-edit:nth-child({0}) .request-edit-update", position));
 		}
+
+		[When(@"I click the cancel button")]
+		public void WhenIClickTheCancelButton()
+		{
+			Browser.Interactions.Click(".request-new-cancel");
+		}
+
+		[Then(@"the add request form should be closed")]
+		public void ThenTheAddRequestFormShouldBeClosed()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section");
+		}
 	}
 }

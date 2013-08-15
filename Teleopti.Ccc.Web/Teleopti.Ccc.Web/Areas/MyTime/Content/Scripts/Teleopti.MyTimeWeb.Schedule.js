@@ -280,7 +280,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.showAddRequestForm = function () {
 		    parent.requestViewModel.DateFrom(moment(self.date()));
 		    parent.requestViewModel.DateTo(moment(self.date()));
-		    parent.requestViewModel.IsNewInProgress(true);
+		    parent.requestViewModel.AddTextRequest(false);
 		};
 	};
 	var LayerViewModel = function (layer, parent) {
