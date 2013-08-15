@@ -9,24 +9,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class PublishedScheduleSpecification : Specification<PersonScheduleDayReadModel>
+	public class PublishedScheduleSpecification : Specification<IPersonScheduleDayReadModel>
 	{
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
 		private readonly DateTime _date;
-		private readonly IEnumerable<IPerson> _persons;
+		private readonly IEnumerable<IPerson> _personsInTeam;
 
 		public PublishedScheduleSpecification(ISchedulePersonProvider schedulePersonProvider, Guid teamId, DateTime date)
 		{
 			_schedulePersonProvider = schedulePersonProvider;
 			_date = date;
-			_persons = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId,
-			                                                              DefinedRaptorApplicationFunctionPaths
-				                                                              .SchedulesAnywhere);
+			_personsInTeam = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), 
+																		  teamId,
+			                                                              DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
 		}
 
-		public override bool IsSatisfiedBy(PersonScheduleDayReadModel obj)
+		public override bool IsSatisfiedBy(IPersonScheduleDayReadModel obj)
 		{
-			var person = (from p in _persons where (p.Id == obj.PersonId) select p).FirstOrDefault();
+			var person = (from p in _personsInTeam where (p.Id == obj.PersonId) select p).FirstOrDefault();
 
 			if (person != null && isSchedulePublished(_date, person))
 				return true;
