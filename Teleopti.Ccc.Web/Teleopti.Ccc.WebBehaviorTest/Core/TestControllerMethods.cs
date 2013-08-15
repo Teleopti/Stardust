@@ -77,26 +77,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void ExpireMyCookieInsidePortal()
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
-			// waiting a while for the cookie to take hold in IE.
-			// possible to assert it?
-			Thread.Sleep(200);
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Cookie is expired!");
 		}
 
 		public static void TestMessage(string message)
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", message);
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Ready for interaction");
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
+			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
 		}
 
 	}

@@ -90,15 +90,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.PersonalShifts, o => o.ResolveUsing(s =>
 					{
-						var assignments = s.PersonAssignmentCollectionDoNotUse();
-						if (assignments.Count > 0)
+						var assignment = s.PersonAssignment();
+						if (assignment != null)
 						{
-							return (from personAssignment in assignments
-							        from layer in personAssignment.PersonalLayers()
+							return (from layer in assignment.PersonalLayers()
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =
-										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+														layer.Payload.ConfidentialDescription(assignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
 									        TimeSpan =
 												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();
