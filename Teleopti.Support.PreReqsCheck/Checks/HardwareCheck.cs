@@ -88,13 +88,13 @@ namespace CheckPreRequisites.Checks
 					_form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", "",
 					                       Math.Round(ramBytes/oneGb, 1).ToString(CultureInfo.InvariantCulture));
 
-					if (numberOfAgent < 500 && Math.Round(ramBytes/oneGb, 1) > 4)
+					if (numberOfAgent < 500 && Math.Round(ramBytes/oneGb, 1) >= 4)
 						_form1.printFeatureStatus(true);
-					else if (numberOfAgent <= 1500 && Math.Round(ramBytes/oneGb, 1) > 8)
+					else if (numberOfAgent <= 1500 && Math.Round(ramBytes/oneGb, 1) >= 8)
 						_form1.printFeatureStatus(true);
-					else if (numberOfAgent <= 4000 && Math.Round(ramBytes/oneGb, 1) > 16)
+					else if (numberOfAgent <= 4000 && Math.Round(ramBytes/oneGb, 1) >= 16)
 						_form1.printFeatureStatus(true);
-					else if (numberOfAgent > 4000 && Math.Round(ramBytes/oneGb, 1) > 32)
+					else if (numberOfAgent > 4000 && Math.Round(ramBytes/oneGb, 1) >= 32)
 						_form1.printFeatureStatus(true);
 					else
 						_form1.printFeatureStatus(false);
