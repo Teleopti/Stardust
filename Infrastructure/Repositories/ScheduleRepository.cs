@@ -45,12 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _repositoryFactory = repositoryFactory;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public T Get<T>(Guid id) where T : IPersistableScheduleData
-        {
-            return Session.Get<T>(id);
-        }
-
         public IPersistableScheduleData Get(Type concreteType, Guid id)
         {
             return (IPersistableScheduleData) Session.Get(concreteType, id);

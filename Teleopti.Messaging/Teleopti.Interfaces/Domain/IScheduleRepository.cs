@@ -10,18 +10,9 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-02-19
     /// </remarks>
-    public interface IScheduleRepository : IRepository<IPersistableScheduleData> {
-
-
-        ///<summary>
-        /// Gets the entity of the specified type using the specified id
-        ///</summary>
-        ///<param name="id"></param>
-        ///<typeparam name="T"></typeparam>
-        ///<returns></returns>
-        T Get<T>(Guid id) where T : IPersistableScheduleData;
-
-        ///<summary>
+    public interface IScheduleRepository : IRepository<IPersistableScheduleData> 
+		{
+			  ///<summary>
         /// Gets the entity of the specified type using the specified id
         ///</summary>
         ///<param name="concreteType"></param>
@@ -75,7 +66,7 @@ namespace Teleopti.Interfaces.Domain
             IScenario scenario, 
             IPersonProvider personsProvider,
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			IEnumerable<IPerson> visiblePersons);
+						IEnumerable<IPerson> visiblePersons);
 
         /// <summary>
         /// Loads the schedule data aggregate.
