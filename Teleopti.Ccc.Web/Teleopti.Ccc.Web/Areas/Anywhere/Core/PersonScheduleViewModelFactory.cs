@@ -4,6 +4,7 @@ using System.Dynamic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			};
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-				|| isSchedulePublished(date, person))
+				|| new SchedulePublishedSpecification(person.WorkflowControlSet, ScheduleVisibleReasons.Published).IsSatisfiedBy(new DateOnly(date)))
 			{
 				var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
 				data.PersonAbsences = calculatePersonAbsences(date, person, personScheduleDayReadModel);
@@ -75,13 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			var absencePeriod = new DateTimePeriod(start, end);
 			return _personAbsenceRepository.Find(new[] { person }, absencePeriod);
-		}
-
-		private bool isSchedulePublished(DateTime date, IPerson person)
-		{
-			var workflowControlSet = person.WorkflowControlSet;
-			return workflowControlSet.SchedulePublishedToDate.HasValue &&
-				   workflowControlSet.SchedulePublishedToDate.Value.AddDays(1) > date;
 		}
 	}
 }
