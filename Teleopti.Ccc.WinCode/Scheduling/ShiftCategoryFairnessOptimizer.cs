@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return true;
 		}
 
-		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
+		private void runDay(BackgroundWorker backgroundWorker, IEnumerable<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
 			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
 			bool runPersonal, bool useAverageShiftLengths)
 		{

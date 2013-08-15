@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
 			if (matrixList.Count == 0) return null;
-			var currentSchedulePeriod = groupPerson.GroupMembers[0].VirtualSchedulePeriod(dateOnly);
+			var firstMember = groupPerson.GroupMembers.First();
+			var currentSchedulePeriod = firstMember.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
 				return null;
 			if (schedulingOptions == null)
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson.GroupMembers[0], false);
+			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, firstMember, false);
 			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList);
 			if (shiftList == null)
 				return null;

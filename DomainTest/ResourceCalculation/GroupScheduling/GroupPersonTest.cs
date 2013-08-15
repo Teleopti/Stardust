@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         {
             var skill = _mock.StrictMock<ISkill>();
             var skillPercent = new Percent(1);
-            var personSkill = new PersonSkill(skill, skillPercent);   //_mock.StrictMock<IPersonSkill>();
+            var personSkill = new PersonSkill(skill, skillPercent);
             
 
             var personSkills = new List<IPersonSkill> { personSkill };
@@ -78,11 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_personPeriod2.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-            //Expect.Call(personSkill.Skill).Return(skill).Repeat.AtLeastOnce();
-            //Expect.Call(() => personSkill.SetParent(_personPeriod)).IgnoreArguments().Repeat.AtLeastOnce();
                 
             Expect.Call(skill.Equals(skill)).Return(true).Repeat.AtLeastOnce();
-            //Expect.Call(personSkill.SkillPercentage).Return(skillPercent).Repeat.AtLeastOnce();
 
             personSkill.SkillPercentage = new Percent(2);
 
@@ -93,7 +91,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(generator1.Category).Return(category1).Repeat.AtLeastOnce();
             Expect.Call(generator2.Category).Return(category2).Repeat.AtLeastOnce();
 
-            //Expect.Call(personSkill.Clone()).Return(personSkill).Repeat.AtLeastOnce();
             _mock.ReplayAll();
         }
 
@@ -136,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var factory = new GroupPersonFactory();
 			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            Assert.AreEqual(2, _groupPerson.GroupMembers.Count);
+            Assert.AreEqual(2, _groupPerson.GroupMembers.Count());
             _mock.VerifyAll();
         }
 
@@ -199,7 +196,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
             var bag = ((Person)_groupPerson).PersonPeriodCollection[0].RuleSetBag;
-            //Assert.That(bag.Equals(_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag));
             Assert.That(bag.Equals(((Person)_groupPerson).Period(_dateOnly).RuleSetBag));
         }
 
@@ -212,7 +208,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var factory = new GroupPersonFactory();
 			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-			//Assert.AreEqual(0,_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag.RuleSetCollection.Count);
             Assert.AreEqual(0, ((Person)_groupPerson).Period(_dateOnly).RuleSetBag.RuleSetCollection.Count);
 		}
 
@@ -251,15 +246,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_person2.Period(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod.RuleSetBag).Return(_bag1).Repeat.AtLeastOnce();
-				//Expect.Call(() => personSkill.SetParent(_personPeriod)).IgnoreArguments().Repeat.AtLeastOnce();
 			}
-
-			
 			using (_mock.Playback())
 			{
 				var factory = new GroupPersonFactory();
 				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
-				Assert.AreEqual(1, _groupPerson.GroupMembers.Count);
+				Assert.AreEqual(1, _groupPerson.GroupMembers.Count());
 			}
 		}
 
@@ -275,6 +267,4 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Assert.AreEqual(_guid, _groupPerson.Id);
 		}
     }
-
-    
 }

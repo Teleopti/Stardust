@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 	public interface IGroupPersonsBuilder
 	{
 		// Handle here when a group can't be scheduled because of different shiftCategories
-        IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IList<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions);
+        IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IEnumerable<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions);
 
         IGroupPagePerDateHolder GroupPagePerDateHolder { get; set; }
 	}

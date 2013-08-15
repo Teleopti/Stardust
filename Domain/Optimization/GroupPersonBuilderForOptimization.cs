@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var dateOnly in period.DayCollection())
 			{
 				groupPerson = BuildGroupPerson(person, dateOnly);
-				if (groupPerson.GroupMembers.Count > 0)
+				if (groupPerson.GroupMembers.Any())
 					break;
 			}
 

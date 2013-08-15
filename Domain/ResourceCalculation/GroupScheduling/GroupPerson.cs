@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -10,11 +10,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 {
-	// An Interface to be possible to Mock the creation of GroupPerson
-
 	public sealed class GroupPerson : Person, IGroupPerson
     {
-        private readonly IList<IPerson> _groupMembers = new List<IPerson>();
+        private readonly IDictionary<IPerson, IPersonPeriod> _groupMembers = new Dictionary<IPerson,IPersonPeriod>();
         private readonly DateOnly _dateOnly;
 
         public GroupPerson(IList<IPerson> persons, DateOnly dateOnly, string name, Guid? guid)
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             _dateOnly = dateOnly;
             setGroupMembers(persons);
             setPersonSkillsOnDate();
-            SetCommonRuleSetBagOnDate();
+            setCommonRuleSetBagOnDate();
 			SetId(guid);
 			Name = new Name(name,"");
         }
@@ -44,42 +42,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 AddSchedulePeriod(new SchedulePeriod(_dateOnly, SchedulePeriodType.Day, 1));
             
             PermissionInformation.SetDefaultTimeZone(persons[0].PermissionInformation.DefaultTimeZone());
-            // Add when needed don't forget mocks in test
-            //PermissionInformation.SetCulture(persons[0].PermissionInformation.Culture());
-            //PermissionInformation.SetUICulture(persons[0].PermissionInformation.UICulture());
-            
-                
+
             addPersonsToGroupMembers(persons);
         }
 
         private void addPersonsToGroupMembers(IEnumerable<IPerson> persons)
         {
-            // TODO more checks on state on the date, 
-            
-            //must be in same TimeZone
-            
             foreach (var person in persons)
             {
-                if(checkSameTimeZone(person) && checkPersonPeriod(person))
-                    _groupMembers.Add(person);
+                if (checkSameTimeZone(person))
+                {
+	                var personPeriod = person.Period(_dateOnly);
+					if (personPeriod != null)
+					{
+						_groupMembers.Add(person,personPeriod);
+					}
+                }
             }
         }
 
 		private bool checkSameTimeZone(IPerson person)
-
 		{
 			var timeZone = PermissionInformation.DefaultTimeZone();
 			return (person.PermissionInformation.DefaultTimeZone().Equals(timeZone));
 		}
 
-		private bool checkPersonPeriod(IPerson person)
-		{
-			return (person.Period(_dateOnly) != null);
-		}
-
-        public ReadOnlyCollection<IPerson> GroupMembers
+        public IEnumerable<IPerson> GroupMembers
         {
-            get { return new ReadOnlyCollection<IPerson>(_groupMembers); }
+            get { return _groupMembers.Keys; }
         }
 
 		public IPossibleStartEndCategory CommonPossibleStartEndCategory { get ; set ; }
@@ -88,22 +78,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         {
             var listOfPersonSkills = new List<IPersonSkill>();
 
-			foreach (IPerson person in _groupMembers)
+			foreach (var person in _groupMembers)
 			{
-				var personPeriod = person.Period(_dateOnly);
+				var personPeriod = person.Value;
 
 				var pSkills = personPeriod.PersonSkillCollection;
 				foreach (IPersonSkill personSkill in pSkills)
 				{
-					IPersonSkill foundPersonSkill = null;
-					foreach (IPersonSkill combinedPersonSkill in listOfPersonSkills)
-					{
-						if (combinedPersonSkill.Skill.Equals(personSkill.Skill))
-						{
-							foundPersonSkill = combinedPersonSkill;
-							break;
-						}
-					}
+					IPersonSkill foundPersonSkill = listOfPersonSkills.FirstOrDefault(combinedPersonSkill => combinedPersonSkill.Skill.Equals(personSkill.Skill));
 					if (foundPersonSkill != null)
 					{
 						foundPersonSkill.SkillPercentage =
@@ -121,13 +103,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             }
         }
 
-        private void SetCommonRuleSetBagOnDate()
+        private void setCommonRuleSetBagOnDate()
         {
             IRuleSetBag returnBag = null;
 
 			foreach (var person in _groupMembers)
 			{
-				var personPeriod = person.Period(_dateOnly);
+				var personPeriod = person.Value;
 				var bag = personPeriod.RuleSetBag;
 
 				if (bag == null)
@@ -153,11 +135,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						//if we don't have the category in this bag we must remove all rulesets with that bag
 						if (!bag.ShiftCategoriesInBag().Contains(category))
 						{
-							foreach (var workShiftRuleSet in returnBag.RuleSetCollection)
-							{
-								if (workShiftRuleSet.TemplateGenerator.Category.Equals(category))
-									ruleSetsToRemove.Add(workShiftRuleSet);
-							}
+							ruleSetsToRemove.AddRange(returnBag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.TemplateGenerator.Category.Equals(category)));
 						}
 					}
 					foreach (var workShiftRuleSet in ruleSetsToRemove)
@@ -172,14 +150,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 							returnBag.AddRuleSet(workShiftRuleSet);
 					}
 				}
-
 			}
 
         	PersonPeriodCollection[0].RuleSetBag = returnBag;            
         }
-
-        
     }
-
-
 }

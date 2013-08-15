@@ -839,7 +839,7 @@ CREATE TABLE [ReadModel].[ScheduledResources](
 	[Heads] [float] NOT NULL,
 	[PeriodStart] [datetime] NOT NULL,
 	[PeriodEnd] [datetime] NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ScheduledResources] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 ))

@@ -547,7 +547,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					}
 					else
 					{
-						if (!(personSkillFromCollection.SkillPercentage == skillPercentage))
+						if (personSkillFromCollection.SkillPercentage != skillPercentage)
 						{
 							personSkillFromCollection.SkillPercentage = skillPercentage;
 							personPeriodModel.CanBold = true;
@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
 
             _schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-            CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);    //.Name.ToString();
+            CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);
 
             foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
             {
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             		model.CanBold = true;
             	}
 
-            	model.FullName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);  //.Name.ToString();
+            	model.FullName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);
             	_schedulePeriodGridViewChildCollection.Add(model);
             }
         }
@@ -640,7 +640,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
 
             _schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-            CurrentChildName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent); // .Name.ToString();
+            CurrentChildName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);
 
             foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
             {
