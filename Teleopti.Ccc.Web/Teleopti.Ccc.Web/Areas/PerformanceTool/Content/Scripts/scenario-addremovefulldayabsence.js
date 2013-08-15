@@ -119,12 +119,10 @@ define([
                         result = null;
                         messagebroker.unsubscribe(personScheduleDayReadModelSubscription);
                         personScheduleDayReadModelSubscription = null;
-                        messagebroker.unsubscribe(personAbsenceSubscription);
-                        personAbsenceSubscription = null;
                     }
                 }
             };
-
+            
             this.Run = function () {
                 
                 progressItemPersonScheduleDayReadModel.Reset();
@@ -144,11 +142,20 @@ define([
                     
                     personAbsenceSubscription = messagebroker.subscribe({
                         domainType: 'IPersonAbsence',
-                        callback: function(notification) {
-                            $.each(iterations, function(i, e) {
-                                if (e.NotifyPersonAbsenceChanged(notification))
-                                    return false;
-                            });
+                        callback: function (notification) {
+                            
+                            if (notification.DomainUpdateType == 0) //Only insert
+                            {
+                                $.each(iterations, function(i, e) {
+                                    if (e.NotifyPersonAbsenceChanged(notification)) {
+                                        if (e == iterations[iterations.length - 1]) {
+                                            messagebroker.unsubscribe(personAbsenceSubscription);
+                                            personAbsenceSubscription = null;
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
                         }
                     });
 
