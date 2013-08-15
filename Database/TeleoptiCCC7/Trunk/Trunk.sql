@@ -828,7 +828,11 @@ CREATE TABLE [ReadModel].[PeriodSkillEfficiencies](
 	[ParentId] [int] NOT NULL,
 	[SkillId] [uniqueidentifier] NOT NULL,
 	[Amount] [float] NOT NULL
-)
+ CONSTRAINT [PK_PeriodSkillEfficiencies] PRIMARY KEY CLUSTERED 
+(
+	[ParentId] ASC,
+	[SkillId] ASC
+))
 
 GO
 
