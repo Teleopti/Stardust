@@ -716,13 +716,13 @@ namespace CheckPreRequisites
                     double Ram_Bytes = (Convert.ToDouble(Mobject["TotalPhysicalMemory"]));
                     printNewFeature("Hardware", "RAM Size in Giga Bytes", "", Math.Round(Ram_Bytes / oneGb, 1).ToString());
 
-                    if (numberOfAgent < 500 && Math.Round(Ram_Bytes / oneGb, 1) > 4)
+                    if (numberOfAgent < 500 && Math.Round(Ram_Bytes / oneGb, 1) >= 4)
                         printFeatureStatus(true);
-                    else if (numberOfAgent <= 1500 && Math.Round(Ram_Bytes / oneGb, 1) > 8)
+                    else if (numberOfAgent <= 1500 && Math.Round(Ram_Bytes / oneGb, 1) >= 8)
                         printFeatureStatus(true);
-                    else if (numberOfAgent <= 4000 && Math.Round(Ram_Bytes / oneGb, 1) > 16)
+                    else if (numberOfAgent <= 4000 && Math.Round(Ram_Bytes / oneGb, 1) >= 16)
                         printFeatureStatus(true);
-                    else if (numberOfAgent > 4000 && Math.Round(Ram_Bytes / oneGb, 1) > 32)
+                    else if (numberOfAgent > 4000 && Math.Round(Ram_Bytes / oneGb, 1) >= 32)
                         printFeatureStatus(true);
                     else
                         printFeatureStatus(false);
