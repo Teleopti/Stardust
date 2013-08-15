@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Created by: robink
         /// Created date: 2009-03-31
         /// </remarks>
-        public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,  DateOnlyPeriod period, IScenario scenario)
+        public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
         {
             if(personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");

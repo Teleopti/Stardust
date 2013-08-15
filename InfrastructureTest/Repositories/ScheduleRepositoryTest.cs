@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IList<IAgentDayScheduleTag> _agentDayScheduleTags;
         private IScheduleDateTimePeriod _schedPeriod;
         private IList<IStudentAvailabilityDay> _studentAvailabilityDays;
-	    private DateOnlyPeriod _searchPeriod;
+				private DateOnlyPeriod _searchPeriod;
 				private DateTimePeriod _longPeriod;
         private DateOnlyPeriod _longDateOnlyPeriod;
         private IList<IOvertimeAvailability> _overtimeAvailbilityDays;

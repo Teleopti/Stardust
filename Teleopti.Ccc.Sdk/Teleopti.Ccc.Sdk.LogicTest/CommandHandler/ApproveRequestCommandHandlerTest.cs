@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _approveRequestCommandDto = new ApproveRequestCommandDto { PersonRequestId = Guid.NewGuid() };
             _personRequestFactory = new PersonRequestFactory();
             _absenceRequest = _personRequestFactory.CreateAbsenceRequest(
-                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod());
+                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod(2000,1,1,2000,1,2));
 
             _personTo = PersonFactory.CreatePerson("Test Peson");
             _personTo.SetId(Guid.NewGuid());
