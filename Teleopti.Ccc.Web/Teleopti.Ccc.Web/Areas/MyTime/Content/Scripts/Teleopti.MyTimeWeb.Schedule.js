@@ -423,8 +423,21 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         }
 	}
     
-	function _successAddingRequest() {
-	    
+	function _displayRequest(data) {
+	    var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
+	    var formattedDate = date.format('YYYY-MM-DD');
+	    var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
+	    var decodedTitle = $('<div/>').html(textRequestCount.attr('title')).text();
+	    if (decodedTitle == undefined)
+	        return;
+	    var newTitle = decodedTitle.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
+	    textRequestCount.attr('title', newTitle);
+	    textRequestCount
+			.show()
+			.children()
+			.first()
+			.text(parseInt(textRequestCount.text()) + 1)
+	    ;
 	}
     
 	function _navigateToRequests() {
@@ -444,7 +457,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		SetupViewModel: function (userTexts, defaultDateTimes) {
 		    var addRequestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
-		    addRequestViewModel.AddRequestCallback = _successAddingRequest;
+		    addRequestViewModel.AddRequestCallback = _displayRequest;
 		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
 			ko.applyBindings(vm, $('#page')[0]);
 		},
@@ -491,41 +504,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 })(jQuery);
 
-
-Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
-	function _displayRequest(inputDate) {
-		var date = moment(inputDate);
-		var formattedDate = date.format('yy-mm-dd');
-		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-		var decodedTitle = $('<div/>').html(textRequestCount.attr('title')).text();
-		if (decodedTitle == undefined)
-		    return;
-		var newTitle = decodedTitle.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
-		textRequestCount.attr('title', newTitle);
-		textRequestCount
-			.show()
-			.children()
-			.first()
-			.text(parseInt(textRequestCount.text()) + 1)
-			;
-	}
-
-	return {
-		Init: function (model) {
-		    requestViewModel = model;
-		},
-		PartialInit: function () {
-			_initEditSection();
-		},
-		InitComboBoxes: function() {
-		    _initComboBoxes();
-		},
-		ClearFormData: function (date) {
-			_clearFormData(date);
-		}
-	};
-
-})(jQuery);
 
 Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 
