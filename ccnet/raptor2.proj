@@ -78,7 +78,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop;NDepend">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -377,6 +377,17 @@
 		<Message Importance="high" Text="NCoverReporting finished." />
 	</Target>
 	
+	<Target Name="NDepend" DependsOnTargets="Compile">
+    <PropertyGroup>
+      <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
+      <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
+	  <NDOut>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs</NDOut>
+    </PropertyGroup>
+	<Message Importance="high" Text="Running NDepend with $(NDPath) on  $(NDProject) out = $(NDOut)" />
+    <Exec
+      Command='"$(NDPath)" "$(NDProject)" /OutDir "$(NDOut)"'/>
+  </Target>
+  
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
 		<Message Importance="high" Text="Running FxCop target..." />
 		<CreateItem Include="$(CCNetWorkingDirectory)\**\*.codeanalysislog.xml">
