@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 			                  .Return(true);
-			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, MockRepository.GenerateMock<ISchedulePersonProvider>());
+			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, null);
 
 			var result = target.TeamSchedule(teamId, dateTime).First();
 			result.Shift.Should().Be.EqualTo(data[0].Shift);

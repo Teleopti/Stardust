@@ -30,13 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			if (schedules != null)
 			{
-				var published = new PublishedScheduleSpecification(_schedulePersonProvider, teamId, date);
 				var scheduleList = new List<PersonScheduleDayReadModel>(schedules);
 
-				return
-					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-						? scheduleList
-						: scheduleList.FindAll(published.IsSatisfiedBy);
+				if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+					return scheduleList;
+				var published = new PublishedScheduleSpecification(_schedulePersonProvider, teamId, date);
+				return scheduleList.FindAll(published.IsSatisfiedBy);
 			}
 			return new List<PersonScheduleDayReadModel>();
 		}
