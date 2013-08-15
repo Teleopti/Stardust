@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Created date: 2008-03-06
         /// </remarks>
         public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons,
-                                               DateTimePeriod period,
+																							 DateOnlyPeriod period,
                                                IScenario scenario)
         {
             InParameter.NotNull("persons", persons);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public ICollection<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario)
+				public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
         {
             InParameter.NotNull("scenario", scenario);
             var crit = personAssignmentCriteriaLoader(period, scenario);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		        return crit.List<IPersonAssignment>();
         }
 
-        private ICriteria personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
+				private ICriteria personAssignmentCriteriaLoader(DateOnlyPeriod period, IScenario scenario)
         {
 	        var assCriteria = Session.CreateCriteria(typeof (PersonAssignment), "ass")
 	                                 .SetFetchMode("ShiftLayers", FetchMode.Join)
@@ -88,11 +88,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                            ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit));
         }
 
-        private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateTimePeriod period)
+				private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateOnlyPeriod period)
         {
             criteria.Add(Restrictions.Eq("ass.Scenario", scenario))
-				.Add(Restrictions.Gt("ass.Period.period.Maximum", period.StartDateTime))
-				.Add(Restrictions.Lt("ass.Period.period.Minimum", period.EndDateTime));
+							.Add(Restrictions.Between("Date", period.StartDate, period.EndDate));
         }
 
         /// <summary>

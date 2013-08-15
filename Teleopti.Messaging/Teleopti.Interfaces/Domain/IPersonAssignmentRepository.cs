@@ -19,7 +19,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-03-06
         /// </remarks>
         ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons,
-                                            DateTimePeriod period,
+                                            DateOnlyPeriod period,
                                             IScenario scenario);
 
         /// <summary>
@@ -32,6 +32,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: zoet
         /// Created date: 2007-11-12
         /// </remarks>
-        ICollection<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario);
+        ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario);
     }
 }
