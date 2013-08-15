@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private bool SkillEquals(IPersonPeriod personPeriod)
 		{
-			if (!_personPeriod.PersonSkillCollection.Count.Equals(personPeriod.PersonSkillCollection.Count)) 
+			if (!_personPeriod.PersonSkillCollection.Count().Equals(personPeriod.PersonSkillCollection.Count())) 
 				return false;
 
 			foreach (var firstPersonSkill in _personPeriod.PersonSkillCollection)

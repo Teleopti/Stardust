@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -217,7 +216,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (_currentPeriod != null)
                 {
-                    _currentPeriod.ResetPersonSkill();
+                    Parent.ResetPersonSkills(_currentPeriod);
                     SetPersonSkills(value);
                 }
             }
@@ -233,7 +232,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         	var personSkills = _personSkillStringParser.Parse(value);
         	foreach (var personSkill in personSkills)
         	{
-        		_currentPeriod.AddPersonSkill(personSkill);
+        		Parent.AddSkill(personSkill,_currentPeriod);
         	}
         }
 

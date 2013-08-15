@@ -216,21 +216,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             // Person Periods
             IPersonPeriod ppPerson1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1));
-            container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
+			container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1),ppPerson1);
             IPersonPeriod ppPerson2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson2.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 1));
-            ppPerson2.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
+			container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
+	        container.ContainedPersons["Person2"].AddSkill(
+		        PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 1), ppPerson2);
+	        container.ContainedPersons["Person2"].AddSkill(
+		        PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson2);
             IPersonPeriod ppPerson3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
             container.ContainedPersons["Person3"].AddPersonPeriod(ppPerson3);
             IPersonPeriod ppPerson4 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson4.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
-
+			container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
+			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson4);
+            
             // create list
             var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008,1,2));
             scheduleRange.Add(assignment1);

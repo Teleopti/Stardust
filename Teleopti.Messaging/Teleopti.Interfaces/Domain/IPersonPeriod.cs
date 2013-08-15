@@ -3,6 +3,27 @@ using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
+	public interface IPersonPeriodModifySkills
+	{
+		/// <summary>
+		/// Adds the person skill.
+		/// </summary>
+		/// <param name="personSkill">The person skill.</param>
+		/// <returns></returns>
+		void AddPersonSkill(IPersonSkill personSkill);
+
+		/// <summary>
+		/// Deletes the person skill.
+		/// </summary>
+		/// <param name="personSkill">The person skill.</param>
+		void DeletePersonSkill(IPersonSkill personSkill);
+
+		/// <summary>
+		/// Resets the person skill.
+		/// </summary>
+		void ResetPersonSkill();
+	}
+
     /// <summary>
     /// Represents the concrete circumstances of a working period for a person (agent).
     /// Defines where, in which team, under what conditions the person WILL, and also 
@@ -43,7 +64,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the person skill collection.
         /// </summary>
         /// <value>The person skill collection.</value>
-        IList<IPersonSkill> PersonSkillCollection { get; }
+        IEnumerable<IPersonSkill> PersonSkillCollection { get; }
 
         /// <summary>
         /// Gets or sets the rule set bag.
@@ -56,24 +77,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The end date.</value>
         DateOnly EndDate();
-
-        /// <summary>
-        /// Adds the person skill.
-        /// </summary>
-        /// <param name="personSkill">The person skill.</param>
-        /// <returns></returns>
-        void AddPersonSkill(IPersonSkill personSkill);
-
-        /// <summary>
-        /// Deletes the person skill.
-        /// </summary>
-        /// <param name="personSkill">The person skill.</param>
-        void DeletePersonSkill(IPersonSkill personSkill);
-
-        /// <summary>
-        /// Resets the person skill.
-        /// </summary>
-        void ResetPersonSkill();
 
         /// <summary>
         /// Gets the person external log on collection.

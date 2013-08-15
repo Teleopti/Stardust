@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -128,7 +127,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             
             IPersonPeriod pPeriod = new PersonPeriod(personPeriodStart,
                                                     PersonContractFactory.CreatePersonContract(),
-                                                     new Team());
+													 new Team());
+			person.AddPersonPeriod(pPeriod);
             foreach (ISkill skill in skillsInPersonPeriod)
             {
                 IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) {Active = true};
@@ -142,11 +142,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 }
 				else
 				{
-					pPeriod.AddPersonSkill(pSkill);
+					person.AddSkill(pSkill,pPeriod);
 				}
                 
             }
-            person.AddPersonPeriod(pPeriod);
             return person;
         }
 

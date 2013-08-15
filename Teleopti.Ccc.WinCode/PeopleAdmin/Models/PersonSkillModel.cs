@@ -61,12 +61,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			{
 				if(value < 1 || value > 999)
 					return;
-				ContainedEntity.SkillPercentage = new Percent((double)value/100);
+
+				((IPerson) ContainedEntity.Root()).ChangeSkillProficiency(ContainedEntity.Skill, new Percent((double) value/100),
+				                                                          (IPersonPeriod) ContainedEntity.Parent);
 				_proficiencyValues = new StringCollection { value.ToString(CultureInfo.InvariantCulture) };
 			}
 		}
-
-	   //public bool CanGray
-	   //{ get { return false; } }
     }
 }

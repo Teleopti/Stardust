@@ -84,9 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-            personPeriod.AddPersonSkill(personSkill);
-
-            _target.AddPersonPeriod(personPeriod);
+			_target.AddPersonPeriod(personPeriod);
+            _target.AddSkill(personSkill,personPeriod);
 
             Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
         }
@@ -103,9 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-            personPeriod.AddPersonSkill(personSkill);
-
-            _target.AddPersonPeriod(personPeriod);
+			_target.AddPersonPeriod(personPeriod);
+            _target.AddSkill(personSkill,personPeriod);
 
             Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
             Assert.AreEqual(1, _target.PersonPeriodCollection.Count);
@@ -125,9 +123,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-            personPeriod.AddPersonSkill(personSkill);
-
-            _target.AddPersonPeriod(personPeriod);
+			_target.AddPersonPeriod(personPeriod);
+            _target.AddSkill(personSkill, personPeriod);
 
             Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
             _target.DeletePersonPeriod(personPeriod);
@@ -146,12 +143,13 @@ namespace Teleopti.Ccc.DomainTest.Common
             site.AddTeam(team);
 
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
-            ISkill skill = SkillFactory.CreateSkill("test skill");
+			_target.AddPersonPeriod(personPeriod); 
+
+			ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-            personPeriod.AddPersonSkill(personSkill);
+            _target.AddSkill(personSkill,personPeriod);
 
-            _target.AddPersonPeriod(personPeriod);
             Assert.AreSame(team, _target.MyTeam(DateOnly.Today));
         }
 

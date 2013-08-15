@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
             Assert.IsNotNull(personalSkills);
-            Assert.AreEqual(1, personalSkills.Count);
+            Assert.AreEqual(1, personalSkills.Count());
             _mock.VerifyAll();
         }
 
@@ -159,13 +159,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { skill });
             IPerson person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { skill });
             var persons = new List<IPerson> { person1, person2 };
-            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection[0].SkillPercentage);
+            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection.First().SkillPercentage);
             var factory = new GroupPersonFactory();
 			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
             var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
             Assert.IsNotNull(personalSkills);
-            Assert.AreEqual(1, personalSkills.Count);
-            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection[0].SkillPercentage);
+            Assert.AreEqual(1, personalSkills.Count());
+            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection.First().SkillPercentage);
         }
 
         [Test]

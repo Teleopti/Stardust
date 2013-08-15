@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			rightSkill.Activity = rightActivity;
 
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
-			person1.Period(new DateOnly()).PersonSkillCollection[0].SkillPercentage = new Percent(0.5);
+			person1.ChangeSkillProficiency(rightSkill,new Percent(0.5), person1.Period(new DateOnly()));
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			rightSkill.Activity = rightActivity;
 
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
-			person1.Period(new DateOnly()).PersonSkillCollection[0].Active = false;
+			person1.DeactivateSkill(rightSkill, person1.Period(new DateOnly()));
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();

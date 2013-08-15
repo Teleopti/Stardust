@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             {
                 Percent percent = new Percent(1);
                 IPersonSkill personSkill = new PersonSkill(skill, percent);
-                personPeriod.AddPersonSkill(personSkill);
+                ((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
             }
 
             return personPeriod;

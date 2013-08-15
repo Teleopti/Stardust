@@ -75,32 +75,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		public IPossibleStartEndCategory CommonPossibleStartEndCategory { get ; set ; }
 
 		private void setPersonSkillsOnDate()
-        {
-            var listOfPersonSkills = new List<IPersonSkill>();
+		{
+			var personPeriod = PersonPeriodCollection[0];
 
 			foreach (var person in _groupMembers)
 			{
-				var personPeriod = person.Value;
-
-				var pSkills = personPeriod.PersonSkillCollection;
+				var pSkills = person.Value.PersonSkillCollection;
 				foreach (IPersonSkill personSkill in pSkills)
 				{
-					IPersonSkill foundPersonSkill = listOfPersonSkills.FirstOrDefault(combinedPersonSkill => combinedPersonSkill.Skill.Equals(personSkill.Skill));
+					IPersonSkill foundPersonSkill = personPeriod.PersonSkillCollection.FirstOrDefault(combinedPersonSkill => combinedPersonSkill.Active && combinedPersonSkill.Skill.Equals(personSkill.Skill));
 					if (foundPersonSkill != null)
 					{
-						foundPersonSkill.SkillPercentage =
-							new Percent(personSkill.SkillPercentage.Value + foundPersonSkill.SkillPercentage.Value);
+						ChangeSkillProficiency(personSkill.Skill, new Percent(personSkill.SkillPercentage.Value + foundPersonSkill.SkillPercentage.Value), personPeriod);
 					}
 					else
 					{
-						listOfPersonSkills.Add((PersonSkill)personSkill.Clone());
+						AddSkill((IPersonSkill) personSkill.Clone(), personPeriod);
 					}
 				}
 			}
-        	foreach (var personSkill in listOfPersonSkills)
-            {
-                PersonPeriodCollection[0].AddPersonSkill(personSkill);
-            }
         }
 
         private void setCommonRuleSetBagOnDate()

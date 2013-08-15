@@ -118,8 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private static IEnumerable<ISkill> extractSkills(IScheduleMatrixPro matrix)
 		{
 			DateOnly firstPeriodDay = matrix.EffectivePeriodDays[0].Day;
-			IList<IPersonSkill> personalSkills =
-				matrix.Person.Period(firstPeriodDay).PersonSkillCollection;
+			var personalSkills = matrix.Person.Period(firstPeriodDay).PersonSkillCollection;
 			return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
 		}
 	}

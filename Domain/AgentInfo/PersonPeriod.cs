@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	public class PersonPeriod : AggregateEntity, IPersonPeriod
+	public class PersonPeriod : AggregateEntity, IPersonPeriod, IPersonPeriodModifySkills
 	{
 		private IPersonContract _personContract;
 		private ITeam _team;
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			set { _team = value; }
 		}
 
-		public virtual IList<IPersonSkill> PersonSkillCollection
+		public virtual IEnumerable<IPersonSkill> PersonSkillCollection
 		{
 			get
 			{

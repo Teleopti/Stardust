@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
             set
             {
-                ContainedEntity.ResetPersonSkill();
+                Parent.ResetPersonSkills(ContainedEntity);
                 SetPersonSkill(value);
             }
         }
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			var personSkills = _personSkillStringParser.Parse(value);
 			foreach (var personSkill in personSkills)
 			{
-				ContainedEntity.AddPersonSkill(personSkill);
+				Parent.AddSkill(personSkill,ContainedEntity);
 			}
         }
 

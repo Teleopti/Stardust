@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -221,12 +222,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
 
 			Assert.AreEqual(_personPeriod2, currentPeriod);
-			Assert.AreEqual(Skill2, currentPeriod.PersonSkillCollection[0].Skill);
+			Assert.AreEqual(Skill2, currentPeriod.PersonSkillCollection.First().Skill);
 			Assert.AreEqual("_skill2", _target.PersonSkills);
 
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
 			_target.PersonSkills = "_skill1";
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
 			Assert.AreEqual("_skill1", _target.PersonSkills);
 		}
 

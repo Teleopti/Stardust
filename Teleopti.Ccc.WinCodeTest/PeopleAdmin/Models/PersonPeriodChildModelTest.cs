@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -35,9 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             CreateSiteTeamCollection();
 
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly1);
-            _personPeriod.AddPersonSkill(PersonSkill1);
-            _personPeriod.AddPersonSkill(PersonSkill2);
-
+            
             _personPeriod.RuleSetBag = new RuleSetBag();
 
         	_personPeriod.BudgetGroup = new BudgetGroup();
@@ -47,6 +46,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _personPeriod.AddExternalLogOn(ExternalLogOn3);
 
             _person.AddPersonPeriod(_personPeriod);
+	        _person.AddSkill(PersonSkill1, _personPeriod);
+			_person.AddSkill(PersonSkill2, _personPeriod);
+
 			_person.ChangeTeam(TeamBlue,_personPeriod);
 
             _target = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(_personPeriod);
@@ -196,9 +198,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
          
             Assert.AreEqual("_skill1, _skill2", _target.PersonSkills);
 
-            Assert.AreEqual(2, currentPeriod.PersonSkillCollection.Count);
+            Assert.AreEqual(2, currentPeriod.PersonSkillCollection.Count());
             _target.PersonSkills = Skill3.Name;
-            Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+            Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
             Assert.AreEqual("_skill3", _target.PersonSkills);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -19,6 +20,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target = new PersonSkillModel();
 
             _personSkill = PersonSkillFactory.CreatePersonSkill("Skill1", 1);
+	        var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), Enumerable.Empty<ISkill>());
+	        person.AddSkill(_personSkill, person.PersonPeriodCollection[0]);
             _target.ContainedEntity = _personSkill;
         }
 

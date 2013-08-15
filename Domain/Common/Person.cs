@@ -115,6 +115,76 @@ namespace Teleopti.Ccc.Domain.Common
 				});
 		}
 
+		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("personSkill", personSkill);
+			InParameter.NotNull("personPeriod", personPeriod);
+			IPersonSkillModify modify = (IPersonSkillModify) personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
+			if (modify == null)
+			{
+				((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
+			}
+			else
+			{
+				modify.Active = personSkill.Active;
+				modify.SkillPercentage = personSkill.SkillPercentage;
+			}
+		}
+
+		public virtual void ResetPersonSkills(IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("personPeriod", personPeriod);
+			var modify = (IPersonPeriodModifySkills)personPeriod;
+			if (modify != null)
+			{
+				modify.ResetPersonSkill();
+			}
+		}
+
+		public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("skill", skill);
+			InParameter.NotNull("personPeriod", personPeriod);
+			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			if (personSkill != null)
+			{
+				personSkill.Active = true;
+			}
+		}
+
+		public virtual void DeactivateSkill(ISkill skill, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("skill", skill);
+			InParameter.NotNull("personPeriod", personPeriod);
+			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			if (personSkill != null)
+			{
+				personSkill.Active = false;
+			}
+		}
+
+		public virtual void RemoveSkill(ISkill skill, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("skill",skill);
+			InParameter.NotNull("personPeriod",personPeriod);
+			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			if (personSkill != null)
+			{
+				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
+			}
+		}
+
+		public virtual void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod)
+		{
+			InParameter.NotNull("skill", skill);
+			InParameter.NotNull("personPeriod", personPeriod);
+			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			if (personSkill != null)
+			{
+				personSkill.SkillPercentage = proficiency;
+			}
+		}
+
         public virtual Name Name
         {
             get { return _name; }
