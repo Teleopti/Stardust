@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-03-31
         /// </remarks>
-        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod period, IScenario scenario);
+        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario);
 
         /// <summary>
         /// Finds schedules for a person where there is a certain absence

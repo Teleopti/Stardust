@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using(mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).Return(dic);
+                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.Constraints(new[]
                                          {
                                              Is.Matching<IPersonProvider>(t => t.GetPersons().Contains(person)),
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using (mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).Return(dic);
+								Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.IgnoreArguments(); //tested in another test
                 Expect.Call(dic[person]).Return(range);
                 Expect.Call(range.ScheduledDay(date)).Return(part);

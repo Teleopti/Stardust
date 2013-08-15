@@ -11,23 +11,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly IUserTimeZone _userTimeZone;
 
-		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IUserTimeZone userTimeZone)
+		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
 			_scenarioRepository = scenarioRepository;
-			_userTimeZone = userTimeZone;
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var defaultScenario = _scenarioRepository.Current();
-			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 
-			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true), dateTimePeriod,
+			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true), period,
 																		defaultScenario);
 
 			return dictionary[person].ScheduledDayCollection(period);
@@ -35,16 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
 		{
-			var person = _loggedOnUser.CurrentUser();
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateTimePeriod = new DateOnlyPeriod(date, date).ToDateTimePeriod(timeZone);
-
 			var defaultScenario = _scenarioRepository.Current();
 
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 				new PersonProvider(persons), 
-				new ScheduleDictionaryLoadOptions(false, false), 
-				dateTimePeriod,
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(date, date),
 			    defaultScenario);
 
 			return dictionary.SchedulesForDay(date);

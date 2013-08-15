@@ -41,9 +41,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IList<MultiplicatorDataDto> multiplicatorDataDtos = new List<MultiplicatorDataDto>();
 
-            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
-            DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+            var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
             
             using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
             var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
-            DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+            var period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1));
 
             ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
             using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
