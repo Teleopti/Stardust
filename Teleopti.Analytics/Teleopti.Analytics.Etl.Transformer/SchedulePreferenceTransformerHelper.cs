@@ -85,10 +85,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 			dataRow["person_restriction_code"] = preferenceRestriction.Id;
 			var preferenceDay = (IPreferenceDay) preferenceRestriction.Parent;
 
-			var utcRestrictionDateTime = TimeZoneHelper.ConvertToUtc(preferenceDay.RestrictionDate,
-			                                                         preferenceDay.Person.PermissionInformation.
-			                                                                       DefaultTimeZone());
-			dataRow["restriction_date"] = utcRestrictionDateTime.Date;
+			var restrictionDate = preferenceDay.RestrictionDate;
+			dataRow["restriction_date"] = restrictionDate.Date;
 			dataRow["person_code"] = schedulePart.Person.Id;
 			dataRow["scenario_code"] = schedulePart.Scenario.Id;
 

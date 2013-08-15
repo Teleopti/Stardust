@@ -16,12 +16,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 	public class SchedulePreferenceTransformerHelperTest
 	{
 		private IPreferenceRestriction preferenceRestriction;
+		private IScheduleDay schedulepart;
 
-		[Test]
-		public void FillDataRow_AddDataToRow_ReturnValidDataRow()
+		[SetUp]
+		public void Setup()
 		{
 			var scheduleParts = SchedulePartFactory.CreateSchedulePartCollection();
-			var schedulepart = scheduleParts[0];
+			schedulepart = scheduleParts[0];
 
 			var activcity = new Activity("Main");
 			activcity.SetId(Guid.NewGuid());
@@ -29,30 +30,36 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			shiftCategory.SetId(Guid.NewGuid());
 			var dayOffTemplate = new DayOffTemplate(new Description("Day off"));
 			dayOffTemplate.SetId(Guid.NewGuid());
-			var absence = new Absence();
-			absence.SetId(Guid.NewGuid());
-			
+
+
 			preferenceRestriction = new PreferenceRestriction
-				{
-					StartTimeLimitation =
-						new StartTimeLimitation(
-							new TimeSpan(6, 0, 0),
-							new TimeSpan(20, 0, 0)),
-					EndTimeLimitation =
-						new EndTimeLimitation(
-							new TimeSpan(6, 0, 0),
-							new TimeSpan(20, 0, 0)),
-					WorkTimeLimitation =
-						new WorkTimeLimitation(
-							new TimeSpan(6, 0, 0),
-							new TimeSpan(20, 0, 0)),
-					ShiftCategory = shiftCategory,
-					DayOffTemplate = dayOffTemplate,
-				};
+			{
+				StartTimeLimitation =
+					new StartTimeLimitation(
+						new TimeSpan(6, 0, 0),
+						new TimeSpan(20, 0, 0)),
+				EndTimeLimitation =
+					new EndTimeLimitation(
+						new TimeSpan(6, 0, 0),
+						new TimeSpan(20, 0, 0)),
+				WorkTimeLimitation =
+					new WorkTimeLimitation(
+						new TimeSpan(6, 0, 0),
+						new TimeSpan(20, 0, 0)),
+				ShiftCategory = shiftCategory,
+				DayOffTemplate = dayOffTemplate,
+			};
 			preferenceRestriction.SetId(Guid.NewGuid());
 			preferenceRestriction.AddActivityRestriction(new ActivityRestriction(activcity));
-			
+
 			var preferenceDay = new PreferenceDay(schedulepart.Person, new DateOnly(), preferenceRestriction);
+			preferenceDay.SetId(Guid.NewGuid());
+		}
+
+		[Test]
+		public void FillDataRow_ShouldUseLocalTime()
+		{
+			var preferenceDay = new PreferenceDay(schedulepart.Person, new DateOnly(2010, 11, 12), preferenceRestriction);
 			preferenceDay.SetId(Guid.NewGuid());
 
 			using (var table = new DataTable())
@@ -61,8 +68,23 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 				SchedulePreferenceInfrastructure.AddColumnsToDataTable(table);
 				var row = table.NewRow();
 				var result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
+				result["restriction_date"].Should().Be.EqualTo(new DateTime(2010, 11, 12));
+			}
+		}
+
+		[Test]
+		public void FillDataRow_AddDataToRow_ReturnValidDataRow()
+		{
+			using (var table = new DataTable())
+			{
+				table.Locale = Thread.CurrentThread.CurrentCulture;
+				SchedulePreferenceInfrastructure.AddColumnsToDataTable(table);
+				var row = table.NewRow();
+				var result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
 				result.Should().Not.Be.Null();
 
+				var absence = new Absence();
+				absence.SetId(Guid.NewGuid());
 				preferenceRestriction.Absence = absence;
 				result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
 				result.Should().Not.Be.Null();
