@@ -6,7 +6,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek) {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek, defaultDateTimes) {
 	var self = this;
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
 	self.TextRequestHeaderVisible = ko.observable(false);
@@ -15,13 +15,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
-    self.TimeFromInternal = ko.observable($('#Request-detail-default-start-time').text());
-    self.TimeToInternal = ko.observable($('#Request-detail-default-end-time').text());
+    self.TimeFromInternal = ko.observable(defaultDateTimes.defaultStartTime);
+    self.TimeToInternal = ko.observable(defaultDateTimes.defaultEndTime);
     self.DateFormat = ko.observable();
     self.TimeFrom = ko.computed({
         read: function() {
             if (self.IsFullDay()) {
-                return $('#Request-detail-default-fullday-start-time').text();
+                return defaultDateTimes.defaultFulldayStartTime;
             }
             return self.TimeFromInternal();
         },
@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.TimeTo = ko.computed({
         read: function () {
             if (self.IsFullDay()) {
-                return $('#Request-detail-default-fullday-end-time').text();
+                return defaultDateTimes.defaultFulldayEndTime;
             }
             return self.TimeToInternal();
         },
@@ -70,37 +70,60 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     };
 	
     function _setDefaultDates() {
-        var year = $('#Request-detail-today-year').val();
-        var month = $('#Request-detail-today-month').val();
-        var day = $('#Request-detail-today-day').val();
+        var year = defaultDateTimes.todayYear;
+        var month = defaultDateTimes.todayMonth;
+        var day = defaultDateTimes.todayDay;
         self.DateFrom(moment(new Date(year, month - 1, day)));
         self.DateTo(moment(new Date(year, month - 1, day)));
     }
 	
-    self.AddTextRequest = function (useDefaultDates) {
+    self.AddTextRequest = function (useDefaultDates, clearData) {
+        if (useDefaultDates != undefined && useDefaultDates === true)
+            _setDefaultDates();
+        if (clearData != undefined && clearData === true)
+            _clearData();
         self.IsNewInProgress(true);
 		self.TypeEnum(0);
 		self.TextRequestHeaderVisible(true);
 		self.AbsenceRequestHeaderVisible(false);
 		self.IsFullDay(false);
-		if (useDefaultDates != undefined && useDefaultDates === true) {
-		    _setDefaultDates();
-        }
+		
     };
 
-    self.AddAbsenceRequest = function (useDefaultDates) {
+    self.AddAbsenceRequest = function (useDefaultDates, clearData) {
+        if (useDefaultDates != undefined && useDefaultDates === true)
+            _setDefaultDates();
+        if (clearData != undefined && clearData === true)
+            _clearData();
         self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.TextRequestHeaderVisible(false);
 		self.AbsenceRequestHeaderVisible(true);
 		self.IsFullDay(true);
-		if (useDefaultDates != undefined && useDefaultDates === true) {
-		    _setDefaultDates();
-		}
     };
 
     self.CancelAddingNewRequest = function() {
 
         self.IsNewInProgress(false);
     };
+    
+    function _clearData() {
+        self.TextRequestHeaderVisible(false);
+        self.AbsenceRequestHeaderVisible(false);
+        self.IsFullDay(false);
+        self.IsUpdate(false);
+        self.TimeFromInternal(defaultDateTimes.defaultStartTime);
+        self.TimeToInternal(defaultDateTimes.defaultEndTime);
+        
+        self.TypeEnum(0);
+        self.ShowError(false);
+        self.ErrorMessage('');
+        self.AbsenceId(undefined);
+        self.Subject(undefined);
+        self.Message(undefined);
+        self.EntityId(undefined);
+        self.DenyReason(undefined);
+        self.IsEditable(true);
+        self.IsNewInProgress(false);
+    }
 };

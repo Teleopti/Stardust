@@ -197,7 +197,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.headerTitle = ko.observable(day.Header.Title);
 		self.headerDayDescription = ko.observable(day.Header.DayDescription);
 		self.headerDayNumber = ko.observable(day.Header.DayNumber);
-		self.textRequestPermission = ko.observable(parent.textPermission);
+		self.textRequestPermission = ko.observable(parent.textPermission());
 		self.summaryStyleClassName = ko.observable(day.Summary.StyleClassName);
 		self.summaryTitle = ko.observable(day.Summary.Title);
 		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
@@ -278,9 +278,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    });
 
 		self.showAddRequestForm = function () {
+		    if (self.textRequestPermission() !== true) {
+		        return;
+		    }
 		    parent.requestViewModel.DateFrom(moment(self.date()));
 		    parent.requestViewModel.DateTo(moment(self.date()));
-		    parent.requestViewModel.AddTextRequest(false);
+		    parent.requestViewModel.AddTextRequest(false, true);
 		};
 	};
 	var LayerViewModel = function (layer, parent) {
@@ -475,8 +478,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},
-		SetupViewModel: function (userTexts) {
-		    var addRequestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart);
+		SetupViewModel: function (userTexts, defaultDateTimes) {
+		    var addRequestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
 		    addRequestViewModel.AddRequestCallback = _successAddingRequest;
 		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel);
 			ko.applyBindings(vm, $('#page')[0]);
