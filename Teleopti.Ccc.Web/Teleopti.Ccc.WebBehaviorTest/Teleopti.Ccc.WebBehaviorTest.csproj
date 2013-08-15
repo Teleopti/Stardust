@@ -93,6 +93,7 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
     <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
     <Compile Include="CalendarShare.feature.cs">
