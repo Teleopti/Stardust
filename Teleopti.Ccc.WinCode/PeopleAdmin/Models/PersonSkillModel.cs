@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
    public class PersonSkillModel : EntityContainer<IPersonSkill>
    {
    		private StringCollection _proficiencyValues;
+	   private int _proficiency = 100;
+
 		public IPersonSkill PersonSkill { get { return ContainedEntity; } }
 
    		public int TriState { get; set; }
@@ -55,15 +57,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 	   		{
-	   			return (int)(ContainedEntity.SkillPercentage.Value * 100);
+	   			return _proficiency;
 	   		}
 			set
 			{
 				if(value < 1 || value > 999)
 					return;
 
-				((IPerson) ContainedEntity.Root()).ChangeSkillProficiency(ContainedEntity.Skill, new Percent((double) value/100),
-				                                                          (IPersonPeriod) ContainedEntity.Parent);
+				_proficiency = value;
 				_proficiencyValues = new StringCollection { value.ToString(CultureInfo.InvariantCulture) };
 			}
 		}
