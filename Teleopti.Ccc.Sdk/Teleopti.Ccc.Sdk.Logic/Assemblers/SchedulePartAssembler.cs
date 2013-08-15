@@ -97,7 +97,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             IPerson person = PersonRepository.Load(schedulePartDto.PersonId);
             DateTimePeriod period = partPeriod(schedulePartDto);
-            var skaVaraPersonernaIListansFullaSchemaPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)), new DateOnly(period.EndDateTime.AddDays(1)));
+
+	        var skaVaraPersonernaIListansFullaSchemaPeriod =
+		        period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
             IScheduleDictionary scheduleDictionary =
                 ScheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, false),
                                                                      skaVaraPersonernaIListansFullaSchemaPeriod,

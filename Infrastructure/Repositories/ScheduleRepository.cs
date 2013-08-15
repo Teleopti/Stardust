@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IScenario scenario, 
             IPersonProvider personsProvider,
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			IEnumerable<IPerson> visiblePersons)
+						IEnumerable<IPerson> visiblePersons)
         {
             if(period == null) throw new ArgumentNullException("period");
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");

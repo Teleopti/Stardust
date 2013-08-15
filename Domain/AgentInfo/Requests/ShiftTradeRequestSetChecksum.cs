@@ -26,8 +26,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
             ShiftTradeRequestPersonExtractor shiftTradeRequestPersonExtractor = new ShiftTradeRequestPersonExtractor();
             shiftTradeRequestPersonExtractor.ExtractPersons(shiftTradeRequest);
-	        var longPeriod = new DateOnlyPeriod(new DateOnly(shiftTradeRequest.Period.StartDateTime.AddDays(-1)),
-	                                            new DateOnly(shiftTradeRequest.Period.EndDateTime.AddDays(1)));
+	        var period =
+		        shiftTradeRequest.Period.ToDateOnlyPeriod(shiftTradeRequest.PersonFrom.PermissionInformation.DefaultTimeZone());
+	        var longPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),
+	                                            period.EndDate.AddDays(1));
             _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(shiftTradeRequestPersonExtractor.Persons), new ScheduleDictionaryLoadOptions(false,false),
                                                           longPeriod,
                                                           defaultScenario);
