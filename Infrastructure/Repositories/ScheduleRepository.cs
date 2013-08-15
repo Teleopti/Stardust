@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if(personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 					
-	        var longDateTimePeriod = new DateTimePeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
-	        var dateTimePeriod = new DateTimePeriod(period.StartDate, period.EndDate);
+	        var longDateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.AddDays(-1).Date.Ticks, DateTimeKind.Utc), new DateTime(period.EndDate.AddDays(1).Date.Ticks, DateTimeKind.Utc));
+	        var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc), new DateTime(period.EndDate.Date.Ticks, DateTimeKind.Utc));
 
             var people = personsProvider.GetPersons();
 						var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, people), new DifferenceEntityCollectionService<IPersistableScheduleData>());
@@ -199,13 +199,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
             var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
-            DateTimePeriod longPeriod = period.LoadedPeriod();
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all
-            // roger risk att det smäller om man för med grejer utanför laddad period??? (longPeriod)
             var loadedPeriod = period.LoadedPeriod();
             var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(loadedPeriod.StartDateTime.AddDays(-1)), new DateOnly(loadedPeriod.EndDateTime.AddDays(1)));
+						var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
 
             using(TurnoffPermissionScope.For(scheduleDictionary))
             {
