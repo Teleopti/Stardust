@@ -63,6 +63,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		}
 
 		[Test]
+		public void ShouldReturnFalseIfPersonHasNoWorkflowControlSet()
+		{
+			Guid personId = Guid.NewGuid();
+
+			using (_mock.Record())
+			{
+				_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(_date, _teamId, null))
+									.IgnoreArguments()
+									.Return(_persons);
+				_person1.Stub(x => x.Id)
+					.Return(personId);
+				_personSchedule.PersonId = personId;
+				_person1.WorkflowControlSet = null;
+			}
+			using (_mock.Playback())
+			{
+				_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+
+				bool result = _target.IsSatisfiedBy(_personSchedule);
+				result.Should().Be.False();
+			}
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfScheduleNotPublished()
 		{
 			Guid personId = Guid.NewGuid();

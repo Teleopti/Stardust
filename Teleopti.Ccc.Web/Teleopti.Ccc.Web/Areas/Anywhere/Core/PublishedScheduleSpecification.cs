@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private static bool isSchedulePublished(DateTime date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return false;
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
 			       workflowControlSet.SchedulePublishedToDate.Value.AddDays(1) > date;
 		}
