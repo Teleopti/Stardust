@@ -222,7 +222,7 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
   </Dirs>
-  <Report Kind="0" SectionsEnabled="12287" XslPath="" Flags="64512">
+  <Report Kind="0" SectionsEnabled="12287" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>
     <Section Enabled="True">.NET Assemblies Metrics</Section>
     <Section Enabled="True">Treemap Metric View</Section>
