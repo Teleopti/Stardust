@@ -41,8 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
+				.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
 				.Add(AuditEntity.Property("Person").In(agentsBatch))
 				.Results()
 				.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
