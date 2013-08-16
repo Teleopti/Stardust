@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             if(personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
-					
-	        var longDateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.AddDays(-1).Date.Ticks, DateTimeKind.Utc), new DateTime(period.EndDate.AddDays(1).Date.Ticks, DateTimeKind.Utc));
-	        var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc), new DateTime(period.EndDate.Date.Ticks, DateTimeKind.Utc));
+
+						var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc), new DateTime(period.EndDate.Date.AddDays(1).Ticks, DateTimeKind.Utc));
+	        var longDateTimePeriod = new DateTimePeriod(dateTimePeriod.StartDateTime.AddDays(-1), dateTimePeriod.EndDateTime.AddDays(1));
 
             var people = personsProvider.GetPersons();
 						var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, people), new DifferenceEntityCollectionService<IPersistableScheduleData>());
