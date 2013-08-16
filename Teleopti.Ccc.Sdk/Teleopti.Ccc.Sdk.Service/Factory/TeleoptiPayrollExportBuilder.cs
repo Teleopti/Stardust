@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
@@ -39,29 +37,24 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public IList<PayrollBaseExportDto> BuildTimeExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();
-			var timeExportDots = createTimeExportDtos(person, dateOnly, scheduleDay).ToList();
+			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
+			var timeExportDots = createTimeExportDtos(person, dateOnly, schedulePartDto).ToList();
 			if (timeExportDots.Any())
 				exportDtos.AddRange(timeExportDots);
 			return exportDtos;
 		}
 
-		private IEnumerable<PayrollBaseExportDto> createTimeExportDtos(IPerson person, DateOnly dateOnly,
-		                                                               IScheduleDay scheduleDay)
+		private static IEnumerable<PayrollBaseExportDto> createTimeExportDtos(IPerson person, DateOnly dateOnly,
+																	   SchedulePartDto schedulePartDto)
 		{
-			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
-			var projection = new ProjectionProvider().Projection(scheduleDay);
 			
-			if (isDayEmpty(scheduleDay, projection))
+			if (isDayEmpty(schedulePartDto))
 				yield break;
 
 			var payrollTimeExportDataDto = createDtoWithPersonData(person, dateOnly);
 
-			var dayOff = scheduleDay.PersonDayOffCollection().FirstOrDefault();
-			if (dayOff != null)
-			{
-				payrollTimeExportDataDto.DayOffPayrollCode = dayOff.DayOff.PayrollCode;
-			}
-			
+			if (schedulePartDto.PersonDayOff != null)
+				payrollTimeExportDataDto.DayOffPayrollCode = schedulePartDto.PersonDayOff.PayrollCode;
 			else
 			{
 				if (schedulePartDto.IsFullDayAbsence)
@@ -71,41 +64,38 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 						payrollTimeExportDataDto.AbsencePayrollCode = absence.AbsenceLayer.Absence.PayrollCode;
 				}
 
-				var personAssignment = scheduleDay.PersonAssignment();
-				if (havePersonAssignmentAndShiftCategory(personAssignment))
-					payrollTimeExportDataDto.ShiftCategoryName = personAssignment.ShiftCategory.Description.Name;
-				
-				payrollTimeExportDataDto.StartDate = projection.Period().GetValueOrDefault().LocalStartDateTime;
-				payrollTimeExportDataDto.EndDate = projection.Period().GetValueOrDefault().LocalEndDateTime;
+				var personAssignmentDto = schedulePartDto.PersonAssignmentCollection.FirstOrDefault();
+				if (personAssignmentDto != null)
+					payrollTimeExportDataDto.ShiftCategoryName =
+						personAssignmentDto.MainShift.ShiftCategoryName;
+
+				payrollTimeExportDataDto.StartDate = schedulePartDto.LocalPeriod.LocalStartDateTime;
+				payrollTimeExportDataDto.EndDate = schedulePartDto.LocalPeriod.LocalEndDateTime;
 				payrollTimeExportDataDto.ContractTime = schedulePartDto.ContractTime.TimeOfDay;
-				payrollTimeExportDataDto.WorkTime = projection.WorkTime();
-				payrollTimeExportDataDto.PaidTime = projection.PaidTime();
+				payrollTimeExportDataDto.WorkTime = schedulePartDto.WorkTime.TimeOfDay;
+				payrollTimeExportDataDto.PaidTime = schedulePartDto.PaidTime.TimeOfDay;
 			}
 
 			yield return payrollTimeExportDataDto;
 		}
 
-		private static bool havePersonAssignmentAndShiftCategory(IPersonAssignment personAssignment)
+		private static bool isDayEmpty(SchedulePartDto part)
 		{
-			return personAssignment != null && personAssignment.ShiftCategory != null;
-		}
-
-		private static bool isDayEmpty(IScheduleDay scheduleDay, IVisualLayerCollection projection)
-		{
-			return !projection.HasLayers &&
-			       !scheduleDay.PersonDayOffCollection().Any() &&
-			       !scheduleDay.PersonAbsenceCollection(false).Any();
+			return !part.ProjectedLayerCollection.Any() &&
+			       !part.PersonAbsenceCollection.Any() &&
+			       part.PersonDayOff == null;
 		}
 		
 		public IList<PayrollBaseExportDto> BuildDetailedExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();
 
-			var overtimeAndShiftAllowances = createOvertimeAndShiftAllowanceDtos(person, dateOnly, scheduleDay).ToList();
+			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
+			var overtimeAndShiftAllowances = createOvertimeAndShiftAllowanceDtos(person, dateOnly, schedulePartDto).ToList();
 			if (overtimeAndShiftAllowances.Any())
 				exportDtos.AddRange(overtimeAndShiftAllowances);
 
-			var absences = createAbsenceDtos(person, dateOnly, scheduleDay, _absenceDictionary).ToList();
+			var absences = createAbsenceDtos(person, dateOnly, schedulePartDto, _absenceDictionary).ToList();
 			if (absences.Any())
 				exportDtos.AddRange(absences);
 
@@ -113,26 +103,24 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		}
 
 		private static IEnumerable<PayrollBaseExportDto> createOvertimeAndShiftAllowanceDtos(IPerson person,
-		                                                                                     DateOnly dateOnly,
-		                                                                                     IScheduleDay scheduleDay)
+		                                                                              DateOnly dateOnly,
+		                                                                              SchedulePartDto schedulePartDto)
 		{
-			var multiplicatorProjectionService = new MultiplicatorProjectionService(scheduleDay, dateOnly);
-			var projection = multiplicatorProjectionService.CreateProjection();
-
-			foreach (var layer in projection)
-			{
-				var payrollDetailedExportDto = createDtoWithPersonData(person, dateOnly);
-				payrollDetailedExportDto.PayrollCode = layer.Payload.ExportCode;
-				payrollDetailedExportDto.Time = layer.Period.ElapsedTime();
-				yield return payrollDetailedExportDto;
-			}
+			foreach (var assignmentDto in schedulePartDto.PersonAssignmentCollection)
+				foreach (var shiftDto in assignmentDto.OvertimeShiftCollection)
+					foreach (var activityLayerDto in shiftDto.LayerCollection)
+					{
+						var payrollDetailedExportDto = createDtoWithPersonData(person, dateOnly);
+						payrollDetailedExportDto.PayrollCode = activityLayerDto.Activity.PayrollCode;
+						payrollDetailedExportDto.Time = activityLayerDto.Period.UtcEndTime - activityLayerDto.Period.UtcStartTime;
+						yield return payrollDetailedExportDto;
+					}
 		}
 
-		private IEnumerable<PayrollBaseExportDto> createAbsenceDtos(IPerson person, DateOnly dateOnly,
-		                                                            IScheduleDay scheduleDay,
+		private static IEnumerable<PayrollBaseExportDto> createAbsenceDtos(IPerson person, DateOnly dateOnly,
+		                                                            SchedulePartDto schedulePartDto,
 		                                                            IDictionary<Guid, AbsenceDto> absenceDictionary)
 		{
-			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
 			var absencesInProjection = schedulePartDto.ProjectedLayerCollection
 			                                          .Where(layer => layer.IsAbsence &&
 			                                                          layer.ContractTime != TimeSpan.Zero);
@@ -148,22 +136,22 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public IList<PayrollBaseExportDto> BuildActivitesExport(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay)
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();
+			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
 			var activityDtos =
-				createActivityExportDtos(person, dateOnly, scheduleDay, _absenceDictionary, _activityDictionary, _dayOffCodes)
+				createActivityExportDtos(person, dateOnly, schedulePartDto, _absenceDictionary, _activityDictionary, _dayOffCodes)
 					.ToList();
 			if (activityDtos.Any())
 				exportDtos.AddRange(activityDtos);
 			return exportDtos;
 		}
 
-		private IEnumerable<PayrollBaseExportDto> createActivityExportDtos(IPerson person, DateOnly dateOnly,
-		                                                                   IScheduleDay scheduleDay,
+		private static IEnumerable<PayrollBaseExportDto> createActivityExportDtos(IPerson person, DateOnly dateOnly,
+																		   SchedulePartDto schedulePartDto,
 		                                                                   IDictionary<Guid, AbsenceDto>
 			                                                                   absenceDictionary,
 		                                                                   IDictionary<Guid, ActivityDto>
 			                                                                   activityDictionary, IList<Guid> dayOffCodes)
 		{
-			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
 			var projectedLayersWithoutDayOffs = schedulePartDto.ProjectedLayerCollection
 			                                                   .Where(layer => !dayOffCodes.Contains(layer.PayloadId));
 
