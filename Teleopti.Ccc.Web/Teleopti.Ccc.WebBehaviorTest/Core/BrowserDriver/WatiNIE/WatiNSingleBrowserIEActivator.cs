@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		private static void IncrementScenarioCount() { _scenarioCount += 1; }
 
 		public IE Internal { get; set; }
+		private WatiNIEBrowserInteractions _interactions;
 
 		public void SetTimeout(TimeSpan timeout)
 		{
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Internal.ClearCache();
 			Internal.ClearCookies();
 			Internal.BringToFront();
+			_interactions = new WatiNIEBrowserInteractions(Internal);
 		}
 
 		public void NotifyBeforeTestRun()
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			finally
 			{
 				Internal = null;
+				_interactions = null;
 				ReleaseBrowser();
 			}
 		}
@@ -99,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public IBrowserInteractions GetInteractions()
 		{
-			return new WatiNIEBrowserInteractions(Internal);
+			return _interactions;
 		}
 
 

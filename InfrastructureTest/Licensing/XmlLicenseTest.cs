@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [Test]
         public void VerifySignErrorWhenFileExists()
         {
-			int exitCode = XmlLicense.Sign(null, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+            int exitCode = XmlLicense.Sign(null, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.FileNotFound, exitCode);
         }
 
@@ -55,28 +55,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySigning()
         {
-			XmlDocument doc = new XmlDocument();
-			doc.Load(teleoptiCccUnsignedLicenseFileName);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(teleoptiCccUnsignedLicenseFileName);
 
-			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
         }
 
         [Test]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySignature()
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.Load(teleoptiCccUnsignedLicenseFileName);
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(teleoptiCccUnsignedLicenseFileName);
 
-			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-			XDocument signedXml;
-			using (var reader = new XmlNodeReader(doc))
-			{
-				signedXml = XDocument.Load(reader);
-			}
+            XDocument signedXml;
+            using (var reader = new XmlNodeReader(doc))
+            {
+                signedXml = XDocument.Load(reader);
+            }
 
             IXmlLicense xmlLicense = new XmlLicense(signedXml, XmlLicenseTestSetupFixture.PublicKeyXmlString);
             Assert.AreEqual("This license is stolen!", xmlLicense.CustomerName);
@@ -98,18 +98,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             )]
         public void VerifySignatureInvalidWhenWrongSingingKey()
         {
-			XmlDocument doc = new XmlDocument();
-			doc.Load(teleoptiCccUnsignedLicenseFileName);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(teleoptiCccUnsignedLicenseFileName);
 
             int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore("nonexistantcontainer"));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-        	XDocument signedXml;
-        	using (var reader = new XmlNodeReader(doc))
-			{
-				signedXml = XDocument.Load(reader);
-			}
-        	bool exceptionThrown = false;
+            XDocument signedXml;
+            using (var reader = new XmlNodeReader(doc))
+            {
+                signedXml = XDocument.Load(reader);
+            }
+            bool exceptionThrown = false;
             try
             {
                 new XmlLicense(signedXml, XmlLicenseTestSetupFixture.PublicKeyXmlString);
@@ -125,18 +125,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifySignatureInvalidWhenModified()
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.Load(teleoptiCccUnsignedLicenseFileName);
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(teleoptiCccUnsignedLicenseFileName);
 
-			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-			XDocument signedXml;
-			using (var reader = new XmlNodeReader(doc))
-			{
-				signedXml = XDocument.Load(reader);
-			}
+            XDocument signedXml;
+            using (var reader = new XmlNodeReader(doc))
+            {
+                signedXml = XDocument.Load(reader);
+            }
 
             XElement maxActiveAgentsElement = signedXml.XPathSelectElement("License/MaxActiveAgents");
             Assert.AreEqual("10000", maxActiveAgentsElement.Value);

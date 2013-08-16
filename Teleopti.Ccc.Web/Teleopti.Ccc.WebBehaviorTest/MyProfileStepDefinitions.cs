@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
+		[When(@"I view my settings")]
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
@@ -86,14 +87,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyCulture()
 		{
 			var user = UserFactory.User();
-			Browser.Interactions.AssertContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
+			Browser.Interactions.AssertFirstContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
 			var user = UserFactory.User();
-			Browser.Interactions.AssertContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
+			Browser.Interactions.AssertFirstContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]

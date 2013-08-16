@@ -248,6 +248,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
 						if (options.Contains("MobileReports")) chkMobileReports.Checked = true;
 						if (options.Contains("SMSLink")) checkBoxSMS.Checked = true;
+						if (options.Contains("CalendarLink")) checkBoxCalendar.Checked = true;
 						if (options.Contains("Version8")) checkBoxVersion8.Checked = true;
 
 						//Freemium
@@ -316,6 +317,7 @@ namespace Teleopti.Support.LicTool
 				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkMobileReports.Checked) elmOptions.AppendChild(xdoc.CreateElement("MobileReports")).AppendChild(xdoc.CreateTextNode("true"));
 				if (checkBoxSMS.Checked) elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
+				if (checkBoxCalendar.Checked) elmOptions.AppendChild(xdoc.CreateElement("CalendarLink")).AppendChild(xdoc.CreateTextNode("true"));
 				if (checkBoxVersion8.Checked) elmOptions.AppendChild(xdoc.CreateElement("Version8")).AppendChild(xdoc.CreateTextNode("true"));
 
 				rootNode.AppendChild(elmOptions);

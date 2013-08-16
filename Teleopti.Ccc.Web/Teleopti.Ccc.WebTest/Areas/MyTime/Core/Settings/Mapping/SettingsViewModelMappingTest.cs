@@ -9,16 +9,17 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.Mapping
 {
 	[TestFixture]
 	public class SettingsViewModelMappingTest
 	{
+
 		[SetUp]
 		public void Setup()
 		{
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile<SettingsMappingProfile>());
+			Mapper.Initialize(c => c.AddProfile(new SettingsMappingProfile()));
 		}
 
 		[Test]
@@ -92,5 +93,9 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var sortedCultures = result.Cultures.OrderBy(c => c.text);
 			result.Cultures.Should().Have.SameSequenceAs(sortedCultures);
 		}
+
+
+
+
 	}
 }

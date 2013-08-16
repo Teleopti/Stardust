@@ -3,7 +3,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 {
 	public class PersonPersister : IPersonPersister
 	{

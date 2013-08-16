@@ -196,7 +196,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _activateMeetingTooltip() {
-		$('.meeting-small')
+		$('.icon-user')
 			.each(function () {
 				var date = $(this).closest("li[data-mytime-date]").attr("data-mytime-date");
 				var content = {
@@ -311,14 +311,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
-					    selectionViewModel.enableDateSelection();
+						selectionViewModel.enableDateSelection();
+						callWhenAjaxIsCompleted(completelyLoaded);
 					});
 				});
 			}
-			callWhenAjaxIsCompleted(function() {
-				readyForInteraction();
-				completelyLoaded();
-			});
 		});
 	}
 

@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
-			Browser.Interactions.AssertExists(
+			Browser.Interactions.AssertExistsUsingJQuery(
 				string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')",
 				              absenceListItemInfo.Name,
 				              absenceListItemInfo.StartTime,
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{
-			Browser.Interactions.Click(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
+			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 		
 		public class AbsenceListItemInfo

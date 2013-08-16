@@ -110,9 +110,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				period = period.ChangeEndTime(TimeSpan.FromTicks(-1));
 				personList.Add(person);
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.Current());
-				//rk don't know if I break stuff here...
-				//scheduleDictionary.SetTimeZone(timeZoneInfo);
+				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
 
 
 				using (ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder())

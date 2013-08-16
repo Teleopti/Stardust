@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     case ViewType.Schedule:
                         _hostedView = _scheduleControl;
-                        _scheduleControl.ScheduleView.Refresh(true);
+                        _scheduleControl.ScheduleView.Refresh();
                         break;
 
                     case ViewType.Legend:

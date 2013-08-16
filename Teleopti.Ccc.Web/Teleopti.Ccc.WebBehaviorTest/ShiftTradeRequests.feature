@@ -504,3 +504,127 @@ Scenario: Can not approve or deny shift trade request that is already approved
 	When I click on the request at position '1' in the list
 	Then I should not see the approve button
 	And I should not see the deny button
+
+	@ignore
+Scenario: Show referred when schedule has changed for a shifttrade that I have created
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have created a shift trade request
+	| Field    | Value         |
+	| From     | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending | True          |
+	And My schedule for '2030-01-01' has been changed 
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	Then I should see a indication that the request is referred
+
+@ignore
+Scenario: Resend referred shifttrade 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have created a shift trade request
+	| Field    | Value         |
+	| From     | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending | True          |
+	And My schedule for '2030-01-01' has been changed 
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	And I click on shifttrade resend button
+	Then I should see a indication that the request is pending
+
+@ignore
+Scenario: Cancel referred shifttrade 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have created a shift trade request
+	| Field    | Value         |
+	| From     | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending | True          |
+	And My schedule for '2030-01-01' has been changed 
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	And I click on shifttrade cancel button
+	Then I should not see any requests
+
+@ignore
+Scenario: Remove shifttrade from reciever when schedule has changed
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have received a shift trade request
+	| Field    | Value         |
+	| From     | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending | True          |
+	And My schedule for '2030-01-01' has been changed 
+	And I am viewing requests
+	Then I should not see any requests
+	
+
+
+
+
+
+

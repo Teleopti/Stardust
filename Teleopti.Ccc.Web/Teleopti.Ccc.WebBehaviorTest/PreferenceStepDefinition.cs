@@ -34,9 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-
-			var selector = "a:contains('" + shiftCategory.Description.Name + "')";
-			Browser.Interactions.Click(selector);
+			Browser.Interactions.ClickContaining("a", shiftCategory.Description.Name);
 		}
 
 		[When(@"I select an editable day without preference")]
@@ -101,16 +99,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.AssertContains("#preference-split-button", data.ShiftCategory.Description.Name);
-			Browser.Interactions.AssertContains("#preference-split-button", data.DayOffTemplate.Description.Name);
-			Browser.Interactions.AssertContains("#preference-split-button", data.Absence.Description.Name);
+			Browser.Interactions.AssertFirstContains("#preference-split-button", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains("#preference-split-button", data.DayOffTemplate.Description.Name);
+			Browser.Interactions.AssertFirstContains("#preference-split-button", data.Absence.Description.Name);
 		}
 
 		[Then(@"I should see the selected standard preference in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
 		{
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.AssertContains("#preference-split-button .btn", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains("#preference-split-button .btn", data.ShiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the standard preference in the calendar")]
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
@@ -126,17 +124,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			var data = UserFactory.User().UserData<StandardPreference>();
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
 			var data = UserFactory.User().UserData<StandardPreference>();
-			Browser.Interactions.AssertNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
+			Browser.Interactions.AssertFirstNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
