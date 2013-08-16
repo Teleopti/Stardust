@@ -2091,6 +2091,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
 
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Count > 0;
+
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
+			}
 		}
 
 		private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
@@ -5343,7 +5348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
 			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo);
 		}
 
@@ -6723,7 +6728,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (TimeZoneGuard.Instance.TimeZone == downItem.Tag);
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
@@ -7129,7 +7134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (TimeZoneGuard.Instance.TimeZone == downItem.Tag);
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{

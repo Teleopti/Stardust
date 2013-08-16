@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
 			this.toolStripStatusLabelScheduleTag = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabelContractTime = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabelTimeZone = new System.Windows.Forms.ToolStripStatusLabel();
 			this.contextMenuViews = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.toolStripMenuItemCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -355,11 +356,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSpinningProgressControl1,
+			this.toolStripSpinningProgressControl1,
             this.toolStripStatusLabelStatus,
             this.toolStripProgressBar1,
             this.toolStripStatusLabelScheduleTag,
-            this.toolStripStatusLabelContractTime});
+            this.toolStripStatusLabelContractTime,
+			this.toolStripStatusLabelTimeZone,
+            });
 			this.statusStrip1.Location = new System.Drawing.Point(6, 725);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(1262, 26);
@@ -416,6 +419,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelContractTime.Size = new System.Drawing.Size(38, 21);
 			this.toolStripStatusLabelContractTime.Text = "00:00";
 			this.toolStripStatusLabelContractTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// toolStripStatusLabelContractTime
+			// 
+			this.toolStripStatusLabelTimeZone.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+			this.toolStripStatusLabelTimeZone.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+			this.toolStripStatusLabelTimeZone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabelTimeZone.Name = "toolStripStatusLabelTimeZone";
+			this.SetShortcut(this.toolStripStatusLabelTimeZone, System.Windows.Forms.Keys.None);
+			this.toolStripStatusLabelTimeZone.Size = new System.Drawing.Size(38, 21);
+			this.toolStripStatusLabelTimeZone.Text = "xxViewPointTimeZone";
+			this.toolStripStatusLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// contextMenuViews
 			// 
@@ -3374,6 +3388,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton btnFilter;
         private System.Windows.Forms.ToolStripButton btnRightLeft;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelContractTime;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTimeZone;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
