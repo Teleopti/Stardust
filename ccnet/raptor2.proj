@@ -377,7 +377,7 @@
 		<Message Importance="high" Text="NCoverReporting finished." />
 	</Target>
 	
-	<Target Name="NDepend" DependsOnTargets="Compile">
+	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="Compile" >
     <PropertyGroup>
       <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
       <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
