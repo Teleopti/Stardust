@@ -109,6 +109,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         }
 
         [Test]
+        public void ShouldAllowOneHundredHoursAsMaximumForTaskTime()
+        {
+            _task = new Task();
+            _target = new TemplateTaskPeriod(_task, _timePeriod);
+            _target.AverageTaskTime = TimeSpan.FromHours(101);
+
+            Assert.AreEqual(TimeSpan.FromHours(100), _target.AverageTaskTime);
+        }
+
+        [Test]
+        public void ShouldAllowOneHundredHoursAsMaximumForAfterTaskTime()
+        {
+            _task = new Task();
+            _target = new TemplateTaskPeriod(_task, _timePeriod);
+            _target.AverageAfterTaskTime = TimeSpan.FromHours(101);
+
+            Assert.AreEqual(TimeSpan.FromHours(100), _target.AverageAfterTaskTime);
+        }
+
+        [Test]
         public void VerifyAverageAfterTaskTimeCanBeZero()
         {
             _task = new Task();
