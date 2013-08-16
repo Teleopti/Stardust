@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveDown
 	    {
-				get { return _moveLayerVertical != null && !_assignment.OvertimeLayers().ToList().Last().Equals(_layer); ; }
+		    get
+		    {
+			    var overtimeLayers = _assignment.OvertimeLayers().ToList();
+			    return _moveLayerVertical != null && overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
+		    }
 	    }
 
 	    public override bool Opaque
