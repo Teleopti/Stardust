@@ -13,11 +13,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class ResourceCalculationDataContainerFromStorageTest
     {
 		private ResourceCalculationDataContainerFromStorage _target;
-	    private readonly DateOnly _date = new DateOnly(2013, 8, 16);
 		private readonly DateTimePeriod _period = new DateTimePeriod(new DateTime(2013, 8, 16, 12, 0, 0, DateTimeKind.Utc), new DateTime(2013, 8, 16, 12, 15, 0, DateTimeKind.Utc));
 		private readonly IActivity _activity = ActivityFactory.CreateActivity("Phone");
 		private readonly ISkill _skill = SkillFactory.CreateSkill("Skill1");
-	    private IPerson _person;
 	    private ActivitySkillCombinationFromStorage[] _activitySkillCombinations;
 
 	    [SetUp]
@@ -36,8 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 						    Skills = _skill.Id.ToString()
 					    }
 			    };
-			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill });
-            _target = new ResourceCalculationDataContainerFromStorage();
+		    _target = new ResourceCalculationDataContainerFromStorage();
         }
 
 		[Test]
@@ -69,7 +66,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldGetAffectedSkillsWithProficiency()
 		{
-			addResourcesForTest(_period, 0.8, new []{new SkillEfficienciesFromStorage{Amount = 0.9,ParentId = 2,SkillId = _skill.Id.GetValueOrDefault()}});
+			addResourcesForTest(_period, 0.8,
+			                    new[]
+				                    {
+					                    new SkillEfficienciesFromStorage
+						                    {
+							                    Amount = 0.9,
+							                    ParentId = 2,
+							                    SkillId = _skill.Id.GetValueOrDefault()
+						                    }
+				                    });
 			
 			var result = _target.AffectedResources(_activity, _period);
 			var affectedSkill = result.First().Value;
@@ -93,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldGetAffectedSkillsForMultipleIntervalsWithEfficiency()
 		{
 			addResourcesForTest(_period, 0.8, _period.MovePeriod(TimeSpan.FromMinutes(15)), 0.7,
-			                    new SkillEfficienciesFromStorage[]
+			                    new[]
 				                    {
 					                    new SkillEfficienciesFromStorage
 						                    {
