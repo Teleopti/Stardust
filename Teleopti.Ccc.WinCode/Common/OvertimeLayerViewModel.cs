@@ -35,10 +35,15 @@ namespace Teleopti.Ccc.WinCode.Common
 	    {
 		    get
 		    {
-			    var overtimeLayers = _assignment.OvertimeLayers().ToList();
-			    return _moveLayerVertical != null && overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
+			    return _moveLayerVertical != null && !isLayerLast();
 		    }
 	    }
+
+		private bool isLayerLast()
+		{
+			var overtimeLayers = _assignment.OvertimeLayers().ToList();
+			return overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
+		}
 
 	    public override bool Opaque
         {
