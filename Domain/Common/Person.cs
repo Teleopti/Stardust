@@ -129,6 +129,14 @@ namespace Teleopti.Ccc.Domain.Common
 				modify.Active = personSkill.Active;
 				modify.SkillPercentage = personSkill.SkillPercentage;
 			}
+			AddEvent(new PersonSkillAddedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					SkillId = personSkill.Skill.Id.GetValueOrDefault(),
+					StartDate = personPeriod.StartDate,
+					Proficiency = personSkill.SkillPercentage.Value,
+					SkillActive = personSkill.Active
+				});
 		}
 
 		public virtual void ResetPersonSkills(IPersonPeriod personPeriod)
@@ -139,6 +147,11 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				modify.ResetPersonSkill();
 			}
+			AddEvent(new PersonSkillAddedEvent
+			{
+				PersonId = Id.GetValueOrDefault(),
+				StartDate = personPeriod.StartDate
+			});
 		}
 
 		public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
@@ -149,6 +162,13 @@ namespace Teleopti.Ccc.Domain.Common
 			if (personSkill != null)
 			{
 				personSkill.Active = true;
+
+				AddEvent(new PersonSkillActivatedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						SkillId = skill.Id.GetValueOrDefault(),
+						StartDate = personPeriod.StartDate
+					});
 			}
 		}
 
@@ -160,6 +180,13 @@ namespace Teleopti.Ccc.Domain.Common
 			if (personSkill != null)
 			{
 				personSkill.Active = false;
+
+				AddEvent(new PersonSkillDeactivatedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						SkillId = skill.Id.GetValueOrDefault(),
+						StartDate = personPeriod.StartDate
+					});
 			}
 		}
 
@@ -171,6 +198,12 @@ namespace Teleopti.Ccc.Domain.Common
 			if (personSkill != null)
 			{
 				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
+				AddEvent(new PersonSkillRemovedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						SkillId = skill.Id.GetValueOrDefault(),
+						StartDate = personPeriod.StartDate
+					});
 			}
 		}
 
@@ -181,7 +214,17 @@ namespace Teleopti.Ccc.Domain.Common
 			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 			{
+				var proficiencyBefore = personSkill.SkillPercentage;
 				personSkill.SkillPercentage = proficiency;
+
+				AddEvent(new PersonSkillProficiencyChangedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						SkillId = skill.Id.GetValueOrDefault(),
+						StartDate = personPeriod.StartDate,
+						ProficiencyBefore = proficiencyBefore.Value,
+						ProficiencyAfter = proficiency.Value
+					});
 			}
 		}
 

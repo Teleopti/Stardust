@@ -75,6 +75,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	}
 
 	[Serializable]
+	public class PersonSkillDeactivatedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid SkillId { get; set; }
+	}
+
+	[Serializable]
+	public class PersonSkillAddedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid SkillId { get; set; }
+		public double Proficiency { get; set; }
+		public bool SkillActive { get; set; }
+	}
+
+	[Serializable]
+	public class PersonSkillResetEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+	}
+
+	[Serializable]
+	public class PersonSkillRemovedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid SkillId { get; set; }
+	}
+
+	[Serializable]
+	public class PersonSkillProficiencyChangedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid SkillId { get; set; }
+		public double ProficiencyBefore { get; set; }
+		public double ProficiencyAfter { get; set; }
+	}
+
+	[Serializable]
+	public class PersonSkillActivatedEvent : RaptorDomainEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime StartDate { get; set; }
+		public Guid SkillId { get; set; }
+	}
+
+	[Serializable]
 	public class PersonTeamChangedEvent : RaptorDomainEvent
 	{
 		public Guid PersonId { get; set; }

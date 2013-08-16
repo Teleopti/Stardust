@@ -107,6 +107,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 	//- Person period removed -
 	//- Person period skill changes
 	//- Person team changes
-	//+ Activity requires seat changed
 	//- Team site changes -
 }
