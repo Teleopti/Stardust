@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -20,21 +25,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 	public class ScheduleOvertimeCommand : IScheduleOvertimeCommand
 	{
+		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IProjectionProvider _projectionProvider;
+		private readonly ISkillResolutionProvider _resolutionProvider;
 		private BackgroundWorker _backgroundWorker;
 
-		public ScheduleOvertimeCommand(ISchedulingResultStateHolder schedulingResultStateHolder,
+		public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
+		                               ISchedulingResultStateHolder schedulingResultStateHolder,
 		                               IOvertimeLengthDecider overtimeLengthDecider,
 		                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                               IProjectionProvider projectionProvider)
+		                               IProjectionProvider projectionProvider,
+		                               ISkillResolutionProvider resolutionProvider)
 		{
+			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_projectionProvider = projectionProvider;
+			_resolutionProvider = resolutionProvider;
 		}
 
 		public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -78,7 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							          new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
                     
                     _schedulePartModifyAndRollbackService.ClearModificationCollection();
-				    var oldRmsValue = getRMSValue(dateOnly);
+				    var oldRmsValue = calculatePeriodValue(dateOnly);
 
 					if (overtimePreferences.ScheduleTag.Description != "<None>")
 					{
@@ -93,22 +104,100 @@ namespace Teleopti.Ccc.Win.Scheduling
 					resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 																			  overtimeLayerPeriod,
 																new List<IScheduleDay> { scheduleDay });
-				    var newRmsValue = getRMSValue(dateOnly);
+				    var newRmsValue = calculatePeriodValue(dateOnly);
 				    if (newRmsValue > oldRmsValue)
 				        _schedulePartModifyAndRollbackService.Rollback();
 				}
 			}
 		}
 
-        private double? getRMSValue(DateOnly dateOnly)
+        private double? calculatePeriodValue(DateOnly dateOnly)
         {
-            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>{dateOnly });
-            if (skillDays.Any())
-            {
-                return  SkillStaffPeriodHelper.SkillDayRootMeanSquare(skillDays[0].SkillStaffPeriodCollection );
+            var skills = _schedulingResultStateHolder.NonVirtualSkills;
+			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
+			// in ViewPoint
+			var timeZone = _schedulerState.TimeZoneInfo;
+			// user timeZone
+			var userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var diff = userTimeZone.BaseUtcOffset - timeZone.BaseUtcOffset;
+			var viewPointPeriod = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(timeZone).MovePeriod(diff);    
+			var dateTimePeriods = viewPointPeriod.WholeDayCollection();
 
-            }
-            return null;
+			IDictionary<DateTimePeriod, IList<ISkillStaffPeriod>> skillStaffPeriods = new Dictionary<DateTimePeriod, IList<ISkillStaffPeriod>>();
+
+			foreach (DateTimePeriod utcPeriod in dateTimePeriods)
+			{
+				DateTimePeriod period = utcPeriod;
+				foreach (ISkill skill in skills)
+				{
+					ISkillStaffPeriodDictionary content;
+					if (!_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out content)) continue;
+
+					if (skill.DefaultResolution > minimumResolution)
+					{
+						
+						var relevantSkillStaffPeriodList = content.Where(c => period.Contains(c.Key)).Select(c => c.Value);
+						var skillStaffPeriodsSplitList = new List<ISkillStaffPeriod>();
+						double factor = (double)minimumResolution / skill.DefaultResolution;
+						foreach (ISkillStaffPeriod skillStaffPeriod in relevantSkillStaffPeriodList)
+						{
+							skillStaffPeriodsSplitList.AddRange(SkillStaffPeriodHolder.SplitSkillStaffPeriod(skillStaffPeriod, factor, TimeSpan.FromMinutes(minimumResolution)));
+						}
+
+						foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodsSplitList)
+						{
+							IList<ISkillStaffPeriod> foundList;
+							if (!skillStaffPeriods.TryGetValue(skillStaffPeriod.Period, out foundList))
+							{
+								foundList = new List<ISkillStaffPeriod>();
+								skillStaffPeriods.Add(skillStaffPeriod.Period, foundList);
+							}
+
+							foundList.Add(skillStaffPeriod);
+						}
+					}
+					else
+					{
+						foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in content.Where(c => period.Contains(c.Key)))
+						{
+							IList<ISkillStaffPeriod> foundList;
+							if (!skillStaffPeriods.TryGetValue(pair.Key, out foundList))
+							{
+								foundList = new List<ISkillStaffPeriod>();
+								skillStaffPeriods.Add(pair.Key, foundList);
+							}
+
+							foundList.Add(pair.Value);
+						}
+					}
+				}
+
+			}
+			IList<ISkillStaffPeriod> combinedSkillStaffPeriods = new List<ISkillStaffPeriod>();
+
+			foreach (KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair in skillStaffPeriods)
+			{
+				ISkillStaffPeriod tempPeriod = SkillStaffPeriod.Combine(keyValuePair.Value);
+				var aggregate = (IAggregateSkillStaffPeriod)tempPeriod;
+				aggregate.IsAggregate = true;
+
+				foreach (ISkillStaffPeriod staffPeriod in keyValuePair.Value)
+				{
+					var asAgg = (IAggregateSkillStaffPeriod)staffPeriod;
+					if (!asAgg.IsAggregate)
+					{
+						SkillStaffPeriodHolder.HandleAggregate(keyValuePair, aggregate, staffPeriod, asAgg);
+					}
+					else
+					{
+						aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
+					}
+
+				}
+				combinedSkillStaffPeriods.Add(tempPeriod);
+			}
+
+			return SkillStaffPeriodHelper.SkillDayRootMeanSquare(combinedSkillStaffPeriods);
         }
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs e)
