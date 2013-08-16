@@ -84,13 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
                                                                              _averageHandlingTime, _periodLength,
                                                                              _minOcc, _maxOcc,1), 3));
         }
-
-		[Test]
-		public void ShouldCalculateAgentsUseOccupancyLowServiceLevel()
-		{
-			_calculatorService.TeleoptiAgents(1, 1, 3000, 1.0001, _periodLength).Should().Be.GreaterThan(0);
-		}
-
+		
         [Test]
         public void VerifyAgentsUseOccupancySmallDemandWorks()
         {
