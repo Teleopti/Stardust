@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -75,6 +76,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if(!overtimePreferences.AllowBreakWeeklyRest)
 						rules.Add(new MinWeeklyRestRule(
 							          new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
+                    
+                    _schedulePartModifyAndRollbackService.ClearModificationCollection();
+				    var oldRmsValue = getRMSValue(dateOnly);
 
 					if (overtimePreferences.ScheduleTag.Description != "<None>")
 					{
@@ -84,13 +88,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 					else
 						_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, rules);
 
+                    
 					OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 					resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 																			  overtimeLayerPeriod,
 																new List<IScheduleDay> { scheduleDay });
+				    var newRmsValue = getRMSValue(dateOnly);
+				    if (newRmsValue > oldRmsValue)
+				        _schedulePartModifyAndRollbackService.Rollback();
 				}
 			}
 		}
+
+        private double? getRMSValue(DateOnly dateOnly)
+        {
+            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>{dateOnly });
+            if (skillDays.Any())
+            {
+                return  SkillStaffPeriodHelper.SkillDayRootMeanSquare(skillDays[0].SkillStaffPeriodCollection );
+
+            }
+            return null;
+        }
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs e)
 		{
