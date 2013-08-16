@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retDic;
         }
 
-        private void addOvertimeAvailability(IScheduleDictionary retDic, IList<IOvertimeAvailability> availabilityDays)
+        private void addOvertimeAvailability(IScheduleDictionary retDic, IEnumerable<IOvertimeAvailability> availabilityDays)
         {
             foreach (var availabilityDay in availabilityDays)
             {
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
 
             // Clean ScheduleDictionary from all persons not present in PersonsInOrganization
-            IList<IPerson> personsToRemove = new List<IPerson>();
+            var personsToRemove = new List<IPerson>();
             foreach (IPerson person in scheduleDictionary.Keys)
             {
                 if (!personsInOrganization.Contains(person))
