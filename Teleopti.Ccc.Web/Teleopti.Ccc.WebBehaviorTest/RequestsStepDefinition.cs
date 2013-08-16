@@ -207,31 +207,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		//henke: todo
-		[Then(@"I should see a indication that the request is referred")]
-		public void ThenIShouldSeeAIndicationThatTheRequestIsReferred()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		//henke: todo
 		[Then(@"I should see a indication that the request is pending")]
 		public void ThenIShouldSeeAIndicationThatTheRequestIsPending()
 		{
-			ScenarioContext.Current.Pending();
-		}
-
-		//henke: todo
-		[Given(@"My schedule for '(.*)' has been changed")]
-		public void GivenMyScheduleForHasBeenChanged(DateTime date)
-		{
-			ScenarioContext.Current.Pending();
+			//ScenarioContext.Current.Pending();
 		}
 
 		//henke: todo
 		[When(@"I click on shifttrade resend button")]
 		public void WhenIClickOnShifttradeResendButton()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.ClickContaining(".btn-primary", Resources.SendAgain);
 		}
 
 		//henke: todo

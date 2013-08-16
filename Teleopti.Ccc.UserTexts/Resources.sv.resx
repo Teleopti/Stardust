@@ -11177,4 +11177,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Zooma</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Skicka igen</value>
+  </data>
 </root>

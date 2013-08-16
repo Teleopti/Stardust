@@ -47,10 +47,12 @@
 
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>
 
-  <div  class="floatright" data-bind="visible: !IsTradeCreatedByMe()" >
-        <button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
-        <button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
-    </div>
-
+<div  class="floatright" data-bind="visible: !IsTradeCreatedByMe()" >
+	<button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
+	<button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
+</div>
+@*<div class="floatright">
+        <button class="btn btn-primary" data-bind="click: reSend">@Resources.SendAgain</button>
+	</div>*@
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>
