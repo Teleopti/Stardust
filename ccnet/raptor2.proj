@@ -381,7 +381,7 @@
     <PropertyGroup>
       <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
       <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
-	  <NDOut>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs</NDOut>
+	  <NDOut>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend</NDOut>
     </PropertyGroup>
 	<Message Importance="high" Text="Running NDepend with $(NDPath) on  $(NDProject) out = $(NDOut)" />
     <Exec
