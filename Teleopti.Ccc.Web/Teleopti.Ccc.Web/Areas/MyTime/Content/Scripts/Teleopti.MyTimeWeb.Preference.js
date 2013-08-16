@@ -311,14 +311,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
-					    selectionViewModel.enableDateSelection();
+						selectionViewModel.enableDateSelection();
+						callWhenAjaxIsCompleted(completelyLoaded);
 					});
 				});
 			}
-			callWhenAjaxIsCompleted(function() {
-				readyForInteraction();
-				completelyLoaded();
-			});
 		});
 	}
 

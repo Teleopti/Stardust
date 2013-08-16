@@ -331,3 +331,8 @@ Keep comments here, in case we need to enabled it again ...
 //xcopy "C:\Program Files\Microsoft SDKs\Windows\v6.0A\Bootstrapper\Packages\DotNetFX35SP1" "C:\Program Files\Microsoft SDKs\Windows\v7.0A\Bootstrapper\Packages\DotNetFX35SP1" /E
 //
 //note3: On some machines, you need to "Update the Package Data" => packages.xml under "v7.0A" rather then "v6.0A"
+
+
+NDepend:
+The latest version should be on Hangaren\NDepend. For now we should only use it on RaptorMain. We only have a license for one machine.
+It is copied to c:\Ndepend on HEBE and the path is hardcoded in raptor2.proj to that directory.
