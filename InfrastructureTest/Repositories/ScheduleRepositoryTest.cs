@@ -333,6 +333,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanLoadReadOnlyScheduleBasedOnPersonsAndPeriodAndScenario()
         {
+					 var searchPeriod = new DateOnlyPeriod(2000, 1, 1, 2001, 1, 2);
+	        var longPeriod = new DateTimePeriod(1999, 12, 31, 2001, 1, 4);
+
             IList<IPerson> visiblePeople = new List<IPerson>();
             IScheduleDictionary retDic;
 
@@ -349,11 +352,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             using (_mocks.Record())
             {
-                ExpectScheduleLoadReadOnlyByPerson(visiblePeople);
+                ExpectScheduleLoadReadOnlyByPerson(visiblePeople, longPeriod);
             }
             using (_mocks.Playback())
             {
-							retDic = _target.FindSchedulesOnlyInGivenPeriod(new PersonProvider(visiblePeople), new ScheduleDictionaryLoadOptions(true, true), _searchPeriod, _scenario);
+							retDic = _target.FindSchedulesOnlyInGivenPeriod(new PersonProvider(visiblePeople), new ScheduleDictionaryLoadOptions(true, true), searchPeriod, _scenario);
             }
             Assert.AreEqual(1, retDic.Count);
             Assert.IsTrue(retDic[person1].Contains(pAss1));
@@ -366,13 +369,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             retDic.GetType().Name.Should().Contain("ReadOnly");
         }
 
-        private void ExpectScheduleLoadReadOnlyByPerson(IList<IPerson> visiblePeople)
+        private void ExpectScheduleLoadReadOnlyByPerson(IList<IPerson> visiblePeople, DateTimePeriod longPeriod)
         {
-            Expect.Call(_absRep.Find(visiblePeople, _longPeriod, _scenario))
+            Expect.Call(_absRep.Find(visiblePeople, longPeriod, _scenario))
                 .Return(_absences);
 						Expect.Call(_assRep.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_assignments);
-            Expect.Call(_dayOffRep.Find(visiblePeople, _longPeriod, _scenario))
+            Expect.Call(_dayOffRep.Find(visiblePeople, longPeriod, _scenario))
                 .Return(_dayOffs);
             Expect.Call(_meetingRepository.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_meetings);
@@ -382,10 +385,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_publicNotes);
 						Expect.Call(_agentDayScheduleTagRepository.Find(_searchPeriod, visiblePeople, _scenario)).Return(_agentDayScheduleTags);
             Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longPeriod.StartDateTime))
+                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(longPeriod.StartDateTime))
                 .Return(_rotations);
             Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longPeriod.StartDateTime))
+                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(longPeriod.StartDateTime))
                 .Return(_availabilities);
 						Expect.Call(_prefDayRep.Find(_searchPeriod, visiblePeople)).Return(_prefDays);
 						Expect.Call(_availabilityDayRep.Find(_searchPeriod, visiblePeople)).Return(_studentAvailabilityDays);
