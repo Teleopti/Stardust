@@ -348,6 +348,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
@@ -1069,9 +1070,6 @@
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsenceTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivitiesTest.cs" />
     <Compile Include="Time\DateOnlyPeriodTest.cs" />
-    <Compile Include="Time\DayOffTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Time\AnchorTimePeriodTest.cs">
       <SubType>Code</SubType>
     </Compile>

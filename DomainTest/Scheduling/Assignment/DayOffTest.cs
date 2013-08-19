@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using System.Drawing;
 
-namespace Teleopti.Ccc.DomainTest.Time
+namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     /// <summary>
     /// Tests AnchorDateTimePeriod struct
