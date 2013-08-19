@@ -4,19 +4,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryInfo
 {
     public class ShiftCategoryStructure
     {
+        public IPerson PersonValue { get; set; }
+        public DateOnly DateOnlyValue { get; set; }
+        public IShiftCategory ShiftCategoryValue { get; set; }
 
         public ShiftCategoryStructure(IScheduleDay scheduleDay)
         {
-            ShiftCategoryValue = scheduleDay.PersonAssignment().ShiftCategory;
-            DateOnlyValue = scheduleDay.DateOnlyAsPeriod.DateOnly;
-            PersonValue = scheduleDay.Person;
+            populateFeilds(scheduleDay.PersonAssignment().ShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly,
+                                   scheduleDay.Person);
         }
 
-        public IPerson PersonValue { get; set; }
+        public ShiftCategoryStructure(IShiftCategory shiftCategory,DateOnly dateOnly, IPerson person  )
+        {
+            populateFeilds(shiftCategory, dateOnly, person);
+        }
 
-        public DateOnly DateOnlyValue { get; set; }
-
-        public IShiftCategory ShiftCategoryValue { get; set; }
-
+        private void populateFeilds(IShiftCategory shiftCategory, DateOnly dateOnly, IPerson person)
+        {
+            ShiftCategoryValue = shiftCategory;
+            DateOnlyValue = dateOnly;
+            PersonValue = person;
+        }
+        
     }
 }
