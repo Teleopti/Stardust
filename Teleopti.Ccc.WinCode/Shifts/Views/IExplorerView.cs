@@ -39,5 +39,6 @@ namespace Teleopti.Ccc.WinCode.Shifts.Views
 	    void SetViewEnabled(bool enabled);
 
 	    void Activate();
+        void ExitEditMode();
     }
 }
