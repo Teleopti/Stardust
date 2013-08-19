@@ -55,6 +55,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeLayer.Period, mergedPeriod);
 			}
+			if (_dayOffTemplate != null && !mergedPeriod.HasValue)
+			{
+				var dayOff = DayOff();
+				mergedPeriod = new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
+			}
 			if (!mergedPeriod.HasValue)
 			{
 				mergedPeriod = UndefinedPeriod;

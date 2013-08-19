@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyGetHashCodeWorks()
         {
             TimeSpan duration = TimeSpan.FromHours(4);
-            //Percent flexibility = new Percent(0.66);
 			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             IDictionary<DayOff, int> dic = new Dictionary<DayOff, int>();
             dic[per] = 5;
