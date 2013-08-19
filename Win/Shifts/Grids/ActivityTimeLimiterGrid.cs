@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _eventAggregator = eventAggregator;
             if (grid == null) return;
 
-            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanLongHourMinutesCellModel(grid.Model) { OnlyPositiveValues = true, InterpretAsMinutes = true });
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanDurationCellModel(grid.Model) { OnlyPositiveValues = true, InterpretAsMinutes = true });
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
 				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
         }
