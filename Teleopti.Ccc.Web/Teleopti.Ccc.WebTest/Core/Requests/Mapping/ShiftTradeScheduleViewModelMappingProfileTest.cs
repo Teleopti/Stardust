@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDayoffDate()
 		{
-			var dayoff = new PersonDayOff(_person, new Scenario("d"), new DayOff(), new DateOnly(2000, 1, 1), TimeZoneInfo.Utc);
+			var dayoff = new PersonDayOff(_person, new Scenario("d"), new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty), new DateOnly(2000, 1, 1), TimeZoneInfo.Utc);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(2000,1,1), _person);
 			scheduleDay.Add(dayoff);
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new IVisualLayer[0]));

@@ -3,10 +3,7 @@ using System.Drawing;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// AnchorTimePeriod struct
-    /// </summary>
-    public struct DayOff : IEquatable<DayOff>
+    public class DayOff : IEquatable<DayOff>
     {
         #region Fields
 

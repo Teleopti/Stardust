@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Time
                 testAnchorPeriod.Equals(
 					new DayOff(anchorDateTime, durationHours.Add(TimeSpan.FromHours(1)), flexibility, description, displayColor, payrollCode)));
 
-            Assert.IsFalse(new DayOff().Equals(null));
+						Assert.IsFalse(new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty).Equals(null));
             Assert.AreEqual(testAnchorPeriod, testAnchorPeriod);
         }
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             TimeSpan duration = TimeSpan.FromHours(24);
             //Percent flexibility = new Percent(0.66d);
 			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
-            DayOff per2 = new DayOff();
+			DayOff per2 = new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty);
 			Assert.IsTrue(per == new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode));
             Assert.IsTrue(per != per2);
         }

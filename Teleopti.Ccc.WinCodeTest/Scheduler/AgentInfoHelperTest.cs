@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dic = new ScheduleDictionaryForTest(_scenario,
                                                     new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)),
                                                     new Dictionary<IPerson, IScheduleRange>());
-            var dayOff = new PersonDayOff(_person, dic.Scenario, new DayOff(), _dateOnly, _timeZoneInfo);
+            var dayOff = new PersonDayOff(_person, dic.Scenario, new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty), _dateOnly, _timeZoneInfo);
             var range = new ScheduleRange(dic, dayOff);
             range.Add(dayOff);
             dic.AddTestItem(_person, range);

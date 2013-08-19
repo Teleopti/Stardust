@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IList<IPersonDayOff> pDayOffs = new List<IPersonDayOff>
                                                 {
-                                                    new PersonDayOff(_person, _scenario, new DayOff(),
+                                                    new PersonDayOff(_person, _scenario, new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty),
                                                                      new DateOnly(2001, 1, 1), timeZoneInfo)
                                                 };
 

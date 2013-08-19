@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _dic = new ScheduleDictionaryForTest(scenario,
                                                  new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)),
                                                  new Dictionary<IPerson, IScheduleRange>());
-            var dayOff = new PersonDayOff(_person, _dic.Scenario, new DayOff(), new DateOnly(2010, 4, 1), _timeZoneInfo);
+						var dayOff = new PersonDayOff(_person, _dic.Scenario, new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty), new DateOnly(2010, 4, 1), _timeZoneInfo);
             _range = new ScheduleRange(_dic, dayOff);
             _range.Add(dayOff);
 

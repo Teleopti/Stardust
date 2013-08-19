@@ -221,12 +221,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IPersonDayOff PersonDayOffStub(DateTimePeriod period) { return PersonDayOffStub(period, null); }
 
-		public IPersonDayOff PersonDayOffStub(DateTimePeriod period, DayOff? dayOff)
+		public IPersonDayOff PersonDayOffStub(DateTimePeriod period, DayOff dayOff)
 		{
 			var personDayOff = MockRepository.GenerateStub<IPersonDayOff>();
 			personDayOff.Stub(x => x.Period).Return(period);
 			if (dayOff != null)
-				personDayOff.Stub(x => x.DayOff).Return(dayOff.Value);
+				personDayOff.Stub(x => x.DayOff).Return(dayOff);
 			return personDayOff;
 		}
 
