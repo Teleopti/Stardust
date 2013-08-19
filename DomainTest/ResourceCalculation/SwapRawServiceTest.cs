@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
 				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod3));
 				_scheduleDayTwoPersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod4));
-				_scheduleDayThreePersonOne.Add(PersonDayOffFactory.CreatePersonDayOff(_personOne, _scenario,
+				_scheduleDayThreePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personOne, 
 																					  new DateOnly(dateTimePeriod3.StartDateTime),
 																					  TimeSpan.FromHours(24), TimeSpan.FromHours(0),
 																					  TimeSpan.FromHours(12)));

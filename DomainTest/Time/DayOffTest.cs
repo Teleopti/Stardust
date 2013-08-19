@@ -81,19 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(testAnchorPeriod, testAnchorPeriod);
         }
 
-        /// <summary>
-        /// Verifies that overloaded operators work.
-        /// </summary>
-        [Test]
-        public void VerifyOverloadedOperatorsWork()
-        {
-            TimeSpan duration = TimeSpan.FromHours(24);
-            //Percent flexibility = new Percent(0.66d);
-			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
-			DayOff per2 = new DayOff(new DateTime(), new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty);
-			Assert.IsTrue(per == new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode));
-            Assert.IsTrue(per != per2);
-        }
 
         /// <summary>
         /// Verifies gethashcode works.
@@ -109,31 +96,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(5, dic[per]);
         }
 
-        ///// <summary>
-        ///// Verifies flexibility limit (less than one) works.
-        ///// </summary>
-        //[Test]
-        //[ExpectedException(typeof (ArgumentOutOfRangeException))]
-        //public void VerifyFlexibilityLimitlessThanOneWorks()
-        //{
-        //    TimeSpan duration = new TimeSpan(4, 0, 0);
-        //    //Percent flexibility = new Percent(-6.66d);
-        //    DayOff per = new DayOff(anchor, duration, flexibility);
-        //    Assert.AreEqual(per,per);
-        //}
-
-        ///// <summary>
-        ///// Verifies flexibility limit (above hundred) works.
-        ///// </summary>
-        //[Test]
-        //[ExpectedException(typeof (ArgumentOutOfRangeException))]
-        //public void VerifyFlexibilityLimitAboveHundredWorks()
-        //{
-        //    TimeSpan duration = new TimeSpan(4, 0, 0);
-        //    //Percent flexibility = new Percent(6.66d);
-        //    DayOff per = new DayOff(anchor, duration, flexibility);
-        //    Assert.AreEqual(per, per);
-        //}
 
         /// <summary>
         /// Verifies correct anchor placed in date and time is of kind UTC
@@ -149,27 +111,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(per,per);
         }
 
-        /// <summary>
-        /// Verifies correct anchor placed in date and time is of kind UTC when using setter
-        /// </summary>
-        //[Test]
-        //[ExpectedException(typeof (ArgumentException))]
-        //public void VerifyCorrectAnchorDateTimePeriodIsUtcUsingSetter()
-        //{
-        //    TimeSpan duration = TimeSpan.FromHours(4);
-        //    //Percent flexibility = new Percent(0.66d);
-        //    DayOff per = new DayOff(anchor, duration, flexibility);
-
-        //    per.Anchor = DateTime.Today.AddHours(12);
-        //}
-
-        /// <summary>
-        /// Verifies that local anchor works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-22
-        /// </remarks>
         [Test]
         public void VerifyLocalAnchorWorks()
         {

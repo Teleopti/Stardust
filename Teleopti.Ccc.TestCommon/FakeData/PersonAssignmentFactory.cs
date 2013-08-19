@@ -368,6 +368,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi);
 				return ret;
 			}
+
+			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
+			{
+				var ass = new PersonAssignment(person, scenario, date);
+				var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("test"));
+				dayOffTemplate.Anchor = anchor;
+				dayOffTemplate.SetTargetAndFlexibility(length, flexibility);
+				ass.SetDayOff(dayOffTemplate);
+				return ass;
+			}
     }
 
     /// <summary>

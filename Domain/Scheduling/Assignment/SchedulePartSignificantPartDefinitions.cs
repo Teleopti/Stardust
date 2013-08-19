@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool HasDayOff()
         {
-            return _schedulePart.PersonDayOffCollection().Count > 0;
+            return _schedulePart.HasDayOff();
         }
 
         public virtual bool HasContractDayOff()

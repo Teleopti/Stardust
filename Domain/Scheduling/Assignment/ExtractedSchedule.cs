@@ -199,6 +199,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection()
         {
+					throw new Exception("nope");
             //todo - when only ScheduleDay, no need to sort this one
             var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
             return new ReadOnlyCollection<IPersonDayOff>(retList);
@@ -304,6 +305,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Clear<IPublicNote>();
         }
+
+	    public bool HasDayOff()
+	    {
+		    var ass = PersonAssignment();
+		    return ass != null && ass.DayOff() != null;
+	    }
 
 	    private void MergePreferenceRestriction(IScheduleDay source)
         {

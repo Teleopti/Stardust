@@ -177,28 +177,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Operator ==.
-        /// </summary>
-        /// <param name="per1">The per1.</param>
-        /// <param name="per2">The per2.</param>
-        /// <returns></returns>
-        public static bool operator ==(DayOff per1, DayOff per2)
-        {
-            return per1.Equals(per2);
-        }
-
-        /// <summary>
-        /// Operator !=.
-        /// </summary>
-        /// <param name="per1">The per1.</param>
-        /// <param name="per2">The per2.</param>
-        /// <returns></returns>
-        public static bool operator !=(DayOff per1, DayOff per2)
-        {
-            return !per1.Equals(per2);
-        }
-
-        /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>

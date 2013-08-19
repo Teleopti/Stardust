@@ -401,6 +401,8 @@ namespace Teleopti.Interfaces.Domain
 				/// Created date: 2010-12-02
 				/// </remarks>
 				void DeletePublicNote();
+
+	    bool HasDayOff();
     }
 
 }

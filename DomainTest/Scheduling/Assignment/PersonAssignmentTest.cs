@@ -456,5 +456,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetDayOff(template);
 			target.DayOff().Description.Should().Be.EqualTo(desc);
 		}
+
+		[Test]
+		public void ShouldSetDayOffAsNull()
+		{
+			target.SetDayOff(null);
+			target.DayOff().Should().Be.Null();
+		}
 	}
 }

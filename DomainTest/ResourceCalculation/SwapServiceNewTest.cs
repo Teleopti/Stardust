@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -187,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var retList = service.Swap(_dictionary);
 
 			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-			Assert.AreEqual(0, retList[0].PersonDayOffCollection().Count);
-			Assert.AreEqual(1, retList[1].PersonDayOffCollection().Count);		
+			retList[0].HasDayOff().Should().Be.False();
+			retList[1].HasDayOff().Should().Be.True();		
 		}
 
         [Test, ExpectedException(typeof(ConstraintException))]
