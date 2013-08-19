@@ -17,7 +17,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Information about the Day Off
         /// </summary>
-        DayOff DayOff { get; }
+        IDayOff DayOff { get; }
 
         /// <summary>
         /// Compares a PersonDayOff to a DayOffTemplate.

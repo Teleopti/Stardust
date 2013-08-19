@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// <param name="date">The date.</param>
         /// <param name="fromTimeZone">From time zone.</param>
 
-        public PersonDayOff(IPerson person, IScenario scenario, DayOff dayOff, DateOnly date, TimeZoneInfo fromTimeZone)
+        public PersonDayOff(IPerson person, IScenario scenario, IDayOff dayOff, DateOnly date, TimeZoneInfo fromTimeZone)
         {
 
             _person = person;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// <summary>
         /// Information about the Day Off
         /// </summary>
-        public virtual DayOff DayOff
+        public virtual IDayOff DayOff
         {
             get { return _dayOff; }
         }
