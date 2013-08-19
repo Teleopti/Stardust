@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="CCC" Platform="DotNet">
-  <OutputDir KeepHistoric="True" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
+  <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
     <Name>Teleopti.Ccc.Domain</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
@@ -215,15 +215,15 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
   </Dirs>
   <Report Kind="0" SectionsEnabled="12287" XslPath="" Flags="63488">
-    <Section Enabled="True">Application Metrics</Section>
-    <Section Enabled="True">.NET Assemblies Metrics</Section>
-    <Section Enabled="True">Treemap Metric View</Section>
-    <Section Enabled="True">.NET Assemblies Abstractness vs. Instability</Section>
-    <Section Enabled="True">.NET Assemblies Dependencies</Section>
-    <Section Enabled="True">.NET Assemblies Dependency Graph</Section>
-    <Section Enabled="True">.NET Assemblies Build Order</Section>
-    <Section Enabled="True">Analysis Log</Section>
-    <Section Enabled="True">CQL Rules Violated</Section>
+    <Section Enabled="False">Application Metrics</Section>
+    <Section Enabled="False">.NET Assemblies Metrics</Section>
+    <Section Enabled="False">Treemap Metric View</Section>
+    <Section Enabled="False">.NET Assemblies Abstractness vs. Instability</Section>
+    <Section Enabled="False">.NET Assemblies Dependencies</Section>
+    <Section Enabled="False">.NET Assemblies Dependency Graph</Section>
+    <Section Enabled="False">.NET Assemblies Build Order</Section>
+    <Section Enabled="False">Analysis Log</Section>
+    <Section Enabled="False">CQL Rules Violated</Section>
     <Section Enabled="True">Types Metrics</Section>
     <Section Enabled="False">Types Dependencies</Section>
   </Report>
