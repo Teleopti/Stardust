@@ -1019,6 +1019,7 @@
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <Content Include="Content\jquery\jquery-1.10.2.min.map" />
+    <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
