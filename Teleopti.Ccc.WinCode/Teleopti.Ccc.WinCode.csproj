@@ -584,6 +584,7 @@
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
+    <Compile Include="Scheduling\ShiftCategoryInfo\ShiftCategoryStructure.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
     <Compile Include="Scheduling\SkillMonthGridControlPresenter.cs" />
     <Compile Include="Scheduling\DayPresenterNew.cs" />

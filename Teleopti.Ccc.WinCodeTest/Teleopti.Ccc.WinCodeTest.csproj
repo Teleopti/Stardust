@@ -572,6 +572,9 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryInfo\ScheduleDayToShiftCategoryMapper.cs" />
+    <Compile Include="Scheduler\ShiftCategoryInfo\ScheduleDayToShiftCategoryMapperTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryInfo\ShiftCategoryStructureTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />

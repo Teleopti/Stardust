@@ -585,6 +585,7 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\ShiftCategory\ScheduleDayListFactory.cs" />
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
