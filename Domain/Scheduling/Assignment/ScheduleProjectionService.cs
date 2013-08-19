@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     else
                         workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
 					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStartDate.Value, scheduleDate) &&
-						ScheduleDay.PersonDayOffCollection().IsEmpty();
+						!ScheduleDay.HasDayOff();
 				}
 				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
 				if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
