@@ -684,13 +684,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void CreateAndAddDayOff(IDayOffTemplate dayOff)
         {
-            //TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-            var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, TimeZone));
-            var personDayOff = new PersonDayOff(Person, Scenario, dayOff, dateOnly);
-            // clear if there already is one
-            DeleteDayOff();
-            Add(personDayOff);           
+					var foundPersonAssignment = PersonAssignment();
+					if (foundPersonAssignment == null)
+					{
+						var newAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+						newAss.SetDayOff(dayOff);
+						Add(newAss);
+					}
+					else
+					{
+						foundPersonAssignment.SetDayOff(dayOff);
+					}
         }
+
          public void CreateAndAddNote(string text)
          {
              var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone() ));
@@ -715,7 +721,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
        
         public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
-						//todo: rk - not sure about this.. 
 						var foundPersonAssignment = PersonAssignment();
 						if (foundPersonAssignment == null)
 						{

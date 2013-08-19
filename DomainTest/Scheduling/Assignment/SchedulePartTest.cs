@@ -182,14 +182,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			dayOff.Anchor = TimeSpan.FromHours(12);
 			_target.CreateAndAddDayOff(dayOff);
 			_target.CreateAndAddDayOff(dayOff);
-			Assert.AreEqual(1, _target.PersonDayOffCollection().Count);
+			_target.PersonAssignment().DayOff().Should().Not.Be.Null();
 			Assert.AreEqual(
 				TimeZoneHelper.ConvertToUtc(_target.Period.StartDateTime.Add(dayOff.Anchor),
 											_target.Person.PermissionInformation.DefaultTimeZone()),
-				_target.PersonDayOffCollection()[0].DayOff.Anchor);
-			Assert.AreEqual(_target.Period.StartDateTime, _target.PersonDayOffCollection()[0].DayOff.Anchor.Date);
-			Assert.AreEqual(new TimeSpan(24, 0, 0), _target.PersonDayOffCollection()[0].DayOff.TargetLength);
-			Assert.AreEqual(TimeSpan.FromHours(6), _target.PersonDayOffCollection()[0].DayOff.Flexibility);
+				_target.PersonAssignment().DayOff().Anchor);
+			Assert.AreEqual(_target.Period.StartDateTime, _target.PersonAssignment().DayOff().Anchor.Date);
+			Assert.AreEqual(new TimeSpan(24, 0, 0), _target.PersonAssignment().DayOff().TargetLength);
+			Assert.AreEqual(TimeSpan.FromHours(6), _target.PersonAssignment().DayOff().Flexibility);
 		}
 
 

@@ -447,5 +447,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.ProjectionService().CreateProjection()
 				.Count().Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldSetDayOff()
+		{
+			var desc = new Description("desc");
+			var template = new DayOffTemplate(desc);
+			target.SetDayOff(template);
+			target.DayOff().Description.Should().Be.EqualTo(desc);
+		}
 	}
 }

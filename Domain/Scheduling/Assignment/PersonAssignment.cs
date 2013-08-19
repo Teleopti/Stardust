@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IPerson _person;
 		private IScenario _scenario;
 		private IShiftCategory _shiftCategory;
+		private IDayOffTemplate _dayOffTemplate;
 
 
 		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
@@ -291,6 +292,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
+		}
+
+		public virtual DayOff DayOff()
+		{
+			//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+      var anchorDateTime = TimeZoneHelper.ConvertToUtc(Date.Date.Add(_dayOffTemplate.Anchor), Person.PermissionInformation.DefaultTimeZone());
+			return new DayOff(anchorDateTime, _dayOffTemplate.TargetLength, _dayOffTemplate.Flexibility, _dayOffTemplate.Description, _dayOffTemplate.DisplayColor, _dayOffTemplate.PayrollCode);
+		}
+
+		public virtual void SetDayOff(IDayOffTemplate template)
+		{
+			_dayOffTemplate = template;
 		}
 	}
 }
