@@ -534,7 +534,6 @@ Scenario: Resend referred shifttrade
 	And I click on shifttrade resend button
 	Then I should see a indication that the request is pending
 
-@ignore
 Scenario: Cancel referred shifttrade 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -565,7 +564,7 @@ Scenario: Cancel referred shifttrade
 	Then I should not see any requests
 
 
-Scenario: Remove shifttrade from reciever when schedule has changed
+Scenario: Remove shifttrade from reciever when referred
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'

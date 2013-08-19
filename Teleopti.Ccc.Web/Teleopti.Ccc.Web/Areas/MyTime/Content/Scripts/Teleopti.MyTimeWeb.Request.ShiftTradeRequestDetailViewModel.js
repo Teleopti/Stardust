@@ -4,6 +4,7 @@
 Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 	var self = this;
+	self.Link = ko.observable();
 	self.EntityId = ko.observable();
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
@@ -54,7 +55,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}
 		});
 	};
-
 	self.reSend = function() {
 		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
@@ -68,7 +68,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}
 		});
 	};
-	
+	self.cancelReferred = function(requestPage,requestItem) {
+		requestPage.Delete(requestItem);
+	};
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
@@ -119,7 +121,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 };
 
 ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prototype, {
-    Initialize: function (data) {
+	Initialize: function (data) {
         var self = this;
         self.showInfo(!data.IsPending);
 		self.Subject(data.Subject);

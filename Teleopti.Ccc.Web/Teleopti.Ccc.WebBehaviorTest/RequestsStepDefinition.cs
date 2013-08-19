@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -213,27 +211,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			//ScenarioContext.Current.Pending();
 		}
 
-		//henke: todo
 		[When(@"I click on shifttrade resend button")]
 		public void WhenIClickOnShifttradeResendButton()
 		{
 			Browser.Interactions.ClickContaining(".btn-primary", Resources.SendAgain);
 		}
 
-		//henke: todo
 		[When(@"I click on shifttrade cancel button")]
 		public void WhenIClickOnShifttradeCancelButton()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
 		}
 
-		//henke: todo
 		[Then(@"I should not see any requests")]
 		public void ThenIShouldNotSeeAnyRequests()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(()=>_page.Requests,Is.Empty);
 		}
-
-
 	}
 }

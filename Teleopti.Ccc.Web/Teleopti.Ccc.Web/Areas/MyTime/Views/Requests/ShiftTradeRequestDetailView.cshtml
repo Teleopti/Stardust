@@ -54,7 +54,7 @@
 <div class="floatright">
 	<!-- henke: todo: only show if referred -->
 	<button class="btn btn-primary" data-bind="click: reSend">@Resources.SendAgain</button>
-	<button class="btn btn-danger">@Resources.Cancel</button>
+	<button class="btn btn-danger"  data-bind="click: function (data,event) { cancelReferred($root, $parent, data, event) }, clickBubble: false">@Resources.Cancel</button>
 
 </div>
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>

@@ -122,7 +122,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         });
 
         self.Delete = function (requestItemViewModel) {
-
             var url = requestItemViewModel.Link();
             ajax.Ajax({
                 url: url,
