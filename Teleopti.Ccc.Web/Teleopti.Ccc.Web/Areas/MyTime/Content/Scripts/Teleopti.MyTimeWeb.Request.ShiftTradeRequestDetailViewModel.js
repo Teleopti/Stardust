@@ -56,7 +56,17 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	};
 
 	self.reSend = function() {
-		//henke todo
+		self.CanApproveAndDeny(false);
+		self.ajax.Ajax({
+			url: "Requests/ReSendShiftTrade/" + self.EntityId(),
+			dataType: "json",
+			cache: false,
+			type: "POST",
+			success: function (data) {
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
+				self.CanApproveAndDeny(true);
+			}
+		});
 	};
 	
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());

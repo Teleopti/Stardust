@@ -505,7 +505,6 @@ Scenario: Can not approve or deny shift trade request that is already approved
 	Then I should not see the approve button
 	And I should not see the deny button
 
-
 Scenario: Resend referred shifttrade 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -565,7 +564,7 @@ Scenario: Cancel referred shifttrade
 	And I click on shifttrade cancel button
 	Then I should not see any requests
 
-@ignore
+
 Scenario: Remove shifttrade from reciever when schedule has changed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
