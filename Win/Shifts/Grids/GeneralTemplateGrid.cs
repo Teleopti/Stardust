@@ -225,7 +225,12 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
         private void RefreshCell(int cell, int row)
         {
-            Grid.RefreshRange(GridRangeInfo.Cell(row, cell));
+            if (Grid.InvokeRequired)
+            {
+                Grid.BeginInvoke(new Action<int, int>(RefreshCell), cell, row);
+                return;
+            }
+            Grid.InvalidateRange(GridRangeInfo.Cell(row, cell));
         }
 
         private void ValidateStartPeriodStartTime(IGeneralTemplateViewModel dataItem, GridStyleInfo styleInfo, int row, bool inSaveMode)

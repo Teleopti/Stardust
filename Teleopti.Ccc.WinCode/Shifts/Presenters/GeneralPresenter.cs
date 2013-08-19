@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
         public override void LoadModelCollection()
         {
             foreach (KeyValuePair<ShiftCreatorViewType, IPresenterBase> pair in _presenters)
+            {
                 pair.Value.LoadModelCollection();
+            }
         }
 
         public new bool Validate()
