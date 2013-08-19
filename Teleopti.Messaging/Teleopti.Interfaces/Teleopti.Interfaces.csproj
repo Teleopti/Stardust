@@ -346,9 +346,6 @@
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
-    <Compile Include="Domain\DayOff.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\AuthenticationTypeOption.cs" />
     <Compile Include="Domain\AvailableDataRangeOption.cs" />
     <Compile Include="Domain\DateOnly.cs" />
