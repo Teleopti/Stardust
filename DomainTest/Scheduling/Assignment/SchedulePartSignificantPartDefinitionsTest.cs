@@ -53,18 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyHasDayOffDefinition()
         {
-            //Definition: PersonDayOffCollection > 0
-            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            IList<IPersonDayOff> pDayOffs = new List<IPersonDayOff>
-                                                {
-                                                    new PersonDayOff(_person, _scenario, new DayOff(DateTime.UtcNow, new TimeSpan(), new TimeSpan(), new Description(), Color.Red, string.Empty),
-                                                                     new DateOnly(2001, 1, 1), timeZoneInfo)
-                                                };
-
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(pDayOffs));
-                Expect.Call(_mockedPart.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+                Expect.Call(_mockedPart.HasDayOff()).Return(true);
+                Expect.Call(_mockedPart.HasDayOff()).Return(false);
                 
             }
 

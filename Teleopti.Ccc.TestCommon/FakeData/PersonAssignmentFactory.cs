@@ -378,6 +378,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				ass.SetDayOff(dayOffTemplate);
 				return ass;
 			}
+
+			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, IDayOffTemplate template)
+			{
+				var ass = new PersonAssignment(person, scenario, date);
+				ass.SetDayOff(template);
+				return ass;
+			}
     }
 
     /// <summary>
