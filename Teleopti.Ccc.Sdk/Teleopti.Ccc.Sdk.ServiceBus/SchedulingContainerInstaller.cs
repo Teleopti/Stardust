@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
 			builder.RegisterType<TeleoptiRtaServiceClient>().As<ITeleoptiRtaService>().SingleInstance();
-			builder.RegisterType<SingleSkillMaxSeatCalculator>().As<ISingleSkillMaxSeatCalculator>();
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>();
 		}

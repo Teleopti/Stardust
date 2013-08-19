@@ -496,10 +496,7 @@
     <Compile Include="ResourceCalculation\ResourcesForCombinationFromStorage.cs" />
     <Compile Include="ResourceCalculation\ResourcesFromStorage.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillLoadedDecider.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculator.cs" />
     <Compile Include="ResourceCalculation\SkillEfficienciesFromStorage.cs" />
     <Compile Include="ResourceCalculation\SkillKeyResource.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />

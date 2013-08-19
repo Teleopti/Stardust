@@ -390,10 +390,7 @@
     <Compile Include="ResourceCalculation\ScheduleDayAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleServiceTest.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeopleTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionaryTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillLoadedDeciderTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SwapRawServiceTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
