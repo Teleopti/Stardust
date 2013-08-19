@@ -45,13 +45,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 				new PersonProvider(new[] {person}),
 				new ScheduleDictionaryLoadOptions(false, false),
-				dateTimePeriod,
+				period,
 				_scenario.Current());
 
 			var scheduleDays = dictionary[person].ScheduledDayCollection(period);

@@ -56,11 +56,15 @@ namespace Teleopti.Ccc.WinCode.Common
 	    {
 		    get
 		    {
-			    var mainLayers = _assignment.MainLayers().ToList();
-			    return _moveLayer != null && mainLayers.Any() && mainLayers.Last().Equals(_layer);
+			    return _moveLayer != null && !isLayerLast();
 		    }
 	    }
 
+		private bool isLayerLast()
+		{
+			var mainLayers = _assignment.MainLayers().ToList();
+			return mainLayers.Any() && mainLayers.Last().Equals(_layer);
+		}
 
 		protected override void Replace()
 		{

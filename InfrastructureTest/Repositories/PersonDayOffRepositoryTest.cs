@@ -60,16 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                             loadedAggregateFromDatabase.DayOff.TargetLength);
         }
 
-        [Test]
-        public void VerifyNoPersonDayOffIsReturnedIfPersonDeleted()
-        {
-            IPersonDayOff dayOff = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(dayOff);
-            new PersonRepository(UnitOfWork).Remove(dayOff.Person);
-            PersistAndRemoveFromUnitOfWork(dayOff.Person);
-
-            Assert.AreEqual(0, rep.Find(new DateTimePeriod(1900,1,1,2111,1,1)).Count);
-        }
 
         [Test]
         public void VerifyLoadGraphById()
@@ -254,83 +244,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsFalse(retList.Contains(personDayOffs2));
             Assert.IsFalse(retList.Contains(personDayOffs3));
             Assert.AreEqual(1, retList.Count);
-        }
-
-        /// <summary>
-        /// Determines whether this instance [can find day offs by agent and date time period with boundary].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-09
-        /// </remarks>
-        [Test]
-        public void CanFindDayOffsByAgentAndDateTimePeriodWithBoundary()
-        {
-            IPerson dummyAgent = PersonFactory.CreatePerson("33");
-            IPerson dummyAgent2 = PersonFactory.CreatePerson("44");
-            IScenario dummyScenario = ScenarioFactory.CreateScenarioAggregate();
-
-            ////////////setup////////////////////////////////////////////////////////////////
-            PersonDayOff personDayOffs1 = new PersonDayOff(dummyAgent, dummyScenario, CreateDayOff(), new DateOnly(new DateTime(2007, 1, 30)));
-            PersonDayOff personDayOffs2 = new PersonDayOff(dummyAgent, dummyScenario, CreateDayOff(TimeSpan.FromHours(36)), new DateOnly(new DateTime(2007, 2, 1)));
-            PersonDayOff personDayOffs3 = new PersonDayOff(dummyAgent2, dummyScenario, CreateDayOff(TimeSpan.FromHours(36)), new DateOnly(new DateTime(2007, 1, 1)));
-
-            PersistAndRemoveFromUnitOfWork(dummyAgent);
-            PersistAndRemoveFromUnitOfWork(dummyAgent2);
-            PersistAndRemoveFromUnitOfWork(dummyScenario);
-
-            PersistAndRemoveFromUnitOfWork(personDayOffs1);
-            PersistAndRemoveFromUnitOfWork(personDayOffs2);
-            PersistAndRemoveFromUnitOfWork(personDayOffs3);
-
-            IList<IPerson> agList = new List<IPerson>();
-            agList.Add(dummyAgent);
-
-            /////////////////////////////////////////////////////////////////////////////////
-            DateTimePeriod dateTimeExpression = new DateTimePeriod(new DateTime(2007, 1, 31, 12, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 31, 23, 30, 0, DateTimeKind.Utc));
-            ICollection<IPersonDayOff> retList = rep.FindByBoundary(agList, dateTimeExpression);
-
-            Assert.IsFalse(retList.Contains(personDayOffs1));
-            Assert.IsTrue(retList.Contains(personDayOffs2));
-            Assert.IsFalse(retList.Contains(personDayOffs3));
-            Assert.AreEqual(1, retList.Count);
-        }
-        /// <summary>
-        /// Verifies find DayOffs based date time period.
-        /// </summary>
-        [Test]
-        public void CanFindDayOffsByDateTimePeriod()
-        {
-            IPerson dummyAgent = PersonFactory.CreatePerson("sdf");
-            IPerson dummyAgent2 = PersonFactory.CreatePerson("hhh");
-            IScenario dummyScenario = ScenarioFactory.CreateScenarioAggregate();
-
-            ////////////setup////////////////////////////////////////////////////////////////
-            PersonDayOff personDayOffs1 = new PersonDayOff(dummyAgent, dummyScenario, CreateDayOff(), new DateOnly(new DateTime(2007, 1, 1)));
-            PersonDayOff personDayOffs2 = new PersonDayOff(dummyAgent, dummyScenario, CreateDayOff(), new DateOnly(new DateTime(2007, 2, 1)));
-            PersonDayOff personDayOffs3 = new PersonDayOff(dummyAgent2, dummyScenario, CreateDayOff(), new DateOnly(new DateTime(2007, 1, 1)));
-
-            PersistAndRemoveFromUnitOfWork(dummyAgent);
-            PersistAndRemoveFromUnitOfWork(dummyAgent2);
-            PersistAndRemoveFromUnitOfWork(dummyScenario);
-
-            PersistAndRemoveFromUnitOfWork(personDayOffs1);
-            PersistAndRemoveFromUnitOfWork(personDayOffs2);
-            PersistAndRemoveFromUnitOfWork(personDayOffs3);
-
-            IList<IPerson> agList = new List<IPerson>();
-            agList.Add(dummyAgent);
-
-            /////////////////////////////////////////////////////////////////////////////////
-            DateTimePeriod dateTimeExpression =
-                new DateTimePeriod(new DateTime(2006, 12, 1, 0, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 31, 0, 0, 0, DateTimeKind.Utc));
-            ICollection<IPersonDayOff> retList = rep.Find(dateTimeExpression);
-
-            Assert.IsTrue(retList.Contains(personDayOffs1));
-            Assert.IsFalse(retList.Contains(personDayOffs2));
-            Assert.IsTrue(retList.Contains(personDayOffs3));
-            Assert.AreEqual(2, retList.Count);
         }
 
         [Test]

@@ -71,22 +71,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         }
 
         /// <summary>
-        /// Gets the person collection.
-        /// </summary>
-        /// <value>The person collection.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-14
-        /// </remarks>
-        public ReadOnlyCollection<IPerson> PersonCollection
-        {
-            get
-            {
-                return new List<IPerson>(_personCollection).AsReadOnly();
-            }
-        }
-
-        /// <summary>
         /// Gets the original period.
         /// </summary>
         /// <value>The period.</value>
