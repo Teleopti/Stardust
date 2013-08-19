@@ -325,8 +325,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(visualLayer.Payload).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_mockedPart)).Return(true);
-				Expect.Call(_mockedPart.PersonDayOffCollection()).Return(
-					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(_mockedPart.HasDayOff()).Return(false);
 			}
 
 			using (_mocker.Playback())

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             {
                 var part = scheduleDictionary[person].ScheduledDay(dateOnly);
 
-                if (part.PersonDayOffCollection().Count == 1)
+                if (part.HasDayOff())
                 {
                     allAvailable = false;
                 }

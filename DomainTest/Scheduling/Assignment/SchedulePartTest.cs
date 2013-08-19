@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -124,7 +125,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IScheduleDay clone = (IScheduleDay)_target.Clone();
 			Assert.AreEqual(_target.PersonAbsenceCollection().Count, clone.PersonAbsenceCollection().Count);
 			Assert.AreEqual(_target.PersonAssignmentCollectionDoNotUse().Count, clone.PersonAssignmentCollectionDoNotUse().Count);
-			Assert.AreEqual(_target.PersonDayOffCollection().Count, clone.PersonDayOffCollection().Count);
 			Assert.AreEqual(_target.PersonMeetingCollection().Count, clone.PersonMeetingCollection().Count);
 			Assert.AreEqual(_target.NoteCollection().Count, clone.NoteCollection().Count);
 			Assert.IsFalse(clone.FullAccess);
@@ -1355,22 +1355,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		#endregion
 
 		#region Tests for SignificantPart
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void SignificantPartWithMainShiftAndDayOff()
 		{
 			IPerson person = PersonFactory.CreatePerson();
 			DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
 			IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001,1,1));
 
-			IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff(person, scenario,
-																			   TimeZoneHelper.ConvertToUtc(
-																				   period.StartDateTime,
-																				   person.PermissionInformation.
-																					   DefaultTimeZone()).Date,
-																			   TimeSpan.FromDays(1),
-																			   TimeSpan.FromHours(1),
-																			   TimeSpan.FromHours(12));
-			part.Add(personDayOff);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2001, 1, 1),
+			                                                             TimeSpan.FromDays(1),
+			                                                             TimeSpan.FromHours(1),
+			                                                             TimeSpan.FromHours(12));
+
+			part.Add(ass);
 
 			IPreferenceRestriction preferenceRestriction = new PreferenceRestriction();
 			IPreferenceDay preferenceDay = new PreferenceDay(part.Person, new DateOnly(part.Period.StartDateTimeLocal(timeZoneInfo)), preferenceRestriction);
@@ -1379,7 +1376,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(SchedulePartView.DayOff, part.SignificantPart());
 
-			part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, period));
+			ass.SetMainShiftLayers(new[]
+				{
+					new MainShiftLayer(new Activity("d"), period )
+				}, new ShiftCategory("sd"));
 			Assert.AreEqual(SchedulePartView.MainShift, part.SignificantPart());
 
 			part.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period));
@@ -1402,12 +1402,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
 			IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001, 1, 1));
 
-			part.Add(PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"), person, period, scenario));
+			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"), person, period, scenario); 
+			part.Add(ass);
 
 			Assert.AreEqual(SchedulePartView.PersonalShift, part.SignificantPart());
 
-			part.Add(PersonDayOffFactory.CreatePersonDayOff(person, scenario, TimeZoneHelper.ConvertToUtc(period.StartDateTime, person.PermissionInformation.DefaultTimeZone()).Date, TimeSpan.FromDays(1), TimeSpan.FromHours(1), new TimeSpan()));
-			Assert.AreEqual(SchedulePartView.DayOff, part.SignificantPart());
+			ass.SetDayOff(new DayOffTemplate(new Description()));
 			Assert.AreEqual(SchedulePartView.DayOff, part.SignificantPart());
 		}
 
