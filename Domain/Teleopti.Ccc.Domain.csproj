@@ -821,7 +821,6 @@
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollection.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRule.cs" />
-    <Compile Include="Scheduling\Rules\NewMaxOneDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRule.cs" />
