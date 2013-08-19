@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public DateTimePeriod LongestDateTimePeriodForAssignment(IScheduleRange current, DateOnly dateToCheck)
         {
-            DayOff dayOffBefore = null;
-            DayOff dayOffAfter = null;
+            IDayOff dayOffBefore = null;
+            IDayOff dayOffAfter = null;
             var  approximateTime = DateTime.SpecifyKind(dateToCheck.Date.AddHours(12), DateTimeKind.Unspecified);
 
 			IEnumerable<IScheduleDay> partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return new DateTimePeriod(earliestStartTime, latestEndTime);
         }
 
-		private static DateTime earliestStartTimeAfterDayOff(IScheduleRange current, DayOff dayOff, IEnumerable<IScheduleDay> partCollection)
+		private static DateTime earliestStartTimeAfterDayOff(IScheduleRange current, IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
         {
             if (dayOff == null)
             {
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return earliestStartTime;
         }
 
-		private static DateTime latestEndTimeBeforeDayOff(DayOff dayOff, IEnumerable<IScheduleDay> partCollection)
+		private static DateTime latestEndTimeBeforeDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
         {
             if (dayOff == null)
             {
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return latestEndTime;
         }
 
-        private static DateTimePeriod dayOffStartEnd(DayOff dayOff)
+        private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
         {
             DateTime startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes / 2));
             DateTime endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes / 2));
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return new DateTimePeriod(startDayOff, endDayOff);
         }
 
-		private static IPersonAssignment getAssignmentJustBeforeDayOff(DayOff dayOff, IEnumerable<IScheduleDay> partCollection)
+		private static IPersonAssignment getAssignmentJustBeforeDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
         {
             IPersonAssignment returnVal = null;
             foreach (IScheduleDay scheduleDay in partCollection)
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return returnVal;
         }
 
-		private static IPersonAssignment getAssignmentJustAfterDayOff(DayOff dayOff, IEnumerable<IScheduleDay> partCollection)
+		private static IPersonAssignment getAssignmentJustAfterDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
         {
             foreach (IScheduleDay scheduleDay in partCollection)
             {

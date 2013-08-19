@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Teleopti.Interfaces.Domain
 {
-    public class DayOff : IEquatable<DayOff>
+	public class DayOff : IDayOff
     {
         #region Fields
 
@@ -143,50 +143,23 @@ namespace Teleopti.Interfaces.Domain
 			get { return _payrollCode; }
     	}
 
-    	#region IEquatable<TimePeriod> Implementation
-
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns>
-        /// true if the current object is equal to the other parameter; otherwise, false.
-        /// </returns>
-        public bool Equals(DayOff other)
-        {
-            return other._anchor == _anchor &&
-                   other._targetLength == _targetLength &&
-                   other._flexibility == _flexibility &&
-				   other._payrollCode == _payrollCode;
-        }
-
-        /// <summary>
-        /// Indicates whether this instance and a specified object are equal.
-        /// </summary>
-        /// <param name="obj">Another object to compare to.</param>
-        /// <returns>
-        /// true if obj and this instance are the same type and represent the same value; otherwise, false.
-        /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is DayOff))
-            {
-                return false;
-            }
-            return Equals((DayOff) obj);
+	        var other = obj as DayOff;
+					if (other == null)
+					{
+						return false;
+					}
+	        return other._anchor == _anchor &&
+	               other._targetLength == _targetLength &&
+	               other._flexibility == _flexibility &&
+	               other._payrollCode == _payrollCode;
         }
 
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A 32-bit signed integer that is the hash code for this instance.
-        /// </returns>
         public override int GetHashCode()
         {
 			return _anchor.GetHashCode() ^ _targetLength.GetHashCode() ^ _flexibility.GetHashCode();
         }
 
-        #endregion
     }
 }

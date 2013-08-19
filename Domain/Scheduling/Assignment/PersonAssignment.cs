@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
-		public virtual DayOff DayOff()
+		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)
 				return null;
