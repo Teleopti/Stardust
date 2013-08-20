@@ -29,20 +29,31 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date)
 		{
-			var shifts = getTeamScheduleReadModels(teamId, date).Select(s => JsonConvert.DeserializeObject<Shift>(s.Shift)).ToArray();
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today,
-			                                            _loggedOnUser.CurrentUser()))
-			{
-				foreach (var layer in shifts.SelectMany(shift => shift.Projection))
-				{
-					layer.Color = layer.IsAbsenceConfidential
-									  ? ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor)
-									  : layer.Color;
-					layer.Title = layer.IsAbsenceConfidential ? ConfidentialPayloadValues.Description.Name : layer.Title;
-				}
-			}
+			var result = new List<Shift>();
+			var shifts = getTeamScheduleReadModels(teamId, date);
+
+			var schedulesToShowConfidental =
+				_schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			
-			return shifts;
+			foreach (PersonScheduleDayReadModel shift in shifts)
+			{
+				var canSeeConfidental = (schedulesToShowConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
+
+				var shift0 = JsonConvert.DeserializeObject<Shift>(shift.Shift);
+
+				foreach (var layer in shift0.Projection)
+				{
+					if (!canSeeConfidental && layer.IsAbsenceConfidential)
+					{
+						layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
+						layer.Title = ConfidentialPayloadValues.Description.Name;
+					}
+
+				}
+				result.Add(shift0);
+
+			}
+			return result;
 		}
 
 		private IEnumerable<PersonScheduleDayReadModel> getTeamScheduleReadModels(Guid teamId, DateTime date)
@@ -60,8 +71,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					return scheduleList;
 				var published = new PublishedScheduleSpecification(_schedulePersonProvider, teamId, date);
 				return scheduleList.FindAll(published.IsSatisfiedBy);
+
+
 			}
 			return new List<PersonScheduleDayReadModel>();
 		}
 	}
 }
+
+
+
+
