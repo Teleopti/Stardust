@@ -60,7 +60,6 @@ Scenario: View confidential absence in team view when permitted
 
 
 #person schedule view
-@ignore
 Scenario: Cannot view confidential absence in person view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
@@ -73,15 +72,14 @@ Scenario: Cannot view confidential absence in person view when no permission
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 16:00 |
-	| Color      | Gray  |
+	| Color      | gray  |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
-	| Name       | Other            |
-	| Color      | Gray             |
+	| Name       | Övrigt           |
+	| Color      | gray             |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
 
-@ignore
 Scenario: View confidential absence in person view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with

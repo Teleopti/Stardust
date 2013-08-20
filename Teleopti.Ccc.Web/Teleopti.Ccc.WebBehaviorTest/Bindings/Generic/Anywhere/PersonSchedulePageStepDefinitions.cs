@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
 				              shiftLayer.StartTime,
 				              shiftLayer.LengthMinutes(),
-				              ColorNameToCss(shiftLayer.Color)));
+				              shiftLayer.Color.StartsWith("gray") ? "gray" : ColorNameToCss(shiftLayer.Color)));
 		}
 
 		[Then(@"I should not see a shift layer with")]
