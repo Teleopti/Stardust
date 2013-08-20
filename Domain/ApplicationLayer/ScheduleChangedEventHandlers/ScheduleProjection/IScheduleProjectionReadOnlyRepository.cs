@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		bool IsInitialized();
 	    DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
 		IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
+		IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId);
 	}
 }

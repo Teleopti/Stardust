@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				personPeriod.PersonSkillCollection.Where(
 					s => s.Active && s.SkillPercentage.Value > 0 && s.SkillPercentage.Value != 1d).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
 
-			var key = string.Join("_", skills.Where(s => !((IDeleteTag)s).IsDeleted).OrderBy(s => s.Name).Select(s => s.Id.GetValueOrDefault()));
+			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
 
 			var combination = new SkillCombination(key, skills.ToArray(), personPeriod.Period, skillEfficiencies);
 			if (foundCombinations != null)
@@ -70,6 +70,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool IsValidForDate(DateOnly date)
 		{
 			return _period.Contains(date);
+		}
+
+		public static string ToKey(IEnumerable<Guid> idCollection)
+		{
+			return string.Join("_", idCollection.OrderBy(s => s));
 		}
 
 		public string Key { get; private set; }

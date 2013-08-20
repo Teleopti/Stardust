@@ -124,12 +124,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
-            
-            IPersonPeriod pPeriod = new PersonPeriod(personPeriodStart,
-                                                    PersonContractFactory.CreatePersonContract(),
-													 new Team());
-			person.AddPersonPeriod(pPeriod);
-            foreach (ISkill skill in skillsInPersonPeriod)
+	        IPersonPeriod pPeriod = person.Period(personPeriodStart);
+	        if (pPeriod == null)
+	        {
+		        pPeriod = new PersonPeriod(personPeriodStart,
+		                         PersonContractFactory.CreatePersonContract(),
+		                         new Team());
+		        person.AddPersonPeriod(pPeriod);
+	        }
+	        foreach (ISkill skill in skillsInPersonPeriod)
             {
                 IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) {Active = true};
             	if(skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)

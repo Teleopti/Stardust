@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
@@ -58,6 +59,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime OldStartDate { get; set; }
 		public DateTime NewStartDate { get; set; }
+
+		public DateTime OldEndDate { get; set; }
+
+		public DateTime NewEndDate { get; set; }
 	}
 
 	[Serializable]
@@ -80,16 +85,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
 		public Guid SkillId { get; set; }
+
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
 	[Serializable]
 	public class PersonSkillAddedEvent : RaptorDomainEvent
 	{
 		public Guid PersonId { get; set; }
+		public DateTime EndDate { get; set; }
 		public DateTime StartDate { get; set; }
 		public Guid SkillId { get; set; }
 		public double Proficiency { get; set; }
 		public bool SkillActive { get; set; }
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
+	}
+
+	[Serializable]
+	public struct PersonSkillDetail
+	{
+		public Guid SkillId { get; set; }
+		public double Proficiency { get; set; }
+		public bool Active { get; set; }
 	}
 
 	[Serializable]
@@ -97,6 +114,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
 	[Serializable]
@@ -105,6 +124,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
 		public Guid SkillId { get; set; }
+
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
 	[Serializable]
@@ -123,6 +144,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
 		public Guid SkillId { get; set; }
+
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
 	[Serializable]

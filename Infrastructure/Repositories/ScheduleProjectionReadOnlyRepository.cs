@@ -6,11 +6,9 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -126,6 +124,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ProjectionChangedEventLayer)))
 										.List<ProjectionChangedEventLayer>();
 	    }
+
+		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
+		{
+			var uow = _currentUnitOfWork.Current();
+
+			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"SELECT * FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate>=:DateFrom AND BelongsToDate<=:DateTo")
+										.SetGuid("ScenarioId", scenarioId)
+										.SetGuid("PersonId", personId)
+										.SetDateTime("DateFrom", datePeriod.StartDate)
+										.SetDateTime("DateTo", datePeriod.EndDate)
+										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ProjectionChangedEventLayer)))
+										.List<ProjectionChangedEventLayer>();
+		}
 
 	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {
