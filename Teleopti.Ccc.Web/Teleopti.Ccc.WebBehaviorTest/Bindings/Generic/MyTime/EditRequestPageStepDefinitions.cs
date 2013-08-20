@@ -106,29 +106,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the add text request form")]
 		public void ThenIShouldSeeTheTextRequestForm()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.JQueryVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-subject");
 		}
 
 		[Then(@"I should not see the add text request form")]
 		public void ThenIShouldNotSeeTheTextRequestForm()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.Exists, Is.False);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-subject");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section .request-new-absence");
 		}
 
 		[Then(@"I should see the add absence request form")]
 		public void ThenIShouldSeeTheAbsenceRequestTab()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.JQueryVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-absence");
 		}
 
 		[Then(@"I should not see the add absence request form")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section .request-new-absence");
 		}
 
 		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]

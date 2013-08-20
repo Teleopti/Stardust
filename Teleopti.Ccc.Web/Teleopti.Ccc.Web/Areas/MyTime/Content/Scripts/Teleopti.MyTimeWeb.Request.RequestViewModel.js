@@ -77,11 +77,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
         self.DateTo(moment(new Date(year, month - 1, day)));
     }
 	
-    self.AddTextRequest = function (useDefaultDates, clearData) {
+    self.AddTextRequest = function (useDefaultDates) {
         if (useDefaultDates != undefined && useDefaultDates === true)
             _setDefaultDates();
-        if (clearData != undefined && clearData === true)
-            _clearData();
         self.IsNewInProgress(true);
 		self.TypeEnum(0);
 		self.TextRequestHeaderVisible(true);
@@ -90,11 +88,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		
     };
 
-    self.AddAbsenceRequest = function (useDefaultDates, clearData) {
+    self.AddAbsenceRequest = function (useDefaultDates) {
         if (useDefaultDates != undefined && useDefaultDates === true)
             _setDefaultDates();
-        if (clearData != undefined && clearData === true)
-            _clearData();
         self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.TextRequestHeaderVisible(false);
@@ -106,24 +102,4 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 
         self.IsNewInProgress(false);
     };
-    
-    function _clearData() {
-        self.TextRequestHeaderVisible(false);
-        self.AbsenceRequestHeaderVisible(false);
-        self.IsFullDay(false);
-        self.IsUpdate(false);
-        self.TimeFromInternal(defaultDateTimes.defaultStartTime);
-        self.TimeToInternal(defaultDateTimes.defaultEndTime);
-        
-        self.TypeEnum(0);
-        self.ShowError(false);
-        self.ErrorMessage('');
-        self.AbsenceId(undefined);
-        self.Subject(undefined);
-        self.Message(undefined);
-        self.EntityId(undefined);
-        self.DenyReason(undefined);
-        self.IsEditable(true);
-        self.IsNewInProgress(false);
-    }
 };

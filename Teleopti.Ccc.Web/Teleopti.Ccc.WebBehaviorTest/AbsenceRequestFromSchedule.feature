@@ -18,8 +18,8 @@ Scenario: Open add absence request form from day summary
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should see the add text request form
-	And I should see the add absence request form
+	And I click to add a new absence request
+	Then I should see the add absence request form
 
 Scenario: Add absence request from week schedule view
 	Given I have the role 'Full access to mytime'

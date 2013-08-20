@@ -45,7 +45,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
-		    _activatePlaceHolderText();
+			_activatePlaceHolderText();
 		},
 	    RequestPartialDispose: function() {
 	        Teleopti.MyTimeWeb.Request.List.Dispose();

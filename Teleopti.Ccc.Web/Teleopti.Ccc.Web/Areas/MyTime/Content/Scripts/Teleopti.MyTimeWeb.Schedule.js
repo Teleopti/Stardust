@@ -39,8 +39,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
-		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
-	    vm.requestViewModel.DateFormat(datePickerFormat);
 		//_initTooltip();
 		//Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		$('.body-weekview-inner').show();
@@ -77,11 +75,35 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.displayDate = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
-	    self.datePickerFormat = ko.observable();
+		self.datePickerFormat = ko.observable();
 
 	    self.selectedDate = ko.observable(moment().startOf('day'));
 	    
-	    self.requestViewModel = addRequestViewModel;
+	    self.requestViewModel = ko.observable();
+
+	    self.textRequestActive = ko.observable(false);
+	    self.absenceRequestActive = ko.observable(false);
+	    self.initialRequestDate = null;
+
+	    self.showAddRequestToolbar = ko.computed(function() {
+	        return (self.requestViewModel() || '') != '';
+	    });
+
+	    self.textRequestActivate = function() {
+	        self.absenceRequestActive(false);
+	        if (!self.textRequestActive()) {
+	            self.textRequestActive(true);
+	            self.showAddTextRequestForm();
+	        }
+	    };
+	    
+	    self.absenceRequestActivate = function () {
+	        self.textRequestActive(false);
+	        if (!self.absenceRequestActive()) {
+	            self.absenceRequestActive(true);
+	            self.showAddAbsenceRequestForm();
+	        }
+	    };
 
 		self.setCurrentDate = function (date) {
 		    self.selectedDate(date);
@@ -106,6 +128,51 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		    
 		};
+
+	    self.showAddTextRequestForm = function() {
+	        if (self.textPermission() !== true) {
+	            return;
+	        }
+	        self.setRequestViewModel();
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDate));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDate));
+	        self.requestViewModel().AddTextRequest(false);
+	    };
+	    
+	    self.showAddAbsenceRequestForm = function () {
+	        if (self.absenceRequestPermission() !== true) {
+	            return;
+	        }
+	        self.setRequestViewModel();
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDate));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDate));
+	        self.requestViewModel().AddAbsenceRequest(false);
+	    };
+
+	    self.showAddRequestForm = function (day) {
+	        self.initialRequestDate = day.date();
+
+	        if ((self.requestViewModel() || '') != '') {
+	            self.requestViewModel().DateFrom(moment(day.date()));
+	            self.requestViewModel().DateTo(moment(day.date()));
+	            return;
+	        }
+
+	        self.textRequestActivate();
+	    };
+	    
+        self.setRequestViewModel = function()
+        {
+            var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+            var model = addRequestViewModel();
+            model.DateFormat(datePickerFormat);
+
+            self.requestViewModel(model);
+        };
+
+	    self.CancelAddingNewRequest = function() {
+	        self.requestViewModel(null);
+	    };
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
@@ -232,15 +299,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		        return true;
 		    }	
 	    });
-
-		self.showAddRequestForm = function () {
-		    if (self.textRequestPermission() !== true) {
-		        return;
-		    }
-		    parent.requestViewModel.DateFrom(moment(self.date()));
-		    parent.requestViewModel.DateTo(moment(self.date()));
-		    parent.requestViewModel.AddTextRequest(false, true);
-		};
 
 	    self.navigateToRequests = function() {
 	        parent.navigateToRequestsMethod();
@@ -456,8 +514,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts, defaultDateTimes) {
-		    var addRequestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
-		    addRequestViewModel.AddRequestCallback = _displayRequest;
+		    var addRequestViewModel = function () {
+		        var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
+		        model.AddRequestCallback = _displayRequest;
+		        return model;
+		    };
+		    
 		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
 			ko.applyBindings(vm, $('#page')[0]);
 		},

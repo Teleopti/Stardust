@@ -63,10 +63,14 @@
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-    <div id="Request-add-section" class="well well-small clearfix" data-bind="visible: IsNewInProgress">
-		<div data-bind="template : Template">
-		</div>
-	</div>
+    <div id="Request-add-section">
+        <div data-bind="with: requestViewModel">
+            <div class="well well-small clearfix">
+                <div data-bind="template: Template">
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="Requests-data-binding-area" >
         <div class="alert alert-block" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
             @Resources.NoRequestsFound
