@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState = PermissionState.Unspecified;
             
-            if(_schedulePart.PersonDayOffCollection().Count > 0)
+            if(_schedulePart.HasDayOff())
             {
                 if(rotation.DayOffTemplate == null)
                     return PermissionState.Broken;
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             {
                 IStudentAvailabilityRestriction restriction = studentAvailabilityDay.RestrictionCollection[0];
                 //If there is a day off and availability is set to false the restriction is considered Satisfied
-                if (_schedulePart.PersonDayOffCollection().Count != 0 && studentAvailabilityDay.NotAvailable)
+                if (_schedulePart.HasDayOff() && studentAvailabilityDay.NotAvailable)
                 {
                     return PermissionState.Satisfied;
                 }

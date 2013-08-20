@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return false;
             }
             //no day off
-            if (_schedulePart.PersonDayOffCollection().Count != 0)
+            if (_schedulePart.HasDayOff())
             {
                 loggFilterResult(UserTexts.Resources.ThereIsAlreadyADayOff, 0, 0);
                 return false;
