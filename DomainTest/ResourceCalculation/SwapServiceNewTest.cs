@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [SetUp]
         public void Setup()
         {
-             var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
             _mocks = new MockRepository();
             _scenario = new Scenario("hej");
             _dic = _mocks.StrictMock<IScheduleDictionary>();
