@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get { return lessIntellegentSplitContainerAdvMain; }
         }
+		
+		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
+        {
+            get { return lessIntellegentSplitContainerAdvMainContainer; }
+        }
         public TeleoptiLessIntelligentSplitContainer SplitContainerAdvResultGraph
         {
             get { return lessIntellegentSplitContainerAdvResultGraph; }

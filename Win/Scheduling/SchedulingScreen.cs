@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripExScheduleViews.Items.Add(hostDatePicker);
 			_grid = schedulerSplitters1.Grid;
 			_chartControlSkillData = schedulerSplitters1.ChartControlSkillData;
-			_splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMain;
+			_splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMainContainer;
 			_splitContainerAdvResultGraph = schedulerSplitters1.SplitContainerAdvResultGraph;
 			_splitContainerLessIntellegentEditor = schedulerSplitters1.SplitContainerLessIntelligent1;
 			_splitContainerLessIntellegentRestriction = schedulerSplitters1.SplitContainerView;
@@ -6516,6 +6516,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_splitterManager = new SplitterManagerRestrictionView
 										   {
 											   MainSplitter = _splitContainerAdvMain,
+											   LeftMainSplitter = schedulerSplitters1.SplitContainerAdvMain,
 											   GraphResultSplitter = _splitContainerAdvResultGraph,
 											   GridEditorSplitter = _splitContainerLessIntellegentEditor,
 											   RestrictionViewSplitter = _splitContainerLessIntellegentRestriction
