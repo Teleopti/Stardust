@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -13,16 +17,36 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider)
+		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider, ILoggedOnUser loggedOnUser)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_permissionProvider = permissionProvider;
 			_schedulePersonProvider = schedulePersonProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> TeamSchedule(Guid teamId, DateTime date)
+		public IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date)
 		{
+			var shifts = getTeamScheduleReadModels(teamId, date).Select(s => JsonConvert.DeserializeObject<Shift>(s.Shift)).ToArray();
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today,
+			                                            _loggedOnUser.CurrentUser()))
+			{
+				foreach (var layer in shifts.SelectMany(shift => shift.Projection))
+				{
+					layer.Color = layer.IsAbsenceConfidential
+									  ? ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor)
+									  : layer.Color;
+					layer.Title = layer.IsAbsenceConfidential ? ConfidentialPayloadValues.Description.Name : layer.Title;
+				}
+			}
+			
+			return shifts;
+		}
+
+		private IEnumerable<PersonScheduleDayReadModel> getTeamScheduleReadModels(Guid teamId, DateTime date)
+ 		{
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
 
