@@ -21,17 +21,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	[TestFixture]
 	public class PersonScheduleViewModelMapperTest
 	{
-		private ILoggedOnUser _loggedOnUser;
 		private IPermissionProvider _permissionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_loggedOnUser, _permissionProvider)));
+			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_permissionProvider)));
 		}
 
 		// cant get this green with dynamics involved
@@ -173,7 +171,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var person = PersonFactory.CreatePersonWithId();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_permissionProvider.Stub(
 				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, person))
 							   .Return(true);
@@ -181,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("Green", isAbsenceConfidential: true) };
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData { Shift = shift, Person = person});
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -221,8 +218,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapPersonAbsences()
 		{
 			var target = new PersonScheduleViewModelMapper();
-
-			var personAbsences = new[] { new PersonAbsence(MockRepository.GenerateMock<IScenario>()) };
+			var absenceLayer = new AbsenceLayer(new Absence() { DisplayColor = Color.Red },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsence = new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer);
+			var personAbsences = new[] { personAbsence };
 		
 			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
 			
@@ -264,7 +263,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var person = PersonFactory.CreatePersonWithId();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_permissionProvider.Stub(
 				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, person))
 			                   .Return(true);
@@ -274,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, Person = person });
 
 			result.PersonAbsences.Single().Color.Should().Be.EqualTo("Red");
 		}
@@ -312,7 +310,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var person = PersonFactory.CreatePersonWithId();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_permissionProvider.Stub(
 				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, person))
 							   .Return(true);
@@ -320,7 +317,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, Person = person});
 
 			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
 		}
@@ -373,8 +370,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapPersonAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();
-
-			var personAbsence = new PersonAbsence(MockRepository.GenerateMock<IScenario>());
+			var absenceLayer = new AbsenceLayer(new Absence() { DisplayColor = Color.Red },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsence = new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer);
 			personAbsence.SetId(Guid.NewGuid());
 			var personAbsences = new[] { personAbsence };
 
