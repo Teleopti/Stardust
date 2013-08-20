@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentEditor;
 		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentRestriction;
 		private readonly TabControlAdv _tabSkillData;
+		private readonly TabControlAdv _tabInfoPanels;
 		private readonly ElementHost _elementHostRequests;
 		private readonly WpfControls.Controls.Requests.Views.HandlePersonRequestView _handlePersonRequestView1;
 		private SingleAgentRestrictionPresenter _singleAgentRestrictionPresenter;
@@ -257,6 +258,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_elementHostRequests = schedulerSplitters1.ElementHostRequests;
 			_handlePersonRequestView1 = schedulerSplitters1.HandlePersonRequestView1;
 			_tabSkillData = schedulerSplitters1.TabSkillData;
+			_tabInfoPanels = schedulerSplitters1.TabInfoPanels;
 			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), true);
 			notesEditor = new NotesEditor(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
 			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.ShiftEditor, wpfShiftEditor1);
@@ -2763,6 +2765,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			loadTagsMenu();
 
 			setupSkillTabs();
+			setupInfoTabs();
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
@@ -4770,6 +4773,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_tabSkillData.TabPages.Add(tab);
 			}
 			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
+		}
+
+		private void setupInfoTabs()
+		{
+			_currentIntraDayDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
+			_tabInfoPanels.TabPages.Clear();
+			var agentInfoTab = ColorHelper.CreateTabPage("Agent Info", "Agent Information");
+			_tabInfoPanels.TabPages.Add(agentInfoTab);
+			var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
+			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;

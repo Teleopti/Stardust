@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
             tabSkillData.TabStyle = typeof(SkillTabRenderer);
-            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
+            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
+			tabInfoPanels.TabStyle = typeof(TabRendererOffice2007);
+			tabInfoPanels.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
         }
 
         public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
@@ -69,6 +71,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public TabControlAdv TabSkillData
         {
             get { return tabSkillData; }
+        }
+		
+		public TabControlAdv TabInfoPanels
+        {
+            get { return tabInfoPanels; }
         }
 
         public ElementHost ElementHostRequests

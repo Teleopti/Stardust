@@ -72,6 +72,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.handlePersonRequestView1 = new Teleopti.Ccc.WpfControls.Controls.Requests.Views.HandlePersonRequestView();
 			this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
 			this.multipleHostControl1 = new Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl();
+			this.tabInfoPanels = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
+			this.tabPageAdv2 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.lessIntellegentSplitContainerAdvMainContainer = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
@@ -101,8 +103,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.chbSchedules)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.agentRestrictionGrid1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).BeginInit();
+			this.tabInfoPanels.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.SuspendLayout();
+			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMainContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -509,6 +514,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.elementHost1.Text = "elementHost1";
 			this.elementHost1.Child = this.multipleHostControl1;
 			// 
+			// TabInfoPanels
+			// 
+			this.tabInfoPanels.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabInfoPanels.Controls.Add(this.tabPageAdv2);
+			this.tabInfoPanels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabInfoPanels.KeepSelectedTabInFrontRow = false;
+			this.tabInfoPanels.Location = new System.Drawing.Point(0, 0);
+			this.tabInfoPanels.Name = "tabInfoPanels";
+			this.tabInfoPanels.Size = new System.Drawing.Size(165, 672);
+			this.tabInfoPanels.TabGap = 10;
+			this.tabInfoPanels.TabIndex = 12;
+			this.tabInfoPanels.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
+			this.tabInfoPanels.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			// 
+			// tabPageAdv2
+			// 
+			this.tabPageAdv2.Image = null;
+			this.tabPageAdv2.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageAdv2.Location = new System.Drawing.Point(1, 22);
+			this.tabPageAdv2.Name = "tabPageAdv2";
+			this.tabPageAdv2.ShowCloseButton = true;
+			this.tabPageAdv2.Size = new System.Drawing.Size(162, 648);
+			this.tabPageAdv2.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabPageAdv2.TabIndex = 11;
+			this.tabPageAdv2.ThemesEnabled = false;
+			// 
 			// lessIntellegentSplitContainerAdvMainContainer
 			// 
 			this.lessIntellegentSplitContainerAdvMainContainer.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -526,6 +557,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// lessIntellegentSplitContainerAdvMainContainer.Panel2
 			// 
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.Controls.Add(this.tabInfoPanels);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2MinSize = 32;
 			this.lessIntellegentSplitContainerAdvMainContainer.Size = new System.Drawing.Size(772, 672);
 			this.lessIntellegentSplitContainerAdvMainContainer.SplitterDistance = 600;
@@ -571,7 +603,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.chbSchedules)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.agentRestrictionGrid1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).EndInit();
+			this.tabInfoPanels.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.ResumeLayout(false);
+			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).EndInit();
 			this.lessIntellegentSplitContainerAdvMainContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -585,7 +620,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvResultGraph;
         private Syncfusion.Windows.Forms.Chart.ChartControl chartControlSkillData;
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabSkillData;
+        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabInfoPanels;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv1;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv2;
         private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer teleoptiLessIntelligentSplitContainerLessIntelligent1;
         private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer teleoptiLessIntellegentSplitContainerView;
         private Syncfusion.Windows.Forms.Grid.GridControl grid;
