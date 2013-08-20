@@ -659,15 +659,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private void mergePersonalStuff(IScheduleDay source)
         {
             IPersonAssignment sourceAss = source.PersonAssignment();
-            IPersonAssignment destAss = PersonAssignment();
 
 	        if (sourceAss != null)
 	        {
-		        if (destAss == null)
-		        {
-			        destAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			        Add(destAss);
-		        }
+		        var destAss = getOrCreateAssignmentIfNotExists();
 
 				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
 				
@@ -691,17 +686,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void CreateAndAddDayOff(IDayOffTemplate dayOff)
         {
-					var foundPersonAssignment = PersonAssignment();
-					if (foundPersonAssignment == null)
-					{
-						var newAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-						newAss.SetDayOff(dayOff);
-						Add(newAss);
-					}
-					else
-					{
-						foundPersonAssignment.SetDayOff(dayOff);
-					}
+					var foundPersonAssignment = getOrCreateAssignmentIfNotExists();
+					foundPersonAssignment.SetDayOff(dayOff);
         }
 
          public void CreateAndAddNote(string text)
@@ -728,17 +714,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
        
         public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
-						var foundPersonAssignment = PersonAssignment();
-						if (foundPersonAssignment == null)
-						{
-							var newAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-							newAss.AddOvertimeLayer(activity, period, definitionSet);
-							Add(newAss);
-						}
-						else
-						{
-							foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
-						}
+						var foundPersonAssignment = getOrCreateAssignmentIfNotExists();
+					foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
         }
 
 				public void MergeOvertime(IScheduleDay source)
@@ -904,5 +881,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(options.OvertimeAvailability)
                 DeleteOvertimeAvailability();
         }
+
+			private IPersonAssignment getOrCreateAssignmentIfNotExists()
+			{
+				var currentAss = PersonAssignment();
+				if (currentAss == null)
+				{
+					currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+					Add(currentAss);
+				}
+				return currentAss;
+			}
     }
 }
