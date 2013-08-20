@@ -357,9 +357,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
+			//borde tas bort!
         public void DeleteDayOff()
         {
-            Clear<IPersonDayOff>();
+	        var ass = PersonAssignment();
+					if (ass != null)
+					{
+						ass.SetDayOff(null);
+					}
         }
 
         private void mergeDayOff(IScheduleDay source)
