@@ -33,15 +33,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today,
 			                                            _loggedOnUser.CurrentUser()))
 			{
-				foreach (var layer in shifts.SelectMany(shift => shift.Projection))
+				foreach (var layer in shifts.SelectMany(shift => shift.Projection).Where(layer => layer.IsAbsenceConfidential))
 				{
-					layer.Color = layer.IsAbsenceConfidential
-									  ? ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor)
-									  : layer.Color;
-					layer.Title = layer.IsAbsenceConfidential ? ConfidentialPayloadValues.Description.Name : layer.Title;
+					layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
+					layer.Title = ConfidentialPayloadValues.Description.Name;
 				}
 			}
-			
 			return shifts;
 		}
 

@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PersonScheduleViewModelMappingProfile : Profile
 	{
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPermissionProvider _permissionProvider;
+
+		public PersonScheduleViewModelMappingProfile(ILoggedOnUser loggedOnUser, IPermissionProvider permissionProvider)
+		{
+			_loggedOnUser = loggedOnUser;
+			_permissionProvider = permissionProvider;
+		}
+
 		protected override void Configure()
 		{
 			CreateMap<PersonScheduleData, PersonScheduleViewModel>()
@@ -31,8 +43,24 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				;
 
 			CreateMap<IPersonAbsence, PersonScheduleViewModelPersonAbsence>()
-				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Layer.Payload.DisplayColor.ToHtml()))
-				.ForMember(x => x.Name, o => o.ResolveUsing(s => s.Layer.Payload.Description.Name))
+				.ForMember(x => x.Color, o => o.ResolveUsing(s =>
+					{
+						var isPermitted = _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+						                                                          DateOnly.Today,
+						                                                          _loggedOnUser.CurrentUser());
+						return isPermitted || !s.Layer.Payload.Confidential
+							       ? s.Layer.Payload.DisplayColor.ToHtml()
+							       : ConfidentialPayloadValues.DisplayColor.ToHtml();
+					}))
+				.ForMember(x => x.Name, o => o.ResolveUsing(s =>
+					{
+						var isPermitted = _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+						                                                          DateOnly.Today,
+						                                                          _loggedOnUser.CurrentUser());
+						return isPermitted || !s.Layer.Payload.Confidential
+							       ? s.Layer.Payload.Description.Name
+							       : ConfidentialPayloadValues.Description.Name;
+					}))
 				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
 					{
 						if (s.Layer.Period.StartDateTime == DateTime.MinValue)
@@ -50,9 +78,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				;
 
 			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
-			
+
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
-				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Color))
+				.ForMember(x => x.Color, o => o.ResolveUsing(s =>
+					{
+						var isPermitted =
+							_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+							                                        DateOnly.Today,
+							                                        _loggedOnUser.CurrentUser());
+						return isPermitted || !s.IsAbsenceConfidential
+							       ? s.Color
+							       : ConfidentialPayloadValues.DisplayColor.ToHtml();
+					}))
 				.ForMember(x => x.Start, o => o.ResolveUsing(s =>
 					{
 						if (s.Start == null)
