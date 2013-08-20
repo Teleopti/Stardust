@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
 		}
 
+		[Then(@"I should see '(.*)' with absence")]
+		public void ThenIShouldSeeWithAbsence(string personName, Table table)
+		{
+			var absence = table.CreateInstance<AbsenceInfo>();
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, absence.Color);
+		}
+
+
 		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
@@ -58,6 +66,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public class TeamInfo
 		{
 			public string Team { get; set; }
+		}
+
+		public class AbsenceInfo
+		{
+			public string Color { get; set; }
 		}
 
 		[When(@"I select team '(.*)'")]

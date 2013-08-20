@@ -33,7 +33,7 @@ Background:
 	
 #team schedule view
 @ignore
-Scenario: Cannot view confidential absence's color in team view when no permission
+Scenario: Cannot view confidential absence in team view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
@@ -43,10 +43,10 @@ Scenario: Cannot view confidential absence's color in team view when no permissi
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with absence
 	| Field | Value |
-	| Color | Grey  |
+	| Color | gray  |
 
 @ignore
-Scenario: View confidential absence's color in team view when permitted
+Scenario: View confidential absence in team view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
@@ -61,7 +61,7 @@ Scenario: View confidential absence's color in team view when permitted
 
 #person schedule view
 @ignore
-Scenario: Cannot view confidential absence's details in person view when no permission
+Scenario: Cannot view confidential absence in person view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
@@ -82,7 +82,7 @@ Scenario: Cannot view confidential absence's details in person view when no perm
 	| End time   | 2013-08-10 23:59 |
 
 @ignore
-Scenario: View confidential absence's details in person view when permitted
+Scenario: View confidential absence in person view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
@@ -93,7 +93,7 @@ Scenario: View confidential absence's details in person view when permitted
 	Then I should see a shift layer with
 	| Field      | Value |
 	| Start time | 08:00 |
-	| End time   | 23:59 |
+	| End time   | 16:00 |
 	| Color      | Red   |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
