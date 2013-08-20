@@ -1,11 +1,9 @@
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 using log4net.Appender;
@@ -24,13 +22,9 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-#endregion
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
-	/// <summary>
-	/// Setup fixture for assembly
-	/// </summary>
 	[SetUpFixture]
 	public class SetupFixtureForAssembly
 	{
@@ -89,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		public static void CleanupHistory(IUnitOfWork uow)
 		{
-			var s = session(uow);
+			var s = uow.FetchSession();
 			foreach (var classMetaData in s.SessionFactory.GetAllClassMetadata().Values)
 			{
 				var entityName = classMetaData.EntityName;
@@ -124,7 +118,7 @@ in what infrastructuretest this has happened - it is unknown for me.";
 			{
 				using (uowTemp.DisableFilter(QueryFilter.BusinessUnit))
 				{
-					ISession s = session(uowTemp);
+					ISession s = uowTemp.FetchSession();
 					s.CreateSQLQuery(@"delete from PersonWriteProtectionInfo").ExecuteUpdate();
 					IList<IAggregateRoot> leftInDb = s.CreateCriteria(typeof(IAggregateRoot))
 											  .List<IAggregateRoot>();
@@ -136,11 +130,6 @@ in what infrastructuretest this has happened - it is unknown for me.";
 					}
 				}
 			}
-		}
-
-		private static ISession session(IUnitOfWork uowTemp)
-		{
-			return (ISession)uowTemp.GetType().GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(uowTemp, null);
 		}
 
 		/// <summary>
@@ -168,11 +157,10 @@ in what infrastructuretest this has happened - it is unknown for me.";
 			//needed if db isn't created by nh but by script:s that also have inserts
 			//IPerson per = fakeLogon();
 
-			using (IUnitOfWork uow = DataSource.Application.CreateAndOpenUnitOfWork())
+			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 
-				ISession session = (ISession)uow.GetType()
-					 .GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(uow, null);
+				var session = uow.FetchSession();
 
 				IRepository rep = new Repository(uow);
 
