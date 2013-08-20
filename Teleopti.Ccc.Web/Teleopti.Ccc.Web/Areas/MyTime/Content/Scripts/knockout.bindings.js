@@ -1,4 +1,26 @@
-﻿ko.bindingHandlers['option-data'] = {
+﻿//eventaggregator
+//usage:
+//	ko.eventAggregator.subscribe(function(newValue){
+//		doSomething with newValue
+//		,null
+//		,"myTopic"
+//	});
+ko.eventAggregator = new ko.subscribable();
+
+//eventAggregatorExtensions
+ko.subscribable.fn.publishOn = function (topic) {
+	this.subscribe(function (newValue) {
+		ko.eventAggregator(newValue, topic);
+	});
+	return this; //support chaining
+};
+
+ko.subscribable.fn.subscribeTo = function (topic) {
+	ko.eventAggregator.subscribe(this, null, topic);
+	return this; //support chaining
+};
+
+ko.bindingHandlers['option-data'] = {
 	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 		var options = valueAccessor();
 		var observable = options.member;
@@ -208,3 +230,4 @@ ko.bindingHandlers.clickable = {
 
 	}
 };
+
