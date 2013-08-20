@@ -1791,8 +1791,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
-
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.Any();
+							Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions);
 
@@ -1830,7 +1829,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.Any();
+							Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions);
 
@@ -1870,7 +1869,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.Any();
+							Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions);
 
