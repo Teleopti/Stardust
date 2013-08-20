@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,12 +32,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private ShiftCategory _category;
         private IScenario _scenario;
         private DateTime _start, _end;
-
+	    private IDayOff _dayOff1;
         private IPersonAssignment _personAssignmentConflictingWithDayOffEnd;
         private IPersonAssignment _personAssignmentConflictingWithDayOffStart;
         private IPersonAssignment _personAssignmentJustAfterDayOff;
         private IPersonAssignment _personAssignmentJustBeforeDayOff;
-        private PersonDayOff _personDayOff1;
+
         private TimeZoneInfo _timeZone;
     	private IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
     	private DateTimePeriod _personAssignmentConflictingWithDayOffStartPeriod;
@@ -50,10 +51,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_mocks = new MockRepository();
 			_workTimeStartEndExtractor = _mocks.StrictMock<IWorkTimeStartEndExtractor>();
 			_target = new NewDayOffRule(_workTimeStartEndExtractor);
-            _day = _mocks.StrictMock<IScheduleDay>();
+            _day = _mocks.DynamicMock<IScheduleDay>();
             _days = new List<IScheduleDay> { _day };
-            _dayBefore = _mocks.StrictMock<IScheduleDay>();
-            _dayAfter = _mocks.StrictMock<IScheduleDay>();
+						_dayBefore = _mocks.DynamicMock<IScheduleDay>();
+						_dayAfter = _mocks.DynamicMock<IScheduleDay>();
             _dayBeforeDayAfter = new List<IScheduleDay> { _dayBefore,_day, _dayAfter };
 
             _timeZone = TimeZoneInfo.Utc;
@@ -72,11 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(9));
             dayOff.Anchor = new TimeSpan(8, 30, 0);
-
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(9));
-            dayOff1.Anchor = new TimeSpan(10, 30, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2007, 8, 3));
+				
+				_dayOff1 = new DayOff(new DateTime(2007, 8, 3, 10, 30, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(9), new Description(), Color.Beige, string.Empty);
 
             // add this and the day off cannot be moved backwards
     		_personAssignmentJustBeforeDayOffPeriod = new DateTimePeriod(_start.AddHours(-3), _end.AddHours(-3));
@@ -123,12 +121,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenNoDayOffRuleReportsNoError()
         {
-            Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
             _mocks.ReplayAll();
             Assert.AreEqual(0, _target.Validate(_dic, _days).Count());
             _mocks.VerifyAll();
@@ -137,20 +129,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentJustBeforeAndConflictingAssignmentAfter()
         {
-            Expect.Call(_day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>
-                                                              {_personAssignmentJustBeforeDayOff})).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>
-                                                              {_personAssignmentConflictingWithDayOffEnd})).Repeat.Twice();
-            Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
-               new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+	        var template = new DayOffTemplate(new Description());
+	        template.Anchor = new TimeSpan(10, 30, 0);
+					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
+					assWithDayOff.SetDayOff(template);
+	        Expect.Call(_day.PersonAssignment()).Return(assWithDayOff).Repeat.Any();
+
+            Expect.Call(_dayBefore.PersonAssignment()).Return(_personAssignmentJustBeforeDayOff).Repeat.Any();
+            Expect.Call(_dayAfter.PersonAssignment()).Return(_personAssignmentConflictingWithDayOffEnd).Repeat.Any();
 
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
 				_personAssignmentJustBeforeDayOffPeriod.StartDateTime).IgnoreArguments();
@@ -172,20 +159,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentJustAfterAndConflictingAssignmentBefore()
         {
-            Expect.Call(_day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffStart })).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentJustAfterDayOff })).Repeat.Twice();
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+					var template = new DayOffTemplate(new Description());
+					template.Anchor = new TimeSpan(10, 30, 0);
+					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
+					assWithDayOff.SetDayOff(template);
+					Expect.Call(_day.PersonAssignment()).Return(assWithDayOff).Repeat.Any();
+					Expect.Call(_dayBefore.PersonAssignment()).Return(_personAssignmentConflictingWithDayOffStart).Repeat.Any();
+					Expect.Call(_dayAfter.PersonAssignment()).Return(_personAssignmentJustAfterDayOff).Repeat.Any();
 
-            Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> ()));
-            Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-
-            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
 
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
 				_personAssignmentConflictingWithDayOffStartPeriod.StartDateTime).IgnoreArguments();
@@ -207,12 +189,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentBeforeAndAfterConflicts()
         {
-            Expect.Call(_day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff1 }));
-            Expect.Call(_dayBefore.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffStart })).Repeat.Twice();
-            Expect.Call(_dayAfter.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignmentConflictingWithDayOffEnd })).Repeat.Twice();
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+					var template = new DayOffTemplate(new Description());
+					template.Anchor = new TimeSpan(10, 30, 0);
+					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
+					assWithDayOff.SetDayOff(template);
+					Expect.Call(_day.PersonAssignment()).Return(assWithDayOff).Repeat.Any();
+
+					Expect.Call(_dayBefore.PersonAssignment()).Return(_personAssignmentConflictingWithDayOffStart).Repeat.Any();
+					Expect.Call(_dayAfter.PersonAssignment()).Return(_personAssignmentConflictingWithDayOffEnd).Repeat.Any();
+
         	Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(null)).Return(
 				_personAssignmentConflictingWithDayOffStartPeriod.StartDateTime).IgnoreArguments();
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeEnd(null)).Return(
@@ -222,13 +208,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_workTimeStartEndExtractor.WorkTimeEnd(null)).Return(
 				_personAssignmentConflictingWithDayOffEndPeriod.EndDateTime).IgnoreArguments();
 
-            Expect.Call(_dayBefore.PersonDayOffCollection()).Return(
-               new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(_dayAfter.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-
-            Expect.Call(_day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Twice();
             _mocks.ReplayAll();
 
             var result = _target.Validate(_dic, _days);
@@ -244,12 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(13));
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2), date.AddDays(2).AddHours(8));
 
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(2));
-            dayOff1.Anchor = new TimeSpan(12, 0, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2010, 9, 7));
-
-            var result = _target.DayOffDoesConflictWithActivity(_personDayOff1, assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
@@ -264,12 +238,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(2), date.AddDays(2).AddHours(10));
 
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(2));
-            dayOff1.Anchor = new TimeSpan(12, 0, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2010, 9, 7));
-
-            var result = _target.DayOffDoesConflictWithActivity(_personDayOff1, assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.False);
             Assert.That(_target.ErrorMessage, Is.Empty);
@@ -284,12 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(-1), date.AddDays(2).AddHours(10));
 
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(2));
-            dayOff1.Anchor = new TimeSpan(12, 0, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2010, 9, 7));
-
-            var result = _target.DayOffDoesConflictWithActivity(_personDayOff1, assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.False);
             Assert.That(_target.ErrorMessage, Is.Empty);
@@ -304,12 +268,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(2), date.AddDays(2).AddHours(10));
 
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(0));
-            dayOff1.Anchor = new TimeSpan(12, 0, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2010, 9, 7));
-
-            var result = _target.DayOffDoesConflictWithActivity(_personDayOff1, assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
@@ -324,12 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(-1), date.AddDays(2).AddHours(10));
 
-            var dayOff1 = new DayOffTemplate(new Description("test"));
-            dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(0));
-            dayOff1.Anchor = new TimeSpan(12, 0, 0);
-            _personDayOff1 = new PersonDayOff(_person, _scenario, dayOff1, new DateOnly(2010, 9, 7));
-
-            var result = _target.DayOffDoesConflictWithActivity(_personDayOff1, assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
@@ -339,21 +293,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void WhenAssignmentIsOnSameDateAsDayOffItIsNoConflict()
         {
             var date = new DateTime(2007, 8, 3, 0, 0, 0, DateTimeKind.Utc);
-            Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_personDayOff1, new DateTimePeriod(date, date.AddHours(8))));
-            Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_personDayOff1, new DateTimePeriod(date, date.AddHours(8))));
+            Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
+						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
 
         [Test]
         public void WhenAssignmentEndBeforeAnchorItIsNoConflictAfter()
         {
             var date = new DateTime(2007, 8, 2, 0, 0, 0, DateTimeKind.Utc);
-            Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_personDayOff1, new DateTimePeriod(date, date.AddHours(8))));
+						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
         [Test]
         public void WhenAssignmentStartsAnchorItIsNoConflictBefore()
         {
             var date = new DateTime(2007, 8, 4, 0, 0, 0, DateTimeKind.Utc);
-            Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_personDayOff1, new DateTimePeriod(date, date.AddHours(8))));
+						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
     }
 }

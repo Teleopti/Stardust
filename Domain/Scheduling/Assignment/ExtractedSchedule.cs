@@ -583,8 +583,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                         return;
 
-                    IPersonDayOff dayOff = PersonDayOffCollection()[0];
-                    Remove(dayOff);
+									DeleteDayOff();
                 }
 
                 IPersonAssignment ass = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
