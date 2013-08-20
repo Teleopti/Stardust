@@ -246,6 +246,9 @@ namespace Teleopti.Ccc.Domain.Common
 						PersonId = Id.GetValueOrDefault(),
 						SkillId = skill.Id.GetValueOrDefault(),
 						StartDate = personPeriod.StartDate,
+						EndDate = personPeriod.EndDate(),
+						Proficiency = personSkill.SkillPercentage.Value,
+						SkillActive = personSkill.Active,
 						SkillsBefore = skillsBefore
 					});
 			}

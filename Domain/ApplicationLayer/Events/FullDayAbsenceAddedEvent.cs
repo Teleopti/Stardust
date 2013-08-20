@@ -126,6 +126,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid SkillId { get; set; }
 
 		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
+
+		public DateTime EndDate { get; set; }
+
+		public double Proficiency { get; set; }
+
+		public bool SkillActive { get; set; }
 	}
 
 	[Serializable]
