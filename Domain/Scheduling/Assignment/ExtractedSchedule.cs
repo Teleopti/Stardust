@@ -374,8 +374,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
                 return;
 
-            IPersonDayOff workingCopyOfDayOff = source.PersonDayOffCollection()[0].NoneEntityClone();
-            //TimeSpan diff = Period.StartDateTime.Subtract(source.Period.StartDateTime);
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             DateTimePeriod period = source.Period.MovePeriod(diff);
@@ -387,7 +385,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 
             Clear<IPersonDayOff>();
-            //Clear<IPersonAbsence>();
 
             IList<IPersonAbsence> filterList = new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
             foreach (IPersonAbsence data in filterList)
@@ -397,15 +394,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             
             Clear<IPersonAssignment>();
-
             splitList.ForEach(Add);
-            var date = new DateOnly(Period.StartDateTimeLocal(TimeZone));
-            TimeZoneInfo timeZoneInfo = workingCopyOfDayOff.Person.PermissionInformation.DefaultTimeZone();
-            if (workingCopyOfDayOff.UsedTimeZone != null)
-                timeZoneInfo = workingCopyOfDayOff.UsedTimeZone;
-            var personDayOff = new PersonDayOff(Person, Scenario, workingCopyOfDayOff.DayOff, date, timeZoneInfo);
 
-            Add(personDayOff);     
+						var thisAss = PersonAssignment(true);
+						source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
         }
 
         public void DeleteFullDayAbsence(IScheduleDay source)
