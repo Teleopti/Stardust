@@ -17,29 +17,41 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider, ILoggedOnUser loggedOnUser)
+		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_permissionProvider = permissionProvider;
 			_schedulePersonProvider = schedulePersonProvider;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date)
 		{
-			var shifts = getTeamScheduleReadModels(teamId, date).Select(s => JsonConvert.DeserializeObject<Shift>(s.Shift)).ToArray();
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today,
-			                                            _loggedOnUser.CurrentUser()))
+			var result = new List<Shift>();
+			var shifts = getTeamScheduleReadModels(teamId, date);
+
+			var permittedPersonsToViewConfidental =
+				_schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+			
+			foreach (PersonScheduleDayReadModel shift in shifts)
 			{
-				foreach (var layer in shifts.SelectMany(shift => shift.Projection).Where(layer => layer.IsAbsenceConfidential))
+				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
+
+				var shift0 = JsonConvert.DeserializeObject<Shift>(shift.Shift);
+
+				foreach (var layer in shift0.Projection)
 				{
-					layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
-					layer.Title = ConfidentialPayloadValues.Description.Name;
+					if (!canSeeConfidental && layer.IsAbsenceConfidential)
+					{
+						layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
+						layer.Title = ConfidentialPayloadValues.Description.Name;
+					}
+
 				}
+				result.Add(shift0);
+
 			}
-			return shifts;
+			return result;
 		}
 
 		private IEnumerable<PersonScheduleDayReadModel> getTeamScheduleReadModels(Guid teamId, DateTime date)
@@ -57,8 +69,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					return scheduleList;
 				var published = new PublishedScheduleSpecification(_schedulePersonProvider, teamId, date);
 				return scheduleList.FindAll(published.IsSatisfiedBy);
+
+
 			}
 			return new List<PersonScheduleDayReadModel>();
 		}
 	}
 }
+
+
+
+
