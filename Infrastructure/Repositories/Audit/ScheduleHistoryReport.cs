@@ -88,12 +88,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var period = auditedAssignment.Entity.Period;
 
-			if (period.Equals(PersonAssignment.UndefinedPeriod))
-			{
-				ret.ScheduleStart = DateTime.MinValue;
-				ret.ScheduleEnd = DateTime.MinValue;
-			}
-			else
+			//todo! fixa!
+			//if (period.Equals(PersonAssignment.UndefinedPeriod))
+			//{
+			//	ret.ScheduleStart = DateTime.MinValue;
+			//	ret.ScheduleEnd = DateTime.MinValue;
+			//}
+			//else
 			{
 				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
 				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);

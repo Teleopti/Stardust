@@ -115,9 +115,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PersonAssignment().ShiftCategory.Description.Name))
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PersonAssignment(false).ShiftCategory.Description.Name))
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
-				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.PersonAssignment().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
+				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Projection(s).ContractTime().TotalMinutes));
 		}
 	}

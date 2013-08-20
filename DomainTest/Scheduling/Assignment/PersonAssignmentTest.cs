@@ -51,7 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void PersonAssignmentWithoutLayersShouldHaveSpecificPeriod()
 		{
-			Assert.AreEqual(PersonAssignment.UndefinedPeriod, target.Period);
+			var expected =
+				new DateOnlyPeriod(target.Date, target.Date).ToDateTimePeriod(target.Person.PermissionInformation.DefaultTimeZone());
+			target.Period.Should().Be.EqualTo(expected);
 		}
 
 		/// <summary>

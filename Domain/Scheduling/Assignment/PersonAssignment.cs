@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
-		public static readonly DateTimePeriod UndefinedPeriod = new DateTimePeriod(1800,1,1,1800,1,2);
 		private IList<IShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
@@ -62,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 			if (!mergedPeriod.HasValue)
 			{
-				mergedPeriod = UndefinedPeriod;
+				//gillar inte att man måste hoppa till personaggregatet här. stämpla assignmentet med tidszon istället?
+				mergedPeriod = new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
 			}
 			return mergedPeriod.Value;
 		}
