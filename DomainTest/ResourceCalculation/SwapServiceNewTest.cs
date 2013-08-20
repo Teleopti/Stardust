@@ -161,15 +161,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_list = new List<IScheduleDay>();
 
-			_p1D1.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12)));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			_p1D1.Add(dayOff);
 			
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-			IList<IPersonDayOff> personDayOffs = new List<IPersonDayOff> {_p1D1.PersonDayOffCollection()[0]};
-			((ScheduleRange)_dictionary[_person1]).AddRange(personDayOffs);
+			((ScheduleRange)_dictionary[_person1]).Add(dayOff);
 			
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
@@ -177,8 +177,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var service = new SwapServiceNew();
 			service.Init(_list);
 			Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
-			Assert.AreEqual(1, _list[0].PersonDayOffCollection().Count());
-
+			Assert.IsNotNull(_list[0].PersonAssignment().DayOff());
+		
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
