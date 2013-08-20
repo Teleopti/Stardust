@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
 			var schedulePart2 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
 			if ((schedulePart1.PersonAssignmentCollectionDoNotUse().Count == 0 || schedulePart2.PersonAssignmentCollectionDoNotUse().Count == 0) &&
-				(schedulePart1.PersonDayOffCollection().Count == 0 && schedulePart2.PersonDayOffCollection().Count == 0))
+				(!schedulePart1.HasDayOff() && !schedulePart2.HasDayOff()))
 			{
 				if (schedulePart1.PersonAssignmentCollectionDoNotUse().Count == 0)
 				{

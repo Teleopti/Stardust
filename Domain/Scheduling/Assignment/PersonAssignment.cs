@@ -312,5 +312,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			_dayOffTemplate = template;
 		}
+
+		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination)
+		{
+			dayOffDestination.SetDayOff(_dayOffTemplate);
+		}
 	}
 }

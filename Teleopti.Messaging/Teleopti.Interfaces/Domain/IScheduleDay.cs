@@ -212,12 +212,6 @@ namespace Teleopti.Interfaces.Domain
 				/// </remarks>
 				ReadOnlyCollection<IPublicNote> PublicNoteCollection();
 
-				///<summary>
-				/// Returns the person assignment to use for view if more than one assignment 
-				/// can not be viewed at the time.
-				///</summary>
-				IPersonAssignment PersonAssignment();
-
 				/// <summary>
 				/// Gets the business rule response collection.
 				/// </summary>
@@ -403,6 +397,12 @@ namespace Teleopti.Interfaces.Domain
 				void DeletePublicNote();
 
 	    bool HasDayOff();
+
+			///<summary>
+			/// Returns the person assignment to use for view if more than one assignment 
+			/// can not be viewed at the time.
+			///</summary>
+	    IPersonAssignment PersonAssignment(bool createIfNotExists = false);
     }
 
 }
