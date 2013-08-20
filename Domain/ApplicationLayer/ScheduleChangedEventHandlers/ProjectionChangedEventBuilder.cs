@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								WorkTime = layer.WorkTime(),
 								StartDateTime = layer.Period.StartDateTime,
 								EndDateTime = layer.Period.EndDateTime,
+								IsAbsenceConfidential = (layer.Payload is IAbsence) && (layer.Payload as IAbsence).Confidential
 							});
 					}
 					messageList.Add(eventScheduleDay);
