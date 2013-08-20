@@ -171,7 +171,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne))
 			      .IgnoreArguments()
 			      .Repeat.AtLeastOnce();
-			Expect.Call(_scheduleDictionary.PermissionsEnabled).Return(true).Repeat.AtLeastOnce();
 		}
 
 		[Test]
