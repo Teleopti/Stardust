@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.PayrollFormatter;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +21,7 @@ using Teleopti.Messaging.Coders;
 
 namespace Teleopti.Ccc.SmartParts.Payroll
 {
-    public partial class PayrollExportsSmartPart : ExtendedSmartPartBase, Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult>
+    public partial class PayrollExportsSmartPart : ExtendedSmartPartBase, WinCode.Common.IObservable<IPayrollResult>
     {
         private ICollection<IPayrollResult> _payrollResults;
         private PayrollExportSmartPartViewModel _model;
@@ -60,16 +59,23 @@ namespace Teleopti.Ccc.SmartParts.Payroll
                 SmartPartEnvironment.MessageBroker.RegisterEventSubscription(OnProgressChanged, typeof(IJobResultProgress));
             }
         }
-        
-        private void OnProgressChanged(object sender, EventMessageArgs e)
-        {
-            var domainObject = e.Message.DomainObject;
-            if (domainObject==null)return;
-            var exportProgress = new JobResultProgressDecoder().Decode(domainObject);
-            if (exportProgress != null) _model.UpdateProgress(exportProgress);
-        }
 
-        private void UnregisterEvents()
+	    private void OnProgressChanged(object sender, EventMessageArgs e)
+	    {
+		    if (e == null || e.Message == null)
+			    return;
+
+		    var domainObject = e.Message.DomainObject;
+		    if (domainObject == null) 
+				return;
+		    
+			var exportProgress = new JobResultProgressDecoder().Decode(domainObject);
+
+		    if (exportProgress != null)
+			    _model.UpdateProgress(exportProgress);
+	    }
+
+	    private void UnregisterEvents()
         {
             if (SmartPartEnvironment.MessageBroker != null)
             {
