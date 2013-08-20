@@ -73,7 +73,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 					foreach (var layer in projection)
 					{
-						var description = layer.DisplayDescription();
+						var isPayloadAbsence = (layer.Payload is IAbsence);
+						var description = isPayloadAbsence
+							                  ? (layer.Payload as IAbsence).Description
+							                  : layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
 
 						eventScheduleDay.Layers.Add(new ProjectionChangedEventLayer
@@ -83,11 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								ContractTime = contractTime,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-								DisplayColor = layer.DisplayColor().ToArgb(),
+								DisplayColor = isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
 								WorkTime = layer.WorkTime(),
 								StartDateTime = layer.Period.StartDateTime,
 								EndDateTime = layer.Period.EndDateTime,
-								IsAbsenceConfidential = (layer.Payload is IAbsence) && (layer.Payload as IAbsence).Confidential
+								IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
 							});
 					}
 					messageList.Add(eventScheduleDay);
