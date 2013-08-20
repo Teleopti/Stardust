@@ -226,8 +226,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse().Count());
-				Assert.AreEqual(1, _scheduleDayTwoPersonOne.PersonAssignmentCollectionDoNotUse().Count);
+				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignment().MainLayers().Count());
+				Assert.AreEqual(1, _scheduleDayTwoPersonOne.PersonAssignment().MainLayers().Count());
 			}
 		}
 
@@ -287,9 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Count());
-                // because the overtime will be deleted, no person assignment will be left for _scheduleDayOnePersonOne
-				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse().Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().OvertimeLayers().Count());
 			}	
 		}
 

@@ -53,39 +53,35 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         public bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations)
         {
-            bool result = false;
+            bool inLegalState = false;
             int iterationCounter = 0;
             _failedSolverDescriptionKeys.Clear();
 
-            while (!result)
+            while (!inLegalState && iterationCounter <= maxIterations)
             {
-                result = true;
-                foreach (var dayOffBackToLegalStateSolver in solvers)
+                inLegalState = true;
+                foreach (var solver in solvers)
                 {
-                    // tamasb***** randomiye here solvers
+                    var isSolverInLegalState = executeSolver(solver);
+	                inLegalState = inLegalState && isSolverInLegalState;
 
-                    bool result1 = !dayOffBackToLegalStateSolver.SetToFewBackToLegalState();
-                    bool result2 = !dayOffBackToLegalStateSolver.SetToManyBackToLegalState();
-                    result = result & result1;
-                    result = result & result2;
+					if (!isSolverInLegalState && iterationCounter == maxIterations)
+						_failedSolverDescriptionKeys.Add(solver.ResolverDescriptionKey);
                 }
-
                 iterationCounter++;
-                if (iterationCounter > maxIterations)
-                {
-                    foreach (var dayOffBackToLegalStateSolver in solvers)
-                    {
-                        if (dayOffBackToLegalStateSolver.SetToFewBackToLegalState() || dayOffBackToLegalStateSolver.SetToManyBackToLegalState())
-                            _failedSolverDescriptionKeys.Add(dayOffBackToLegalStateSolver.ResolverDescriptionKey);
-                    }
-                    return false;  //could not be solved
-                }
-
             }
-            return true;
+			return inLegalState;
         }
 
-        public IList<string> FailedSolverDescriptionKeys
+	    private static bool executeSolver(IDayOffBackToLegalStateSolver solver)
+	    {
+		    bool isTooFewInLegalState = !solver.SetToFewBackToLegalState();
+		    bool isTooManyInLegalState = !solver.SetToManyBackToLegalState();
+		    bool isSolverInLegalState = isTooFewInLegalState && isTooManyInLegalState;
+		    return isSolverInLegalState;
+	    }
+
+	    public IList<string> FailedSolverDescriptionKeys
         {
             get { return _failedSolverDescriptionKeys; }
         }

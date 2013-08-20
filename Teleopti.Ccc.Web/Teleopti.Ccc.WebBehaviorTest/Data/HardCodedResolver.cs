@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new PersonScheduleDayReadModelsCreator(
 								new PersonRepository(CurrentUnitOfWork.Make()),
 								new NewtonsoftJsonSerializer()),
-							new PersonScheduleDayReadModelStorage(
+							new PersonScheduleDayReadModelPersister(
 								CurrentUnitOfWork.Make(),
 								new DoNotSend(),
 								new CurrentDataSource(new CurrentIdentity()))

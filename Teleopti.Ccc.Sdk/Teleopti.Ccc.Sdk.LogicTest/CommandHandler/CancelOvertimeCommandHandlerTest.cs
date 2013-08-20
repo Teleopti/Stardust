@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_personRepository.Load(_cancelOvertimeCommandDto.PersonId)).Return(_person);
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
                 Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelOvertimeCommandDto.Period)).Return(_period);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_personRepository.Load(_cancelOvertimeCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelOvertimeCommandDto.Period)).Return(_period);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);

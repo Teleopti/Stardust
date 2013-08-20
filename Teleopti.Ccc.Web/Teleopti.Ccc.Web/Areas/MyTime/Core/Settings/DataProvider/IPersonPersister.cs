@@ -1,7 +1,7 @@
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 {
 	public interface IPersonPersister
 	{

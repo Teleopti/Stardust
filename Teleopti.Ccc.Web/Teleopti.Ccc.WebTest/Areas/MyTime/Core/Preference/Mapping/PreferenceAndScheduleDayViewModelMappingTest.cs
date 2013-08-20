@@ -275,8 +275,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
 			personAssignment.Stub(x => x.PersonalLayers()).Return(new List<IPersonalShiftLayer>{activityLayer});
-			var assignments = new ReadOnlyCollection<IPersonAssignment>(new[] { personAssignment });
-			scheduleDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(assignments);
+			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 

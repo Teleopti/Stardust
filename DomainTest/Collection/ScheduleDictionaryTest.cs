@@ -472,7 +472,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
             using (mocks.Record())
             {
                 SetAuthorizationServiceExpectations();
-                part.RemoveEmptyAssignments();
                 Expect.Call(part.Person).Return(dummyPerson).Repeat.AtLeastOnce();
                 Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>()).Repeat.AtLeastOnce();
                 Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
@@ -1480,8 +1479,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
 					part.PersonAssignmentCollectionDoNotUse()[0].ClearMainLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-                    CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-                                        PersonAssignmentCollectionDoNotUse());
+                    CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
 
                     container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
@@ -1491,13 +1489,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
 
                     container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollectionDoNotUse());
+										CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
 
                     //should do nothing
                     container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollectionDoNotUse());
+										CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
                 }
             }
         }

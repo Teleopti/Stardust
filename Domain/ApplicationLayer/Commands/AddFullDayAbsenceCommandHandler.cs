@@ -45,13 +45,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 				new PersonProvider(new[] {person}),
 				new ScheduleDictionaryLoadOptions(false, false),
-				dateTimePeriod,
+				period,
 				_scenario.Current());
 
 			var scheduleDays = dictionary[person].ScheduledDayCollection(period);
@@ -72,9 +69,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var startTime = DateTime.MaxValue;
 			var endTime = DateTime.MinValue;
-			var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
+			var personAssignment = scheduleDay.PersonAssignment();
 
-			foreach (var personAssignment in personAssignments)
+			if (personAssignment != null)
 			{
 				var personAssignmentStartDateTime = personAssignment.Period.StartDateTime;
 				var personAssignmentEndDateTime = personAssignment.Period.EndDateTime;
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					endTime = personAssignmentEndDateTime;
 				}
 			}
-			if (personAssignments.Count < 1)
+			else
 			{
 				startTime = scheduleDay.Period.StartDateTime;
 				endTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);

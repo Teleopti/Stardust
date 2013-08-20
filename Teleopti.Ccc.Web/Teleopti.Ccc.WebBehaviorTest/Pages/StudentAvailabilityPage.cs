@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class StudentAvailabilityPage : CalendarCellsPage, IDateRangeSelector
 	{
-		
-		[FindBy(Id = "qtip-edit-student-availability")]
+
+		[FindBy(Id = "Student-availability-edit-form")]
 		public Div EditStudentAvailabilityPanel;
 		[FindBy(Id = "Student-availability-start-time")]
 		public ComboBox StudentAvailabilityStartTime;

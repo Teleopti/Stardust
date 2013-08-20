@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"my cookie expires")]
 		public void WhenMyCookieExpires()
 		{
+			// we need to wait for everything to be completely loaded
+			// and for all ajax call to complete
+			// before we expire the cookie from inside the application.
+			// otherwise we run the risk of being logged out the moment we expire it!
+			TestControllerMethods.WaitUntilCompletelyLoaded();
 			TestControllerMethods.ExpireMyCookieInsidePortal();
 		}
 

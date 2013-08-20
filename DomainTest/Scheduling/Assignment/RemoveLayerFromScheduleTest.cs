@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var firstLayer = ass.MainLayers().Single();
             Assert.IsTrue(ass.MainLayers().Contains(firstLayer),"Verify contains the layer");
 						target.Remove(schedulePart, firstLayer);
-						Assert.AreEqual(0, schedulePart.PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, schedulePart.PersonAssignment().MainLayers().Count());
         }
 
         [Test]

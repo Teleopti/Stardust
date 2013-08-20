@@ -133,20 +133,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void RemoveEmptyAssignmentsPersonalShift()
-		{
-			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(parameters.Period.StartDateTime));
-			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(new Activity("sdf"), parameters.Person, parameters.Period, parameters.Scenario);
-			_target.Add(ass);
-			_target.RemoveEmptyAssignments();
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
-			ass.RemoveLayer(ass.PersonalLayers().Single());
-			_target.RemoveEmptyAssignments();
-			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
-		}
-
-
-		[Test]
 		public void VerifyProperties()
 		{
 			Assert.AreEqual(1, _target.PersonAbsenceCollection().Count);
@@ -1197,105 +1183,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
-	   
-		[Test]
-		public void VerifyMergeDelete()
-		{
-			SetupForMergeTests();
-
-			ISignificantPartService absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
-			using (_mocks.Record())
-			{
-				Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
-			}
-
-			//add dayoff, absence, assignment to source
-			destination.Add(personDayOffDest);
-			destination.Add(personAbsenceDest);
-			destination.Add(personAssignmentDest);
-
-			//merge
-			destination.Merge(destination, true);
-
-			//assert the absence is splitted
-			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
-			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(1, destination.PersonAssignmentCollectionDoNotUse().Count);
-
-			//merge
-			destination.Merge(destination, true);
-
-			//assert the main shift is removed
-			Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
-			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.IsNull(destination.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
-
-			//merge
-			destination.Merge(destination, true);
-
-			//assert the day off is removed
-			Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
-			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.IsNull(destination.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
-
-			//merge
-			destination.Merge(destination, true);
-
-			//assert the assignment is removed
-			Assert.AreEqual(0, destination.PersonDayOffCollection().Count);
-			Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
-
-			//create assignment with no mainshift
-			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person2, scenario);
-			//add a personal layer
-			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period1.MovePeriod(TimeSpan.FromDays(1)));
-
-			//add assignment to destination
-			destination.Add(newPersonAssignment);
-
-			//merge
-			destination.Merge(destination, true);
-
-			//assert personal shift + assignment is removed
-			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
-
-			var period = new DateTimePeriod(new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc),
-			   new DateTime(2000, 1, 2, 17, 0, 0, DateTimeKind.Utc));
-
-			//create absence
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person2, scenario, period);
-			//add personal layer to assignment with no mainshift
-			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period1.MovePeriod(TimeSpan.FromDays(1)));
-
-			//clear absences
-			destination.Clear<IPersonAbsence>();
-			//add absence
-			destination.Add(personAbsence);
-			//add assignment
-			destination.Add(newPersonAssignment);
-			//merge
-			destination.Merge(destination, true);
-
-			//assert personal shift is removed
-			Assert.AreEqual(1, destination.PersonAbsenceCollection(true).Count);
-			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
-
-
-			((ExtractedSchedule)destination).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
-
-			//assert absence is removed
-			destination.Merge(destination, true);
-			Assert.AreEqual(0, destination.PersonAbsenceCollection(true).Count);
-
-			//create absence
-			var personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(person2, scenario, destination.Period);
-			destination.Add(personAbsence2);
-			destination.Merge(destination, true);
-			Assert.AreEqual(0, destination.PersonAbsenceCollection(true).Count);
-		}
-
-
 		private void SetupForMergeTests()
 		{
 			//person 1
@@ -1583,68 +1470,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.DeleteOvertime();
 			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
-
-		[Test]
-		public void VerifyDeletePersonalStuff()
-		{
-			SetupForMergeTests();
-
-			IMultiplicatorDefinitionSet definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
-			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);
-			IActivity activity = ActivityFactory.CreateActivity("activity");
-			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
-			DateTimePeriod period = new DateTimePeriod(start, end);
-
-			//personal shift + overtime shift
-			source.Add(personAssignmentSource);
-			source.CreateAndAddOvertime(activity, period, definitionSet);
-			source.DeleteMainShift(source);
-			source.DeletePersonalStuff();
-			Assert.IsNotEmpty(source.PersonAssignmentCollectionDoNotUse());
-			
-			//personal shift
-			SetupForMergeTests();
-			source.Add(personAssignmentSource);
-			source.DeleteMainShift(source);
-			source.DeletePersonalStuff();
-			Assert.IsEmpty(source.PersonAssignmentCollectionDoNotUse());
-		}
-
-		[Test]
-		public void VerifyDeleteMainShift()
-		{
-			SetupForMergeTests();
-
-			IMultiplicatorDefinitionSet definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
-			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);
-			IActivity activity = ActivityFactory.CreateActivity("activity");
-			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			var end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(start, end);
-
-			//mainshift + personal shift
-			source.Add(personAssignmentSource);
-			source.DeleteMainShift(source);
-			Assert.IsNull(source.PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
-			Assert.AreEqual(1, source.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
-
-			//mainshift + overtime shift
-			var options = new DeleteOption {PersonalShift = true};
-			((ExtractedSchedule)source).Remove(options);
-			source.CreateAndAddOvertime(activity, period, definitionSet);
-			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-			new EditableShiftMapper().SetMainShiftLayers(_target.PersonAssignmentCollectionDoNotUse()[0], mainShift);
-			source.DeleteMainShift(source);
-            Assert.AreEqual(1, source.PersonAssignmentCollectionDoNotUse().Count);
-
-			//no mainshift and no overtime shift
-			source.DeleteOvertime();
-			source.DeleteMainShift(source);
-            Assert.AreEqual(0, source.PersonAssignmentCollectionDoNotUse().Count);
-		}
-
-
+		
 		[Test]
 		public void VerifyMergeOvertime()
 		{

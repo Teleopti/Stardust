@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -36,11 +35,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
-                var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var startDate = new DateOnly(command.Date.DateTime);
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);

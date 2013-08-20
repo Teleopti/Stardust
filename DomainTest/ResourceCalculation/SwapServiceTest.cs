@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-            Assert.AreEqual(0, retList[0].PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
         }
 
 

@@ -104,13 +104,13 @@ and sd.SkillDayDate < @MaxDate
 
 
 --Schedule
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(Minimum),'19900101')) from PersonAssignment
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(Date),'19900101')) from PersonAssignment
 
 delete PersonAssignment --Lovely, cascade delete is on...
 from PersonAssignment pa
 where 1 = 1
-and pa.Minimum < @ScheduleKeepUntil
-and pa.Minimum < @MaxDate
+and pa.Date < @ScheduleKeepUntil
+and pa.Date < @MaxDate
 
 delete PersonAbsence --Lovely, cascade delete is on...
 from PersonAbsence pa

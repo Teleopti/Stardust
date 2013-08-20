@@ -52,6 +52,7 @@
 			this.chkPerformanceManager = new System.Windows.Forms.CheckBox();
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
+			this.checkBoxCalendar = new System.Windows.Forms.CheckBox();
 			this.checkBoxSMS = new System.Windows.Forms.CheckBox();
 			this.chkMobileReports = new System.Windows.Forms.CheckBox();
 			this.chkMyTimeWeb = new System.Windows.Forms.CheckBox();
@@ -240,7 +241,7 @@
 			// 
 			// btnCreateAndSave
 			// 
-			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 627);
+			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 636);
 			this.btnCreateAndSave.Name = "btnCreateAndSave";
 			this.btnCreateAndSave.Size = new System.Drawing.Size(99, 27);
 			this.btnCreateAndSave.TabIndex = 18;
@@ -261,7 +262,7 @@
 			// chkAgentSelfService
 			// 
 			this.chkAgentSelfService.AutoSize = true;
-			this.chkAgentSelfService.Location = new System.Drawing.Point(6, 42);
+			this.chkAgentSelfService.Location = new System.Drawing.Point(6, 41);
 			this.chkAgentSelfService.Name = "chkAgentSelfService";
 			this.chkAgentSelfService.Size = new System.Drawing.Size(132, 17);
 			this.chkAgentSelfService.TabIndex = 7;
@@ -272,7 +273,7 @@
 			// chkShiftTrades
 			// 
 			this.chkShiftTrades.AutoSize = true;
-			this.chkShiftTrades.Location = new System.Drawing.Point(33, 65);
+			this.chkShiftTrades.Location = new System.Drawing.Point(33, 63);
 			this.chkShiftTrades.Name = "chkShiftTrades";
 			this.chkShiftTrades.Size = new System.Drawing.Size(83, 17);
 			this.chkShiftTrades.TabIndex = 8;
@@ -282,7 +283,7 @@
 			// chkAgentScheduleMessenger
 			// 
 			this.chkAgentScheduleMessenger.AutoSize = true;
-			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 88);
+			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 85);
 			this.chkAgentScheduleMessenger.Name = "chkAgentScheduleMessenger";
 			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(157, 17);
 			this.chkAgentScheduleMessenger.TabIndex = 9;
@@ -292,7 +293,7 @@
 			// chkHolidayPlanner
 			// 
 			this.chkHolidayPlanner.AutoSize = true;
-			this.chkHolidayPlanner.Location = new System.Drawing.Point(33, 111);
+			this.chkHolidayPlanner.Location = new System.Drawing.Point(33, 107);
 			this.chkHolidayPlanner.Name = "chkHolidayPlanner";
 			this.chkHolidayPlanner.Size = new System.Drawing.Size(100, 17);
 			this.chkHolidayPlanner.TabIndex = 10;
@@ -302,7 +303,7 @@
 			// chkRealtimeAdherence
 			// 
 			this.chkRealtimeAdherence.AutoSize = true;
-			this.chkRealtimeAdherence.Location = new System.Drawing.Point(6, 134);
+			this.chkRealtimeAdherence.Location = new System.Drawing.Point(6, 129);
 			this.chkRealtimeAdherence.Name = "chkRealtimeAdherence";
 			this.chkRealtimeAdherence.Size = new System.Drawing.Size(122, 17);
 			this.chkRealtimeAdherence.TabIndex = 11;
@@ -312,7 +313,7 @@
 			// chkPerformanceManager
 			// 
 			this.chkPerformanceManager.AutoSize = true;
-			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 158);
+			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 152);
 			this.chkPerformanceManager.Name = "chkPerformanceManager";
 			this.chkPerformanceManager.Size = new System.Drawing.Size(131, 17);
 			this.chkPerformanceManager.TabIndex = 12;
@@ -322,7 +323,7 @@
 			// chkPayrollIntegration
 			// 
 			this.chkPayrollIntegration.AutoSize = true;
-			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 181);
+			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 174);
 			this.chkPayrollIntegration.Name = "chkPayrollIntegration";
 			this.chkPayrollIntegration.Size = new System.Drawing.Size(110, 17);
 			this.chkPayrollIntegration.TabIndex = 13;
@@ -331,6 +332,7 @@
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.checkBoxCalendar);
 			this.grpBoxModules.Controls.Add(this.checkBoxSMS);
 			this.grpBoxModules.Controls.Add(this.chkMobileReports);
 			this.grpBoxModules.Controls.Add(this.chkMyTimeWeb);
@@ -344,15 +346,26 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 271);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 280);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
 			// 
+			// checkBoxCalendar
+			// 
+			this.checkBoxCalendar.AutoSize = true;
+			this.checkBoxCalendar.Location = new System.Drawing.Point(6, 258);
+			this.checkBoxCalendar.Name = "checkBoxCalendar";
+			this.checkBoxCalendar.Size = new System.Drawing.Size(91, 17);
+			this.checkBoxCalendar.TabIndex = 18;
+			this.checkBoxCalendar.Text = "Calendar Link";
+			this.checkBoxCalendar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.checkBoxCalendar.UseVisualStyleBackColor = true;
+			// 
 			// checkBoxSMS
 			// 
 			this.checkBoxSMS.AutoSize = true;
-			this.checkBoxSMS.Location = new System.Drawing.Point(6, 248);
+			this.checkBoxSMS.Location = new System.Drawing.Point(6, 237);
 			this.checkBoxSMS.Name = "checkBoxSMS";
 			this.checkBoxSMS.Size = new System.Drawing.Size(72, 17);
 			this.checkBoxSMS.TabIndex = 17;
@@ -363,9 +376,9 @@
 			// chkMobileReports
 			// 
 			this.chkMobileReports.AutoSize = true;
-			this.chkMobileReports.Location = new System.Drawing.Point(6, 225);
+			this.chkMobileReports.Location = new System.Drawing.Point(6, 216);
 			this.chkMobileReports.Name = "chkMobileReports";
-			this.chkMobileReports.Size = new System.Drawing.Size(142, 17);
+			this.chkMobileReports.Size = new System.Drawing.Size(97, 17);
 			this.chkMobileReports.TabIndex = 16;
 			this.chkMobileReports.Text = "Mobile Reports";
 			this.chkMobileReports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -374,7 +387,7 @@
 			// chkMyTimeWeb
 			// 
 			this.chkMyTimeWeb.AutoSize = true;
-			this.chkMyTimeWeb.Location = new System.Drawing.Point(6, 204);
+			this.chkMyTimeWeb.Location = new System.Drawing.Point(6, 196);
 			this.chkMyTimeWeb.Name = "chkMyTimeWeb";
 			this.chkMyTimeWeb.Size = new System.Drawing.Size(89, 17);
 			this.chkMyTimeWeb.TabIndex = 15;
@@ -384,7 +397,7 @@
 			// chkDeveloper
 			// 
 			this.chkDeveloper.AutoSize = true;
-			this.chkDeveloper.Location = new System.Drawing.Point(76, 615);
+			this.chkDeveloper.Location = new System.Drawing.Point(76, 624);
 			this.chkDeveloper.Name = "chkDeveloper";
 			this.chkDeveloper.Size = new System.Drawing.Size(75, 17);
 			this.chkDeveloper.TabIndex = 15;
@@ -613,7 +626,7 @@
 			this.groupBox1.Controls.Add(this.chkFreemium);
 			this.groupBox1.Location = new System.Drawing.Point(352, 338);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(200, 128);
+			this.groupBox1.Size = new System.Drawing.Size(200, 130);
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Freemium";
@@ -632,9 +645,9 @@
 			// groupBoxVersion8
 			// 
 			this.groupBoxVersion8.Controls.Add(this.checkBoxVersion8);
-			this.groupBoxVersion8.Location = new System.Drawing.Point(352, 481);
+			this.groupBoxVersion8.Location = new System.Drawing.Point(352, 484);
 			this.groupBoxVersion8.Name = "groupBoxVersion8";
-			this.groupBoxVersion8.Size = new System.Drawing.Size(200, 128);
+			this.groupBoxVersion8.Size = new System.Drawing.Size(200, 130);
 			this.groupBoxVersion8.TabIndex = 17;
 			this.groupBoxVersion8.TabStop = false;
 			this.groupBoxVersion8.Text = "Version 8";
@@ -653,7 +666,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 665);
+			this.ClientSize = new System.Drawing.Size(639, 682);
 			this.Controls.Add(this.groupBoxVersion8);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
@@ -762,6 +775,7 @@
 		private System.Windows.Forms.CheckBox checkBoxSMS;
 		private System.Windows.Forms.GroupBox groupBoxVersion8;
 		private System.Windows.Forms.CheckBox checkBoxVersion8;
+		private System.Windows.Forms.CheckBox checkBoxCalendar;
 	}
 }
 

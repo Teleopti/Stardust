@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             original.DeleteMainShift(original);
-            Assert.AreEqual(0, original.PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             current.DeleteMainShift(current);
-            Assert.AreEqual(0, current.PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
 
             Assert.IsFalse(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -222,13 +222,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current2));
 
             original.DeleteMainShift(original);
-            Assert.AreEqual(0, original.PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             current.DeleteMainShift(current);
-            Assert.AreEqual(0, current.PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -254,8 +254,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             original.DeleteMainShift(original);
             current.DeleteMainShift(current);
-            Assert.AreEqual(0, original.PersonAssignmentCollectionDoNotUse().Count);
-            Assert.AreEqual(0, current.PersonAssignmentCollectionDoNotUse().Count);
+            Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
