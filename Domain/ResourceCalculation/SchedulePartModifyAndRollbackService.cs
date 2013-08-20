@@ -65,18 +65,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				RollbackLast();
 		}
 	
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void ModifyStrictly(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection)
-		{
-			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
-			IScheduleDay partToSave = range.ReFetch(schedulePart);
-			var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, _scheduleTagSetter, newBusinessRuleCollection);
-			_rollbackStack.Push(partToSave);
-			_modificationStack.Push(schedulePart);
-			if (responses.Any())
-				RollbackLast();
-		}
-
         public void Rollback()
         {
             using (PerformanceOutput.ForOperation("SchedulePartModifyAndRollbackService performed a rollback"))
