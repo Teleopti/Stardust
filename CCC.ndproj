@@ -214,8 +214,8 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
   </Dirs>
-  <Report Kind="0" SectionsEnabled="2560" XslPath="" Flags="63488">
-    <Section Enabled="False">Application Metrics</Section>
+  <Report Kind="0" SectionsEnabled="2561" XslPath="" Flags="63488">
+    <Section Enabled="True">Application Metrics</Section>
     <Section Enabled="False">.NET Assemblies Metrics</Section>
     <Section Enabled="False">Treemap Metric View</Section>
     <Section Enabled="False">.NET Assemblies Abstractness vs. Instability</Section>
