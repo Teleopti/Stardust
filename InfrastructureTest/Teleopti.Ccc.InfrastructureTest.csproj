@@ -397,6 +397,7 @@
     <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\SqlQueryTest.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
   </ItemGroup>
