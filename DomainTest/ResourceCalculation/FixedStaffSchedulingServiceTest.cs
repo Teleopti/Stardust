@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			var range = _mocks.StrictMock<IScheduleRange>();
             
-			var dayOffCollection = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>());
 			var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
 			//int dayOffsNow;
@@ -107,7 +106,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(part2.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
             Expect.Call(part3.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
             Expect.Call(part4.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
-			Expect.Call(part1.PersonDayOffCollection()).Return(dayOffCollection).Repeat.Any();
 
 			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Repeat.AtLeastOnce()
                 .Return(true);

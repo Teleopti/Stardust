@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public void Restore()
         {
             _destination.Clear<IPersonAssignment>();
-            //_destination.Clear<IPersonAbsence>();
         	IList<IPersonAbsence> toDelete = _destination.PersonAbsenceCollection();
         	foreach (var personAbsence in toDelete)
         	{
@@ -41,11 +39,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             foreach (var personAbsence in _source.PersonAbsenceCollection())
             {
                 _destination.Add(personAbsence.NoneEntityClone());
-            }
-
-            foreach (var personDayOff in _source.PersonDayOffCollection())
-            {
-                _destination.Add(personDayOff.NoneEntityClone());
             }
 
             _rollbackService.Modify(_destination);   
