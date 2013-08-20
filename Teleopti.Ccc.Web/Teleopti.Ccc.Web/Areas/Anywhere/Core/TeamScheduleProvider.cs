@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider, ILoggedOnUser loggedOnUser)
+		public TeamScheduleProvider(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_permissionProvider = permissionProvider;
 			_schedulePersonProvider = schedulePersonProvider;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date)
@@ -32,12 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var result = new List<Shift>();
 			var shifts = getTeamScheduleReadModels(teamId, date);
 
-			var schedulesToShowConfidental =
+			var permittedPersonsToViewConfidental =
 				_schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			
 			foreach (PersonScheduleDayReadModel shift in shifts)
 			{
-				var canSeeConfidental = (schedulesToShowConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
+				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
 
 				var shift0 = JsonConvert.DeserializeObject<Shift>(shift.Shift);
 
