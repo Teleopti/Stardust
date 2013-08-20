@@ -15,9 +15,39 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Request = (function ($) {
     var readyForInteraction = function () { };
     var completelyLoaded = function () { };
+
+    var requestNavigationViewModel = null;
     
+    function RequestNavigationViewModel() {
+        var self = this;
+
+        self.addTextRequestActive = ko.observable(false);
+        self.addAbsenceRequestActive = ko.observable(false);
+        self.addShiftTradeRequestActive = ko.observable(false);
+
+        self.addTextRequest = function() {
+            self.addTextRequestActive(true);
+            self.addAbsenceRequestActive(false);
+            self.addShiftTradeRequestActive(false);
+            Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
+        };
+        self.addAbsenceRequest = function () {
+            self.addTextRequestActive(false);
+            self.addAbsenceRequestActive(true);
+            self.addShiftTradeRequestActive(false);
+            Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
+        };
+        self.addShiftTradeRequest = function () {
+            self.addTextRequestActive(false);
+            self.addAbsenceRequestActive(false);
+            self.addShiftTradeRequestActive(true);
+            Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();
+        };
+    }
+
     function _initNavigationViewModel() {
-        ko.applyBindings({}, $('div.navbar')[1]);
+        requestNavigationViewModel = new RequestNavigationViewModel();
+        ko.applyBindings(requestNavigationViewModel, $('div.navbar')[1]);
 	}
 
     function _activatePlaceHolderText() {

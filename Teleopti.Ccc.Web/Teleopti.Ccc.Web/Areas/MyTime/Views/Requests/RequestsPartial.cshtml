@@ -48,15 +48,21 @@
 		<ul class="nav">
             @if (Model.RequestPermission.TextRequestPermission)
             {
-                <li><a href="#" class="text-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a></li>
+                <li data-bind="css: { active: addTextRequestActive }">
+                    <a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
+                </li>
             } 
             @if (Model.RequestPermission.AbsenceRequestPermission)
             {
-                <li><a href="#" class="absence-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a></li>
+                <li data-bind="css: { active: addAbsenceRequestActive }">
+                    <a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+                </li>
             }
             @if (Model.RequestPermission.ShiftTradeRequestPermission)
             {
-                <li><a href="#" class="shifttrade-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a></li>
+                <li data-bind="css: { active: addShiftTradeRequestActive }">
+                    <a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+                </li>
             }
 		</ul>
 	</div>

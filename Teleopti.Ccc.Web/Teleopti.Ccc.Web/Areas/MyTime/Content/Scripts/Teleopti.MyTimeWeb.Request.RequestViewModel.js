@@ -9,8 +9,6 @@
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek, defaultDateTimes) {
 	var self = this;
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
-	self.TextRequestHeaderVisible = ko.observable(false);
-	self.AbsenceRequestHeaderVisible = ko.observable(false);
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
@@ -61,7 +59,11 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 
     self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
-	});
+    });
+    
+    self.ShowAbsencesCombo = ko.computed(function() {
+        return self.TypeEnum() === 1 ? true : false;
+    });
 
     self.AddRequestCallback = undefined;
 
@@ -82,8 +84,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             _setDefaultDates();
         self.IsNewInProgress(true);
 		self.TypeEnum(0);
-		self.TextRequestHeaderVisible(true);
-		self.AbsenceRequestHeaderVisible(false);
 		self.IsFullDay(false);
 		
     };
@@ -93,8 +93,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             _setDefaultDates();
         self.IsNewInProgress(true);
 		self.TypeEnum(1);
-		self.TextRequestHeaderVisible(false);
-		self.AbsenceRequestHeaderVisible(true);
 		self.IsFullDay(true);
     };
 
