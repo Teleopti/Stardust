@@ -38,18 +38,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private int _minutes;
         private int _hourWidth;
         private MockRepository _mockRep;
-
         private ScheduleParameters _param;
         private ScheduleRange _scheduleRange;
         private IPersonAssignment _ass1;
-        private IPersonAssignment _ass2;
-        private IPersonAssignment _ass3;
-        private IPersonAssignment _ass4;
-
-        private IPersonAbsence _abs1;
-        private PersonDayOff _dayOff1;
-        private IMeeting _meeting1;
-        private IMeeting _meeting2;
         private IAbsence _absence;
         private TimeSpan _nightlyRest;
         private IContract _contract;
@@ -70,8 +61,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleDay _schedulePart2;
         private IScheduleDay _schedulePart3;
         private IProjectionService _projectionService;
-        private IPersonDayOff _personDayOff;
-        private ReadOnlyCollection<IPersonDayOff> _personDayOffCollection;
         private IPersonAssignment _personAssignment;
         private IPersonAbsence _personAbsence;
         private ReadOnlyCollection<IPersonAbsence> _personAbsenceCollection;
@@ -95,8 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _schedulePart2 = _mockRep.StrictMock<IScheduleDay>();
             _schedulePart3 = _mockRep.StrictMock<IScheduleDay>();
             _projectionService = _mockRep.StrictMock<IProjectionService>();
-            _personDayOff = PersonDayOffFactory.CreatePersonDayOff(_agent, _scenario, new DateTime(2008, 11, 24, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(24), TimeSpan.Zero, TimeSpan.FromHours(12));
-            _personDayOffCollection = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff });
+
             _personAssignment = CreatePersonAssignment();
             _personAbsence = CreatePersonAbsence();
             _personAbsenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
@@ -114,55 +102,26 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
              _scheduleRange = new ScheduleRange(_dic, _param);
         	var act = ActivityFactory.CreateActivity("sdfsdf");
         	act.InWorkTime = true;
-				_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-                              act,
-                              _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2000, 12, 31, 21, 0, 0), new DateTime(2000, 12, 31, 22, 0, 0)),
-                              ShiftCategoryFactory.CreateShiftCategory("Morgon"),
-                              _scenario);
+			_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+				act,
+				_agent,
+				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2000, 12, 31, 21, 0, 0),
+				                                                     new DateTime(2000, 12, 31, 22, 0, 0)),
+				ShiftCategoryFactory.CreateShiftCategory("Morgon"),
+				_scenario);
 
-             _ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-                               ActivityFactory.CreateActivity("sdfsdf"),
-                               _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 2, 0, 0), new DateTime(2001, 1, 1, 3, 0, 0)),
-                               ShiftCategoryFactory.CreateShiftCategory("Morgon"),
-                               _scenario);
-
-             _ass3 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-                                ActivityFactory.CreateActivity("sdfsdf"),
-                                _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 2, 15, 0), new DateTime(2001, 1, 1, 2, 30, 0)),
-                                ShiftCategoryFactory.CreateShiftCategory("Morgon"),
-                                _scenario);
-
-             _ass4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                                 ActivityFactory.CreateActivity("sdfsdf"),
-                                 _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 2, 6, 0, 0)),
-                                 ShiftCategoryFactory.CreateShiftCategory("Morgon"),
-                                 _scenario);
-            
 
             //create absences
             _absence = AbsenceFactory.CreateAbsence("Tjänsteresa", "TJ", Color.DimGray);
-            
 
-            _abs1 = new PersonAbsence(_agent, _scenario,
-                                     new AbsenceLayer(_absence, new DateTimePeriod(2001, 1, 1, 2006, 1, 1)));
-
-            //create day offs
-            var dayOff = new DayOffTemplate(new Description("test")) {Anchor = TimeSpan.Zero};
-            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(1));
-            _dayOff1 = new PersonDayOff(_agent, _scenario, dayOff, new DateOnly(2001, 1, 1));
-
-            _meeting1 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting1", "location1", "description1", ActivityFactory.CreateActivity("activity1"), _scenario)
+            var meeting1 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting1", "location1", "description1", ActivityFactory.CreateActivity("activity1"), _scenario)
                             {
                                 StartDate = new DateOnly(2006, 1, 1),
                                 EndDate = new DateOnly(2006, 1, 1),
                                 StartTime = TimeSpan.FromHours(8),
                                 EndTime = TimeSpan.FromHours(9)
                             };
-            _meeting2 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting2", "location2", "description2", ActivityFactory.CreateActivity("activity2"), _scenario)
+             var meeting2 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting2", "location2", "description2", ActivityFactory.CreateActivity("activity2"), _scenario)
                             {
                                 StartDate = new DateOnly(2006, 1, 1),
                                 EndDate = new DateOnly(2006, 1, 1),
@@ -173,16 +132,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IMeetingPerson meetingPersonRequired = new MeetingPerson(_agent, false);
             IMeetingPerson meetingPersonOptional = new MeetingPerson(_agent, true);
 
-            _meeting1.AddMeetingPerson(meetingPersonRequired);
-            _meeting2.AddMeetingPerson(meetingPersonOptional);
+            meeting1.AddMeetingPerson(meetingPersonRequired);
+            meeting2.AddMeetingPerson(meetingPersonOptional);
 
+			var abs = new PersonAbsence(_agent, _scenario,
+									 new AbsenceLayer(_absence, new DateTimePeriod(2001, 1, 1, 2006, 1, 1)));
 
             //add to schedule
             _scheduleRange.Add(_ass1);
-            _scheduleRange.Add(_abs1);
-            _scheduleRange.Add(_dayOff1);
-            _scheduleRange.AddRange(_meeting1.GetPersonMeetings(_agent));
-            _scheduleRange.AddRange(_meeting2.GetPersonMeetings(_agent));
+            _scheduleRange.Add(abs);
+            _scheduleRange.AddRange(meeting1.GetPersonMeetings(_agent));
+            _scheduleRange.AddRange(meeting2.GetPersonMeetings(_agent));
 
             var start = new DateTime(2007, 10, 1, 6, 0, 0);
             var end = new DateTime(2007, 10, 1, 10, 0, 0);
@@ -200,8 +160,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipDayOff()
         {
-			StringAssert.Contains(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)).PersonDayOffCollection()[0].DayOff.Description.Name,
-                ViewBaseHelper.GetToolTipDayOff(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
+			var scheduleRange = new ScheduleRange(_dic, _param);
+	        var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _agent,
+	                                                                                  new DateOnly(2001, 1, 1),
+	                                                                                  DayOffFactory.CreateDayOff(new Description("hej", "DÅ")));
+			scheduleRange.Add(personAssignment);
+
+			StringAssert.Contains("hej",
+                ViewBaseHelper.GetToolTipDayOff(scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
         }
 
         [Test]
@@ -211,8 +177,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                            new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
             _scheduleRange = new ScheduleRange(_dic, _param);
 
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+					ActivityFactory.CreateActivity("sdfsdf"),
+					_agent,
+				 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 2, 6, 0, 0)),
+					ShiftCategoryFactory.CreateShiftCategory("Morgon"),
+					_scenario);
+
             _scheduleRange.Add(_ass1);
-            _scheduleRange.Add(_ass4);
+            _scheduleRange.Add(ass);
             
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
@@ -372,7 +345,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyGetToolTip()
         {
-            _scheduleRange.Add(_ass2);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+				  ActivityFactory.CreateActivity("sdfsdf"),
+				  _agent,
+				 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 2, 0, 0), new DateTime(2001, 1, 1, 3, 0, 0)),
+				  ShiftCategoryFactory.CreateShiftCategory("Morgon"),
+				  _scenario);
+
+            _scheduleRange.Add(ass);
 
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person,_scheduleRange);
@@ -409,12 +389,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                        team));
 
 
-            IPersonAssignment noRest = CreateNoRestAss();
-
+            var noRest = CreateNoRestAss();
             _scheduleRange.Add(noRest);
-            _scheduleRange.Add(_dayOff1);
-            _scheduleRange.Add(_ass1);
-            
+
+			_scheduleRange.Add(_ass1);
+
+
             var newRules = NewBusinessRuleCollection.Minimum();
 			newRules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
             _dic.ValidateBusinessRulesOnPersons(new List<IPerson>{_agent} ,CultureInfo.CurrentUICulture, newRules);
@@ -1065,6 +1045,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInfoTextWeekView()
         {
+	        var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Tjillevippen", "xy"));
+			_personAssignment.SetDayOff(dayOffTemplate);
             var range = _mockRep.StrictMock<IScheduleRange>();
             using (_mockRep.Record())
             {
@@ -1076,7 +1058,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_schedulePart2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart2.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePart2.PersonDayOffCollection()).Return(_personDayOffCollection).Repeat.AtLeastOnce();
 
                 Expect.Call(_schedulePart3.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
@@ -1113,7 +1094,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             periodText = infoList[1];
             timeText = infoList[2];
             ViewBaseHelper.GetInfoTextWeekView(_schedulePart2, SchedulePartView.DayOff);
-            Assert.AreEqual(_personDayOff.DayOff.Description.Name, infoText);
+            Assert.AreEqual("Tjillevippen", infoText);
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
 
@@ -1193,9 +1174,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_agent.AddSchedulePeriod(schedulePeriod1);
 			_agent.AddSchedulePeriod(schedulePeriod2);
 
-			if (!period.HasValue) return;
+			period = ViewBaseHelper.PeriodFromSchedulePeriods(new List<IPerson> { _agent }, dateOnlyPeriod);
 			Assert.AreEqual(startDate1, period.Value.StartDate);
-			Assert.AreEqual(startDate2.AddDays(6), period.Value.StartDate);
+			Assert.AreEqual(startDate2.AddDays(6), period.Value.EndDate);
 		}
 
     	private IPersonAssignment CreatePersonAssignment()
