@@ -1,24 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="CCC" Platform="DotNet">
-  <OutputDir KeepHistoric="True" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
+  <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
     <Name>Teleopti.Ccc.Domain</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
     <Name>Teleopti.Ccc.Win</Name>
     <Name>Teleopti.Ccc.WinCode</Name>
-    <Name>Teleopti.Ccc.UserTexts</Name>
     <Name>Teleopti.Common.UI.SmartPartControls</Name>
     <Name>Teleopti.Ccc.SmartClientPortal.Shell</Name>
     <Name>Teleopti.Ccc.AgentPortal</Name>
     <Name>Teleopti.Ccc.WpfControls</Name>
     <Name>Teleopti.Messaging</Name>
-    <Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Analytics.Etl.Common</Name>
     <Name>Teleopti.Analytics.Etl.ConfigTool</Name>
     <Name>Teleopti.Analytics.Etl.Transformer</Name>
     <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
-    <Name>Teleopti.Analytics.Etl.Interfaces</Name>
     <Name>Teleopti.Ccc.SmartParts</Name>
     <Name>Teleopti.Ccc.Sdk.WcfHost</Name>
     <Name>Teleopti.Ccc.Sdk.WcfSdkService</Name>
@@ -33,7 +30,6 @@
     <Name>Teleopti.Ccc.Payroll</Name>
     <Name>AnalysisServicesManager</Name>
     <Name>Teleopti.Analytics.Etl.ServiceHost</Name>
-    <Name>Teleopti.Ccc.Rta.Interfaces</Name>
     <Name>Teleopti.Ccc.Rta.LogClientProxy</Name>
     <Name>Teleopti.Ccc.Rta.LogClient</Name>
     <Name>Teleopti.Ccc.Rta.Server</Name>
@@ -162,18 +158,15 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverter\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Win\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCode\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.UserTexts\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WpfControls\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Messaging\TeleOpti.Messaging.Bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Messaging\Teleopti.Interfaces\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerInfrastructure\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Interfaces\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartParts\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Service\bin\Debug</Dir>
@@ -188,7 +181,6 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.AnalysisServicesManager\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientProxy\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClient\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\bin\Debug</Dir>
@@ -222,16 +214,16 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
   </Dirs>
-  <Report Kind="0" SectionsEnabled="12287" XslPath="" Flags="63488">
+  <Report Kind="0" SectionsEnabled="2563" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>
-    <Section Enabled="True">.NET Assemblies Metrics</Section>
-    <Section Enabled="True">Treemap Metric View</Section>
-    <Section Enabled="True">.NET Assemblies Abstractness vs. Instability</Section>
-    <Section Enabled="True">.NET Assemblies Dependencies</Section>
-    <Section Enabled="True">.NET Assemblies Dependency Graph</Section>
-    <Section Enabled="True">.NET Assemblies Build Order</Section>
-    <Section Enabled="True">Analysis Log</Section>
-    <Section Enabled="True">CQL Rules Violated</Section>
+    <Section Enabled="False">.NET Assemblies Metrics</Section>
+    <Section Enabled="False">Treemap Metric View</Section>
+    <Section Enabled="False">.NET Assemblies Abstractness vs. Instability</Section>
+    <Section Enabled="False">.NET Assemblies Dependencies</Section>
+    <Section Enabled="False">.NET Assemblies Dependency Graph</Section>
+    <Section Enabled="False">.NET Assemblies Build Order</Section>
+    <Section Enabled="False">Analysis Log</Section>
+    <Section Enabled="False">CQL Rules Violated</Section>
     <Section Enabled="True">Types Metrics</Section>
     <Section Enabled="False">Types Dependencies</Section>
   </Report>

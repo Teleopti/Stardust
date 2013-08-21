@@ -22891,6 +22891,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch to View Point of Selected Agent.
+        /// </summary>
+        public static string SwitchToViewPointOfSelectedAgent {
+            get {
+                return ResourceManager.GetString("SwitchToViewPointOfSelectedAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System color.
         /// </summary>
         public static string SystemColor {

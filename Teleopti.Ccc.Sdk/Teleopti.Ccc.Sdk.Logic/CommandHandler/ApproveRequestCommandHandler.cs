@@ -110,8 +110,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private IScheduleDictionary getScheduleDictionary(IPersonRequest personRequest, IEnumerable<IPerson> personList)
         {
             var timePeriod = personRequest.Request.Period;
+	        var dateonlyPeriod = new DateOnlyPeriod(new DateOnly(timePeriod.StartDateTime.AddDays(-1)),
+	                                                new DateOnly(timePeriod.EndDateTime.AddDays(1)));
             var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), timePeriod,
+                new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), dateonlyPeriod,
                 _scenarioRepository.Current());
             ((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
             return scheduleDictionary;

@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(".person", personName);
 		}
 
+		[Then(@"I should see '(.*)' with schedule")]
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
 		}
 
+		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
@@ -52,6 +54,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
 		}
+
+		[Then(@"I should see no team available")]
+		public void ThenIShouldSeeNoTeamAvailable()
+		{
+			Browser.Interactions.AssertExists("#team-selector");
+			Browser.Interactions.AssertNotExists("#team-selector", "#team-selector option");
+		}
+
 		
 		public class TeamInfo
 		{

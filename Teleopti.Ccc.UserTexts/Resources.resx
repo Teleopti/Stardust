@@ -11664,6 +11664,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Switch to View Point of Selected Agent</value>
+  </data>
   <data name="ShareCalendar" xml:space="preserve">
     <value>Share Calendar</value>
     <comment>Share Calendar</comment>

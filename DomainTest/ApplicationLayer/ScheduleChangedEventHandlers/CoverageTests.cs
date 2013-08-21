@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeople(Arg<IEnumerable<Guid>>.Is.Anything)).Return(new[] {person});
 			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
+			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).IgnoreArguments()
 			                  .Return(scheduleDictionary);
 
 			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeople(Arg<IEnumerable<Guid>>.Is.Anything)).Return(new[] { person });
 			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
+			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).IgnoreArguments()
 							  .Return(scheduleDictionary);
 
 			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeople(Arg<IEnumerable<Guid>>.Is.Anything)).Return(new[] { person });
 			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
+			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).IgnoreArguments()
 							  .Return(scheduleDictionary);
 			var repository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 

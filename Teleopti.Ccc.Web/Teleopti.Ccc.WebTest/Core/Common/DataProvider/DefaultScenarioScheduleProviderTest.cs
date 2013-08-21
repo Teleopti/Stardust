@@ -5,11 +5,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
@@ -21,7 +19,6 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		private ICurrentScenario _scenarioProvider;
 		private IScheduleRepository _scheduleRepository;
 		private ILoggedOnUser _loggedOnUser;
-		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Setup()
@@ -29,8 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			_scenarioProvider = MockRepository.GenerateMock<ICurrentScenario>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_target = new DefaultScenarioScheduleProvider(_loggedOnUser, _scheduleRepository, _scenarioProvider, _userTimeZone);
+			_target = new DefaultScenarioScheduleProvider(_loggedOnUser, _scheduleRepository, _scenarioProvider);
 		}
 
 		[Test]
@@ -45,10 +41,9 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
-																			period.ToDateTimePeriod(timeZone),
+																			period,
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay, scheduleDay });
@@ -65,7 +60,6 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var date = new DateOnly(2011, 5, 18);
 			var period = new DateOnlyPeriod(date, date);
-			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var persons = new IPerson[] {user};
 			var scenario = new Scenario(" ");
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
@@ -76,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(
 				Arg<IPersonProvider>.Matches(o => o.GetPersons().Single().Equals(user)),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
-				Arg<DateTimePeriod>.Is.Equal(dateTimePeriod),
+				Arg<DateOnlyPeriod>.Is.Equal(period),
 				Arg<IScenario>.Is.Equal(scenario)))
 				.Return(scheduleDictionary);
 			scheduleDictionary.Stub(x => x.SchedulesForDay(date)).Return(scheduleDays);
@@ -208,16 +202,14 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(date, date);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var scenario = MockRepository.GenerateMock<IScenario>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
-																			period.ToDateTimePeriod(timeZone),
+																			period,
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay });

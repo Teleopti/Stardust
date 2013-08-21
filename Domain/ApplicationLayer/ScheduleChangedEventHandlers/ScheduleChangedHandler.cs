@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var schedule =
 				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}) {DoLoadByPerson = true},
 				                                                   new ScheduleDictionaryLoadOptions(false, false),
-				                                                   dateOnlyPeriod.ToDateTimePeriod(timeZone), scenario);
+				                                                   dateOnlyPeriod, scenario);
 
 			_range = schedule[person];
 

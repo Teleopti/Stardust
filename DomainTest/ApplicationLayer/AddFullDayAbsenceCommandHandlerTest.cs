@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			
 			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null))
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
 							  .IgnoreArguments()
 							  .Return(scheduleDictionary);
 		}

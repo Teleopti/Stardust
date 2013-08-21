@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		public void ShouldHaveCorrectConvertersForDbManager()
 		{
 			AgentDayConverters.ForDbManager().Select(x => x.GetType())
-			                  .Should().Have.SameValuesAs(typeof (PersonAssignmentDateSetter));
+			                  .Should().Have.SameValuesAs(typeof (PersonAssignmentDateSetter), typeof(RemoveEmptyAssignments));
 		}
 
 		[Test]
@@ -27,6 +27,13 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		{
 			AgentDayConverters.ForPeople().First().GetType()
 			                  .Should().Be.EqualTo(typeof (PersonTimeZoneSetter));
+		}
+
+		[Test]
+		public void ShouldRunRemoveEmptyAssignmentsFirstForDbManagerSoEmptyAreRemovedBeforeSetter()
+		{
+			AgentDayConverters.ForDbManager().First().GetType()
+			                  .Should().Be.EqualTo(typeof (RemoveEmptyAssignments));
 		}
 	}
 }
