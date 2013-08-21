@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IPersonAssignment _personAssignment;
         private ReadOnlyCollection<IPersonAssignment> readOnlyCollection;
         private PersonAssignment _personAssignment2;
-	    private IEditableShiftMapper _editableShiftMapper;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -103,7 +101,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _ass = _mocks.StrictMock<IPersonAssignment>();
             _overtimeDialog = _mocks.StrictMock<IAddOvertimeViewModel>();
             _selectedActivity = _mocks.StrictMock<IActivity>();
-	        _editableShiftMapper = _mocks.StrictMock<IEditableShiftMapper>();
         }
 
         [TearDown]
@@ -545,7 +542,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
-			//if (person1.Id != null) _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
             if (person1.Id != null) _schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 

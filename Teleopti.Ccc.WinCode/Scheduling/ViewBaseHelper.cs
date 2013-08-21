@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (significantPart == SchedulePartView.DayOff)
             {
-                infoText = schedulePart.PersonDayOffCollection()[0].DayOff.Description.Name;
+                infoText = schedulePart.PersonAssignment().DayOff().Description.Name;
                 periodText = "-";
             }
 
