@@ -180,14 +180,15 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("personPeriod", personPeriod);
 
 			var skillsBefore = personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
-			{
-				Active = p.Active,
-				Proficiency = p.SkillPercentage.Value,
-				SkillId = p.Skill.Id.GetValueOrDefault()
-			}).ToList();
+				{
+					Active = p.Active,
+					Proficiency = p.SkillPercentage.Value,
+					SkillId = p.Skill.Id.GetValueOrDefault()
+				}).ToList();
 
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
+			if (personSkill.Active) return;
 
 			personSkill.Active = true;
 
@@ -196,6 +197,7 @@ namespace Teleopti.Ccc.Domain.Common
 					PersonId = Id.GetValueOrDefault(),
 					SkillId = skill.Id.GetValueOrDefault(),
 					StartDate = personPeriod.StartDate,
+					EndDate = personPeriod.EndDate(),
 					SkillsBefore = skillsBefore
 				});
 		}
@@ -204,13 +206,13 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			InParameter.NotNull("skill", skill);
 			InParameter.NotNull("personPeriod", personPeriod);
-			
+
 			var skillsBefore = personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
-			{
-				Active = p.Active,
-				Proficiency = p.SkillPercentage.Value,
-				SkillId = p.Skill.Id.GetValueOrDefault()
-			}).ToList();
+				{
+					Active = p.Active,
+					Proficiency = p.SkillPercentage.Value,
+					SkillId = p.Skill.Id.GetValueOrDefault()
+				}).ToList();
 
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
@@ -222,6 +224,7 @@ namespace Teleopti.Ccc.Domain.Common
 					PersonId = Id.GetValueOrDefault(),
 					SkillId = skill.Id.GetValueOrDefault(),
 					StartDate = personPeriod.StartDate,
+					EndDate = personPeriod.EndDate(),
 					SkillsBefore = skillsBefore
 				});
 		}
@@ -234,11 +237,11 @@ namespace Teleopti.Ccc.Domain.Common
 			if (personSkill != null)
 			{
 				var skillsBefore = personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
-				{
-					Active = p.Active,
-					Proficiency = p.SkillPercentage.Value,
-					SkillId = p.Skill.Id.GetValueOrDefault()
-				}).ToList();
+					{
+						Active = p.Active,
+						Proficiency = p.SkillPercentage.Value,
+						SkillId = p.Skill.Id.GetValueOrDefault()
+					}).ToList();
 
 				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
 				AddEvent(new PersonSkillRemovedEvent
@@ -261,7 +264,13 @@ namespace Teleopti.Ccc.Domain.Common
 			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 			{
-				var proficiencyBefore = personSkill.SkillPercentage;
+				var skillsBefore = personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
+					{
+						Active = p.Active,
+						Proficiency = p.SkillPercentage.Value,
+						SkillId = p.Skill.Id.GetValueOrDefault()
+					}).ToList();
+
 				personSkill.SkillPercentage = proficiency;
 
 				AddEvent(new PersonSkillProficiencyChangedEvent
@@ -269,7 +278,8 @@ namespace Teleopti.Ccc.Domain.Common
 						PersonId = Id.GetValueOrDefault(),
 						SkillId = skill.Id.GetValueOrDefault(),
 						StartDate = personPeriod.StartDate,
-						ProficiencyBefore = proficiencyBefore.Value,
+						EndDate = personPeriod.EndDate(),
+						SkillsBefore = skillsBefore,
 						ProficiencyAfter = proficiency.Value
 					});
 			}

@@ -9,7 +9,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
-	public class ScheduledResourcesPersonSkillRemovedHandler : IHandleEvent<PersonSkillRemovedEvent>
+	public class ScheduledResourcesPersonSkillDeactivatedHandler : IHandleEvent<PersonSkillDeactivatedEvent>
 	{
 		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private int configurableIntervalLength = 15;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduledResourcesPersonSkillRemovedHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduledResourcesPersonSkillDeactivatedHandler));
 
-		public ScheduledResourcesPersonSkillRemovedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, IPersonRepository personRepository, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
+		public ScheduledResourcesPersonSkillDeactivatedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, IPersonRepository personRepository, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_readModelFinder = readModelFinder;
@@ -28,10 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			_scenarioRepository = scenarioRepository;
 		}
 
-		public void Handle(PersonSkillRemovedEvent @event)
+		public void Handle(PersonSkillDeactivatedEvent @event)
 		{
-			if (!@event.SkillActive) return;
-
 			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)
 			{
@@ -59,20 +57,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 				}
 			}
 
-			var foundskillDetail = skillsBefore.FirstOrDefault(s => s.SkillId == @event.SkillId);
-			skillsBefore.Remove(foundskillDetail);
-
-			if (skillsBefore.Count > 0)
+			var personSkill = @event.SkillsBefore.First(s => s.SkillId == @event.SkillId);
+			skillsBefore.Remove(personSkill);
+			var combinationAfter =
+				new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
+									 new ISkill[] { }, period,
+									 skillsBefore.Where(s => s.Proficiency != 1d)
+										   .ToDictionary(k => k.SkillId, v => v.Proficiency));
+			foreach (var resourceLayer in oldResources)
 			{
-				var combinationAfter =
-					new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
-					                     new ISkill[] {}, period,
-					                     skillsBefore.Where(s => s.Proficiency != 1d)
-					                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
-				foreach (var resourceLayer in oldResources)
-				{
-					addResourceToInterval(resourceLayer, combinationAfter);
-				}
+				addResourceToInterval(resourceLayer, combinationAfter);
 			}
 		}
 

@@ -59,9 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime OldStartDate { get; set; }
 		public DateTime NewStartDate { get; set; }
-
 		public DateTime OldEndDate { get; set; }
-
 		public DateTime NewEndDate { get; set; }
 	}
 
@@ -84,6 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 		public Guid SkillId { get; set; }
 
 		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
@@ -98,6 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid SkillId { get; set; }
 		public double Proficiency { get; set; }
 		public bool SkillActive { get; set; }
+
 		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
@@ -123,15 +123,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+		public double Proficiency { get; set; }
+		public bool SkillActive { get; set; }
 		public Guid SkillId { get; set; }
 
 		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
-
-		public DateTime EndDate { get; set; }
-
-		public double Proficiency { get; set; }
-
-		public bool SkillActive { get; set; }
 	}
 
 	[Serializable]
@@ -139,9 +136,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 		public Guid SkillId { get; set; }
-		public double ProficiencyBefore { get; set; }
 		public double ProficiencyAfter { get; set; }
+
+		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
 	}
 
 	[Serializable]
@@ -149,6 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 		public Guid SkillId { get; set; }
 
 		public IEnumerable<PersonSkillDetail> SkillsBefore { get; set; }
