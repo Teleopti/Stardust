@@ -74,6 +74,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Person == person)));
 		}
+
+		[Test]
+		public void ShouldRetrieveHasViewConfidentialPermissionToMapping()
+		{
+			var person = FakePerson();
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+			                                                    DateOnly.Today, person)).Return(true);
+			target.CreateViewModel(person.Id.Value, DateTime.Today);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.HasViewConfidentialPermission)));
+		}
 		
 		[Test]
 		public void ShouldRetrieveAbsencesToMapping()
