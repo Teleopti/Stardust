@@ -123,8 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.Period).Return(
                     new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1),
                                                  person.PermissionInformation.DefaultTimeZone()).Period());
-                //Expect.Call(scheduleDay1.PersonAssignmentConflictCollection).Return(new List<IPersonAssignment>());
-                Expect.Call(scheduleDay1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{ass2})).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay1.PersonAssignment()).Return(ass2).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.TimeZone).Return(person.PermissionInformation.DefaultTimeZone());
                 Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));

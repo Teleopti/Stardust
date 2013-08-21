@@ -28,12 +28,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             foreach (var person in schedulerState.FilteredPersonDictionary.Values)
             {
                 IScheduleRange range = schedulerState.Schedules[person];
+	            IPersonAssignment personAssignment;
 				
                 if (min.TimeOfDay != TimeSpan.Zero)
                 {
                     IScheduleDay yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
                 	timeZone = yesterDay.TimeZone;
-                    foreach (var personAssignment in yesterDay.PersonAssignmentCollectionDoNotUse())
+	                personAssignment = yesterDay.PersonAssignment();
+                    if (personAssignment != null)
                     {
 	                    var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
                         if (shift != null && shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
@@ -48,8 +50,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                 }
 
-                IScheduleDay today = range.ScheduledDay(selectedDate);
-                foreach (var personAssignment in today.PersonAssignmentCollectionDoNotUse())
+				IScheduleDay today = range.ScheduledDay(selectedDate);
+				personAssignment = today.PersonAssignment();
+				if (personAssignment != null)
                 {
 					var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
 					if (shift != null)

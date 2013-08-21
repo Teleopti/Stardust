@@ -86,17 +86,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPerson person1 = mocks.StrictMock<IPerson>();
             IScheduleDay schedulePart = mocks.StrictMock<IScheduleDay>();
             IPersonAssignment pa1 = mocks.StrictMock<IPersonAssignment>();
-            IPersonAssignment pa2 = mocks.StrictMock<IPersonAssignment>();
         	var statePeriod = schedulerState.RequestedPeriod.Period();
             Expect.Call(person1.Id).Return(Guid.NewGuid()).Repeat.AtLeastOnce();
             Expect.Call(scheduleDictionary[person1]).IgnoreArguments().Return(range).Repeat.AtLeastOnce();
             //Expect.Call(range.ScheduledPeriod(new DateTimePeriod())).IgnoreArguments().Return(schedulePart).Repeat.AtLeastOnce();
             Expect.Call(range.ScheduledDayCollection(period)).Return(new List<IScheduleDay> {schedulePart}).Repeat.
                 AtLeastOnce();
-            Expect.Call(schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{pa1,pa2})).Repeat.AtLeastOnce();
-			Expect.Call(pa1.Period).Return(new DateTimePeriod(statePeriod.StartDateTime.AddHours(10), statePeriod.StartDateTime.AddHours(15))).Repeat.AtLeastOnce();
-			Expect.Call(pa2.Period).Return(new DateTimePeriod(statePeriod.StartDateTime.AddHours(18), statePeriod.StartDateTime.AddHours(25))).Repeat.AtLeastOnce();
+            Expect.Call(schedulePart.PersonAssignment()).Return(pa1).Repeat.AtLeastOnce();
+			Expect.Call(pa1.Period).Return(new DateTimePeriod(statePeriod.StartDateTime.AddHours(10), statePeriod.StartDateTime.AddHours(25))).Repeat.AtLeastOnce();
 
             mocks.ReplayAll();
             target.SchedulerState.FilteredPersonDictionary.Add(person1.Id.Value,person1);
