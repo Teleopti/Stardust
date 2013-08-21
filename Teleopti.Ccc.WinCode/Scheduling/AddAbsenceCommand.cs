@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Data;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -142,8 +143,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (selectedSchedules.Count > 0)
             {
-                if (selectedSchedules.First().PersonAssignmentCollectionDoNotUse().Count > 0)
-                    startDate = selectedSchedules.First().PersonAssignmentCollectionDoNotUse().First().Period.StartDateTime;
+	            IPersonAssignment personAssignment = selectedSchedules.First().PersonAssignment();
+                if (personAssignment != null)
+					startDate = personAssignment.Period.StartDateTime;
                 else
                     startDate = selectedSchedules.First().Period.StartDateTime;
 
@@ -152,7 +154,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var scheduleDay in selectedSchedules)
             {
-                var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
+                IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
+	            IPersonAssignment assignment = scheduleDay.PersonAssignment();
+	            if (assignment != null)
+	            {
+					personAssignments.Add(assignment);
+	            }
 
                 foreach (var personAssignment in personAssignments)
                 {
@@ -197,7 +204,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var selectedSchedule in selectedSchedules)
             {
-                var personAssignments = selectedSchedule.PersonAssignmentCollectionDoNotUse();
+	            IPersonAssignment assignment = selectedSchedule.PersonAssignment();
+                var personAssignments = new List<IPersonAssignment>();
+	            if (assignment != null)
+	            {
+		            personAssignments.Add(assignment);
+	            }
 
                 foreach (var personAssignment in personAssignments)
                 {

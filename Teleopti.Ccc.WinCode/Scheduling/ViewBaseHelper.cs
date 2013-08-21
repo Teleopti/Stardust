@@ -167,47 +167,44 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 									TimeHelper.TimeOfDayFromTimeSpan(endTimePeriod.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
         }
 
-        /// <summary>
-        /// Get tooltip for assignments
-        /// </summary>
-        /// <param name="scheduleDay"></param>
-        /// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
-        {
-            var sb = new StringBuilder();
+	    /// <summary>
+	    /// Get tooltip for assignments
+	    /// </summary>
+	    /// <param name="scheduleDay"></param>
+	    /// <returns></returns>
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		    MessageId = "0")]
+	    public static string GetToolTipAssignments(IScheduleDay scheduleDay)
+	    {
+		    var sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
-	        if (asses.Count > 0)
-	        {
-		        foreach (IPersonAssignment pa in asses)
-		        {
-			        if (sb.Length > 0)
-				        sb.AppendLine();
-			        if (pa.ShiftCategory != null)
-				        sb.Append(pa.ShiftCategory.Description.Name); //name
-			        sb.Append("  ");
-			        sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
+		    IPersonAssignment pa = scheduleDay.PersonAssignment();
+		    if (pa != null)
+		    {
+			    if (sb.Length > 0)
+				    sb.AppendLine();
+			    if (pa.ShiftCategory != null)
+				    sb.Append(pa.ShiftCategory.Description.Name); //name
+			    sb.Append("  ");
+			    sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
 
-			        foreach (var layer in pa.PersonalLayers())
-			        {
-				        sb.AppendLine();
-				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
+			    foreach (var layer in pa.PersonalLayers())
+			    {
+				    sb.AppendLine();
+				    sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
 
-				        sb.AppendLine();
-				        sb.Append("    ");
-				        sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
-					        //name
-				        sb.Append(": ");
-				        sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone)); //time
-			        }
-		        }
-	        }
+				    sb.AppendLine();
+				    sb.Append("    ");
+				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+				    //name
+				    sb.Append(": ");
+				    sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone)); //time
+			    }
+		    }
+		    return sb.ToString();
+	    }
 
-	        return sb.ToString();
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Get tooltip for absences
         /// </summary>
         /// <param name="cell"></param>
