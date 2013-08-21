@@ -204,13 +204,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
 
-		//henke: todo
-		[Then(@"I should see a indication that the request is pending")]
-		public void ThenIShouldSeeAIndicationThatTheRequestIsPending()
-		{
-			//ScenarioContext.Current.Pending();
-		}
-
 		[When(@"I click on shifttrade resend button")]
 		public void WhenIClickOnShifttradeResendButton()
 		{
@@ -223,10 +216,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
 		}
 
+
+		[Then(@"I should not see cancel shifttrade button")]
+		public void ThenIShouldSeeCancelShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-danger", Resources.Cancel);
+		}
+
+		[Then(@"I should not see resend shifttrade button")]
+		public void ThenIShouldNotSeeResendShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-primary", Resources.SendAgain);
+		}
+
 		[Then(@"I should not see any requests")]
 		public void ThenIShouldNotSeeAnyRequests()
 		{
 			EventualAssert.That(()=>_page.Requests,Is.Empty);
 		}
+
+
 	}
 }

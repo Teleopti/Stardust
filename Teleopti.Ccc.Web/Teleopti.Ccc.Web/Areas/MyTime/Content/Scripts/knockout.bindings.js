@@ -1,10 +1,13 @@
 ﻿//eventaggregator
-//usage:
-//	ko.eventAggregator.subscribe(function(newValue){
-//		doSomething with newValue
+//usage (subscribing):
+//	ko.eventAggregator.subscribe(function(value){
+//		doSomething with value
 //		,null
 //		,"myTopic"
 //	});
+//
+//usage (publishing)
+//ko.eventAggregator.notifySubscribers(value, "mytopic");
 ko.eventAggregator = new ko.subscribable();
 
 //eventAggregatorExtensions

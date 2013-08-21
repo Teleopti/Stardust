@@ -563,8 +563,7 @@ Scenario: Cancel referred shifttrade
 	And I click on shifttrade cancel button
 	Then I should not see any requests
 
-
-Scenario: Remove shifttrade from reciever when referred
+Scenario: Do not show rerred shifttrade to reciever
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -590,6 +589,35 @@ Scenario: Remove shifttrade from reciever when referred
 	| HasBeenReferred	| True          |
 	And I am viewing requests
 	Then I should not see any requests
+
+Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not referred
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have created a shift trade request
+	| Field				| Value         |
+	| To				| Ashley Andeen	|
+	| DateTo			| 2030-01-01    |
+	| DateFrom			| 2030-01-01    |
+	| Pending			| True          |
+	| HasBeenReferred	| False         |
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	Then I should not see resend shifttrade button
+	And I should not see cancel shifttrade button
 	
 
 
