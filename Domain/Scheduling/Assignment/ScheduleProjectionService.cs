@@ -125,7 +125,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IList<IVisualLayer> createAssignmentLayers()
 		{
 			var assesProjection = new List<IVisualLayer>();
-			foreach (var assignment in ScheduleDay.PersonAssignmentCollectionDoNotUse())
+			var assignment = ScheduleDay.PersonAssignment();
+			if (assignment != null)
 			{
 				var assLayers = ((VisualLayerCollection)assignment.ProjectionService().CreateProjection()).UnMergedCollection;
 				assesProjection.AddRange(assLayers);

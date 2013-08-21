@@ -305,8 +305,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Expect.Call(_dictionary[_person1]).Return(_range1);
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
             Expect.Call(day.HasDayOff()).Return(false);
-            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAss})).Repeat.Twice();
+            Expect.Call(day.PersonAssignment()).Return(personAss).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);
         	Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);
@@ -351,8 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Expect.Call(_dictionary[_person1]).Return(_range1);
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
             Expect.Call(day.HasDayOff()).Return(false);
-            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss })).Repeat.Twice();
+            Expect.Call(day.PersonAssignment()).Return(personAss).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);
             Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);

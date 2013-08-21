@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                 {
                     allAvailable = false;
                 }
-                else if (part.PersonAssignmentCollectionDoNotUse().Count > 0)
+                else if (part.PersonAssignment() != null)
                 {
                     var proj = part.ProjectionService().CreateProjection();
                     var absenceLayerList = proj.FilterLayers<IAbsence>();
@@ -134,30 +134,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
         private static TimeSpan GetLocalStartDateTime(IScheduleDay part, TimeSpan localStartDateTime, ref TimeSpan localEndDateTime)
         {
-            var scheduleStart = part.PersonAssignmentCollectionDoNotUse();
-            if (scheduleStart.Count <= 0) return localStartDateTime;
-            foreach (IPersonAssignment t in scheduleStart)
+	        var assignment = part.PersonAssignment();
+	        if (assignment == null)
+		        return localStartDateTime;
+
+					var period = assignment.Period;
+            var localStartTime = period.LocalStartDateTime.TimeOfDay;
+            if (localStartTime > localStartDateTime)
             {
-                var period = t.Period;
-                var localStartTime = period.LocalStartDateTime.TimeOfDay;
-                if (localStartTime > localStartDateTime)
-                {
-                    localStartDateTime = localStartTime;
-                }
-                var localEndTime = period.LocalEndDateTime.TimeOfDay;
+                localStartDateTime = localStartTime;
+            }
+            var localEndTime = period.LocalEndDateTime.TimeOfDay;
 
-                var startDateTime = period.StartDateTime.Date;
-                var endDateTime = period.EndDateTime.Date;
+            var startDateTime = period.StartDateTime.Date;
+            var endDateTime = period.EndDateTime.Date;
 
-                if (startDateTime != endDateTime)
-                {
-                    localEndTime = new TimeSpan(23, 59, 0);
-                }
+            if (startDateTime != endDateTime)
+            {
+                localEndTime = new TimeSpan(23, 59, 0);
+            }
 
-                if (localEndTime < localEndDateTime)
-                {
-                    localEndDateTime = localEndTime;
-                }
+            if (localEndTime < localEndDateTime)
+            {
+                localEndDateTime = localEndTime;
             }
             return localStartDateTime;
         }

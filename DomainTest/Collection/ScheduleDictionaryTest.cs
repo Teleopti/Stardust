@@ -474,8 +474,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 SetAuthorizationServiceExpectations();
                 Expect.Call(part.Person).Return(dummyPerson).Repeat.AtLeastOnce();
                 Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>()).Repeat.AtLeastOnce();
-                Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+                Expect.Call(part.PersonAssignment()).Return(null);
                 Expect.Call(part.Period).Return(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)).Repeat.AtLeastOnce();
                 Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), dummyPerson.PermissionInformation.DefaultTimeZone()));
             }

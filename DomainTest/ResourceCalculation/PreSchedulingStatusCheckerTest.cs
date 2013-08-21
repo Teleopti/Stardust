@@ -6,8 +6,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -20,8 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IScheduleDay _part;
         private ISchedulingOptions _schedulingOptions;
         private IWorkShiftFinderResult _finderResult;
-        private DateTime _scheduleDate = new DateTime(2009,2,2,4,0,0,DateTimeKind.Utc);
-        private DateTimePeriod _period;
         private readonly DateOnly _scheduleDateOnly = new DateOnly(2009,2,2);
         private IPerson _person;
         private TimeZoneInfo _TimeZoneInfo;
@@ -38,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             _person = _mocks.StrictMock<IPerson>();
             _finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-            _period = new DateTimePeriod(_scheduleDate, _scheduleDate.AddDays(1));
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
             _TimeZoneInfo = (zone);
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
@@ -135,39 +130,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void PersonAssignmentsCheckWithNoPersonAssignmentReturnsTrue()
         {
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
-
             using (_mocks.Record())
             {
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-            }
-
-            bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
-            Assert.IsTrue(ret);
-        }
-
-        [Test]
-        public void MoreThanOnePersonAssignmentsReturnTrue()
-        {
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            var personAssignment2 = _mocks.StrictMock<IPersonAssignment>();
-            var period = new DateTimePeriod(_period.StartDateTime.AddHours(10), _period.StartDateTime.AddHours(12));
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { personAssignment, personAssignment2 };
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-	            Expect.Call(personAssignment.PersonalLayers())
-	                  .Return(new List<IPersonalShiftLayer>
-		                  {
-			                  new PersonalShiftLayer(ActivityFactory.CreateActivity("Nursing"), period.MovePeriod(new TimeSpan(4, 0, 0))),
-												new PersonalShiftLayer(ActivityFactory.CreateActivity("Nursing"), period.MovePeriod(new TimeSpan(4,0,0)))
-		                  })
-	                  .Repeat.AtLeastOnce();
-	            
-                Expect.Call(personAssignment.ShiftCategory).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
             }
 
             bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
@@ -178,12 +143,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void PersonAssignmentsCheckWithNoMainReturnsTrue()
         {
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-             IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> {personAssignment};
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
 
             using (_mocks.Record())
             {
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+							Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.ShiftCategory).Return(null);
                 Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
             }
@@ -195,14 +158,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void PersonAssignmentsCheckWithMainReturnsFalse()
         {
-             //_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
-
             var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
 
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { personAssignment };
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
 
             using (_mocks.Record())
             {
@@ -214,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
 
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+								Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("dummy"));
                 Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
             }
@@ -228,8 +187,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
 
             using (_mocks.Record())
             {
@@ -240,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_part.HasDayOff()).Return(true);
             }
 
@@ -253,8 +210,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
 
             using (_mocks.Record())
             {
@@ -265,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 								Expect.Call(_part.HasDayOff()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(null);
             }
@@ -279,9 +234,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
-            IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
-            var readOnlyAssignments = new ReadOnlyCollection<IPersonAssignment>(personAssignments);
-
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             using (_mocks.Record())
             {
@@ -291,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 								Expect.Call(_part.HasDayOff()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(ruleSetBag);
             }

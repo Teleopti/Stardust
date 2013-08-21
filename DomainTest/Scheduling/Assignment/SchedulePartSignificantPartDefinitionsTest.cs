@@ -203,13 +203,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyHasAssignmentDefinition()
         {
-            //Definition: PersonAssignmentCollection() > 0
-					IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1)) };
-
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(personAssignments));
+                Expect.Call(_mockedPart.PersonAssignment()).Return(null);
+								Expect.Call(_mockedPart.PersonAssignment()).Return(new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1)));
             }
 
             using (_mocker.Playback())

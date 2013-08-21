@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IScheduleRange _scheduleRange;
         private IScheduleDay _part;
         private IPersonAssignment _personAssignment;
-        private IList<IPersonAssignment> _personAssignments;
         private IScheduleDictionary _scheduleDictionary;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _part = _mocks.StrictMock<IScheduleDay>();
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAssignments = new List<IPersonAssignment>();
 
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
@@ -586,7 +584,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var retList = new List<IPersonMeeting>();
             var meetings = new ReadOnlyCollection<IPersonMeeting>(retList);
-            _personAssignments.Add(_personAssignment);
 
             using (_mocks.Record())
             {
@@ -825,7 +822,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void CanFilterOutShiftsWhichCannotBeOverwritten()
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAssignments = new List<IPersonAssignment> { _personAssignment };
             
             var currentDate = new DateTime(2009, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var lunch = ActivityFactory.CreateActivity("lunch");
@@ -835,7 +831,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var c1 = _mocks.StrictMock<IShiftProjectionCache>();
             shifts.Add(c1);
             Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, GetLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
-            Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+            Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
 						Expect.Call(_personAssignment.PersonalLayers()).Return(GetPersonalLayers(currentDate)).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
@@ -847,9 +843,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldNotFilterIfNoMeetingOrPersonAssignment()
 		{
-			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignments = new List<IPersonAssignment>();
-
 			var lunch = ActivityFactory.CreateActivity("lunch");
 			lunch.AllowOverwrite = false;
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
@@ -857,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
 			
-			Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+			Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
 			
 			_mocks.ReplayAll();
@@ -892,7 +885,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyIfPersonalShiftCannotOverrideActivity()
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAssignments = new List<IPersonAssignment> { _personAssignment };
             
             var currentDate = new DateTime(2009, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var lunch = ActivityFactory.CreateActivity("lunch");
@@ -910,7 +902,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var c1 = _mocks.StrictMock<IShiftProjectionCache>();
             shifts.Add(c1);
             Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-            Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+            Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
             Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var retShifts = _target.FilterOnNotOverWritableActivities(shifts, _part, _finderResult);
@@ -929,7 +921,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var meeting = _mocks.StrictMock<IPersonMeeting>();
             var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-					_personAssignments.Add(_personAssignment);
 
             var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var phone = ActivityFactory.CreateActivity("phone");
@@ -979,8 +970,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var meeting = _mocks.StrictMock<IPersonMeeting>();
             var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAssignments = new List<IPersonAssignment> { _personAssignment };
-
 
             var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var phone = ActivityFactory.CreateActivity("phone");
