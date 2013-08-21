@@ -244,6 +244,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 											.CreateProjection();
             part.ProjectedLayerCollection.Clear();
             part.ContractTime = DateTime.MinValue.Add(proj.ContractTime());
+	        part.WorkTime = DateTime.MinValue.Add(proj.WorkTime());
+	        part.PaidTime = DateTime.MinValue.Add(proj.PaidTime());
 
             if (proj.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
                 part.IsFullDayAbsence = true;
