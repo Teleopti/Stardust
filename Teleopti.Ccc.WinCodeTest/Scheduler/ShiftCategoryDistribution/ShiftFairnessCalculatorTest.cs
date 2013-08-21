@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void Setup()
         {
             _person1 = PersonFactory.CreatePerson("John");
-            _person1 = PersonFactory.CreatePerson("Ashley");
-            _person1 = PersonFactory.CreatePerson("Bill");
-            _person1 = PersonFactory.CreatePerson("Stan");
+            _person2 = PersonFactory.CreatePerson("Ashley");
+            _person3 = PersonFactory.CreatePerson("Bill");
+            _person4 = PersonFactory.CreatePerson("Stan");
 
             _shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent>();
             _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, "Morning", 2));
@@ -46,14 +46,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [Test]
         public void VerifyThatShiftCategoryCountIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             Assert.AreEqual(ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList).Count(), 3);
         }
 
         [Test]
         public void VerifyThatShiftCategoryIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList);
             Assert.IsTrue(shiftFairnessList[0].ShiftCategoryName.Equals( "Morning") );
             Assert.IsTrue(shiftFairnessList[1].ShiftCategoryName.Equals( "Day") );
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [Test]
         public void VerifyThatMinValueIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList);
             Assert.AreEqual(shiftFairnessList[0].MinimumValue ,2);
             Assert.AreEqual(shiftFairnessList[1].MinimumValue ,2);
@@ -73,7 +70,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [Test]
         public void VerifyThatMaxValueIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList); ;
             Assert.AreEqual(shiftFairnessList[0].MaximumValue, 4);
             Assert.AreEqual(shiftFairnessList[1].MaximumValue, 7);
@@ -83,7 +79,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [Test]
         public void VerifyThatAverageValueIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList); ;
             Assert.AreEqual(shiftFairnessList[0].AverageValue , 2.75);
             Assert.AreEqual(shiftFairnessList[1].AverageValue, 5);
@@ -93,7 +88,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [Test]
         public void VerifyThatSdValueIsPopulated()
         {
-            //IShiftFairnessCalculator shiftFairnessCalculator = new ShiftFairnessCalculator(_shiftCategoryPerAgentList);
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList); ;
             Assert.AreEqual(Math.Round(shiftFairnessList[0].StandardDeviationValue,2), 0.83);
             Assert.AreEqual(Math.Round(shiftFairnessList[1].StandardDeviationValue,2), 1.87);
