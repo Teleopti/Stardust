@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
-		public void ShouldHandleNewSkillWithProficiencyWhenNoPreviousPersonSkill()
+		public void ShouldHandleActivatedSkillWithProficiencyWhenNoPreviousActivePersonSkill()
 		{
 			_readModelFinder.Stub(
 				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _person.Id.GetValueOrDefault(), _scenario.Id.GetValueOrDefault()))
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
-		public void ShouldHandleNewSkillWithProficiencyWhenPreviousPersonSkill()
+		public void ShouldHandleActivatedSkillWithProficiencyWhenPreviousActivePersonSkill()
 		{
 			var newSkillId = Guid.NewGuid();
 

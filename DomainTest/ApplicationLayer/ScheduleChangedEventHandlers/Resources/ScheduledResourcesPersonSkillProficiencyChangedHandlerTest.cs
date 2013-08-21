@@ -6,16 +6,15 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
 	[TestFixture]
-	public class ScheduledResourcesPersonSkillDeactivatedHandlerTest
+	public class ScheduledResourcesPersonSkillProficiencyChangedHandlerTest
 	{
-		private ScheduledResourcesPersonSkillDeactivatedHandler _target;
+		private ScheduledResourcesPersonSkillProficiencyChangedHandler _target;
 		private IScheduledResourcesReadModelStorage _storage;
 		private readonly Guid _activityId = Guid.NewGuid();
 		private IPersonRepository _personRepository;
@@ -42,11 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] {_skill});
 			_person.SetId(Guid.NewGuid());
 			_scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			_target = new ScheduledResourcesPersonSkillDeactivatedHandler(_storage, _readModelFinder, _personRepository, _skillRepository, _scenarioRepository);
+			_target = new ScheduledResourcesPersonSkillProficiencyChangedHandler(_storage, _readModelFinder, _personRepository, _skillRepository, _scenarioRepository);
 		}
 
 		[Test]
-		public void ShouldHandleOnePersonSkillWithProficiencyDeactivated()
+		public void ShouldHandleChangedSkillProficiencyWithNewProficiencyNotOneHundredPercent()
 		{
 			_readModelFinder.Stub(
 				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _person.Id.GetValueOrDefault(), _scenario.Id.GetValueOrDefault()))
@@ -59,29 +58,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							                PayloadId = _activityId
 						                }
 				                });
-			_storage.Stub(x => x.RemoveResources(_activityId, _skill.Id.ToString(), _period, 1, 1)).Return(2);
+			_storage.Stub(x => x.AddResources(_activityId, false, _skill.Id.ToString(), _period, 1, 1)).Return(2);
+			_storage.Stub(x => x.RemoveResources(_activityId, _skill.Id.ToString(), _period, 1, 1)).Return(4);
 			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_skillRepository.Stub(x => x.MinimumResolution()).Return(15);
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 
-			_target.Handle(new PersonSkillDeactivatedEvent
+			_target.Handle(new PersonSkillProficiencyChangedEvent
 				{
 					PersonId = _person.Id.GetValueOrDefault(),
 					SkillId = _skill.Id.GetValueOrDefault(),
+					ProficiencyAfter = 0.7,
 					StartDate = _date,
 					EndDate = _date,
 					SkillsBefore =
 						new[] {new PersonSkillDetail {Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault()}}
 				});
 
-			_storage.AssertWasCalled(x => x.RemoveSkillEfficiency(2,_skill.Id.GetValueOrDefault(),0.9d));
+			_storage.AssertWasCalled(x => x.RemoveSkillEfficiency(4,_skill.Id.GetValueOrDefault(),0.9d));
+			_storage.AssertWasCalled(x => x.AddSkillEfficiency(2,_skill.Id.GetValueOrDefault(),0.7d));
 		}
 
 		[Test]
-		public void ShouldHandleDeactivateSkillWithProficiencyGivenTwoActivePersonSkills()
+		public void ShouldHandleSkillWithChangedProficiencyWhenNewProficiencyIsOneHundredPercent()
 		{
-			var newSkillId = Guid.NewGuid();
-
 			_readModelFinder.Stub(
 				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _person.Id.GetValueOrDefault(), _scenario.Id.GetValueOrDefault()))
 							.Return(new[]
@@ -94,29 +94,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						                }
 				                });
 
-			_storage.Stub(x => x.RemoveResources(_activityId, SkillCombination.ToKey(new[] { newSkillId, _skill.Id.GetValueOrDefault() }), _period, 1, 1)).Return(4);
-			_storage.Stub(x => x.AddResources(_activityId, false, _skill.Id.ToString(), _period, 1, 1)).Return(2);
+			_storage.Stub(x => x.AddResources(_activityId, false, _skill.Id.ToString(), _period, 1, 1)).Return(4);
+			_storage.Stub(x => x.RemoveResources(_activityId, _skill.Id.ToString(), _period, 1, 1)).Return(2);
 			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_skillRepository.Stub(x => x.MinimumResolution()).Return(15);
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 
-			_target.Handle(new PersonSkillDeactivatedEvent
+			_target.Handle(new PersonSkillProficiencyChangedEvent
 				{
 					PersonId = _person.Id.GetValueOrDefault(),
-					SkillId = newSkillId,
+					SkillId = _skill.Id.GetValueOrDefault(),
+					ProficiencyAfter = 1,
 					StartDate = _date,
 					EndDate = _date,
 					SkillsBefore =
 						new[]
 							{
 								new PersonSkillDetail {Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault()},
-								new PersonSkillDetail {Active = true, Proficiency = 0.8, SkillId = newSkillId}
 							}
 				});
 
-			_storage.AssertWasCalled(x => x.AddSkillEfficiency(2, _skill.Id.GetValueOrDefault(), 0.9d));
-			_storage.AssertWasCalled(x => x.RemoveSkillEfficiency(4, _skill.Id.GetValueOrDefault(), 0.9d));
-			_storage.AssertWasCalled(x => x.RemoveSkillEfficiency(4, newSkillId, 0.8d));
+			_storage.AssertWasCalled(x => x.RemoveSkillEfficiency(2, _skill.Id.GetValueOrDefault(), 0.9d));
+			_storage.AssertWasNotCalled(x => x.AddSkillEfficiency(4, _skill.Id.GetValueOrDefault(), 1d));
 		}
 	}
 }
