@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
-		public void ShouldHandleNewSkillWithProficiencyWhenPreviousPersonSkill()
+		public void ShouldHandleNewSkillWithProficiencyWhenPreviousPersonSkillExists()
 		{
 			var newSkillId = Guid.NewGuid();
 
