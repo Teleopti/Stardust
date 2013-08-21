@@ -1089,38 +1089,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
         }
 
         [Test]
-        public void VerifyUpdateFromDataSourcePersonDayOff()
-        {
-            ILoadAggregateById<IPersonDayOff> rep = mocks.StrictMock<ILoadAggregateById<IPersonDayOff>>();
-            Guid newId = Guid.NewGuid();
-
-            IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-            dOff1.Anchor = new TimeSpan(10, 1, 1);
-            dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-            IPersonDayOff dayOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario, new DateOnly(2000, 6, 1), dOff1);
-
-            dayOff.SetId(newId);
-            using (mocks.Record())
-            {
-                SetAuthorizationServiceExpectations();
-                Expect.Call(rep.LoadAggregate(newId))
-                    .Return(dayOff);
-            }
-            using (mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    Assert.AreSame(dayOff, target.UpdateFromBroker(rep, newId));
-                    var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-                    Assert.AreEqual(1, part.PersonDayOffCollection().Count);
-                    Assert.AreEqual(dayOff.Id, part.PersonDayOffCollection()[0].Id);
-                    Assert.AreEqual(0, target.DifferenceSinceSnapshot().Count());
-                    Assert.IsTrue(eventFired);
-                }
-            }
-        }
-
-        [Test]
         public void VerifyUpdateFromDataSourceMeeting()
         {
             var rep = mocks.StrictMock<ILoadAggregateById<IMeeting>>();
