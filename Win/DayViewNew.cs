@@ -239,15 +239,15 @@ namespace Teleopti.Ccc.Win
                 (int) Math.Round(pixelConverter.PositionFromDateTime(local1.StartDateTime, IsRightToLeft)) +
                 e.Bounds.X;
             int endPixel1 = (int) Math.Round(pixelConverter.PositionFromDateTime(local1.EndDateTime, IsRightToLeft)) + e.Bounds.X;
-            var personDayOffs = scheduleDay.PersonDayOffCollection();
-            if (personDayOffs.Count == 0) return;
+			if (!scheduleDay.HasDayOff())
+				return;
 
-            IPersonDayOff personDayOff = personDayOffs[0];
+            IDayOff personDayOff = scheduleDay.PersonAssignment().DayOff();
             
-            string shortName = personDayOff.DayOff.Description.ShortName;
+            string shortName = personDayOff.Description.ShortName;
             SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
             var point = new Point(startPixel1 + ((endPixel1-startPixel1)/2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-            drawDayOffRect(e, personDayOff.DayOff.DisplayColor, startPixel1, endPixel1, shortName, point);
+            drawDayOffRect(e, personDayOff.DisplayColor, startPixel1, endPixel1, shortName, point);
 
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
@@ -273,17 +273,13 @@ namespace Teleopti.Ccc.Win
                             e.Bounds.X;
 
             IAbsence absence = SignificantAbsence(scheduleDay);
-			var personDayOffs = scheduleDay.PersonDayOffCollection();
-        	string shortName;
-			if (personDayOffs.Count == 0)
+
+        	string shortName = "";
+			if (scheduleDay.HasDayOff())
 			{
-				shortName = "";
+				shortName = scheduleDay.PersonAssignment().DayOff().Description.ShortName;
 			}
-			else
-			{
-				IPersonDayOff personDayOff = personDayOffs[0];
-				shortName = personDayOff.DayOff.Description.ShortName;
-			}
+
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			var point = new Point(startPixel1 + ((endPixel1 - startPixel1) / 2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
             drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person,dateOnly), startPixel1, endPixel1, shortName, point);

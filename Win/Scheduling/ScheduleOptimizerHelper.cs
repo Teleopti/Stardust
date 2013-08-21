@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //if (schedulePart.PersonAssignmentCollection().Count == 0)
                     if (PreSchedulingStatusChecker.CheckAssignments(schedulePart))
                         //no day off
-                        if (schedulePart.PersonDayOffCollection().Count == 0)
+                        if (!schedulePart.HasDayOff())
                         {
                             DateTime schedulingTime = DateTime.Now;
                             IWorkShiftCalculationResultHolder cache;

@@ -1226,7 +1226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{
-					if (schedulePart.PersonDayOffCollection().Count == 0)
+					if (!schedulePart.HasDayOff())
 					{
 						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)

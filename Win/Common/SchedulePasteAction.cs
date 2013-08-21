@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
-                    if (tempPart.PersonDayOffCollection().Count>0)
+                    if (tempPart.HasDayOff())
                         destination.Merge(tempPart, false);
                 }
 
