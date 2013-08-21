@@ -90,27 +90,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState = PermissionState.Unspecified;
 
-            var personDayOffCollaction = _schedulePart.PersonDayOffCollection();
-
-            if (personDayOffCollaction.Count == 0 && rotation.DayOffTemplate != null)
+            if (!_schedulePart.HasDayOff() && rotation.DayOffTemplate != null)
             {
                 return PermissionState.Broken;
             }
 
-            //todo: How does the dayoff work?
-            foreach (IPersonDayOff dayOff in personDayOffCollaction)
-            {
-                if (rotation.DayOffTemplate != null)
-                {
-                    permissionState = PermissionState.Satisfied;
+	        var ass = _schedulePart.PersonAssignment();
+					if (ass != null)
+					{
+						if (rotation.DayOffTemplate != null)
+						{
+							permissionState = PermissionState.Satisfied;
 
-                    if (!dayOff.CompareToTemplate(rotation.DayOffTemplate))
-                    {
-                        //Need to do a return here because the visualLayerCollection can be empty 
-                        return PermissionState.Broken;
-                    }
-                }
-            }
+							if (!ass.AssignedWithDayOff(rotation.DayOffTemplate))
+							{
+								//Need to do a return here because the visualLayerCollection can be empty 
+								return PermissionState.Broken;
+							}
+						}
+					}
 
             return permissionState;
         }
@@ -486,26 +484,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private PermissionState checkRotationShiftCategory(IRotationRestriction preference, PermissionState permissionState)
         {
-            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollectionDoNotUse())
-            {
-				IShiftCategory shiftCategory = assignment.ShiftCategory;
-				if (preference.ShiftCategory != null && shiftCategory == null)
-                {
-                    permissionState = PermissionState.Broken;
-                }
+	        var assignment = _schedulePart.PersonAssignment();
+					if (assignment != null)
+					{
+						IShiftCategory shiftCategory = assignment.ShiftCategory;
+						if (preference.ShiftCategory != null && shiftCategory == null)
+						{
+							permissionState = PermissionState.Broken;
+						}
 
-				if (shiftCategory == null)
-                    continue;
+						if (shiftCategory == null)
+							return permissionState;
 
-                if (preference.ShiftCategory != null)
-                {
-                    if (!preference.ShiftCategory.Equals(shiftCategory))
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-                }
-            }
-            return permissionState;
+						if (preference.ShiftCategory != null)
+						{
+							if (!preference.ShiftCategory.Equals(shiftCategory))
+							{
+								permissionState = PermissionState.Broken;
+							}
+						}
+					}
+	        return permissionState;
         }
 
         private static bool isWithinTimeSpan(TimeSpan? startTime, TimeSpan? endTime, TimeSpan scheduleTime)
