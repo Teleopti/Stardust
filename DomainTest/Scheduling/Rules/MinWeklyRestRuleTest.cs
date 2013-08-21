@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -113,8 +112,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var oldResponses = new List<IBusinessRuleResponse>();
             var day0Hours = _mocks.StrictMock<IScheduleDay>();
 
-            var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             using (_mocks.Record())
             {
                 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays, true)).Return(
@@ -136,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(9);
+                Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(9);
 
             }
             using (_mocks.Playback())
@@ -165,13 +162,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var day0Hours = _mocks.StrictMock<IScheduleDay>();
             var day1 = _mocks.StrictMock<IScheduleDay>();
 
-            var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             var firstlayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 24, 12, 0, 0, DateTimeKind.Utc),
                                                           new DateTime(2010, 8, 24, 22, 0, 0, DateTimeKind.Utc));
 
             var personAss = _mocks.StrictMock<IPersonAssignment>();
-            var personAssCol2 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{personAss});
 
             using (_mocks.Record())
             {
@@ -194,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(8);
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2).Repeat.Times(1);
+								Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(8);
+								Expect.Call(day1.PersonAssignment()).Return(personAss).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Start);
 			}
             using (_mocks.Playback())
@@ -225,15 +219,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var day1 = _mocks.StrictMock<IScheduleDay>();
             var day2 = _mocks.StrictMock<IScheduleDay>();
 
-            var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             var firstlayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 24, 0, 0, 0, DateTimeKind.Utc),
                                                           new DateTime(2010, 8, 24, 22, 0, 0, DateTimeKind.Utc));
 
             var personAss = _mocks.StrictMock<IPersonAssignment>();
-            var personAssCol1 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });          
             var personAss2 = _mocks.StrictMock<IPersonAssignment>();
-            var personAssCol2 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss2 });
 
             using (_mocks.Record())
             {
@@ -256,10 +246,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(7);
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol1).Repeat.Times(1);
+                Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(7);
+								Expect.Call(day1.PersonAssignment()).Return(personAss).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
-                Expect.Call(day2.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2).Repeat.Times(1);
+				Expect.Call(day2.PersonAssignment()).Return(personAss2).Repeat.Times(1);
 				mockShift(personAss2, firstlayerCollectionPeriod, WorkTimeOptions.Both);
             }
             using (_mocks.Playback())
@@ -288,13 +278,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var day0Hours = _mocks.StrictMock<IScheduleDay>();
             var day1 = _mocks.StrictMock<IScheduleDay>();
 
-            var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             var firstlayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 24, 0, 0, 0, DateTimeKind.Utc),
                                                           new DateTime(2010, 8, 24, 22, 0, 0, DateTimeKind.Utc));
 
             var personAss = _mocks.StrictMock<IPersonAssignment>();
-            var personAssCol2 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });
 
             using (_mocks.Record())
             {
@@ -317,8 +304,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(8);
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2).Repeat.Times(1);
+                Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(8);
+								Expect.Call(day1.PersonAssignment()).Return(personAss).Repeat.Times(1);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
             }
             using (_mocks.Playback())
@@ -357,8 +344,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var day0Hours = _mocks.StrictMock<IScheduleDay>();
             var day1 = _mocks.StrictMock<IScheduleDay>();
 
-            var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             var firstlayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 24, 0, 0, 0, DateTimeKind.Utc),
                                                           new DateTime(2010, 8, 24, 22, 0, 0, DateTimeKind.Utc));
             var firstlayerCollectionPeriod2 = new DateTimePeriod(new DateTime(2010, 8, 28, 0, 0, 0, DateTimeKind.Utc),
@@ -366,8 +351,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var personAss = _mocks.StrictMock<IPersonAssignment>();
             var personAss2 = _mocks.StrictMock<IPersonAssignment>();
-            var personAssCol2 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });
-            var personAssCol3 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss2 });
 
             using (_mocks.Record())
             {
@@ -390,9 +373,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(7);
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2);
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol3);
+                Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(7);
+								Expect.Call(day1.PersonAssignment()).Return(personAss);
+								Expect.Call(day1.PersonAssignment()).Return(personAss2);
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
 				mockShift(personAss2, firstlayerCollectionPeriod2, WorkTimeOptions.Both);
 
@@ -404,7 +387,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldNotReturnListIfSundayAndNextMondayIsNotScheduled()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
@@ -433,13 +416,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var day0Hours = _mocks.StrictMock<IScheduleDay>();
 			var day1 = _mocks.StrictMock<IScheduleDay>();
 
-			var personAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
 			var firstlayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 23, 8, 0, 0, DateTimeKind.Utc),
 														  new DateTime(2010, 8, 23, 22, 0, 0, DateTimeKind.Utc));
 
 			var personAss = _mocks.StrictMock<IPersonAssignment>();
-			var personAssCol2 = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });
 
 			using (_mocks.Record())
 			{
@@ -462,8 +442,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
 				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
 				Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day0Hours);
-				Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(3);
-				Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2).Repeat.Times(6);
+				Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Times(3);
+				Expect.Call(day1.PersonAssignment()).Return(personAss).Repeat.Times(6);
 
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
 				mockShift(personAss, firstlayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(1)), WorkTimeOptions.Both);
@@ -514,15 +494,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var day0Hours = _mocks.StrictMock<IScheduleDay>();
             var day1 = _mocks.StrictMock<IScheduleDay>();
 
-            var emptyPersonAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
-
             var scheduledDayLayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 22, 6, 0, 0, DateTimeKind.Utc),
                                                           new DateTime(2010, 8, 22, 18, 0, 0, DateTimeKind.Utc));
             
 
 			var personAss = _mocks.StrictMock<IPersonAssignment>();
-            
-            var scheduledPersonAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });
+           
             
             using (_mocks.Record())
             {
@@ -549,8 +526,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 5))).Return(day1);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 6))).Return(day1);
 
-                Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(emptyPersonAssCol).Repeat.Twice();
-                Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(scheduledPersonAssCol).Repeat.AtLeastOnce();
+                Expect.Call(day0Hours.PersonAssignment()).Return(null).Repeat.Twice();
+								Expect.Call(day1.PersonAssignment()).Return(personAss).Repeat.AtLeastOnce();
 
                 mockShift(personAss, scheduledDayLayerCollectionPeriod, WorkTimeOptions.Both);
                 mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(1)), WorkTimeOptions.Both);

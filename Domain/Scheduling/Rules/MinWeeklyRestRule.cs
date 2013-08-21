@@ -98,8 +98,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (var day in extendedWeek.DayCollection())
             {
                 var schedule = currentSchedules.ScheduledDay(day);
-                // to check! are the assignments in correct order??
-                schedule.PersonAssignmentCollectionDoNotUse().ForEach(ass => pAss.Add(ass));
+	            var ass = schedule.PersonAssignment();
+							if (ass != null)
+							{
+								pAss.Add(ass);
+							}
             }
             if (pAss.Count == 0)
                 return true;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -152,10 +153,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 2, 11, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonOne.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 3, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 4, 9, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonTwo.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 2, 11, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 3, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 4, 9, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime);
 				Assert.AreEqual(0, _scheduleDayThreePersonOne.PersistableScheduleDataCollection().Count());
 				Assert.IsNotNull(_scheduleDayThreePersonTwo.PersonAssignment().DayOff());
 			}
@@ -196,9 +197,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse().Count());
+				_scheduleDayOnePersonOne.PersonAssignment().Should().Not.Be.Null();
+				_scheduleDayTwoPersonOne.PersonAssignment().Should().Not.Be.Null();
 				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAbsenceCollection().Count);
-				Assert.AreEqual(1, _scheduleDayTwoPersonOne.PersonAssignmentCollectionDoNotUse().Count);
 				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAbsenceCollection().Count);
 			}
 		}
@@ -247,15 +248,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
 				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse()[0].AddPersonalLayer(new Activity("activity"), dateTimePeriod2);
+				_scheduleDayOnePersonOne.PersonAssignment().AddPersonalLayer(new Activity("activity"), dateTimePeriod2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
-				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().PersonalLayers().Count());
+				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignment().PersonalLayers().Count());
 				Assert.IsTrue(_scheduleDayOnePersonOne.SignificantPart() == SchedulePartView.PersonalShift);
 			}
 		}
@@ -318,8 +319,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignmentCollectionDoNotUse()[0].Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
 			}
 		}
 	}

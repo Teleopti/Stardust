@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollectionDoNotUse()[0]};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
             assignments = new List<IPersonAssignment>();
             ((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
@@ -213,9 +213,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
                                        new DifferenceEntityCollectionService<IPersistableScheduleData>());
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollectionDoNotUse()[0]};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
-            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignmentCollectionDoNotUse()[0]};
+            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
 
         }
