@@ -33,17 +33,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var filteredList = new List<IShiftProjectionCache>();
 			var meetings = part.PersonMeetingCollection();
-			var personAssignments = part.PersonAssignmentCollectionDoNotUse();
+			var personAssignment = part.PersonAssignment();
 			var cnt = shiftList.Count;
 
-			if (meetings.Count == 0 && personAssignments.Count == 0)
+			if (meetings.Count == 0 && personAssignment == null)
 				return shiftList;
 
 			foreach (var shift in shiftList)
 			{
 				if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
 				                                       isActivityIntersectedWithMeetingOrPersonalShift(
-					                                       personAssignments, meetings, x)))
+					                                       personAssignment, meetings, x)))
 					continue;
 				filteredList.Add(shift);
 			}
@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return filteredList;
 		}
 
-		private static bool isActivityIntersectedWithMeetingOrPersonalShift(IEnumerable<IPersonAssignment> personAssignments,
+		private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
 		                                                                    IEnumerable<IPersonMeeting> meetings,
 		                                                                    IVisualLayer layer)
 		{
 			if (meetings.Any(x => x.Period.Intersect(layer.Period)))
 				return true;
 
-			foreach (var personAssignment in personAssignments)
+			if (personAssignment != null)
 			{
 				if (personAssignment.PersonalLayers().Any(l => l.Period.Intersect(layer.Period)))
 					return true;
