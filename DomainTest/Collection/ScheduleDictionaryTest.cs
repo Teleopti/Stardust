@@ -733,7 +733,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
             IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
             dOff1.Anchor = TimeSpan.Zero;
             dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-            IPersonDayOff dOff2BeRemoved = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario, new DateOnly(2000, 1, 1), dOff1);
             IPersonAbsence pAbs2BeChanged = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IPersonAssignment pAss2BeAdded = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
@@ -755,11 +754,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
             {
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
-                    ((ScheduleRange) target[dummyPerson]).Add(dOff2BeRemoved);
                     ((ScheduleRange) target[dummyPerson]).Add(pAbs2BeChanged);
 
                     var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 1));
-                    part.Remove(dOff2BeRemoved);
 	                var personAbsence = part.PersonAbsenceCollection()[0];
 	                var oldLayer = personAbsence.Layer;
 	                var newLayer = new AbsenceLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(TimeSpan.FromDays(10)));
@@ -775,8 +772,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     Assert.IsFalse(res.Contains(pAss2BeAdded));
                     Assert.AreEqual(0, res.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.AreEqual(1, res.PersonAbsenceCollection().Count);
-                    Assert.AreEqual(1, res.PersonDayOffCollection().Count);
-                    Assert.AreEqual(TimeSpan.FromHours(1), res.PersonDayOffCollection()[0].DayOff.Flexibility);
                     Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1),
                                     res.PersonAbsenceCollection()[0].Layer.Period);
                 }
