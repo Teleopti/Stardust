@@ -950,7 +950,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)
@@ -958,8 +957,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
                 Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
                 Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(meetings),
-                                                                      new ReadOnlyCollection<IPersonAssignment>(
-                                                                          _personAssignments))).Return(true);
+																	  _personAssignment)).Return(true);
             }
 
             using (_mocks.Playback())
@@ -1003,7 +1001,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.PersonalLayers()).Return(new[]
 	                {
 		                new PersonalShiftLayer(new Activity("d"), period)
