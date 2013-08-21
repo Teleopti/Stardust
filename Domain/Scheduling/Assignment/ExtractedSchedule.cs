@@ -209,9 +209,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection()
         {
 					throw new Exception("nope. you should use HasDayOff on scheduleday or/and dayoff on personassignment instead!");
-            //todo - when only ScheduleDay, no need to sort this one
-            var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
-            return new ReadOnlyCollection<IPersonDayOff>(retList);
+						////todo - when only ScheduleDay, no need to sort this one
+						//var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
+						//return new ReadOnlyCollection<IPersonDayOff>(retList);
         }
 
         public ReadOnlyCollection<INote> NoteCollection()
