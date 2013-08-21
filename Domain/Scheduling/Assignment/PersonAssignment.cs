@@ -317,5 +317,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			dayOffDestination.SetDayOff(_dayOffTemplate);
 		}
+
+		public bool AssignedWithDayOff(IDayOffTemplate template)
+		{
+			if (_dayOffTemplate == null)
+				return template == null;
+			return _dayOffTemplate.Equals(template);
+		}
 	}
 }

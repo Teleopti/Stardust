@@ -58,5 +58,6 @@ namespace Teleopti.Interfaces.Domain
 	    IDayOff DayOff();
 	    void SetDayOff(IDayOffTemplate template);
 	    void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);
+	    bool AssignedWithDayOff(IDayOffTemplate template);
     }
 }

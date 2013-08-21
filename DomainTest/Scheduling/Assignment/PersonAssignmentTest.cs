@@ -494,5 +494,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			ass.DayOff().Should().Be.Null();
 		}
+
+		[Test]
+		public void AssignedWithDayoffFulfilled()
+		{
+			var template = new DayOffTemplate();
+			target.SetDayOff(template);
+			target.AssignedWithDayOff(template)
+			      .Should().Be.True();
+		}
+
+		[Test]
+		public void AssignedWithDayoffDifferent()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.AssignedWithDayOff(new DayOffTemplate())
+						.Should().Be.False();
+		}
+
+		[Test]
+		public void AssignedWithDayoffWhenAssignmentHasNoDayoff()
+		{
+			target.AssignedWithDayOff(new DayOffTemplate())
+						.Should().Be.False();
+		}
+
+		[Test]
+		public void AssignedWithDayoffCompareWithNull()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.AssignedWithDayOff(null)
+						.Should().Be.False();
+		}
+
+
+		[Test]
+		public void AssignedWithDayoffBothNull()
+		{
+			target.AssignedWithDayOff(null)
+						.Should().Be.True();
+		}
 	}
 }
