@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -24,27 +25,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _schedulePart = _mocks.StrictMock<IScheduleDay>();
             _target = new ShiftTradeChecksumCalculator(_schedulePart);
 
-            IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff();
-            IList<IPersonDayOff> personDayOffList = new List<IPersonDayOff>();
-            personDayOffList.Add(personDayOff);
+            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"), new Person(), new DateOnly(), new DayOffTemplate());
             
             using (_mocks.Record())
             {
-                Expect.Call(_schedulePart.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(personDayOffList));
-                Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_schedulePart.PersonAssignment()).Return(personDayOff);
             }
 
             using (_mocks.Playback())
             {
                 long checksum = _target.CalculateChecksum();
-                Assert.AreEqual(personDayOffList[0].Checksum(), checksum);
                 Assert.AreNotEqual(
                     PersonDayOffFactory.CreatePersonDayOff(personDayOff.Person, personDayOff.Scenario,
                                                           personDayOff.Period.StartDateTime.AddDays(1),
-                                                          personDayOff.DayOff.TargetLength,
-                                                          personDayOff.DayOff.Flexibility,
-                                                          personDayOff.DayOff.AnchorLocal(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).TimeOfDay).Checksum(), checksum);
+                                                          personDayOff.DayOff().TargetLength,
+																													personDayOff.DayOff().Flexibility,
+                                                          personDayOff.DayOff().AnchorLocal(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).TimeOfDay).Checksum(), checksum);
             }
         }
 
@@ -57,17 +53,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var period = new DateTimePeriod(new DateTime(2009, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                                        new DateTime(2009, 1, 1, 9, 0, 0, DateTimeKind.Utc));
-            var personAssignments = new List<IPersonAssignment>();
             IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
                                                                           PersonFactory.CreatePerson(),
                                                                           period);
-            personAssignments.Add(personAssignment);
 
             using (_mocks.Record())
             {
-                Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(personAssignments)).Repeat.Twice();
+                Expect.Call(_schedulePart.PersonAssignment()).Return(personAssignment).Repeat.Any();
             }
 
             using (_mocks.Playback())
@@ -88,16 +80,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var period = new DateTimePeriod(new DateTime(2009, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                                        new DateTime(2009, 1, 1, 9, 0, 0, DateTimeKind.Utc));
-            var personAssignments = new List<IPersonAssignment>();
             IPersonAssignment personAssignment =
                 PersonAssignmentFactory.CreateAssignmentWithPersonalShift(PersonFactory.CreatePerson(), period);
-            personAssignments.Add(personAssignment);
 
             using (_mocks.Record())
             {
-                Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.Overtime);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(personAssignments));
+               // Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.Overtime);
+                Expect.Call(_schedulePart.PersonAssignment()).Return(personAssignment);
             }
 
             using (_mocks.Playback())
@@ -128,19 +117,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             activity.SetId(Guid.NewGuid());
             IShiftCategory schiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftcat1");
 
-            var personAssignmentCollection1 = new List<IPersonAssignment>();
             IPersonAssignment personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period1, schiftCategory, scenario);
-            personAssignmentCollection1.Add(personAssignment1);
-
-            var personAssignmentCollection2 = new List<IPersonAssignment>();
             IPersonAssignment personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period2, schiftCategory, scenario);
-            personAssignmentCollection2.Add(personAssignment2);
 
             using (_mocks.Record())
             {
-                Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(personAssignmentCollection1)).Repeat.Any();
+	            Expect.Call(_schedulePart.PersonAssignment()).Return(personAssignment1);
             }
 
             using (_mocks.Playback())
@@ -154,9 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             
             using (_mocks.Record())
             {
-                Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
-                    new ReadOnlyCollection<IPersonAssignment>(personAssignmentCollection2)).Repeat.Any();
+                Expect.Call(_schedulePart.PersonAssignment()).Return(personAssignment2).Repeat.Any();
             }
 
             using (_mocks.Playback())
