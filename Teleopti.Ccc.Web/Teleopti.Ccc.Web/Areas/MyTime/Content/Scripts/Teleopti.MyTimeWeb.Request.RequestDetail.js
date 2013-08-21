@@ -36,11 +36,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
         self.CancelAddingNewRequest = function () {
             self.requestViewModel(null);
+            Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
         };
     };
 
-	function _addItemAtTop(data) {
-	    Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+    function _addItemAtTop(data) {
+        Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+        parentViewModel.CancelAddingNewRequest();
 	}
     
     function _datePickerFormat() {

@@ -25,23 +25,26 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         self.addAbsenceRequestActive = ko.observable(false);
         self.addShiftTradeRequestActive = ko.observable(false);
 
-        self.addTextRequest = function() {
+        self.addTextRequest = function () {
+            self.resetToolbarActiveButtons();
             self.addTextRequestActive(true);
-            self.addAbsenceRequestActive(false);
-            self.addShiftTradeRequestActive(false);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
         };
         self.addAbsenceRequest = function () {
-            self.addTextRequestActive(false);
+            self.resetToolbarActiveButtons();
             self.addAbsenceRequestActive(true);
-            self.addShiftTradeRequestActive(false);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
         };
         self.addShiftTradeRequest = function () {
-            self.addTextRequestActive(false);
-            self.addAbsenceRequestActive(false);
+            self.resetToolbarActiveButtons();
             self.addShiftTradeRequestActive(true);
             Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();
+        };
+
+        self.resetToolbarActiveButtons = function() {
+            self.addTextRequestActive(false);
+            self.addAbsenceRequestActive(false);
+            self.addShiftTradeRequestActive(false);
         };
     }
 
@@ -79,6 +82,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		},
 	    RequestPartialDispose: function() {
 	        Teleopti.MyTimeWeb.Request.List.Dispose();
+	    },
+	    ResetToolbarActiveButtons: function () {
+	        requestNavigationViewModel.resetToolbarActiveButtons();
 	    }
 	};
 

@@ -172,6 +172,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	    self.CancelAddingNewRequest = function() {
 	        self.requestViewModel(null);
+	        self.textRequestActive(false);
+	        self.absenceRequestActive(false);
 	    };
 	};
 
@@ -496,6 +498,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			.first()
 			.text(parseInt(textRequestCount.text()) + 1)
 	    ;
+	    
+	    vm.CancelAddingNewRequest();
 	}
     
 	function _navigateToRequests() {
