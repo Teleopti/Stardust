@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 							  ColorNameToCss(shiftLayer.Color)));
 		}
 
-		private static string ColorNameToCss(string colorName)
+		public static string ColorNameToCss(string colorName)
 		{
 			var color = System.Drawing.Color.FromName(colorName);
 			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);

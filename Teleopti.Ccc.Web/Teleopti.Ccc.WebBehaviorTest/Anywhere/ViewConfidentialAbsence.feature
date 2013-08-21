@@ -32,7 +32,6 @@ Background:
 	| Color        | Red      |
 	
 #team schedule view
-@ignore
 Scenario: Cannot view confidential absence in team view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
@@ -45,7 +44,6 @@ Scenario: Cannot view confidential absence in team view when no permission
 	| Field | Value |
 	| Color | gray  |
 
-@ignore
 Scenario: View confidential absence in team view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with

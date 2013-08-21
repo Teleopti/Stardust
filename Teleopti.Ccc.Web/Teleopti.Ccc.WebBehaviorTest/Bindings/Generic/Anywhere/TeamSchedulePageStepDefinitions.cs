@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
 			var absence = table.CreateInstance<AbsenceInfo>();
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, absence.Color);
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
 		}
 
 
