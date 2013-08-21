@@ -1,9 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
@@ -47,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 		{
 			var bus = MockRepository.GenerateMock<IServiceBus>();
 			var target = new EventsConsumer(null, bus, null);
-			var message = new EventsPackageMessage {Events = new[] {new Event()}};
+			var message = new EventsPackageMessage {Events = new List<Event> {new Event()}};
 
 			target.Consume(message);
 

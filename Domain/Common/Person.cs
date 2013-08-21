@@ -413,8 +413,10 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private IEnumerable<PersonPeriodDetail> gatherPersonPeriodDetails()
 		{
-			return
-				InternalPersonPeriodCollection.Select(
+			var personPeriods = InternalPersonPeriodCollection;
+			if (personPeriods == null) return Enumerable.Empty<PersonPeriodDetail>();
+			return 
+				personPeriods.Select(
 					p =>
 					new PersonPeriodDetail
 						{
@@ -932,6 +934,11 @@ namespace Teleopti.Ccc.Domain.Common
             }
             return TimeSpan.Zero;
         }
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode() ^ 431;
+		}
     }
 
     class PersonEqualityComparer : IEqualityComparer<IPerson>

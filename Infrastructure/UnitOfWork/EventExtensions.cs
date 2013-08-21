@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			setValuesFromIdentity(@event,identity);
 		}
 
-		public static IEnumerable<IEvent> SetMessageDetail(this IEnumerable<IEvent> @event)
+		public static List<Event> SetMessageDetail(this IEnumerable<IEvent> @event)
 		{
 			var domainEvents = @event.OfType<IRaptorDomainMessageInfo>();
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				setValuesFromIdentity(message, identity);
 			}
-			return @event;
+			return @event.OfType<Event>().ToList();
 		}
 
 		private static void setValuesFromIdentity(IRaptorDomainMessageInfo message, ITeleoptiIdentity identity)

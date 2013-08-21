@@ -139,8 +139,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
+    <Compile Include="ApplicationLayer\ITestHandler.cs" />
     <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
+    <Compile Include="ApplicationLayer\TestEvent.cs" />
+    <Compile Include="ApplicationLayer\TestEventTwo.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug22600.cs" />
@@ -361,6 +364,7 @@
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
     <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />

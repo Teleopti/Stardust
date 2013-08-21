@@ -1,6 +1,4 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Deployment.Application;
@@ -22,8 +20,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Win.Services;
 using Teleopti.Messaging.Composites;
-
-#endregion
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -130,6 +126,7 @@ namespace Teleopti.Ccc.Win.Main
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
 												      {
+														  new EventsMessageSender(new DenormalizationQueueEventsPublisher(saveToDenormalizationQueue,sendDenormalizeNotification)),
 												          new ScheduleMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue), 
                                                           new MeetingMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue),
                                                           new GroupPageChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),

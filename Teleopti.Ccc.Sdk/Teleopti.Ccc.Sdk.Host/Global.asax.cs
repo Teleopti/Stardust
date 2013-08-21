@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -23,7 +22,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
@@ -73,6 +71,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IMessageSender>
         			                       	{
+												new EventsMessageSender(new DenormalizationQueueEventsPublisher(saveToDenormalizationQueue,busSender)),
                                                 new ScheduleMessageSender(busSender,saveToDenormalizationQueue),
                                                 new MeetingMessageSender(busSender,saveToDenormalizationQueue),
                                                 new GroupPageChangedMessageSender(busSender,saveToDenormalizationQueue  ),

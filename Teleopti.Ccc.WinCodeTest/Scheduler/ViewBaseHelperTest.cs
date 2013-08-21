@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -24,9 +25,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-    /// <summary>
-    /// Tests for ViewBaseHelper
-    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
     public class ViewBaseHelperTest
     {
@@ -894,25 +892,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyCheckLoadedAndScheduledPeriodDayOff()
         {
-            var personContract = _mockRep.StrictMock<IPersonContract>();
-
             _baseDateTime = new DateOnly(2009, 6, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(_baseDateTime, _baseDateTime.AddDays(6));
-            IPerson person = new Person();
-            var info = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+	        var personContract = _mockRep.DynamicMock<IPersonContract>();
+            var person = PersonFactory.CreatePersonWithPersonPeriod(_baseDateTime,Enumerable.Empty<ISkill>());
+			var personPeriod = person.Period(_baseDateTime);
+            var info = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1);
             schedulePeriod.SetDaysOff(2);
             person.AddSchedulePeriod(schedulePeriod);
-
-            var personPeriod = _mockRep.StrictMock<IPersonPeriod>();
+			
+			personPeriod.PersonContract = personContract;
+			    
             using (_mockRep.Record())
             {
-                Expect.Call(personPeriod.StartDate).Return(_baseDateTime).Repeat.AtLeastOnce();
-                Expect.Call(() => personPeriod.SetParent(person));
-                Expect.Call(personPeriod.PersonContract).Return(personContract).Repeat.AtLeastOnce();
                 Expect.Call(personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
-  
             }
             using (_mockRep.Playback())
             {
@@ -933,8 +928,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _baseDateTime = new DateOnly(2009, 6, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(_baseDateTime, _baseDateTime.AddDays(6));
-            IPerson person = new Person();
-            var info = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var person = PersonFactory.CreatePersonWithPersonPeriod(_baseDateTime,Enumerable.Empty<ISkill>());
+	        var personPeriod = person.Period(_baseDateTime);
+            var info = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1)
                                      {
@@ -942,14 +938,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                      };
 
             person.AddSchedulePeriod(schedulePeriod);
-            var personPeriod = _mockRep.StrictMock<IPersonPeriod>();
+	        personPeriod.PersonContract = personContract;
+
             using (_mockRep.Record())
             {
-                Expect.Call(personPeriod.StartDate).Return(_baseDateTime).Repeat.AtLeastOnce();
-                Expect.Call(() => personPeriod.SetParent(person));
-                Expect.Call(personPeriod.PersonContract).Return(personContract).Repeat.AtLeastOnce();
                 Expect.Call(personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
- 
             }
             using (_mockRep.Playback())
             {

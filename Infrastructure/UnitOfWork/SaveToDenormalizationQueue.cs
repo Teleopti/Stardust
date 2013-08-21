@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Helper;
+﻿using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				"INSERT INTO dbo.DenormalizationQueue (BusinessUnit,Timestamp,[Message],Type) VALUES (:BusinessUnit,:Timestamp,:Message,:Type)")
 				.SetDateTime("Timestamp", message.Timestamp)
 				.SetGuid("BusinessUnit", message.BusinessUnitId)
-				.SetString("Message", SerializationHelper.SerializeAsXml(message))
+				.SetString("Message", JsonConvert.SerializeObject(message).ToCompressedBase64String())
 				.SetString("Type", message.GetType().AssemblyQualifiedName)
 				.Execute();
 		}

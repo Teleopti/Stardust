@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
+			if (!withEvents.Any()) return;
+
 			var events = withEvents.SelectMany(e => e.PopAllEvents()).ToArray();
 			_publisher.Publish(events);
 		}
