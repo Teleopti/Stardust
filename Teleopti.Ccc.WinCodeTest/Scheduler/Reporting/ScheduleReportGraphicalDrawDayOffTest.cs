@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -20,12 +19,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         private MockRepository _mock;
         private IScheduleDay _scheduleDay;
         private DateTimePeriod _timelinePeriod;
-        private IPersonDayOff _personDayOff;
-        private ReadOnlyCollection<IPersonDayOff> _personDayOffs;
         private Rectangle _projectionRectangle;
         private DateTimePeriod _scheduleDayPeriod;
         private DayOff _dayOff;
-        private ReadOnlyCollection<IPersonAssignment> _personAssignments;
         private IPersonAssignment _personAssignment;
         private IEnumerable<IOvertimeShiftLayer> _overtimeShifts;
 
@@ -39,14 +35,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _timelinePeriod = new DateTimePeriod(2011, 1, 10, 2011, 1, 12);
             _projectionRectangle = new Rectangle(0, 0, 100, 10);
             _target = new ScheduleReportGraphicalDrawDayOff(_scheduleDay, _timelinePeriod, _projectionRectangle, false, page.Graphics);
-            _personDayOff = _mock.StrictMock<IPersonDayOff>();
-            _personDayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{_personDayOff});
             var startDateTime = new DateTime(2011, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var endDateTime = startDateTime.AddHours(24);
             _scheduleDayPeriod = new DateTimePeriod(startDateTime, endDateTime);
             _dayOff = new DayOff(startDateTime, TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description("day off", "do"), Color.Gray, "payrollCode");
             _personAssignment = _mock.StrictMock<IPersonAssignment>();
-            _personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment});
 	        _overtimeShifts = new[]
 		        {
 			        new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())
@@ -93,15 +86,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             using(_mock.Record())
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
-                Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_personAssignment.OvertimeLayers()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
+	            Expect.Call(_personAssignment.DayOff()).Return(_dayOff).Repeat.AtLeastOnce();
             }
 
             using(_mock.Playback())
             {
                 var personDayOff = _target.PersonDayOff();
-                Assert.AreEqual(_personDayOff, personDayOff);
+				Assert.AreEqual(_dayOff, personDayOff);
             }
         }
 
@@ -111,8 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             using(_mock.Record())
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
-                Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();	
-                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_personAssignment.OvertimeLayers()).Return(_overtimeShifts);
             }
 
@@ -169,10 +161,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
-                Expect.Call(_personDayOff.DayOff).Return(_dayOff).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_personAssignment.OvertimeLayers()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
+	            Expect.Call(_personAssignment.DayOff()).Return(_dayOff);
             }
 
             using (_mock.Playback())

@@ -73,14 +73,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
         public IDayOff PersonDayOff()
         {
-            if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff || !_scheduleDay.HasDayOff()) return null;
+            if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff) 
+				return null;
 
-            var overtime = (from p in _scheduleDay.PersonAssignmentCollectionDoNotUse()
-                            where p.OvertimeLayers().Any()
-                            select p).ToList();
-
-
-            return overtime.Count > 0 ? null : _scheduleDay.PersonAssignment().DayOff();
+	        var personAssignment = _scheduleDay.PersonAssignment();
+			var overtime = personAssignment.OvertimeLayers().Any();
+			return overtime ? null : personAssignment.DayOff();
         }
 
         public DateTimePeriod Period()
