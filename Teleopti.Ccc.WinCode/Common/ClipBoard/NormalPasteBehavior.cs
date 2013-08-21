@@ -1,4 +1,8 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using System.Linq;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using System;
 using System.Collections.Generic;
@@ -17,9 +21,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
     /// </remarks>
     public class NormalPasteBehavior : PasteBehavior, IPasteBehavior
     {
-
-
-
         /// <summary>
         /// Todo Fix this, moved from Win, rewrite & test
         /// </summary>
@@ -31,11 +32,13 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         public IList<T> DoPaste<T>(GridControl gridControl, ClipHandler<T> clipHandler, IGridPasteAction<T> gridPasteAction, GridRangeInfoList rangeList)
         {
             IList<T> pasteList = new List<T>();
+	        bool multipleColumnsPaste = clipHandler.ClipList.Count > 1;
 
             if (clipHandler.ClipList.Count > 0)
             {
                 foreach (GridRangeInfo range in rangeList)
                 {
+	                if (range.Left != range.Right) multipleColumnsPaste = true;
                     //loop all rows in selection, step with height in clip
                     for (int row = range.Top; row <= range.Bottom; row += clipHandler.RowSpan())
                     {
@@ -55,13 +58,25 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 										if(IsFullDayAbsence(part))
 										{
 											Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)ReducedAbsence(part));
+											
 											//IScheduleDay dest = gridControl[row + reducedClip.RowOffset, col + reducedClip.ColOffset].CellValue as IScheduleDay;
 											// skip the Paste if there already is a FullDayAbsence
 											//if (!IsFullDayAbsence(dest))
 											//{
 											pasteResult = gridPasteAction.Paste(gridControl, reducedClip, row + reducedClip.RowOffset, col + reducedClip.ColOffset);
 											if (pasteResult != null)
+											{
 												pasteList.Add(pasteResult);
+
+												if (!multipleColumnsPaste)
+												{
+													foreach (var item in pasteList)
+													{
+														AdjustFullDayAbsenceNextDay(item);
+													}
+												}
+											}
+
 											//}
 	
 										}
@@ -82,6 +97,32 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             return pasteList;
         }
 
+		protected static void AdjustFullDayAbsenceNextDay<T>(T part)
+		{
+			var destination = part as IScheduleDay;
+			if (destination == null) return;
+
+			foreach (var data in destination.PersistableScheduleDataCollection())
+			{
+				var personAbsence = data as IPersonAbsence;
+				if(personAbsence == null) continue;
+
+				var assignment = destination.AssignmentHighZOrder();
+				if (assignment == null) continue;
+
+				var dayPeriod = destination.DateOnlyAsPeriod.Period();
+				var nextDay = assignment.Period.EndDateTime > dayPeriod.EndDateTime && assignment.Period.StartDateTime < dayPeriod.EndDateTime;
+
+				if (assignment.MainShift != null && nextDay)
+				{
+					var diffEnd = personAbsence.Period.EndDateTime.Subtract(assignment.Period.EndDateTime);
+					var diffStart = personAbsence.Period.StartDateTime.Subtract(assignment.Period.StartDateTime);
+					personAbsence.Layer.ChangeLayerPeriodEnd(-diffEnd);
+					personAbsence.Layer.ChangeLayerPeriodStart(-diffStart);
+				}
+			}
+		}
+	
         //check if we have a full day absence
         protected static bool IsFullDayAbsence(IScheduleDay part)
         {
@@ -103,6 +144,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 			if(ass != null) part.Remove(ass);
 	
             return part;
-        }	
+        }
     }
 }
