@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
             }
 
-            Assert.AreEqual(0, result.PersonDayOffCollection().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonDayOffCollection().Count);
+            Assert.IsFalse(result.HasDayOff());
+            Assert.IsTrue(_currentScheduleDay.HasDayOff());
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, _newData);
             }
 
-            Assert.AreEqual(1, result.PersonDayOffCollection().Count);
+            Assert.IsTrue(result.HasDayOff());
         }
 
 		[Test]
