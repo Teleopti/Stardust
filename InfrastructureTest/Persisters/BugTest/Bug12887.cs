@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 	[Category("LongRunning")]
 	public class Bug12887 : ScheduleScreenPersisterIntegrationTest
 	{
-		protected override IPersistableScheduleData MakeScheduleData()
+		protected override IPersistableScheduleData SetupScheduleData()
 		{
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
 			personAssignment.SetMainShiftLayers(new[] {new MainShiftLayer(Activity, FirstDayDateTimePeriod)}, ShiftCategory);

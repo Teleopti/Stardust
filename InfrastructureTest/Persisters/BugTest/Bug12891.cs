@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 	[Category("LongRunning")]
 	public class Bug12891 : ScheduleScreenPersisterIntegrationTest
 	{
-		protected override IPersistableScheduleData MakeScheduleData()
+		protected override IPersistableScheduleData SetupScheduleData()
 		{
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
 			personAssignment.SetMainShiftLayers(new[]{new MainShiftLayer(Activity, FirstDayDateTimePeriod)}, ShiftCategory);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 
 			//user 2
 			ScheduleDictionary.TakeSnapshot();
-			ModifyPersonAbsenceAccount();
+			ModifyPersonAbsenceAccountInMemory();
 			addMainShiftActivityLayer();
 		
 			var result = TryPersistScheduleScreen();

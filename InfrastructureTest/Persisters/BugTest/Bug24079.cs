@@ -13,37 +13,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 	[Category("LongRunning")]
 	public class Bug24079 : ScheduleScreenPersisterIntegrationTest
 	{
-		private PersonAssignment _personAssignment;
-
-		protected override IPersistableScheduleData MakeScheduleData()
+		protected override IPersistableScheduleData SetupScheduleData()
 		{
-			_personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			_personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, FirstDayDateTimePeriod) }, ShiftCategory);
-			return _personAssignment;
+			return null;
 		}
 
 		[Test]
-		public void ShouldPersistWithPersonAssignmentKeyConflict()
+		public void ShouldReportConflictWithPersonAssignmentKeyConflict()
 		{
 			MakeTarget();
 
-			CreatePersonAssignmentAsAnotherUser(FirstDayDateOnly);
+			// me, in application
+			AddPersonAssignmentInMemory(FirstDayDateOnly);
+
+			// another user, in database
+			AddPersonAssignmentAsAnotherUser(FirstDayDateOnly);
 
 			var result = TryPersistScheduleScreen();
 
 			result.Saved.Should().Be.False();
 			result.ScheduleDictionaryConflicts.Should().Have.Count.EqualTo(1);
-		}
-
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var repository = new Repository(unitOfWork);
-				var personAssignment = new PersonAssignmentRepository(unitOfWork).Get(_personAssignment.Id.Value);
-				repository.Remove(personAssignment);
-				unitOfWork.PersistAll();
-			}
 		}
 
 		protected override IEnumerable<IAggregateRoot> TestDataToReassociate()
