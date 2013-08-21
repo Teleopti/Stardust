@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (IScheduleDay schedule in schedules)
             {
-                if (schedule.PersonDayOffCollection().Count > 0)
+                if (schedule.HasDayOff())
                     schedulesWithFreeDays.Add(schedule);
             }
 
@@ -77,11 +77,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (IScheduleDay schedule in schedules)
             {
-                foreach (IPersonDayOff dayOff in schedule.PersonDayOffCollection())
-                {
-                    if (dayOff.CompareToTemplateForLocking(dayOffTemplate))
-                        schedulesWithDayOff.Add(schedule);
-                }
+	            var ass = schedule.PersonAssignment();
+							if (ass != null)
+							{
+								if (ass.AssignedWithDayOff(dayOffTemplate))
+								{
+									schedulesWithDayOff.Add(schedule);
+								}
+							}
             }
             return schedulesWithDayOff;
         }

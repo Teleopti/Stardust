@@ -290,21 +290,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
 			StringBuilder sb = new StringBuilder();
         	var culture = TeleoptiPrincipal.Current.Regional.Culture;
-
-            var personDayOffs = cell.PersonDayOffCollection();
-            if (personDayOffs.Count > 0)
-            {
-            	var dayOff = personDayOffs[0].DayOff;
-				sb.AppendLine(dayOff.Description.Name);
-            	sb.Append(Resources.TargetLengthColon + " ");
-				sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
-				sb.Append(Resources.AnchorColon + " ");
-            	sb.AppendLine(
-            		TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
+	        var ass = cell.PersonAssignment();
+					if (ass != null)
+					{
+						var dayOff = ass.DayOff();
+						if (dayOff != null)
+						{
+							sb.AppendLine(dayOff.Description.Name);
+							sb.Append(Resources.TargetLengthColon + " ");
+							sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
+							sb.Append(Resources.AnchorColon + " ");
+							sb.AppendLine(
+								TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
 													 culture));
-				sb.Append(Resources.FlexibilityColon + " ");
-				sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
-            }
+							sb.Append(Resources.FlexibilityColon + " ");
+							sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
+						}
+					}
 
 			return sb.ToString();
         }
