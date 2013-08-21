@@ -26,17 +26,17 @@ Background:
 	| Team       | Team green |
 	| Start date | 2013-08-01 |
 	And there is an absence with
-	| Field        | Value    |
-	| Name         | Vacation |
-	| Confidential | true     |
-	| Color        | Red      |
+	| Field        | Value           |
+	| Name         | Mental disorder |
+	| Confidential | true            |
+	| Color        | Red             |
 	
 #team schedule view
 Scenario: Cannot view confidential absence in team view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
-	| Name       | Vacation         |
+	| Name       | Mental disorder  |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
 	When I view schedules for '2013-08-10'
@@ -48,7 +48,7 @@ Scenario: View confidential absence in team view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
-	| Name       | Vacation         |
+	| Name       | Mental disorder  |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
 	When I view schedules for '2013-08-10'
@@ -62,7 +62,7 @@ Scenario: Cannot view confidential absence in person view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
-	| Name       | Vacation         |
+	| Name       | Mental disorder  |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
@@ -82,7 +82,7 @@ Scenario: View confidential absence in person view when permitted
 	Given I have the role 'Can View Confidential'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
-	| Name       | Vacation         |
+	| Name       | Mental disorder  |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
@@ -93,7 +93,7 @@ Scenario: View confidential absence in person view when permitted
 	| Color      | Red   |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
-	| Name       | Vacation         |
+	| Name       | Mental disorder  |
 	| Color      | Red              |
 	| Start time | 2013-08-10 00:00 |
 	| End time   | 2013-08-10 23:59 |
