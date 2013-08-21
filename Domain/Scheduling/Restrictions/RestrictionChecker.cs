@@ -261,24 +261,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (!_schedulePart.IsScheduled() && preference.DayOffTemplate != null)
 				return PermissionState.Unspecified;
 
-            //todo: How does the dayoff work? 
-            foreach (var dayOff in _schedulePart.PersonDayOffCollection())
-            {
-                permissionState = PermissionState.Satisfied;
+	        var ass = _schedulePart.PersonAssignment();
+					if (ass != null)
+					{
+						var dayOff = ass.DayOff();
+						if (dayOff != null)
+						{
+							permissionState = PermissionState.Satisfied;
 
-                if (preference.DayOffTemplate != null)
-                {
-                    if (!dayOff.CompareToTemplate(preference.DayOffTemplate))
-                    {
-                        //Need to do a return here because the visualLayerCollection can be empty 
-                        return PermissionState.Broken;
-                    }
-                }
-                else
-                    return PermissionState.Broken;
-            }
-
-            return permissionState;
+							if (preference.DayOffTemplate != null)
+							{
+								if (!ass.AssignedWithDayOff(preference.DayOffTemplate))
+								{
+									//Need to do a return here because the visualLayerCollection can be empty 
+									return PermissionState.Broken;
+								}
+							}
+							else
+								return PermissionState.Broken;
+						}
+					}
+           return permissionState;
         }
 
         private IPreferenceRestriction RestrictionPreference()
@@ -460,26 +463,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState)
         {
-            foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollectionDoNotUse())
-            {
-				IShiftCategory shiftCategory = assignment.ShiftCategory;
-				if (preference.ShiftCategory != null && shiftCategory == null)
-                {
-                    permissionState = PermissionState.Broken;
-                }
+					var assignment = _schedulePart.PersonAssignment();
+					if (assignment != null)
+					{
+						IShiftCategory shiftCategory = assignment.ShiftCategory;
+						if (preference.ShiftCategory != null && shiftCategory == null)
+						{
+							permissionState = PermissionState.Broken;
+						}
 
-				if (shiftCategory == null)
-                    continue;
+						if (shiftCategory == null)
+							return permissionState;
 
-                if (preference.ShiftCategory != null)
-                {
-                    if (!preference.ShiftCategory.Equals(shiftCategory))
-                    {
-                        permissionState = PermissionState.Broken;
-                    }
-                }
-            }
-            return permissionState;
+						if (preference.ShiftCategory != null)
+						{
+							if (!preference.ShiftCategory.Equals(shiftCategory))
+							{
+								permissionState = PermissionState.Broken;
+							}
+						}
+					}
+          return permissionState;
         }
 
         private PermissionState checkRotationShiftCategory(IRotationRestriction preference, PermissionState permissionState)
