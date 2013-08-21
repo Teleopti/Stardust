@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (period.HasValue)
             {
                 var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
+                var personalAssignment = schedulePart.PersonAssignment();
                 int cntBefore = shiftList.Count;
                 IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
                 foreach (IShiftProjectionCache t in shiftList)
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (!proj.MainShiftProjection.Period().HasValue) continue;
                     DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
 
-                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
+                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
                     {
                         workShiftsWithinPeriod.Add(proj);
                     }
