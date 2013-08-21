@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime? PreviousTerminationDate { get; set; }
 		public DateTime TerminationDate { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsAfter { get; set; }
 	}
 	
 	[Serializable]
@@ -44,12 +47,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime PreviousTerminationDate { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsAfter { get; set; }
 	}
 
 	[Serializable]
 	public class PersonDeletedEvent : RaptorDomainEvent
 	{
 		public Guid PersonId { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
 	}
 
 	[Serializable]
@@ -58,8 +66,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public DateTime OldStartDate { get; set; }
 		public DateTime NewStartDate { get; set; }
-		public DateTime OldEndDate { get; set; }
-		public DateTime NewEndDate { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsAfter { get; set; }
 	}
 
 	[Serializable]
@@ -67,6 +76,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsAfter { get; set; }
 	}
 
 	[Serializable]
@@ -74,6 +86,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }
+
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsBefore { get; set; }
+		public IEnumerable<PersonPeriodDetail> PersonPeriodsAfter { get; set; }
 	}
 
 	[Serializable]
@@ -106,6 +121,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid SkillId { get; set; }
 		public double Proficiency { get; set; }
 		public bool Active { get; set; }
+	}
+
+	[Serializable]
+	public struct PersonPeriodDetail
+	{
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+		public Guid TeamId { get; set; }
+		public IEnumerable<PersonSkillDetail> PersonSkillDetails { get; set; }
 	}
 
 	[Serializable]
