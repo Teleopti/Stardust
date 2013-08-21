@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             _selectedDate = dateOnly;
             _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate);
-            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly), TeleoptiPrincipal.Current.Regional.TimeZone);
+            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly), TimeZoneGuard.Instance.TimeZone);
         }
 
 

@@ -14,10 +14,16 @@ Background:
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
 	And there is a role with
-	| Field                      | Value                        |
-	| Name                       | Cannot View Unpublished |
-	| Access to team             | Team green                   |
-	| Access to Anywhere         | true                         |
+	| Field                      | Value           |
+	| Name                       | Anywhere My Own |
+	| Access to my own           | true            |
+	| Access to Anywhere         | true            |
+	| View unpublished schedules | true            |
+	And there is a role with
+	| Field              | Value                   |
+	| Name               | Cannot View Unpublished |
+	| Access to team     | Team green              |
+	| Access to Anywhere | true                    |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
@@ -35,14 +41,19 @@ Background:
 	| Name  | Phone |
 	| Color | Green |
 	And there is a workflow control set with
-	| Field                      | Value                   |
+	| Field                      | Value                      |
 	| Name                       | Schedule published to 0809 |
-	| Schedule published to date | 2013-08-09              |
+	| Schedule published to date | 2013-08-09                 |
 	And there is a workflow control set with
-	| Field                      | Value                   |
+	| Field                      | Value                      |
 	| Name                       | Schedule published to 0810 |
-	| Schedule published to date | 2013-08-10              |
+	| Schedule published to date | 2013-08-10                 |
 	
+Scenario: View empty when no team available
+	Given I have the role 'Anywhere My Own'
+	When I view schedules for '2013-08-10'
+	Then I should see no team available
+
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with

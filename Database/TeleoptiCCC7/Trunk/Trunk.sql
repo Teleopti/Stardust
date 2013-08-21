@@ -967,3 +967,20 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-08-16
+--Desc: PBI #21978 - dropping min,max columns from personassignment(AUD).
+----------------  
+DROP INDEX [IX_PersonAssignment_AK1] ON [dbo].[PersonAssignment]
+DROP INDEX [IX_Scenario_Minimum_Maximum] ON [dbo].[PersonAssignment]
+GO
+
+ALTER TABLE [dbo].[PersonAssignment]
+DROP COLUMN Minimum, Maximum
+GO
+
+ALTER TABLE [Auditing].[PersonAssignment_AUD]
+DROP COLUMN Minimum, Maximum
+GO

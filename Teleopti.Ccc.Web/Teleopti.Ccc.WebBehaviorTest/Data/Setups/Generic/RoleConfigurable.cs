@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string BusinessUnit { get; set; }
 
 		public string AccessToTeam { get; set; }
+		public bool AccessToMyOwn { get; set; }
 
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
+			AccessToMyOwn = false;
 			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
@@ -61,12 +63,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		{
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
+			var availableDataRangeOption = AccessToMyOwn ? AvailableDataRangeOption.MyOwn : AvailableDataRangeOption.MyTeam;
 			var availableData = new AvailableData
-			                    	{
-			                    		ApplicationRole = role,
-			                    		AvailableDataRange = AvailableDataRangeOption.MyTeam
-			                    	};
+			{
+				ApplicationRole = role,
+				AvailableDataRange = availableDataRangeOption
+			};
 			role.AvailableData = availableData;
+			
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
