@@ -17,18 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 	[Category("LongRunning")]
 	public class Bug11817 : ScheduleScreenPersisterIntegrationTest
 	{
-		private ShiftCategory _shiftCategory;
-		private Activity _activity;
 		private PersonAssignment _personAssignment;
-
-		[SetUp]
-		public void Bug11817Setup()
-		{
-			_shiftCategory = new ShiftCategory("sc");
-			_activity = new Activity("sdfsdfsdf");
-			PersistAndRemoveFromUnitOfWork(_shiftCategory);
-			PersistAndRemoveFromUnitOfWork(_activity);
-		}
 
 		protected override IPersistableScheduleData MakeScheduleData()
 		{
@@ -53,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		private void AddPersonAssignment()
 		{
 			_personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			_personAssignment.SetMainShiftLayers(new[]{new MainShiftLayer(_activity, FirstDayDateTimePeriod)}, _shiftCategory);
+			_personAssignment.SetMainShiftLayers(new[]{new MainShiftLayer(Activity, FirstDayDateTimePeriod)}, ShiftCategory);
 
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 			scheduleDay.Add(_personAssignment);
@@ -67,15 +56,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 				var repository = new Repository(unitOfWork);
 				var personAssignment = new PersonAssignmentRepository(unitOfWork).Get(_personAssignment.Id.Value);
 				repository.Remove(personAssignment);
-				repository.Remove(_shiftCategory);
-				repository.Remove(_activity);
 				unitOfWork.PersistAll();
 			}
 		}
 
 		protected override IEnumerable<IAggregateRoot> TestDataToReassociate()
 		{
-			return new IAggregateRoot[] {_shiftCategory, _activity};
+			return new IAggregateRoot[] { };
 		}
 
 	}

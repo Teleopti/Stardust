@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		protected IPersistableScheduleData ScheduleData { get; set; }
 		protected IScheduleDictionary ScheduleDictionary { get; private set; }
 		protected IAbsence Absence { get; private set; }
+		protected IActivity Activity { get; private set; }
+		protected IShiftCategory ShiftCategory { get; private set; }
 		protected DateOnly AccountDate { get; set; }
 		protected IAccount Account { get; set; }
 		protected DateTime ScheduleStartDate { get; set; }
@@ -103,26 +105,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			SetupDependencies();
 		}
 
-		private void SetupDatabase()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				new PersonRepository(unitOfWork).Add(Person);
-				new AbsenceRepository(unitOfWork).Add(Absence);
-				new PersonAbsenceAccountRepository(unitOfWork).Add(PersonAbsenceAccount);
-				new ScenarioRepository(unitOfWork).Add(Scenario);
-				new ScheduleRepository(unitOfWork).Add(ScheduleData);
-
-				unitOfWork.PersistAll();
-			}
-		}
-
 		private void SetupEntities() 
 		{
 			Person = PersonFactory.CreatePerson("person", "one");
 			Absence = AbsenceFactory.CreateAbsence("absence");
 			Absence.Tracker = Tracker.CreateDayTracker();
 			PersonAbsenceAccount = new PersonAbsenceAccount(Person, Absence);
+			Activity = new Activity("activity");
+			ShiftCategory = new ShiftCategory("shift category");
 			PersonWriteProtectionInfoCollection = new List<IPersonWriteProtectionInfo>();
 			AccountDate = DateOnly.Today;
 			Account = new AccountDay(AccountDate);
@@ -138,6 +128,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		}
 
 		protected abstract IPersistableScheduleData MakeScheduleData();
+
+		private void SetupDatabase()
+		{
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				new PersonRepository(unitOfWork).Add(Person);
+				new AbsenceRepository(unitOfWork).Add(Absence);
+				new PersonAbsenceAccountRepository(unitOfWork).Add(PersonAbsenceAccount);
+				new ActivityRepository(unitOfWork).Add(Activity);
+				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
+				new ScenarioRepository(unitOfWork).Add(Scenario);
+				new ScheduleRepository(unitOfWork).Add(ScheduleData);
+
+				unitOfWork.PersistAll();
+			}
+		}
 
 		private void SetupScheduleDictionary() 
 		{
@@ -173,6 +179,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				var person = personRepository.Get(Person.Id.Value);
 				var absenceRepository = new AbsenceRepository(unitOfWork);
 				var absence = absenceRepository.Get(Absence.Id.Value);
+				var activityRepository = new ActivityRepository(unitOfWork);
+				var activity = activityRepository.Get(Activity.Id.Value);
+				var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
+				var shiftCategory = shiftCategoryRepository.Get(ShiftCategory.Id.Value);
 				var scenarioRepository = new ScenarioRepository(unitOfWork);
 				var scenario = scenarioRepository.Get(Scenario.Id.Value);
 				var session = unitOfWork.FetchSession();
@@ -183,6 +193,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				repository.Remove(personAbsenceAccount);
 				repository.Remove(person);
 				repository.Remove(absence);
+				repository.Remove(activity);
+				repository.Remove(shiftCategory);
 				repository.Remove(scenario);
 				if (scheduleData != null)
 					repository.Remove(scheduleData);
@@ -213,6 +225,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 				personAbsenceAccountRepository.Add(personAbsenceAccountToChange);
 
+				unitOfWork.PersistAll();
+			}
+		}
+
+		protected void CreatePersonAssignmentAsAnotherUser(DateOnly date)
+		{
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+				var personAssignment = new PersonAssignment(Person, Scenario, date);
+				personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, FirstDayDateTimePeriod) }, ShiftCategory);
+				personAssignmentRepository.Add(personAssignment);
 				unitOfWork.PersistAll();
 			}
 		}
@@ -248,7 +272,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
 		{
-			return new[] { new IAggregateRoot[] { Scenario }, TestDataToReassociate() };
+			return new[] { new IAggregateRoot[] { Scenario, Activity, ShiftCategory }, TestDataToReassociate() };
 		}
 
 		protected abstract IEnumerable<IAggregateRoot> TestDataToReassociate();

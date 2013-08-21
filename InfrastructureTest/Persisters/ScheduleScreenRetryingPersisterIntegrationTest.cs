@@ -22,7 +22,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			return new Note(Person, FirstDayDateOnly, Scenario, "a test note");
 		}
 
-		protected override IEnumerable<IAggregateRoot> TestDataToReassociate() { return new IAggregateRoot[] { }; }
+		protected override IEnumerable<IAggregateRoot> TestDataToReassociate()
+		{
+			return new IAggregateRoot[] { };
+		}
 
 		private static T UnitOfWorkAction<T>(Func<IUnitOfWork, T> expressionThatRequiresUnitOfWork)
 		{
