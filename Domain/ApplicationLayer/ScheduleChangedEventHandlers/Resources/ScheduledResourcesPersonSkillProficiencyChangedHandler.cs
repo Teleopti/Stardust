@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
@@ -13,30 +12,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 	{
 		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
-		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private int configurableIntervalLength = 15;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduledResourcesPersonSkillActivatedHandler));
 
-		public ScheduledResourcesPersonSkillProficiencyChangedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, IPersonRepository personRepository, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
+		public ScheduledResourcesPersonSkillProficiencyChangedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_readModelFinder = readModelFinder;
-			_personRepository = personRepository;
 			_skillRepository = skillRepository;
 			_scenarioRepository = scenarioRepository;
 		}
 
 		public void Handle(PersonSkillProficiencyChangedEvent @event)
 		{
-			var person = _personRepository.Get(@event.PersonId);
-			if (person == null)
-			{
-				Logger.WarnFormat("No person was found with the id {0}", @event.PersonId);
-				return;
-			}
-
 			configurableIntervalLength = _skillRepository.MinimumResolution();
 
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));

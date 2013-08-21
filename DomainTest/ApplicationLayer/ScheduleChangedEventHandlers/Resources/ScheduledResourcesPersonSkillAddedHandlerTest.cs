@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private ScheduledResourcesPersonSkillAddedHandler _target;
 		private IScheduledResourcesReadModelStorage _storage;
 		private readonly Guid _activityId = Guid.NewGuid();
+		private readonly Guid _personId = Guid.NewGuid();
 		private IPersonRepository _personRepository;
 		private ISkill _skill;
 		private readonly DateOnly _date = new DateOnly(2010,1,1);
 		private readonly DateTimePeriod _period = new DateTimePeriod(new DateTime(2010, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 		                                                             new DateTime(2010, 1, 1, 12, 15, 0, DateTimeKind.Utc));
-		private IPerson _person;
 		private ISkillRepository _skillRepository;
 		private IScheduleProjectionReadOnlyRepository _readModelFinder;
 		private IScenarioRepository _scenarioRepository;
@@ -39,17 +39,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_readModelFinder = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			_skill = SkillFactory.CreateSkill("Skill1");
 			_skill.SetId(Guid.NewGuid());
-			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] {_skill});
-			_person.SetId(Guid.NewGuid());
 			_scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			_target = new ScheduledResourcesPersonSkillAddedHandler(_storage, _readModelFinder, _personRepository, _skillRepository, _scenarioRepository);
+			_target = new ScheduledResourcesPersonSkillAddedHandler(_storage, _readModelFinder, _skillRepository, _scenarioRepository);
 		}
 
 		[Test]
 		public void ShouldHandleNewSkillWithProficiencyWhenNoPreviousPersonSkill()
 		{
 			_readModelFinder.Stub(
-				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _person.Id.GetValueOrDefault(), _scenario.Id.GetValueOrDefault()))
+				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _personId, _scenario.Id.GetValueOrDefault()))
 			                .Return(new[]
 				                {
 					                new ProjectionChangedEventLayer
@@ -60,13 +58,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						                }
 				                });
 			_storage.Stub(x => x.AddResources(_activityId, false, _skill.Id.ToString(), _period, 1, 1)).Return(2);
-			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_skillRepository.Stub(x => x.MinimumResolution()).Return(15);
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 
 			_target.Handle(new PersonSkillAddedEvent
 				{
-					PersonId = _person.Id.GetValueOrDefault(),
+					PersonId = _personId,
 					SkillId = _skill.Id.GetValueOrDefault(),
 					StartDate = _date,
 					EndDate = _date,
@@ -84,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var newSkillId = Guid.NewGuid();
 
 			_readModelFinder.Stub(
-				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _person.Id.GetValueOrDefault(), _scenario.Id.GetValueOrDefault()))
+				x => x.ForPerson(new DateOnlyPeriod(_date, _date), _personId, _scenario.Id.GetValueOrDefault()))
 							.Return(new[]
 				                {
 					                new ProjectionChangedEventLayer
@@ -97,13 +94,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_storage.Stub(x => x.AddResources(_activityId, false, SkillCombination.ToKey(new[]{newSkillId, _skill.Id.GetValueOrDefault()}), _period, 1, 1)).Return(4);
 			_storage.Stub(x => x.RemoveResources(_activityId, _skill.Id.ToString(), _period, 1, 1)).Return(2);
-			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_skillRepository.Stub(x => x.MinimumResolution()).Return(15);
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 
 			_target.Handle(new PersonSkillAddedEvent
 			{
-				PersonId = _person.Id.GetValueOrDefault(),
+				PersonId = _personId,
 				SkillId = newSkillId,
 				StartDate = _date,
 				EndDate = _date,
