@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
+namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
     public class ShiftCategoryPerAgent
     {

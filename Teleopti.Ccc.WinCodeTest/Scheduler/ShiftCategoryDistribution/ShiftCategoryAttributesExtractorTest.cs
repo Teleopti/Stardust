@@ -8,9 +8,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 {
     [TestFixture]
-    public class ShiftCategoryInformationExtractorTest
+    public class ShiftCategoryAttributesExtractorTest
     {
-        private IShiftCategoryInformationExtractor _target;
+        private IShiftCategoryAttributesExtractor _target;
         private ShiftCategoryStructure _shiftCategoryStructure1;
         private ShiftCategoryStructure _shiftCategoryStructure2;
         private ShiftCategoryStructure _shiftCategoryStructure3;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         [SetUp]
         public void Setup()
         {
-            _target = new ShiftCategoryInformationExtractor();
+            _target = new ShiftCategoryAttributesExtractor();
             _person1 = PersonFactory.CreatePerson("person1");
             _person2 = PersonFactory.CreatePerson("person2");
             _person3 = PersonFactory.CreatePerson("person3");

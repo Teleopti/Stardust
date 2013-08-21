@@ -5,26 +5,15 @@ using Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
-    public interface IShiftFairnessCalculator
+
+    public static class ShiftFairnessCalculator 
     {
-        IList<ShiftFairness> GetShiftFairness();
-    }
 
-    public class ShiftFairnessCalculator : IShiftFairnessCalculator
-    {
-        private readonly IEnumerable<ShiftCategoryPerAgent> _shiftCategoryPerAgentList;
-
-        public ShiftFairnessCalculator(IEnumerable<ShiftCategoryPerAgent> shiftCategoryPerAgentList)
-        {
-            _shiftCategoryPerAgentList = shiftCategoryPerAgentList;
-            
-        }
-
-        public IList<ShiftFairness> GetShiftFairness()
+        public static IList<ShiftFairness> GetShiftFairness(IEnumerable<ShiftCategoryPerAgent> shiftCategoryPerAgentList)
         {
             var returnShiftFairness = new List<ShiftFairness>();
             var shiftCategoryPerAgentCountValues = new Dictionary<string, List<double>>();
-            foreach (var shiftCategoryPerAgent in _shiftCategoryPerAgentList)
+            foreach (var shiftCategoryPerAgent in shiftCategoryPerAgentList)
             {
                 if (shiftCategoryPerAgentCountValues.ContainsKey(shiftCategoryPerAgent.ShiftCategoryName))
                 {
@@ -48,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             return returnShiftFairness;
         }
 
-        private double getStandardDeviation(List<double> doubleList)
+        private static double getStandardDeviation(List<double> doubleList)
         {
             double average = doubleList.Average();
             double sumOfDerivation = 0;

@@ -4,36 +4,36 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
-    public interface IShiftCategoryInformationExtractor
+    public interface IShiftCategoryAttributesExtractor
     {
-        void ExtractShiftCategoryInformation(List<ShiftCategoryStructure> shiftCategoryStructureList);
-        List<String> ShiftCategories { get; }
-        List<IPerson> PersonInvolved { get; }
-        List<DateOnly> Dates { get; }
+        void ExtractShiftCategoryInformation(IList<ShiftCategoryStructure> shiftCategoryStructureList);
+        IList<String> ShiftCategories { get; }
+        IList<IPerson> PersonInvolved { get; }
+        IList<DateOnly> Dates { get; }
     }
     
-    public class ShiftCategoryInformationExtractor : IShiftCategoryInformationExtractor
+    public class ShiftCategoryAttributesExtractor : IShiftCategoryAttributesExtractor
     {
-        private List<string> _shiftCategories;
-        private List<IPerson> _persons; 
-        private List<DateOnly> _dates ; 
+        private IList<string> _shiftCategories;
+        private IList<IPerson> _persons; 
+        private IList<DateOnly> _dates ; 
 
-        public List<string> ShiftCategories
+        public IList<string> ShiftCategories
         {
             get { return _shiftCategories; }
         }
 
-        public List<IPerson> PersonInvolved
+        public IList<IPerson> PersonInvolved
         {
             get { return _persons; }
         }
 
-        public List<DateOnly> Dates
+        public IList<DateOnly> Dates
         {
             get { return _dates; }
         }
 
-        public void ExtractShiftCategoryInformation(List<ShiftCategoryStructure> shiftCategoryStructureList)
+        public void ExtractShiftCategoryInformation(IList<ShiftCategoryStructure> shiftCategoryStructureList)
         {
             _shiftCategories = new List<string>();
             _persons  = new List<IPerson>();
