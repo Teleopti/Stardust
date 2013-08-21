@@ -192,6 +192,8 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
     <Compile Include="Core\HttpPostOrPutAttributeTest.cs" />
+    <Compile Include="Core\MessageBroker\ActionImmediateTest.cs" />
+    <Compile Include="Core\MessageBroker\ActionThrottleTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerHubTest.cs" />
     <Compile Include="Core\MessageBroker\SignalRConfigurationTest.cs" />
     <Compile Include="Core\MessageBroker\TimeoutSettingsTest.cs" />

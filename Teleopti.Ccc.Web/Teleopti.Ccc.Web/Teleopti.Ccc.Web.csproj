@@ -206,6 +206,15 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionImmediate.cs">
+      <Link>Core\MessageBroker\ActionImmediate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionThrottle.cs">
+      <Link>Core\MessageBroker\ActionThrottle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
+      <Link>Core\MessageBroker\IActionScheduler.cs</Link>
+    </Compile>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />

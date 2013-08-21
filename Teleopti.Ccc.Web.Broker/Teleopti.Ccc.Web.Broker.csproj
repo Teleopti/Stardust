@@ -115,9 +115,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionImmediate.cs" />
+    <Compile Include="ActionThrottle.cs" />
+    <Compile Include="DependencyResolverExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="IActionScheduler.cs" />
     <Compile Include="MessageBrokerHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalRConfiguration.cs" />
