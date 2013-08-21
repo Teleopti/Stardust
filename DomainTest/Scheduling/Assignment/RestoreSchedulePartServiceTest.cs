@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScheduleDay _source;
         private IPersonAssignment _personAssignment;
         private IPersonAbsence _personAbsence;
-        private ReadOnlyCollection<IPersonAssignment> _personAssignments;
         private ReadOnlyCollection<IPersonAbsence> _personAbsences;
         private MockRepository _mocks;
         
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _source = _mocks.StrictMock<IScheduleDay>();
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
             _personAbsence = _mocks.StrictMock<IPersonAbsence>();
-            _personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment});
             _personAbsences = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _target = new RestoreSchedulePartService(_rollbackService, _destination, _source);
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             		new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(() => _destination.Clear<IPersonDayOff>());
 
-                Expect.Call(_source.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_source.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_source.PersonAbsenceCollection()).Return(_personAbsences);
 
                 Expect.Call(_personAssignment.NoneEntityClone()).Return(_personAssignment);

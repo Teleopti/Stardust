@@ -31,10 +31,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         	}
         	_destination.Clear<IPersonDayOff>();
 
-            foreach (var personAssingment in _source.PersonAssignmentCollectionDoNotUse())
-            {
-                _destination.Add(personAssingment.NoneEntityClone());
-            }
+	        var personAssignment = _source.PersonAssignment();
+					if (personAssignment != null)
+					{
+						_destination.Add(personAssignment.NoneEntityClone());
+					}
 
             foreach (var personAbsence in _source.PersonAbsenceCollection())
             {
