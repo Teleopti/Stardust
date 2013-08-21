@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -30,125 +31,171 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldGetTeamSchedule()
 		{
 			var teamId = Guid.NewGuid();
-			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
+			var scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var data = new[] { new PersonScheduleDayReadModel { Shift = "{FirstName: 'Pierre'}" } };
-			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(data);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(1))); // set the published date one day after the schedule time
+			var shifts = new[] {new PersonScheduleDayReadModel {Shift = "{FirstName: 'Pierre', Projection: [{Title:'Vacation', Color:'Red'}]}"}};
+			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(shifts);
+			
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-			                  .Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, _user))
-			                  .Return(true);
-			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, null);
+							  .Return(true);
+			var schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
+				.Return(new[] { person });
+			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, schedulePersonProvider);
 
-			var result = target.TeamSchedule(teamId, dateTime).First();
+			var result = target.TeamSchedule(teamId, scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldFilterOutUnpublishedSchedule()
 		{
 			var teamId = Guid.NewGuid();
-			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
+			var scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var person1 = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2013, 3, 10));
-			var person2 = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2013, 2, 10));
-			var data = new[]
+			var personScheduleDayReadModelRepository = MockRepository.GenerateStub<IPersonScheduleDayReadModelFinder>();
+			var personWithPublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(1))); // set the published date one day after the schedule time
+			var personWithUnpublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(-1))); // set the published date one day before the schedule time
+			var schedules = new[]
 				{
-					new PersonScheduleDayReadModel {PersonId = person1.Id.Value, Shift = "{FirstName: 'Pierre', Projection: [{Title:'Vocation', Color:'Red'}]}"},
-					new PersonScheduleDayReadModel {PersonId = person2.Id.Value, Shift = "{FirstName: 'Ashley'}"}
+					new PersonScheduleDayReadModel {PersonId = personWithPublishedSchedule.Id.Value, Shift = "{FirstName: 'Published', Projection: [{Title:'Vacation', Color:'Red'}]}"},
+					new PersonScheduleDayReadModel {PersonId = personWithUnpublishedSchedule.Id.Value, Shift = "{FirstName: 'Unpublished'}"}
 				};
-			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(data);
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var schedulePersonProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
-			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(dateTime), teamId,
-			                                                              DefinedRaptorApplicationFunctionPaths
-				                                                              .SchedulesAnywhere)).Return(new[] {person1, person2});
-			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(dateTime), teamId,
-															  DefinedRaptorApplicationFunctionPaths
-																  .ViewConfidential)).Return(new[] { person1, person2 });
+			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId))
+				.Return(schedules);
+
+			// has not permission for ViewUnpublishedSchedules
+			var permissionProvider = MockRepository.GenerateStub<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+				.Return(false);
+
+			var schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
+				.Return(new[] { personWithPublishedSchedule, personWithUnpublishedSchedule });
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
+				.Return(new[] { personWithPublishedSchedule, personWithUnpublishedSchedule });
+
 			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, schedulePersonProvider);
 
-			var result = target.TeamSchedule(teamId, dateTime);
+			var result = target.TeamSchedule(teamId, scheduleDate);
 			result.Count().Should().Be.EqualTo(1);
-			result.First().FirstName.Should().Be.EqualTo("Pierre");
+			result.First().FirstName.Should().Be.EqualTo("Published");
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldGreyConfidentialAbsenceIfNoPermission()
 		{
 			var teamId = Guid.NewGuid();
-			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
+			var scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
-			var person1 = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2013, 3, 10));
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(1)));
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var data = new[]
+			var schedules = new[]
 				{
 					new PersonScheduleDayReadModel
 						{
-							PersonId = person1.Id.Value,
+							PersonId = person.Id.Value,
 							Shift =
-								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vocation', Color:'Red', IsAbsenceConfidential:'true'}]}"
+								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'true'}]}"
 						}
 				};
-			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(data);
+			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(schedules);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var schedulePersonProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
-			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(dateTime), teamId,
-															  DefinedRaptorApplicationFunctionPaths
-																  .SchedulesAnywhere)).Return(new[] { person1 });
-			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(dateTime), teamId,
-															  DefinedRaptorApplicationFunctionPaths
-																  .ViewConfidential)).Return(new[] { person1 });
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
+				.Return(new[] { person });
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+			     DefinedRaptorApplicationFunctionPaths.ViewConfidential))
+			     .Return(new List<IPerson>()); // no person with confidental
 
 			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, schedulePersonProvider);
 
-			var result = target.TeamSchedule(teamId, dateTime).First();
+			var result = target.TeamSchedule(teamId, scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 			result.Projection[0].Title.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldNotGreyNormalAbsenceIfNoPermission()
 		{
 			var teamId = Guid.NewGuid();
-			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
+			var scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(1)));
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var data = new[]
+			var schedules = new[]
 				{
 					new PersonScheduleDayReadModel
 						{
+							PersonId = person.Id.Value,
 							Shift =
-								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vocation', Color:'Red'}]}"
+								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'false'}]}"
 						}
 				};
-			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(data);
+			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(schedules);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-							  .Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, _user))
-							  .Return(false);
-			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, null);
+			var schedulePersonProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
+				.Return(new[] { person });
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
+				 .Return(new List<IPerson>()); // no person with confidental
 
-			var result = target.TeamSchedule(teamId, dateTime).First();
+			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, schedulePersonProvider);
+
+			var result = target.TeamSchedule(teamId, scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
-			result.Projection[0].Title.Should().Be.EqualTo("Vocation");
+			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
 			result.Projection[0].Color.Should().Be.EqualTo("Red");
+		}
+
+
+		[Test]
+		public void ShouldNotGreyConfidentialAbsenceIfHasPermission()
+		{
+			var teamId = Guid.NewGuid();
+			var scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
+			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduleDate.AddDays(1)));
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			var schedules = new[]
+				{
+					new PersonScheduleDayReadModel
+						{
+							PersonId = person.Id.Value,
+							Shift =
+								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'true'}]}"
+						}
+				};
+			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(schedules);
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var schedulePersonProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
+				.Return(new[] { person });
+			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(scheduleDate), teamId,
+				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
+				 .Return(new[] { person }); // no person with confidental
+
+			var target = new TeamScheduleProvider(personScheduleDayReadModelRepository, permissionProvider, schedulePersonProvider);
+
+			var result = target.TeamSchedule(teamId, scheduleDate).First();
+			result.FirstName.Should().Be.EqualTo("Pierre");
+			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
+			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.Red));
 		}
 	}
 }
