@@ -8,8 +8,6 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	
-
 	[HubName("MessageBrokerHub")]
 	public class MessageBrokerHub : TestableHub
 	{
@@ -90,6 +88,3 @@ namespace Teleopti.Ccc.Web.Broker
 
 	}
 }
-	
-
-	
