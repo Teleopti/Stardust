@@ -74,18 +74,15 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				}
 				catch (OptimisticLockExceptionOnScheduleDictionary)
 				{
-					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
-					return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
 				}
 				catch (ForeignKeyExceptionOnScheduleDictionary)
 				{
-					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
-					return new ScheduleScreenPersisterResult { Saved = false, ScheduleDictionaryConflicts = conflicts };
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
 				}
 				catch (PersonAssignmentConstraintViolationOnScheduleDictionary)
 				{
-					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
-					return new ScheduleScreenPersisterResult { Saved = false, ScheduleDictionaryConflicts = conflicts };
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
 				}
 				catch (OptimisticLockException)
 				{
@@ -93,6 +90,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				}
 			} while (retry);
 			return new ScheduleScreenPersisterResult {Saved = true};
+		}
+
+		private IScheduleScreenPersisterResult scheduleDictionaryConflictResult(IScheduleDictionary scheduleDictionary, IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
+			return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
 		}
 
 
