@@ -397,7 +397,7 @@
 		</PropertyGroup>
 		<Message Importance="high" Text="Copying data from xml to database" />
 		<Exec Command='$(CCNetWorkingDirectory)\ccnet\GetRevision.bat "$(RevisionOutput)"'/>
-		<Exec Command="$(NDependTransferDataPath) $(RevisionOutput) $(NDependOutput) $(NCoverOutput)" />
+		<Exec Command='$(NDependTransferDataPath) "$(RevisionOutput)" "$(NDependOutput)" "$(NCoverOutput)"'/>
 	</Target>
   
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
