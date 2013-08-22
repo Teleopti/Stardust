@@ -27,9 +27,12 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
     {
         public static IPersonAssignment GetPersonAssignmentForLayer(IScheduleDay schedule, ILayer<IPayload> layer)
         {
-        	IList<IPersonAssignment> pAssignCollection = schedule.PersonAssignmentCollectionDoNotUse();
-
-        	return pAssignCollection.FirstOrDefault(personAssignment => personAssignment.Period.Intersect(layer.Period));
+	        var ass = schedule.PersonAssignment();
+					if (ass != null && ass.Period.Intersect(layer.Period))
+					{
+						return ass;
+					}
+	        return null;
         }
 
 

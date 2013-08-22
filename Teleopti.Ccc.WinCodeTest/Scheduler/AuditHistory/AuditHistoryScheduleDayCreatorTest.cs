@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -93,8 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
             }
 
-            Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonAssignmentCollectionDoNotUse().Count);
+	        result.PersonAssignment().Should().Be.Null();
+					_currentScheduleDay.PersonAssignment().Should().Not.Be.Null();
         }
 
         [Test]
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, _newData);
             }
 
-            Assert.AreEqual(1, result.PersonAssignmentCollectionDoNotUse().Count);
+						result.PersonAssignment().Should().Not.Be.Null();
         }
 
 		[Test]
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
 
 			var result = _target.Create(_currentScheduleDay, _newData);
-			Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
+			result.PersonAssignment().Should().Be.Null();
 		}	
     }
 }
