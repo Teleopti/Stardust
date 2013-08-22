@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						           : s.PersonRestrictionCollection().OfType<IPreferenceDay>().SingleOrDefault()))
 				.ForMember(s => s.DayOff,
 				           o =>
-				           o.MapFrom(s => s.PersonDayOffCollection() == null ? null : s.PersonDayOffCollection().SingleOrDefault()))
+				           o.MapFrom(s => s.HasDayOff() ? 
+											s.PersonAssignment(false).DayOff() : 
+											null))
 				.ForMember(s => s.Absence, o => o.MapFrom(s => (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence ||
 				                                                s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) &&
 				                                               s.PersonAbsenceCollection() != null
@@ -106,8 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				;
 
-			CreateMap<IPersonDayOff, DayOffDayViewModel>()
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
+			CreateMap<IDayOff, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.Description.Name))
 				;
 
 			CreateMap<IPersonAbsence, AbsenceDayViewModel>()

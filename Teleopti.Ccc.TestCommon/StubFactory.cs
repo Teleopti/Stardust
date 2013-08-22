@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.TestCommon
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
 			scheduleDay.Stub(x => x.TotalPeriod()).Return(totalPeriod);
-			//scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] {});
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)
@@ -125,6 +124,10 @@ namespace Teleopti.Ccc.TestCommon
 			if (personAssignment != null)
 			{
 				scheduleDay.Stub(x => scheduleDay.PersonAssignment()).Return(personAssignment);
+				if (personAssignment.DayOff() != null)
+				{
+					scheduleDay.Stub(x => x.HasDayOff()).Return(true);
+				}
 			}
 			if (personAbsences != null)
 			{

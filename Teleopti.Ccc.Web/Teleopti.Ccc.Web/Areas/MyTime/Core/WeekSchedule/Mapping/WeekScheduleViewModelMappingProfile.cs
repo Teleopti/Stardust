@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>()
-				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().First().DayOff.Description.Name))
+				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).DayOff().Description.Name))
 				.ForMember(d => d.Summary, c => c.Ignore())
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
