@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEnumerable<IPersistConflict> GetConflicts(IScheduleDictionary scheduleDictionary, IOwnMessageQueue messageQueueUpdater)
 		{
 			messageQueueUpdater.ReassociateDataWithAllPeople();

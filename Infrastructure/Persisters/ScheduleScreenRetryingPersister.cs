@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
 		}
 
-
 		private void saveWriteProtectionInSeparateTransaction(IUnitOfWorkFactory unitOfWorkFactory, ICollection<IPersonWriteProtectionInfo> personWriteProtectionInfos)
 		{
 			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
