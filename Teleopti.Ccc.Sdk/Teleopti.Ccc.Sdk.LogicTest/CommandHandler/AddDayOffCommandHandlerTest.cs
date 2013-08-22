@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_addAbsenceCommandDto);
-                scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
+                scheduleDay.HasDayOff().Should().Be.True();
             }
         }
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_addAbsenceCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_addAbsenceCommandDto);
-				scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
+				scheduleDay.HasDayOff().Should().Be.True();
 			}
 		}
     }
