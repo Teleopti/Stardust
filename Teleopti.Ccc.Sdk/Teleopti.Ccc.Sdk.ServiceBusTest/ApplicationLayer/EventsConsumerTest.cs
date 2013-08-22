@@ -5,7 +5,6 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
