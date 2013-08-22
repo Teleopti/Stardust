@@ -10,11 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
             foreach (var shiftCategoryStructure in mappedShiftCategoriesList)
             {
-                if (assignShiftDistrubuionIfExists(shiftDistributionList,shiftCategoryStructure))
-                {
-                    
-                }
-                else
+                if (!assignShiftDistrubuionIfExists(shiftDistributionList,shiftCategoryStructure))
                 {
                     shiftDistributionList.Add(new ShiftDistribution(shiftCategoryStructure.DateOnlyValue,
                                                                     shiftCategoryStructure.ShiftCategoryValue
