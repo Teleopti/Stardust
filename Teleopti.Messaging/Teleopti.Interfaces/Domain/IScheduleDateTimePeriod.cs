@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -12,16 +10,6 @@ namespace Teleopti.Interfaces.Domain
     /// </remarks>
     public interface IScheduleDateTimePeriod
     {
-        /// <summary>
-        /// Gets the person collection.
-        /// </summary>
-        /// <value>The person collection.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-14
-        /// </remarks>
-        ReadOnlyCollection<IPerson> PersonCollection { get; }
-
         /// <summary>
         /// Gets the visible period.
         /// </summary>

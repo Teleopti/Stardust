@@ -41,8 +41,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[REV]
 		,[REVTYPE]
 		,[Version]
-		,[Minimum]
-		,[Maximum]
 		,[Person]
 		,[Scenario]
 		,[BusinessUnit]
@@ -52,8 +50,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,ar.Id
 		,0
 		,p.Version
-		,[Minimum]
-		,[Maximum]
 		,[Person]
 		,[Scenario]
 		,p.BusinessUnit

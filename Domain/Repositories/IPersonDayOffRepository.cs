@@ -37,29 +37,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         ICollection<IPersonDayOff> Find(IEnumerable<IPerson> agents, DateTimePeriod period,
                                        IScenario scenario);
-        /// <summary>
-        /// Finds the specified period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-11-09
-        /// </remarks>
-        ICollection<IPersonDayOff> Find(DateTimePeriod period);
-
-        /// <summary>
-        /// Finds the days off by boundary.
-        /// </summary>
-        /// <param name="agents">The agents.</param>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-11
-        /// </remarks>
-        ICollection<IPersonDayOff> FindByBoundary(IEnumerable<IPerson> agents,
-                                                DateTimePeriod period);
 
         /// <summary>
         /// Finds the specified period.

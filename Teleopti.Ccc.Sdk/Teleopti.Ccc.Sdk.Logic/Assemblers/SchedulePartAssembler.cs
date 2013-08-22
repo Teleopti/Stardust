@@ -97,7 +97,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             IPerson person = PersonRepository.Load(schedulePartDto.PersonId);
             DateTimePeriod period = partPeriod(schedulePartDto);
-            DateTimePeriod skaVaraPersonernaIListansFullaSchemaPeriod = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
+
+	        var skaVaraPersonernaIListansFullaSchemaPeriod =
+		        period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
             IScheduleDictionary scheduleDictionary =
                 ScheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, false),
                                                                      skaVaraPersonernaIListansFullaSchemaPeriod,
@@ -242,6 +244,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 											.CreateProjection();
             part.ProjectedLayerCollection.Clear();
             part.ContractTime = DateTime.MinValue.Add(proj.ContractTime());
+	        part.WorkTime = DateTime.MinValue.Add(proj.WorkTime());
+	        part.PaidTime = DateTime.MinValue.Add(proj.PaidTime());
 
             if (proj.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
                 part.IsFullDayAbsence = true;

@@ -62,6 +62,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
 		}
+
+		[Then(@"I should see no team available")]
+		public void ThenIShouldSeeNoTeamAvailable()
+		{
+			Browser.Interactions.AssertExists("#team-selector");
+			Browser.Interactions.AssertNotExists("#team-selector", "#team-selector option");
+		}
+
 		
 		public class TeamInfo
 		{

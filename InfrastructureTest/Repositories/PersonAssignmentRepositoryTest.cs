@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [ExpectedException(typeof(ArgumentNullException))]
         public void CannotUseNullAsScenario()
         {
-            _rep.Find(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), null);
+            _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null);
         }
 
 
@@ -141,9 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAssignmentsByDatesAndScenario()
         {
             var notToFindScenario = new Scenario("NotToFind");
-            var searchPeriod =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc));
+            var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
 
             ////////////setup////////////////////////////////////////////////////////////////
             IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -190,7 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             new PersonRepository(UnitOfWork).Remove(_dummyAgent);
             PersistAndRemoveFromUnitOfWork(_dummyAgent);
 
-            Assert.AreEqual(0, _rep.Find(new DateTimePeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);
+            Assert.AreEqual(0, _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);
         }
 
         /// <summary>
@@ -204,9 +202,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAgentAssignmentsByDatesAndScenario()
         {
             var notToFindScenario = new Scenario("NotToFind");
-            var searchPeriod =
-                new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc));
+            var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
 
             #region setup test data
 

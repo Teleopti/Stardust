@@ -286,6 +286,7 @@
     <Compile Include="DataTransferObject\SkillDayDto.cs" />
     <Compile Include="DataTransferObject\SkillDto.cs" />
     <Compile Include="DataTransferObject\TeamDto.cs" />
+    <Compile Include="DataTransferObject\PayrollBaseExportDto.cs" />
     <Compile Include="DataTransferObject\TextRequestDto.cs" />
     <Compile Include="DataTransferObject\TimeLimitationDto.cs" />
     <Compile Include="DataTransferObject\ValidatedSchedulePartDto.cs" />

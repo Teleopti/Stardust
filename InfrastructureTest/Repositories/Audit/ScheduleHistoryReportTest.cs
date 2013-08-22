@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
+									new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
+								  new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}

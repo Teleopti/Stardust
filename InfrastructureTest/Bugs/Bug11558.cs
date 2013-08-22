@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using System.Reflection;
-using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
             using(var uow = dataSource.Application.CreateAndOpenUnitOfWork())
             {
 
-                var session = grabUowSession(uow);
+                var session = uow.FetchSession();
                 Assert.Throws<DataSourceException>(() =>
                                         session.CreateSQLQuery(query)
                                             .SetString("waitFor", "00:00:02")
@@ -41,12 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
                                             );
 
             }
-        }
-
-        private static ISession grabUowSession(IUnitOfWork uow)
-        {
-            return (ISession)uow.GetType()
-                .GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(uow, null);
         }
     }
 }
