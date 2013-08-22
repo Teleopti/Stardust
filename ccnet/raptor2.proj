@@ -31,6 +31,8 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
+		
+		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -375,7 +377,7 @@
 		</NCoverReporting>
 
 		<Message Importance="high" Text="NCoverReporting finished." />
-	</Target>
+	</Target> 
 	
 	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="Compile" >
     <PropertyGroup>
@@ -387,6 +389,16 @@
     <Exec
       Command='"$(NDPath)" "$(NDProject)" /OutDir "$(NDOut)"'/>
   </Target>
+	<Target Name="CopyNDependStatisticsToDatabase" DependsOnTargets="NDepend">
+		<PropertyGroup>
+			<RevisionOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\Revision.txt</RevisionOutput>
+			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\</NDependOutput>
+			<NCoverOutput>$(CCNetWorkingDirectory)\</NCoverOutput>
+		</PropertyGroup>
+		<Message Importance="high" Text="Copying data from xml to database" />
+		<Exec Command='$(CCNetWorkingDirectory)\ccnet\GetRevision.bat "$(RevisionOutput)"'/>
+		<Exec Command="$(NDependTransferDataPath) $(RevisionOutput) $(NDependOutput) $(NCoverOutput)" />
+	</Target>
   
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
 		<Message Importance="high" Text="Running FxCop target..." />
