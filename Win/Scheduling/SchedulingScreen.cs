@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateOnly _currentIntraDayDate;
 		private DockingManager _dockingManager;
 		private FormAgentInfo _agentInfo;
+		private AgentInfoControl _agentInfoControl;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
@@ -4781,6 +4782,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tabInfoPanels.TabPages.Clear();
 			var agentInfoTab = ColorHelper.CreateTabPage("Agent Info", "Agent Information");
 			_tabInfoPanels.TabPages.Add(agentInfoTab);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
+			_agentInfoControl.Dock = DockStyle.Fill;
+			agentInfoTab.Controls.Add(_agentInfoControl);
 			var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
 		}

@@ -586,6 +586,12 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\AgentInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentInfoControl.Designer.cs">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\ShiftCategory\ScheduleDayListFactory.cs" />
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
@@ -2638,6 +2644,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentInfoControl.resx">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterOvertimeAvailabilityView.resx">
       <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
