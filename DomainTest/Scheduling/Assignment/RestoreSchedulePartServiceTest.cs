@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(() => _destination.Clear<IPersonAssignment>());
             	Expect.Call(_destination.PersonAbsenceCollection()).Return(
             		new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-                Expect.Call(() => _destination.Clear<IPersonDayOff>());
 
                 Expect.Call(_source.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_source.PersonAbsenceCollection()).Return(_personAbsences);

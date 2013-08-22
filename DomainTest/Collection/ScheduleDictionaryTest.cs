@@ -195,22 +195,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                                                   new DateTimePeriod(2000, 6, 1, 2000, 6,
                                                                                                      2));
 
-                    IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff.Anchor = TimeSpan.FromHours(10);
-                    dOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-                    IPersonDayOff dayOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                  new DateOnly(2000, 6, 1), dOff);
 
                     Guid assId = Guid.NewGuid();
                     Guid absId = Guid.NewGuid();
-                    Guid dayOffId = Guid.NewGuid();
                     ass.SetId(assId);
                     abs.SetId(absId);
-                    dayOff.SetId(dayOffId);
                     Schedule schedule = (Schedule) part;
                     schedule.Add(ass);
                     schedule.Add(abs);
-                    schedule.Add(dayOff);
 
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
@@ -245,22 +237,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                                                   new DateTimePeriod(2000, 6, 1, 2000, 6,
                                                                                                      2));
 
-                    IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff.Anchor = TimeSpan.FromHours(10);
-                    dOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-                    IPersonDayOff dayOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                  new DateOnly(2000, 6, 1), dOff);
-
                     Guid assId = Guid.NewGuid();
                     Guid absId = Guid.NewGuid();
-                    Guid dayOffId = Guid.NewGuid();
                     ass.SetId(assId);
                     abs.SetId(absId);
-                    dayOff.SetId(dayOffId);
                     Schedule schedule = (Schedule)part;
                     schedule.Add(ass);
                     schedule.Add(abs);
-                    schedule.Add(dayOff);
 
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
@@ -280,15 +263,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
             IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
             dOff1.Anchor = TimeSpan.Zero;
             dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-            IPersonDayOff dOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario, new DateOnly(2000, 1, 2), dOff1);
             IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             ((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
             target.TakeSnapshot();
-            ((ScheduleRange)target[dummyPerson]).Add(dOff);
             ((ScheduleRange)target[dummyPerson]).Add(pAbs);
 
             //this is actually "wrong" but do this for easier mocking-asserts
-            dOff.SetId(Guid.NewGuid());
             pAbs.SetId(Guid.NewGuid());
 
             using (mocks.Record())
@@ -297,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     .IgnoreArguments()
                     .Constraints(
                             List.Equal(new List<IPersistableScheduleData> { pAss }),
-                            List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs, dOff })
+                            List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs})
                                 )
                     .Return(new DifferenceCollection<IPersistableScheduleData>());
             }
@@ -341,28 +321,21 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
                     dOff1.Anchor = TimeSpan.FromHours(10);
                     dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-                    IPersonDayOff dayOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                  new DateOnly(2000, 6, 1), dOff1);
-
                     Guid assId = Guid.NewGuid();
                     Guid absId = Guid.NewGuid();
                     Guid dayOffId = Guid.NewGuid();
                     ass.SetId(assId);
                     abs.SetId(absId);
-                    dayOff.SetId(dayOffId);
                     Schedule schedule = (Schedule) part;
                     schedule.Add(ass);
                     schedule.Add(abs);
-                    schedule.Add(dayOff);
 
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
                     target.TakeSnapshot();
 
                     Assert.AreSame(ass, target.DeleteFromBroker(assId));
                     Assert.AreSame(abs, target.DeleteFromBroker(absId));
-                    Assert.AreSame(dayOff, target.DeleteFromBroker(dayOffId));
                     Assert.IsFalse(target[dummyPerson].Contains(ass));
-                    Assert.IsFalse(target[dummyPerson].Contains(dayOff));
                     Assert.IsFalse(target[dummyPerson].Contains(abs));
 
                     IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();

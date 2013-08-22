@@ -230,8 +230,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (!Owner.PermissionsEnabled)
                     return false; //if loaded from db, ignore stuff outside period
-                if((scheduleData is IPersonDayOff))
-                    throw new DayOffOutsideScheduleException(scheduleData.Period + " is outside " + Period + ". Cannot add to Schedule.");
 				////TODO check with RK, problems when splitting long absence periods
 				//if (!(scheduleData is IPersonAbsence))
 				//    throw new ArgumentOutOfRangeException(scheduleData.Period + " is outside " + Period + ". Cannot add to Schedule.");

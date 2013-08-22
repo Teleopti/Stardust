@@ -388,8 +388,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 personAbsence.Split(period).ForEach(splitList.Add);
             }
 
-            Clear<IPersonDayOff>();
-
             IList<IPersonAbsence> filterList = new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
             foreach (IPersonAbsence data in filterList)
             {
@@ -773,8 +771,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 					return;
 				}
-
-			Clear<IPersonDayOff>();
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);

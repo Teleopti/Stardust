@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         	{
         		_destination.Remove(personAbsence);
         	}
-        	_destination.Clear<IPersonDayOff>();
 
 	        var personAssignment = _source.PersonAssignment();
 					if (personAssignment != null)
