@@ -11683,4 +11683,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</value>
     <comment>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</comment>
   </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Send again</value>
+    <comment>Send again (ie. shifttrade)</comment>
+  </data>
 </root>

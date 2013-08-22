@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     /// </summary>
     public interface IFactoryProvider
     {
+        TeleoptiPayrollExportFactory CreateTeleoptiPayrollFactory(ILifetimeScope lifetimeScope);
         ScheduleFactory CreateScheduleFactory(ILifetimeScope lifetimeScope);
         IPersonRequestFactory CreatePersonRequestFactory(ILifetimeScope lifetimeScope);
         LicenseFactory CreateLicenseFactory();
@@ -31,6 +32,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         public FactoryProvider(IComponentContext container)
         {
             _container = container;
+        }
+
+        public TeleoptiPayrollExportFactory CreateTeleoptiPayrollFactory(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.Resolve<TeleoptiPayrollExportFactory>();
         }
 
         public ScheduleFactory CreateScheduleFactory(ILifetimeScope lifetimeScope)

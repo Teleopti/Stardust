@@ -20791,6 +20791,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send again.
+        /// </summary>
+        public static string SendAgain {
+            get {
+                return ResourceManager.GetString("SendAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send message (ASM).
         /// </summary>
         public static string SendASM {
