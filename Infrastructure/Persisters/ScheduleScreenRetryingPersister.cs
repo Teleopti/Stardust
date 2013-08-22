@@ -77,6 +77,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
 					return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
 				} 
+				catch (ForeignKeyExceptionOnScheduleDictionary)
+				{
+					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
+					return new ScheduleScreenPersisterResult { Saved = false, ScheduleDictionaryConflicts = conflicts };
+				}
 				catch (OptimisticLockException)
 				{
 					return new ScheduleScreenPersisterResult {Saved = false};
@@ -179,10 +184,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			}
 			catch(ForeignKeyException exception)
 			{
-				//special case. if fk-exception -> treat it like opt lock
+				//special case.
 				//because the reason is probably a deleted ref row i db
-				var fakeOptLock = new OptimisticLockException(exception.Message, exception);
-				throw new OptimisticLockExceptionOnScheduleDictionary(fakeOptLock);
+				throw new ForeignKeyExceptionOnScheduleDictionary(exception);
 			}
 		}
 
@@ -193,8 +197,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
 		private class OptimisticLockExceptionOnScheduleDictionary : Exception
 		{
-			public OptimisticLockExceptionOnScheduleDictionary(OptimisticLockException innerException)
-				: base(null, innerException) {}
+			public OptimisticLockExceptionOnScheduleDictionary(OptimisticLockException innerException) : base(null, innerException) {}
 		}
+
+		private class ForeignKeyExceptionOnScheduleDictionary : Exception
+		{
+			public ForeignKeyExceptionOnScheduleDictionary(ForeignKeyException innerException) : base(null, innerException) { }
 	}
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		}
 
 		[Test]
-		public void PersonAccountConflictShouldWorkWithDeletedScheduleData()
+		public void ShouldGiveConflictWithDeletedScheduleData()
 		{
 			ScheduleDictionaryConflictCollector = new ScheduleDictionaryConflictCollector(ScheduleRepository, new LazyLoadingManagerWrapper());
 			MakeTarget();
