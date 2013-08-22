@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 
 			target.Consume(message);
 
-			bus.AssertWasCalled(x => x.Send(message.Events));
+			bus.AssertWasCalled(x => x.Send(message.Events.ToArray()));
 		}
 
 	}

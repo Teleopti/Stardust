@@ -4490,26 +4490,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Cursor = Cursors.WaitCursor;
 				using (PerformanceOutput.ForOperation("Persisting changes"))
 				{
-					using (new DenormalizerContext(new SendDenormalizeNotificationToSdk(_container.Resolve<ISendCommandToSdk>())))
+					_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+					var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
+					                                   _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
+					if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
 					{
-						_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
-						var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections, _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-						if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-						{
-							var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
-							if (conflictHandlingResult.DialogResult == DialogResult.OK)
-								showPleaseSaveAgainDialog();
-							return;
-						}
-						if (!result.Saved)
-						{
-							appologizeAndClose();
-							return;
-						}
-						if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-						{
-							BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
-						}
+						var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
+						if (conflictHandlingResult.DialogResult == DialogResult.OK)
+							showPleaseSaveAgainDialog();
+						return;
+					}
+					if (!result.Saved)
+					{
+						appologizeAndClose();
+						return;
+					}
+					if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+					{
+						BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 					}
 				}
 				_undoRedo.Clear();

@@ -360,7 +360,6 @@
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizerContextTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
     <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
@@ -393,11 +392,8 @@
     <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\PersonPeriodChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
-    <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
-    <Compile Include="UnitOfWork\SqlQueryTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
   </ItemGroup>

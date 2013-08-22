@@ -7,9 +7,10 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
-using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Ccc.Win.Common.ServiceBus;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
@@ -119,19 +120,19 @@ namespace Teleopti.Ccc.Win.Main
             {
                 messageBrokerDisabled = true;
             }
-        	var sendDenormalizeNotification = new SendDenormalizeNotificationToSdk(new SendCommandToSdk(new SdkAuthentication()));
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
+        	
+			var sendToServiceBus = new ServiceBusSender();
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
 												      {
-														  new EventsMessageSender(new DenormalizationQueueEventsPublisher(saveToDenormalizationQueue,sendDenormalizeNotification)),
-												          new ScheduleMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue), 
-                                                          new MeetingMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue),
-                                                          new GroupPageChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
-                                                          new PersonChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
-                                                          new PersonPeriodChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue )
+														  new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(sendToServiceBus))),
+												          new ScheduleMessageSender(sendToServiceBus), 
+                                                          new MeetingMessageSender(sendToServiceBus),
+                                                          new GroupPageChangedMessageSender(sendToServiceBus),
+                                                          new PersonChangedMessageSender(sendToServiceBus),
+                                                          new PersonPeriodChangedMessageSender(sendToServiceBus)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
         			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
         			{

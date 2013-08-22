@@ -64,19 +64,18 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
-        	var busSender = new SendDenormalizeNotificationToBus(denormalizeHandler);
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
+        	var busSender = new ServiceBusSender();
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IMessageSender>
         			                       	{
-												new EventsMessageSender(new DenormalizationQueueEventsPublisher(saveToDenormalizationQueue,busSender)),
-                                                new ScheduleMessageSender(busSender,saveToDenormalizationQueue),
-                                                new MeetingMessageSender(busSender,saveToDenormalizationQueue),
-                                                new GroupPageChangedMessageSender(busSender,saveToDenormalizationQueue  ),
-                                                new PersonChangedMessageSender(busSender,saveToDenormalizationQueue ),
-                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue)
+												new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(busSender))),
+                                                new ScheduleMessageSender(busSender),
+                                                new MeetingMessageSender(busSender),
+                                                new GroupPageChangedMessageSender(busSender),
+                                                new PersonChangedMessageSender(busSender),
+                                                new PersonPeriodChangedMessageSender(busSender)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))

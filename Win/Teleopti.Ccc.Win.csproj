@@ -97,6 +97,9 @@
     <Reference Include="Autofac.Configuration">
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -128,6 +131,15 @@
     </Reference>
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus">
+      <HintPath>..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.Autofac">
+      <HintPath>..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.SqlQueues">
+      <HintPath>..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.8\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Chart.Win.10.2.80\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>
@@ -598,6 +610,9 @@
     <Compile Include="Common\SearchPerson.Designer.cs">
       <DependentUpon>SearchPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
+    <Compile Include="Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
+    <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Common\TextBoxNameExtender.cs" />
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
@@ -824,7 +839,6 @@
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\SendDenormalizeNotificationToSdk.cs" />
     <Compile Include="Main\NavigationModule.cs" />
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
@@ -2880,6 +2894,10 @@
       <DependentUpon>SkillGeneral.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config">
+      <Link>Teleopti.Ccc.Sdk.ServiceBus.Client.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
