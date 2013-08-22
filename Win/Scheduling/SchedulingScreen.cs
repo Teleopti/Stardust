@@ -4788,6 +4788,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			agentInfoTab.Controls.Add(_agentInfoControl);
 			var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
+			var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
+			_tabInfoPanels.TabPages.Add(shiftFairnessTab);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
@@ -5358,7 +5360,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
 			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _agentInfoControl);
 		}
 
