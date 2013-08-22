@@ -80,7 +80,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop;NDepend">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop;NDepend;CopyNDependStatisticsToDatabase">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -392,12 +392,12 @@
 	<Target Name="CopyNDependStatisticsToDatabase" DependsOnTargets="NDepend">
 		<PropertyGroup>
 			<RevisionOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\Revision.txt</RevisionOutput>
-			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\</NDependOutput>
-			<NCoverOutput>$(CCNetWorkingDirectory)\</NCoverOutput>
+			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\\</NDependOutput>
+			<NCoverOutput>$(CCNetWorkingDirectory)\\</NCoverOutput>
 		</PropertyGroup>
 		<Message Importance="high" Text="Copying data from xml to database" />
-		<Exec Command='$(CCNetWorkingDirectory)\ccnet\GetRevision.bat "$(RevisionOutput)"'/>
-		<Exec Command="$(NDependTransferDataPath) $(RevisionOutput) $(NDependOutput) $(NCoverOutput)" />
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\GetRevision.bat&quot; &quot;$(RevisionOutput)&quot;"/>
+		<Exec Command="&quot;$(NDependTransferDataPath)&quot; &quot;$(RevisionOutput)&quot; &quot;$(NDependOutput)&quot; &quot;$(NCoverOutput)&quot;"/>
 	</Target>
   
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
