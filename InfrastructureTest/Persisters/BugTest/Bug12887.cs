@@ -5,8 +5,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		[Test]
 		public void ShouldGiveConflictWithDeletedScheduleData()
 		{
-			ScheduleDictionaryConflictCollector = new ScheduleDictionaryConflictCollector(ScheduleRepository, new LazyLoadingManagerWrapper());
+			ScheduleDictionaryConflictCollector = new ScheduleDictionaryConflictCollector(ScheduleRepository, PersonAssignmentRepository, new LazyLoadingManagerWrapper(), new UtcTimeZone());
 			MakeTarget();
 
 			DeleteScheduleDataAsAnotherUser();

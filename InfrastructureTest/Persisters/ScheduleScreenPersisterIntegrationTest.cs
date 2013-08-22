@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
 		protected ScheduleRepository ScheduleRepository { get; set; }
+		protected PersonAssignmentRepository PersonAssignmentRepository { get; set; }
 
 		protected IScheduleDictionarySaver ScheduleDictionarySaver { get; set; }
 		protected IPersonAbsenceAccount PersonAbsenceAccount { get; set; }
@@ -132,6 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			_messageBrokerModule = Mocks.DynamicMock<IMessageBrokerModule>();
 			_personAbsenceAccountValidator = Mocks.DynamicMock<IPersonAbsenceAccountValidator>();
 			ScheduleRepository = new ScheduleRepository(UnitOfWorkFactory.Current);
+			PersonAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
 			ScheduleDictionaryConflictCollector = Mocks.DynamicMock<IScheduleDictionaryConflictCollector>();
 			ScheduleDictionarySaver = new ScheduleDictionarySaver();
 			Mocks.ReplayAll();

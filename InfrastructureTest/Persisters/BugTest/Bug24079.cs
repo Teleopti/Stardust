@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
@@ -18,6 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		[Test]
 		public void ShouldGiveConflictWithPersonAssignmentConstraintViolation()
 		{
+			ScheduleDictionaryConflictCollector = new ScheduleDictionaryConflictCollector(ScheduleRepository, PersonAssignmentRepository, new LazyLoadingManagerWrapper(), new UtcTimeZone());
 			MakeTarget();
 
 			// me, in application

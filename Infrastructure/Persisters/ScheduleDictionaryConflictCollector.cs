@@ -8,13 +8,22 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	public class ScheduleDictionaryConflictCollector : IScheduleDictionaryConflictCollector 
 	{
 		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly ILazyLoadingManager _lazyLoadingManager;
+		private readonly IUserTimeZone _timeZone;
 
-		public ScheduleDictionaryConflictCollector(IScheduleRepository scheduleRepository, ILazyLoadingManager lazyLoadingManager)
+		public ScheduleDictionaryConflictCollector(
+			IScheduleRepository scheduleRepository, 
+			IPersonAssignmentRepository personAssignmentRepository,
+			ILazyLoadingManager lazyLoadingManager,
+			IUserTimeZone timeZone
+			)
 		{
 
 			_scheduleRepository = scheduleRepository;
+			_personAssignmentRepository = personAssignmentRepository;
 			_lazyLoadingManager = lazyLoadingManager;
+			_timeZone = timeZone;
 		}
 
 		public IEnumerable<IPersistConflict> GetConflicts(IScheduleDictionary scheduleDictionary, IOwnMessageQueue messageQueueUpdater)
@@ -46,7 +55,36 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			                      	                                              inMemoryEntity.Id.Value)
 								  select MakePersistConflict(e, databaseEntity);
 
-			return conflictObjects.ToArray();
+
+
+			var personAssignmentsInDb = _personAssignmentRepository.Find(
+				scheduleDictionary.Period.LoadedPeriod().ToDateOnlyPeriod(_timeZone.TimeZone()), 
+				scheduleDictionary.Scenario);
+
+			var addedPersonAssignments = from e in entityDifferencesSinceLoad
+			                             let pa = e.CurrentItem as IPersonAssignment
+			                             where
+				                             e.Status == DifferenceStatus.Added &&
+				                             pa != null
+			                             select new
+				                             {
+					                             Diff = e, 
+												 CurrentPersonAssignment = pa
+				                             };
+
+			var conflictingAddedPersonAssignments = from e in addedPersonAssignments
+													let inMemoryEntity = e.CurrentPersonAssignment
+			                                        let databaseEntity = (
+				                                                             from pa in personAssignmentsInDb
+																			 where pa.Person.Id == e.CurrentPersonAssignment.Person.Id &&
+																				   pa.Date == e.CurrentPersonAssignment.Date &&
+																				   pa.Scenario.Id == e.CurrentPersonAssignment.Scenario.Id
+				                                                             select pa
+			                                                             ).SingleOrDefault()
+			                                        where databaseEntity != null
+													select MakePersistConflict(e.Diff, databaseEntity); ;
+
+			return conflictObjects.Union(conflictingAddedPersonAssignments).ToArray();
 		}
 
 		private IPersistConflict MakePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
