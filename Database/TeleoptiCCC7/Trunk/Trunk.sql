@@ -1004,3 +1004,7 @@ ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
             Id
             )
 GO
+
+ALTER TABLE auditing.PersonAssignment_AUD ADD
+            DayOffTemplate uniqueidentifier NULL
+GO
