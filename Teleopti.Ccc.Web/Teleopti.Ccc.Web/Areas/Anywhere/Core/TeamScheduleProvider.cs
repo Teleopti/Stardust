@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -28,28 +28,23 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date)
 		{
 			var result = new List<Shift>();
-			var shifts = getTeamScheduleReadModels(teamId, date);
-
+			var schedules = getTeamScheduleReadModels(teamId, date);
 			var permittedPersonsToViewConfidental =
-				_schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential);
-			
-			foreach (PersonScheduleDayReadModel shift in shifts)
+				_schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId,
+				                                                   DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToArray();
+			foreach (var personScheduleDay in schedules)
 			{
-				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
-
-				var shift0 = JsonConvert.DeserializeObject<Shift>(shift.Shift);
-
-				foreach (var layer in shift0.Projection)
+				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == personScheduleDay.PersonId)) != null;
+				var shift = JsonConvert.DeserializeObject<Shift>(personScheduleDay.Shift);
+				if (!canSeeConfidental)
 				{
-					if (!canSeeConfidental && layer.IsAbsenceConfidential)
+					foreach (var layer in shift.Projection.Where(layer => layer.IsAbsenceConfidential))
 					{
-						layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
+						layer.Color = ConfidentialPayloadValues.DisplayColor.ToHtml();
 						layer.Title = ConfidentialPayloadValues.Description.Name;
 					}
-
 				}
-				result.Add(shift0);
-
+				result.Add(shift);
 			}
 			return result;
 		}
