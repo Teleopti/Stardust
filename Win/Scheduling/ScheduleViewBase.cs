@@ -598,34 +598,34 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            foreach (IPersonAssignment personAssignment in personAssignments)
-            {
-                if (personAssignment.PersonalLayers().Any())
-                {
-                    Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
-                    Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
-                    Point pt3 = new Point(e.Bounds.Right, e.Bounds.Y + 6);
+            var personAssignment = scheduleRange.PersonAssignment();
+					if (personAssignment != null)
+					{
+						if (personAssignment.PersonalLayers().Any())
+						{
+							Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
+							Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
+							Point pt3 = new Point(e.Bounds.Right, e.Bounds.Y + 6);
 
-                    e.Graphics.FillPolygon(Brushes.Blue, new[] { pt1, pt2, pt3 });
-                }
-            }
+							e.Graphics.FillPolygon(Brushes.Blue, new[] { pt1, pt2, pt3 });
+						}
+					}
         }
 
         private static void addOvertimeMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            foreach (IPersonAssignment personAssignment in personAssignments)
-            {
-                if (personAssignment.OvertimeLayers().Any())
-                {
-                    Size s = new Size(6, 6);
-                    Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);
-                    Rectangle rectangle = new Rectangle(point1, s);
+            var personAssignment = scheduleRange.PersonAssignment();
+					if (personAssignment != null)
+					{
+						if (personAssignment.OvertimeLayers().Any())
+						{
+							Size s = new Size(6, 6);
+							Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);
+							Rectangle rectangle = new Rectangle(point1, s);
 
-                    e.Graphics.FillRectangle(Brushes.Orange, rectangle);
-                }
-            }
+							e.Graphics.FillRectangle(Brushes.Orange, rectangle);
+						}
+					}
         }
 
         private static void addMeetingMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)

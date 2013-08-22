@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            String symbol = String.Empty;
 		            Color color2 = Color.White;
 
-		            if (scheduleDay.PersonAssignmentCollectionDoNotUse().Count > 0)
+		            if (scheduleDay.PersonAssignment() != null)
 		            {
 			            if (significantPart == SchedulePartView.MainShift)
 			            {
