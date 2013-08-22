@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			}
 		}
 
-		protected void AddPersonAssignmentAsAnotherUser(DateOnly date)
+		protected IPersonAssignment AddPersonAssignmentAsAnotherUser(DateOnly date)
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -203,6 +203,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				personAssignmentRepository.Add(personAssignment);
 
 				unitOfWork.PersistAll();
+
+				return personAssignment;
 			}
 		}
 
