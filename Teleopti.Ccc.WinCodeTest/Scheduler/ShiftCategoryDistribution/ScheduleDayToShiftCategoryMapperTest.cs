@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryInfo;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryInfo
+namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 {
     [TestFixture]
     public class ScheduleDayToShiftCategoryMapperTest
