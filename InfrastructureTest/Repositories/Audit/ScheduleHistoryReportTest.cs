@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportDeleted,
 				ShiftType = Resources.AuditingReportShift,
-				ScheduleEnd = DateTime.MinValue,
-				ScheduleStart = DateTime.MinValue,
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone),
 				Detail = string.Empty,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
@@ -248,8 +248,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = DateTime.MinValue,
-				ScheduleStart = DateTime.MinValue,
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone)
 			};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
