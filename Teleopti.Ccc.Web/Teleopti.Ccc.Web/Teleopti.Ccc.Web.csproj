@@ -218,6 +218,15 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
       <Link>Core\MessageBroker\IActionScheduler.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IBeforeSubscribe.cs">
+      <Link>Core\MessageBroker\IBeforeSubscribe.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionFiller.cs">
+      <Link>Core\MessageBroker\SubscriptionFiller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
+      <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
+    </Compile>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />

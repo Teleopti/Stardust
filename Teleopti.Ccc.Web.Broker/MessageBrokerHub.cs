@@ -8,26 +8,34 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
+	
+
 	[HubName("MessageBrokerHub")]
 	public class MessageBrokerHub : TestableHub
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
 		private readonly IActionScheduler _actionScheduler;
-		
-		public MessageBrokerHub(IActionScheduler actionScheduler)
+		private readonly IBeforeSubscribe _beforeSubscribe;
+
+		public MessageBrokerHub(IActionScheduler actionScheduler, IBeforeSubscribe beforeSubscribe)
 		{
 			_actionScheduler = actionScheduler;
+			_beforeSubscribe = beforeSubscribe;
 		}
 
 		public string AddSubscription(Subscription subscription)
 		{
+			_beforeSubscribe.Invoke(subscription);
+
+			var route = subscription.Route();
+			
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId,
-								   subscription.Route(), RouteToGroupName(subscription.Route()));
+								   route, RouteToGroupName(route));
 			}
-			var route = subscription.Route();
+			
 			Groups.Add(Context.ConnectionId, RouteToGroupName(route))
 				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
 

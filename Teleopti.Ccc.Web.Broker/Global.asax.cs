@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Broker
 
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.Register(c => SignalRConfiguration.ActionThrottle).As<IActionScheduler>();
+			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
 			containerBuilder.RegisterType<MessageBrokerHub>();
 			_container = containerBuilder.Build();
 			GlobalHost.DependencyResolver = new AutofacDependencyResolver(_container.BeginLifetimeScope()); 

@@ -196,6 +196,8 @@
     <Compile Include="Core\MessageBroker\ActionThrottleTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerHubTest.cs" />
     <Compile Include="Core\MessageBroker\SignalRConfigurationTest.cs" />
+    <Compile Include="Core\MessageBroker\SubscriptionFillerTest.cs" />
+    <Compile Include="Core\MessageBroker\SubscriptionPassThroughTest.cs" />
     <Compile Include="Core\MessageBroker\TimeoutSettingsTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageDialoguePersisterTest.cs" />
     <Compile Include="Core\Message\Mapping\MessageViewModelMappingProfileTest.cs" />
