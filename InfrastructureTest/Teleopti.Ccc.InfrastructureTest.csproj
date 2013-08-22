@@ -334,7 +334,6 @@
     <Compile Include="Repositories\ApplicationFunctionRepositoryTest.cs" />
     <Compile Include="Repositories\ApplicationRoleRepositoryTest.cs" />
     <Compile Include="Repositories\BusinessUnitRepositoryTest.cs" />
-    <Compile Include="Repositories\PersonDayOffRepositoryTest.cs" />
     <Compile Include="Repositories\AvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\ContractRepositoryTest.cs" />
     <Compile Include="Repositories\ContractScheduleRepositoryTest.cs" />

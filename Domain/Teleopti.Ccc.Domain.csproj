@@ -1283,7 +1283,6 @@
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformation.cs" />
     <Compile Include="Repositories\IPersonAvailabilityRepository.cs" />
-    <Compile Include="Repositories\IPersonDayOffRepository.cs" />
     <Compile Include="Repositories\IPersonRepository.cs" />
     <Compile Include="Repositories\IRepositoryFactory.cs" />
     <Compile Include="Repositories\IScenarioRepository.cs" />

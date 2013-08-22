@@ -356,7 +356,6 @@
     <Compile Include="Repositories\ApplicationFunctionRepository.cs" />
     <Compile Include="Repositories\ApplicationRoleRepository.cs" />
     <Compile Include="Repositories\BusinessUnitRepository.cs" />
-    <Compile Include="Repositories\PersonDayOffRepository.cs" />
     <Compile Include="Repositories\AvailabilityRepository.cs" />
     <Compile Include="Repositories\PersonAvailabilityRepository.cs" />
     <Compile Include="Repositories\ContractRepository.cs" />

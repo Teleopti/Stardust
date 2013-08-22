@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
@@ -19,9 +19,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var dayOff = new DayOffRepository(uow).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
-			var personDayOff = new PersonDayOff(user, Scenario, dayOff, new DateOnly(Date));
+			var personDayOff = new PersonAssignment(user, Scenario, new DateOnly(Date));
+			personDayOff.SetDayOff(dayOff);
 
-			var repository = new PersonDayOffRepository(uow);
+			var repository = new PersonAssignmentRepository(uow);
 			repository.Add(personDayOff);
 		}
 	}
