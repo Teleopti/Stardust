@@ -187,17 +187,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"),
-		 SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"),
-		 SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
 		private class OptimisticLockExceptionOnPersonAccount : Exception
 		{
 			public OptimisticLockExceptionOnPersonAccount(OptimisticLockException innerException) : base(null, innerException) {}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"),
-		 SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"),
-		 SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
 		private class OptimisticLockExceptionOnScheduleDictionary : Exception
 		{
 			public OptimisticLockExceptionOnScheduleDictionary(OptimisticLockException innerException)
