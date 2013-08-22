@@ -23,38 +23,27 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTimePeriod totalPeriod)
 		{
-			return ScheduleDayStub(totalPeriod.StartDateTime, new Person(), SchedulePartView.MainShift, null, null, null, null,
-			                       null, totalPeriod);
+			return ScheduleDayStub(totalPeriod.StartDateTime, new Person(), SchedulePartView.MainShift, null, null, null, null, totalPeriod);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date)
 		{
-			return ScheduleDayStub(date, SchedulePartView.None, null, null, null, null);
+			return ScheduleDayStub(date, SchedulePartView.None, null, null, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person)
 		{
-			return ScheduleDayStub(date, person, SchedulePartView.None, null, null, null, null);
-		}
-
-		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff)
-		{
-			return ScheduleDayStub(date, significantPartToDisplay, personDayOff, null, null, null);
-		}
-
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff)
-		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, null, null, null);
+			return ScheduleDayStub(date, person, SchedulePartView.None, null, null, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment)
 		{
-			return ScheduleDayStub(date, significantPartToDisplay, null, personAssignment, null, null);
+			return ScheduleDayStub(date, significantPartToDisplay, personAssignment, null, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, null, personAssignment, null, null);
+			return ScheduleDayStub(date, person, significantPartToDisplay, personAssignment, null, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
@@ -64,32 +53,32 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, new[] { personAbsence }, null);
+			return ScheduleDayStub(date, person, significantPartToDisplay, null, new[] { personAbsence }, null);
 		}
 
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
 		{
-			return ScheduleDayStub(date, significantPartToDisplay, null, null, personAbsences, null);
+			return ScheduleDayStub(date, significantPartToDisplay, null, personAbsences, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, significantPartToDisplay, null, null, null, publicNote);
+			return ScheduleDayStub(date, significantPartToDisplay, null, null, publicNote);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
+		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, new Person(), significantPartToDisplay, personDayOff, personAssignment, personAbsences, publicNote);
+			return ScheduleDayStub(date, new Person(), significantPartToDisplay, personAssignment, personAbsences, publicNote);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, personAssignment, personAbsences,
+			return ScheduleDayStub(date, person, significantPartToDisplay, personAssignment, personAbsences,
 								   publicNote, null, null);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings, DateTimePeriod? totalPeriod)
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings, DateTimePeriod? totalPeriod)
 		{
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			                       
@@ -111,15 +100,6 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				var publicNotes = new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>());
 				scheduleDay.Stub(x => x.PublicNoteCollection()).Return(publicNotes);
-			}
-			if (personDayOff != null)
-			{
-				var personDayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> {personDayOff});
-				scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(personDayOffs);
-			}
-			else
-			{
-				scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 			}
 			if (personAssignment != null)
 			{
