@@ -5358,7 +5358,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
 			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo);
+			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _agentInfoControl);
 		}
 
 		private void deleteInMainGrid(PasteOptions deleteOptions)

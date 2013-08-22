@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
-		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, FormAgentInfo agentInfo)
+		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, FormAgentInfo agentInfo, AgentInfoControl agentInfoControl)
 		{
 			if (scheduleView != null)
 			{
@@ -46,6 +46,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (agentInfo != null)
 					agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
+										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
+				if (agentInfoControl != null)
+					agentInfoControl.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
 										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 
 				_statusLabelContractTime.Text = string.Concat(Resources.ContractScheduledTime, " ",
