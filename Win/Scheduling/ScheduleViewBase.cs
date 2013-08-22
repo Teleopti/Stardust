@@ -585,17 +585,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void addMultipleAssignmentMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
-        {
-            //check if we have multiple assignments
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            if (personAssignments.Count > 1)
-            {
-                //draw a marker to indicate we have multiple assignments
-                e.Graphics.DrawString("+", CellFontSmall, Brushes.Black, new Point(e.Bounds.X, e.Bounds.Y));
-            }
-        }
-
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             var personAssignment = scheduleRange.PersonAssignment();
@@ -710,9 +699,6 @@ namespace Teleopti.Ccc.Win.Scheduling
  
         protected void AddMarkersToCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
         {  
-            //multiple assignments
-            addMultipleAssignmentMarkers(e, scheduleRange);
-
             //conflicts
             addConflictMarkers(e, scheduleRange);
 
