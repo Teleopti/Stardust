@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
@@ -33,14 +31,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			DeleteScheduleDataAsAnotherUser();
 
 			ScheduleDictionary.TakeSnapshot();
-			modifyScheduleData();
+			modifyPersonAssignmanrInMemory();
 
 			var result = TryPersistScheduleScreen();
 			Assert.That(result.Saved, Is.False);
 			Assert.That(result.ScheduleDictionaryConflicts.Count(), Is.EqualTo(1));
 		}
 
-		private void modifyScheduleData()
+		private void modifyPersonAssignmanrInMemory()
 		{
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
