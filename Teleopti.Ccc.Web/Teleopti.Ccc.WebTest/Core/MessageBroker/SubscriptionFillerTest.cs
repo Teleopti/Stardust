@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 	public class SubscriptionFillerTest
 	{
 		[Test]
-		public void ShouldFilterSubscriptionWithDatasource()
+		public void ShouldFillSubscriptionWithDatasource()
 		{
 			var target = new SubscriptionFiller(
 				new SpecificDataSource(new FakeDataSource {DataSourceName = "data source"}),
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		}
 
 		[Test]
-		public void ShouldFilterSubscriptionWithBusinessUnitId()
+		public void ShouldFillSubscriptionWithBusinessUnitId()
 		{
 			var businessUnit = new BusinessUnit("unit");
 			businessUnit.SetId(Guid.NewGuid());
