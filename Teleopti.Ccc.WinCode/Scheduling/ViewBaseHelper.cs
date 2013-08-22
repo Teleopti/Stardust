@@ -472,16 +472,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             style.CellType = "TotalDayOffCell";
 
-			//if (!wholeRange.CalculatedScheduleDaysOff.HasValue)
-			//{
-			//    int totalDayOff = 0;
-			//    foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-			//    {
-			//        SchedulePartView significant = scheduleDay.SignificantPart();
-			//        if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-			//            totalDayOff += 1;
-			//    }
-			//    wholeRange.CalculatedScheduleDaysOff = totalDayOff;
 	
 			wholeRange.CalculatedScheduleDaysOff = CurrentTotalDayOffs(wholeRange, period);
 			//}

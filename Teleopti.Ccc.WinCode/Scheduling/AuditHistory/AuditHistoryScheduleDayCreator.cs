@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
             }
             foreach (var persistableScheduleData in currentScheduleDay.PersistableScheduleDataCollection())
             {
-                if(persistableScheduleData is IPersonAbsence || persistableScheduleData is IPersonDayOff)
+                if(persistableScheduleData is IPersonAbsence)
                     resultingDay.Remove(persistableScheduleData);
             }
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
 				}
 				if(persistableScheduleData.Period.ToDateOnlyPeriod(currentScheduleDay.TimeZone).StartDate != currentScheduleDay.DateOnlyAsPeriod.DateOnly)
 					continue;
-                if(persistableScheduleData is IPersonDayOff || persistableScheduleData is IPersonAssignment)
+                if(persistableScheduleData is IPersonAssignment)
                     resultingDay.Add(persistableScheduleData);
             }
 

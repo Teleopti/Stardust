@@ -53,9 +53,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             RaptorTransformerHelper.SetUpdatedOn(ass2, DateTime.Now);
             RaptorTransformerHelper.SetUpdatedOn(ass3, DateTime.Now);
 
-            IPersonDayOff dayOff1 = CreatePersonDayOff(date2, person1, scenario);
-            IPersonDayOff dayOff2 = CreatePersonDayOff(date1, person2, scenario);
-
             IPersonAbsence abs1 = CreatePersonAbsence(period3, person1, ab1, scenario);
             IPersonAbsence abs2 = CreatePersonAbsence(period3, person2, ab2, scenario);
             IPersonAbsence abs3 = CreatePersonAbsence(period3, person3, ab3, scenario);
@@ -79,10 +76,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IScheduleDay schedulePart333 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 3));
 
             schedulePart1.Add(ass1);
-            schedulePart11.Add(dayOff1);
             schedulePart111.Add(abs1);
 
-            schedulePart2.Add(dayOff2);
             schedulePart22.Add(ass2);
             schedulePart222.Add(abs2);
 

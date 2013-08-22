@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var assPer = new Person { Name = new Name("roger", "moore") };
             var changedByPer = new Person { Name = new Name("hubba", "bubba") };
 
-            var ass = PersonDayOffFactory.CreatePersonDayOff(assPer, new Scenario("ffsdf"), new DateOnly(2000,1,2), new DayOffTemplate(new Description()));
+						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("ffsdf"), assPer, new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, null), ass.EntityClone(), eventMessage, removeMessage));
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var oneModelRow = model.Data.First();
             Assert.AreEqual("roger moore", oneModelRow.Name);
             Assert.AreEqual(new DateOnly(2000, 1, 1), oneModelRow.Date);
-            Assert.AreEqual(UserTexts.Resources.DayOff, oneModelRow.ConflictType);
+            Assert.AreEqual(UserTexts.Resources.Shift, oneModelRow.ConflictType);
             Assert.AreEqual("hubba bubba", oneModelRow.LastModifiedName);
         }
 

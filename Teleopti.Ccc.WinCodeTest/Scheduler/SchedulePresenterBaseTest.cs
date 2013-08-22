@@ -519,8 +519,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.Repeat.Once();
             schedulePart.Clear<IPersonAssignment>();
             LastCall.Repeat.Once();
-            schedulePart.Clear<IPersonDayOff>();
-            LastCall.Repeat.Once();
 
             Expect.Call(schedulePart.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAbsenceCollection()).Return(
@@ -1620,14 +1618,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var selectedItem = _mocks.StrictMock<IActivity>();
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IActivity>>();
             var person = _mocks.StrictMock<IPerson>();
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
         	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
             var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
 
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
-            Expect.Call(schedulePart.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
-            Expect.Call(personAssignment.Period).Return(period);
+            Expect.Call(ass.Period).Return(period);
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
                                                                     (TimeZoneInfo.Local))).Constraints(Is.Anything(),
@@ -1636,7 +1632,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
             Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
-            Expect.Call(schedulePart.PersonAssignmentCollectionDoNotUse()).Return(new List<IPersonAssignment> { ass }.AsReadOnly()).Repeat.AtLeastOnce();
+            Expect.Call(schedulePart.PersonAssignment()).Return(ass).Repeat.AtLeastOnce();
             Expect.Call(ass.CheckRestrictions);
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
