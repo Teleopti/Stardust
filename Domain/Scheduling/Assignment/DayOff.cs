@@ -74,15 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         #endregion
 
-    	/// <summary>
-    	/// Initializes a new instance
-    	/// </summary>
-    	/// <param name="anchor">The anchor.</param>
-    	/// <param name="targetLength">Length of the target.</param>
-    	/// <param name="flexibility">The flexibility.</param>
-    	/// <param name="description">The description.</param>
-    	/// <param name="displayColor">The display color.</param>
-    	/// <param name="payrollCode">The payroll code.</param>
+		protected DayOff()
+		{
+			
+		}
+
+
     	public DayOff(DateTime anchor, TimeSpan targetLength, TimeSpan flexibility, Description description, Color displayColor,  string payrollCode)
         {
             InParameter.VerifyDateIsUtc("anchor", anchor);
