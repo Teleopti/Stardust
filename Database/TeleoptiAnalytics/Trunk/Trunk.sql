@@ -310,3 +310,39 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_person_category_type_get]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_control_person_category_type_get]
 GO
+
+----------------  
+--Name: Erik S
+--Date: 2013-08-13
+--Desc: PBI12246
+-----------------
+TRUNCATE TABLE stage.stg_schedule_preference
+ALTER TABLE stage.stg_schedule_preference
+DROP COLUMN interval_id
+GO
+
+DECLARE @control_collection_id int
+SET @control_collection_id = 
+	(SELECT control_collection_id 
+	FROM mart.report 
+	WHERE report_id = 1)
+DELETE FROM mart.report_control_collection
+WHERE collection_id = @control_collection_id
+	AND param_name = '@time_zone_id'
+GO
+----------------  
+--Name: David
+--Date: 2013-08-14
+--Desc: #12446 - convert UTC date to agent local date
+-----------------
+update f
+set
+	date_id =  b.local_date_id,
+	interval_id = 0
+from mart.fact_schedule_preference f
+inner join mart.dim_person p
+	on p.person_id = f.person_id
+inner join mart.bridge_time_zone b
+	on b.date_id = f.date_id
+	and b.interval_id = f.interval_id
+	and p.time_zone_id = b.time_zone_id
