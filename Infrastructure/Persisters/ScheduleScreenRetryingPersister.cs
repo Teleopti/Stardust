@@ -66,29 +66,35 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				{
 					transactions(unitOfWorkFactory, conflictedPersonAbsenceAccounts, personAbsenceAccounts, scheduleDictionary, personRequests);
 					retry = false;
-				} 
+				}
 				catch (OptimisticLockExceptionOnPersonAccount)
 				{
 					conflictedPersonAbsenceAccounts = GetPersonAbsenceAccountConflicts(unitOfWorkFactory, personAbsenceAccounts);
 					retry = true;
-				} 
+				}
 				catch (OptimisticLockExceptionOnScheduleDictionary)
 				{
 					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
 					return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
-				} 
+				}
 				catch (ForeignKeyExceptionOnScheduleDictionary)
+				{
+					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
+					return new ScheduleScreenPersisterResult { Saved = false, ScheduleDictionaryConflicts = conflicts };
+				}
+				catch (PersonAssignmentConstraintViolationOnScheduleDictionary)
 				{
 					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
 					return new ScheduleScreenPersisterResult { Saved = false, ScheduleDictionaryConflicts = conflicts };
 				}
 				catch (OptimisticLockException)
 				{
-					return new ScheduleScreenPersisterResult {Saved = false};
+					return new ScheduleScreenPersisterResult { Saved = false };
 				}
 			} while (retry);
 			return new ScheduleScreenPersisterResult {Saved = true};
 		}
+
 
 		private void saveWriteProtectionInSeparateTransaction(IUnitOfWorkFactory unitOfWorkFactory, ICollection<IPersonWriteProtectionInfo> personWriteProtectionInfos)
 		{
@@ -177,16 +183,25 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			try
 			{
 				_scheduleDictionaryBatchPersister.Persist(scheduleDictionary);
-			} 
+			}
 			catch (OptimisticLockException exception)
 			{
 				throw new OptimisticLockExceptionOnScheduleDictionary(exception);
 			}
-			catch(ForeignKeyException exception)
+			catch (ForeignKeyException exception)
 			{
 				//special case.
 				//because the reason is probably a deleted ref row i db
 				throw new ForeignKeyExceptionOnScheduleDictionary(exception);
+			}
+			catch (ConstraintViolationException exception)
+			{
+				if (exception.InnerException.Message.Contains("'UQ_PersonAssignment_Person_Date_Scenario'"))
+				{
+					// if 2 persons try to save a PA for the same person and date, handle it like a conflict
+					throw new PersonAssignmentConstraintViolationOnScheduleDictionary(exception);
+				}
+				throw;
 			}
 		}
 
@@ -203,5 +218,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private class ForeignKeyExceptionOnScheduleDictionary : Exception
 		{
 			public ForeignKeyExceptionOnScheduleDictionary(ForeignKeyException innerException) : base(null, innerException) { }
+		}
+
+		private class PersonAssignmentConstraintViolationOnScheduleDictionary : Exception
+		{
+			public PersonAssignmentConstraintViolationOnScheduleDictionary(ConstraintViolationException innerException) : base(null, innerException) { }
+		}
 	}
 }

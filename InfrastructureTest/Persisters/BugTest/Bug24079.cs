@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		}
 
 		[Test]
-		public void ShouldReportConflictWithPersonAssignmentKeyConflict()
+		public void ShouldGiveConflictWithPersonAssignmentConstraintViolation()
 		{
 			MakeTarget();
 
