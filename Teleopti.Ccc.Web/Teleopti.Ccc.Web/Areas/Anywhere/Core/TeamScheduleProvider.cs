@@ -35,21 +35,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			
 			foreach (PersonScheduleDayReadModel shift in shifts)
 			{
-				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == shift.PersonId)) != null;
+				var canSeeConfidental = permittedPersonsToViewConfidental.Any(x => x.Id == shift.PersonId);
 
-				var shift0 = JsonConvert.DeserializeObject<Shift>(shift.Shift);
+				var deserializedShift = JsonConvert.DeserializeObject<Shift>(shift.Shift);
+				result.Add(deserializedShift);
+				if (canSeeConfidental) continue;
 
-				foreach (var layer in shift0.Projection)
+				foreach (var layer in deserializedShift.Projection)
 				{
-					if (!canSeeConfidental && layer.IsAbsenceConfidential)
+					if (layer.IsAbsenceConfidential)
 					{
 						layer.Color = ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor);
 						layer.Title = ConfidentialPayloadValues.Description.Name;
 					}
 
 				}
-				result.Add(shift0);
-
 			}
 			return result;
 		}
