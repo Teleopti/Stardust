@@ -152,15 +152,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new DateOnlyPeriod(minDate, maxDate);
         }
 
-        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
-        {
-            return new DateOnly(selectedParts.Min(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
-        }
-
-        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
-        {
-            return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
-        }
         /// <summary>
         /// Get the ISchedulePart list contained in the clips. This method creates a list of the ISchedulePart objects
         /// that are contained in the grid. Filters out those that are null, or if does not have the ISchedulePart type.

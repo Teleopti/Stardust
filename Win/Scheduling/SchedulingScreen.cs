@@ -1407,14 +1407,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (selectedSchedules.Count() == 0)
 							return;
 
-						var sortedList = (from d in ScheduleViewBase.AllSelectedDates(selectedSchedules)
+						var sortedList = (from d in ScheduleViewBase.AllSelectedUtcDates(selectedSchedules)
 										  orderby d.Date
 										  select d).ToList();
 
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
-						var period = new DateOnlyPeriod(first, last).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
-						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, _schedulerState.TimeZoneInfo, period);
+						var period = new DateTimePeriod(DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc),
+						                                DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc));
+						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.TimeZone, period);
 
 						if (!addDayOffDialog.Result)
 							return;
@@ -2091,6 +2092,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
+
+			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Count > 0;
+
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
+			}
 		}
 
 		private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
@@ -3640,11 +3648,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseShiftCategoryLimitations = false;
 			var scheduleDays = argument.ScheduleDays;
 
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(
-					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3892,10 +3896,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (lastCalculationState)
 				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
 			var selectedSchedules = options.ScheduleDays;
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone),
-				                   OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
 			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
@@ -6356,7 +6357,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupContextMenuAvailTimeZones()
 		{
-			_schedulerState.TimeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
 			IList<TimeZoneInfo> otherList = new List<TimeZoneInfo> { _schedulerState.TimeZoneInfo };
@@ -6732,21 +6734,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			var item = (ToolStripMenuItem)sender;
-			_schedulerState.TimeZoneInfo = (TimeZoneInfo)item.Tag;
-			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
+			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo) item.Tag;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (_schedulerState.TimeZoneInfo == downItem.Tag);
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
 				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
 			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 			_grid.Invalidate();
 			_grid.Refresh();
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 			updateShiftEditor();
 			drawSkillGrid();
+			reloadChart();
 		}
 
 		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
@@ -7132,6 +7137,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//preparation for future pbi
 		}
 
+		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
+		{
+			var scheduleDay = _scheduleView.SelectedSchedules().First();
+			TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
+			}
+			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
+			{
+				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
+			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
+			_grid.Invalidate();
+			_grid.Refresh();
+			updateSelectionInfo(_scheduleView.SelectedSchedules());
+			updateShiftEditor();
+			drawSkillGrid();
+			reloadChart();
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

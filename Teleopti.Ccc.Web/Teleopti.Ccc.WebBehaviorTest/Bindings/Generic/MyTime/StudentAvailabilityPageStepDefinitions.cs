@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using WatiN.Core;
@@ -64,15 +65,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I input student availability with")]
 		public void WhenIInputStudentAvailabilityWith(Table table)
 		{
+			Browser.Interactions.AssertVisibleUsingJQuery("#Student-availability-edit-form"); //needed
+
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
-			Pages.Pages.StudentAvailabilityPage.EditStudentAvailabilityPanel.WaitUntilDisplayed(); //needed
 
 			if (fields.StartTime != null)
-				Pages.Pages.StudentAvailabilityPage.StudentAvailabilityStartTime.Value = fields.StartTime;
+				Browser.Interactions.Javascript(string.Format("$('.availability-start-time').timepicker('setTime', '{0}');", fields.StartTime));
 			if (fields.EndTime != null)
-				Pages.Pages.StudentAvailabilityPage.StudentAvailabilityEndTime.Value = fields.EndTime;
-			if(fields.NextDay)
-				Pages.Pages.StudentAvailabilityPage.StudentAvailabilityEndTimeNextDay.Checked = true;
+				Browser.Interactions.Javascript(string.Format("$('.availability-end-time').timepicker('setTime', '{0}');", fields.EndTime));
+			if (fields.NextDay)
+				Browser.Interactions.Click(".availability-next-day");
 		}
 
 		[When(@"I click the apply student availability button")]
@@ -102,8 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a message '(.*)'")]
 		public void ThenIShouldSeeAMessage(string message)
 		{
-			EventualAssert.That(() => Pages.Pages.StudentAvailabilityPage.EditStudentAvailabilityPanel.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.StudentAvailabilityPage.ValidationError.Text, Is.StringStarting(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
+			Browser.Interactions.AssertAnyContains(".availability-error-panel", string.Format(Resources.InvalidTimeValue, Resources.EndTime));
 		}
 
 		private class SingleValue

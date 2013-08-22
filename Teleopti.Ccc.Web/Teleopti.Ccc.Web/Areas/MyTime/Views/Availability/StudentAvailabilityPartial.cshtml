@@ -26,6 +26,9 @@
         </ul>
     </div>
 </div>
+<div id="Student-availability-edit-form" class="well well-small clearfix" data-bind="visible: AddAvailabilityFormVisible">
+    @Html.Partial("AddStudentAvailabilityPartial")
+</div>
 <div id="StudentAvailability-period" class="alert alert-info">
 	@if (Model.StudentAvailabilityPeriod == null)
 	{
@@ -53,7 +56,7 @@
         </ul>
         @foreach (var week in Model.Weeks)
         {
-            <ul class="calendarview-week">
+            <ul class="calendarview-week" onselectstart="return false;">
                 <li>
                     <div>
                         <span>@week.Summary.MinWorkTime</span>
@@ -82,55 +85,3 @@
         }
     </div>
 </div>
-
-				@{
-					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
-					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
-					            select new Option
-						            {
-							            Value = value,
-							            Text = text
-						            };
-					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-					                  select new Option
-						                  {
-							                  Value = value,
-							                  Text = text
-						                  };
-				}
-<div id="Student-availability-edit-form" class="displaynone">
-						<div>
-							<div class="time-limitation-label icon leftarrow"></div>
-						
-							<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-						</div>
-						<div>
-							<div class="time-limitation-label icon rightarrow"></div>
-						
-							<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-							<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: NextDay" title="@Resources.NextDay" />
-						</div>
-						<div class="mt5">
-							<button id="Student-availability-reset" class="btn" data-bind="click: reset">@Resources.Reset</button>
-							<button id="Student-availability-apply" class="btn btn-primary" data-bind="click: Teleopti.MyTimeWeb.StudentAvailability.SetStudentAvailability">@Resources.Apply</button>
-						</div>
-						<div>
-							<div id="Student-availability-apply-error" class="error floatleft" data-bind="html: ValidationError"></div>
-							<div class="clearboth"></div>
-						</div>
-					</div>

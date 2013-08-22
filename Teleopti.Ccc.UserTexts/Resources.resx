@@ -11664,6 +11664,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Switch to View Point of Selected Agent</value>
+  </data>
   <data name="ShareCalendar" xml:space="preserve">
     <value>Share Calendar</value>
     <comment>Share Calendar</comment>
@@ -11679,5 +11682,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ShareMyCalendarHint" xml:space="preserve">
     <value>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</value>
     <comment>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</comment>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Send again</value>
+    <comment>Send again (ie. shifttrade)</comment>
   </data>
 </root>
