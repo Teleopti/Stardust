@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -17,10 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    /// <summary>
-    /// Tests for AssignmentRepository
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture]
+    [TestFixture]
     [Category("LongRunning")]
     public class PersonAssignmentRepositoryTest : RepositoryTest<IPersonAssignment>
     {
@@ -33,6 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IShiftCategory _dummyCategory;
         private IGroupingActivity _groupAct;
         private IMultiplicatorDefinitionSet _definitionSet;
+	    private IDayOffTemplate _dayOffTemplate;
 
 
         private void cleanUp(IAggregateRoot loaded)
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].Team);
                 repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].Team.Site);
                 repRemove.Remove(_definitionSet);
+							repRemove.Remove(_dayOffTemplate);
                 uow.PersistAll();                
             }
         }
@@ -74,12 +75,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);
             _dummyCategory = ShiftCategoryFactory.CreateShiftCategory("Morning");
             _definitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
+					_dayOffTemplate = new DayOffTemplate(new Description("this is the one"));
 
             PersistAndRemoveFromUnitOfWork(_dummyCategory);
             PersistAndRemoveFromUnitOfWork(_dummyAgent2);
             PersistAndRemoveFromUnitOfWork(_dummyScenario);
             PersistAndRemoveFromUnitOfWork(_dummyCat);
             PersistAndRemoveFromUnitOfWork(_definitionSet);
+					PersistAndRemoveFromUnitOfWork(_dayOffTemplate);
 
             PersonFactory.AddDefinitionSetToPerson(_dummyAgent, _definitionSet);
             IPersonPeriod per = _dummyAgent.Period(new DateOnly(2000, 1, 1));
@@ -99,6 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        ass.SetMainShiftLayers(new[] {new MainShiftLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2))}, _dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
 	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+					ass.SetDayOff(_dayOffTemplate);
 	        return ass;
         }
 
@@ -108,6 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
             Assert.AreEqual(org.PersonalLayers().Count(), loadedAggregateFromDatabase.PersonalLayers().Count());
             Assert.AreEqual(org.OvertimeLayers().Count(), loadedAggregateFromDatabase.OvertimeLayers().Count());
+	        org.DayOff().Description.Should().Be.EqualTo(_dayOffTemplate.Description);
         }
 
 			[Test]

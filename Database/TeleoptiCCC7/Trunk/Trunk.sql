@@ -984,3 +984,23 @@ GO
 ALTER TABLE [Auditing].[PersonAssignment_AUD]
 DROP COLUMN Minimum, Maximum
 GO
+
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-08-22
+--Desc: PBI #21978 - Adding dayoff ref from personassignment. (should also remove old persondayoff - but needs to happen after convertion of data
+----------------  
+ALTER TABLE dbo.PersonAssignment ADD 
+            DayOffTemplate uniqueidentifier NULL
+GO
+
+ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
+            FK_PersonAssignment_DayOffTemplate FOREIGN KEY
+            (
+                         DayOffTemplate
+            ) REFERENCES dbo.DayOffTemplate
+            (
+            Id
+            )
+GO
