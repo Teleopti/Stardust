@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -14,122 +13,149 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Payroll
 {
-    public class TeleoptiTimeExport : IPayrollExportProcessorWithFeedback
-    {
-        private const int BatchSize = 50;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof (TeleoptiTimeExport));
-        private static readonly PayrollFormatDto Format = new PayrollFormatDto(new Guid("{5A888BEC-5954-466d-B245-639BFEDA1BB5}"), "Teleopti Time Export");
+	public class TeleoptiTimeExport : IPayrollExportProcessorWithFeedback
+	{
+		private static readonly PayrollFormatDto Format =
+			new PayrollFormatDto(new Guid("{5A888BEC-5954-466d-B245-639BFEDA1BB5}"), "Teleopti Time Export");
 
-        public PayrollFormatDto PayrollFormat
-        {
-            get { return Format; }
-        }
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiTimeExport));
+		private const int batchSize = 50;
 
-        public IXPathNavigable ProcessPayrollData(ITeleoptiSchedulingService schedulingService, ITeleoptiOrganizationService organizationService, PayrollExportDto payrollExport)
-        {
-            using(var payrollDt = new DataTable("PayrollExport"))
-            {
-                payrollDt.Locale = CultureInfo.InvariantCulture;
-                payrollDt.Columns.Add("Person", typeof(string));
-                payrollDt.Columns.Add("Date", typeof(DateTime));
-                payrollDt.Columns.Add("Time", typeof(TimeSpan));
+		public IPayrollExportFeedback PayrollExportFeedback { get; set; }
 
-                IDictionary<Guid, PersonDto> personDic = new Dictionary<Guid, PersonDto>();
-                foreach (PersonDto personDto in payrollExport.PersonCollection)
-                {
-                    if(personDto.Id != null)
-                     personDic.Add(personDto.Id.Value, personDto);
-                }
+		public PayrollFormatDto PayrollFormat
+		{
+			get { return Format; }
+		}
 
-                DateOnlyDto startDateOnlyDto = payrollExport.DatePeriod.StartDate;
-                DateOnlyDto endDateOnlyDto = payrollExport.DatePeriod.EndDate;
+		public IXPathNavigable ProcessPayrollData(ITeleoptiSchedulingService schedulingService,
+		                                          ITeleoptiOrganizationService organizationService,
+		                                          PayrollExportDto payrollExport)
+		{
+			using (var payrollDt = new DataTable("PayrollExport"))
+			{
 
-                PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
-                                                         "Running Teleopti Time Export for dates {0} to {1}",
-                                                         startDateOnlyDto.DateTime, endDateOnlyDto.DateTime));
+				addColumnsToTable(payrollDt);
 
-                var count = payrollExport.PersonCollection.Count;
-                PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
-                                                         "Running Export for {0} persons in batches of {1}", count,
-                                                         BatchSize));
+				var startDateOnlyDto = payrollExport.DatePeriod.StartDate;
+				var endDateOnlyDto = payrollExport.DatePeriod.EndDate;
 
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
+				PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
+				                                         "Running Teleopti Time Export for dates {0} to {1}",
+				                                         startDateOnlyDto.DateTime, endDateOnlyDto.DateTime));
 
-                int step = GetIncreasePercentagePerBatch(count);
-                var progress = 10;
+				var count = payrollExport.PersonCollection.Count;
+				PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,
+				                                         "Running Export for {0} persons in batches of {1}", count,
+				                                         batchSize));
 
-                for (int i = 0; i < count; i = i + BatchSize)
-                {
-                    PayrollExportFeedback.ReportProgress(progress, "Loading schedules...");
+				var stopwatch = new Stopwatch();
+				stopwatch.Start();
 
-                    var currentAgents = payrollExport.PersonCollection.Take(BatchSize).ToArray();
-                    var personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
-#pragma warning disable 612,618
-                    ICollection<SchedulePartDto> scheduleParts =
-                        schedulingService.GetSchedulePartsForPersons(currentAgents,
-#pragma warning restore 612,618
-                                                                     startDateOnlyDto,
-                                                                     endDateOnlyDto,
-                                                                     personTimeZone.Id);
+				int step = getIncreasePercentagePerBatch(count);
+				var progress = 10;
 
-                    foreach (SchedulePartDto schedulePart in scheduleParts)
-                    {
-                        var person = personDic[schedulePart.PersonId];
-                        var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate.DateTime).FirstOrDefault();
-                        if (firstPeriod != null && schedulePart.Date.DateTime < firstPeriod.Period.StartDate.DateTime)
-                            continue;
-                        var teminateDate = person.TerminationDate;
-                        if (teminateDate != null && schedulePart.Date.DateTime > teminateDate.DateTime)
-                            continue;
-                        if (person.TimeZoneId != personTimeZone.Id)
-                            personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(person.TimeZoneId);
-                        payrollDt.LoadDataRow(
-                            new object[]
-                            {
-                                personDic[schedulePart.PersonId].EmploymentNumber,
-                                TimeZoneInfo.ConvertTimeFromUtc(schedulePart.LocalPeriod.UtcStartTime, personTimeZone),
-                                schedulePart.ContractTime.TimeOfDay
-                            },
-                            true);
-                    }
+				for (int i = 0; i < count; i = i + batchSize)
+				{
+					PayrollExportFeedback.ReportProgress(progress, "Loading data...");
 
-                    progress += step;
-                }
+					var currentAgents = payrollExport.PersonCollection.Skip(i).Take(batchSize).ToArray();
+					var personTimeZone = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
-                Logger.Debug("Done with processing data");
-                var builder = new StringBuilder();
+					var payrollTimeExportDataList =
+						schedulingService.GetTeleoptiTimeExportData(currentAgents,
 
-                using (
-                    var stringWriter = new StringWriter(builder, CultureInfo.InvariantCulture)
-                    )
-                {
-                    Logger.Debug("Creating XML structure from data");
-                    payrollDt.WriteXml(stringWriter, XmlWriteMode.IgnoreSchema, false);
-                    stringWriter.Flush();
-                    Logger.Debug("Done with creating XML structure from data");
-                }
+						                                            startDateOnlyDto,
+						                                            endDateOnlyDto,
+						                                            personTimeZone.Id);
 
-                var document = new XmlDocument();
-                document.LoadXml(builder.ToString());
-                Logger.Debug("Appending format to export");
-                var result = FormatAppender.AppendFormat(document, "TeleoptiTimeExportFormat.xml");
-                Logger.Debug("Done with appending format to export");
-                Logger.Debug("Done with payroll export");
 
-                stopwatch.Stop();
-                PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture,"The payroll export took {0} to complete.",stopwatch.Elapsed));
+					foreach (var payrollTimeExportData in payrollTimeExportDataList)
+					{
+						payrollDt.LoadDataRow(
+							new object[]
+								{
+									payrollTimeExportData.EmploymentNumber,
+									payrollTimeExportData.FirstName,
+									payrollTimeExportData.LastName,
+									payrollTimeExportData.BusinessUnitName,
+									payrollTimeExportData.SiteName,
+									payrollTimeExportData.TeamName,
+									payrollTimeExportData.ContractName,
+									payrollTimeExportData.PartTimePercentageName,
+									payrollTimeExportData.PartTimePercentageNumber,
+									payrollTimeExportData.Date,
+									payrollTimeExportData.StartDate,
+									payrollTimeExportData.EndDate,
+									payrollTimeExportData.ShiftCategoryName,
+									payrollTimeExportData.ContractTime,
+									payrollTimeExportData.WorkTime,
+									payrollTimeExportData.PaidTime,
+									payrollTimeExportData.AbsencePayrollCode,
+									payrollTimeExportData.DayOffPayrollCode
+								},
+							true);
+					}
+					progress += step;
+				}
 
-                return result;
-            }
-        }
+				Logger.Debug("Done with processing data");
+				var builder = new StringBuilder();
 
-        private static int GetIncreasePercentagePerBatch(int count)
-        {
-            var batchCount = Math.Max(count/BatchSize,1);
-            return 80/batchCount;
-        }
+				using (
+					var stringWriter = new StringWriter(builder, CultureInfo.InvariantCulture)
+					)
+				{
+					Logger.Debug("Creating XML structure from data");
+					payrollDt.WriteXml(stringWriter, XmlWriteMode.IgnoreSchema, false);
+					stringWriter.Flush();
+					Logger.Debug("Done with creating XML structure from data");
+				}
 
-        public IPayrollExportFeedback PayrollExportFeedback { get; set; }
-    }
+				var document = new XmlDocument();
+				document.LoadXml(builder.ToString());
+				Logger.Debug("Appending format to export");
+				var result = FormatAppender.AppendFormat(document, "TeleoptiTimeExportFormat.xml");
+				Logger.Debug("Done with appending format to export");
+				Logger.Debug("Done with payroll export");
+
+				stopwatch.Stop();
+				PayrollExportFeedback.Info(string.Format(CultureInfo.InvariantCulture, "The payroll export took {0} to complete.",
+				                                         stopwatch.Elapsed));
+
+				return result;
+			}
+		}
+
+		private static void addColumnsToTable(DataTable payrollDt)
+		{
+			payrollDt.Locale = CultureInfo.InvariantCulture;
+			payrollDt.Columns.Add("Person", typeof (string));
+			payrollDt.Columns.Add("FirstName", typeof (string));
+			payrollDt.Columns.Add("LastName", typeof (string));
+			payrollDt.Columns.Add("BusinessUnitName", typeof (string));
+			payrollDt.Columns.Add("SiteName", typeof (string));
+			payrollDt.Columns.Add("TeamName", typeof (string));
+			payrollDt.Columns.Add("ContractName", typeof (string));
+			payrollDt.Columns.Add("PartTimePercentageName", typeof (string));
+			payrollDt.Columns.Add("PartTimePercentageNumber", typeof (int));
+			payrollDt.Columns.Add("Date", typeof (DateTime));
+			payrollDt.Columns.Add("StartDate", typeof (DateTime));
+			payrollDt.Columns.Add("EndDate", typeof (DateTime));
+			payrollDt.Columns.Add("ShiftCategoryName", typeof (string));
+			payrollDt.Columns.Add("ContractTime", typeof(TimeSpan));
+			payrollDt.Columns.Add("WorkTime", typeof (TimeSpan));
+			payrollDt.Columns.Add("PaidTime", typeof (TimeSpan));
+			payrollDt.Columns.Add("AbsencePayrollCode", typeof (string));
+			payrollDt.Columns.Add("DayOffPayrollCode", typeof (string));
+
+
+		}
+
+		private static int getIncreasePercentagePerBatch(int count)
+		{
+			var batchCount = Math.Max(count/batchSize, 1);
+			return 80/batchCount;
+		}
+	}
 }

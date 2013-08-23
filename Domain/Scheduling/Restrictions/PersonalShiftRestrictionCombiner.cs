@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (effectiveRestriction == null)
 				return null;
 
-			var assignments = scheduleDay.PersonAssignmentCollection();
+			var assignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
 			if (assignments.IsEmpty())
 				return effectiveRestriction;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
 			var periods = from a in assignments
-			              from l in a.PersonalLayers
+			              from l in a.PersonalLayers()
 			              select l.Period
 				;
 

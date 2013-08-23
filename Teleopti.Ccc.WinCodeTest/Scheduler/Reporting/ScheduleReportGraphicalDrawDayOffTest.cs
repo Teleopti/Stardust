@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Pdf;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 
@@ -24,8 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         private DayOff _dayOff;
         private ReadOnlyCollection<IPersonAssignment> _personAssignments;
         private IPersonAssignment _personAssignment;
-        private ReadOnlyCollection<IOvertimeShift> _overtimeShifts;
-        private IOvertimeShift _overtimeShift;
+        private IEnumerable<IOvertimeShiftLayer> _overtimeShifts;
 
         [SetUp]
         public void Setup()
@@ -45,8 +47,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dayOff = new DayOff(startDateTime, TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description("day off", "do"), Color.Gray, "payrollCode");
             _personAssignment = _mock.StrictMock<IPersonAssignment>();
             _personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment});
-            _overtimeShift = _mock.StrictMock<IOvertimeShift>();
-            _overtimeShifts = new ReadOnlyCollection<IOvertimeShift>(new List<IOvertimeShift>{_overtimeShift});
+	        _overtimeShifts = new[]
+		        {
+			        new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())
+		        };
         }
 
         [Test]
@@ -90,8 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(_personAssignments);
-                Expect.Call(_personAssignment.OvertimeShiftCollection).Return(new ReadOnlyCollection<IOvertimeShift>(new List<IOvertimeShift>()));
+                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_personAssignment.OvertimeLayers()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
             }
 
             using(_mock.Playback())
@@ -108,8 +112,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();	
-                Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(_personAssignments);
-                Expect.Call(_personAssignment.OvertimeShiftCollection).Return(new ReadOnlyCollection<IOvertimeShift>(_overtimeShifts));
+                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_personAssignment.OvertimeLayers()).Return(_overtimeShifts);
             }
 
             using(_mock.Playback())
@@ -167,8 +171,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
                 Expect.Call(_personDayOff.DayOff).Return(_dayOff).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(_personAssignments);
-                Expect.Call(_personAssignment.OvertimeShiftCollection).Return(new ReadOnlyCollection<IOvertimeShift>(new List<IOvertimeShift>()));
+                Expect.Call(_scheduleDay.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_personAssignment.OvertimeLayers()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
             }
 
             using (_mock.Playback())

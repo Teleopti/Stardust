@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private IList<IPersonAvailability> _childrenPersonAvailabilityCollection = new List<IPersonAvailability>();
 		private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
 		private readonly TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
-		private readonly TypedBindingCollection<int> _weeksCollection = new TypedBindingCollection<int>();
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
 		
 		private readonly List<GridClassType> _trackerDescriptionClassTypes = new List<GridClassType>();
@@ -288,14 +287,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public ReadOnlyCollection<PersonPeriodChildModel> FullPersonPeriodChildGridData
-        {
-            get
-            {
-                return new ReadOnlyCollection<PersonPeriodChildModel>(_fullPersonPeriodGridViewChildCollection);
-            }
-        }
-
         public string CurrentChildName
         {
             get;
@@ -377,29 +368,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             	model.FullName = filteredPerson.Name.ToString();
             	_personPeriodGridViewChildCollection.Add(model);
             }
-        }
-
-        public void GetAllChildPersonPeriods(Collection<IPerson> personCollection)
-        {
-        	// Instantiates the fill person period data collection
-            _fullPersonPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
-
-        	foreach (IPerson person in personCollection)
-        	{
-        		// Gets the person period collection of the of the person object
-        		IList<IPersonPeriod> personPeriodCollection = new List<IPersonPeriod>(person.PersonPeriodCollection);
-        		// Holds the person object
-
-        		foreach (IPersonPeriod personPeriod in personPeriodCollection)
-        		{
-        			// Creates a person view adoptor using the person period
-        			PersonPeriodChildModel model =
-        				EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(personPeriod);
-
-        			// Adds the person period adoptor to the collection
-        			_fullPersonPeriodGridViewChildCollection.Add(model);
-        		}
-        	}
         }
 
         public IPersonPeriod AddPersonPeriod(int rowIndex, Collection<PersonPeriodModel>
@@ -745,23 +713,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _availabilityCollection; }
         }
 
-        public void AddPersonRotation(int parentRowIndex, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            var rep = new PersonRotationRepository(filteredPeopleHolder.UnitOfWork);
-            IPerson selectedPerson = filteredPeopleHolder.PersonRotationParentAdapterCollection[parentRowIndex].Person;
-            IPersonRotation personRotation = GetSamplePersonRotation(selectedPerson);
-
-            if (personRotation != null)
-            {
-                rep.Add(personRotation);
-                if (filteredPeopleHolder.ParentPersonRotationCollection[parentRowIndex] == null)
-                {
-                    filteredPeopleHolder.ParentPersonRotationCollection[parentRowIndex] = personRotation;
-                }
-                filteredPeopleHolder.AllPersonRotationCollection.Add(personRotation);
-            }
-        }
-
         public static void AddPersonRotation(IPersonRotation personRotation, int parentRowIndex, FilteredPeopleHolder filteredPeopleHolder)
         {
             if (personRotation != null)
@@ -924,41 +875,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void GetParentPersonRotationWhenAddedOrUpdated(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            IPersonRotation selectedPersonRotation = filteredPeopleHolder.ParentPersonRotationCollection[rowIndex];
-            PersonRotationModelParent personPeriodModelParent;
-
-            IPersonRotation currentPersonRotation = filteredPeopleHolder.GetCurrentPersonRotation(_childrenPersonRotationCollection);
-
-            if (currentPersonRotation != null)
-            {
-                personPeriodModelParent =
-                new PersonRotationModelParent(currentPersonRotation.Person,filteredPeopleHolder.CommonNameDescription);
-
-                filteredPeopleHolder.ParentPersonRotationCollection[rowIndex] = currentPersonRotation;
-
-                personPeriodModelParent.PersonRotation = currentPersonRotation;
-                personPeriodModelParent.CurrentRotation = currentPersonRotation.Rotation;
-                personPeriodModelParent.RotationCount = _childrenPersonRotationCollection.Count == 1
-                                                                      ? 0
-                                                                      : _childrenPersonRotationCollection.Count;
-
-
-            }
-            else
-            {
-                personPeriodModelParent = new PersonRotationModelParent(selectedPersonRotation.Person,filteredPeopleHolder.CommonNameDescription)
-                                          	{
-                                          		PersonRotation = currentPersonRotation,
-                                          		RotationCount = _childrenPersonRotationCollection.Count + 1
-                                          	};
-
-            	filteredPeopleHolder.ParentPersonRotationCollection[rowIndex] = GetSamplePersonRotation(selectedPersonRotation.Person);
-            }
-            filteredPeopleHolder.PersonRotationParentAdapterCollection[rowIndex] = personPeriodModelParent;
-        }
-
         public void GetParentPersonRotationWhenDeleted(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
         {
             IPersonRotation selectedPersonRotation = filteredPeopleHolder.ParentPersonRotationCollection[rowIndex];
@@ -998,49 +914,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
 
             filteredPeopleHolder.PersonRotationParentAdapterCollection[rowIndex] = personRotationModelParent;
-        }
-
-        public void DeletePersonRotation(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            //lets load the _childPersonRotationCollection as it is to be used in some other methods
-            GetChildPersonRotations(rowIndex, filteredPeopleHolder);
-            var prRepository = new PersonRotationRepository(filteredPeopleHolder.UnitOfWork);
-
-            IPersonRotation rotationToBeRemoved = filteredPeopleHolder.ParentPersonRotationCollection[rowIndex];
-
-            if (rotationToBeRemoved != null && rotationToBeRemoved.Id != null)
-            {
-                int index = filteredPeopleHolder.AllPersonRotationCollection.IndexOf(filteredPeopleHolder.AllPersonRotationCollection.FirstOrDefault(p => p.Equals(rotationToBeRemoved)));
-                filteredPeopleHolder.AllPersonRotationCollection.RemoveAt(index);
-
-                prRepository.Remove(rotationToBeRemoved);
-            }
-
-            removeNewPersonRotation(rotationToBeRemoved, filteredPeopleHolder);
-        }
-
-        private static void removeNewPersonRotation(IPersonRotation rotationToBeRemoved, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            if (rotationToBeRemoved != null && rotationToBeRemoved.Id == null)
-            {
-                if (filteredPeopleHolder.AllPersonRotationCollection.Contains(rotationToBeRemoved))
-                {
-                    filteredPeopleHolder.AllPersonRotationCollection.Remove(rotationToBeRemoved);
-                    filteredPeopleHolder.DeleteNewPersonRotation(rotationToBeRemoved);
-                }
-            }
-        }
-
-        public void LoadParentGridRotationWeeks(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            var rotation = (Rotation)filteredPeopleHolder.ParentPersonRotationCollection[rowIndex].Rotation;
-
-            int noOfWeeks = rotation.RotationDays.Count / 7;
-
-            for (int i = 0; i < noOfWeeks; i++)
-            {
-                _weeksCollection.Add(i + 1);
-            }
         }
 
         public IPersonRotation GetSamplePersonRotation(IPerson person)
@@ -1106,38 +979,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 _personaccountGridViewChildCollection.Reverse();
                 return new ReadOnlyCollection<IPersonAccountChildModel>(
                     _personaccountGridViewChildCollection);
-            }
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerDescriptionTypesCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerDescriptionClassTypes);
-            }
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerDescriptionTypesCollectionForRibbon
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerDescriptionClassTypesForRibbon);
-            }
-        }
-
-        public ReadOnlyCollection<IAbsence> AbsenceCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<IAbsence>(_absenceCollection);
-            }   
-        }
-
-        public ReadOnlyCollection<GridClassType> TrackerAccountTypesCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridClassType>(_trackerAccountClassTypes);
             }
         }
 
@@ -1212,56 +1053,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 if (!adapter.CanBold)
                 {
                     adapter.CanBold = canBold;
-                }
-            }
-        }
-
-        public void LoadTrackerDescriptionTypesForRibbon()
-        {
-            _trackerDescriptionClassTypesForRibbon.Clear();
-            _trackerDescriptionClassTypesForRibbon.Add(new GridClassType(UserTexts.Resources.All, typeof(Nullable)));
-            _trackerDescriptionClassTypesForRibbon.Add(new GridClassType(UserTexts.Resources.DescriptionDayTracker, typeof(AccountDay)));
-            _trackerDescriptionClassTypesForRibbon.Add(new GridClassType(UserTexts.Resources.DescriptionTimeTracker, typeof(AccountTime)));
-        }
-
-        public void LoadAllAbsence(FilteredPeopleHolder filterPeopleHolder)
-        {
-            _absenceCollection.Clear();
-
-            var absenceRepository = new AbsenceRepository(filterPeopleHolder.UnitOfWork);
-            _absenceCollection.AddRange(absenceRepository.LoadAllSortByName());
-        }
-
-        public void LoadTrackerAccountTypes()
-        {
-            _trackerAccountClassTypes.Clear();
-            _trackerAccountClassTypes.Add(new GridClassType(UserTexts.Resources.PersonAccountDay, typeof(AccountDay)));
-            _trackerAccountClassTypes.Add(new GridClassType(UserTexts.Resources.PersonAccountTime, typeof(AccountTime)));
-        }
-
-        public void RefreshRotationGridViewAdapterData(IRotation rotation, FilteredPeopleHolder filteredPeopleHolder)
-        {
-            if (rotation != null)
-            {
-                //Update parent 
-                foreach (PersonRotationModelParent personRotationGridViewAdapterParent in filteredPeopleHolder.PersonRotationParentAdapterCollection)
-                {
-                    if (personRotationGridViewAdapterParent.CurrentRotation != null)
-                        if (personRotationGridViewAdapterParent.CurrentRotation.Id == rotation.Id)
-                        {
-                            personRotationGridViewAdapterParent.CurrentRotation = rotation;
-                        }
-                }
-
-                //Update child
-                //TODO: Check this ?
-                foreach (PersonRotationModelChild personRotationGridViewAdapterChild in PersonRotationChildGridData)
-                {
-                    if (personRotationGridViewAdapterChild.CurrentRotation != null)
-                        if (personRotationGridViewAdapterChild.CurrentRotation.Id == rotation.Id)
-                        {
-                            personRotationGridViewAdapterChild.CurrentRotation = rotation;
-                        }
                 }
             }
         }

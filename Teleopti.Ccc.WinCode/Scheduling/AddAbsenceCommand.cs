@@ -142,8 +142,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (selectedSchedules.Count > 0)
             {
-                if (selectedSchedules.First().PersonAssignmentCollection().Count > 0)
-                    startDate = selectedSchedules.First().PersonAssignmentCollection().First().Period.StartDateTime;
+                if (selectedSchedules.First().PersonAssignmentCollectionDoNotUse().Count > 0)
+                    startDate = selectedSchedules.First().PersonAssignmentCollectionDoNotUse().First().Period.StartDateTime;
                 else
                     startDate = selectedSchedules.First().Period.StartDateTime;
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var scheduleDay in selectedSchedules)
             {
-                var personAssignments = scheduleDay.PersonAssignmentCollection();
+                var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
                 foreach (var personAssignment in personAssignments)
                 {
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var selectedSchedule in selectedSchedules)
             {
-                var personAssignments = selectedSchedule.PersonAssignmentCollection();
+                var personAssignments = selectedSchedule.PersonAssignmentCollectionDoNotUse();
 
                 foreach (var personAssignment in personAssignments)
                 {

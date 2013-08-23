@@ -33,11 +33,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             }
         }
 
-        public SFGridColumnGridHelper<MyScheduleGridAdapter> ColumnGridHelper
-        {
-            get { return _columnGridHelper; }
-        }
-
         /// <summary>
         /// Initializes the schedule info control.
         /// </summary>

@@ -141,9 +141,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     int withOneAss = 0, withZeroAss = 0;
                     foreach (IScheduleDay part in schedList)
                     {
-                        if (part.PersonAssignmentCollection().Count == 0)
+                        if (part.PersonAssignmentCollectionDoNotUse().Count == 0)
                             withZeroAss += 1;
-                        if (part.PersonAssignmentCollection().Count == 1)
+                        if (part.PersonAssignmentCollectionDoNotUse().Count == 1)
                             withOneAss += 1;
                     }
 
@@ -472,10 +472,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
             using (mocks.Record())
             {
                 SetAuthorizationServiceExpectations();
-                part.RemoveEmptyAssignments();
                 Expect.Call(part.Person).Return(dummyPerson).Repeat.AtLeastOnce();
                 Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>()).Repeat.AtLeastOnce();
-                Expect.Call(part.PersonAssignmentCollection()).Return(
+                Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
                 Expect.Call(part.Period).Return(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)).Repeat.AtLeastOnce();
                 Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), dummyPerson.PermissionInformation.DefaultTimeZone()));
@@ -774,7 +773,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     var res = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 1));
 
                     Assert.IsFalse(res.Contains(pAss2BeAdded));
-                    Assert.AreEqual(0, res.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(0, res.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.AreEqual(1, res.PersonAbsenceCollection().Count);
                     Assert.AreEqual(1, res.PersonDayOffCollection().Count);
                     Assert.AreEqual(TimeSpan.FromHours(1), res.PersonDayOffCollection()[0].DayOff.Flexibility);
@@ -813,124 +812,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     Assert.AreEqual(1, target.Count);
                     Assert.IsTrue(target[dummyPerson].Contains(ass));
                     Assert.AreEqual(1, target.Count);
-                }
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyModifyNewAndRemoved()
-        {
-            using (mocks.Record())
-            {
-                SetAuthorizationServiceExpectations();
-            }
-            using (mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    IPerson per = PersonFactory.CreatePerson();
-                    per.PermissionInformation.SetDefaultTimeZone(
-                        (TimeZoneInfo.FindSystemTimeZoneById("UTC")));
-                    IPersonAssignment pAssOld = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-                                                                                                      new DateTimePeriod
-                                                                                                          (
-                                                                                                          2000, 1, 1,
-                                                                                                          2000,
-                                                                                                          6, 1));
-                    IPersonAssignment pAssOldOutside = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
-                                                                                                             per,
-                                                                                                             new DateTimePeriod
-                                                                                                                 (2000,
-                                                                                                                  11,
-                                                                                                                  2,
-                                                                                                                  2001,
-                                                                                                                  1, 1));
-
-                    IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff1.Anchor = TimeSpan.Zero;
-                    dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOffOld = PersonDayOffFactory.CreatePersonDayOff(per, scenario,
-                                                                                   new DateOnly(2000, 1, 1),
-                                                                                   dOff1);
-
-
-                    IPersonAbsence pAbsOld = PersonAbsenceFactory.CreatePersonAbsence(per, scenario,
-                                                                                      new DateTimePeriod(2000, 1, 1,
-                                                                                                         2001,
-                                                                                                         1, 1));
-                    IPersonAssignment pAssNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-                                                                                                      new DateTimePeriod
-                                                                                                          (
-                                                                                                          2000, 1, 1,
-                                                                                                          2001,
-                                                                                                          1, 1));
-
-                    IDayOffTemplate dOff2 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff2.Anchor = TimeSpan.Zero;
-                    dOff2.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOffNew = PersonDayOffFactory.CreatePersonDayOff(per, scenario,
-                                                                                   new DateOnly(2000, 1, 1),
-                                                                                   dOff2);
-
-
-
-                    IPersonAbsence pAbsNew = PersonAbsenceFactory.CreatePersonAbsence(per, scenario,
-                                                                                      new DateTimePeriod(2000, 1, 1,
-                                                                                                         2001,
-                                                                                                         1, 1));
-                    ITeam team = TeamFactory.CreateSimpleTeam();
-                    //team.WriteProtection = 10000;
-                    per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1),
-                                                                               new PersonContract(_contract,
-                                                                                                  PartTimePercentageFactory
-                                                                                                      .
-                                                                                                      CreatePartTimePercentage
-                                                                                                      (
-                                                                                                          "sdf"),
-                                                                                                  ContractScheduleFactory
-                                                                                                      .
-                                                                                                      CreateContractSchedule
-                                                                                                      (
-                                                                                                          "sdf")), team));
-
-                    pAssOld.SetId(Guid.NewGuid());
-                    dOffOld.SetId(Guid.NewGuid());
-                    pAbsOld.SetId(Guid.NewGuid());
-                    pAssOldOutside.SetId(Guid.NewGuid());
-
-                    ((ScheduleRange) target[per]).Add(pAbsOld);
-                    ((ScheduleRange) target[per]).Add(dOffOld);
-                    ((ScheduleRange) target[per]).AddRange(new List<IPersonAssignment> {pAssOld, pAssOldOutside});
-
-                    var part = target[per].ScheduledDay(new DateOnly(2000, 1, 1));
-                    part.Remove(pAssOld);
-                    part.Remove(dOffOld);
-                    part.Remove(pAbsOld);
-                    part.Add(pAssNew);
-                    part.Add(dOffNew);
-                    part.Add(pAbsNew);
-
-                    //overlapping mainshifts
-                    target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-                    Assert.IsTrue(target[per].Contains(pAssOldOutside));
-                    Assert.IsTrue(target[per].Contains(pAssOld));
-                    Assert.IsFalse(target[per].Contains(pAssNew)); //conflict
-                    Assert.IsFalse(target[per].Contains(dOffNew));
-                    Assert.IsTrue(target[per].Contains(dOffOld));
-                    Assert.IsFalse(target[per].Contains(pAbsNew));
-                    Assert.IsTrue(target[per].Contains(pAbsOld));
-                    Assert.IsFalse(eventFired);
-
-                    //remove overlapping shift, now the modify should pass
-                    part.Remove(pAssNew);
-                    target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-                    Assert.IsTrue(target[per].Contains(pAssOldOutside));
-                    Assert.IsFalse(target[per].Contains(pAssOld));
-                    Assert.IsTrue(target[per].Contains(dOffNew));
-                    Assert.IsFalse(target[per].Contains(dOffOld));
-                    Assert.IsTrue(target[per].Contains(pAbsNew));
-                    Assert.IsFalse(target[per].Contains(pAbsOld));
-                    Assert.IsTrue(eventFired);
                 }
             }
         }
@@ -1174,8 +1055,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 {
                     Assert.AreSame(ass, target.UpdateFromBroker(rep, newId));
                     var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-                    Assert.AreEqual(1, part.PersonAssignmentCollection().Count);
-                    Assert.AreEqual(ass.Id, part.PersonAssignmentCollection()[0].Id);
+                    Assert.AreEqual(1, part.PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(ass.Id, part.PersonAssignmentCollectionDoNotUse()[0].Id);
                     Assert.AreEqual(0, target.DifferenceSinceSnapshot().Count());
                     Assert.IsTrue(eventFired);
                 }
@@ -1205,7 +1086,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 {
                     Assert.IsNull(target.UpdateFromBroker(rep, newId));
                     var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-                    Assert.AreEqual(0, part.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(0, part.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.AreEqual(0, target.DifferenceSinceSnapshot().Count());
                     Assert.IsFalse(eventFired);
                 }
@@ -1270,8 +1151,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-                    ISchedulePart part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
                     Assert.AreEqual(1, part.PersonMeetingCollection().Count);
                     Assert.AreEqual(1, part2.PersonMeetingCollection().Count);
                     Assert.IsTrue(eventFired);
@@ -1310,8 +1191,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-                    ISchedulePart part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
                     Assert.AreEqual(0, part.PersonMeetingCollection().Count);
                     Assert.AreEqual(0, part2.PersonMeetingCollection().Count);
                     Assert.IsFalse(eventFired);
@@ -1346,7 +1227,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 using (new CustomAuthorizationContext(principalAuthorization))
                 {
                     target.MeetingUpdateFromBroker(rep, newId);
-                    ISchedulePart part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
+                    var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
                     Assert.AreEqual(0, part.PersonMeetingCollection().Count);
                     Assert.IsFalse(eventFired);
                 }
@@ -1504,17 +1385,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     CollectionAssert.IsEmpty(
                                     target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-                                        PersonAssignmentCollection());
+                                        PersonAssignmentCollectionDoNotUse());
 
                     container.Undo();
 					CollectionAssert.IsNotEmpty(
                                     target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-                                        PersonAssignmentCollection());
+                                        PersonAssignmentCollectionDoNotUse());
 
                     container.Redo();
 					CollectionAssert.IsEmpty(
                                     target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-                                        PersonAssignmentCollection());
+                                        PersonAssignmentCollectionDoNotUse());
                 }
             }
         }
@@ -1548,7 +1429,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     Assert.IsFalse(container.CanRedo());
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 1));
-                    part.PersonAssignmentCollection()[0].ClearMainLayers(); 
+                    part.PersonAssignmentCollectionDoNotUse()[0].ClearMainLayers(); 
 
                     container.CreateBatch("a");
                     target.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { part }, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -1596,26 +1477,23 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					part.PersonAssignmentCollection()[0].ClearMainLayers();
+					part.PersonAssignmentCollectionDoNotUse()[0].ClearMainLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-                    CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-                                        PersonAssignmentCollection());
+                    CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
 
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
 
                     //should do nothing
                     container.Undo();
-					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollection()[0].ShiftCategory);
+					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignmentCollectionDoNotUse()[0].ShiftCategory);
 
                     container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollection());
+										CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
 
                     //should do nothing
                     container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-										PersonAssignmentCollection());
+										CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
                 }
             }
         }
@@ -1643,7 +1521,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
 					var oldMainShift = part.GetEditorShift();
-					part.PersonAssignmentCollection()[0].ClearMainLayers();
+					part.PersonAssignmentCollectionDoNotUse()[0].ClearMainLayers();
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
                     container.Undo();

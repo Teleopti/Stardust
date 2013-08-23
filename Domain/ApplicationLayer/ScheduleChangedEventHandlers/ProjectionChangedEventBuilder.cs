@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					switch (significantPart)
 					{
 						case SchedulePartView.MainShift:
-							var cat = scheduleDay.AssignmentHighZOrder().ShiftCategory;
+							var cat = scheduleDay.PersonAssignment().ShiftCategory;
 							eventScheduleDay.Label = cat.Description.ShortName;
 							eventScheduleDay.DisplayColor = cat.DisplayColor.ToArgb();
 							break;

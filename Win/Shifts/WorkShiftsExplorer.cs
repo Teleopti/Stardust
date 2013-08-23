@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
@@ -299,8 +297,11 @@ namespace Teleopti.Ccc.Win.Shifts
             loadView(ShiftCreatorViewType.Activities);
         }
 
+	    private DateTime _lastSaveClick;
         private void toolStripButtonSaveClick(object sender, EventArgs e)
         {
+			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
+			if (_lastSaveClick.AddSeconds(1) > DateTime.Now) return;
             if (validateGrid())
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -308,6 +309,7 @@ namespace Teleopti.Ccc.Win.Shifts
                 toolStripButtonRefresh.PerformClick();
                 Cursor.Current = Cursors.Default;
             }
+			_lastSaveClick = DateTime.Now;
         }
 
         private void toolStripButtonHelpClick(object sender, EventArgs e)
@@ -325,7 +327,6 @@ namespace Teleopti.Ccc.Win.Shifts
             {
                 _generalView.Refresh();
                 ShowWarningMessage(UserTexts.Resources.ShiftCreatorValidationErrorMessage,Text);
-                
             }
             return status;
         }
@@ -335,7 +336,6 @@ namespace Teleopti.Ccc.Win.Shifts
 			if (validateGrid())
             {
 				_navigationView.ForceRefresh();
-                //Presenter.VisualizePresenter.LoadModelCollection();
                 _visualizeView.RefreshView();
                 var amountList = Presenter.VisualizePresenter.RuleSetAmounts();
                 _generalView.Amounts(amountList);
@@ -534,7 +534,12 @@ namespace Teleopti.Ccc.Win.Shifts
 		    _generalView.Enabled = enabled;
 	    }
 
-	    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public void ExitEditMode()
+        {
+            validateGrid();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;
             const int WM_SYSKEYDOWN = 0x104;

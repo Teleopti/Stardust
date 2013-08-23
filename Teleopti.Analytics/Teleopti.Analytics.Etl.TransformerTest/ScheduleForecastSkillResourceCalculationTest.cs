@@ -21,6 +21,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private ISchedulingResultService _schedulingResultService;
         private IDictionary<ISkill, IList<ISkillDay>> _skillDaysDictionary;
 	    private DateTimePeriod _scheduleLoadedForPeriod;
+		private readonly DateTime _updatedOnDateTime = DateTime.Now;
 
 	    [SetUp]
         public void Setup()
@@ -32,6 +33,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             skill.SetId(Guid.NewGuid());
 
 	        var period = new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11);
+			ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11), skill, _updatedOnDateTime);
 		    _scheduleLoadedForPeriod = period.ToDateTimePeriod(skill.TimeZone);
             ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(period, skill);
             _skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>();

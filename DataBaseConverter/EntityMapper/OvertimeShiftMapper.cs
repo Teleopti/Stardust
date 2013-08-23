@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// <summary>
     /// Maps a PersonalShift.
     /// </summary>
-    public class OvertimeShiftMapper : Mapper<OvertimeShift, global::Domain.ShiftBase>
+    public class OvertimeShiftMapper : Mapper<IEnumerable<ILayer<IActivity>>, global::Domain.ShiftBase>
     {
         private readonly DateTime _date;
         private readonly LayerContainsOvertime _layerContainsOvertime;
@@ -39,24 +39,17 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public override OvertimeShift Map(global::Domain.ShiftBase oldEntity)
+				public override IEnumerable<ILayer<IActivity>> Map(global::Domain.ShiftBase oldEntity)
         {
-            OvertimeShift retShift = new OvertimeShiftForConversion();
-            ActivityLayerMapper actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.OvertimeShift, _date, TimeZone);
-            foreach (global::Domain.ActivityLayer actLayer in oldEntity.ProjectedLayers().FilterBySpecification(_layerContainsOvertime))
+            var actLayerMapper = new ActivityLayerMapper(MappedObjectPair, ActivityLayerBelongsTo.OvertimeShift, _date, TimeZone);
+						var ret = new List<ILayer<IActivity>>();
+            foreach (var actLayer in oldEntity.ProjectedLayers().FilterBySpecification(_layerContainsOvertime))
             {
                 var newActLayer = actLayerMapper.Map(actLayer);
                 if (newActLayer != null)
-                    retShift.LayerCollection.Add(newActLayer);
+                    ret.Add(newActLayer);
             }
-            return retShift;
-        }
-
-        private class OvertimeShiftForConversion : OvertimeShift
-        {
-            public override void OnAdd(ILayer<IActivity> layer)
-            {
-            }
+            return ret;
         }
     }
 }

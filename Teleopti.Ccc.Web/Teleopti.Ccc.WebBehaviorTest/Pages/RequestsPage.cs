@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -67,9 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Deny-shift-trade")]
 		public Button DenyShiftTradeButton { get; set; }
-		
-		[FindBy(Id = "I-am-a-shifttrade")]
-		public Div IamAShiftTrade { get; set; }
 
 		[FindBy(Class = "request-detail-title")]
 		public Div RequestDetailTitle { get; set; }

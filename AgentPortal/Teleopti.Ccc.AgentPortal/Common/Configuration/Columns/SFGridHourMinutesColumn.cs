@@ -6,21 +6,11 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {
     public class SFGridHourMinutesColumn<T> : SFGridColumnBase<T>
     {
-        private string _toBeBold = string.Empty;
-        public SFGridHourMinutesColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        {
-        }
-
+        private readonly string _toBeBold = string.Empty;
+        
         public SFGridHourMinutesColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)
         {
-        }
-
-        public SFGridHourMinutesColumn(string bindingProperty, string headerText, int preferredWidth, string toBeBold)
-            : base(bindingProperty, headerText, preferredWidth)
-        {
-            _toBeBold = toBeBold;
         }
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)

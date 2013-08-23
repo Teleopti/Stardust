@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
 			var datePeriod = new DateOnlyPeriod(new DateOnly(query.StartDate.DateTime), new DateOnly(query.EndDate.DateTime));
-			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
 			_dateTimePeriodAssembler.TimeZone = timeZone;
 			_scheduleDayAssembler.SpecialProjection = query.SpecialProjection;

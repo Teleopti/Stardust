@@ -98,8 +98,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -246,7 +247,6 @@
     <Compile Include="Persisters\IScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\MeetingRefresher.cs" />
-    <Compile Include="Persisters\NoReassociateData.cs" />
     <Compile Include="Persisters\PersistConflict.cs" />
     <Compile Include="Persisters\PersistConflictMessageState.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollector.cs" />
@@ -262,13 +262,15 @@
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\RemoveEmptyAssignments.cs" />
     <Compile Include="UnitOfWork\EventExtensions.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
-    <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\IImportForecastsRepository.cs" />
@@ -456,6 +458,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\PolicyForPassword.xml" />
+    <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_Sw_Forecasts.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_En_St.txt" />

@@ -810,7 +810,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
                     populate=function(results, container, depth) {
 
-                        var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted;
+                        var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, divider;
 
                         results = opts.sortResults(results, container, query);
 
@@ -819,7 +819,9 @@ the specific language governing permissions and limitations under the Apache Lic
                             result=results[i];
 
                             disabled = (result.disabled === true);
-                            selectable = (!disabled) && (id(result) !== undefined);
+                            divider = id(result) === '-';
+                            //selectable = (!disabled) && (id(result) !== undefined);
+                            selectable = (!disabled) && (id(result) !== undefined) && !divider;
 
                             compound=result.children && result.children.length > 0;
 

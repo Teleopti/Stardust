@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			
 			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null))
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
 							  .IgnoreArguments()
 							  .Return(scheduleDictionary);
 		}
@@ -68,10 +66,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -107,10 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -148,10 +142,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -195,11 +187,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollection()).Return(readOnlyCollection);
-			_firstDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -244,11 +233,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection()).Return(readOnlyCollection);
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -292,11 +278,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollection())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection()).Return(readOnlyCollection);
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -347,9 +330,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 			var personAssignmentOnSecondDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod(assignmentStart.AddDays(1), assignmentEnd.AddDays(1).AddHours(2)));
 
-			_previousDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment}));
-			secondDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignmentOnSecondDay}));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			secondDay.Stub(x => x.PersonAssignment()).Return(personAssignmentOnSecondDay);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -399,9 +382,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			_previousDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
-			secondDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			secondDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -451,9 +434,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			_previousDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			secondDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment}));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
+			secondDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{

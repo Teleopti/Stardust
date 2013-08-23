@@ -48,7 +48,57 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                  	{UpdatedDate = workloadDayTemplate.UpdatedDate};
         	Create(workloadDate, workload, workloadDayTemplate.OpenHourList);
 
-            ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
+            copyValuesFromTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
+        }
+
+        private void copyValuesFromTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
+        {
+            Close();
+            SetOpenHours(workloadDayTemplate.OpenHourList);
+            innerSplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(TaskPeriodList), lockAction, releaseAction);
+
+            double taskTimeFactor = TaskTimeFactorTaskTime(workloadDayTemplate);
+            double taskAfterTaskTimeFactor = TaskTimeFactorAfterTaskTime(workloadDayTemplate);
+
+            var timeZone = Workload.Skill.TimeZone;
+            lockAction(this);
+            foreach (var keyValuePair in workloadDayTemplate.SortedTaskPeriodList)
+            {
+                var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
+                var taskPeriods =
+                    TaskPeriodList.Where(t => localTemplatePeriod.Contains(t.Period.TimePeriod(timeZone))).ToList();
+                int taskPeriodCount = taskPeriods.Count;
+                if (taskPeriodCount == 2 &&
+                    taskPeriods[0].Period.TimePeriod(timeZone) == taskPeriods[1].Period.TimePeriod(timeZone))
+                {
+                    //Do nothing as we wan't to set the same values to both periods in this case (ambigious periods due to change from DST)
+                }
+                else if (taskPeriodCount > 1)
+                {
+                    innerMergeTemplateTaskPeriods(taskPeriods, lockAction, releaseAction);
+                    taskPeriods =
+                        TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.TimePeriod(timeZone).StartTime)
+                            .ToList();
+                    taskPeriodCount = taskPeriods.Count;
+                }
+                if (taskPeriodCount == 0) continue;
+                
+                foreach (ITemplateTaskPeriod newTaskPeriod in taskPeriods)
+                {
+                    newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
+                    newTaskPeriod.AverageTaskTime = keyValuePair.AverageTaskTime;
+                    newTaskPeriod.AverageAfterTaskTime = keyValuePair.AverageAfterTaskTime;
+                    newTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageTaskTime.TotalSeconds * taskTimeFactor);
+                    newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor);
+                }
+            }
+
+            releaseAction(this);
+            Guid templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
+            _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek,
+                workloadDayTemplate.Workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
+
+            ResetStatistics();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -102,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				}
             }
             
-            if (isOpenForIncomingWork() && tasks > 0)
+            if (isOpenForIncomingWork())
             {
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
@@ -119,8 +169,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         	//Apply the original volumes
             if (isOpenForIncomingWork())
             {
-                if (tasks > 0)
-                {
                     lockAction(this);
                     CampaignTasks = campaignTasks;
                     CampaignTaskTime = campaignTasksTime;
@@ -129,11 +177,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     AverageTaskTime = originalAverageTaskTime;
                     AverageAfterTaskTime = originalAfterTaskTime;
                     releaseAction(this);
-                }
-                else
-                {
-                    OnTasksChanged();
-                }
             }
 
             ResetStatistics();
@@ -159,6 +202,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             TimeSpan templateAvgHandlingTime = templateHandlingTime;
             if (templateTasks > 0)
                 templateAvgHandlingTime = TimeSpan.FromSeconds(templateHandlingTime.TotalSeconds / templateTasks);
+            else
+            {
+                foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
+                {
+                    taskTimesAverageTalkTime += taskPeriod.AverageTaskTime.TotalSeconds;
+                }
+                if (workloadDayTemplate.TaskPeriodList.Count > 0)
+                    templateAvgHandlingTime = TimeSpan.FromSeconds(taskTimesAverageTalkTime / workloadDayTemplate.TaskPeriodList.Count);
+            }
 
             double taskTimeFactor = 1;
             if (AverageTaskTime.TotalSeconds > 0 && templateAvgHandlingTime.TotalSeconds > 0)
@@ -181,10 +233,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
             TimeSpan templateAveragegAfterTaskTime = templateAfterTaskTime;
             if (templateTasks > 0)
                 templateAveragegAfterTaskTime = TimeSpan.FromSeconds(templateAfterTaskTime.TotalSeconds / templateTasks);
+            else
+            {
+                foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
+                {
+                    taskTimesAverageAfterTalkTime += taskPeriod.AverageTaskTime.TotalSeconds;
+                }
+                if(workloadDayTemplate.TaskPeriodList.Count>0)
+                    templateAveragegAfterTaskTime = TimeSpan.FromSeconds(taskTimesAverageAfterTalkTime / workloadDayTemplate.TaskPeriodList.Count);
+            }
+
 
             double taskTimeFactor = 1;
             if (AverageAfterTaskTime.TotalSeconds > 0 && templateAveragegAfterTaskTime.TotalSeconds > 0)
                 taskTimeFactor = AverageAfterTaskTime.TotalSeconds / templateAveragegAfterTaskTime.TotalSeconds;
+           
             return taskTimeFactor;
         }
 

@@ -9,34 +9,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private string _headerText;
-        private string _groupHeaderText;
-        private string _bindingProperty;
-
-        public TimeOfDayColumn(string bindingProperty, string headerText)
-        {
-            _headerText = headerText;
-            _bindingProperty = bindingProperty;
-        }
-
+        private readonly string _headerText;
+        private readonly string _groupHeaderText;
+        
         public TimeOfDayColumn(string bindingProperty, string headerText, string groupHeaderText)
+            : base(bindingProperty, 80)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _groupHeaderText = groupHeaderText;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 150; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -52,17 +32,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             e.Handled = true;
         }
 
-        #region Set Up Headers
-
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -73,20 +42,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             {
                 e.Style.CellType = "TimeSpanTimeOfDayCellModel";
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 InvokeValidate(dataItem, e.Style, e.RowIndex, false);
             }
         }
 
-        /// <summary>
-        /// Sets up multiple headers.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpMultipleHeaders(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0)
@@ -104,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                     return;
 
                 T dataItem = dataItems[e.RowIndex - 2];
-                object cellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object cellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 e.Style.CellType = "TimeSpanTimeOfDayCellModel";
                 if (cellValue == null)
                     e.Style.CellType = "Static";
@@ -114,8 +74,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 InvokeValidate(dataItem, e.Style, e.RowIndex, false);
             }
         }
-
-        #endregion
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.TimeSpan.TryParse(System.String,System.TimeSpan@)")]
         public override void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -139,8 +97,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             if (e.Style.CellValue != null)
             {
                 TimeSpan cellValue;
-                TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
-                _propertyReflector.SetValue(dataItem, _bindingProperty, cellValue);
+                if (e.Style.CellValue is TimeSpan)
+                {
+                    cellValue = (TimeSpan) e.Style.CellValue;
+                }
+                else
+                {
+                    TimeSpan.TryParse(e.Style.CellValue.ToString(), out cellValue);
+                }
+                _propertyReflector.SetValue(dataItem, BindingProperty, cellValue);
             }
 
             InvokeValidate(dataItem, e.Style, e.RowIndex, true);
@@ -150,24 +115,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
         }
 
-        /// <summary>
-        /// Invokes the validate.
-        /// </summary>
-        /// <param name="dataItem">The data item.</param>
-        /// <param name="style">The style.</param>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="inSaveMode">if set to <c>true</c> [in save mode].</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-02
-        /// </remarks>
         private void InvokeValidate(T dataItem, GridStyleInfo style, int rowIndex, bool inSaveMode)
         {
         	var handler = Validate;
             if (handler != null)
             {
-                IAsyncResult result = handler.BeginInvoke(dataItem, style, rowIndex, inSaveMode, null, null);
-                handler.EndInvoke(result);
+                handler.Invoke(dataItem, style, rowIndex, inSaveMode);
             }
         }
     }

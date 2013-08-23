@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             gridColumns.Add(new SFGridDescriptionNameColumn<ITeamScorecardModel>("SiteAndTeam", UserTexts.Resources.Team));
             var scorecardColumn = new SFGridDropDownColumn<ITeamScorecardModel, IScorecard>("Scorecard", UserTexts.Resources.ScoreCard,
-                                                                              _scorecards, "Name", null,
+                                                                              _scorecards, "Name",
                                                                               typeof(IScorecard));
             gridColumns.Add(scorecardColumn);
             scorecardColumn.QueryComboItems += ScorecardColumnQueryComboItems;

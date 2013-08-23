@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         }
 
+        [Test]
         public void VerifyConstructors()
         {
             Assert.IsNotNull(_target);

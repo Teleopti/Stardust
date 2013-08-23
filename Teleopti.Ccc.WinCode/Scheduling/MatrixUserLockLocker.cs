@@ -23,15 +23,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             foreach (var matrix in scheduleMatrixes)
             {
-                var currentPerson = matrix.Person;
-
-	            bool personIncluded = scheduleDays.Any(scheduleDay => scheduleDay.Person.Equals(currentPerson));
 
 	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
-				if(personIncluded)
-#pragma warning disable 612,618
-					matrix.SelectedPeriod = selectedPeriod;
-#pragma warning restore 612,618
             }
         }
 

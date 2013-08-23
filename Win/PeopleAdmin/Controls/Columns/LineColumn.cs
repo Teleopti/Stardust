@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
@@ -13,25 +9,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
-        private string _bindingProperty;
-
-        public LineColumn(string bindingProperty)
+        public LineColumn(string bindingProperty) : base(bindingProperty,110)
         {
-            _bindingProperty = bindingProperty;
         }
-
-        public override int PreferredWidth
-        {
-            get { return 110; }
-        }
-
-		public override string BindingProperty
-		{
-			get
-			{
-				return _bindingProperty;
-			}
-		}
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
@@ -44,13 +24,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (e.RowIndex == 0 && e.ColIndex > 0)
             {
                 T dataItem = dataItems[e.RowIndex];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
             }
 
             if (dataItems.Count > 0 && e.RowIndex == 1)
             {
                 T dataItem = dataItems[e.RowIndex - 1];
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
                 e.Style.VerticalAlignment = GridVerticalAlignment.Top;
                 e.Style.Font.Bold = true;
             }

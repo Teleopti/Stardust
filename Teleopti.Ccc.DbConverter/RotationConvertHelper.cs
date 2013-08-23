@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.DBConverter
             : base(connectionString)
         {}
 
-        protected RotationConvertHelper(){}
-
         public IList<DataRow> LoadAllRotations()
         {
             return ReadData("SELECT rotation_id, rotation_name, weeks FROM t_rotations");
@@ -19,9 +17,6 @@ namespace Teleopti.Ccc.DBConverter
 
         public IList<DataRow> LoadAllRotationDays()
         {
-            //return ReadData("SELECT rotation_id, rotation_day, start_interval, end_interval, shift_cat_id, abs_id FROM t_rotation_days");
-            
-            //edited by Madhuranga, to get dayoff's short name to map dayoffs in rotations.
             return ReadData("SELECT r.rotation_id, r.rotation_day, r.start_interval, r.end_interval, r.shift_cat_id, r.abs_id, a.abs_short_desc_nonuni as abs_short_desc FROM t_rotation_days r left outer join absences a on r.abs_id = a.abs_id");
         }
 

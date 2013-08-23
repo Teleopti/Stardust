@@ -8,10 +8,9 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IOvertimeShiftActivityLayer _layer;
+	    private readonly IOvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 	    private readonly IMoveLayerVertical _moveLayerVertical;
-	    private IOvertimeShift _overtimeShift;
 
 	    public OvertimeLayerViewModel(IVisualLayer layer)
             : base(layer)
@@ -19,33 +18,13 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
             : base(observer, layer, assignment, eventAggregator, moveLayerVertical)
         {
 	        _layer = layer;
 	        _assignment = assignment;
 	        _moveLayerVertical = moveLayerVertical;
-
-	        tempFindShift();
         }
-
-			private void tempFindShift()
-			{
-				//just a hack for now
-				if (_assignment == null)
-					return;
-				foreach (var overtimeShift in _assignment.OvertimeShiftCollection)
-				{
-					foreach (var layer in overtimeShift.LayerCollection)
-					{
-						if (layer.Equals(_layer))
-						{
-							_overtimeShift = overtimeShift;
-							return;
-						}
-					}
-				}
-			}
 
 	    public override bool CanMoveUp
 	    {
@@ -54,8 +33,17 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveDown
 	    {
-				get { return _moveLayerVertical != null && _overtimeShift.LayerCollection.CanMoveDownLayer(_layer); }
+		    get
+		    {
+			    return _moveLayerVertical != null && !isLayerLast();
+		    }
 	    }
+
+		private bool isLayerLast()
+		{
+			var overtimeLayers = _assignment.OvertimeLayers().ToList();
+			return overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
+		}
 
 	    public override bool Opaque
         {

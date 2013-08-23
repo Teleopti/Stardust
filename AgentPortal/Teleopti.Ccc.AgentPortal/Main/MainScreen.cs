@@ -80,17 +80,6 @@ namespace Teleopti.Ccc.AgentPortal.Main
             get { return panelLegends; }
         }       
 
-        public void RefreshSchedules()
-        {
-            Cursor = Cursors.WaitCursor;
-            var control = panelSchedule.Controls[0] as ScheduleControl;
-            if (control != null)
-            {
-                ((IAgentScheduleViewBase)control.ScheduleView).Refresh(true);
-            }
-            Cursor = Cursors.Default;
-        }
-
         public void RefreshTab()
         {
             if (ActiveControl != null)
@@ -610,14 +599,14 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     string resourceKey = reportDto.ReportName.Substring(2, reportDto.ReportName.Length - 2);
                     string localizedResourceText = Resources.ResourceManager.GetString(resourceKey);
-                    if (!string.IsNullOrEmpty(localizedResourceText))
-                    {
-                        item.Text = localizedResourceText;
-                        item.Tag = reportDto;
-                        item.Click += ToolStripMenuSomeReportClick;
+                    if(string.IsNullOrEmpty(localizedResourceText)) localizedResourceText = reportDto.ReportName;
+                    
+                    item.Text = localizedResourceText;
+                    item.Tag = reportDto;
+                    item.Click += ToolStripMenuSomeReportClick;
 
-                        toolStripSplitButtonReport.DropDownItems.Add(item);
-                    }
+                    toolStripSplitButtonReport.DropDownItems.Add(item);
+                    
                 }
             }
 

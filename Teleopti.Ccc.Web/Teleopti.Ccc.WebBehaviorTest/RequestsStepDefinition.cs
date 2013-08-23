@@ -4,8 +4,8 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -203,6 +203,38 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
+
+		[When(@"I click on shifttrade resend button")]
+		public void WhenIClickOnShifttradeResendButton()
+		{
+			Browser.Interactions.ClickContaining(".btn-primary", Resources.SendAgain);
+		}
+
+		[When(@"I click on shifttrade cancel button")]
+		public void WhenIClickOnShifttradeCancelButton()
+		{
+			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
+		}
+
+
+		[Then(@"I should not see cancel shifttrade button")]
+		public void ThenIShouldSeeCancelShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-danger", Resources.Cancel);
+		}
+
+		[Then(@"I should not see resend shifttrade button")]
+		public void ThenIShouldNotSeeResendShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-primary", Resources.SendAgain);
+		}
+
+		[Then(@"I should not see any requests")]
+		public void ThenIShouldNotSeeAnyRequests()
+		{
+			EventualAssert.That(()=>_page.Requests,Is.Empty);
+		}
+
 
 	}
 }

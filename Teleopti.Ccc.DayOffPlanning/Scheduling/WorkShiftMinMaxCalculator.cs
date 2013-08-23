@@ -90,6 +90,8 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             TimeSpan corrMax = minMax.Maximum.Subtract(sumCorrection);
             TimeSpan minLenght = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrix).StartTime.Subtract(corrMax);
 
+
+
             TimeSpan minForDay = PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions)[dayToSchedule].Minimum;
             if (minForDay > minLenght)
                 minLenght = minForDay;

@@ -28,14 +28,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             Description description;
             object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
 
-            if (value.GetType() == typeof(Description))
+            if (value is Description)
                 description = (Description)value;
             else
-                description = new Description(((Description)value).Name, text);
+                description = new Description(value.ToString(), text);
             return description;
         }
 
-    
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
             e.Style.CellType = "DescriptionShortNameCellModel";
@@ -53,7 +52,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             var description = (Description)e.Style.CellValue;
             PropertyReflectorHelper.SetValue(currentItem, BindingProperty, description);
         }
-
     }
-
 }

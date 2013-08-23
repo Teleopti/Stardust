@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                             scheduleRange.Key.PermissionInformation.DefaultTimeZone());
                     foreach (IScheduleDay scheduleDay in scheduleRange.Value.ScheduledDayCollection(period))
                     {
-                        scheduleDay.PersonAssignmentCollection().ForEach(p => p.CheckRestrictions());
+                        scheduleDay.PersonAssignmentCollectionDoNotUse().ForEach(p => p.CheckRestrictions());
                     }
 
                 }

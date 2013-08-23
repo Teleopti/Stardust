@@ -48,10 +48,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
                 var startDate = new DateOnly(command.Date.DateTime);
-                var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
@@ -59,12 +58,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var shiftCategory = _shiftCategoryRepository.Load(command.ShiftCategoryId);
 	            var mainShiftLayers = _mainActivityLayerAssembler.DtosToDomainEntities(command.LayerCollection);
                
-				IPersonAssignment currentAss = scheduleDay.AssignmentHighZOrder();
-			//unsure about this...
-	            foreach (var period in mainShiftLayers.PeriodBlocks())
-	            {
-								scheduleDay.MergePersonalShiftsToOneAssignment(period); 
-	            }
+				IPersonAssignment currentAss = scheduleDay.PersonAssignment();
+
 				if (currentAss == null)
 				{
 					currentAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);

@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
+			scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_personRepository.Load(_cancelPersonalActivityCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelPersonalActivityCommandDto.Period)).Return(_period);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Playback())
 			{
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].PersonalLayers.Should().Be.Empty();
+				scheduleDay.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Should().Be.Empty();
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollection()[0].AddPersonalLayer(_activity, _period);
+			scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddPersonalLayer(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_personRepository.Load(_cancelPersonalActivityCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelPersonalActivityCommandDto.Period)).Return(_period);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelPersonalActivityCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].PersonalLayers.Should().Be.Empty();
+				scheduleDay.PersonAssignmentCollectionDoNotUse()[0].PersonalLayers().Should().Be.Empty();
 			}
 		}
 	}

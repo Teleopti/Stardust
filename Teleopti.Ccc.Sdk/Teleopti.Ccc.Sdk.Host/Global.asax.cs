@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -26,7 +27,6 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new PersonPeriodChangedMessageSender(busSender)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
-        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
@@ -195,6 +195,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<AuthenticationFactory>().InstancePerLifetimeScope();
             builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleMailFactory>().InstancePerLifetimeScope();
         	builder.RegisterType<PublicNoteTypeFactory>().InstancePerLifetimeScope();
             builder.RegisterType<PersonsFromLoadOptionFactory>().InstancePerLifetimeScope();

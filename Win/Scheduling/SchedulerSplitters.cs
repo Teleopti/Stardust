@@ -65,10 +65,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get { return tabSkillData; }
         }
-        public TabPageAdv TabPageAdv1
-        {
-            get { return tabPageAdv1; }
-        }
+
         public ElementHost ElementHostRequests
         {
             get { return elementHostRequests; }
@@ -91,31 +88,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get { return _pinnedSkillHelper.PinnedPage(); }
 		}
 
-		//public IRestrictionSummaryGrid RestrictionSummeryGrid
-		//{
-		//    get { return restrictionSummaryGrid1; }
-		//}
-
     	public AgentRestrictionGrid AgentRestrictionGrid
     	{
 			get { return agentRestrictionGrid1; }
     	}
-
-		//public ISchedulingOptions SchedulingOptions
-		//{
-		//    get
-		//    {
-		//        ISchedulingOptions options = new RestrictionSchedulingOptions
-		//                                         {
-		//                                             UseAvailability = _useAvailability,
-		//                                             UsePreferences = _usePreference,
-		//                                             UseStudentAvailability = _useStudentAvailability,
-		//                                             UseRotations = _useRotation,
-		//                                             UseScheduling = _useSchedules
-		//                                         };
-		//        return options;
-		//    }
-		//}
 
 		public RestrictionSchedulingOptions SchedulingOptions
 		{
@@ -135,55 +111,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void chbAvailability_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
-
             _useAvailability = chbAvailability.Checked;
             RecalculateRestrictions();
         }
 
         private void chbRotations_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
             _useRotation = chbRotations.Checked;
             RecalculateRestrictions();
         }
 
         private void chbPreferences_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
             _usePreference = chbPreferences.Checked;
             RecalculateRestrictions();
         }
 
         private void chbStudenAvailability_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
             _useStudentAvailability = chbStudenAvailability.Checked;
             RecalculateRestrictions();
         }
 
         private void chbSchedules_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
             _useSchedules = chbSchedules.Checked;
             RecalculateRestrictions();
         }
 
         public void RecalculateRestrictions()
         {
-			//if (restrictionSummaryGrid1.SingleAgentRestrictionPresenter == null)
-			//    return;
-
-			//Cursor = Cursors.WaitCursor;
-			//ISchedulingOptions options = SchedulingOptions;
-			//restrictionSummaryGrid1.SingleAgentRestrictionPresenter.SetSchedulingOptions(options, true);
-			//Cursor = Cursors.Default;
-
 			agentRestrictionGrid1.LoadData(SchedulingOptions);
         }
 
@@ -218,11 +175,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void ReplaceOldWithNew(ISkill newSkill, ISkill oldSkill)
         {
             _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
-        }
-
-        public void RemoveHandlePersonEvents()
-        {
-            handlePersonRequestView1.RemoveEvents();
         }
     }
 }

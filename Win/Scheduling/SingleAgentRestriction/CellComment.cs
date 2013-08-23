@@ -21,13 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
 			_editTextBox.Text = value;}
 		}
 
-		public Font CommentFont 
-		{
-            get { return _comment.Font; }
-            set { _comment.Font = value; }
-		}
-
-		public Size CommentCorner
+        public Size CommentCorner
 		{
 			get{return new Size(_dx, _dy);}
 			set{_dx = value.Width; _dy = value.Height;}

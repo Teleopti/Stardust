@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    /// <summary>
-    /// Creates SkillDay test date
-    /// </summary>
     public static class SkillDayFactory
     {
         public static ISkillDay CreateSkillDay(DateTime dt)
@@ -19,33 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ISkill skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
             return CreateSkillDay(skill, dt);
         }
-
-        public static ISkillDay CreateSkillDay(DateTime dt, IList<TimePeriod> openHours)
-        {
-            ISkill skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
-            IWorkload workload = new Workload(skill);
-            IWorkloadDay workloadDay = new WorkloadDay();
-            var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone));
-            workloadDay.Create(date, workload, openHours);
-            IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-            workloadDays.Add(workloadDay);
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-            if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
-            return new SkillDay(date, skill, scenario, workloadDays, new List<ISkillDataPeriod>());
-        }
-
-		public static ISkillDay CreateSkillDay(ISkill skill, DateTime dt, IList<TimePeriod> openHours)
-		{
-			IWorkload workload = new Workload(skill);
-			IWorkloadDay workloadDay = new WorkloadDay();
-			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone));
-			workloadDay.Create(date, workload, openHours);
-			IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-			workloadDays.Add(workloadDay);
-			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-			if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
-			return new SkillDay(date, skill, scenario, workloadDays, new List<ISkillDataPeriod>());
-		}
 
         public static ISkillDay CreateSkillDay(ISkill skill, DateTime dt, IScenario scenario)
         {
@@ -94,12 +63,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return skillDay;
         }
 
-
-        /// <summary>
-        /// Creates skill days for activity divider test.
-        /// </summary>
-        /// <param name="skills">The contained skills.</param>
-        /// <returns></returns>
         public static ISkillSkillStaffPeriodExtendedDictionary CreateSkillDaysForActivityDividerTest(IDictionary<string, ISkill> skills)
         {
             DateTime dateTime = new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc);
@@ -128,21 +91,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill, dateTime, forecastValue, 0d);
 
             return new SkillStaffPeriodDictionary(skill) { { skillStaffPeriod.Period, skillStaffPeriod } };
-        }
-
-        public static ISkillSkillStaffPeriodExtendedDictionary CreateSkillDaysForActivityDividerTest2(IDictionary<string, ISkill> skills)
-        {
-            DateTime dateTime = new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc);
-
-            ISkillSkillStaffPeriodExtendedDictionary retList = new SkillSkillStaffPeriodExtendedDictionary();
-
-            retList.Add(skills["PhoneA"], prepareSkillDay(skills["PhoneA"], dateTime, 5));
-            var secondPeriodForPhoneA = prepareSkillDay(skills["PhoneA"], dateTime.AddDays(1), 5);
-            retList[skills["PhoneA"]].Add(secondPeriodForPhoneA.First().Key, secondPeriodForPhoneA.First().Value);
-            retList.Add(skills["PhoneB"], prepareSkillDay(skills["PhoneB"], dateTime, 10));
-            retList.Add(skills["PhoneC"], prepareSkillDay(skills["PhoneC"], dateTime, 0));
-
-            return retList;
         }
 
     	public static TaskOwnerHelper GenerateStatistics(DateTime startDate, IWorkload workload)
@@ -190,7 +138,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 statisticTasks.Add(statisticTask3);
 
                 IWorkloadDay workloadDay = WorkloadDayFactory.GetWorkloadDaysForTest(date, date, workload)[0];
-                //workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList.ToList());
                 workloadDays.Add(workloadDay);
             }
             TaskOwnerHelper period = new TaskOwnerHelper(workloadDays);
@@ -242,7 +189,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return new TaskOwnerHelper(workloadDays);
         }
 
-
     	public static TaskOwnerHelper GenerateStatisticsForWeekTests(DateTime startDate, IWorkload workload)
         {
             IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
@@ -291,7 +237,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 statisticTasks.Add(statisticTask3);
 
                 IWorkloadDay workloadDay = WorkloadDayFactory.GetWorkloadDaysForTest(date, date, workload)[0];
-                //workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList.ToList());
                 workloadDays.Add(workloadDay);
 
             }
@@ -301,58 +246,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             period.EndUpdate();
 
             return period;
-        }
-
-        public static TaskOwnerHelper GenerateMockedStatisticsForWeekTests(MockRepository mocks, DateTime startDate, IWorkload workload, TimeZoneInfo timeZone)
-        {
-            IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-            DateTime date = startDate;
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == 4 || i == 9)
-                    date = date.AddDays(2);
-                else
-                    date = date.AddDays(7);
-
-                IWorkloadDay workloadDay = mocks.StrictMock<IWorkloadDay>();
-
-                Expect.Call(workloadDay.CurrentDate).Return(new DateOnly(date)).Repeat.Any();
-                Expect.Call(workloadDay.Workload).Return(workload).Repeat.Any();
-                Expect.Call(workloadDay.IsLocked).Return(false).Repeat.Any();
-                //Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
-                Expect.Call(workloadDay.OpenForWork).Return(new OpenForWork(){ IsOpen = true , IsOpenForIncomingWork = true}).Repeat.Any();
-                Expect.Call(workloadDay.TotalTasks).Return(30).Repeat.Any();
-                Expect.Call(workloadDay.TotalAverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
-                Expect.Call(workloadDay.TotalAverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();
-                Expect.Call(workloadDay.Tasks).Return(30).Repeat.Any();
-                Expect.Call(workloadDay.AverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
-                Expect.Call(workloadDay.AverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();
-
-                workloadDay.AddParent(null);
-                LastCall.IgnoreArguments().Repeat.Any();
-
-                if (i > 6)
-                {
-                    Expect.Call(workloadDay.TotalStatisticAbandonedTasks).Return(0).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAnsweredTasks).Return(110).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageAfterTaskTime).Return(TimeSpan.FromSeconds(10)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageTaskTime).Return(TimeSpan.FromSeconds(20)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticCalculatedTasks).Return(110).Repeat.Any();
-                }
-                else
-                {
-                    Expect.Call(workloadDay.TotalStatisticAbandonedTasks).Return(0).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAnsweredTasks).Return(80).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageAfterTaskTime).Return(TimeSpan.FromSeconds(20)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageTaskTime).Return(TimeSpan.FromSeconds(30)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticCalculatedTasks).Return(80).Repeat.Any();
-                }
-
-                workloadDays.Add(workloadDay);
-
-            }
-            return new TaskOwnerHelper(workloadDays);
         }
 
     	public static TaskOwnerHelper GenerateStatisticsForDayTests(DateTime startDate, IWorkload workload)
@@ -400,7 +293,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 statisticTasks.Add(statisticTask3);
 
                 IWorkloadDay workloadDay = WorkloadDayFactory.GetWorkloadDaysForTest(date, date, workload)[0];
-                //workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList.ToList());
                 workloadDays.Add(workloadDay);
 
             }
@@ -410,55 +302,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             period.EndUpdate();
 
             return period;
-        }
-
-        public static TaskOwnerHelper GenerateMockedStatisticsForDayTests(MockRepository mocks,DateTime startDate, IWorkload workload, TimeZoneInfo timeZone)
-        {
-            IList<ITaskOwner> workloadDays = new List<ITaskOwner>();
-            DateTime date = startDate;
-
-            for (int i = 0; i < 14; i++)
-            {
-                date = date.AddDays(1);
-
-                IWorkloadDay workloadDay = mocks.StrictMock<IWorkloadDay>();
-
-                Expect.Call(workloadDay.CurrentDate).Return(new DateOnly(date)).Repeat.Any();
-                Expect.Call(workloadDay.Workload).Return(workload).Repeat.Any();
-                Expect.Call(workloadDay.IsLocked).Return(false).Repeat.Any();
-                //Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
-                Expect.Call(workloadDay.OpenForWork).Return(new OpenForWork() { IsOpen = true, IsOpenForIncomingWork = true }).Repeat.Any();
-                Expect.Call(workloadDay.TotalTasks).Return(30).Repeat.Any();
-                Expect.Call(workloadDay.TotalAverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
-                Expect.Call(workloadDay.TotalAverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();
-                Expect.Call(workloadDay.Tasks).Return(30).Repeat.Any();
-                Expect.Call(workloadDay.AverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
-                Expect.Call(workloadDay.AverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();
-
-                workloadDay.AddParent(null);
-                LastCall.IgnoreArguments().Repeat.Any();
-
-                if (i == 0)
-                {
-                    Expect.Call(workloadDay.TotalStatisticAbandonedTasks).Return(40).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAnsweredTasks).Return(110).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageAfterTaskTime).Return(TimeSpan.FromSeconds(10)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageTaskTime).Return(TimeSpan.FromSeconds(20)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticCalculatedTasks).Return(110).Repeat.Any();
-                }
-                else
-                {
-                    Expect.Call(workloadDay.TotalStatisticAbandonedTasks).Return(30).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAnsweredTasks).Return(80).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageAfterTaskTime).Return(TimeSpan.FromSeconds(20)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticAverageTaskTime).Return(TimeSpan.FromSeconds(30)).Repeat.Any();
-                    Expect.Call(workloadDay.TotalStatisticCalculatedTasks).Return(80).Repeat.Any();
-                }
-
-                workloadDays.Add(workloadDay);
-
-            }
-            return new TaskOwnerHelper(workloadDays);
         }
     }
 }

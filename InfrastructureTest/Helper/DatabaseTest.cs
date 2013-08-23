@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,9 +25,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
     	protected IUnitOfWork UnitOfWork { get; private set; }
     	protected MockRepository Mocks { get; private set; }
 
-    	/// <summary>
-        /// Runs once a test
-        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -49,10 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
                                                      stateMock);
 
             UnitOfWork = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-            Session =
-                (ISession)
-                UnitOfWork.GetType().GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(
-                    UnitOfWork, null);
+	        Session = UnitOfWork.FetchSession();
 
             ((IDeleteTag)LoggedOnPerson).SetDeleted();
             Session.Save(LoggedOnPerson);

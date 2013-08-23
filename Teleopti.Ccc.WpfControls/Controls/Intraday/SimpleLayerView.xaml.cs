@@ -1,12 +1,9 @@
 ﻿using System.Windows;
-using UserControl=System.Windows.Controls.UserControl;
+using System.Windows.Input;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday
 {
-    /// <summary>
-    /// Interaction logic for SimpleLayerView.xaml
-    /// </summary>
-    public partial class SimpleLayerView : UserControl
+    public partial class SimpleLayerView
     {
         public static readonly RoutedEvent SelectShiftEvent =
             EventManager.RegisterRoutedEvent("SelectShift",
@@ -25,8 +22,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             InitializeComponent();
         }
 
-
-        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(SelectShiftEvent, this));
         }

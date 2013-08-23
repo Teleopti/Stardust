@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Common;
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.Win
 
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, scheduleDay.TimeZone);
+                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.TimeZone);
                 int startPixel =
                     (int)Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -295,7 +296,7 @@ namespace Teleopti.Ccc.Win
         {
             foreach (IVisualLayer visualLayer in tomorrow.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, tomorrow.TimeZone);
+				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.TimeZone);
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -314,7 +315,7 @@ namespace Teleopti.Ccc.Win
         {
             foreach (IVisualLayer visualLayer in yesterday.ProjectionService().CreateProjection())
             {
-				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, yesterday.TimeZone);
+				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.TimeZone);
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;

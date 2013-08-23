@@ -194,17 +194,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _adjustTabs(hashInfo) {
-
-		var tabId = '#' + hashInfo.controller + 'Tab';
-		tabs.tabberiet('selectById', tabId);
-
-		// initializes action for next/previous buttons in the period picker.
-		// should be set from whoever initializes the period picker instead.
-		var toolbar = $(tabId);
-		toolbar
-			.find('.date-range-selector')
-			.data('mytime-action', hashInfo.actionHash)
-			;
+	    var tabHref = '#' + hashInfo.controller + 'Tab';
+	    $('.bdd-mytime-top-menu .nav li').removeClass('active');
+	    $('a[href="' + tabHref + '"]').parent().addClass('active');
 	}
 
 	function _loadContent(hashInfo) {

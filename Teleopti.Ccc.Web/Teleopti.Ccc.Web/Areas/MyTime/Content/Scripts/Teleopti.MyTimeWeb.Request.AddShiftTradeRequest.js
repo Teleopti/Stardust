@@ -16,6 +16,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var layerCanvasPixelWidth = 700;
 
 		self.now = null;
+		self.weekStart = ko.observable(1); 
 		self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days',-1));
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
@@ -112,18 +113,21 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             },
             write: function (value) {
                 if (self.requestedDateInternal().diff(value) == 0) return;
-                //    self.setScheduleLoadedReady();
-                //    self.isReadyLoaded(true);
-                //    return;
-                //}
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.loadSchedule();
             }
         });
 
+        self.nextDateValid = ko.computed(function () {
+        	return self.openPeriodEndDate().diff(self.requestedDateInternal())>0;
+		});
 
-	    self.isRequestedDateValid = function(date) {
+        self.previousDateValid = ko.computed(function () {
+        	return self.requestedDateInternal().diff(self.openPeriodStartDate())>0;
+		});
+
+        self.isRequestedDateValid = function (date) {
 	        if (date.diff(self.openPeriodStartDate()) < 0) {
 	            return false;
 	        } else if (self.openPeriodEndDate().diff(date) < 0) {
@@ -174,7 +178,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-	    self.changeRequestedDate = function(movement) {
+		self.changeRequestedDate = function (movement) {
 	        var date = moment(self.requestedDateInternal()).add('days', movement);
 	        if (self.isRequestedDateValid(date))
 	            self.requestedDate(date);
@@ -197,16 +201,33 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function _init() {
 		var elementToBind = $('#Request-add-shift-trade')[0];
-		if (_hasPermission(elementToBind)) {
-		    if ((vm || '') == '') {
-		        vm = new shiftTradeViewModel(_saveNewShiftTrade);
-		        ko.applyBindings(vm, elementToBind);
+		if (elementToBind !== undefined) {
+		    if ((vm || '') == '' || !ko.dataFor(elementToBind)) {
+		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
+		    	ko.applyBindings(vm, elementToBind);
+
+			    _setWeekStart(vm);
 		    }
 		}
 	}
 
-	function _hasPermission(element) {
-		return element!==undefined;
+	function _setWeekStart(vm) {
+		ajax.Ajax({
+			url: "UserInfo/ShiftTradeRequest",
+			dataType: "json",
+			type: 'GET',
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				vm.weekStart(data.WeekStart);
+			},
+			
+			error: function (jqXHR, textStatus, errorThrown) {
+				
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
 	}
 
 	function _saveNewShiftTrade(viewModel) {

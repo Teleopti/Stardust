@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
     {
         private readonly IEventAggregator _eventAggregator;
 
-        #region Variables
-
         private ColumnBase<IActivityTimeLimiterViewModel> _ruleSetColumn;
         private ColumnBase<IActivityTimeLimiterViewModel> _baseActivityColumn;
         private ColumnBase<IActivityTimeLimiterViewModel> _operatorColumn;
@@ -30,20 +28,13 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private ToolStripMenuItem _addNewLimiterFromClipboardMenuItem;
         private ToolStripMenuItem _deleteSelectedLimitersMenuItem;
 
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityTimeLimiterGrid"/> class.
-        /// </summary>
-        /// <param name="presenter">The presenter.</param>
-        /// <param name="grid">The grid.</param>
-        /// <param name="eventAggregator"></param>
         public ActivityTimeLimiterGrid(IActivityTimeLimiterPresenter presenter, GridControl grid, IEventAggregator eventAggregator)
             : base(presenter, grid)
         {
             _eventAggregator = eventAggregator;
             if (grid == null) return;
 
+            grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanDurationCellModel(grid.Model) { OnlyPositiveValues = true, InterpretAsMinutes = true });
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
 				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
         }
@@ -52,8 +43,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             get { return ShiftCreatorViewType.Limitation; }
         }
-
-        #region Create Grid
 
         internal override void CreateHeaders()
         {
@@ -67,7 +56,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             AddColumn(_baseActivityColumn);
             _operatorColumn = new DropDownColumn<IActivityTimeLimiterViewModel, string>("Operator", UserTexts.Resources.Limit, Presenter.Explorer.Model.OperatorLimitCollection, "OperatorLimit");
             AddColumn(_operatorColumn);
-            _endTimeColumn = new EditableHourMinutesColumn<IActivityTimeLimiterViewModel>("Time", UserTexts.Resources.Time);
+            _endTimeColumn = new EditableHourMinutesColumn<IActivityTimeLimiterViewModel>("Time", UserTexts.Resources.Time, null, null, "TimeSpanLongHourMinutesCellModelMinutes");
             AddColumn(_endTimeColumn);
         }
 
@@ -109,16 +98,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             e.Handled = true;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// </summary>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 5/28/2008
-        /// </remarks>
         internal override void CreateContextMenu()
         {
             Grid.ContextMenuStrip = new ContextMenuStrip();
@@ -153,21 +132,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 			Grid.ContextMenuStrip.Show();
 		}
 		
-        //internal override void AddNewGridRow<T>(object sender, T eventArgs)
-        //{
-        //    AddNewLimiter();
-        //    RefreshGrid();
-        //}
-
         private void AddNewLimiter()
         {
             Presenter.AddAndSaveLimiter();
         }
-
-        //internal override void AddNewGridRowFromClipboard<T>(object sender, T eventArgs)
-        //{
-        //    //AddFromClipBoard();
-        //}
 
         internal void RefreshGrid()
         {
@@ -177,24 +145,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                                     (Grid.Model.CurrentCellInfo == null) ? 1 : Grid.Model.CurrentCellInfo.ColIndex,
                                     GridSetCurrentCellOptions.SetFocus);
         }
-
-        //internal void AddFromClipBoard()
-        //{
-        //    ClipHandler<string> clipHandler = GridHelper.ConvertClipboardToClipHandlerString();
-        //    int rowSpan = clipHandler.RowSpan();
-        //    for (int row = 0; row < rowSpan; row++)
-        //        AddNewLimiter();
-
-        //    RefreshGrid();
-        //    SimpleTextPasteAction pasteAction = new SimpleTextPasteAction();
-        //    GridHelper.HandlePaste(Grid, clipHandler, pasteAction);
-        //    clipHandler.Clear();
-        //}
-
-        //internal override void DeleteSelectedGridRows<T>(object sender, T eventArgs)
-        //{
-        //    this.DeleteSelectedLimiter();
-        //}
 
         private void DeleteSelectedLimiter()
         {
@@ -223,35 +173,6 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.Invalidate();
         }
 
-        //internal override void KeyUp(KeyEventArgs e)
-        //{
-        //    if (e.KeyValue == 46)
-        //    {
-        //        if (CheckForDelete())
-        //            DeleteSelectedGridRows<EventArgs>(this, EventArgs.Empty);
-        //    }
-        //    e.Handled = true;
-        //}
-
-        #endregion
-
-        public override void Sort(bool isAscending, int columnIndex)
-        {
-            if (columnIndex > 1)
-            {
-                SortingModes mode = isAscending ? SortingModes.Ascending : SortingModes.Descending;
-                IList<IActivityTimeLimiterViewModel> result = Sort((ISortColumn<IActivityTimeLimiterViewModel>)GridColumns[columnIndex],
-                    Presenter.ModelCollection, mode, columnIndex);
-                Presenter.SetModelCollection(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(result));
-                Grid.Invalidate();
-            }
-        }
-
-        #region Overriden Methods
-
-        /// <summary>
-        /// Adds the new.
-        /// </summary>
         public override void Add()
         {
             AddNewLimiter();
@@ -259,19 +180,16 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             _eventAggregator.GetEvent<RuleSetChanged>().Publish(Presenter.Explorer.Model.FilteredRuleSetCollection);
         }
 
-        /// <summary>
-        /// Deletes the selected items.
-        /// </summary>
         public override void Delete()
         {
             DeleteSelectedLimiter();
             _eventAggregator.GetEvent<RuleSetChanged>().Publish(Presenter.Explorer.Model.FilteredRuleSetCollection);
         }
 
-        /// <summary>
-        /// Sorts this instance.
-        /// </summary>
-        /// <param name="mode"></param>
+        public override void Rename()
+        {
+        }
+
         public override void Sort(SortingMode mode)
         {
             int columnIndex = Grid.CurrentCell.ColIndex;
@@ -284,15 +202,10 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Refreshes the view.
-        /// </summary>
         public override void RefreshView()
         {
             Grid.RowCount = Presenter.ModelCollection.Count;
             Grid.Invalidate();
         }
-
-        #endregion
     }
 }

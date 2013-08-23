@@ -6,11 +6,10 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Used for limitations of end times in for example Rotations
     /// </summary>
-    /// /// 
     /// <remarks>
     ///  Created by: Ola
     ///  Created date: 2008-10-15    
-    /// /// </remarks>
+    /// </remarks>
     [Serializable]
     public struct EndTimeLimitation: ILimitation
     {
@@ -22,11 +21,10 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="startTime">The start time.</param>
         /// <param name="endTime">The end time.</param>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
-        /// /// </remarks>
+        /// </remarks>
 		public EndTimeLimitation(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			_startTime = startTime;
@@ -57,11 +55,10 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the start time.
         /// </summary>
         /// <value>The start time.</value>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
-        /// /// </remarks>
+        /// </remarks>
 		public TimeSpan? StartTime
         {
 			get { return _startTime; }
@@ -71,27 +68,24 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the end time.
         /// </summary>
         /// <value>The end time.</value>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
-        /// /// </remarks>
+        /// </remarks>
 		public TimeSpan? EndTime
         {
 			get { return _endTime; }
 
         }
 
-
         /// <summary>
         /// Gets or sets the start time string.
         /// </summary>
         /// <value>The start time string.</value>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
-        /// /// </remarks>
+        /// </remarks>
         public string StartTimeString
         {
             get
@@ -100,16 +94,14 @@ namespace Teleopti.Interfaces.Domain
             }
         }
 
-
         /// <summary>
         /// Gets or sets the end time string.
         /// </summary>
         /// <value>The end time string.</value>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
-        /// /// </remarks>
+        /// </remarks>
         public string EndTimeString
         {
             get
@@ -124,11 +116,10 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="per1">The per1.</param>
         /// <param name="per2">The per2.</param>
         /// <returns>The result of the operator.</returns>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-16    
-        /// /// </remarks>
+        /// </remarks>
         public static bool operator ==(EndTimeLimitation per1, EndTimeLimitation per2)
         {
             return per1.Equals(per2);
@@ -140,11 +131,10 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="per1">The per1.</param>
         /// <param name="per2">The per2.</param>
         /// <returns>The result of the operator.</returns>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-16    
-        /// /// </remarks>
+        /// </remarks>
         public static bool operator !=(EndTimeLimitation per1, EndTimeLimitation per2)
         {
             return !per1.Equals(per2);
@@ -175,11 +165,10 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="other">The other.</param>
         /// <returns></returns>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-16    
-        /// /// </remarks>
+        /// </remarks>
         public bool Equals(EndTimeLimitation other)
         {
             return GetHashCode() == other.GetHashCode();
@@ -192,11 +181,10 @@ namespace Teleopti.Interfaces.Domain
         /// <returns>
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
-        /// /// 
         /// <remarks>
         ///  Created by: Ola
         ///  Created date: 2008-10-16    
-        /// /// </remarks>
+        /// </remarks>
         public override bool Equals(object obj)
         {
             if (obj == null || !(obj is EndTimeLimitation))

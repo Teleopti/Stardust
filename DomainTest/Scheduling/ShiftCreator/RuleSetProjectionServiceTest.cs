@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 	[TestFixture]
 	public class RuleSetProjectionServiceTest
 	{
+        [Test]
 		public void ShouldReturnRequiredData()
 		{
 			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();

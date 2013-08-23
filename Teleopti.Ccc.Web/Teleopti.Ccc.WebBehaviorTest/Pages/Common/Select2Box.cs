@@ -1,5 +1,7 @@
 using System.Threading;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
@@ -19,8 +21,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			AssertIsOpen(select2Id);
 			Browser.Interactions.Javascript("$('.select2-input').focus().val('').trigger('keyup-change');");
-			Browser.Interactions.AssertExists(string.Format("#{0} option:contains('{1}')", select2Id, optionText));
-			Browser.Interactions.AssertExists(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("#{0} option:contains('{1}')", select2Id, optionText));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
 		}
 
 		public static string FirstOptionText
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			AssertOptionExist(select2Id, text);
 			Browser.Interactions.Javascript("$('.select2-result-selectable div:contains(\"" + text + "\")').trigger('mouseup');");
-			Browser.Interactions.AssertExists(string.Format("#s2id_{0} .select2-choice span:contains('{1}')", select2Id, text));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("#s2id_{0} .select2-choice span:contains('{1}')", select2Id, text));
 		}
 
 		public static void SelectItemByIdAndText(string select2Id, string optionValue, string optionText)

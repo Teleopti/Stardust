@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
                 var startDate = new DateOnly(command.Date.DateTime);
-                var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
@@ -60,8 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 var activity = _activityRepository.Load(command.ActivityId);
                 var overtimeDefinition = _multiplicatorDefinitionSetRepository.Load(command.OvertimeDefinitionSetId);
-                var overtimeLayer = new OvertimeShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
-                scheduleDay.CreateAndAddOvertime(overtimeLayer);
+								scheduleDay.CreateAndAddOvertime(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 
                 _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);

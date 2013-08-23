@@ -4,8 +4,9 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
+		[When(@"I view my settings")]
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
@@ -85,14 +87,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyCulture()
 		{
 			var user = UserFactory.User();
-			Browser.Interactions.AssertContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
+			Browser.Interactions.AssertFirstContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
 			var user = UserFactory.User();
-			Browser.Interactions.AssertContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
+			Browser.Interactions.AssertFirstContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]

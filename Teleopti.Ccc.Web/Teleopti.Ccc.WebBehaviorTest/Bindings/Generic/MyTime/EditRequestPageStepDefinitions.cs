@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertElementsAreVisible(string.Format(".request-edit:nth-child({0})", position));
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".request-edit:nth-child({0})", position));
 		}
 
 		[Then(@"I should see the add text request form")]
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
 		public void ThenIShouldSeeThatRequestAtPositionInTheListWasDeniedWithReason(int position, string reason)
 		{
-			Browser.Interactions.AssertContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
+			Browser.Interactions.AssertFirstContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
 		}
 
 		[Then(@"I should see request form with subject '(.*)'")]

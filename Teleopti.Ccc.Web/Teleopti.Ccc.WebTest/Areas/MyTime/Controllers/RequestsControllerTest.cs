@@ -326,6 +326,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			requestViewModelFactory.VerifyAllExpectations();
 		}
 
+		[Test]
+		public void ReSendShiftTrade_WhenStatusIsReffered_ShouldSetTheShiftTradeStatusToOkByMe()
+		{
+			var id = Guid.NewGuid();
+			var resultData = new RequestViewModel();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
+			shiftTradePersister.Expect(a => a.OkByMe(id)).Return(resultData);
+
+			using (var target = new RequestsController(null, null, null, null, shiftTradePersister))
+			{
+				var result = target.ReSendShiftTrade(id);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
+			}
+
+			shiftTradePersister.VerifyAllExpectations();
+		}
+
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)
 		{
 			target.Dates.Should().Be.EqualTo(expected.Dates);

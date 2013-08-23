@@ -21,6 +21,7 @@
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
 		<DocSrcPath>\\integration\Documentation</DocSrcPath>
 		<MSIShare>D:\Installation\msi</MSIShare>
+		<Dependencies>\\hebe\Installation\Dependencies</Dependencies>
 		<ObfuscateCmd>$(CCNetWorkingDirectory)\ccnet\Obfuscate\RunObfuscation.cmd</ObfuscateCmd>
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
@@ -180,9 +181,6 @@
 	<Target Name="BuildLocalWiki" DependsOnTargets="CompileExtraApps">
 		<Message Text="Buliding local wiki ... " />
 		
-		<Copy 	SourceFiles="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString\bin\$(Configuration)\ReplaceString.exe"
-				DestinationFiles="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString.exe"/>
-	
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\WISE\LocalWiki\BuildAndDeploy.bat&quot;" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>

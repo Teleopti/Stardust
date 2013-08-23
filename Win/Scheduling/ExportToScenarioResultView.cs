@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class ExportToScenarioResultView : BaseRibbonForm, IExportToScenarioResultView
+	public partial class ExportToScenarioResultView : BaseDialogForm, IExportToScenarioResultView
 	{
 		private ExportToScenarioResultPresenter _presenter;
 
@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_presenter.Initialize();
 			BackColor = ColorHelper.OfficeBlue;
-			groupBoxWarnings.BackColor = ColorHelper.OfficeBlue;
-			groupBoxInfo.BackColor = ColorHelper.OfficeBlue;
-			ribbonControlAdv1.BackColor = ColorHelper.OfficeBlue;
+			// All this bloody blue I hate it
+			//groupBoxWarnings.BackColor = ColorHelper.OfficeBlue;
+			//groupBoxInfo.BackColor = ColorHelper.OfficeBlue;
+			
 			Text = Resources.ExportToOtherScenario;
 			gridControl1.RightToLeft = RightToLeft;
 		}
@@ -76,7 +77,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void DisableBodyText()
 		{
-			gridControl1.Visible = false;
+			// why hide it?
+			//gridControl1.Visible = false;
 		}
 
 		public void SetAgentText(string agentText)

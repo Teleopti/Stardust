@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string BusinessUnit { get; set; }
 
 		public string AccessToTeam { get; set; }
+		public bool AccessToMyOwn { get; set; }
 
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
         public bool AccessToAbsenceRequests { get; set; }
         public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
+		public bool AccessToCalendarLink { get; set; }
 
 		public bool AccessToViewAllGroupPages { get; set; }
 
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
+			AccessToMyOwn = false;
 			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
@@ -53,18 +56,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
             AccessToShiftTradeRequests = true;
 			AccessToAnywhere = false;
 			AccessToViewAllGroupPages = false;
+			AccessToCalendarLink = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
+			var availableDataRangeOption = AccessToMyOwn ? AvailableDataRangeOption.MyOwn : AvailableDataRangeOption.MyTeam;
 			var availableData = new AvailableData
-			                    	{
-			                    		ApplicationRole = role,
-			                    		AvailableDataRange = AvailableDataRangeOption.MyTeam
-			                    	};
+			{
+				ApplicationRole = role,
+				AvailableDataRange = availableDataRangeOption
+			};
 			role.AvailableData = availableData;
+			
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
@@ -153,6 +159,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 									   select f;
+			if (!AccessToCalendarLink)
+				applicationFunctions = from f in applicationFunctions
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
+				                       select f;
 			return applicationFunctions;
 		}
 	}

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				var idx = 0;
 				if (_parent != null)
-					idx = _parent.PersonalLayers.ToList().IndexOf(_layer);
+					idx = _parent.PersonalLayers().ToList().IndexOf(_layer);
 				return 200 + idx;
 			}
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				if (_parent != null)
 				{
-					return _parent.PersonalLayers.Contains(_layer) && !_parent.PersonalLayers.ToList().Last().Equals(_layer);
+					return _parent.PersonalLayers().Contains(_layer) && !_parent.PersonalLayers().ToList().Last().Equals(_layer);
 				}
 
 				return false;

@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_editableShiftMapper.CreateEditorShift(_personAssignment1)).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
 				Expect.Call(_groupSchedulingService.ScheduleOneDayOnePersonSteadyState(_dateOnly, _person1, _schedulingOptions, _groupPerson, _matrixes, _rollbackService)).Return(true).IgnoreArguments();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 			}
 
 			using(_mocks.Playback())
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();	
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_editableShiftMapper.CreateEditorShift(_personAssignment1)).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_editableShiftMapper.CreateEditorShift(_personAssignment1)).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(null);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(null);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_editableShiftMapper.CreateEditorShift(_personAssignment1)).Return(_mainShift1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_editableShiftMapper.CreateEditorShift(_personAssignment1)).Return(_mainShift1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2).Repeat.Twice();
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2).Repeat.Twice();
-				Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 

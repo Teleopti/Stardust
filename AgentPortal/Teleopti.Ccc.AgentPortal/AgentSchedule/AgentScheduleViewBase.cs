@@ -30,18 +30,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is need to reload data.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is need to reload data; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2009-01-19
-        /// </remarks>
-        public bool IsNeedToReloadData { get; set; }
-
-        /// <summary>
         /// Refreshes the specified reload data.
         /// </summary>
         /// <param name="reloadData">if set to <c>true</c> [reload data].</param>
@@ -49,9 +37,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Created by: Sumedah
         /// Created date: 2009-01-19
         /// </remarks>
-        public virtual void Refresh(bool reloadData)
+        public virtual void Refresh()
         {
-            IsNeedToReloadData = reloadData;
         }
 
         /// <summary>

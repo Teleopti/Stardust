@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					var scheduleDay = day.DaySchedulePart();
 					var dateOnly = day.Day;
 					
-					if (scheduleDay.PersonAssignmentCollection().Count > 1)
+					if (scheduleDay.PersonAssignmentCollectionDoNotUse().Count > 1)
 					{
 						scheduleMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
 					}

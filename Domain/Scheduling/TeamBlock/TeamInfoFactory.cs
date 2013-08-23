@@ -41,15 +41,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					}
 				}
 			}
-			
+
 			return new TeamInfo(groupPerson, matrixesForGroup);
 		}
 
 		public ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period);
-			if (!groupPerson.GroupMembers.Any())
+		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
+		    if (groupPerson == null) return null;
+			if (groupPerson.GroupMembers.Count == 0)
 				return null;
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)

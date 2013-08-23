@@ -438,11 +438,6 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
             }
         }
 
-        protected void SetUnitOfWork(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         /// <summary>
         /// Gets the repository factory.
         /// </summary>

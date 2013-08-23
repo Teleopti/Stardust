@@ -1,143 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DataSource2">
-      <DataSourceReference>DataSource2</DataSourceReference>
-      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet1">
-      <Fields>
-        <Field Name="period">
-          <DataField>period</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="calls_offered">
-          <DataField>calls_offered</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="calls_answered">
-          <DataField>calls_answered</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="calls_answ_after_sl">
-          <DataField>calls_answ_after_sl</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="calls_answ_within_sl">
-          <DataField>calls_answ_within_sl</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="calls_abnd">
-          <DataField>calls_abnd</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="scheduled_agents_ready">
-          <DataField>scheduled_agents_ready</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="agents_ready">
-          <DataField>agents_ready</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="calls_offered_per_scheduled_agent">
-          <DataField>calls_offered_per_scheduled_agent</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="calls_offered_per_ready_agent">
-          <DataField>calls_offered_per_ready_agent</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="abnd_rate">
-          <DataField>abnd_rate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="answ_rate">
-          <DataField>answ_rate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="service_level">
-          <DataField>service_level</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="hide_time_zone">
-          <DataField>hide_time_zone</DataField>
-          <rd:TypeName>System.Bool</rd:TypeName>
-        </Field>
-        <Field Name="interval_type">
-          <DataField>interval_type</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="service_level_numerator">
-          <DataField>service_level_numerator</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="service_level_denominator">
-          <DataField>service_level_denominator</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource2</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>report_data_service_level_agents_ready</CommandText>
-        <QueryParameters>
-          <QueryParameter Name="@skill_set">
-            <Value>=Parameters!skill_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@workload_set">
-            <Value>=Parameters!workload_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@interval_type">
-            <Value>=Parameters!interval_type.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_from">
-            <Value>=Parameters!date_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_to">
-            <Value>=Parameters!date_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@interval_from">
-            <Value>=Parameters!interval_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@interval_to">
-            <Value>=Parameters!interval_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@time_zone_id">
-            <Value>=Parameters!time_zone_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@person_code">
-            <Value>=Parameters!person_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@report_id">
-            <Value>=Parameters!report_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@language_id">
-            <Value>=Parameters!language_id.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-      </Query>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.77165in</Width>
+              <Width>4.49999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.12972in</Width>
+              <Width>7.94949cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.3622in</Width>
+              <Width>5.99999cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -209,7 +89,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -282,7 +162,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -355,7 +235,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -428,7 +308,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -501,7 +381,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -635,13 +515,13 @@
         <ChartSeriesHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Label>=Parameters!ResAnsweredCallsWithinSL.Value</Label>
+              <Label>calls answ within sl</Label>
             </ChartMember>
             <ChartMember>
-              <Label>=Parameters!ResAnsweredCallsAfterSL.Value</Label>
+              <Label>calls answ after sl</Label>
             </ChartMember>
             <ChartMember>
-              <Label>=Parameters!ResAbandonedCalls.Value</Label>
+              <Label>calls abnd</Label>
             </ChartMember>
           </ChartMembers>
         </ChartSeriesHierarchy>
@@ -839,9 +719,14 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -857,6 +742,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartCategoryAxes>
             <ChartValueAxes>
@@ -916,6 +804,9 @@
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -931,6 +822,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartValueAxes>
             <ChartThreeDProperties>
@@ -1029,10 +923,10 @@
         <ChartSeriesHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Label>=Parameters!ResScheduledAgentsReady.Value</Label>
+              <Label>scheduled agents ready</Label>
             </ChartMember>
             <ChartMember>
-              <Label>=Parameters!ResAgentsReady.Value</Label>
+              <Label>agents ready</Label>
             </ChartMember>
           </ChartMembers>
         </ChartSeriesHierarchy>
@@ -1183,9 +1077,14 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -1201,6 +1100,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartCategoryAxes>
             <ChartValueAxes>
@@ -1260,6 +1162,9 @@
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -1275,6 +1180,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartValueAxes>
             <ChartThreeDProperties>
@@ -1360,36 +1268,36 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.80967in</Width>
+              <Width>2.05656cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.80968in</Width>
+              <Width>2.05659cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.80606in</Width>
+              <Width>2.04739cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.08268in</Width>
+              <Width>2.75001cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.08268in</Width>
+              <Width>2.75001cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.7874in</Width>
+              <Width>2cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.68898in</Width>
+              <Width>1.75001cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.7874in</Width>
+              <Width>2cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.59055in</Width>
+              <Width>1.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.49213in</Height>
+              <Height>1.25001cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1689,7 +1597,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.29528in</Height>
+              <Height>0.75001cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1972,7 +1880,15 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(iif((sum(Fields!calls_answered.Value)+sum(Fields!calls_abnd.Value))&gt;0,sum(Fields!calls_answered.Value)/(sum(Fields!calls_answered.Value)+sum(Fields!calls_abnd.Value)),0),1)</Value>
+                              <Value>=FormatPercent(
+
+iif(
+(
+ sum(Fields!calls_offered.Value))&gt;0,
+ sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value))
+ ,0
+)
+,1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -2044,7 +1960,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2334,7 +2250,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.32635in</Height>
+              <Height>0.82893cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2491,7 +2407,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2623,7 +2538,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(iif((sum(Fields!calls_answered.Value)+sum(Fields!calls_abnd.Value))&gt;0,sum(Fields!calls_answered.Value)/(sum(Fields!calls_answered.Value)+sum(Fields!calls_abnd.Value)),0),1)</Value>
+                              <Value>=FormatPercent(iif(( sum(Fields!calls_offered.Value))&gt;0, sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value)) ,0),1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -2652,6 +2567,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2748,7 +2664,7 @@
         </PageBreak>
         <Top>24.75cm</Top>
         <Height>3.42895cm</Height>
-        <Width>18.91056cm</Width>
+        <Width>18.91055cm</Width>
         <ZIndex>3</ZIndex>
         <Style />
       </Tablix>
@@ -2769,10 +2685,10 @@
         <ChartSeriesHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Label>=Parameters!ResOfferedCallsPerScheduledAgent.Value</Label>
+              <Label>calls offered per scheduled agent</Label>
             </ChartMember>
             <ChartMember>
-              <Label>=Parameters!ResOfferedCallsPerAgentReady.Value</Label>
+              <Label>calls offered per ready agent</Label>
             </ChartMember>
           </ChartMembers>
         </ChartSeriesHierarchy>
@@ -2915,9 +2831,14 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -2933,6 +2854,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartCategoryAxes>
             <ChartValueAxes>
@@ -2992,6 +2916,9 @@
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
               <ChartAxis Name="Secondary">
                 <Style>
@@ -3007,6 +2934,9 @@
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
               </ChartAxis>
             </ChartValueAxes>
             <ChartThreeDProperties>
@@ -3108,6 +3038,177 @@
     <Height>28.17895cm</Height>
     <Style />
   </Body>
+  <Width>19cm</Width>
+  <Page>
+    <PageFooter>
+      <Height>0.75cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="textbox42">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Powered by TELEOPTI CCC©</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <Top>0.12367cm</Top>
+          <Left>0.125cm</Left>
+          <Height>0.50265cm</Height>
+          <Width>18.75cm</Width>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+      </ReportItems>
+      <Style />
+    </PageFooter>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>1cm</LeftMargin>
+    <RightMargin>1cm</RightMargin>
+    <TopMargin>1cm</TopMargin>
+    <BottomMargin>1cm</BottomMargin>
+    <ColumnSpacing>1cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource2">
+      <DataSourceReference>DataSource2</DataSourceReference>
+      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DataSource2</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@skill_set">
+            <Value>=Parameters!skill_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@workload_set">
+            <Value>=Parameters!workload_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@interval_type">
+            <Value>=Parameters!interval_type.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_from">
+            <Value>=Parameters!date_from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_to">
+            <Value>=Parameters!date_to.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@interval_from">
+            <Value>=Parameters!interval_from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@interval_to">
+            <Value>=Parameters!interval_to.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@time_zone_id">
+            <Value>=Parameters!time_zone_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@person_code">
+            <Value>=Parameters!person_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@report_id">
+            <Value>=Parameters!report_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@language_id">
+            <Value>=Parameters!language_id.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>report_data_service_level_agents_ready</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="period">
+          <DataField>period</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="calls_offered">
+          <DataField>calls_offered</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="calls_answered">
+          <DataField>calls_answered</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="calls_answ_after_sl">
+          <DataField>calls_answ_after_sl</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="calls_answ_within_sl">
+          <DataField>calls_answ_within_sl</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="calls_abnd">
+          <DataField>calls_abnd</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="scheduled_agents_ready">
+          <DataField>scheduled_agents_ready</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="agents_ready">
+          <DataField>agents_ready</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="calls_offered_per_scheduled_agent">
+          <DataField>calls_offered_per_scheduled_agent</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="calls_offered_per_ready_agent">
+          <DataField>calls_offered_per_ready_agent</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="abnd_rate">
+          <DataField>abnd_rate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="answ_rate">
+          <DataField>answ_rate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="service_level">
+          <DataField>service_level</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="hide_time_zone">
+          <DataField>hide_time_zone</DataField>
+          <rd:TypeName>System.Bool</rd:TypeName>
+        </Field>
+        <Field Name="interval_type">
+          <DataField>interval_type</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="service_level_numerator">
+          <DataField>service_level_numerator</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="service_level_denominator">
+          <DataField>service_level_denominator</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportParameters>
     <ReportParameter Name="skill_set">
       <DataType>String</DataType>
@@ -3377,171 +3478,8 @@ Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object
    End If
 End Function
 </Code>
-  <Width>19cm</Width>
-  <Page>
-    <PageHeader>
-      <Height>2cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox39">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Parameters!ResReportServiceLevelAndAgentsReady.Value</Value>
-                  <Style>
-                    <FontSize>22pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox39</rd:DefaultName>
-          <Height>1.5cm</Height>
-          <Width>14cm</Width>
-          <Style>
-            <VerticalAlign>Bottom</VerticalAlign>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox40">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox40</rd:DefaultName>
-          <Left>15cm</Left>
-          <Height>0.50265cm</Height>
-          <Width>3.75cm</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <VerticalAlign>Bottom</VerticalAlign>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox41">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.5cm</Top>
-          <Left>15.75cm</Left>
-          <Height>0.5cm</Height>
-          <Width>3cm</Width>
-          <ZIndex>2</ZIndex>
-          <Style>
-            <VerticalAlign>Bottom</VerticalAlign>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="line1">
-          <Top>1.75cm</Top>
-          <Height>0cm</Height>
-          <Width>19cm</Width>
-          <ZIndex>3</ZIndex>
-          <Style>
-            <Border>
-              <Color>#d3e5ef</Color>
-              <Style>Solid</Style>
-              <Width>2pt</Width>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style />
-    </PageHeader>
-    <PageFooter>
-      <Height>0.75cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox42">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>Powered by TELEOPTI CCC©</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Center</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.12367cm</Top>
-          <Left>0.125cm</Left>
-          <Height>0.50265cm</Height>
-          <Width>18.75cm</Width>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-      </ReportItems>
-      <Style />
-    </PageFooter>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
-    <LeftMargin>1cm</LeftMargin>
-    <RightMargin>1cm</RightMargin>
-    <TopMargin>1cm</TopMargin>
-    <BottomMargin>1cm</BottomMargin>
-    <ColumnSpacing>1cm</ColumnSpacing>
-    <Style />
-  </Page>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>

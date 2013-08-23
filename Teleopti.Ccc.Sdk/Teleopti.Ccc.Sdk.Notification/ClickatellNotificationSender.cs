@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.Notification
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 		private INotificationConfigReader _notificationConfigReader;
-		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SendNotification(INotificationMessage message, string receiver)
@@ -108,16 +107,16 @@ namespace Teleopti.Ccc.Sdk.Notification
 						doc.LoadXml(s);
 						if (doc.GetElementsByTagName("fault").Count > 0)
 						{
-							throw (new SendNotificationException("Error occurred sending SMS: " + s));
-							//Logger.Error("Error occurred sending SMS: " + s);
+                            Logger.Error("Error occurred sending SMS: " + s);
+							throw new SendNotificationException("Error occurred sending SMS: " + s);
 						}
 					}
 				}
 				catch (Exception exception)
 				{
-					throw (new SendNotificationException(
-						"Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception));
-					//Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
+                    Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
+					throw new SendNotificationException(
+						"Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
 				}
 			}
 		}

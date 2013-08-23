@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                         definitionSet = MappedObjectPair.MultiplicatorDefinitionSet.GetPaired(overtime);
                     }
 
-                    returnLayer = new OvertimeShiftActivityLayer(newAct, newPeriod, definitionSet);
+                    returnLayer = new OvertimeShiftLayer(newAct, newPeriod, definitionSet);
                     break;
             }
             return returnLayer;

@@ -5043,7 +5043,7 @@ tillgänglighet</value>
     <comment>Early warning</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>Generell vy: användaruppgifter</value>
+    <value>Kan inte spara!</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
@@ -7626,7 +7626,7 @@ Teleopti R&amp;D</value>
     <value>Väntar på godkännande från administratör</value>
   </data>
   <data name="WaitingForYourApproval" xml:space="preserve">
-    <value>Väntar på ditt godkännnade</value>
+    <value>Väntar på ditt godkännande</value>
   </data>
   <data name="DefaultIntradaySetting" xml:space="preserve">
     <value>Standardvy</value>
@@ -11008,10 +11008,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Nekad</value>
     <comment>Translation for enum status Autodenied for requests</comment>
   </data>
-  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
-    <value>Nekad</value>
-    <comment>Translation for enum status Autodenied for requests</comment>
-  </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Din frånvaroförfrågan har avslagits. Några dagar i den aktuella perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar gällande följande period: {0}.</value>
   </data>
@@ -11020,5 +11016,195 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="LocalTime" xml:space="preserve">
     <value>Lokal tid</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Max antal parallella uppgifter:</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chatt</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Tappade chattar</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Besvarade chattar</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Genomsnittligt antal chattar</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Lägg till tillgänglighet för övertid</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Beräknade chattar</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Kampanjchattar %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Tillgänglighet för övertid</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Tidigare sparad tillgänglighet för övertid</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chatt</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Avvikelse chattar</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Prognosticerade chattar</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index chattar</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Inkommande chattar</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Ursprungligt antal inkommande chattar</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Totalt antal chattar</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Validerade chattar</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Kampanjchattid %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chattar</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Total chattid</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Teamblockperioden är inte i ett giltigt läge.</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Var god välj minst ett av alternativen "Skiftkategori", "Starttid" eller "Samma skift" för blockschemaläggningen. </value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filtrera tillgänglighet för övertid</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Aktuell sida</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exportera</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Hitta</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Hitta nästa</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Hitta text i rapporten</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Första sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Sista sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Nästa</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Nästa sida</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Inga fler förekomster hittades.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>av</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sidinställningar</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Sidbredd</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Förra sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Utskriftsformat</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Skriv ut</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Ladda om</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Sluta generera rapport</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texten hittades inte.</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Sidor totalt</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Hela sidan</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zooma</value>
+    <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Skicka igen</value>
+   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Anslutningen till databasen tog för lång tid. Försök att begränsa dina sökvillkor.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Uppfyllda</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Uppfyllnad (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Veton</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Ouppfyllda</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Dela kalender</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Dela min kalender</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Upphäv</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Kopiera/klistra in följande URL och lägg till den i Outlook eller Google kalender etc.</value>
   </data>
 </root>

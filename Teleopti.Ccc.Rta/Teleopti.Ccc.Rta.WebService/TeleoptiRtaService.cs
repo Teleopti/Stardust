@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Rta.WebService
         private readonly object _lockObject = new object();
         private const string LogOutStateCode = "LOGGED-OFF";
         private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
+	    private RtaProcessMissingAgents _processMissingAgents;
 
         public TeleoptiRtaService()
         {
@@ -27,7 +28,15 @@ namespace Teleopti.Ccc.Rta.WebService
             string authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
             if (string.IsNullOrEmpty(authenticationKey)) authenticationKey = "!#¤atAbgT%";
             _authenticationKey = authenticationKey;
+			_processMissingAgents = new RtaProcessMissingAgents(LogOutStateCode, processRtaAgentState);
         }
+
+		private void processRtaAgentState(RtaAgentState rtaAgentState)
+		{
+			processExternalUserState(new Guid(), rtaAgentState.UserCode, rtaAgentState.StateCode, rtaAgentState.StateDescription,
+			                         rtaAgentState.IsLoggedOn, 0, rtaAgentState.Timestamp, rtaAgentState.PlatformTypeId,
+			                         rtaAgentState.SourceId, rtaAgentState.BatchId, rtaAgentState.IsSnapshot);
+		}
 
         private void InitializeClientHandler()
         {
@@ -39,7 +48,19 @@ namespace Teleopti.Ccc.Rta.WebService
             Guid messageId = Guid.NewGuid();
 
 			verifyAuthenticationKey(authenticationKey, messageId);
-
+			_processMissingAgents.Check(new RtaAgentState()
+				                            {
+												AuthenticationKey = authenticationKey,
+												UserCode = userCode,
+												StateCode = stateCode,
+												StateDescription = stateDescription,
+												IsLoggedOn = isLoggedOn,
+												Timestamp = timestamp,
+												PlatformTypeId = platformTypeId,
+												SourceId = sourceId,
+												BatchId = batchId,
+												IsSnapshot = isSnapshot
+				                            });
             return processExternalUserState(messageId, userCode, stateCode, stateDescription, isLoggedOn, secondsInState, timestamp, platformTypeId, sourceId, batchId, isSnapshot);
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public interface IMainShiftLayer : IAggregateEntity, ILayer<IActivity>
+	public interface IMainShiftLayer : IShiftLayer
 	{
 	}
 }

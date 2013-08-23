@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-	        var itemAsPersistedLayer = item as IPersistedLayer<T>;
+						var itemAsPersistedLayer = item as IAggregateEntity;
 					if (itemAsPersistedLayer != null)
 					{
 						itemAsPersistedLayer.SetParent((IEntity)_owner);						
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void Insert(int index, ILayer<T> item)
         {
-					var itemAsPersistedLayer = item as IPersistedLayer<T>;
+					var itemAsPersistedLayer = item as IAggregateEntity;
 					if (itemAsPersistedLayer != null)
 					{
 						itemAsPersistedLayer.SetParent((IEntity)_owner);

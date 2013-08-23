@@ -41,8 +41,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[REV]
 		,[REVTYPE]
 		,[Version]
-		,[Minimum]
-		,[Maximum]
 		,[Person]
 		,[Scenario]
 		,[BusinessUnit]
@@ -52,8 +50,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,ar.Id
 		,0
 		,p.Version
-		,[Minimum]
-		,[Maximum]
 		,[Person]
 		,[Scenario]
 		,p.BusinessUnit
@@ -63,44 +59,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
 	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1
 	
-	 --mainshiftactivitylayer
-	 insert into Auditing.MainShiftActivityLayer_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[Minimum]
-		,[Maximum]
-		,[OrderIndex]
-		,[Payload]
-		,[Parent])
-	 select al.Id
-		,rev
-		,0
-		,al.Minimum
-		,al.Maximum
-		,al.OrderIndex
-		,al.Payload
-		,al.Parent
-	 from dbo.MainShiftActivityLayer al
-	 inner join Auditing.PersonAssignment_AUD pa_aud
-	 on al.Parent = pa_aud.Id
-
-	--overtimeshift
-	insert into Auditing.OvertimeShift_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[OrderIndex]
-		,[Parent])
-	 select os.Id,
-		rev,
-		0
-		,os.OrderIndex
-		,os.Parent
-	 from dbo.OvertimeShift os
-	 inner join Auditing.PersonAssignment_AUD pa_aud
-	 on os.Parent = pa_aud.Id
-	
-	--overtimeshift activity layer
-	insert into Auditing.OvertimeShiftActivityLayer_AUD ([Id]
+	--ShiftLayer
+	insert into Auditing.ShiftLayer_AUD ([Id]
 		,[REV]
 		,[REVTYPE]
 		,[Minimum]
@@ -108,7 +68,7 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[OrderIndex]
 		,[Payload]
 		,[DefinitionSet]
-		,[Parent])
+		,[LayerType])
 	 select al.Id,
 		rev,
 		0,
@@ -117,29 +77,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		al.OrderIndex,
 		al.Payload,
 		al.DefinitionSet,
-		al.Parent
-	 from dbo.OvertimeShiftActivityLayer al
-	 inner join Auditing.OvertimeShift_AUD os_aud
-	 on al.Parent = os_aud.Id
-	 
-	 --personalshiftactivitylayer
-	 insert into Auditing.PersonalShiftActivityLayer_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[Minimum]
-		,[Maximum]
-		,[OrderIndex]
-		,[Payload]
-		,[Parent])
-	 select al.Id,
-		rev,
-		0,
-		al.Minimum,
-		al.Maximum,
-		al.OrderIndex,
-		al.payLoad,
-		al.Parent
-	 from dbo.PersonalShiftActivityLayer al
+		al.LayerType
+	 from dbo.ShiftLayer al
 	 inner join Auditing.PersonAssignment_AUD pa_aud
 	 on al.Parent = pa_aud.Id
 	 

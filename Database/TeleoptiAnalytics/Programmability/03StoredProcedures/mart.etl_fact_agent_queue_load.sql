@@ -51,8 +51,8 @@ BEGIN
 	SELECT @internal = internal FROM mart.sys_datasource WHERE datasource_id = @datasource_id
 
 	--Create system mindate
-	DECLARE @mindate as smalldatetime
-	SELECT @mindate=CAST('19000101' as smalldatetime)
+	DECLARE @UtcNow as smalldatetime
+	SELECT @UtcNow=CAST(getutcdate() as smalldatetime)
 
 	DECLARE @start_date_id	INT
 	DECLARE @end_date_id	INT
@@ -115,7 +115,7 @@ BEGIN
 		datasource_id			= a.datasource_id, 
 		insert_date				= getdate(), 
 		update_date				= getdate(), 
-		datasource_update_date	= '''+ CAST(@mindate as nvarchar(20))+'''
+		datasource_update_date	= '''+ CAST(@UtcNow as nvarchar(20))+'''
 		FROM
 		(SELECT * FROM '+ 
 		CASE @internal

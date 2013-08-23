@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment pa2 = mocks.StrictMock<IPersonAssignment>();
 
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.MainShift);
-            Expect.Call(schedulePart.PersonAssignmentCollection()).Return(
+            Expect.Call(schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { pa1, pa2 })).Repeat.AtLeastOnce();
             Expect.Call(pa1.Period).Return(new DateTimePeriod(_date.AddHours(10), _date.AddHours(15))).Repeat.AtLeastOnce();
             Expect.Call(pa2.Period).Return(new DateTimePeriod(_date.AddHours(18), _date.AddHours(25))).Repeat.AtLeastOnce();
@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var pa1 = mocks.StrictMock<IPersonAssignment>();
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.PersonalShift);
-            Expect.Call(schedulePart.PersonAssignmentCollection()).Return(
+            Expect.Call(schedulePart.PersonAssignmentCollectionDoNotUse()).Return(
                 new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { pa1 })).Repeat.AtLeastOnce();
-	        Expect.Call(pa1.PersonalLayers)
+	        Expect.Call(pa1.PersonalLayers())
 	              .Return(new List<IPersonalShiftLayer>
 		              {
 			              new PersonalShiftLayer(new Activity("d"), new DateTimePeriod(_date.AddHours(10), _date.AddHours(15)))

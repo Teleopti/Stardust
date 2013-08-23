@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         {
             bool b = bool.Parse(e.Style.CellValue.ToString());
             PropertyReflectorHelper.SetValue(currentItem, BindingProperty, b);
-
         }
     }
 }

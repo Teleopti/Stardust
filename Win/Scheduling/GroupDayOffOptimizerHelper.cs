@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
 			IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
@@ -378,7 +377,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   where ((IDeleteTag)item).IsDeleted == false
                                                   select item).ToList();
 
-            var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
+            var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // Schedule White Spots after back to legal state
@@ -440,7 +439,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
 																				   groupPageDataProvider,
-																				   schedulingOptions.GroupOnGroupPageForTeamBlockPer,
+																				   schedulingOptions.GroupOnGroupPage,
 																				   true);
 			}
 			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
@@ -466,14 +465,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 														 new ScheduleTagSetter(
 															 schedulingOptions.TagToUseOnScheduling));
 			var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-
+			var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
 			ITeamBlockScheduler teamBlockScheduler =
 				new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 									   _container.Resolve<IRestrictionAggregator>(),
 									   _container.Resolve<IWorkShiftFilterService>(), 
 									   teamScheduling,
 									   _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
+										teamBlockCleaner, schedulePartModifyAndRollbackService);
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -481,8 +481,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					optimizationPreferences.DaysOff,
 					100, 
 					_container.Resolve<IDayOffDecisionMaker>());
-
-			var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
+			var groupPersonBuilderFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
+			var groupPersonBuilderForOptimization = groupPersonBuilderFactory.Create(schedulingOptions);
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =
@@ -506,8 +506,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
-					_container.Resolve<ITeamBlockClearer>(),
-					teamBlockRestrictionOverLimitValidator
+					teamBlockCleaner,
+                    teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -542,13 +542,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                          new ScheduleTagSetter(
                                                              schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-
+				var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
             ITeamBlockScheduler teamBlockScheduler =
                 new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                        _container.Resolve<IRestrictionAggregator>(),
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
                                        _container.Resolve<IWorkShiftSelector>(),
-									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>());
+									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
+										teamBlockCleaner, schedulePartModifyAndRollbackService);
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -562,8 +563,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
-					_container.Resolve<ITeamBlockClearer>(),
-					_container.Resolve<IStandardDeviationSumCalculator>()
+					teamBlockCleaner,
+                    _container.Resolve<IStandardDeviationSumCalculator>(), _container.Resolve<ITeamBlockMaxSeatChecker >()
                     );
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;

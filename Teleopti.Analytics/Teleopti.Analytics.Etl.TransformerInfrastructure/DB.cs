@@ -61,42 +61,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             _procParam.Add(parameter);
         }
 
-        public void AddProcParameter(string parameterName, object value)
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-            AddProcParameter(new SqlParameter(parameterName, RuntimeHelpers.GetObjectValue(value)));
-        }
-
-        public void Close()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-            Dispose();
-        }
-
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public IDataReader ExecuteDataReader()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-
-			GrabConnection();
-            SetCommand();
-            setParams();
-            
-			return cmd.ExecuteReader(CmdBehavior);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]

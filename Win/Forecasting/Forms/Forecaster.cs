@@ -1681,17 +1681,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             if (_chartControl != null)
             {
-                PrintDialog pPrintDialog = new PrintDialog();
-                pPrintDialog.Document = this._chartControl.PrintDocument;
-                _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
+	            var pPrintDialog = new PrintDialog {Document = _chartControl.PrintDocument};
+	            _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
                 //this will check if the platform is 64bit or not
-                String sArchType = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-                if (sArchType != null && sArchType.Contains("64") == true)
+                var sArchType = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+                if (sArchType != null && sArchType.Contains("64"))
                     pPrintDialog.UseEXDialog = true;
 
                 if (pPrintDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _chartControl.PrintDocument.Print();
+	                _chartControl.PrintColorMode = pPrintDialog.PrinterSettings.SupportsColor
+		                                               ? ChartPrintColorMode.Color
+		                                               : ChartPrintColorMode.GrayScale;
+	                _chartControl.PrintDocument.Print();
                 }
             }
         }
@@ -1699,7 +1701,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void toolStripButtonPrintPreview_Click(object sender, EventArgs e)
         {
-            PrintPreviewDialog pPrintPreviewDialog = new PrintPreviewDialog();
+            var pPrintPreviewDialog = new PrintPreviewDialog();
             _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
             pPrintPreviewDialog.Document = _chartControl.PrintDocument;
             try

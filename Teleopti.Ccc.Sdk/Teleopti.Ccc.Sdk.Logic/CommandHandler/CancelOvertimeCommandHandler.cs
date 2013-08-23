@@ -44,29 +44,19 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var scenario = getDesiredScenario(command);
                 var dateTimePeriod = _dateTimePeriodAssembler.DtoToDomainEntity(command.Period);
             	var startDate = new DateOnly(command.Date.DateTime);
-            	var timeZone = person.PermissionInformation.DefaultTimeZone();
-
                 var scheduleDictionary =
                     _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                         new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
-                        new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                        new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
-                var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
+                var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
 
             	foreach (var personAssignment in personAssignmentCollection)
             	{
-            		var overtimeShifts = personAssignment.OvertimeShiftCollection.ToList();
-            		foreach (var overtimeShift in overtimeShifts)
-            		{
-            			cancelOvertime(overtimeShift, dateTimePeriod);
-						if (overtimeShift.LayerCollection.Count==0)
-						{
-							personAssignment.RemoveOvertimeShift(overtimeShift);
-						}
-            		}
+								cancelOvertime(personAssignment, dateTimePeriod);
             	}
 
                 _saveSchedulePartService.Save(scheduleDay, rules);
@@ -84,26 +74,25 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     		return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
     	}
 
-    	private static void cancelOvertime(IOvertimeShift overtimeShift, DateTimePeriod period)
-		{
-			var layers = overtimeShift.LayerCollection.ToList();
-    		foreach (IOvertimeShiftActivityLayer layer in layers)
+			private static void cancelOvertime(IPersonAssignment personAssignment, DateTimePeriod period)
 			{
-				var layerPeriod = layer.Period;
-				if (!layerPeriod.Intersect(period)) continue;
-
-				overtimeShift.LayerCollection.Remove(layer);
-
-				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
-				foreach (var dateTimePeriod in newPeriods)
+				var layers = personAssignment.OvertimeLayers().ToList();
+				foreach (var layer in layers)
 				{
-					if (dateTimePeriod.ElapsedTime()>TimeSpan.Zero)
+					var layerPeriod = layer.Period;
+					if (!layerPeriod.Intersect(period)) continue;
+
+					personAssignment.RemoveLayer(layer);
+
+					var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
+					foreach (var dateTimePeriod in newPeriods)
 					{
-						var newLayer = new OvertimeShiftActivityLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
-						overtimeShift.LayerCollection.Add(newLayer);
+						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
+						{
+							personAssignment.AddOvertimeLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
+						}
 					}
 				}
 			}
-    	}
     }
 }

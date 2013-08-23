@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IGroupPersonBuilderForOptimization
 	{
 		IGroupPerson BuildGroupPerson(IPerson person, DateOnly dateOnly);
-		IGroupPerson BuildGroupPerson(IPerson person, DateOnlyPeriod period);
 	}
 
 	public class GroupPersonBuilderForOptimization : IGroupPersonBuilderForOptimization
@@ -62,19 +61,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	
 			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
 			
-			return groupPerson;
-		}
-
-		public IGroupPerson BuildGroupPerson(IPerson person, DateOnlyPeriod period)
-		{
-			IGroupPerson groupPerson = null;
-			foreach (var dateOnly in period.DayCollection())
-			{
-				groupPerson = BuildGroupPerson(person, dateOnly);
-				if (groupPerson.GroupMembers.Any())
-					break;
-			}
-
 			return groupPerson;
 		}
 

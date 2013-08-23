@@ -69,11 +69,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         private readonly ObservableList<ToolStripGalleryItemEx> customItems = new ObservableList<ToolStripGalleryItemEx>();
 
-    	public ObservableList<ToolStripGalleryItemEx> GalleryItems
-        {
-            get { return customItems; }
-        }
-
         [Browsable(true), Category("Teleopti")]
         public ToolStripTabItem ParentRibbonTab
         {
@@ -228,7 +223,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         private void ContextMenuStrip_Click(object sender, EventArgs e)
         {
-            OnContextMenuClicked(selectedGalleryItem);
+            OnContextMenuClicked();
             contextMenuMode = 2;
         }
 
@@ -249,12 +244,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
             return GetItemByLocationAndOffset(e.Location, Dimensions.Width, GetScrollOffset());
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal void SetCheckedItem(ToolStripGalleryItem item)
-        {
-            GetType().GetProperty("CheckedItem", BindingFlags.Instance | BindingFlags.Public).SetValue(this, item, null);
-        }
-
         private void OnItemClicked(ToolStripItemClickedEventArgs e)
         {
         	var handler = ItemClicked;
@@ -262,17 +251,13 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
                 handler(this, e);
         }
 
-        private void OnContextMenuClicked(ToolStripGalleryItem item)
+        private void OnContextMenuClicked()
         {
-            ToolStripGalleryItemContextMenuClickEventArgs args = new ToolStripGalleryItemContextMenuClickEventArgs(item);
-            OnContextMenuClicked(args);
-        }
+            ToolStripGalleryItemContextMenuClickEventArgs args = new ToolStripGalleryItemContextMenuClickEventArgs();
 
-        private void OnContextMenuClicked(ToolStripGalleryItemContextMenuClickEventArgs e)
-        {
-        	var handler = ContextMenuClicked;
+            var handler = ContextMenuClicked;
             if (handler != null)
-                handler(this, e);
+                handler(this, args);
         }
     }
 }

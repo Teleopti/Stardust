@@ -13,16 +13,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
     {
         private readonly DateTimeFormatInfo _dtfi;
         
-        public DateOnlyColumn(string bindingProperty, string headerText) : this(bindingProperty,headerText,null)
+        public DateOnlyColumn(string bindingProperty, string headerText) : base(bindingProperty,headerText)
         {
         }
 
         public DateOnlyColumn(string bindingProperty, string headerText, string groupHeaderText)
-            : base(bindingProperty, headerText)
+            : this(bindingProperty, headerText)
         {
             GroupHeaderText = groupHeaderText;
-            CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.LCID, false);
-            _dtfi = ci.DateTimeFormat;
+            _dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
         }
 
         public override int PreferredWidth
@@ -57,7 +56,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             DateTime dt;
             DateOnly? dateOnly = null;
 
-            if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
+            if (e.Style.CellValue is DateTime)
+            {
+                dateOnly = new DateOnly((DateTime) e.Style.CellValue);
+            }
+            else if (DateTime.TryParse(e.Style.CellValue.ToString(), out dt))
             {
                 dateOnly = new DateOnly(dt);
             }

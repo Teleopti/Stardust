@@ -792,3 +792,7 @@ End personal drop down menu
   body {
     padding-top: 40px;
   }
+
+  .select2-drop{
+    z-index: 9999999999999 !important;
+}

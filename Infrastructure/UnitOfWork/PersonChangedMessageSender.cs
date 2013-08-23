@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        	{
 		                                                        		typeof (IPerson),
 		                                                        	};
+		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
+		                                                        	{
+		                                                        		typeof (ITeam),
+		                                                        		typeof (ISite),
+		                                                        	};
 
 		public PersonChangedMessageSender(IServiceBusSender serviceBusSender)
 		{

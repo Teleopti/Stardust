@@ -18,13 +18,15 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
         private readonly bool _latestOnly;
+	    private readonly ICommonNameDescriptionSetting _commonNameDescription;
 
-        public SchedulingResult(IWorkShiftFinderResultHolder workShiftFinderResultHolder, bool latestOnly)
+	    public SchedulingResult(IWorkShiftFinderResultHolder workShiftFinderResultHolder, bool latestOnly, ICommonNameDescriptionSetting commonNameDescription)
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
             _workShiftFinderResultHolder = workShiftFinderResultHolder;
             _latestOnly = latestOnly;
+			_commonNameDescription = commonNameDescription;
         }
 
         private void SchedulingResult_Load(object sender, EventArgs e)
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 
-        private static DataTable GetTopTable(IList<IWorkShiftFinderResult> finderResults)
+        private DataTable GetTopTable(IList<IWorkShiftFinderResult> finderResults)
         {
             DataTable dt = new DataTable("TopTable");
             dt.Locale = CultureInfo.CurrentCulture;
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 DataRow dr = dt.NewRow();
                 dr[0] = result.PersonDateKey;
-                dr[1] = result.PersonName;
+                dr[1] = _commonNameDescription.BuildCommonNameDescription(result.Person);
                 dr[2] = result.ScheduleDate.Date;
                 dr[3] = string.Empty;
                 if (result.FilterResults.Count>0)

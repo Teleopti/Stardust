@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void ButtonNewClick(object sender, EventArgs e)
         {
-            var atype = new AlarmType(new Description() , Color.Empty   , new TimeSpan(0, 0, 0), AlarmTypeMode.UserDefined,0.0);
-            _alarmTypes.Add(atype);
-            teleoptiGridControl1.Refresh();
+			var atype = new AlarmType(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), AlarmTypeMode.UserDefined, 0.0);
+			_alarmTypes.Add(atype);
+			_view.LoadGrid();
         }
 
         private void ButtonAdvDeleteClick(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
             teleoptiGridControl1.Selections.Clear();
 
-            teleoptiGridControl1.Refresh();
+			_view.LoadGrid();
         }
 
         public void SaveChanges()

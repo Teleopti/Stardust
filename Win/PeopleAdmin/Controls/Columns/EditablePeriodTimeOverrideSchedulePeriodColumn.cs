@@ -11,27 +11,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 	public class EditablePeriodTimeOverrideSchedulePeriodColumn<T> : ColumnBase<T>
 	{
 		private readonly PropertyReflector _propertyReflector = new PropertyReflector();
+		private readonly string _headerText;
 
-		private string _headerText;
-		private string _bindingProperty;
-
-		public EditablePeriodTimeOverrideSchedulePeriodColumn(string bindingProperty, string headerText)
+		public EditablePeriodTimeOverrideSchedulePeriodColumn(string bindingProperty, string headerText) : base(bindingProperty,150)
 		{
 			_headerText = headerText;
-			_bindingProperty = bindingProperty;
-		}
-
-		public override int PreferredWidth
-		{
-			get { return 150; }
-		}
-
-		public override string BindingProperty
-		{
-			get
-			{
-				return _bindingProperty;
-			}
 		}
 
 		public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -40,15 +24,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 			e.Handled = true;
 		}
 
-		/// <summary>
-		/// Set up single header.
-		/// </summary>
-		/// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-		/// <param name="dataItems">The data items.</param>
-		/// <remarks>
-		/// Created by: Aruna Priyankara Wickrama
-		/// Created date: 2008-05-21
-		/// </remarks>
 		private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
 		{
 			if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -62,7 +37,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 				e.Style.CellType = GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell;
 				T dataItem = dataItems[e.RowIndex - 1];
 
-				object obj = _propertyReflector.GetValue(dataItem, _bindingProperty);
+				object obj = _propertyReflector.GetValue(dataItem, BindingProperty);
 				e.Style.CellValue = obj;
 
 				PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e);
@@ -76,15 +51,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 			{
 				T dataItem = dataItems[e.RowIndex - 1];
 
-
-				if ((TimeSpan)e.Style.CellValue == TimeSpan.Zero)
+			    var value = (TimeSpan) e.Style.CellValue;
+				if (value == TimeSpan.Zero)
 				{
-					//_propertyReflector.SetValue(dataItem, _bindingProperty, TimeSpan.MinValue);
 					PeopleAdminHelper.ResetPeriodTime(dataItem);
 				}
 				else
 				{
-					_propertyReflector.SetValue(dataItem, _bindingProperty, (TimeSpan)e.Style.CellValue);
+					_propertyReflector.SetValue(dataItem, BindingProperty, value);
 				}
 
 				OnCellChanged(dataItem, e);

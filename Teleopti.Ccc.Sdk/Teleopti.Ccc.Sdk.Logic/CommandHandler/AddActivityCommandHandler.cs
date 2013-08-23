@@ -49,17 +49,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
                 var startDate = new DateOnly(command.Date.DateTime);
-                var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 				
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
                 
                 IShiftCategory shiftCategory;
-                var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
+                var personAssignment = scheduleDay.PersonAssignment();
                 if (personAssignment != null)
                 {
                     shiftCategory = personAssignment.ShiftCategory;
@@ -68,10 +67,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     throw new FaultException("A main shift should exist first before you add a new activity.");
 
                 var activity = _activityRepository.Load(command.ActivityId);
-                var activityLayer = new MainShiftLayer(activity,
-                                                      _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 
-                scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);
+								scheduleDay.CreateAndAddActivity(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), shiftCategory);
 
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private DateTimePeriod _inPeriod;
 		private PersonSkillProvider _personSkillProvider;
 		private IResourceCalculationDataContainerWithSingleOperation _resources;
-
 		[SetUp]
 		public void Setup()
 		{
@@ -44,29 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_resources,
 				false,
 				_personSkillProvider);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public static IDictionary<ISkill, IList<ISkillDay>> CreateSkillDaysFromSkillStaffPeriodDictionary(MockRepository mocks, ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary)
-		{
-			IDictionary<ISkill, IList<ISkillDay>> skillDaysDic = new Dictionary<ISkill, IList<ISkillDay>>();
-			foreach (var pair in skillStaffPeriodDictionary)
-			{
-				var skillDays = new List<ISkillDay>();
-				foreach (var skillStaffPeriod in pair.Value)
-				{
-					ISkillDay skillDay = mocks.StrictMock<ISkillDay>();
-					Expect.Call(skillDay.Skill).Return(pair.Key).Repeat.Any();
-					Expect.Call(skillDay.CurrentDate).Return(new DateOnly(skillStaffPeriod.Key.StartDateTime.Date)).Repeat.Any();
-					Expect.Call(skillDay.SkillStaffPeriodCollection).Return(
-						new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod.Value }))
-						.Repeat.Any();
-					skillDays.Add(skillDay);
-				}
-
-				skillDaysDic.Add(pair.Key, skillDays);
-			}
-			return skillDaysDic;
 		}
 
 		[Test]
@@ -103,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
 							0.001);
 		}
-
 
 		[Test]
 		public void VerifySchedulingPeriodDoNotIntersectSkillStaffPeriod()

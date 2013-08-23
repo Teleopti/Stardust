@@ -238,4 +238,47 @@
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AddServicesCalled" xml:space="preserve">
+    <value>AddServices() method called for Module {0}.</value>
+  </data>
+  <data name="DependencyNotFound" xml:space="preserve">
+    <value>Section '{0}' depends on section '{1}' which was not found.</value>
+  </data>
+  <data name="DuplicatedModule" xml:space="preserve">
+    <value>A duplicated module with name {0} has been found by the loader.</value>
+  </data>
+  <data name="FailedToLoadModule" xml:space="preserve">
+    <value>Failed to load module from assembly {0}. Error was:
+{1}</value>
+  </data>
+  <data name="InvalidSolutionProfileSchema" xml:space="preserve">
+    <value>The solution profile references an unknown schema.</value>
+  </data>
+  <data name="LogModuleAdded" xml:space="preserve">
+    <value>Module {0} added to the container.</value>
+  </data>
+  <data name="LogModuleAssemblyLoaded" xml:space="preserve">
+    <value>Loaded assembly file {0} for Module.</value>
+  </data>
+  <data name="ModuleNotFound" xml:space="preserve">
+    <value>Assembly file {0} was not found.</value>
+  </data>
+  <data name="ModuleStartCalled" xml:space="preserve">
+    <value>Load() method called for Module {0}.</value>
+  </data>
+  <data name="NoUserProvidedForAuthentication" xml:space="preserve">
+    <value>No user was selected for the authentication service.</value>
+  </data>
+  <data name="ReferencedAssemblyNotFound" xml:space="preserve">
+    <value>The ModuleLoaderService cannot initialize the module because some of their dependencies are not present. Make sure to deploy all the assemblies needed to execute the module.</value>
+  </data>
+  <data name="ServiceAdded" xml:space="preserve">
+    <value>Service {1} added for Module {0}.</value>
+  </data>
+  <data name="ServiceAddedOnDemand" xml:space="preserve">
+    <value>Service {1} will be added on demand for Module {0}.</value>
+  </data>
+  <data name="UserNotFoundMessage" xml:space="preserve">
+    <value>There is no a user matching the information you have provided.</value>
+  </data>
 </root>

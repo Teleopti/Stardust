@@ -54,9 +54,17 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveDown
 	    {
-				get { return _moveLayer!=null && !_assignment.MainLayers.Last().Equals(_layer); }
+		    get
+		    {
+			    return _moveLayer != null && !isLayerLast();
+		    }
 	    }
 
+		private bool isLayerLast()
+		{
+			var mainLayers = _assignment.MainLayers().ToList();
+			return mainLayers.Any() && mainLayers.Last().Equals(_layer);
+		}
 
 		protected override void Replace()
 		{

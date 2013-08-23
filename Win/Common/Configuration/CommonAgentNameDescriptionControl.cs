@@ -459,6 +459,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 
                 uow.PersistAll();
 				changedInfo();
+                setStatus();
             }
         }
 

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 						t =>
 						(IRootChangeInfo)
 						new MeetingChangedDetail(new MeetingChangedEntity { MainRoot = person, Period = t, Id = afterChanges.Id },
-						                         DomainUpdateType.Delete)));
+						                         DomainUpdateType.Update)));
 			}
 		}
 

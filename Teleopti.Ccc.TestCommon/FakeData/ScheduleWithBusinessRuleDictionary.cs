@@ -8,14 +8,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     {
         private readonly List<IBusinessRuleResponse> _businessRuleReponseCollection = new List<IBusinessRuleResponse>();
 
-        protected ScheduleWithBusinessRuleDictionary(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary) : base(scenario, period, dictionary)
-        {
-        }
-
-        public ScheduleWithBusinessRuleDictionary(IScenario scenario, IScheduleDateTimePeriod period, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService) : base(scenario, period, differenceCollectionService)
-        {
-        }
-
         public ScheduleWithBusinessRuleDictionary(IScenario scenario, IScheduleDateTimePeriod period) : base(scenario, period)
         {
         }

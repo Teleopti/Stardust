@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mocks.Record())
             {
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-                Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
+                Expect.Call(part.PersonAssignment()).Return(_personAssignment).Repeat.Any();
             }
 
             Assert.IsTrue(ShiftCategoryLimitationChecker.IsThisDayCorrectCategory(part, shiftCategory));
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-                Expect.Call(part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
+                Expect.Call(part.PersonAssignment()).Return(_personAssignment).Repeat.Any();
             }
 
             Assert.IsFalse(ShiftCategoryLimitationChecker.IsThisDayCorrectCategory(part, shiftCategory));
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	                  .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 12, 29),
 	                                                       _person.PermissionInformation.DefaultTimeZone())).Repeat.Any();
                 Expect.Call(_part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-                Expect.Call(_part.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
+                Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.Any();
                 Expect.Call(_part.Period).Return(_dateTimePeriod).Repeat.Any();
                 Expect.Call(_part.Person).Return(_person).Repeat.Any();
             }

@@ -198,5 +198,10 @@ namespace Teleopti.Ccc.AgentPortal.Requests
             }
             return false;
         }
+
+		private void toolStripButtonSend_Click(object sender, EventArgs e)
+		{
+			save();
+		}
     }
 }

@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers());
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
-			ass.MainLayers.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
+			ass.MainLayers().Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
 		}
 
 		[Test]
@@ -30,14 +30,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var overtimeShift = ass.OvertimeShiftCollection.Single();
-			var orgLayers = new List<IOvertimeShiftActivityLayer>(overtimeShift.LayerCollectionWithDefinitionSet());
+			var orgLayers = ass.OvertimeLayers().ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
-			ass.OvertimeShiftCollection.Single().LayerCollection.Should().Have.SameSequenceAs(firstLayer, lastLayer, middleLayer);
+			//new instances - cant check for equality
+			var res = ass.OvertimeLayers().ToArray();
+			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
+			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
+			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
 		}
 
 		[Test]
@@ -45,13 +48,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreePersonalLayers();
-			var orgLayers = ass.PersonalLayers.ToArray();
+			var orgLayers = ass.PersonalLayers().ToArray();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 			target.MoveUp(ass, lastLayer);
 			//new instances - cant check for equality
-			var res = ass.PersonalLayers.ToArray();
+			var res = ass.PersonalLayers().ToArray();
 			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
 			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
@@ -62,13 +65,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers);
+			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers());
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
-			ass.MainLayers.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
+			ass.MainLayers().Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
 		}
 
 		[Test]
@@ -76,14 +79,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var overtimeShift = ass.OvertimeShiftCollection.Single();
-			var orgLayers = new List<IOvertimeShiftActivityLayer>(overtimeShift.LayerCollectionWithDefinitionSet());
+			var orgLayers = ass.OvertimeLayers().ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
-			ass.OvertimeShiftCollection.Single().LayerCollection.Should().Have.SameSequenceAs(middleLayer, firstLayer, lastLayer);
+			//new instances - cant check for equality
+			var res = ass.OvertimeLayers().ToArray();
+			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
+			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
+			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
 		}
 
 		[Test]
@@ -91,13 +97,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreePersonalLayers();
-			var orgLayers = ass.PersonalLayers.ToArray();
+			var orgLayers = ass.PersonalLayers().ToArray();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 			target.MoveDown(ass, firstLayer);
 			//new instances - cant check for equality
-			var res = ass.PersonalLayers.ToArray();
+			var res = ass.PersonalLayers().ToArray();
 			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
 			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[2].Period.Should().Be.EqualTo(lastLayer.Period);

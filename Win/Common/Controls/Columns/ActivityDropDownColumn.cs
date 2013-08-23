@@ -15,17 +15,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
     {
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
         private readonly string _headerText;
-        private readonly string _bindingProperty;
         private readonly IEnumerable<TItems> _comboItems;
         private readonly string _displayMember;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly string _groupHeaderText;
 		private readonly ImageList _masterImage = new ImageList();
 
-        public ActivityDropDownColumn(string bindingProperty, string headerText, IEnumerable<TItems> comboItems, string displayMember, Image masterActivityImage)
+        public ActivityDropDownColumn(string bindingProperty, string headerText, IEnumerable<TItems> comboItems, string displayMember, Image masterActivityImage) : base(bindingProperty,100)
         {
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _comboItems = comboItems;
             _displayMember = displayMember;
 
@@ -37,11 +35,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                               string displayMember, string groupHeaderText, Image masterActivityImage) : this(bindingProperty,headerText,comboItems,displayMember,masterActivityImage)
         {
             _groupHeaderText = groupHeaderText;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<TData> dataItems)
@@ -63,7 +56,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             	e.Style.DataSource = _comboItems;
 				e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
                 e.Style.DisplayMember = _displayMember;
-                e.Style.CellValue = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
 				e.Style.ImageIndex = (e.Style.CellValue is IMasterActivity ? 0 : -1);
 				OnCellDisplayChanged(dataItem, e);
             }
@@ -84,7 +77,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             if (tItemType == cellValueType ||
                 cellValueType.GetInterface(tItemType.Name) == tItemType)
             {
-                _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                 e.Handled = true;
             }
             else
@@ -92,7 +85,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 TItems item;
                 if (TryGetItemByDisplayMember(e.Style.CellValue.ToString(), out item))
                 {
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, item);
+                    _propertyReflector.SetValue(dataItem, BindingProperty, item);
                     e.Handled = true;
                 }
             }

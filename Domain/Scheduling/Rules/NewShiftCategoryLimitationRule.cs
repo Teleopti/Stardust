@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     var person = schedulePeriod.Person;
                     IScheduleRange currentSchedules = rangeClones[person];
                     var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+                    var oldResponseCount = oldResponses.Count();
                     foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                     {
                         if (!shiftCategoryLimitation.Weekly)
@@ -73,6 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             }
                         }
                     }
+                    var newResponseCount = responseList.Count();
+                    if (newResponseCount <= oldResponseCount)
+                        responseList = new HashSet<IBusinessRuleResponse>();
                 }
             }
 

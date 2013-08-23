@@ -63,20 +63,20 @@
     </Reference>
     <Reference Include="DotNetOpenAuth.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.1.13026\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.1.13026\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId.Provider, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.1.13026\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+    <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
@@ -92,7 +92,8 @@
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.1.2\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -134,6 +135,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGeneratorTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ShareCalendarControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserInfoControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistrationTest.cs" />
@@ -211,10 +220,11 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\RespondToShiftTradeTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsPermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
-    <Compile Include="Core\Settings\PersonPersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
     <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
@@ -250,7 +260,7 @@
     <Compile Include="Core\Requests\Mapping\AbsenceRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSenderTest.cs" />
-    <Compile Include="Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />

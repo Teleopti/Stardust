@@ -13,28 +13,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
         private int _maxLength;
         private string _headerText;
-        private string _bindingProperty;
         private bool _readOnly;
 
-        public EditablePasswordColumn(string bindingProperty, int maxLength, string headerText, bool readOnly)
+        public EditablePasswordColumn(string bindingProperty, int maxLength, string headerText, bool readOnly) : base(bindingProperty, 100)
         {
             _maxLength = maxLength;
             _headerText = headerText;
-            _bindingProperty = bindingProperty;
             _readOnly = readOnly;
-        }
-
-        public override int PreferredWidth
-        {
-            get { return 100; }
-        }
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
         }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
@@ -86,7 +71,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                     return;
 
                 T dataItem = dataItems[e.RowIndex - 1];
-                _propertyReflector.SetValue(dataItem, _bindingProperty, e.Style.CellValue);
+                _propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
                 OnCellChanged(dataItem, e);
                 e.Handled = true;
             }

@@ -90,9 +90,12 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
-    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.4.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
+    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.5.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.4\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.1.5\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+    </Reference>
+    <Reference Include="DDay.iCal">
+      <HintPath>..\..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.Core">
       <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
@@ -111,6 +114,7 @@
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MbCache, Version=2.3.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
@@ -142,7 +146,8 @@
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
       <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
@@ -157,9 +162,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.7, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.8, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.7\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.8\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -207,6 +212,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
+    <Compile Include="Areas\Anywhere\Core\ITeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkIdGenerator.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\ICalendarLinkSettingsPersisterAndProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProvider.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ShareCalendarController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserInfoController.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ISettingsPermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsPermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Settings\SettingsPermissionViewModel.cs" />
     <Compile Include="Areas\PerformanceTool\Core\IoC\PerformanceToolAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
@@ -337,7 +360,6 @@
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\Message\MessageForm.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />
@@ -368,8 +390,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\IPersonPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\PersonPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\IPersonPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimePeriodFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
@@ -833,6 +855,8 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
+    <Content Include="Content\jquery\jquery-1.10.2.js" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.core.min.js" />
     <Content Include="Content\MobileDateBox\jqm-datebox.css" />
@@ -961,9 +985,6 @@
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
     <Content Include="Content\bootstrap\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap.min.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.js" />
-    <Content Include="Content\Scripts\jquery-1.9.1.min.js" />
     <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\Scripts\jquery.validate.js" />
     <Content Include="Content\Scripts\jquery.validate.min.js" />
@@ -997,10 +1018,15 @@
       <Link>customTimeoutSettings.config.notinuse</Link>
     </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
+    <Content Include="Content\jquery\jquery-1.10.2.min.map" />
+    <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1010,7 +1036,6 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
-    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
   </ItemGroup>
   <ItemGroup>
@@ -1116,6 +1141,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\PasswordPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

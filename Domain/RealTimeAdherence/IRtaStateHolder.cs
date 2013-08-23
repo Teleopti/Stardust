@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
@@ -15,5 +16,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         void Initialize();
         IEnumerable<IPerson> FilteredPersons { get; }
         void SetActualAgentState(IActualAgentState actualAgentState);
+		event EventHandler<CustomEventArgs<IActualAgentState>> AgentstateUpdated;
     }
 }
