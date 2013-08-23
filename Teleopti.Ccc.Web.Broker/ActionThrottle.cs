@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.Web.Broker
 		private readonly BlockingCollection<Action> actions = new BlockingCollection<Action>();
 		private readonly int actionDelay;
 		private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
+		
+		public ILog Logger = LogManager.GetLogger(typeof(ActionThrottle));
 
 		public ActionThrottle(int actionsPerSecond)
 		{
@@ -27,8 +30,15 @@ namespace Teleopti.Ccc.Web.Broker
 				{
 					foreach (var action in actions.GetConsumingEnumerable(cancellation.Token))
 					{
-						action();
-						Thread.Sleep(actionDelay);
+						try
+						{
+							action();
+							Thread.Sleep(actionDelay);
+						}
+						catch (Exception ex)
+						{
+							Logger.Error(ex);
+						}
 					}
 				});
 		}
