@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.successUpdatingRequest = function(data) {
             self.IsSelected(false);
             self.DetailItem = undefined;
-            self.parent.AddRequest(data, true);
+            self.parent.AddRequest(data, false);
         };
 
         self.ToggleMouseOver = function () {
