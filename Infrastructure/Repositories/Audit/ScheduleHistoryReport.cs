@@ -46,14 +46,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Results()
 				.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
 
-				auditSession.CreateQuery().ForHistoryOf<PersonDayOff, Revision>()
-					.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
-					.AddModifiedByIfNotNull(modifiedBy)
-					.Add(AuditEntity.Property("DayOff.Anchor").Between(scheduledPeriodAgentTimeZone.StartDateTime, scheduledPeriodAgentTimeZone.EndDateTime))
-					.Add(AuditEntity.Property("Person").In(agentsBatch))
-					.Results()
-					.ForEach(dayOffRev => retTemp.Add(createDayOffAuditingData(dayOffRev)));
-
 				auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
 					.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 					.AddModifiedByIfNotNull(modifiedBy)
@@ -88,31 +80,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var period = auditedAssignment.Entity.Period;
 
-			//todo! fixa!
-			//if (period.Equals(PersonAssignment.UndefinedPeriod))
-			//{
-			//	ret.ScheduleStart = DateTime.MinValue;
-			//	ret.ScheduleEnd = DateTime.MinValue;
-			//}
-			//else
-			{
-				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
-				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);
-			}
+			ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
+			ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);
 
-			return ret;
-		}
-
-		private ScheduleAuditingReportData createDayOffAuditingData(IRevisionEntityInfo<PersonDayOff, Revision> auditedDayOff)
-		{
-			var ret = new ScheduleAuditingReportData
-			{
-				ShiftType = Resources.AuditingReportDayOff,
-				Detail = auditedDayOff.Entity.DayOff.Description.Name,
-				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.StartDateTime, _regional.TimeZone),
-				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.EndDateTime, _regional.TimeZone)
-			};
-			addCommonScheduleData(ret, auditedDayOff.Entity, auditedDayOff.RevisionEntity, auditedDayOff.Operation);
 			return ret;
 		}
 

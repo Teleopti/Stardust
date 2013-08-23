@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		protected IPersonAssignment PersonAssignment { get; private set; }
 		protected IPerson Agent { get; private set; }
 		protected IPersonAbsence PersonAbsence { get; private set; }
-		protected IPersonDayOff PersonDayOff { get; private set; }
 		protected DateTime Today { get; private set; }
 		protected IScenario Scenario { get; private set; }
 		protected IRepository Repository { get; private set; }
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			Scenario = PersonAssignment.Scenario;
 			Scenario.DefaultScenario = true;
 			PersonAbsence = PersonAbsenceFactory.CreatePersonAbsence(Agent, Scenario, new DateTimePeriod(Today, Today.AddDays(1)));
-			PersonDayOff = new PersonDayOff(Agent, Scenario, new DayOffTemplate(new Description("test")) { Anchor = TimeSpan.FromMinutes(2) }, new DateOnly(Today));
 			Repository = new Repository(UnitOfWorkFactory.Current);
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -50,7 +47,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 				Repository.Add(PersonAssignment);
 				Repository.Add(PersonAbsence);
-				Repository.Add(PersonDayOff);
 				uow.PersistAll();
 			}
 			AuditSetup();
