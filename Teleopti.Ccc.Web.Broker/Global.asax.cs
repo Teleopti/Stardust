@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Broker
 			log4net.Config.XmlConfigurator.Configure();
 
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.Register(c => SignalRConfiguration.ActionThrottle).As<IActionScheduler>();
+			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
 			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
 			containerBuilder.RegisterType<MessageBrokerHub>();
 			_container = containerBuilder.Build();
@@ -25,12 +25,17 @@ namespace Teleopti.Ccc.Web.Broker
 			
 			var hubConfiguration = new HubConfiguration { EnableCrossDomain = true };
 			SignalRConfiguration.Configure(hubConfiguration);
+
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 		}
 
 		protected void Application_End(object sender, EventArgs e)
 		{
-			SignalRConfiguration.ActionThrottle.Dispose();
+			if (SignalRConfiguration.ActionScheduler is IDisposable)
+			{
+				var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
+				if (actionThrottle != null) actionThrottle.Dispose();
+			}
 		}
 
 	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)

@@ -112,7 +112,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 				application.Disposed += (s, e) =>
 					{
-						SignalRConfiguration.ActionThrottle.Dispose();
+						if (SignalRConfiguration.ActionScheduler is IDisposable)
+						{
+							var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
+							if (actionThrottle != null) actionThrottle.Dispose();
+						}
 					};
 			}
 			catch (Exception ex)

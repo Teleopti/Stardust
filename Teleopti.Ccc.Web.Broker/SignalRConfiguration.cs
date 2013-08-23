@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public static Action<HubConfiguration> MapHubs = c => RouteTable.Routes.MapHubs(c);
 
-		public static ActionThrottle ActionThrottle; 
+		public static IActionScheduler ActionScheduler; 
 
 		public static void Configure(HubConfiguration hubConfiguration)
 		{
@@ -34,8 +34,16 @@ namespace Teleopti.Ccc.Web.Broker
 				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
 			}
 
-			ActionThrottle = new ActionThrottle(settingsFromParser.MessagesPerSecond);
-			ActionThrottle.Start();
+			if (settingsFromParser.ThrottleMessages)
+			{
+				var actionThrottle = new ActionThrottle(settingsFromParser.MessagesPerSecond);
+				actionThrottle.Start();
+				ActionScheduler = actionThrottle;
+			}
+			else
+			{
+				ActionScheduler = new ActionImmediate();
+			}
 		}
 	}
 }
