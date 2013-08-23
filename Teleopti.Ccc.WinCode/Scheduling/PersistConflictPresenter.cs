@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             foreach (var messState in _model.PersistConflicts)
             {
 				if (discardMyChanges)
-                addToModifiedCollection(messState, discardMyChanges);
+					addToModifiedCollection(messState);
 
 				var databaseVersion = messState.DatabaseVersion;
 				var originalVersion = messState.ClientVersion.OriginalItem;
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        private void addToModifiedCollection(IPersistConflict messState, bool discardMyChanges)
+        private void addToModifiedCollection(IPersistConflict messState)
         {
 			if (messState.ClientVersion.OriginalItem != null)
 				_model.ModifiedDataResult.Add(messState.ClientVersion.OriginalItem);
