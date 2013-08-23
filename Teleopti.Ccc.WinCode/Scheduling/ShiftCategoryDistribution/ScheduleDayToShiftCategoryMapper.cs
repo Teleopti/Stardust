@@ -8,7 +8,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
     {
         public static  IList<ShiftCategoryStructure> MapScheduleDay(IList<IScheduleDay> scheduleDays)
         {
-            return scheduleDays.Select(scheduleDay => new ShiftCategoryStructure(scheduleDay)).ToList();
+            var mappedScheduleDays = new List<ShiftCategoryStructure>();
+            foreach (var scheduleDay in scheduleDays)
+            {
+                var shiftCategoryStructure = new ShiftCategoryStructure(scheduleDay);
+                if (shiftCategoryStructure.ShiftCategoryValue != null)
+                {
+                    mappedScheduleDays.Add(shiftCategoryStructure);
+                }
+            }
+            return mappedScheduleDays;
         }
     }
 }
