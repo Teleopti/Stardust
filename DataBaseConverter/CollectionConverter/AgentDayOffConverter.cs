@@ -1,7 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
-using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -30,8 +28,8 @@ namespace Teleopti.Ccc.DatabaseConverter.CollectionConverter
         public AgentDayOffConverter(IUnitOfWork unitOfWork, Mapper<IPersonDayOff, global::Domain.AgentDay> mapper)
             : base(unitOfWork, mapper)
         {
+					_rep = null;// new PersonDayOffRepository(unitOfWork);
           throw new Exception("need to fix this");
-	        _rep = null;// new PersonDayOffRepository(unitOfWork);
         }
 
         /// <summary>

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private DateTimePeriod rangePeriod;
 		private IPersonAbsence abs;
 		private IPersonAssignment ass1;
-		private IPersonDayOff pDayOff;
 		private IPersonMeeting _personMeeting;
 		private IPerson person1;
 		private IPerson person2;
@@ -86,15 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(_personMeeting);
 			_target.Add(ass1);
 			_target.Add(_note);
-
-			DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-			dayOff.Anchor = TimeSpan.FromHours(12);
-			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-			
-			pDayOff = new PersonDayOff(parameters.Person, parameters.Scenario,
-										dayOff, new DateOnly(parameters.Period.StartDateTime.Date));
-
-			_target.Add(pDayOff);
 		}
 
 		[Test]
@@ -1391,7 +1381,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			part.Clear<IPersonAssignment>();
 			part.Clear<IPersonAbsence>();
-			part.Clear<IPersonDayOff>();
 
 			Assert.AreEqual(SchedulePartView.PreferenceRestriction, part.SignificantPart());
 		}

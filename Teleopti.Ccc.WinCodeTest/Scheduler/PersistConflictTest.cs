@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenModified()
         {
-            var pDayOff = PersonDayOffFactory.CreatePersonDayOff();
+            var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dbData = pDayOff.EntityClone();
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenDeletedInDatabase()
         {
-            var pDayOff = PersonDayOffFactory.CreatePersonDayOff();
+					var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             pDayOff.SetId(Guid.NewGuid());
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
@@ -249,8 +249,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenModified()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
-            var dataCurrent = (PersonDayOff)dataOrg.EntityClone();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+            var dataCurrent = dataOrg.EntityClone();
             var dataDb = dataCurrent.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), dataDb, eventMessage, removeMessage));
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnClient()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dataDb = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb, eventMessage, removeMessage));
@@ -299,9 +299,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnDatabase()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
-            ((IEntity)dataOrg).SetId(Guid.NewGuid());
-            var dataCurrent = (PersonDayOff)dataOrg.EntityClone();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+            dataOrg.SetId(Guid.NewGuid());
+            var dataCurrent = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg);

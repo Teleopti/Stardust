@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
@@ -16,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -552,20 +549,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                                                                        2001,
                                                                                                        1, 1));
 
-                    IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff1.Anchor = TimeSpan.Zero;
-                    dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                new DateOnly(2000, 1, 2), dOff1);
-
                     IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
                                                                                    new DateTimePeriod(2000, 1, 1, 2001,
                                                                                                       1, 1));
                     pAss.SetId(Guid.NewGuid());
-                    dOff.SetId(Guid.NewGuid());
                     pAbs.SetId(Guid.NewGuid());
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
-                    ((ScheduleRange) target[dummyPerson]).Add(dOff);
                     ((ScheduleRange) target[dummyPerson]).Add(pAbs);
                     target.TakeSnapshot();
 
@@ -589,25 +578,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
                         PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
                                                                               new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
                     pAss.SetId(Guid.NewGuid());
-                    IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff1.Anchor = TimeSpan.Zero;
-                    dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                new DateOnly(2000, 1, 2), dOff1);
-                    dOff.SetId(Guid.NewGuid());
-
                     IPersonAbsence pAbs =
                         PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
                                                                  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
                     pAbs.SetId(Guid.NewGuid());
                     extractor extractor = new extractor();
                     ((ScheduleRange) target[pAss.Person]).Add(pAss);
-                    ((ScheduleRange) target[dOff.Person]).Add(dOff);
                     ((ScheduleRange) target[pAbs.Person]).Add(pAbs);
                     target.ExtractAllScheduleData(extractor, new DateTimePeriod(1999, 12, 30, 2000, 1, 3));
                     CollectionAssert.Contains(extractor.Data, pAss);
                     CollectionAssert.Contains(extractor.Data, pAbs);
-                    CollectionAssert.Contains(extractor.Data, dOff);
                 }
             }
         }
@@ -627,12 +607,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
                         PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
                                                                               new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
                     pAss.SetId(Guid.NewGuid());
-                    IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff1.Anchor = TimeSpan.Zero;
-                    dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                new DateOnly(2000, 1, 2), dOff1);
-                    dOff.SetId(Guid.NewGuid());
 
                     IPersonAbsence pAbs =
                         PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
@@ -641,12 +615,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
                     extractor extractor = new extractor();
                     ((ScheduleRange) target[pAss.Person]).Add(pAss);
-                    ((ScheduleRange) target[dOff.Person]).Add(dOff);
                     ((ScheduleRange) target[pAbs.Person]).Add(pAbs);
                     target.ExtractAllScheduleData(extractor, new DateTimePeriod(2000, 1, 1, 2000, 1, 3));
                     CollectionAssert.Contains(extractor.Data, pAss);
                     CollectionAssert.Contains(extractor.Data, pAbs);
-                    CollectionAssert.Contains(extractor.Data, dOff);
                 }
             }
         }
@@ -1299,18 +1271,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
                                                                                                        2001,
                                                                                                        1, 1));
 
-                    DayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
-                    dOff1.Anchor = TimeSpan.Zero;
-                    dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-                    IPersonDayOff dOff = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario,
-                                                                                new DateOnly(2000, 1, 2), dOff1);
-
-
                     IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
                                                                                    new DateTimePeriod(2000, 1, 1, 2001,
                                                                                                       1, 1));
                     ((ScheduleRange) target[dummyPerson]).AddRange(new List<IPersonAssignment> {pAss});
-                    ((ScheduleRange) target[dummyPerson]).Add(dOff);
                     ((ScheduleRange) target[dummyPerson]).Add(pAbs);
 
 
