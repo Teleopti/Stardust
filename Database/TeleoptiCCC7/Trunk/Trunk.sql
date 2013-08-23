@@ -1005,9 +1005,6 @@ ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
             )
 GO
 
-ALTER TABLE auditing.PersonAssignment_AUD ADD
-            DayOffTemplate uniqueidentifier NULL
-GO
 
 --- ??? Here David magic
 --- ??? Here David magic
