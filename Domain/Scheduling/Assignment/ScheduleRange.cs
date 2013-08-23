@@ -336,52 +336,63 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         //use this one only if you know what you're doing!
         //not part of IScheduleRange. Use with care!
-        public virtual void UnsafeSnapshotUpdate(IScheduleData persistableScheduleData, bool includeCurrent)
-        {
-            Snapshot.Remove(persistableScheduleData);
-            Snapshot.Add(persistableScheduleData);
-            if (includeCurrent)
-            {
-                Remove(persistableScheduleData);
-                Add(persistableScheduleData);
-            }
-            else
-            {
-                var inData = persistableScheduleData as IVersioned;
-                if (inData != null)
-                {
-                    var data = find(persistableScheduleData);
-					if (data != null)
-						((IVersioned)data).SetVersion(inData.Version.Value);
-                }
-            }
+		public virtual void UnsafeResolveConflictOfTypeUpdateByOther(IScheduleData databaseVersion, bool discardMyChanges)
+		{
+			// get my version of this thing
+			var myVersion = find(databaseVersion);
+
+			// replace version in snapshot with database version
+			Snapshot.Remove(databaseVersion);
+			Snapshot.Add(databaseVersion);
+
+			if (discardMyChanges)
+			{
+				// put database version as my version
+				Remove(myVersion);
+				Add(databaseVersion);
+			}
+			else
+			{
+				// update version number of my data to databases version
+				var databaseVersioned = databaseVersion as IVersioned;
+				if (databaseVersioned != null)
+				{
+					var myVersioned = myVersion as IVersioned;
+					if (myVersioned != null)
+						myVersioned.SetVersion(databaseVersioned.Version.Value);
+				}
+			}
         }
 
         //use this one only if you know what you're doing!
         //not part of IScheduleRange. Use with care!
-        public IPersistableScheduleData UnsafeSnapshotDelete(Guid id, bool includeCurrent)
-        {
-            foreach (IScheduleData scheduleData in Snapshot.ScheduleDataInternalCollection())
-            {
-                IPersistableScheduleData casted = scheduleData as IPersistableScheduleData;
-                if (casted != null && casted.Id == id)
-                {
-                    var current = ((IPersistableScheduleData)find(casted));
-                    Snapshot.Remove(casted);
-                    if (current != null)
-                    {
-                        var transientCurrent = current.CreateTransient();
-                        Remove(casted);
-                        if (!includeCurrent)
-                            Add(transientCurrent);
-                    }
-                    return casted;
-                }
-            }
-            return null;
-        }
+	    public IPersistableScheduleData UnsafeResolveConflictOfTypeDeletionByOther(Guid id, bool discardMyChanges)
+	    {
+		    foreach (var scheduleData in Snapshot.ScheduleDataInternalCollection())
+		    {
+			    var casted = scheduleData as IPersistableScheduleData;
+			    if (casted != null && casted.Id == id)
+			    {
+				    var current = ((IPersistableScheduleData) find(casted));
+				    Snapshot.Remove(casted);
+				    if (current != null)
+				    {
+					    Remove(casted);
 
-        private IScheduleData find(IScheduleData scheduleData)
+						// if overwrite other's deletion, mimic an add
+					    if (!discardMyChanges)
+					    {
+						    var transientCurrent = current.CreateTransient();
+						    Add(transientCurrent);
+					    }
+				    }
+				    return casted;
+			    }
+		    }
+		    return null;
+	    }
+
+	    private IScheduleData find(IScheduleData scheduleData)
         {
             foreach (var data in ScheduleDataInternalCollection())
             {

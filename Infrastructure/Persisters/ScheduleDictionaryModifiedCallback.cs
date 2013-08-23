@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                    IEnumerable<IPersistableScheduleData> deletedEntities
 			)
 		{
-			modifiedEntities.ForEach(e => whichRange(e).UnsafeSnapshotUpdate(e, true));
-			addedEntities.ForEach(e => whichRange(e).UnsafeSnapshotUpdate(e, true));
+			modifiedEntities.ForEach(e => whichRange(e).UnsafeResolveConflictOfTypeUpdateByOther(e, true));
+			addedEntities.ForEach(e => whichRange(e).UnsafeResolveConflictOfTypeUpdateByOther(e, true));
 		}
 	}
 }
