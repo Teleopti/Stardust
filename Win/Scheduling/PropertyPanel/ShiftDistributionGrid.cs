@@ -7,14 +7,20 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-    public class ShiftDistributionGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
-    {
-        public ShiftDistributionGrid()
+	public class ShiftDistributionGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftDistributionGrid
+	{
+		private IDistributionInformationExtractor _model;
+		private ShiftDistributionGridPresenter _presenter;
+
+        public ShiftDistributionGrid(IDistributionInformationExtractor model)
         {
             initializeComponent();
+	        _model = model;
+			_presenter = new ShiftDistributionGridPresenter(this);
         }
 
         //initialize component

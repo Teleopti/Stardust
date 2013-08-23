@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             InitializeComponent();
 	        _model = distributionInformationExtractor;
-            var shiftDistributionGrid = new ShiftDistributionGrid();
+            var shiftDistributionGrid = new ShiftDistributionGrid(_model);
             shiftDistributionGrid.Dock = DockStyle.Fill;
             shiftDistributiontableLayoutPanel.Controls.Add(shiftDistributionGrid,0,0);
         }

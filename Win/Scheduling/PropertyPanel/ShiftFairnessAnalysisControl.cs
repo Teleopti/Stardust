@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             InitializeComponent();
 	        _model = distributionInformationExtractor;
-            var shiftFairnessGrid = new ShiftFairnessGrid();
-            var shiftPerAgentGrid = new ShiftPerAgentGrid();
+            var shiftFairnessGrid = new ShiftFairnessGrid(_model);
+            var shiftPerAgentGrid = new ShiftPerAgentGrid(_model);
             shiftFairnessGrid.Dock = DockStyle.Fill;
             shiftPerAgentGrid.Dock = DockStyle.Fill;
             shiftFairnessTableLayoutPanel.Controls.Add(shiftFairnessGrid,0,3);

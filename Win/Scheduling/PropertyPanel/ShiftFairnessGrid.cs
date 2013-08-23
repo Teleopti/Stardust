@@ -7,11 +7,21 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-    public class ShiftFairnessGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
+    public class ShiftFairnessGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftFairnessGrid
     {
+	    private IDistributionInformationExtractor _model;
+	    private ShiftFairnessGridPresenter _presenter;
+
+		public ShiftFairnessGrid(IDistributionInformationExtractor model)
+		{
+			_model = model;
+			_presenter = new ShiftFairnessGridPresenter(this);
+		}
+
         public bool HasColumns { get; private set; }
         public void RefreshGrid()
         {
