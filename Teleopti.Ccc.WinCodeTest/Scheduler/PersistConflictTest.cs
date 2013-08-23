@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using(mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeResolveConflictOfTypeUpdateByOther(conflicts.First().DatabaseVersion, true);
+                range.SolveConflictBecauseOfExternalUpdate(conflicts.First().DatabaseVersion, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeResolveConflictOfTypeDeletionByOther(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
+                range.SolveConflictBecauseOfExternalDeletion(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeResolveConflictOfTypeUpdateByOther(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeResolveConflictOfTypeUpdateByOther(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeResolveConflictOfTypeDeletionByOther(dataOrg.Id.Value, false);
+                range.SolveConflictBecauseOfExternalDeletion(dataOrg.Id.Value, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }

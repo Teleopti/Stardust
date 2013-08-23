@@ -74,13 +74,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (databaseVersion == null)
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[originalVersion.Person]);
-					scheduleRange.UnsafeResolveConflictOfTypeDeletionByOther(originalVersion.Id.Value, discardMyChanges); 
+					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.Value, discardMyChanges); 
                 }
                 else
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[databaseVersion.Person]);
-					scheduleRange.UnsafeResolveConflictOfTypeUpdateByOther(databaseVersion, discardMyChanges);  
-                }
+					scheduleRange.SolveConflictBecauseOfExternalUpdate(databaseVersion, discardMyChanges);
+				}
 
                 messState.RemoveFromCollection();
             }

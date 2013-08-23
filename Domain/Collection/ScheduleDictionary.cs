@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
             foreach (KeyValuePair<IPerson, IScheduleRange> pair in _dictionary)
             {
-                IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).UnsafeResolveConflictOfTypeDeletionByOther(id, true);
+                IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).SolveConflictBecauseOfExternalDeletion(id, true);
                 if (retVal != null)
                 {
                     OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, retVal.Person, retVal.Period));
@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.Domain.Collection
                     if (range.WithinRange(updatedData.Period))
                     {
                         using(TurnoffPermissionScope.For(this)) 
-                            range.UnsafeResolveConflictOfTypeUpdateByOther(updatedData, true);
+                            range.SolveConflictBecauseOfExternalUpdate(updatedData, true);
                         OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, updatedData.Person, updatedData.Period));
                         returnData = updatedData;
                     }
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 foreach (var personMeeting in personMeetings)
                 {
                     if (!range.WithinRange(personMeeting.Period)) continue;
-                    using (TurnoffPermissionScope.For(this)) range.UnsafeResolveConflictOfTypeUpdateByOther(personMeeting, true);
+                    using (TurnoffPermissionScope.For(this)) range.SolveConflictBecauseOfExternalUpdate(personMeeting, true);
                     OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period));
                 }
             }

@@ -334,25 +334,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return BusinessRuleResponseInternalCollection;
 		}
 
+		//use this one only if you know what you're doing!
+		//not part of IScheduleRange. Use with care!
+		public virtual void SolveConflictBecauseOfExternalInsert(IScheduleData databaseVersion, bool discardMyChanges)
+		{
+			if (discardMyChanges)
+			{
+				Snapshot.Add(databaseVersion);
+				var myVersion = find(databaseVersion);
+				Remove(myVersion);
+				Add(databaseVersion);
+			}
+			else
+			{
+				Snapshot.Add(databaseVersion);
+			}
+		}
+
         //use this one only if you know what you're doing!
         //not part of IScheduleRange. Use with care!
-		public virtual void UnsafeResolveConflictOfTypeUpdateByOther(IScheduleData databaseVersion, bool discardMyChanges)
+		public virtual void SolveConflictBecauseOfExternalUpdate(IScheduleData databaseVersion, bool discardMyChanges)
 		{
-			// get my version of this thing
-			var myVersion = find(databaseVersion);
-
 			// replace version in snapshot with database version
 			Snapshot.Remove(databaseVersion);
 			Snapshot.Add(databaseVersion);
 
 			if (discardMyChanges)
 			{
+				// get my version of this thing, and remove if it exists
+				var myVersion = find(databaseVersion);
+				if (myVersion != null)
+					Remove(myVersion);
 				// put database version as my version
-				Remove(myVersion);
 				Add(databaseVersion);
 			}
 			else
 			{
+				// get my version of this thing
+				var myVersion = find(databaseVersion);
 				// update version number of my data to databases version
 				var databaseVersioned = databaseVersion as IVersioned;
 				if (databaseVersioned != null)
@@ -366,7 +385,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         //use this one only if you know what you're doing!
         //not part of IScheduleRange. Use with care!
-	    public IPersistableScheduleData UnsafeResolveConflictOfTypeDeletionByOther(Guid id, bool discardMyChanges)
+	    public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
 	    {
 		    foreach (var scheduleData in Snapshot.ScheduleDataInternalCollection())
 		    {
