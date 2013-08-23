@@ -1008,3 +1008,11 @@ GO
 ALTER TABLE auditing.PersonAssignment_AUD ADD
             DayOffTemplate uniqueidentifier NULL
 GO
+
+--- ??? Here David magic
+--- ??? Here David magic
+
+
+drop table dbo.PersonDayOff
+drop table auditing.PersonDayOff_AUD
+GO
