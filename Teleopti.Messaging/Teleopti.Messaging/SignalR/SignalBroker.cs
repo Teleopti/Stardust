@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -9,7 +10,6 @@ using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -27,10 +27,9 @@ namespace Teleopti.Messaging.SignalR
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
+		public SignalBroker(IMessageFilterManager typeFilter)
 		{
-			FilterManager = new MessageFilterManager();
-			FilterManager.InitializeTypeFilter(typeFilter);
+			FilterManager = typeFilter;
 			IsTypeFilterApplied = true;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;

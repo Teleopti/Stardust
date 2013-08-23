@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
@@ -21,7 +22,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Win.Services;
-using Teleopti.Messaging.Composites;
 
 #endregion
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Main
         	bool messageBrokerDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
 
         	new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
-				new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+				new SignalBroker(MessageFilterManager.Instance))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper(), true);
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Main
                                                           new PersonChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
                                                           new PersonPeriodChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue )
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

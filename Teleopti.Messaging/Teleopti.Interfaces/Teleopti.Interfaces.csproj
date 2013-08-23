@@ -589,6 +589,7 @@
     <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
+    <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
     <Compile Include="Infrastructure\IConfigReader.cs" />
     <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
@@ -742,6 +743,7 @@
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
+    <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />
