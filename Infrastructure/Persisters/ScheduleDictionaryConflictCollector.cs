@@ -73,16 +73,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				                             };
 
 			var conflictingAddedPersonAssignments = from e in addedPersonAssignments
-													let inMemoryEntity = e.CurrentPersonAssignment
-			                                        let databaseEntity = (
-				                                                             from pa in personAssignmentsInDb
-																			 where pa.Person.Id == e.CurrentPersonAssignment.Person.Id &&
-																				   pa.Date == e.CurrentPersonAssignment.Date &&
-																				   pa.Scenario.Id == e.CurrentPersonAssignment.Scenario.Id
-				                                                             select pa
-			                                                             ).SingleOrDefault()
+			                                        let inMemoryEntity = e.CurrentPersonAssignment
+			                                        let databaseEntity = personAssignmentsInDb
+				                                        .SingleOrDefault(pa => pa.Equals(e.CurrentPersonAssignment))
 			                                        where databaseEntity != null
-													select MakePersistConflict(e.Diff, databaseEntity); ;
+			                                        select MakePersistConflict(e.Diff, databaseEntity);
 
 			return conflictObjects.Union(conflictingAddedPersonAssignments).ToArray();
 		}

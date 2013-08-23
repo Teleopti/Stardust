@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -292,5 +293,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 		}
+
+		#region Equals
+
+		public virtual bool Equals(IPersonAssignment other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return
+				Equals(_person, other.Person) && 
+				Equals(_scenario, other.Scenario) && 
+				Date.Equals(other.Date);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((IPersonAssignment) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ (_person != null ? _person.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ Date.GetHashCode();
+				return hashCode;
+			}
+		}
+
+		#endregion
+
 	}
 }

@@ -18,7 +18,8 @@ namespace Teleopti.Interfaces.Domain
                                             IBelongsToBusinessUnit,
                                             IRestrictionChecker<IPersonAssignment>, 
                                             IProjectionSource, 
-                                            ICloneableEntity<IPersonAssignment>
+                                            ICloneableEntity<IPersonAssignment>,
+											IEquatable<IPersonAssignment>
     {
 			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
 
