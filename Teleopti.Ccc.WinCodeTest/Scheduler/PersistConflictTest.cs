@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             using(mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(2, modifiedData.Count);
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             using (mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(1, modifiedData.Count);
@@ -333,8 +333,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnCancel();
             }
-            CollectionAssert.IsEmpty(model.ModifiedData);
+            CollectionAssert.IsEmpty(model.ModifiedDataResult);
         }
+
         [Test, SetCulture("sv-SE")]
         public void VerifyOnQueryCellInfo()
         {

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _view.SetupGridControl(_model.Data);            
         }
 
-        public void OnUndoClientChanges()
+        public void OnDiscardMyChanges()
         {
             mergeConflict(true);
             closeForm(true);
@@ -61,34 +61,35 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return string.Empty;
         }
 
-        private void mergeConflict(bool undoClientState)
+        private void mergeConflict(bool discardMyChanges)
         {
             foreach (var messState in _model.PersistConflicts)
             {
                 var dbVersion = messState.DatabaseVersion;
-                addToModifiedCollection(messState, undoClientState);
+                addToModifiedCollection(messState, discardMyChanges);
+
                 if(dbVersion==null)
                 {
                     var orgVersion = messState.ClientVersion.OriginalItem;
-                    ((ScheduleRange)_model.ScheduleDictionary[orgVersion.Person])
-                        .UnsafeSnapshotDelete(orgVersion.Id.Value, undoClientState); 
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[orgVersion.Person]);
+					scheduleRange.UnsafeSnapshotDelete(orgVersion.Id.Value, discardMyChanges); 
                 }
                 else
                 {
-                    ((ScheduleRange)_model.ScheduleDictionary[dbVersion.Person])
-                        .UnsafeSnapshotUpdate(dbVersion, undoClientState);  
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[dbVersion.Person]);
+					scheduleRange.UnsafeSnapshotUpdate(dbVersion, discardMyChanges);  
                 }                
                 messState.RemoveFromCollection();
             }
         }
 
-        private void addToModifiedCollection(IPersistConflict messState, bool undoClientState)
+        private void addToModifiedCollection(IPersistConflict messState, bool discardMyChanges)
         {
-            if(undoClientState)
+            if(discardMyChanges)
             {
                 _model.ModifiedData.Add(messState.ClientVersion.OriginalItem);
                 if(messState.DatabaseVersion!=null)
-                    _model.ModifiedData.Add(messState.DatabaseVersion);
+					_model.ModifiedDataResult.Add(messState.DatabaseVersion);
             }
         }
 
