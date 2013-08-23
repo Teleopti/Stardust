@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
-                Expect.Call(_personAssignment.ShiftCategory).Return(shiftCategory);
+                Expect.Call(_personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod)
                       .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
@@ -46,14 +46,37 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         }
 
         [Test]
+        public void VerifyValueNotSetIfShiftCategoryIsNull()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
+                Expect.Call(_personAssignment.ShiftCategory).Return(null);
+            }
+            _target = new ShiftCategoryStructure(_scheduleDay);
+            Assert.AreEqual(_target.ShiftCategoryValue, null);
+            Assert.AreEqual(_target.PersonValue, null);
+
+        }
+
+        [Test]
+        public void VerifyValueNotSetIfPersonAssignmentIsNull()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
+            }
+            _target = new ShiftCategoryStructure(_scheduleDay);
+            Assert.AreEqual(_target.ShiftCategoryValue, null);
+            Assert.AreEqual(_target.PersonValue, null);
+
+        }
+
+        [Test]
         public void VerifyValueBeingSetWithDirectValues()
         {
             var shiftCategory = new Domain.Scheduling.ShiftCategory("test1");
             var person = PersonFactory.CreatePerson("person2");
-            using (_mocks.Record())
-            {
-
-            }
             _target = new ShiftCategoryStructure(shiftCategory,DateOnly.Today,person);
             Assert.AreEqual(_target.ShiftCategoryValue.Description, shiftCategory.Description);
             Assert.AreEqual(_target.DateOnlyValue, DateOnly.Today);

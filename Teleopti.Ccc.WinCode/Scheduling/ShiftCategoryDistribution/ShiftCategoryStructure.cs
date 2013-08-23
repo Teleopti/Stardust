@@ -10,8 +10,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
         public ShiftCategoryStructure(IScheduleDay scheduleDay)
         {
-            populateFeilds(scheduleDay.PersonAssignment().ShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly,
+
+            var personAssignment = scheduleDay.PersonAssignment();
+            if (personAssignment != null && personAssignment.ShiftCategory != null)
+            {
+                populateFeilds(personAssignment.ShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly,
                                    scheduleDay.Person);
+            }
+            
         }
 
         public ShiftCategoryStructure(IShiftCategory shiftCategory,DateOnly dateOnly, IPerson person  )
