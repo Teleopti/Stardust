@@ -575,10 +575,13 @@
     <Compile Include="Scheduler\ShiftCategoryDistribution\DistributionInformationExtractorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryPerAgentCalculatorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionCalculatorTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionGridPresenterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftFairnessCalculatorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryPerAgentTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftFairnessGridPresenterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftFairnessTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerAgentGridPresenterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ScheduleDayToShiftCategoryMapperTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryAttributesExtractorTest.cs" />

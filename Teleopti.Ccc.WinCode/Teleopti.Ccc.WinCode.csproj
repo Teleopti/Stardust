@@ -588,8 +588,11 @@
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryPerAgentCalculator.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftDistribution.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftDistributionCalculator.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftDistributionGridPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftFairness.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftFairnessCalculator.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftFairnessGridPresenter.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentGridPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ScheduleDayToShiftCategoryMapper.cs" />
