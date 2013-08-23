@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
 	partial class AgentInfoControl
 	{
