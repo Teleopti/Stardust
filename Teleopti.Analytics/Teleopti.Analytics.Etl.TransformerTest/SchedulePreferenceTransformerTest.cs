@@ -38,8 +38,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = schedulePart.Person;
             IShiftCategory shiftCategory = new ShiftCategory("TopCat");
             shiftCategory.SetId(Guid.NewGuid());
-			IPersonAssignment assignment = new PersonAssignment(person, schedulePart.Scenario, new DateOnly(2000, 1, 1));
-			assignment.SetMainShiftLayers(new[] { new MainShiftActivityLayerNew(activity, schedulePart.Period) }, shiftCategory);
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("WrongDayOff"));
             dayOffTemplate.SetId(Guid.NewGuid());
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
@@ -62,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPreferenceDay personRestriction = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction);
             personRestriction.SetId(Guid.NewGuid());
             Schedule schedule = (Schedule)schedulePart;
-            schedule.Add(assignment);
+            //schedule.Add(assignment);
             schedule.Add(personRestriction);
 
 

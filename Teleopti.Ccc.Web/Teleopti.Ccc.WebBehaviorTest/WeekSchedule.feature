@@ -103,25 +103,6 @@ Scenario: Do not show unpublished schedule for part of week
 	Then I should see a shift on date '2012-08-28'
 	And I should not see a shift on date '2012-08-29'
 	
-Scenario: View meeting
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-28 8:00  |
-	| EndTime               | 2012-08-28 17:00 |
-	| Shift category		| Day	           |
-	And I have a meeting scheduled
-	| Field                 | Value						|
-	| StartTime             | 2012-08-28 9:00			|
-	| EndTime               | 2012-08-28 10:00		|
-	| Subject               | Meeting subject			|
-	| Location              | Meeting location		|
-	| Description           | Meeting description	|
-	When I view my week schedule for date '2012-08-28'
-	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
-	And I should see the meeting details with description 'Meeting description' on date '2012-08-28'
-	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -190,6 +171,14 @@ Scenario: Show timeline with no schedule
 	| start timeline			| 0:00  |
 	| end timeline				| 23:59 |
 	| number of timeline labels	| 25    |
+
+@ignore
+Scenario: Show calender according to the users culture
+	Given I have the role 'Full access to mytime'
+	And I am swedish
+	When I view my week schedule for date '2013-10-03'
+	And I open the weekschedule date-picker
+	Then I should see 'Mo' as the first day in the calender
 
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'
@@ -281,24 +270,25 @@ Scenario: Show activity at correct times
 Scenario: Update schedule when schedule has changed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	When I view my week schedule for date '2012-08-28'
-	And I am assigned this shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 12:00 |
 	| EndTime               | 2012-08-28 15:00 |
 	| Shift category		| Day	           |
-	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' reloads
+	When I view my week schedule for date '2012-08-28'
+	And My schedule between '2013-08-28 12:00' to '2013-08-28 15:00' reloads
 	Then I should see activities on date '2012-08-28'
 
+@ignore
+#Ignored for now. See TextRequestFromSchedule.feature. /Maria S
 Scenario: Keep user request input when schedules are refreshed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
-	And I input text request values for date '2013-10-03'
-	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
-	Then I should see the add text request form
-	And Subject should not be empty
+	And I input text request values with subject 'request subject' for date '2013-10-03'
+	And My schedule between '2013-10-03 12:00' to '2013-10-03 15:00' reloads
+	Then I should see request form with subject 'request subject'
 
 Scenario: Show black day summary text when background color is white 
 	Given I have the role 'Full access to mytime'

@@ -11,32 +11,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private string _headerText;
-        private string _bindingProperty;
-    	private int _preferredWidth;
-    	private const int _preferredWidthDefault = 110;
 
-        public NumericCellColumnForSchedulePeriod(string bindingProperty, string headerText)
-			: this(bindingProperty, headerText, _preferredWidthDefault) { }
-
-		public NumericCellColumnForSchedulePeriod(string bindingProperty, string headerText, int preferredWidth)
+		public NumericCellColumnForSchedulePeriod(string bindingProperty, string headerText, int preferredWidth) : base(bindingProperty,preferredWidth)
 		{
 			_headerText = headerText;
-			_bindingProperty = bindingProperty;
-			_preferredWidth = preferredWidth;
 		}
-
-        public override string BindingProperty
-        {
-            get
-            {
-                return _bindingProperty;
-            }
-        }
-
-        public override int PreferredWidth
-        {
-            get { return _preferredWidth; }
-        }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
@@ -44,15 +23,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Set up single header.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs"/> instance containing the event data.</param>
-        /// <param name="dataItems">The data items.</param>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-05-21
-        /// </remarks>
         private void SetUpSingleHeader(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
         {
             if (e.RowIndex == 0 && e.ColIndex > 0)
@@ -64,7 +34,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             if (IsContentRow(e.RowIndex,dataItems.Count))
             {
                 T dataItem = dataItems[e.RowIndex - 1];
-                object obj = _propertyReflector.GetValue(dataItem, _bindingProperty);
+                object obj = _propertyReflector.GetValue(dataItem, BindingProperty);
 
                 int value = (int)obj;
 
@@ -104,7 +74,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
                 if (value > 0 && value < 100)
                 {
-                    _propertyReflector.SetValue(dataItem, _bindingProperty, value);
+                    _propertyReflector.SetValue(dataItem, BindingProperty, value);
 
                     OnCellChanged(dataItem, e);
                 }

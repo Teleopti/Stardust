@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             public void AddSchedulePart(IScheduleDay schedulePart)
             {
-                schedulePart.PersonAssignmentCollection().ForEach(PersonAssignments.Add);
+                schedulePart.PersonAssignmentCollectionDoNotUse().ForEach(PersonAssignments.Add);
                 schedulePart.PersonAbsenceCollection().ForEach(PersonAbsences.Add);
                 schedulePart.PersonDayOffCollection().ForEach(PersonDayOffs.Add);
             }

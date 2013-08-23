@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                 and pa.Layer.Period.period.Maximum > :startTime
                                 and pa.Layer.Period.period.Minimum < :endTime
                                 and pa.Scenario =:scenario
-                                and pa.Layer.Payload =:absence";
+                                and pa.Layer.Payload =:absence
+								ORDER BY pa.Layer.Period.period.Minimum";
            
             IList<DateTimePeriod> periods = Session.CreateQuery(q)
                                     .SetEntity("person", person)
@@ -125,7 +126,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return periods;
         }
 
-        /// <summary>
+	    public IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence)
+	    {
+			var retList = new List<IPersonAbsence>();
+
+			foreach (var personList in persons.Batch(400))
+			{
+
+				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
+					.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(optimizedPeriod, scenario)
+											   .Add(Restrictions.In("Person", personList.ToArray()))
+											   .Add(Restrictions.Eq("Layer.Payload", absence))))
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPersonAbsence>());
+			}
+
+			initializeAbsences(retList);
+			return retList;
+	    }
+
+	    /// <summary>
         /// Finds the specified period.
         /// </summary>
         /// <param name="period">The period.</param>
@@ -172,15 +192,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return dCrit;
         }
 
-        /// <summary>
-        /// Loads the aggregate.
-        /// </summary>
-        /// <param name="id">The id.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-06-25
-        /// </remarks>
         public IPersonAbsence LoadAggregate(Guid id)
         {
             PersonAbsence retObj = Session.CreateCriteria(typeof(PersonAbsence))
@@ -190,14 +201,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 var initializer = new InitializeRootsPersonAbsence(new List<IPersonAbsence> {retObj});
                 initializer.Initialize();
-                //initializeAbsences(new List<IPersonAbsence> {retObj});
             }
             return retObj;
         }
-    }
-
-    public class Test
-    {
-        public Guid Id { get; set; }
     }
 }

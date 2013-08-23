@@ -65,8 +65,9 @@
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -97,6 +98,7 @@
     <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
     <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
     <Compile Include="Job\Steps\FactAvailabilityJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Job\Steps\StageAvailabilityJobStep.cs" />
@@ -197,7 +199,6 @@
     <Compile Include="Job\Steps\DimSiteJobStep.cs" />
     <Compile Include="Job\Steps\DimTeamJobStep.cs" />
     <Compile Include="Job\Steps\FactForecastWorkloadJobStep.cs" />
-    <Compile Include="Job\Steps\FactScheduleContractJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleJobStep.cs" />
     <Compile Include="Job\Steps\StageAbsenceJobStep.cs" />
     <Compile Include="Job\Steps\StageActivityJobStep.cs" />

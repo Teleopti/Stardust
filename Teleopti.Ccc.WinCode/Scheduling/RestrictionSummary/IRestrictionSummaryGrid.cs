@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         int RowCount { get; set; }
         int ColCount { get; set; }
         int CurrentCellRowIndex { get;}
-        void ResizeToFit();
         void Invalidate();
-        void UpdateRestrictionSummaryView();
-
-        void Initialize(SingleAgentRestrictionPresenter singleAgentRestrictionPresenter,
-                        IScheduleViewBase preferenceView);
-        SingleAgentRestrictionPresenter SingleAgentRestrictionPresenter{ get;}
     }
 }

@@ -1,10 +1,7 @@
 using System;
 using System.Drawing;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Diagnostics;
-using System.Collections.Specialized;
 using Image = System.Web.UI.WebControls.Image;
 
 namespace Teleopti.Analytics.Parameters
@@ -36,7 +33,6 @@ namespace Teleopti.Analytics.Parameters
 
 	    protected override void Clear()
 	    {
-	        
 	    }
 
 	    protected override void SetData()
@@ -45,8 +41,6 @@ namespace Teleopti.Analytics.Parameters
 			Value = _TextBox.Text;
 			ParameterText = _TextBoxText.Text;
 		}
-
-		
 
 		protected override void CreateChildControls() 
 		{
@@ -148,7 +142,7 @@ namespace Teleopti.Analytics.Parameters
 				int i=0;
 				while (i <= mCount)
 				{
-					if (_ListBox.Items[i].Value.ToString() == s.ToString())
+					if (_ListBox.Items[i].Value == s)
 					{
 						_ListBox2.Items.Add(_ListBox.Items[i]);
 						_TextBoxText.Text = _TextBoxText.Text + _ListBox.Items[i].Text + ",";
@@ -163,7 +157,6 @@ namespace Teleopti.Analytics.Parameters
 			{
 				_TextBoxText.Text = _TextBoxText.Text.Substring(0,_TextBoxText.Text.Length -1);
 				_TextBox.Text = _TextBox.Text.Substring(0,_TextBox.Text.Length -1);
-				//_TextBox.Text = _DefaultValue;
 			}
 			if (_ListBox2.Items.Count == 0)
 			{
@@ -292,14 +285,7 @@ namespace Teleopti.Analytics.Parameters
 			writer.WriteBeginTag("td");	//Viktig
 			writer.WriteAttribute("valign","bottom");
 			writer.Write(HtmlTextWriter.TagRightChar);
-//			writer.RenderEndTag();//TD
-//			writer.RenderEndTag();//TD
-//			writer.RenderEndTag(); //TRfffffffff
-//
-//			writer.RenderEndTag();//tdfffff
 
-//			writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-//			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,"20");
 			Panel _Panel = new Panel();
 			_Panel.Height = new Unit("20");
@@ -311,82 +297,12 @@ namespace Teleopti.Analytics.Parameters
 			Controls.Add(_Panel);
 			_Panel.RenderControl(writer);
 
-//			writer.RenderEndTag();
-//			writer.RenderEndTag();
-
 			writer.WriteEndTag("td");
-
-
 		}
 
 		protected override void SetAutoPostBack()
 		{
 			EnsureChildControls();			
-		}
-
-		private void Move( Object sender, ImageClickEventArgs e)//Flyttar värden mellan listboxar och textboxar
-		{
-			ListBox _From = new ListBox();
-			ListBox _To = new ListBox();
-			ImageButton Butt;
-			string One = "ButtonOne" + Dbid.ToString();
-			string All = "ButtonAll" + Dbid.ToString();
-			string OneBack = "ButtonOneBack" + Dbid.ToString();
-			string AllBack = "ButtonAllBack" + Dbid.ToString();
-			bool all = false;
-			int i = 0;
-			Butt = (ImageButton)sender;
-			string controlid = Butt.ID;
-
-			if  (controlid == One)
-			{				
-				_From = _ListBox;
-				_To = _ListBox2;
-				all = false;
-			}
-
-			if  (controlid == All)
-			{
-				_From = _ListBox;
-				_To = _ListBox2;
-				all = true;
-			}
-
-			if  (controlid == OneBack)
-			{
-				_From = _ListBox2;
-				_To = _ListBox;
-				all = false;
-			}
-
-			if  (controlid == AllBack)
-			{
-				_From = _ListBox2;
-				_To = _ListBox;
-				all = true;
-			}
-			
-			if (all == true)
-			{
-				foreach (ListItem itm in _From.Items)
-				{
-					itm.Selected = true;
-				}
-			}
-
-			int mCount;
-			mCount = _From.Items.Count - 1;
-			while (i <= mCount)
-			{
-				if (_From.Items[i].Selected)
-				{
-					_To.Items.Add(_From.Items[i]);
-					_From.Items.Remove(_From.Items[i]);
-					mCount = _From.Items.Count - 1;
-				}
-				else
-					i ++;
-			}		
 		}
 
 		private void _TextBox_TextChanged(object sender, EventArgs e)
@@ -402,10 +318,8 @@ namespace Teleopti.Analytics.Parameters
 
 		private void ReloadDependent()
 		{
-			
 			foreach (ParameterBase ctrl in Dependent)
 			{
-				//ctrl.Reloaded = false;
 				ctrl.LoadData();
 			}
 		}
@@ -463,6 +377,5 @@ namespace Teleopti.Analytics.Parameters
             Page.ClientScript.RegisterClientScriptBlock(GetType(),scriptKey, scriptBlock);
 		}
 		}
-
 	}
 }

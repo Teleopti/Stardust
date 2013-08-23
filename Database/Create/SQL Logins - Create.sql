@@ -15,9 +15,6 @@ USE master
 DECLARE @securityadmin			int
 
 --init
-	SELECT @securityadmin	= CASE WHEN IS_SRVROLEMEMBER('securityadmin') = 1 THEN 1 ELSE 0 END
-
-	IF @securityadmin = 1
 	BEGIN
 		IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the login.
 		BEGIN
@@ -39,9 +36,7 @@ DECLARE @securityadmin			int
 		PRINT 'Creating login: $(SQLLOGIN). Finished!'
 		END
 	END
-	ELSE
-		PRINT 'WARNING: Cannot create or alter server login under the current credetials!'
-	
+
 END TRY
 
 BEGIN CATCH

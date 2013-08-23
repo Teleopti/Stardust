@@ -430,8 +430,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 _baseDateTime.AddHours(3),
                 _baseDateTime.AddHours(7));
             var part = partFactory.CreatePart();
-            part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(_activity, basePeriod,
-                                                                     _definitionSet));
+            part.CreateAndAddOvertime(_activity, basePeriod, _definitionSet);
             part.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Holiday!"),basePeriod));
 
             _target = new MultiplicatorProjectionService(part, _dateOnly);
@@ -462,11 +461,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 _baseDateTime.AddHours(3),
                 _baseDateTime.AddHours(7));
             var part = partFactory.CreatePart();
-            part.CreateAndAddActivity(
-                new MainShiftActivityLayer(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9))),
-                ShiftCategoryFactory.CreateShiftCategory("test"));
-            part.CreateAndAddOvertime(new OvertimeShiftActivityLayer(_activity, basePeriod,
-                                                                     _definitionSet));
+            part.CreateAndAddActivity(_activity, basePeriod.ChangeEndTime(TimeSpan.FromHours(9)),ShiftCategoryFactory.CreateShiftCategory("test"));
+            part.CreateAndAddOvertime(_activity, basePeriod,_definitionSet);
             part.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Holiday!"), basePeriod.MovePeriod(TimeSpan.FromHours(5))));
 
             _target = new MultiplicatorProjectionService(part, _dateOnly);

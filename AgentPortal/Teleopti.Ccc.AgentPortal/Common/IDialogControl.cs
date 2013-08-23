@@ -35,10 +35,6 @@ namespace Teleopti.Ccc.AgentPortal.Common
         /// Persist all and save changes by the control. Calls when OkDialog hits.
         /// </summary>
         bool SaveChanges();
-        /// <summary>
-        /// Persist all and delete data by the control. Calls when DeleteDialog hits.
-        /// </summary>
-        void Delete();
 
         #endregion
 

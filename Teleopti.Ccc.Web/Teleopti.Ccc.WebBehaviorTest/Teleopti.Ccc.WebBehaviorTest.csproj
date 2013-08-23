@@ -45,11 +45,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CassiniDev\AnyCPU build\CassiniDev4-lib.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,7 +92,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
+    <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
+    <Compile Include="CalendarShare.feature.cs">
+      <DependentUpon>CalendarShare.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -127,8 +146,10 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
+    <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
@@ -149,7 +170,6 @@
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
-    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
@@ -178,10 +198,9 @@
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\Robustness\EventualAssert.cs" />
-    <Compile Include="Core\Robustness\EventualElementActions.cs" />
-    <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Pages\SignInPage.cs" />
+    <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
+    <Compile Include="Core\Legacy\EventualElementActions.cs" />
+    <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -196,7 +215,7 @@
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="Core\Robustness\QuicklyFind.cs" />
+    <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="Data\Setups\Specific\ExistingShiftTradeRequest.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
@@ -452,7 +471,7 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Robustness\EventualElementWaits.cs" />
+    <Compile Include="Core\Legacy\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
@@ -488,9 +507,8 @@
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
-    <Compile Include="Pages\Common\IDeleteButton.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
-    <Compile Include="Core\Extensions\ElementExtensions.cs" />
+    <Compile Include="Core\Legacy\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />
@@ -548,7 +566,7 @@
     <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
-    <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
+    <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\UserFactory.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">
@@ -581,6 +599,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="CalendarShare.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>

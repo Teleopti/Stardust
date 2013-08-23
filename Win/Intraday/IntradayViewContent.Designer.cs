@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WpfControls.Controls.Intraday;
+﻿using System;
+using Teleopti.Ccc.WpfControls.Controls.Intraday;
 
 namespace Teleopti.Ccc.Win.Intraday
 {
@@ -35,6 +36,12 @@ namespace Teleopti.Ccc.Win.Intraday
 
                 if (_backgroundWorkerResources != null)
                     _backgroundWorkerResources.Dispose();
+
+				if (timerRefreshSchedule != null)
+				{
+					timerRefreshSchedule.Tick -= new EventHandler(this.timerRefreshSchedule_Tick);
+					timerRefreshSchedule.Stop();
+				}
 
                 _owner = null;
                 _presenter = null;

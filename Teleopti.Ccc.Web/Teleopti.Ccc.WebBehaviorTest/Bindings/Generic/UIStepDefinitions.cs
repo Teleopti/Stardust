@@ -1,10 +1,7 @@
 using System.Globalization;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -41,10 +38,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// I click 'add full day absence'
 		// *NOT* I click 'remove' on absence named 'Vacation'
 		[When(@"I click '([a-z|\s]*)'")]
-		public void WhenIClickClass(CssClass cssClass)
+		public void WhenIClickButtonWithClass(CssClass cssClass)
 		{
-			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
+			// enforcing button because of :enabled selector.
+			// if its clickable, it has to be enabled after initialization for robustness
+			// probably have to reevaluate this decision later
+			Browser.Interactions.Click(string.Format("button.{0}:enabled", cssClass.Name));
 		}
+
 
 		// I click agent 'mathias stenbom'
 		// I click the agent 'mathias stenbom'
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click( the)? ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
 		{
-			Browser.Interactions.Click(string.Format(".{0}:contains('{1}')", cssClass.Name, text));
+			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
 
 		// I should see the message 'an error message'
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void ThenIShouldSeeTheMessage(CssClass cssClass, LocalizedText text)
 		{
-			Browser.Interactions.AssertContains("." + cssClass.Name, text.Text);
+			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}
 
 	}

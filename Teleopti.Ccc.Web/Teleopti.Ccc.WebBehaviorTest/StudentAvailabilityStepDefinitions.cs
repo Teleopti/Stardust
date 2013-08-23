@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to see student availability link")]
 		public void ThenIShouldNotBeAbleToSeeStudentAvailabilityLink()
 		{
-			Browser.Interactions.AssertNotExists("#tabs", "[href*='#StudentAvailabilityTab']");
+			Browser.Interactions.AssertNotExists("#signout", "[href*='#StudentAvailabilityTab']");
 		}
 
 		[Then(@"I should see my existing student availability")]

@@ -121,25 +121,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        /// <summary>
-        /// Finds the specified period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-11-09
-        /// </remarks>
-        public ICollection<IPersonDayOff> Find(DateTimePeriod period)
-        {
-            InParameter.NotNull("period", period);
-
-           ICollection<IPersonDayOff> retList = Session.CreateCriteria(typeof(PersonDayOff), "AF")
-                .Add(Expression.Between("AF.DayOff.Anchor", period.StartDateTime, period.EndDateTime))
-                .List<IPersonDayOff>();
-
-           return retList;
-        }
 
         /// <summary>
         /// Finds the specified period by date time period and scenario.
@@ -163,38 +144,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         Expression.Eq("Scenario", scenario)))
                 .List<IPersonDayOff>();
 
-
-            return retList;
-        }
-
-        /// <summary>
-        /// Finds the days off by boundary.
-        /// </summary>
-        /// <param name="agents">The agents.</param>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-08
-        /// </remarks>
-        public ICollection<IPersonDayOff> FindByBoundary(IEnumerable<IPerson> agents, DateTimePeriod period)
-        {
-            InParameter.NotNull("period", period);
-
-            //Query should use Boundary as expression instead. Not possible right now...
-            //IQuery query = Session.CreateQuery("from PersonDayOff as AF where (AF.Person in (:nonGenericAgents)) and " +
-            //    "(DateAdd(ms, -Cast((AF.DayOff.TargetLength / 10000) * (1 + AF.DayOff.Flexibility) as int), AF.DayOff.Anchor) < :endDate) and " +
-            //    "(DateAdd(ms, Cast((AF.DayOff.TargetLength / 10000) * (1 + AF.DayOff.Flexibility) as int), AF.DayOff.Anchor) > :startDate) order by AF.DayOff.Anchor");
-
-            IQuery query = Session.CreateQuery("from PersonDayOff as AF where (AF.Person in (:nonGenericAgents)) and " +
-                "(DateAdd(ms, -Cast((AF.DayOff.TargetLength / 10000) + (AF.DayOff.Flexibility / 10000) as int), AF.DayOff.Anchor) < :endDate) and " +
-                "(DateAdd(ms, Cast((AF.DayOff.TargetLength / 10000) + (AF.DayOff.Flexibility / 10000) as int), AF.DayOff.Anchor) > :startDate) order by AF.DayOff.Anchor");
-
-            query.SetParameterList("nonGenericAgents", new List<IPerson>(agents));
-            query.SetDateTime("startDate",period.StartDateTime);
-            query.SetDateTime("endDate", period.EndDateTime);
-
-            ICollection<IPersonDayOff> retList = query.List<IPersonDayOff>();
 
             return retList;
         }

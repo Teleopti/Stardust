@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         public DateNavigateControlThinLayout()
         {
             InitializeComponent();
-            dateTimePickerAdv1.Calendar.Culture = CultureInfo.CurrentCulture;
-            dateTimePickerAdv1.Culture = CultureInfo.CurrentCulture;
+            dateTimePickerAdv1.SetCultureInfoSafe(CultureInfo.CurrentCulture);
         }
 
         public event EventHandler<CustomEventArgs<DateOnly>> SelectedDateChanged;
@@ -48,12 +47,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             {
             	handler.Invoke(this, new CustomEventArgs<DateOnly>(new DateOnly(dateTimePickerAdv1.Value)));
             }
-        }
-
-        public void SetAvailableTimeSpan(DateOnlyPeriod dateTimePair)
-        {
-            dateTimePickerAdv1.SetAvailableTimeSpan(dateTimePair);
-            dateTimePickerAdv1.Value = dateTimePickerAdv1.MinValue;
         }
 
         public void SetSelectedDate(DateOnly dateTime )

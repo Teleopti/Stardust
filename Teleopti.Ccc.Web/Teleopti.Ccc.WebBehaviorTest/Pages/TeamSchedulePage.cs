@@ -1,5 +1,5 @@
 using System.Linq;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -80,20 +80,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(1)");
 		}
 
 		public Div ToolTipContainer()
 		{
 			return Document.Div(QuicklyFind.ByClass("tooltip-container"));
 		}
-
-		[FindBy(Id = "Team-Picker")]
-		public Select2Box TeamPicker { get; set; }
 	}
 }

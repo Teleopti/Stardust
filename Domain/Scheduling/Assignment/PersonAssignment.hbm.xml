@@ -42,28 +42,12 @@
 						foreign-key="FK_PersonAssignment_ShiftCategory"
 						access="property"/>
 
-		<list name="MainShiftActivityLayers"
-		  cascade="all-delete-orphan"
-		  inverse="true">
-			<key column="Parent" on-delete="cascade" />
-			<index type="Byte" column ="OrderIndex" />
-			<one-to-many class="MainShiftActivityLayerNew"/>
-		</list>
-
-		<list name="PersonalShiftCollection"
+		<list name="ShiftLayers"
 				cascade="all-delete-orphan"
 				inverse="true">
-			<key column="Parent" />
+			<key column="Parent" on-delete ="cascade" />
 			<index type="Byte" column="OrderIndex" />
-			<one-to-many class="PersonalShift"/>
-		</list>
-
-		<list name="OvertimeShiftCollection"
-				cascade="all-delete-orphan"
-				inverse="true">
-			<key column="Parent" />
-			<index type="Byte" column="OrderIndex" />
-			<one-to-many class="OvertimeShift"/>
+			<one-to-many class="ShiftLayer"/>
 		</list>
 
 		<many-to-one name="Person"
@@ -76,19 +60,6 @@
 				class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 				access="nosetter.camelcase-underscore"
 				not-null="true" foreign-key="FK_PersonAssignment_BusinessUnit"/>
-
-		<component name="Period"
-							 class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces"
-							 access="readonly">
-			<component name="period" access="field">
-				<property name="Minimum"
-								not-null="true"
-								type="UtcDateTime" />
-				<property name="Maximum"
-						not-null="true"
-						type="UtcDateTime"/>
-			</component>
-		</component>
 
 		<filter name="businessUnitFilter"
 						condition=":businessUnitParameter = BusinessUnit" />

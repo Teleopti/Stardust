@@ -7,10 +7,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public static class Pages
 	{
-		private static readonly ScenarioContextLazy<SignInPage> _signInPage =
-			new ScenarioContextLazy<SignInPage>(() => Browser.Current.Page<SignInPage>());
-		public static SignInPage SignInPage { get { return _signInPage.Value; } }
-
 		private static readonly ScenarioContextLazy<WeekSchedulePage> _weekSchedulePage =
 			new ScenarioContextLazy<WeekSchedulePage>(() => Browser.Current.Page<WeekSchedulePage>());
 		public static WeekSchedulePage WeekSchedulePage { get { return _weekSchedulePage.Value; } }
@@ -51,7 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		public static PortalPage CurrentPortalPage { get { return Current as PortalPage; } }
-		public static IDeleteButton CurrentDeleteButton { get { return Current as IDeleteButton; } }
 		public static IOkButton CurrentOkButton { get { return Current as IOkButton; } }
 		public static ICancelButton CurrentCancelButton { get { return Current as ICancelButton; } }
 		public static IDateRangeSelector CurrentDateRangeSelector { get { return Current as IDateRangeSelector; } }

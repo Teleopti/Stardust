@@ -12,13 +12,29 @@ namespace Teleopti.Ccc.WinCode.Security
     public class PasswordPolicyServiceViewModel : DataModel
     {
         private IPasswordPolicy _model;
-        private ILoadPasswordPolicyService _loadPasswordService  =new LoadPasswordPolicyService(string.Empty);
+        private readonly ILoadPasswordPolicyService _loadPasswordService  =new LoadPasswordPolicyService(string.Empty);
         private string _path;
         private bool _filePathIsOk;
         private string _password;
         private bool _passwordIsStrongEnough;
 
-        #region properties
+        public PasswordPolicyServiceViewModel()
+        {
+            LoadFileCommand = CommandModelFactory.CreateCommandModel(loadFile, () => true, CommonRoutedCommands.LoadPasswordPolicy);
+        }
+
+        public PasswordPolicyServiceViewModel(ILoadPasswordPolicyService loadPasswordService)
+            : this()
+        {
+            _loadPasswordService = loadPasswordService;
+        }
+
+        public PasswordPolicyServiceViewModel(IPasswordPolicy passwordPolicy)
+            : this()
+        {
+            _model = passwordPolicy;
+        }
+
         public string Path
         {
             get { return _path; }
@@ -27,9 +43,9 @@ namespace Teleopti.Ccc.WinCode.Security
                 _path = value;
                 NotifyProperty(() => Path);
                 FilePathIsOk = File.Exists(Path);
-
             }
         }
+
         public bool FilePathIsOk
         {
             get { return _filePathIsOk; }
@@ -39,11 +55,9 @@ namespace Teleopti.Ccc.WinCode.Security
                 NotifyProperty(() => FilePathIsOk);
             }
         }
-        public CommandModel LoadFileCommand
-        {
-            get;
-            private set;
-        }
+
+        public CommandModel LoadFileCommand{ get; private set; }
+
         public bool PasswordIsStrongEnough
         {
             get
@@ -56,6 +70,7 @@ namespace Teleopti.Ccc.WinCode.Security
                 NotifyProperty(() => PasswordIsStrongEnough);
             }
         }
+
         public string Password
         {
             get { return _password; }
@@ -67,7 +82,6 @@ namespace Teleopti.Ccc.WinCode.Security
             }
         }
 
-        #region exposed
         public TimeSpan InvalidAttemptWindow 
         {
             get { return _model.InvalidAttemptWindow; }
@@ -86,33 +100,7 @@ namespace Teleopti.Ccc.WinCode.Security
         {
             get { return _model.PasswordExpireWarningDayCount; }
         }
-        #endregion
-        #endregion //properties
-
-        //TODO: get rid of all these ctors
-        public PasswordPolicyServiceViewModel()
-        {
-            LoadFileCommand = CommandModelFactory.CreateCommandModel(loadFile, canLoadFile, CommonRoutedCommands.LoadPasswordPolicy);
-        }
-
-        public PasswordPolicyServiceViewModel(ILoadPasswordPolicyService loadPasswordService):this()
-        {
-            _loadPasswordService = loadPasswordService;
-
-        }
-
-        public PasswordPolicyServiceViewModel(IPasswordPolicy passwordPolicy)
-            : this()
-        {
-            _model = passwordPolicy;
-        }
-
-
-        private bool canLoadFile()
-        {
-            return true;
-        }
-
+       
         private void loadFile()
         {
             _loadPasswordService.Path = Path;
@@ -122,13 +110,6 @@ namespace Teleopti.Ccc.WinCode.Security
             NotifyProperty(() => MaxAttemptCount);
             NotifyProperty(() => PasswordValidForDayCount);
             NotifyProperty(() => PasswordExpireWarningDayCount);
-        
         }
     }
-
-
-
-
-
-
 }

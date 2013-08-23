@@ -109,8 +109,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				IScheduleMatrixPro result = _target.MatrixesForMemberAndDate(_groupMember, _date.AddDays(1));
+				IScheduleMatrixPro result = _target.MatrixForMemberAndDate(_groupMember, _date.AddDays(1));
 				Assert.AreSame(_matrix2, result);
+			}
+		}
+	
+		[Test]
+		public void ShouldGiveMeCorrectMatrixesForMemberAndPeriod()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+
+				Expect.Call(_matrix.Person).Return(_groupMember);
+				Expect.Call(_matrix2.Person).Return(_groupMember);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.MatrixesForMemberAndPeriod(_groupMember, new DateOnlyPeriod(_date, _date.AddDays(1)));
+				Assert.That(result.Count(), Is.EqualTo(2));
 			}
 		}
 

@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -85,11 +84,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-            OvertimeShiftFactory.CreateOvertimeShift(_activity, _period,
+					scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
                                                                          new MultiplicatorDefinitionSet("test",
                                                                                                         MultiplicatorType
-                                                                                                            .Overtime),
-                                                                         scheduleDay.PersonAssignmentCollection()[0]);
+                                                                                                            .Overtime));
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
             var dictionary = _mock.DynamicMock<IScheduleDictionary>();
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -101,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_personRepository.Load(_cancelOvertimeCommandDto.PersonId)).Return(_person);
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
                 Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelOvertimeCommandDto.Period)).Return(_period);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_cancelOvertimeCommandDto);
-                scheduleDay.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count.Should().Be.EqualTo(0);
+                scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
             }
         }
 
@@ -121,11 +119,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
  			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			OvertimeShiftFactory.CreateOvertimeShift(_activity, _period,
-																		 new MultiplicatorDefinitionSet("test",
-																										MultiplicatorType
-																											.Overtime),
-																		 scheduleDay.PersonAssignmentCollection()[0]);
+			scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
+																		 new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -137,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_personRepository.Load(_cancelOvertimeCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelOvertimeCommandDto.Period)).Return(_period);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
@@ -148,7 +143,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelOvertimeCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelOvertimeCommandDto);
-				scheduleDay.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count.Should().Be.EqualTo(0);
+				scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
 			}
 		}
     }

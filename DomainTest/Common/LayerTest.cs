@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -66,12 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var actL = new FakeLayerClass(fakeActivity, per);
 			actL.SetParent(null);
 		}
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(ActivityLayer)));
-        }
-
 
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
@@ -81,33 +74,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void PayloadMustNotBeSetToNull()
         {
             new FakeLayerClass(null, new DateTimePeriod());
-        }
-
-        /// <summary>
-        /// Verifies the adjacent method.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-30
-        /// </remarks>
-        [Test]
-        public void VerifyAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            ILayer<IActivity> layer2001 = new ActivityLayer(fakeActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1));
-            ILayer<IActivity> layer2002 = new ActivityLayer(fakeActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-
-            Assert.IsTrue(layer2000.AdjacentTo(layer2001));
-            Assert.IsTrue(layer2002.AdjacentTo(layer2001));
-            Assert.IsFalse(layer2002.AdjacentTo(layer2000));
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyNotNullToAdjacent()
-        {
-            ILayer<IActivity> layer2000 = new ActivityLayer(fakeActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            layer2000.AdjacentTo(null);
         }
 
         /// <summary>
@@ -139,26 +105,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.That(cloneLayer, Is.Not.Null);
             cloneLayer = (FakeLayerClass)orgLayer.NoneEntityClone();
 			Assert.That(cloneLayer, Is.Not.Null);
-        }
-        /// <summary>
-        /// Verifies the order index works.
-        /// TODO: more test here when insert, delete and so on exists
-        /// </summary>
-        [Test]
-        public void VerifyOrderIndexWorks()
-        {
-	        var shift = PersonalShiftFactory.CreatePersonalShift(fakeActivity, new DateTimePeriod());
-			shift.LayerCollection.Clear();
-            var layer1 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
-			var layer2 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
-
-            shift.LayerCollection.Add(layer1);
-            shift.LayerCollection.Add(layer2);
-            Assert.AreEqual(0, layer1.OrderIndex);
-            Assert.AreEqual(1, layer2.OrderIndex);
-            
-            
-
         }
 
         [Test]

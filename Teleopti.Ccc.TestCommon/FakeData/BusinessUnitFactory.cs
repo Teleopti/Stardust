@@ -5,17 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    /// <summary>
-    /// Creating test data for BusinessUnit domain object
-    /// </summary>
     public static class BusinessUnitFactory
     {
-        private static BusinessUnit _businessUnitUsedInTest;
+        private static IBusinessUnit _businessUnitUsedInTest;
 
-        /// <summary>
-        /// Gets the business unit used in test.
-        /// </summary>
-        /// <value>The business unit used in test.</value>
         public static IBusinessUnit BusinessUnitUsedInTest
         {
             get
@@ -23,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 if (_businessUnitUsedInTest == null)
                 {
                     _businessUnitUsedInTest = CreateSimpleBusinessUnit("Business unit used in test");
-                    ((IEntity) _businessUnitUsedInTest).SetId(Guid.NewGuid());
+                    _businessUnitUsedInTest.SetId(Guid.NewGuid());
                 }
 
                 return _businessUnitUsedInTest;
@@ -35,16 +28,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             _businessUnitUsedInTest = null;
         }
 
-        /// <summary>
-        /// Creates a BusinessUnit
-        /// </summary>
-        /// <param name="name">Name of BusinessUnit</param>
-        /// <returns></returns>
         public static BusinessUnit CreateSimpleBusinessUnit(string name)
         {
             BusinessUnit myBusinessUnit = new BusinessUnit(name);
-            //typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance)
-            //    .SetValue(myBusinessUnit, Guid.NewGuid());
             return myBusinessUnit;
         }
 
@@ -55,39 +41,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return businessUnit;
 		}
 
-        /// <summary>
-        /// Creates A businessUnit without taking params
-        /// </summary>
         public static BusinessUnit CreateSimpleBusinessUnit()
         {
             return CreateSimpleBusinessUnit("Sweden");
         }
 
-        /// <summary>
-        /// Creates a business unit aggregate list.
-        /// </summary>
-        /// <returns></returns>
-        public static IList<BusinessUnit> CreateBusinessUnitTreeStructure()
-        {
-            IList<BusinessUnit> businessUnitList = new List<BusinessUnit>();
-            businessUnitList.Add(CreateBusinessUnitWithSitesAndTeams());
-            return businessUnitList;
-        }
-
-        /// <summary>
-        /// Creates a business unit aggregate containing sites and teams.
-        /// </summary>
-        /// <returns></returns>
         public static BusinessUnit CreateBusinessUnitWithSitesAndTeams()
         {
             IList<ITeam> teams;
             return CreateBusinessUnitWithSitesAndTeams(out teams);
         }
 
-        /// <summary>
-        /// Creates a business unit aggregate containing sites and teams.
-        /// </summary>
-        /// <returns></returns>
         public static BusinessUnit CreateBusinessUnitWithSitesAndTeams(out IList<ITeam> teams)
         {
             BusinessUnit swedenBusinessUnit = new BusinessUnit("Sweden");

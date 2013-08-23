@@ -415,10 +415,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IncreaseVersionNumber();
         }
         #endregion
-
-    	public virtual void SetUpdatedDateToTemplateReference(DateTime updatedDate)
-    	{
-    		TemplateReference.UpdatedDate = updatedDate;
-    	}
     }
 }

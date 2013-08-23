@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public interface IEtlReadModelRepository
 	{
 		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
-		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName);
+		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period);
 		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
 	}
 	public class EtlReadModelRepository : IEtlReadModelRepository
@@ -36,14 +36,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<IScheduleChangedReadModel>();
 		}
 
-		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
 		{
 			var res = ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
-					"exec mart.[LastChangedDateOnStep] @stepName=:step, @buId=:bu ")
+					"exec mart.[LastChangedDateOnStep] @stepName=:step, @buId=:bu, @start=:start, @end=:end ")
 					.AddScalar("ThisTime", NHibernateUtil.Timestamp)
 					.AddScalar("LastTime", NHibernateUtil.Timestamp)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
+					.SetDateTime("start", period.StartDateTime)
+					.SetDateTime("end", period.EndDateTime)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(LastChangedReadModel)))
 					.SetReadOnly(true)
 					.List<ILastChangedReadModel>();

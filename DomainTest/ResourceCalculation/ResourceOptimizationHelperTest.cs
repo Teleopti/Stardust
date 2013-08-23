@@ -185,57 +185,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotAddResourceWhenVirtualPeriodIsNotValid()
-		{
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			var dateOnly = new DateOnly(2011, 2, 1);
-			var person = _mocks.StrictMock<IPerson>();
-			Expect.Call(person.VirtualSchedulePeriod(dateOnly)).Return(virtualPeriod);
-			Expect.Call(virtualPeriod.IsValid).Return(false);
-			_mocks.ReplayAll();
-			_target.AddResourcesToNonBlendAndMaxSeat(mainShift, person, dateOnly);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldOnlyCalculateOnePersonAndAddResources()
-		{
-			var skill = _mocks.StrictMock<ISkill>();
-			var personSkill = _mocks.StrictMock<IPersonSkill>();
-			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-			var person = _mocks.StrictMock<IPerson>();
-			var mainShift = _mocks.StrictMock<IMainShift>();
-			var dateOnly = new DateOnly(2011, 2, 1);
-			var timePeriod = new DateTimePeriod(2011, 2, 1, 2011, 2, 2);
-			var layer = _mocks.StrictMock<IVisualLayer>();
-			var layerCollection = new VisualLayerCollection(person, new List<IVisualLayer> { layer }, new ProjectionPayloadMerger());
-			var projService = _mocks.StrictMock<IProjectionService>();
-			var skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-
-			Expect.Call(person.VirtualSchedulePeriod(dateOnly)).Return(virtualPeriod);
-			Expect.Call(virtualPeriod.IsValid).Return(true);
-			Expect.Call(mainShift.ProjectionService()).Return(projService);
-			Expect.Call(projService.CreateProjection()).Return(layerCollection);
-			Expect.Call(layer.Period).Return(timePeriod);
-			Expect.Call(layer.EntityClone()).Return(layer);
-			Expect.Call(person.Period(dateOnly)).Return(personPeriod);
-			//Expect.Call(virtualPeriod.PersonPeriod).Return(personPeriod);
-			Expect.Call(personPeriod.PersonNonBlendSkillCollection).Return(new List<IPersonSkill> { personSkill });
-			Expect.Call(personPeriod.PersonMaxSeatSkillCollection).Return(new List<IPersonSkill> { personSkill });
-			Expect.Call(personSkill.Skill).Return(skill).Repeat.Twice();
-			Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.Twice();
-			Expect.Call(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary).Return(
-				new SkillSkillStaffPeriodExtendedDictionary()).Repeat.Twice();
-			Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), new List<IVisualLayerCollection>(),
-														  new SkillSkillStaffPeriodExtendedDictionary())).
-				IgnoreArguments();
-			_mocks.ReplayAll();
-			_target.AddResourcesToNonBlendAndMaxSeat(mainShift, person, dateOnly);
-			_mocks.VerifyAll();
-		}
-
-		[Test]
 		public void ShouldNotUseSingleSkillCalculationOnNoInputDays()
 		{
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
@@ -351,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(scheduleDay.Person).Return(person);
 				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimeperiod);
 				Expect.Call(dateOnlyAsDateTimeperiod.DateOnly).Return(new DateOnly());
-				Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pa);
+				Expect.Call(scheduleDay.PersonAssignment()).Return(pa);
 				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly())).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>()).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.AtLeastOnce();

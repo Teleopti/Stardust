@@ -7,13 +7,11 @@
 {
     float: left;
     font-weight: bold;
-    height: 15px;
+    height: 20px;
     max-width: 77px;
     overflow: hidden;
 }
 .preference-must-have {
-	margin-left: 3px;
-	margin-top: 5px;
 	margin-bottom: 3px;
 }
 .preference-indicator 
@@ -36,12 +34,16 @@
 }
 .extended-panel {
 	line-height: 14px;
+	background-color: lightgray;
+	border: none;
 }
 .extended-part {
 	text-align: center;
 	margin-bottom: 10px;
 	margin-top: 3px;
+    margin-left: 8px;
 	width: 120px;
+	border: 1px solid lightgray;
 }
 .extended-part-title {
 	font-weight: bold;
@@ -68,9 +70,39 @@
 	width: 20px;
 }
 
+.day-header-text {
+	font-size: 11px;
+	height: 12px;
+	width: auto;
+	padding-top: 1px;
+	padding-right: 3px;
+	padding-left: 3px;
+	border-radius: 3px;
+}
+
+.day-header-left {
+	margin-top: 2px;
+	margin-left: 2px;
+}
+
+.day-header-right {
+	margin-top: 2px;
+	margin-right: 2px;
+}
+
+.day-content-text {
+	font-size: 11px;
+	height: 14px;
+	width: auto;
+	padding-top: 1px;
+	padding-right: 3px;
+	padding-left: 3px;
+	border-radius: 3px;
+}
+
 .feedback-error {
 	font-size: 12px;
-	height: 13px;
+	height: 20px;
 	padding-bottom: 1px;
 }
 
@@ -80,6 +112,17 @@
 	height: 13px;
 	padding-bottom: 1px;
 	font-variant: small-caps;
+	white-space: nowrap;
+}
+/*.time-limitation.icon-step-backward, 
+.time-limitation.icon-step-forward, 
+.time-limitation.icon-resize-horizontal*/ 
+.time-limitation.arrow-icon
+{
+	display: block; /* required because chrome will display a different height without content otherwise */
+	height: 13px;
+	padding-left: 6px;
+	text-indent: 12px;
 }
 .time-limitation.icon.leftarrow,
 .time-limitation.icon.rightarrow,
@@ -91,36 +134,21 @@
 	padding-left: 6px;
 }
 
-
 .time-limitation-label.icon.leftarrow,
 .time-limitation-label.icon.rightarrow,
 .time-limitation-label.icon.doublearrow-blue
+.time-limitation-label.arrow-icon
 {
 	/*display: block; /* required because chrome will display a different height without content otherwise */
 	width: 10px;
 	height: 14px;
 }
 
- #Preference-period-feedback-view 
-{
-	color: gray;
-	margin-bottom: 0.6em;
-	padding-bottom: 0.6em;
-	border-bottom: 1px solid #dfdfdf;
-}
-.rgba #Preference-period-feedback-view 
-{
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
+
 .feedback-detail 
 {
 	color: black;
 	font-size: 1.15em;
-}
-#Preference-period 
-{
-	line-height: 1em;
-	font-size: 0.8em;
 }
 .preference-next-day-checkbox {
     width: 17px;
@@ -159,6 +187,19 @@
 	text-align: center;
 	cursor: pointer;
 }
+
+.musthave-current {
+    
+}
+
+.musthave-max {
+    
+}
+
+.add-musthave {
+	
+}
+
 #Template-name-section {
 	padding-bottom: 0;
 }
@@ -176,4 +217,18 @@
 
 div.qtip-content {
     overflow: visible;
+}
+
+#qtip-add-extended {
+	min-width: 420px;
+	max-width: 420px;
+}
+
+.select2-result-label hr {
+	clear: both;
+	margin: 0 0 0 0;
+}
+
+.select2-item-height li hr {
+	height: 5px;
 }

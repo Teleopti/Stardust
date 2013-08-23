@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
             DateOnlyPeriod originalDatePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateOnlyPeriod datePeriod = new DateOnlyPeriod(originalDatePeriod.StartDate.AddDays(-6), originalDatePeriod.EndDate.AddDays(6));
-            DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+            var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {

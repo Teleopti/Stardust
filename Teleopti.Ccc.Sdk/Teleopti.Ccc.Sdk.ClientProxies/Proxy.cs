@@ -23,18 +23,6 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
             return Channel.GetHibernateConfigurationInternal();
         }
 
-        public LicenseVerificationResultDto VerifyLicenseInternal()
-        {
-            return Channel.VerifyLicenseInternal();
-        }
-
-        public void TransferSessionInternal(SessionDataDto sessionDataDto)
-        {
-#pragma warning disable 612,618
-            Channel.TransferSessionInternal(sessionDataDto);
-#pragma warning restore 612,618
-        }
-
         public IDictionary<string, string> GetAppSettingsInternal()
         {
             return Channel.GetAppSettingsInternal();

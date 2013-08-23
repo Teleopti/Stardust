@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
     public class ShiftTradeVisualProjectionColumn : ScheduleGridColumnBase<ShiftTradeDetailModel>
     {
         private readonly IComparer<ShiftTradeDetailModel> _columnComparer;
-        private string _displayDate;
 
         public ShiftTradeVisualProjectionColumn(string bindingProperty, string headerText, IComparer<ShiftTradeDetailModel> columnComparer)
             : base(bindingProperty, headerText)
@@ -25,11 +24,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
                 return _columnComparer;
             }
         }
-        public string DisplayDate
-        {
-            get { return _displayDate; }
-            set { _displayDate = value; }
-        }
+
+        public string DisplayDate { get; set; }
 
         public TimePeriod Period { get; set; }
 
@@ -39,7 +35,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
             if (e.RowIndex <= e.Style.CellModel.Grid.Rows.HeaderCount)
             {
                 e.Style.CellType = "VisualProjectionColumnHeaderCell";
-                e.Style.CellValue = _displayDate;
+                e.Style.CellValue = DisplayDate;
                 //e.Style.CellValue = string.Empty;
             }
             else

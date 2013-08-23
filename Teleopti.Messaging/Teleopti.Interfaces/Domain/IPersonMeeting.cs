@@ -7,7 +7,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPersonMeeting : IAggregateRoot, 
                                         IScheduleData, 
-                                        IVisualLayerFactoryFactory,
                                         ICloneableEntity<IPersonMeeting>
     {
         /// <summary>

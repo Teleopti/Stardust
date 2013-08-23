@@ -118,21 +118,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
             return null;
         }
-
-        /// <summary>
-        /// Gets the shifts navigation panel.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 9/3/2008
-        /// </remarks>
-        private void getShiftsNavigationPanel()
-        {
-            using(ShiftsNavigationPanel snp = _navigationPanelProvider.CreateNavigationPanel<ShiftsNavigationPanel>())
-            {
-                snp.OpenShifts();
-            }
-        }
     }
 }

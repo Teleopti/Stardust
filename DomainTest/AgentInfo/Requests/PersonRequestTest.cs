@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.DomainTest.Helper;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
@@ -180,24 +179,35 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.TrySetMessage(_message);
         }
 
-        /// <summary>
-        /// Verifies the deny.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-09
-        /// </remarks>
         [Test]
         public void VerifyDeny()
         {
+			_target.Pending();
+			Assert.IsFalse(_target.IsNew);
+
             _target.Deny(null, "DeniedDueToRain", _authorization);
             Assert.IsTrue(_target.IsDenied);
+			Assert.IsFalse(_target.IsAutoDenied);
+
             Assert.AreEqual("DeniedDueToRain", _target.DenyReason);
 
             _target.ForcePending();
             _target.Deny(null, null, _authorization);
             Assert.AreEqual(string.Empty, _target.DenyReason);
         }
+
+		[Test]
+		public void VerifyAutoDeny()
+		{
+			Assert.IsTrue(_target.IsNew); 
+
+			_target.Deny(null, "DeniedDueToRain", _authorization);
+			Assert.IsTrue(_target.IsDenied);
+			Assert.IsTrue(_target.IsAutoDenied);
+
+			Assert.AreEqual("DeniedDueToRain", _target.DenyReason);
+		}
+
 
         /// <summary>
         /// Verifies the approve.
@@ -585,7 +595,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             var result = PersonRequest.GetUnderlyingStateId(personRequest);
             Assert.AreEqual(result, 3);
         }
-        
+
 		[Test]
 		public void ShouldReturnUpdatedOnServerUtc()
 		{

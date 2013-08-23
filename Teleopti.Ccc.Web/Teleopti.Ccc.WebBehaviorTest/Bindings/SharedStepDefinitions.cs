@@ -3,15 +3,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using WatiN.Core;
-using WatiN.Core.Constraints;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
@@ -24,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.ClickNext();
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I click previous virtual schedule period button")]
@@ -40,11 +37,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
 		}
 
-		[When(@"I click the delete button")]
-		public void WhenIClickTheDeleteButton()
-		{
-			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
-		}
 
 		[When(@"I click the Cancel button")]
 		public void WhenIClickTheCancelButton()
@@ -92,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
-			Browser.Interactions.AssertExists("#friendly-message");
+			Browser.Interactions.AssertExists(".alert.alert-block");
 		}
 
 		[Then(@"I should see next virtual schedule period")]

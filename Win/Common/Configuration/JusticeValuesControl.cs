@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     TeleoptiPrincipal.Current.Regional.Culture);
             foreach (var dayOfWeek in days)
             {
-                gridColumns.Add(new SFGridIntegerCellColumn<JusticeValuesView>(dayOfWeek.ToString(), GetDayNameShort(dayOfWeek), null));
+                gridColumns.Add(new SFGridIntegerCellColumn<JusticeValuesView>(dayOfWeek.ToString(), GetDayNameShort(dayOfWeek)));
             }
 
             grid.RowCount = _source.Count + grid.Rows.HeaderCount;

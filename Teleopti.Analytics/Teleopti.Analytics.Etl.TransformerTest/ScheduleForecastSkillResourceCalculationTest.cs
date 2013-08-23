@@ -20,6 +20,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private MockRepository _mocks;
         private ISchedulingResultService _schedulingResultService;
         private IDictionary<ISkill, IList<ISkillDay>> _skillDaysDictionary;
+		private readonly DateTime _updatedOnDateTime = DateTime.Now;
 
         [SetUp]
         public void Setup()
@@ -29,8 +30,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             
             ISkill skill = SkillFactory.CreateSkill("Skill A", SkillTypeFactory.CreateSkillType(), 15);
             skill.SetId(Guid.NewGuid());
-            
-            ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(new DateOnlyPeriod(2009,9,11,2009,9,11), skill);
+
+			ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11), skill, _updatedOnDateTime);
             _skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
             _skillDaysDictionary.Add(skill, skillDayCollection.ToList());
 

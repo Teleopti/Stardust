@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly IStandardDeviationSumCalculator _standardDeviationSumCalculator;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private bool _cancelMe;
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 		                                            ITeamBlockClearer teamBlockClearer,
-		                                            IStandardDeviationSumCalculator standardDeviationSumCalculator)
+		                                            IStandardDeviationSumCalculator standardDeviationSumCalculator,
+													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
 			_standardDeviationSumCalculator = standardDeviationSumCalculator;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var handler = ReportProgress;
 			if (handler != null)
 			{
-				var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
@@ -125,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);

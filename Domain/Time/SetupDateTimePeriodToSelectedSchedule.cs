@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Time
         public SetupDateTimePeriodToSelectedSchedule(IScheduleDay scheduleDay, ISetupDateTimePeriod fallback)
         {
             _fallback = fallback;
-            var assignment = scheduleDay.AssignmentHighZOrder();
+            var assignment = scheduleDay.PersonAssignment();
             if (assignment!=null)
             {
                 _period = assignment.Period;

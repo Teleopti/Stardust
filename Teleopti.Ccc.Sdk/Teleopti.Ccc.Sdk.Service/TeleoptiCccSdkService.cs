@@ -439,7 +439,63 @@ namespace Teleopti.Ccc.Sdk.WcfService
             }
 		}
 
-		public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		public ICollection<PayrollBaseExportDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+                                                     string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+            {
+                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiTimeExportData(personList, startDate,
+                                                                                             endDate, timeZoneId);
+            }
+        }
+
+		public ICollection<PayrollBaseExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
+                                                         string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var absences = GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
+				var absenceDictinary = absences
+					.Where(a => a.Id.HasValue)
+					.ToDictionary(a => a.Id.GetValueOrDefault());
+
+				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
+                                                                                             endDate, timeZoneId, absenceDictinary);
+            }
+        }
+
+		public ICollection<PayrollBaseExportDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+        {
+            using (var inner = _lifetimeScope.BeginLifetimeScope())
+            {
+	            var loadDeleted = new LoadOptionDto{LoadDeleted = true};
+
+				var absences = GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
+				var absenceDictinary = absences
+					.Where(a => a.Id.HasValue)
+					.ToDictionary(a => a.Id.GetValueOrDefault());
+
+				var dayOffCodes = GetDaysOffs(loadDeleted)
+					.Where(d => d.Id.HasValue)
+					.Select(d => d.Id.GetValueOrDefault())
+					.ToList();
+
+	            var activites = GetActivities(loadDeleted);
+	            var activityDictionary = activites
+		            .Where(a => a.Id.HasValue)
+		            .ToDictionary(a => a.Id.GetValueOrDefault());
+
+	            return
+		            _factoryProvider.CreateTeleoptiPayrollFactory(inner)
+		                            .GetTeleoptiPayrollActivitiesExportData(personList, startDate,
+		                                                                    endDate, timeZoneId,
+		                                                                    absenceDictinary,
+																			dayOffCodes,
+																			activityDictionary);
+            }
+        }
+
+        public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
 			if (scheduleLoadOptionDto == null)
 				throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
@@ -1541,7 +1597,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 	    }
 
 	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-    	public CommandResultDto ExecuteCommand(CommandDto commandDto)
+		public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
 			try

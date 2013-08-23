@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _approveRequestCommandDto = new ApproveRequestCommandDto { PersonRequestId = Guid.NewGuid() };
             _personRequestFactory = new PersonRequestFactory();
             _absenceRequest = _personRequestFactory.CreateAbsenceRequest(
-                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod());
+                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod(2000,1,1,2000,1,2));
 
             _personTo = PersonFactory.CreatePerson("Test Peson");
             _personTo.SetId(Guid.NewGuid());
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
+										new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
+										new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
+										new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());

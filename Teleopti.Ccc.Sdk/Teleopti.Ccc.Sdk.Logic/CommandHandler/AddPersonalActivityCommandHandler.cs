@@ -46,18 +46,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var startDate = new DateOnly(command.Date.DateTime);
-				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 					new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-					new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+					new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
 
 				var activity = _activityRepository.Load(command.ActivityId);
-				var personalShiftActivityLayer = new PersonalShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
-				scheduleDay.CreateAndAddPersonalActivity(personalShiftActivityLayer);
+				scheduleDay.CreateAndAddPersonalActivity(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
 
 			    _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);

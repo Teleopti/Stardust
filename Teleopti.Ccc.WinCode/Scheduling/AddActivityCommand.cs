@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{
-				IPersonAssignment pa = part.AssignmentHighZOrder();
+				IPersonAssignment pa = part.PersonAssignment();
 				defaultPeriod = pa.Period;
 			}
 
@@ -72,11 +72,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (IScheduleDay part in filteredScheduleParts)
 			{
-				MainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(activity, period);
+				part.CreateAndAddActivity(activity, period, shiftCategory);
 
-				part.CreateAndAddActivity(mainShiftActivityLayer, shiftCategory);
-
-				foreach (IPersonAssignment assignment in part.PersonAssignmentCollection())
+				foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
 					assignment.CheckRestrictions();
 
 			}

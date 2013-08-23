@@ -11,6 +11,7 @@
             <xs:enumeration value="date" />
             <xs:enumeration value="decimal" />
             <xs:enumeration value="double" />
+						<xs:enumeration value="fullTime" />
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

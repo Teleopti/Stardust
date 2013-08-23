@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
         private readonly ISkillType _skillType;
 
         public WorkloadIntradayTemplateGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ISkillType skillType)
-            : base(taskOwner, taskOwnerHelper, timeZone, resolution, owner, new ChartSettings())
+            : base(taskOwner, taskOwnerHelper, timeZone, resolution, owner, new ChartSettings(),skillType)
         {
             _skillType = skillType;
         }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             GridRows.Clear();
             RowManagerTemplateTaskPeriod.Rows.Clear();
             TextManager manager = new TextManager(_skillType);
-            if (_skillType.ForecastSource != ForecastSource.InboundTelephony)
+			if (_skillType.ForecastSource != ForecastSource.InboundTelephony && _skillType.ForecastSource != ForecastSource.Chat)
             {
                 GridRows.Add(new IntervalHeaderGridRow(Intervals));
                 GridRows.Add(RowManagerTemplateTaskPeriod.AddRow(new TemplateTaskPeriodGridRow(RowManagerTemplateTaskPeriod, "NumericCell",
@@ -63,13 +63,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             {
                 GridRows.Add(new IntervalHeaderGridRow(Intervals));
                 GridRows.Add(RowManagerTemplateTaskPeriod.AddRow(new TemplateTaskPeriodGridRow(RowManagerTemplateTaskPeriod, "NumericCell",
-                    "Tasks", UserTexts.Resources.Calls)));
+					"Tasks", manager.WordDictionary["Tasks"])));
 
                 GridRows.Add(RowManagerTemplateTaskPeriod.AddRow(new TemplateTaskPeriodGridRow(RowManagerTemplateTaskPeriod, "TimeSpanTotalSecondsCell",
-                    "AverageTaskTime", UserTexts.Resources.TalkTime)));
+					"AverageTaskTime", manager.WordDictionary["AverageTaskTime"])));
 
                 GridRows.Add(RowManagerTemplateTaskPeriod.AddRow(new TemplateTaskPeriodGridRow(RowManagerTemplateTaskPeriod, "TimeSpanTotalSecondsCell",
-                    "AverageAfterTaskTime", UserTexts.Resources.ACW)));
+					"AverageAfterTaskTime", manager.WordDictionary["AverageAfterTaskTime"])));
             }
 
         }

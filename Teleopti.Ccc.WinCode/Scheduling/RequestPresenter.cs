@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Dynamic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -13,9 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    /// <summary>
-    /// Helpe for request view
-    /// </summary>
     public class RequestPresenter : IRequestPresenter
     {
         private readonly IPersonRequestCheckAuthorization _authorization;
@@ -28,17 +23,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         }
 
         /// <summary>
-        /// Sort list from specified expression
-        /// </summary>
-        /// <param name="adapterList"></param>
-        /// <param name="sortExpression"></param>
-        /// <returns></returns>
-        public static IList<PersonRequestViewModel> SortAdapters(IList<PersonRequestViewModel> adapterList, string sortExpression)
-        {
-            return adapterList.AsQueryable().OrderBy(sortExpression).ToList();
-        }
-
-        /// <summary>
         /// Filter list from specified expression
         /// </summary>
         /// <param name="adapterList"></param>
@@ -46,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
-			var filteredData = SearchText(adapterList, filterExpression);
+			var filteredData = searchText(adapterList, filterExpression);
             return filteredData;
         }
 
@@ -56,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return adapterList.Where(p => filteredPersons.Contains(p.PersonRequest.Person.Id.GetValueOrDefault())).ToList();
 		}
 
-        public static IList<PersonRequestViewModel> SearchText(IList<PersonRequestViewModel> data,
+        private static IList<PersonRequestViewModel> searchText(IEnumerable<PersonRequestViewModel> data,
                                                  IList<string> filterExpression)
         {
             var filteredRequest = new List<PersonRequestViewModel>();
@@ -102,19 +86,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             var filterTextInLowerCase = filterText.ToLower();
 
-            if (element.Message.ToLower().Contains(filterTextInLowerCase))
+            if (element.Message != null && element.Message.ToLower().Contains(filterTextInLowerCase))
                 return true;
-            if (element.Name.ToLower().Contains(filterTextInLowerCase))
+			if (element.Name != null && element.Name.ToLower().Contains(filterTextInLowerCase))
                 return true;
-            if (element.Subject.ToLower().Contains(filterTextInLowerCase))
+            if (element.Subject != null && element.Subject.ToLower().Contains(filterTextInLowerCase))
                 return true;
-            if (element.RequestType.ToLower().Contains(filterTextInLowerCase))
+			if (element.RequestType != null && element.RequestType.ToLower().Contains(filterTextInLowerCase))
+				return true;
+			if (element.Details != null && element.Details.ToLower().Contains(filterTextInLowerCase))
                 return true;
-            if (element.Details.ToLower().Contains(filterTextInLowerCase))
-                return true;
-            if (element.RequestType.ToLower().Contains(filterTextInLowerCase))
-                return true;
-            if (element.StatusText.ToLower().Contains(filterTextInLowerCase))
+            if (element.StatusText != null && element.StatusText.ToLower().Contains(filterTextInLowerCase))
                 return true;
 
             var request = element.PersonRequest.Request as AbsenceRequest;
@@ -138,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (numOfDaysInBetween > 0)
             {
-                for (int i = 0; i < numOfDaysInBetween; i++)
+                for (var i = 0; i < numOfDaysInBetween; i++)
                 {
                     var date = startDate.AddDays(i);
                     requestedPeriodList.Add(date.ToString());
@@ -307,7 +289,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var lstBusinessRuleResponse = Approve( _newBusinessRules);
             var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, _view, _overriddenBusinessRulesHolder);
             lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
-            if (lstBusinessRuleResponse.Count() == 0)
+            if (!lstBusinessRuleResponse.Any())
                 return true;
             // try again with overriden
             if (lstBusinessRuleResponseToOverride.Count > 0)

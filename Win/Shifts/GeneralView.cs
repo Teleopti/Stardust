@@ -43,8 +43,6 @@ namespace Teleopti.Ccc.Win.Shifts
             _gridConstructor.FlushCache();
             _gridConstructor.BuildGridView(ShiftCreatorViewType.General, 
                                            ExplorerPresenter.GeneralPresenter.GeneralTemplatePresenter);
-            //_currentGridView = ShiftCreatorViewType.General;
-
         }
 
         /// <summary>
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
                 view.Grid.QueryCellInfo += (gridWorkShifts_QueryCellInfo);
                 view.Grid.SaveCellInfo += (gridWorkShifts_SaveCellInfo);
-                view.Grid.ClipboardPaste += (gridWorkShifts_ClipboardPaste);
+                view.Grid.Model.ClipboardPaste += (gridWorkShifts_ClipboardPaste);
                 view.Grid.SelectionChanged += (gridWorkShifts_SelectionChanged);
                 view.Grid.KeyUp += (gridWorkShifts_KeyUp);
                 view.Grid.KeyDown += (gridWorkShifts_KeyDown);
@@ -70,17 +68,6 @@ namespace Teleopti.Ccc.Win.Shifts
 
             Controls.Add(view.Grid);
             view.Grid.Dock = DockStyle.Fill;
-
-            //TODO: Put this inside the explorerView with the grid control passed as a param
-            /* 
-            view.Grid.Width = splitContainerAdvHorizontal.Panel2.Width;
-            view.Grid.VScrollBehavior = GridScrollbarMode.Enabled;
-            toolStripButtonGeneral.Checked = (sender is GeneralTemplateGrid);
-            toolStripButtonLimitations.Checked = (sender is ActivityTimeLimiterGrid);
-            toolStripButtonDateExclusion.Checked = (sender is AccessibilityDateGrid);
-            toolStripButtonWeekdayExclusion.Checked = (sender is DaysOfWeekGrid);
-            toolStripButtonCombined.Checked = (sender is CombinedGrid);
-             * */
         }
 
         #region GridControl Events
@@ -129,6 +116,10 @@ namespace Teleopti.Ccc.Win.Shifts
         private void gridWorkShifts_ClipboardPaste(object sender, GridCutPasteEventArgs e)
         {
             _gridConstructor.View.ClipboardPaste(e);
+            foreach (GridRangeInfo selectedRange in _gridConstructor.View.Grid.Model.SelectedRanges)
+            {
+                _gridConstructor.View.Grid.RefreshRange(selectedRange);
+            }
             e.Handled = true;
         }
 
@@ -168,7 +159,6 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public void ChangeGridView(ShiftCreatorViewType viewType)
         {
-            //_currentGridView = viewType;
             if (_gridConstructor.View.Type != viewType)
             {
                 switch(viewType)
@@ -201,13 +191,8 @@ namespace Teleopti.Ccc.Win.Shifts
 
         public void ReflectEnteredValues()
         {
-            int index = (_gridConstructor.View.Grid.Model.CurrentCellInfo == null) ? 1 :
-                         _gridConstructor.View.Grid.Model.CurrentCellInfo.RowIndex;
-            _gridConstructor.View.Grid.CurrentCell.MoveTo(index, 1);
-            _gridConstructor.View.Grid.Selections.Clear(false);
-           
+            _gridConstructor.View.Grid.Model.EndEdit();
         }
-
 
         #endregion
 

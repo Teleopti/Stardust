@@ -3,8 +3,9 @@ using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
 			const int heightOfDay = 668;
-			const int timeLineOffset = 203;
+			const int timeLineOffset = 245;
 			const int timeIndicatorHeight = 2;
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;

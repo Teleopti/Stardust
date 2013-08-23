@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Win.Meetings
             if (!DesignMode)
             {
                 SetTexts();
+                dateTimePickerAdvtDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
             }
         }
 
@@ -246,11 +248,12 @@ namespace Teleopti.Ccc.Win.Meetings
         public void PrepareGridView(IList<ContactPersonViewModel> personViewDataList)
         {
             gridControlPeople.BeginUpdate(BeginUpdateOptions.SynchronizeScrollBars);
-            _gridHelper = new SFGridColumnGridHelper<ContactPersonViewModel>(
-                gridControlPeople,
-                new ReadOnlyCollection<SFGridColumnBase<ContactPersonViewModel>>(_gridColumns),
-                personViewDataList
-                );
+			if (_gridHelper == null)
+				_gridHelper = new SFGridColumnGridHelper<ContactPersonViewModel>(
+					gridControlPeople,
+					new ReadOnlyCollection<SFGridColumnBase<ContactPersonViewModel>>(_gridColumns),
+					personViewDataList
+					);
 
             // Overrides grid styles.
             gridControlPeople.ActivateCurrentCellBehavior = GridCellActivateAction.None;
@@ -292,7 +295,7 @@ namespace Teleopti.Ccc.Win.Meetings
             if (handler != null)
             {
                 // Creates the event args.
-                var e = new AddressBookParticipantSelectionEventArgs(_presenter.AddressBookViewModel);
+                var e = new AddressBookParticipantSelectionEventArgs();
 
                 // Invokes the participant seleceted event
                 handler.Invoke(this, e);

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
         [Test]
         public void VerifyConstructorOverload2()
         {
-            _target = new SkillVisualLayerCollectionDictionaryTestClass();
+            _target = new SkillVisualLayerCollectionDictionary();
             Assert.IsNotNull(_target);
         }
     }

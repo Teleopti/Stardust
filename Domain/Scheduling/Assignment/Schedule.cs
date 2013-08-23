@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private List<IBusinessRuleResponse> _businessRuleResponseCollection;
         private readonly IScheduleDictionary _owner;
         private readonly IScheduleParameters _parameters;
-        private List<IPersonAssignment> _personAssignmentConflictCollection;
-        private List<IScheduleData> _scheduleDataCollection;
+        private HashSet<IScheduleData> _scheduleDataCollection;
 
         private readonly object lockObject = new object();
 
@@ -23,9 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             InParameter.NotNull("owner", owner);
             _owner = owner;
             _parameters = parameters;
-            _personAssignmentConflictCollection = new List<IPersonAssignment>();
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            _scheduleDataCollection = new List<IScheduleData>();
+            _scheduleDataCollection = new HashSet<IScheduleData>();
         }
 
         public IScheduleDictionary Owner
@@ -58,13 +56,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             get { return _businessRuleResponseCollection; }
         }
 
-        /// <summary>
-        /// Gets the conflicting assignment collection sorted by StartDateTime.
-        /// </summary>
-        protected IList<IPersonAssignment> PersonAssignmentConflictInternalCollection
-        {
-            get { return _personAssignmentConflictCollection; }
-        }
 
         protected IEnumerable<IScheduleData> ScheduleDataInternalCollection()
         {
@@ -93,11 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 lock(lockObject)
                 {
-                    _scheduleDataCollection.Add(scheduleData);
-
-                    var pAss = scheduleData as IPersonAssignment;
-                    if (pAss != null)
-                        mightMoveAssignmentToConflictList(sortedAssignmentCollection(), pAss);
+									_scheduleDataCollection.Add(scheduleData);
 
                 	var preferenceDay = scheduleData as IPreferenceDay;
 					if (preferenceDay != null)
@@ -135,69 +122,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                         _scheduleDataCollection.Add(assignment);
                 }                
             }
-            var assignmentCollection = sortedAssignmentCollection();
-            for (var i = assignmentCollection.Count - 1; i >= 0; i--)
-            {
-                mightMoveAssignmentToConflictList(assignmentCollection, assignmentCollection[i]);
-            }
-        }
-
-        private List<IPersonAssignment> sortedAssignmentCollection()
-        {
-            var assignmentCollection = new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>());
-            assignmentCollection.Sort(new PersonAssignmentByDateSorter());
-            return assignmentCollection;
-        }
-
-        private void mightMoveAssignmentToConflictList(IList<IPersonAssignment> assignmentCollection, IPersonAssignment personAssignment)
-        {
-            var newIndex = assignmentCollection.IndexOf(personAssignment);
-            if (assignmentCollection.Count > 1)
-            {
-                DateTimePeriod assPer = personAssignment.Period;
-                if ((newIndex > 0 && assPer.StartDateTime < assignmentCollection[newIndex - 1].Period.EndDateTime) ||
-                    (newIndex < assignmentCollection.Count - 1 && assPer.EndDateTime > assignmentCollection[newIndex + 1].Period.StartDateTime))
-                {
-                    _scheduleDataCollection.Remove(personAssignment);
-                    assignmentCollection.Remove(personAssignment);
-                    _personAssignmentConflictCollection.Add(personAssignment);
-                }
-            }
-        }
-
-        private void mightMoveAssignmentBackFromConflictList(IPersonAssignment ass)
-        {
-            if (_personAssignmentConflictCollection.Count > 0)
-            {
-                IPersonAssignment conflict=null;
-                foreach (var assConflict in PersonAssignmentConflictInternalCollection)
-                {
-                    if(assConflict.Period.Intersect(ass.Period))
-                    {
-                        conflict = assConflict;
-                        break;
-                    }
-                }
-                if(conflict!=null)
-                {
-                    _personAssignmentConflictCollection.Remove(conflict);
-                    Add(conflict);
-                }
-            }
         }
 
         public virtual void Remove(IScheduleData persistableScheduleData)
         {
             lock(lockObject)
             {
-                var wasRemoved = _scheduleDataCollection.Remove(persistableScheduleData);
-
-                var pAss = persistableScheduleData as IPersonAssignment;
-                if (pAss != null)
-                {
-                    if(!_personAssignmentConflictCollection.Remove(pAss) && wasRemoved)
-                        mightMoveAssignmentBackFromConflictList(pAss);
-                }
+                _scheduleDataCollection.Remove(persistableScheduleData);
             }
         }
 
@@ -241,7 +172,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected IScheduleDay ScheduleDay(IDateOnlyAsDateTimePeriod dateAndDateTime, bool includeUnpublished, IEnumerable<DateOnlyPeriod> availableDatePeriods)
         {
             IEnumerable<IScheduleData> filteredData;
-            IEnumerable<IPersonAssignment> filteredConflicts;
             var period = dateAndDateTime.Period();
             //this will probably slow things down - fix later
 
@@ -257,13 +187,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 filteredData = (from data in ScheduleDataInternalCollection()
                                 where data.BelongsToPeriod(dateAndDateTime)
                                 select (IScheduleData)data.Clone()).ToList();
-                filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
-// ReSharper disable ImplicitlyCapturedClosure
-									 // tamasb: note that we can ignore the R# warning here as both usages of schedulePublishedSpecification come   
-									 // one after other quick, so the existance of schedulePublishedSpecification is not long
-                                     where conflict.BelongsToPeriod(dateAndDateTime)
-// ReSharper restore ImplicitlyCapturedClosure
-                                     select conflict.EntityClone());
             }
             else
             {
@@ -280,24 +203,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
                                         new PublishedScheduleData(data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
-                filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
-                                     where
-                                         conflict.BelongsToPeriod(dateAndDateTime) &&
-									(schedulePublishedSpecification.IsSatisfiedBy(
-										new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
-										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
-										new PublishedScheduleData(conflict, agentTimeZone)))
-                                     select conflict.EntityClone());
             }
-            filteredData.ForEach(retObj._scheduleDataCollection.Add);
+            filteredData.ForEach(x => retObj._scheduleDataCollection.Add(x));
             BusinessRuleResponseInternalCollection.Where(rule => rule.Period.Contains(period.StartDateTime)).ForEach(retObj.BusinessRuleResponseInternalCollection.Add);
-            filteredConflicts.ForEach(retObj.PersonAssignmentConflictInternalCollection.Add);
             return retObj;
         }
 
         private bool checkData(IScheduleData scheduleData)
         {
             InParameter.NotNull("scheduleData", scheduleData);
+	        var ass = scheduleData as IPersonAssignment;
+					if (ass!=null)
+					{
+						var currentAssignments =
+							ScheduleDataInternalCollection().OfType<IPersonAssignment>().Where(curr => curr.Date == ass.Date);
+						if (currentAssignments.Any())
+						{
+							throw new ArgumentException("scheduleData", "Cannot add multiple assignments on one schedule day.");
+						}
+					}
             if(!scheduleData.Person.Equals(Person))
                 throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect person.");
             if (!scheduleData.BelongsToScenario(Scenario))
@@ -327,10 +251,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Schedule clone = (Schedule)MemberwiseClone();
             clone._businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            clone._personAssignmentConflictCollection = new List<IPersonAssignment>();
-            clone._scheduleDataCollection = new List<IScheduleData>();
-            ScheduleDataInternalCollection().ForEach(clone._scheduleDataCollection.Add);
-            _personAssignmentConflictCollection.ForEach(clone.PersonAssignmentConflictInternalCollection.Add);
+            clone._scheduleDataCollection = new HashSet<IScheduleData>();
+            ScheduleDataInternalCollection().ForEach(x => clone._scheduleDataCollection.Add(x));
             _businessRuleResponseCollection.ForEach(clone.BusinessRuleResponseInternalCollection.Add);
             CloneDerived(clone);
 

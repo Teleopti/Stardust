@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamDayOffModifier teamDayOffModifier,
 			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
-			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator
+			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -74,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -94,7 +98,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+				if (teamInfo != null)
+					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 
 			// find a random selected TeamInfo/matrix
@@ -121,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			EventHandler<ResourceOptimizerProgressEventArgs> handler = ReportProgress;
 			if (handler != null)
 			{
-				var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
@@ -146,35 +152,38 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 				bool anySuccess = false;
-				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
+
+				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
-					rollbackService.ClearModificationCollection();
-					var success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
-					             selectedPeriod, selectedPersons, allPersonMatrixList);
-
-					double currentPeriodValue =
-					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
-					if (currentPeriodValue >= previousPeriodValue || !success)
+					foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 					{
-						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-						currentPeriodValue =
-						_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-					}
-					else
-					{
-						anySuccess = true;
-					}
-					previousPeriodValue = currentPeriodValue;
+						rollbackService.ClearModificationCollection();
+						var success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+						                           selectedPeriod, selectedPersons, allPersonMatrixList);
 
-					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-					                 currentTeamInfoCounter.ToString("####") + ") " +
-					                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
-					                 ")");
-					if (_cancelMe)
-						break;
+						double currentPeriodValue =
+							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+						if (currentPeriodValue >= previousPeriodValue || !success)
+						{
+							_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+							currentPeriodValue =
+								_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						}
+						else
+						{
+							anySuccess = true;
+						}
+						previousPeriodValue = currentPeriodValue;
+
+						OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+						                 currentTeamInfoCounter.ToString("####") + ") " +
+						                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
+						                 ")");
+						if (_cancelMe)
+							break;
+					}
 				}
-
 				if (!anySuccess)
 				{
 					teamInfosToRemove.Add(teamInfo);
@@ -213,8 +222,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService, allPersonMatrixList);
 			if (!success)
 				return false;
-
-			if (!_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
+			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
+										 removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
+			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(addedDaysOff, teamInfo);
@@ -256,6 +266,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                                                                                             .BlockFinderTypeForAdvanceScheduling, 
 																							singleAgentTeam,
 																							allPersonMatrixList);
+				if (teamBlockInfo == null) continue;
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 

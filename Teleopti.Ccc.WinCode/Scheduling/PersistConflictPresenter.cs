@@ -139,7 +139,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return UserTexts.Resources.Note;
             if (conflict is IStudentAvailabilityDay)
                 return UserTexts.Resources.StudentAvailability;
-            return UserTexts.Resources.Unknown;
+	        if (conflict is IPublicNote)
+		        return UserTexts.Resources.PublicNoteColon;
+	        if (conflict is IScheduleTag)
+		        return UserTexts.Resources.Tags;
+	        if (conflict is IPreferenceDay)
+		        return UserTexts.Resources.Preference;
+			return UserTexts.Resources.Unknown + "(" + conflict.GetType() + ")";
         }
 
         private static string formatName(Name name)

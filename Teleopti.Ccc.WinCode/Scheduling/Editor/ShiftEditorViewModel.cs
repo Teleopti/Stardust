@@ -22,8 +22,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         private const double ExpandSize = 0.8d;
         #endregion
 
+		private IEventAggregator _eventAggregator;
+		private readonly IEditableShiftMapper _editableShiftMapper;
+		private bool _enabled;
+
         #region properties
-        public TimeSpan SurroundingTime { get; private set; }
+		public TimeSpan SurroundingTime { get; private set; }
         public TimelineControlViewModel Timeline { get; private set; }
         public LayerViewModelCollection Layers { get; private set; }
 	    public bool ShowMeetingsInContextMenu { get; private set; }
@@ -31,19 +35,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public EditLayerViewModel EditLayer { get; private set; }
         public IScheduleDay SchedulePart { get; private set; }
         public ShiftEditorSettings Settings { get; private set; }
-        public ILayerViewModel SelectedLayer
+
+		public bool Enabled
+		{
+			get
+			{
+				return _enabled;
+			}
+			private set
+			{
+				if (value == _enabled) return;
+				_enabled = value;
+				NotifyPropertyChanged("Enabled");
+			}
+		}
+
+	    public ILayerViewModel SelectedLayer
         {
             get { return _selectedLayer; }
             set
             {
-                if (_selectedLayer != value)
-                {
-                    _selectedLayer = value;
-
-					NotifyPropertyChanged("SelectedLayer");
-                }
+	            if (_selectedLayer == value) return;
+	            _selectedLayer = value;
+	            NotifyPropertyChanged("SelectedLayer");
             }
         }
+
         public TimeSpan Interval
         {
             get { return Settings.Interval; }
@@ -84,8 +101,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         #endregion
 
-        private IEventAggregator _eventAggregator;
-	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    #region ctor
 		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
@@ -158,8 +173,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         
         }
 
-       
-
         private void MoveUpLayerExecuted()
         {
             SelectedLayer.MoveUp();
@@ -182,7 +195,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private void DeleteLayer()
         {
-          //  Layers.Remove(SelectedLayer);
             SelectedLayer.Delete();
         }
 
@@ -302,7 +314,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 
                 
                 ZoomToPeriod(Layers.TotalDateTimePeriod(true));
-                var assignement = SchedulePart.AssignmentHighZOrder();
+                var assignement = SchedulePart.PersonAssignment();
 				if (assignement != null && assignement.ShiftCategory != null)
                 {
                     _category = assignement.ShiftCategory;
@@ -353,7 +365,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 CollectionViewSource.GetDefaultView(Categories).MoveCurrentTo(_category);
                 if (SchedulePart != null)
                 {
-                    var assignement = SchedulePart.AssignmentHighZOrder();
+                    var assignement = SchedulePart.PersonAssignment();
 					if (assignement != null)
 					{
 						var editorShift = _editableShiftMapper.CreateEditorShift(assignement);
@@ -370,24 +382,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             get { return Settings.ShiftCategories; }
         }
 
-        private bool _enabled;
-
-        public bool Enabled
-        {
-            get {
-                return _enabled;
-            }
-            private set
-            {
-                if (value != _enabled)
-                {
-                    _enabled = value;
-                    NotifyPropertyChanged("Enabled");
-                }
-            }
-        }
-
-        private void NotifyPropertyChanged(string property)
+		private void NotifyPropertyChanged(string property)
 		{
 			var handler = PropertyChanged;
 			if (handler != null)

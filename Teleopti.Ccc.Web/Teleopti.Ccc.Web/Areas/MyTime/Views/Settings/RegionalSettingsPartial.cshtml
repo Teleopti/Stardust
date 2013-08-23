@@ -1,18 +1,35 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
-@model SettingsViewModel
+@model SettingsPermissionViewModel
 @{
 	Layout = null;
 }
-<div id="settings" class="edit-module">
-	<div id="selectors" class="edit-module-inner">
-		<div class="edit-module-element">
-			<label>@Resources.Language</label>
-			@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
-		</div>
-		<div class="edit-module-element pdt15">
-			<label>@Resources.DateFormat</label>
-			@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
-		</div>
+<div id="settings" class="well well-small">
+    <div class="clearfix">
+        <label for="CultureUi-Picker">@Resources.Language</label>
+        <select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
+            <option data-bind="text: text, value: id"></option>
+        </select>
+    </div>
+    <br/>
+	<div class="clearfix">
+		<label for="Culture-Picker">@Resources.DateFormat</label>
+                        <select id="Culture-Picker" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+			<option data-bind="text: text, value: id"></option>
+		</select>
 	</div>
+    <br/>
+    @if (Model.ShareCalendarPermission)
+    {
+	    <div class="clearfix">
+		    <div class="btn-group">
+			    <button class="btn btn-large share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+			    <button class="btn btn-large revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
+		    </div>
+		    <!-- ko if: CalendarSharingActive() -->
+		    <label>@Resources.ShareMyCalendarHint</label>
+		    <label class="calendar-url" data-bind="text: CalendarUrl"></label>
+		    <!-- /ko -->
+	    </div>
+    }
 </div>

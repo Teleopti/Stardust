@@ -91,10 +91,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void VerifyNoScorecardForDeletedTeam()
         {
             // Team
+			var _updatedOnDateTime = DateTime.Now;
+
             var personPeriod = _personCollection[0].PersonPeriodCollection.First();
             personPeriod.Team = TeamFactory.CreateSimpleTeam();
             personPeriod.Team.SetId(Guid.NewGuid());
-            personPeriod.Team.Scorecard = ScorecardFactory.CreateScorecardCollection()[0];
+			personPeriod.Team.Scorecard = ScorecardFactory.CreateScorecardCollection(_updatedOnDateTime)[0];
             personPeriod.Team.Site = SiteFactory.CreateSimpleSite();
             personPeriod.Team.Site.SetId(Guid.NewGuid());
             ((IDeleteTag)personPeriod.Team).SetDeleted();
@@ -110,10 +112,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void VerifyNoScorecardForDeletedSite()
         {
             // Team
+			var _updatedOnDateTime = DateTime.Now;
+
             var personPeriod = _personCollection[0].PersonPeriodCollection.First();
             personPeriod.Team = TeamFactory.CreateSimpleTeam();
             personPeriod.Team.SetId(Guid.NewGuid());
-            personPeriod.Team.Scorecard = ScorecardFactory.CreateScorecardCollection()[0];
+			personPeriod.Team.Scorecard = ScorecardFactory.CreateScorecardCollection(_updatedOnDateTime)[0];
             personPeriod.Team.Site = SiteFactory.CreateSimpleSite();
             personPeriod.Team.Site.SetId(Guid.NewGuid());
             ((IDeleteTag)personPeriod.Team.Site).SetDeleted();

@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 				scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(_scenario).Repeat.Any();
             _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
-            _mockRepository.StrictMock<IAuthorizationService>();
 			_target = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(scenarioRepository), _scheduleRepository);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
@@ -65,15 +64,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyCanFindScheduleAndSetChecksums()
         {
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)).ChangeStartTime(TimeSpan.FromHours(-25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime.AddDays(-1)), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRangePerson1).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRangePerson2).Repeat.AtLeastOnce();
             Expect.Call(_scheduleRangePerson1.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart1).Repeat.
                 AtLeastOnce();
             Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart2).Repeat.
                 AtLeastOnce();
-            Expect.Call(_schedulePart1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment1 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment1 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 

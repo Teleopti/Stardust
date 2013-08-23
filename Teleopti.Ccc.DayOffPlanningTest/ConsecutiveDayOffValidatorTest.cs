@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsTrue(_target.IsValid(bitArray, 7));
         }
 
-        [ExpectedException(typeof(ArgumentException))]
+        [Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyIsValidWithBitArrayThrowsExceptionWhenNotIndexIsNotDayOff()
         {
             BitArray bitArray = createBitArrayForTest();

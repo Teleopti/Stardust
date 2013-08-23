@@ -69,6 +69,42 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 
         /// <summary>
+        /// Gets Payroll time export information for all persons between the given dates.
+        /// </summary>
+        /// <param name="personList">The list of people to load schedule for.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="timeZoneId">The time zone.</param>
+        /// <returns></returns>
+        /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
+        [OperationContract]
+		ICollection<PayrollBaseExportDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
+
+        /// <summary>
+        /// Gets Payroll detailed export information for all persons between the given dates.
+        /// </summary>
+        /// <param name="personList">The list of people to load schedule for.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="timeZoneId">The time zone.</param>
+        /// <returns></returns>
+        /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
+        [OperationContract]
+		ICollection<PayrollBaseExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
+
+	    /// <summary>
+	    /// Gets Payroll activities export information for all persons between the given dates.
+	    /// </summary>
+	    /// <param name="personList">The list of people to load schedule for.</param>
+	    /// <param name="startDate">The start date.</param>
+	    /// <param name="endDate">The end date.</param>
+	    /// <param name="timeZoneId">The time zone.</param>
+	    /// <returns></returns>
+	    /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
+	    [OperationContract]
+		ICollection<PayrollBaseExportDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
+
+        /// <summary>
         /// Gets schedule information for days between the given dates using the specified load options.
         /// </summary>
         /// <param name="scheduleLoadOptionDto">The schedule load options.</param>
@@ -87,6 +123,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="schedulePartDto">The updated schedule information.</param>
         /// <remarks>Restrictions or meetings will not be saved using this operation.</remarks>
         [OperationContract]
+				[Obsolete("This method is obsolete, instead use any of the available task based methods to modify a schedule.")]
         void SaveSchedulePart(SchedulePartDto schedulePartDto);
 
         /// <summary>

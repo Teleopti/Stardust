@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 AtLeastOnce();
             Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart2).Repeat.
                 AtLeastOnce();
-            Expect.Call(_schedulePart1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment1})).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment1})).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
         }
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyChangedScheduleForOwnerRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyChangedScheduleForRequestedRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+						Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
             Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true),
-                                     _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)),
+																		 new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))),
                                      _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             IRequestApprovalService requestApprovalService = _mockRepository.StrictMock<IRequestApprovalService>();
 
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(requestApprovalService.ApproveShiftTrade(((IShiftTradeRequest)_personRequest2.Request))).Return(
                 new List<IBusinessRuleResponse>());

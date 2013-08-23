@@ -1,4 +1,29 @@
-﻿ko.bindingHandlers['option-data'] = {
+﻿//eventaggregator
+//usage (subscribing):
+//	ko.eventAggregator.subscribe(function(value){
+//		doSomething with value
+//		,null
+//		,"myTopic"
+//	});
+//
+//usage (publishing)
+//ko.eventAggregator.notifySubscribers(value, "mytopic");
+ko.eventAggregator = new ko.subscribable();
+
+//eventAggregatorExtensions
+ko.subscribable.fn.publishOn = function (topic) {
+	this.subscribe(function (newValue) {
+		ko.eventAggregator(newValue, topic);
+	});
+	return this; //support chaining
+};
+
+ko.subscribable.fn.subscribeTo = function (topic) {
+	ko.eventAggregator.subscribe(this, null, topic);
+	return this; //support chaining
+};
+
+ko.bindingHandlers['option-data'] = {
 	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 		var options = valueAccessor();
 		var observable = options.member;
@@ -14,7 +39,7 @@ ko.bindingHandlers.animateBackground = {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
 		var fadeDuration = allBindings.fadeDuration || 1500;
 		var valueUnwrapped = ko.utils.unwrapObservable(value);
-		$(element).stop().animate({ backgroundColor: valueUnwrapped}, fadeDuration);
+		$(element).stop().animate({ backgroundColor: valueUnwrapped }, fadeDuration);
 	}
 };
 
@@ -86,6 +111,7 @@ ko.bindingHandlers.fadeInIf = {
 	}
 };
 
+//Increases the elements width (default by 20px) if the bound value is true
 ko.bindingHandlers.increaseWidthIf = {
 	update: function (element, valueAccessor, allBindingsAccessor) {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
@@ -108,48 +134,103 @@ ko.bindingHandlers.increaseWidthIf = {
 	}
 };
 
-ko.bindingHandlers.datepicker = {
+ko.bindingHandlers.timepicker = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
-		//initialize datepicker with some optional options
-		var options = allBindingsAccessor().datepickerOptions || { showAnim: 'slideDown' };
-		$(element).datepicker(options);
+		var options = allBindingsAccessor().timepickerOptions || {};
+		$(element).timepicker(options);
 
-		//handle the field changing
-		ko.utils.registerEventHandler(element, "change", function () {
+		ko.utils.registerEventHandler(element, "changeTime.timepicker", function (e) {
 			var observable = valueAccessor();
-			observable(moment($(element).datepicker("getDate")));
-			$(element).blur();
+			observable(e.time.value);
 		});
-
-		//handle the field keydown for enter key
-		ko.utils.registerEventHandler(element, "keydown", function (key) {
-			if (key.keyCode == 13) {
-				var observable = valueAccessor();
-				observable(moment($(element).datepicker("getDate")));
-				$(element).blur();
-			}
-		});
-
-		//handle disposal (if KO removes by the template binding)
-		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-			$(element).datepicker("destroy");
-		});
-
 	},
 	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
-		$(element).datepicker("setDate", new Date(value));
+		if (typeof value === 'function') return;
+		if (value === undefined) value = '';
+            
+		$(element).timepicker("setTime", value);
+	}
+};
+
+//Sets the tooltip (using bootstrapper) to the bound text
+ko.bindingHandlers.tooltip = {
+	update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+		var $element, options, tooltip;
+		options = ko.utils.unwrapObservable(valueAccessor());
+		$element = $(element);
+		tooltip = $element.data('tooltip');
+		if (tooltip) {
+			$.extend(tooltip.options, options);
+		} else {
+			$element.tooltip(options);
+		}
+	}
+};
+
+ko.bindingHandlers.select2 = {
+	init: function (element, valueAccessor) {
+		var options = valueAccessor();
+        options['escapeMarkup'] = function (m) { return m; };
+        options['width'] = 'resolve';
+        
+		var observable = options.value;
+		// kinda strange, but we have to use the original select's event because select2 doesnt provide its own events
+		$(element).on('change', function () {
+			observable($(element).val());
+		});
+		$(element).select2(options);
+
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+			$(element).select2('destroy');
+		});
+	},
+	update: function (element, valueAccessor) {
+		var observable = valueAccessor().value;
+		$(element).select2("val", observable());
 	}
 };
 
 ko.bindingHandlers.button = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-        $(element).button();
-    },
-    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-        var value = ko.utils.unwrapObservable(valueAccessor()),
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		$(element).button();
+	},
+	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var value = ko.utils.unwrapObservable(valueAccessor()),
             disabled = ko.utils.unwrapObservable(value.disabled);
 
-        $(element).button("option", "disabled", disabled);
-    }
+		$(element).button("option", "disabled", disabled);
+	}
 };
+
+//wraps the datepickerbinding and sets the datepickeroptions
+ko.bindingHandlers.mytimeDatePicker = {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var isDisabled = $(element).attr('disabled') == 'disabled';
+		$(element).attr('disabled', 'disabled');
+
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
+				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
+
+				if (!isDisabled) $(element).removeAttr('disabled');
+			}
+		});
+	}
+};
+
+ko.bindingHandlers.clickable = {
+	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+		var value = ko.utils.unwrapObservable(valueAccessor());
+
+		var clickableCursor = (value) ? "pointer" : "not-allowed";
+		$(element).css('cursor', clickableCursor);
+
+	}
+};
+

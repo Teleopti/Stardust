@@ -74,13 +74,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             // Add activity periods to a Layer
 	        var layers = new[]
 		        {
-							new MainShiftActivityLayerNew(ActivityCollection[0], phone1),
-							new MainShiftActivityLayerNew(ActivityCollection[2], shortBreak1),
-							new MainShiftActivityLayerNew(ActivityCollection[0], phone2),
-							new MainShiftActivityLayerNew(ActivityCollection[1], lunchBreak1),
-							new MainShiftActivityLayerNew(ActivityCollection[0], phone3),
-							new MainShiftActivityLayerNew(ActivityCollection[2], shortbreak2),
-							new MainShiftActivityLayerNew(ActivityCollection[0], phone4)
+							new MainShiftLayer(ActivityCollection[0], phone1),
+							new MainShiftLayer(ActivityCollection[2], shortBreak1),
+							new MainShiftLayer(ActivityCollection[0], phone2),
+							new MainShiftLayer(ActivityCollection[1], lunchBreak1),
+							new MainShiftLayer(ActivityCollection[0], phone3),
+							new MainShiftLayer(ActivityCollection[2], shortbreak2),
+							new MainShiftLayer(ActivityCollection[0], phone4)
 		        };
 
 						personAssignment.SetMainShiftLayers(layers, _shiftCategoryCollection[0]);

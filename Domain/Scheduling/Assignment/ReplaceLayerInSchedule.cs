@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -10,54 +12,52 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 
 		//this can be done MUCH simpler when we have one list of layers and no shifts....
+		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			foreach (var ass in scheduleDay.PersonAssignmentCollection())
+			foreach (var ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
 			{
-#pragma warning disable 612,618
-				var ms = ass.ToMainShift();
-#pragma warning restore 612,618
-				if (ms != null)
+				foreach (var layer in ass.MainLayers())
 				{
-					foreach (var layer in ms.LayerCollection)
+					if (layer.Equals(layerToRemove))
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							ms.LayerCollection.Remove(layer);
-							ms.LayerCollection.Insert(indexOfLayer, new MainShiftActivityLayer(newActivity, newPeriod));
-							ass.SetMainShift(ms);
-							return;
-						}
+						var indexOfLayer = layer.OrderIndex;
+						var newLayers = new List<IMainShiftLayer>(ass.MainLayers());
+						newLayers.Remove(layer);
+						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
+						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
+						return;
 					}
 				}
 
-				foreach (var personalShift in ass.PersonalShiftCollection)
+				var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
+				if (layerAsPersonal != null)
 				{
-					foreach (var layer in personalShift.LayerCollection)
+					var personalLayers = ass.PersonalLayers().ToList();
+					var indexOfLayer = personalLayers.IndexOf(layerAsPersonal);
+					personalLayers.RemoveAt(indexOfLayer);
+					personalLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
+					ass.ClearPersonalLayers();
+					foreach (var personalLayer in personalLayers)
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							personalShift.LayerCollection.Remove(layer);
-							personalShift.LayerCollection.Insert(indexOfLayer, new PersonalShiftActivityLayer(newActivity, newPeriod));
-							return;
-						}
+						ass.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
 					}
+					return;
 				}
 
-				foreach (var overtimeShift in ass.OvertimeShiftCollection)
+				var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
+				if (layerAsOvertime != null)
 				{
-					foreach (IOvertimeShiftActivityLayer layer in overtimeShift.LayerCollection)
+					var overtimeLayers = ass.OvertimeLayers().ToList();
+					var indexOfLayer = layerAsOvertime.OrderIndex;
+					overtimeLayers.RemoveAt(indexOfLayer);
+					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
+					ass.ClearOvertimeLayers();
+					foreach (var overtimeLayer in overtimeLayers)
 					{
-						if (layer.Equals(layerToRemove))
-						{
-							var indexOfLayer = layer.OrderIndex;
-							overtimeShift.LayerCollection.Remove(layer);
-							overtimeShift.LayerCollection.Insert(indexOfLayer, new OvertimeShiftActivityLayer(newActivity, newPeriod, layer.DefinitionSet));
-							return;
-						}
+						ass.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 					}
+					return;
 				}
 			}
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					//behövs nån form av orderindex på personabsence kommas ihåg?
 					scheduleDay.Remove(personAbsence);
 					scheduleDay.Add(new PersonAbsence(personAbsence.Person, personAbsence.Scenario,
-					                                  new AbsenceLayer(newAbsence, newPeriod)));
+																						new AbsenceLayer(newAbsence, newPeriod)));
 					return;
 				}
 			}

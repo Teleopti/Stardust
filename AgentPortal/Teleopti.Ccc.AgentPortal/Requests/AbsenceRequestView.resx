@@ -135,7 +135,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>834, 479</value>
+    <value>986, 674</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tableLayoutPanelMain.ColumnCount" type="System.Int32, mscorlib">
@@ -184,7 +184,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="gradientPanelScheduleHasChanged.Size" type="System.Drawing.Size, System.Drawing">
-    <value>822, 35</value>
+    <value>974, 35</value>
   </data>
   <data name="gradientPanelScheduleHasChanged.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -214,7 +214,7 @@
     <value>True</value>
   </data>
   <data name="textBoxExtMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>816, 146</value>
+    <value>968, 341</value>
   </data>
   <data name="textBoxExtMessage.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -277,7 +277,7 @@
     <value>80</value>
   </data>
   <data name="textBoxExtSubject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>692, 20</value>
+    <value>832, 20</value>
   </data>
   <data name="textBoxExtSubject.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -484,7 +484,7 @@
     <value>3</value>
   </data>
   <data name="tableLayoutPanelTop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>816, 77</value>
+    <value>968, 77</value>
   </data>
   <data name="tableLayoutPanelTop.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -583,7 +583,7 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 0</value>
+    <value>130, 0</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 20</value>
@@ -592,7 +592,7 @@
     <value>None</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 174</value>
+    <value>202, 174</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -601,7 +601,7 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 20</value>
+    <value>130, 20</value>
   </data>
   <data name="dateTimePickerAdvEnd.Calendar.TodayButton.Text" xml:space="preserve">
     <value>Today</value>
@@ -637,7 +637,7 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 0</value>
+    <value>130, 0</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 20</value>
@@ -646,7 +646,7 @@
     <value>None</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 174</value>
+    <value>202, 174</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -655,7 +655,7 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 20</value>
+    <value>130, 20</value>
   </data>
   <data name="dateTimePickerAdvStart.Calendar.TodayButton.Text" xml:space="preserve">
     <value>Today</value>
@@ -766,7 +766,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanelDates.Size" type="System.Drawing.Size, System.Drawing">
-    <value>816, 55</value>
+    <value>968, 55</value>
   </data>
   <data name="tableLayoutPanelDates.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -796,7 +796,7 @@
     <value>3, 118</value>
   </data>
   <data name="labelLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>816, 1</value>
+    <value>968, 1</value>
   </data>
   <data name="labelLine.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -823,7 +823,7 @@
     <value>5</value>
   </data>
   <data name="tableLayoutPanelMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>822, 332</value>
+    <value>974, 527</value>
   </data>
   <data name="tableLayoutPanelMain.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -847,15 +847,15 @@
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOuAAA
-        DrgBakH1WwAAAdFJREFUOE/tlDtLA0EUhf0J+Qn7EwRLm1TGzrWRWAgpfEEEg0SIhboQxIiKi4j4KIwo
-        GFHMikJ8IC5YaLkEgoIWGyy0nNLueM+MEatkSe2Fy9wZMl/OPTOzHR3/0cyBxYt35M8+MFOsYWS3irnD
-        FyyW39CWa2u3H8ge1OG/KKgv/AZrrqW3H7F+XY8OJ3D/pq5hfgA4JcAumGTtBwqhAvInVSyVX6OBqZDA
-        og/EczJe4VctYZktrhnw0Ppjayg9ZHtUSCABDO8JSLlm5B/Gc0pqZtgamt581ZvYZjxjWnY9oFNqa1wh
-        44o8CdtRSBUCKJn2O0fNwQMr1Z9NBtQ5btKSTAmwcVCW7cNKij8SXYNrzaGJBQNl6wamYKWUKDYKPV/m
-        AovZnozSQhRo33JNq8lsGZiVDHW6JQON2YGkgdo5X9pXSIzuNVc6f/ysD4qHQFgsSUggHobis8wJ7PV0
-        Fq9C+HJQY6stPOVLycrL4XVxGxABsdZKf4BOMZDfKAznz1ufPqHO6ZtWRTDV2E6gfWSy5lr4qZDduMTs
-        zl00qAaX5K2vPOh7SN8awZotp92KACvRgX8/FpPb9+ieOtHXJjGxh57pI/Gw3B6sra/Q/yY68A0Kvuy5
-        /xCdAQAAAABJRU5ErkJggg==
+        DrgBakH1WwAAActJREFUOE/tkztLA0EUhfMT8hP2JwiWNqmMnWsjsRBS+IIIBokQC3UhiIqKi4j4KIwo
+        GFHMioIvxAULLZdAMKDFBgstp7Q73jMTxSobrT1wmTuzu9+ee2cm9q+mmjt7ReHkDZPFKga3K5jer2Gu
+        /ILG499p5eYNub06/JqC+sC3mHMts/mA1at663ACd6/rBhAATgmw500w9wOFUAGFowoWys+tgemQwKIP
+        JPIyXhqHFGHZDa4ZcP/qQzSUPWR5dEggAZT3CKRdM/IHibySnBFGQzPrz/ojlpnImpJdD2iT3BpRyLpi
+        T2Q7Cun5AEqmPc5Bc3DvUqXxkQG1jZiwJNIC1H2WSizbh5WS/oja+1aaQ5OzBsrSDUwAaSWOjUPPl7nA
+        4rYno5QgioR2L1a1m+yGgVmpUIdbMtC4HUgYqJ33pXyF5NBOc+jM4ZMuj5tAWDxFSCDtCKXPMiewy9NR
+        vAzhy0YNL0f0lMrJzeFxcb8gEsy10wbQKQbyjsJA4TQaSDnHL9oVwXRjO4HuI4M518J3hdzaOaa2bluD
+        Uk5J7vrSvT6H7NuXmLPkjHshwIvWgT81tnmHjvEjvcPJ0R10ThxID8t/g/3rj4rFPgEKvuy5LdrxuwAA
+        AABJRU5ErkJggg==
 </value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -1086,7 +1086,7 @@
     <value>xxRequest</value>
   </data>
   <data name="ribbonControlAdv1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>832, 140</value>
+    <value>984, 140</value>
   </data>
   <data name="ribbonControlAdv1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>

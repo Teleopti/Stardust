@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
     public class ScheduleGridVisualProjectionColumn : ScheduleGridColumnBase<VisualProjection>
     {
         private readonly IComparer<VisualProjection> _columnComparer;
-        private TimePeriod _period;
-        private string _displayDate;
 
         public ScheduleGridVisualProjectionColumn(string bindingProperty, string headerText, IComparer<VisualProjection> columnComparer)
             : base(bindingProperty, headerText)
@@ -24,17 +22,10 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
                 return _columnComparer;
             }
         }
-        public string DisplayDate
-        {
-            get { return _displayDate; }
-            set { _displayDate = value; }
-        }
 
-        public TimePeriod Period
-        {
-            get { return _period; }
-            set { _period = value; }
-        }
+        public string DisplayDate { get; set; }
+
+        public TimePeriod Period { get; set; }
 
         public override void GetCellInfo(GridQueryCellInfoEventArgs e, IList<VisualProjection> dataItems)
         {
@@ -42,7 +33,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.Columns
             if (e.RowIndex <= e.Style.CellModel.Grid.Rows.HeaderCount)
             {
                 e.Style.CellType = "VisualProjectionColumnHeaderCell";
-                e.Style.CellValue = _displayDate;
+                e.Style.CellValue = DisplayDate;
                 //e.Style.CellValue = string.Empty;
             }
             else

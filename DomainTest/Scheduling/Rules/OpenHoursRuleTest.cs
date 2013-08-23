@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
         	IActivity activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
-            var type = _mocks.StrictMock<ISkillType>();
+			var type = SkillTypeFactory.CreateSkillType();
         	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
 
@@ -124,8 +124,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
         	IActivity activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
-            var type = _mocks.StrictMock<ISkillType>();
-        	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
+            
+			var type = SkillTypeFactory.CreateSkillType();
+			ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
         	ISkill skill1 = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill1.Activity = activity;
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
         	IActivity activity = ActivityFactory.CreateActivity("Activity1");
 			activity.RequiresSkill = true;
-            var type = _mocks.StrictMock<ISkillType>();
+			var type = SkillTypeFactory.CreateSkillType();
 
         	IActivity activity2 = ActivityFactory.CreateActivity("Activity2");
 			activity2.RequiresSkill = false;
@@ -296,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
         	IActivity activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
-            var type = _mocks.StrictMock<ISkillType>();
+			var type = SkillTypeFactory.CreateSkillType();
         	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
 

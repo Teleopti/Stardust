@@ -6,366 +6,59 @@
 @using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
-<nav id="tabs" class="main-nav">
-    <input id="message-count-text" type="hidden" value="@Resources.MessagesParenthesis"/>
-    <input id="message-text" type="hidden" value="@Resources.Messages"/>
-	<ul>
-		@foreach (var navSection in Model.NavigationItems)
-		{
-			<li>
-			    <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? 
-			                                                                                                                              @Html.Raw("class=\"asm-new-message-indicator\"") : 
-			                                                                                                                              @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? navSection.TitleCount : navSection.Title)</a>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner bdd-mytime-top-menu">
+        <div class="container fixed-non-responsive">
+            <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
-			</li>
-		}
-	</ul>
-	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
-		<div class="toolbar-inner">
-		</div>
-	</section>
-	@foreach (var navSection in Model.NavigationItems)
-	{
-		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<div class="toolbar-inner">
-				@{ int index = 0; }
-				@foreach (var toolbarItem in navSection.ToolBarItems)
-				{
-					if (toolbarItem is ToolBarSeparatorItem)
-					{
-						{
-							index = 0;
-						}
-						<div class="seperator"></div>
-					}
-					if (toolbarItem is ToolBarDatePicker)
-					{
-						var dpicker = toolbarItem as ToolBarDatePicker;
-						<div id="@string.Format("{0}DateRangeSelector", navSection.Controller)" class="date-range-selector floatleft ml10">
-							<button data-mytime-action="#" class="first">@dpicker.PrevTitle</button>
-							<input id="@string.Format("{0}DatePicker", navSection.Controller)" type="text" class="datepicker" />
-							<button data-mytime-action="#" class="last">@dpicker.NextTitle</button>
-							<span class="selected-date-period displayblock"></span>
-							<a class="displaynone" data-mytime-action="#"></a>
-						</div>
-					}
-					if (toolbarItem is ToolBarButtonItem)
-					{
-						var button = toolbarItem as ToolBarButtonItem;
-						var id = string.Format("{0}-{1}", navSection.Controller, button.ButtonType);
-						var buttonId = id + "-button";
-						<button title="@Html.AttributeEncode(button.Title)" id="@buttonId" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon @button.Icon ir floatleft@((index > 1) ? " ml10" : "")">@button.Title</button>
-					}
-					if (toolbarItem is ToolBarTextItem)
-					{
-						var id = string.Format("{0}-{1}", navSection.Controller, (toolbarItem as ToolBarTextItem).Id);
-						<span id="@id" class="ml10"></span>
-					}
-					if (toolbarItem is ToolBarSplitButton)
-					{
-						var splitButton = toolbarItem as ToolBarSplitButton;
-						<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
-							<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
-							<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
-								@foreach (var option in splitButton.Options)
-								{
-									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-								}
-							</select>
-						</div>
-					}
-					if (toolbarItem is ToolBarSelectBox)
-					{
-						var selectBox = toolbarItem as ToolBarSelectBox;
-						<select class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
-							@foreach (var option in selectBox.Options)
-							{
-								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-							}
-						</select>
-					}
-					if (toolbarItem is ToolBarDropDown)
-					{
-						var dropDown = toolbarItem as ToolBarDropDown;
-						var dropDownId = string.Format("{0}-{1}-{2}", navSection.Controller, "addRequest", "dropdown");
-						<div class="ml10 displayblock floatleft">
-							<dl id="@dropDownId" class="dropdown">
-								<dt><span class="icon icon-left @dropDown.Icon"></span></dt>
-								<dd>
-									<ul class="ui-widget-content ui-corner-all ui-menu">
-										@foreach (var menuItem in dropDown.MenuItems)
-										{
-											var menuItemId = string.Format("{0}-{1}-{2}", navSection.Controller, menuItem.MenyType, "menuItem");
-											<li class="ui-menu-item"><a id="@menuItemId" class="ui-corner-all cursorpointer">@menuItem.Title</a></li>
-										}
-									</ul>
-								</dd>
-							</dl>		
-						</div>
-					}
-					{
-						index++;
-					}
-				}
-				@{
-					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
-					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
-					            select new Option
-						            {
-							            Value = value,
-							            Text = text
-						            };
-					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-					                  select new Option
-						                  {
-							                  Value = value,
-							                  Text = text
-						                  };
-				}
-				
-				@if (navSection is TeamScheduleNavigationItem)
-				{
-					<div class="seperator" data-bind="visible: SeperatorVisible"></div>
-					<input type="hidden" id="Team-Picker"/>
-				}
-
-				@if (navSection is StudentAvailabilityNavigationItem)
-				{
-					<div id="Student-availability-edit-form" class="displaynone">
-						<div>
-							<div class="time-limitation-label icon leftarrow"></div>
-						
-							<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-						</div>
-						<div>
-							<div class="time-limitation-label icon rightarrow"></div>
-						
-							<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-							<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: NextDay" title="@Resources.NextDay" />
-						</div>
-						<div class="mt5">
-							<button id="Student-availability-reset" class="ml15 mt10 mb5 mr5 floatleft">@Resources.Reset</button>
-							<button id="Student-availability-apply" class="mr15 mt10 mb5 ml5 floatleft">@Resources.Apply</button>
-						</div>
-						<div>
-							<div id="Student-availability-apply-error" class="error floatleft" data-bind="html: ValidationError"></div>
-							<div class="clearboth"></div>
-						</div>
-					</div>
-				}
-
-				@if (navSection is PreferenceNavigationItem)
-				{
-					var preferenceNavigation = navSection as PreferenceNavigationItem;
-
-					<div id="Preference-add-extended-form" class="displaynone"> 
-						<div class="ml5" data-bind="visible: HasTemplates">
-							<span>[</span><span id="Expend-Template" class="collapse-sign" data-bind="text: ToggleSign"></span><span>]</span>
-							<select id="Preference-template" data-bind="options: AvailableTemplates, optionsText: 'Text', optionsValue:'Value', optionsCaption: '&nbsp;'" title="@Resources.ExtendedPreferencesTemplate" class="displayinline-block ml5">
-							</select>
-						</div>
-						<div data-bind="visible: IsDetailsVisible">
-							<hr data-bind="visible: AvailableTemplates().length>0"/>
-							<div class="ml10">
-								<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
-									<option value="" data-preference-extended="true">&nbsp;</option>
-									<option value="-">-</option>
-									@foreach (var option in preferenceNavigation.PreferenceOptions)
-									{
-										<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
-									}
-								</select>
-						    
-								<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
-									<div class="mt5">
-										<div class="time-limitation-label icon leftarrow"></div>
-										<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<span class="ml20"></span>
-										<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-									</div>
-									<div>
-										<div class="time-limitation-label icon rightarrow"></div>
-										<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
-										<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
-									</div>
-									<div>
-										<div class="time-limitation-label icon doublearrow-blue"></div>
-										<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in timeLengths)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<span class="ml20"></span> 
-										<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in timeLengths)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-									</div>
-									<hr/>
-									<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
-										<option value="">&nbsp;</option>
-										<option value="-">-</option>
-										@foreach (var option in preferenceNavigation.ActivityOptions)
-										{
-											<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-										}
-									</select>
-								</div>
-								<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
-									<div>
-										<div class="time-limitation-label icon leftarrow"></div>
-										<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.EarliestStartTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<span class="ml20"></span>
-										<select id="Preference-extended-activity-start-time-maximum" class="time-input" data-bind="combobox: ActivityLatestStartTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.LatestStartTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-									</div>
-									<div>
-										<div class="time-limitation-label icon rightarrow"></div>
-										<select id="Preference-extended-activity-end-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestEndTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.EarliestEndTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<span class="ml20"></span>
-										<select id="Preference-extended-activity-end-time-maximum" class="time-input" data-bind="combobox: ActivityLatestEndTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.LatestEndTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in times)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-									</div>
-									<div>
-										<div class="time-limitation-label icon doublearrow-blue"></div>
-										<select id="Preference-extended-activity-time-minimum" class="time-input" data-bind="combobox: ActivityMinimumTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.MinTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in timeLengths)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-										<span class="ml20"></span>
-										<select id="Preference-extended-activity-time-maximum" class="time-input" data-bind="combobox: ActivityMaximumTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.MaxTime">
-											<option value="">&nbsp;</option>
-											@foreach (var timeSpan in timeLengths)
-											{
-												<option value="@timeSpan.Value">@timeSpan.Text</option>
-											}
-										</select>
-									</div>
-								</div>
-							
-								<div class="mt10 floatleft">
-									<div id="Template-save">
-										<span>[</span><span class="collapse-sign" data-bind="text: IsSaveAsNewTemplate()?'-':'+'"></span><span>]</span>
-										<label class="ml5">
-											@Resources.SaveAsTemplate
-										</label>
-									</div>
-									<div id="Template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate">
-										<input id="Template-name-input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
-										<button id="Preference-extended-save-template" class="ml5">@Resources.Save</button>
-									</div>
-								</div>
-							</div>
-						</div>
-		   
-						<div class="clearleftfloat">
-							<button id="Preference-extended-reset" class="ml25 mt10 mb5 floatleft">@Resources.Reset</button>
-							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
-						</div>
-						<div>
-							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>
-							<div class="clearboth"></div>
-						</div>
-					</div>
-				}
-			</div>
-		</section>
-	}
-			
-	<section id="toolbar-right" class="col-main floatright">
-		<div class="toolbar-inner">
-			<dl id="settings-dropdown" class="dropdown">
-				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
-				<dd>
-					<ul class="ui-widget-content ui-corner-all ui-menu">
-						<li class="ui-menu-item"><a data-mytime-action="Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
-						@if (Model.ShowChangePassword)
-						{
-							<li class="ui-menu-item"><a data-mytime-action="Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
-						}
-						@if (Model.HasAsmPermission)
-						{
-							<li class="ui-menu-item"><a id="asm-link" class="ui-corner-all cursorpointer" >@Resources.OpenASM</a></li>
-						}
-						<li>&nbsp;</li>
-						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout", @class = "ui-corner-all"})</li>
-					</ul>
-				</dd>
-			</dl>		
-		</div>
-	</section>
-	<div id="warning">
-		
-	</div>
-</nav>
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+ 
+            <!-- Be sure to leave the brand out there if you want it shown -->
+            <a class="brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
+ 
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="collapse visibility">
+                <ul class="nav">
+                    @foreach (var navSection in Model.NavigationItems)
+                    {
+                        <li>
+                            @if (navSection.UnreadMessageCount>0)
+                            {
+                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+                            }
+                            else
+                            {
+                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge badge-important"></span></a>
+                            }
+                        </li>
+                    }
+                </ul>
+                
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> @User.Identity.Name <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+                            @if (Model.ShowChangePassword)
+                            {
+                                <li><a href="#" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+                            }
+                            <li class="divider"></li>
+                            @if (Model.HasAsmPermission)
+                            {
+                                <li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+                                <li class="divider"></li>
+                            }
+                            <li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

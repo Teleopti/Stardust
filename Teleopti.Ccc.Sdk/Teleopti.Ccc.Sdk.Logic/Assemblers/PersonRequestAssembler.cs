@@ -46,7 +46,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personRequestDto.Id = entity.Id;
             personRequestDto.Message = entity.GetMessage(new NormalizeText());
             personRequestDto.Subject = entity.GetSubject(new NormalizeText());
-            personRequestDto.RequestStatus = (RequestStatusDto)PersonRequest.GetUnderlyingStateId(entity);
+
+			int statusId = PersonRequest.GetUnderlyingStateId(entity);
+	        if (statusId == 4) statusId = 1;
+			personRequestDto.RequestStatus = (RequestStatusDto)statusId;
+
             personRequestDto.RequestedDate = entity.RequestedDate;
             personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value) : DateTime.MinValue;
             personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value) : DateTime.MinValue;

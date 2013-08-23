@@ -10,11 +10,13 @@ GO
 --				AF 2011-11-22 Had to format the sql to read it :-)
 --				DJ 2011-12-08 adding view for PersonPeriod including EndDate instead on row based dateadd()
 --				AF 2012-01-18 Display agents on deleted sites, teams, contracts, part time percentages, contract schedules, shift bags, BUT not skills. Do not want to see deleted skills at all.
---				Ola 2012-05-16 Added parameter to just update changed persons 
+--				Ola 2012-05-16 Added parameter to just update changed persons
+--				AF 20130806 Execute as owner, otherwise we are not allowed to do truncate table. 
 -- =============================================
 -- exec ReadModel.UpdateGroupingReadModel 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
 CREATE PROCEDURE ReadModel.UpdateGroupingReadModel
 @persons nvarchar(max)
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	 SET NOCOUNT ON;
@@ -195,7 +197,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 		on	p.id=pp.parent and p.isdeleted=0 
 	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @skillId)
 
-return
 	CREATE TABLE #groupsForSecondCTE
 	(
 		groupid uniqueidentifier not null,

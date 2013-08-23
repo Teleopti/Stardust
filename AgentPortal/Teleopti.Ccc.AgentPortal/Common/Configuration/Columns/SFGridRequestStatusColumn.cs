@@ -10,10 +10,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {
     public class SFGridRequestStatusColumn<T> : SFGridColumnBase<T>
     {
-        public SFGridRequestStatusColumn(string bindingProperty, string headerText)
-            : base(bindingProperty, headerText)
-        { }
-
         public SFGridRequestStatusColumn(string bindingProperty, string headerText, int preferredWidth)
             : base(bindingProperty, headerText, preferredWidth)
         { }
@@ -56,7 +52,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
                 if (requestStatus==RequestStatusDto.Approved)
                 {
                     brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.LimeGreen));
-                }else if(requestStatus==RequestStatusDto.Denied)
+				}
+				else if (requestStatus == RequestStatusDto.Denied)
                 {
                     brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.Crimson));
                 }

@@ -49,22 +49,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			IPersonAssignment assignment2 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 			IPersonAssignment assignment3 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 
-            assignment1.SetMainShiftLayers(new List<IMainShiftActivityLayerNew>{new MainShiftActivityLayerNew(activity, new DateTimePeriod())}, fm);
-						assignment2.SetMainShiftLayers(new List<IMainShiftActivityLayerNew> { new MainShiftActivityLayerNew(activity, new DateTimePeriod()) }, fm);
-						assignment3.SetMainShiftLayers(new List<IMainShiftActivityLayerNew> { new MainShiftActivityLayerNew(activity, new DateTimePeriod()) }, da);
+            assignment1.SetMainShiftLayers(new List<IMainShiftLayer>{new MainShiftLayer(activity, new DateTimePeriod())}, fm);
+						assignment2.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, new DateTimePeriod()) }, fm);
+						assignment3.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, new DateTimePeriod()) }, da);
 
             using (_mockRepository.Record())
             {
                 Expect.Call(_scheduleRange.ScheduledDayCollection(_period))
                     .Return(_scheduleDays);
                 Expect.Call(_d1.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d1.AssignmentHighZOrder()).Return(assignment1);
+                Expect.Call(_d1.PersonAssignment()).Return(assignment1);
 
                 Expect.Call(_d2.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d2.AssignmentHighZOrder()).Return(assignment2);
+                Expect.Call(_d2.PersonAssignment()).Return(assignment2);
 
                 Expect.Call(_d3.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_d3.AssignmentHighZOrder()).Return(assignment3);
+                Expect.Call(_d3.PersonAssignment()).Return(assignment3);
 
                 Expect.Call(_scheduleRange.FairnessPoints())
                     .Return(new FairnessValueResult())

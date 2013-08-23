@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (current.SignificantPart() == SchedulePartView.None && original.SignificantPart() == SchedulePartView.MainShift)
 				return false;
 
-            for (int assignmentIndex = 0; assignmentIndex < original.PersonAssignmentCollection().Count; assignmentIndex++)
+            for (int assignmentIndex = 0; assignmentIndex < original.PersonAssignmentCollectionDoNotUse().Count; assignmentIndex++)
             {
-                if(current.PersonAssignmentCollection().Count  > 0)
+                if(current.PersonAssignmentCollectionDoNotUse().Count  > 0)
                 {
-					IEditableShift originalMainShift =_editableShiftMapper.CreateEditorShift(original.PersonAssignmentCollection()[assignmentIndex]);
-					IEditableShift currentMainShift =_editableShiftMapper.CreateEditorShift( current.PersonAssignmentCollection()[assignmentIndex]);
+					IEditableShift originalMainShift =_editableShiftMapper.CreateEditorShift(original.PersonAssignmentCollectionDoNotUse()[assignmentIndex]);
+					IEditableShift currentMainShift =_editableShiftMapper.CreateEditorShift( current.PersonAssignmentCollectionDoNotUse()[assignmentIndex]);
 
                     if (originalMainShift == null || currentMainShift == null)
                         return false;

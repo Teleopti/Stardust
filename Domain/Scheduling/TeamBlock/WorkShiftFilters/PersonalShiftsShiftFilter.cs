@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (period.HasValue)
 			{
 				var meetings = schedulePart.PersonMeetingCollection();
-				var personalAssignments = schedulePart.PersonAssignmentCollection();
+				var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
 				int cntBefore = shiftList.Count;
 				IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
 				foreach (IShiftProjectionCache t in shiftList)
@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		private static DateTimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
-			if (schedulePart.PersonMeetingCollection().Count == 0 && schedulePart.PersonAssignmentCollection().Count == 0)
+			var ass = schedulePart.PersonAssignment();
+			if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
 			{
 				return null;
 			}
@@ -74,15 +75,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				period = period.Value.MaximumPeriod(personMeeting.Period);
 			}
 
-			if (schedulePart.PersonAssignmentCollection().Count > 0)
+			if (ass!=null)
 			{
-				foreach (IPersonalShift personalShift in schedulePart.PersonAssignmentCollection()[0].PersonalShiftCollection)
+				foreach (var layer in ass.PersonalLayers())
 				{
-					if (!period.HasValue && personalShift.LayerCollection.Period().HasValue)
-						period = personalShift.LayerCollection.Period().Value;
-					if (personalShift.LayerCollection.Period().HasValue)
-						if (period != null)
-							period = period.Value.MaximumPeriod(personalShift.LayerCollection.Period().Value);
+					if (!period.HasValue)
+						period = layer.Period;
+					else
+						period = period.Value.MaximumPeriod(layer.Period);
 				}
 			}
 			return period;

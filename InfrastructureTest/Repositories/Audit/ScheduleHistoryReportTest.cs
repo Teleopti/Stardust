@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var orgLayers = new List<IMainShiftActivityLayerNew>(PersonAssignment.MainShiftActivityLayers);
-				orgLayers.Add(new MainShiftActivityLayerNew(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
+				var orgLayers = new List<IMainShiftLayer>(PersonAssignment.MainLayers());
+				orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
 				PersonAssignment.SetMainShiftLayers(orgLayers, PersonAssignment.ShiftCategory);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.ClearMainShiftLayers();
+				PersonAssignment.ClearMainLayers();
 				uow.PersistAll();
 			}
 			//remove assignment
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
+									new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -222,11 +222,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				var pShift = new PersonalShift();
-				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShiftActivityLayers.First().Payload,
-																							 PersonAssignment.MainShiftActivityLayers.First().Period));
-				PersonAssignment.ClearMainShiftLayers();
-				PersonAssignment.AddPersonalShift(pShift);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.ClearMainLayers();
 				uow.PersistAll();
 			}
 
@@ -258,7 +255,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.ClearMainShiftLayers();
+				PersonAssignment.ClearMainLayers();
 				uow.PersistAll();
 			}
 
@@ -266,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
+								  new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}

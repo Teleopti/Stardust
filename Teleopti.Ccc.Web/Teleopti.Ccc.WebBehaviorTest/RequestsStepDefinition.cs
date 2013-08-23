@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -19,20 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 		private RequestsPage _page { get { return Pages.Pages.RequestsPage; } }
 
-		[When(@"I click on the request")]
-		public void WhenIClickOnTheRequest()
+		[When(@"I click on the request at position '(.*)' in the list")]
+		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
 		{
-			_page.FirstRequest.Click();
+			Browser.Interactions.Click(string.Format(".request-body:nth-child({0})", position));
 		}
-
-		[When(@"I click the delete button on the shift trade request")]
-		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
-		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.True);
-			_page.RequestDeleteButtonById(requestId).EventualClick();
-		}
-
+		
 		[When(@"I navigate to the requests page")]
 		public void WhenINavigateToTheRequestsPage()
 		{
@@ -88,6 +78,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
+
+		[Then(@"I should not see any request")]
+		public void ThenIShouldNotSeeAnyRequest()
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(0));
+		}
+
 
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
@@ -185,14 +182,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
+			EventualAssert.That(() => _page.RequestsDeleteButton().IsDisplayed(), Is.False);
 			_page.DenyShiftTradeButton.EventualClick();
 		}
 
 		[Then(@"I should not see a delete button on the request")]
 		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
 		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+			Browser.Interactions.AssertNotExists(".request-data-subject", ".close");	
 		}
 
 		[Then(@"I should see '(.*)' as the sender of the request")]
@@ -206,6 +203,38 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
+
+		[When(@"I click on shifttrade resend button")]
+		public void WhenIClickOnShifttradeResendButton()
+		{
+			Browser.Interactions.ClickContaining(".btn-primary", Resources.SendAgain);
+		}
+
+		[When(@"I click on shifttrade cancel button")]
+		public void WhenIClickOnShifttradeCancelButton()
+		{
+			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
+		}
+
+
+		[Then(@"I should not see cancel shifttrade button")]
+		public void ThenIShouldSeeCancelShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-danger", Resources.Cancel);
+		}
+
+		[Then(@"I should not see resend shifttrade button")]
+		public void ThenIShouldNotSeeResendShifttradeButton()
+		{
+			Browser.Interactions.AssertFirstNotContains(".btn-primary", Resources.SendAgain);
+		}
+
+		[Then(@"I should not see any requests")]
+		public void ThenIShouldNotSeeAnyRequests()
+		{
+			EventualAssert.That(()=>_page.Requests,Is.Empty);
+		}
+
 
 	}
 }

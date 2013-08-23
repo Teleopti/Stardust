@@ -48,29 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 		}
 
-
-		[Test]
-		public void PersonAssignmentConflictsShouldBePartOfDifferenceSinceSnapshot()
-		{
-			using (_mocks.Record())
-			{
-				fullPermission(true);
-			}
-			using (_mocks.Playback())
-			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
-				{
-					var ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-					var ass2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-					_target.Add(ass1);
-					_target.Add(ass2);
-
-					_target.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()).Count()
-						.Should().Be.EqualTo(2);
-				}
-			}
-		}
-
 		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
 		public void VerifyExtractAllDataRegardingTimeZones()
 		{
@@ -142,10 +119,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
-                    _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
-                    Assert.AreEqual(0, part.PersonAssignmentCollection().Count);
-                    Assert.AreEqual(0, part.PersonAssignmentConflictCollection.Count);
+                    Assert.AreEqual(0, part.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.IsFalse(part.IsFullyPublished);
                 }
 			}
@@ -171,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     IScheduleDay yes = _target.ReFetch(partWithHit);
                     IScheduleDay no = _target.ReFetch(partWithNoHit);
-                    Assert.AreEqual(1, yes.PersonAssignmentCollection().Count);
-                    Assert.AreEqual(0, no.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, yes.PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(0, no.PersonAssignmentCollectionDoNotUse().Count);
                 }
 			}
 		}
@@ -231,7 +206,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CalculatedContractTimeHolder = TimeSpan.FromMinutes(24);
 			Assert.AreEqual(TimeSpan.FromMinutes(24), _target.CalculatedContractTimeHolder);
 			IPersistableScheduleData data1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-			IPersistableScheduleData data2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
 			using (_mocks.Record())
 			{
@@ -243,7 +217,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     _target.Add(data1);
-                    _target.Add(data2);
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     _target.ModifyInternal(part);
                     Assert.IsFalse(_target.CalculatedContractTimeHolder.HasValue);
@@ -258,7 +231,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CalculatedTargetTimeHolder = TimeSpan.FromMinutes(24);
 			Assert.AreEqual(TimeSpan.FromMinutes(24), _target.CalculatedTargetTimeHolder);
 			IPersistableScheduleData data1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-			IPersistableScheduleData data2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
 			using (_mocks.Record())
 			{
@@ -270,7 +242,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     _target.Add(data1);
-                    _target.Add(data2);
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     _target.ModifyInternal(part);
                     Assert.IsFalse(_target.CalculatedTargetTimeHolder.HasValue);
@@ -284,7 +255,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CalculatedTargetScheduleDaysOff = 7;
 			Assert.AreEqual(7, _target.CalculatedTargetScheduleDaysOff);
 			IPersistableScheduleData data1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-			IPersistableScheduleData data2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
 			using (_mocks.Record())
 			{
@@ -296,7 +266,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     _target.Add(data1);
-                    _target.Add(data2);
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     _target.ModifyInternal(part);
                     Assert.IsFalse(_target.CalculatedTargetScheduleDaysOff.HasValue);
@@ -316,10 +285,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
-                    _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
-                    Assert.AreEqual(1, part.PersonAssignmentCollection().Count);
-                    Assert.AreEqual(1, part.PersonAssignmentConflictCollection.Count);
+                    Assert.AreEqual(1, part.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.IsFalse(part.IsFullyPublished);
                 }
 			}
@@ -343,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
-                    Assert.AreEqual(1, part.PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, part.PersonAssignmentCollectionDoNotUse().Count);
                     Assert.IsTrue(part.IsFullyPublished);
                 }
             }
@@ -381,9 +348,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                     _target.TimeZone =
                         (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollection().Count);
-                    Assert.AreEqual(1, _target.ScheduledDay(dateOnly).PersonAssignmentCollection().Count);
-                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignmentCollection().Count);
+                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(1, _target.ScheduledDay(dateOnly).PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignmentCollectionDoNotUse().Count);
                 }
             }
 		}
@@ -406,9 +373,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 
 
-                    Assert.AreEqual(1, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollection().Count);
-                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly).PersonAssignmentCollection().Count);
-                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignmentCollection().Count);
+                    Assert.AreEqual(1, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly).PersonAssignmentCollectionDoNotUse().Count);
+                    Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignmentCollectionDoNotUse().Count);
                 }
             }
 		}
@@ -427,8 +394,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
                     IPersonAssignment ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-                    IPersonAssignment ass2 = createPersonAssignment(new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
-                    IPersonAssignment ass3 = createPersonAssignment(new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
                     IPersonAbsence abs1 = createPersonAbsence(new DateTimePeriod(2000, 1, 1, 2000, 1, 4));
                     IPersonAbsence abs2 = createPersonAbsence(new DateTimePeriod(2000, 1, 2, 2000, 1, 4));
                     IPersonDayOff dayOff1 = createPersonDayOff(new DateTime(2000, 1, 2));
@@ -436,8 +401,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonMeeting personMeeting = createPersonMeeting(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
                     _target.Add(ass1);
-                    _target.Add(ass2);
-                    _target.Add(ass3);
                     _target.Add(abs1);
                     _target.Add(abs2);
                     _target.Add(dayOff1);
@@ -447,12 +410,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-										Assert.AreEqual(ass1.MainShiftActivityLayers.First().Period,
-																		day1.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
-										Assert.AreEqual(ass2.MainShiftActivityLayers.First().Period,
-																		day2.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
-										Assert.AreEqual(ass3.MainShiftActivityLayers.First().Period,
-																		day2.PersonAssignmentConflictCollection[0].MainShiftActivityLayers.First().Period);
+										Assert.AreEqual(ass1.MainLayers().First().Period,
+																		day1.PersonAssignmentCollectionDoNotUse()[0].MainLayers().First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
@@ -568,16 +527,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("def", MultiplicatorType.Overtime);
                 PersonFactory.AddDefinitionSetToPerson(_person, defSet);
-                IOvertimeShift ot = new OvertimeShift();
 								IPersonAssignment ass = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-                ass.AddOvertimeShift(ot);
-                ot.LayerCollection.Add(new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("d"),
-                                                                      new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet));
+                ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
-                                _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection()[0].
-                                    OvertimeShiftCollection.Count);
+                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Count());
             }
 			_mocks.VerifyAll();
 		}
@@ -629,26 +584,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return new DateTimePeriod(start, end);
 		}
 
-		[Test]
-		public void VerifyPersonAssignmentDateTimeSortOrder()
-		{
-			fullPermission(true);
-			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                IPersonAssignment pAssOk = createPersonAssignment(createPeriod(5, 20));
-                IPersonAssignment pAssOk2 = createPersonAssignment(createPeriod(3, 4));
-                _target.Add(pAssOk);
-                _target.Add(pAssOk2);
-
-                IList<IPersonAssignment> res =
-                    _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection();
-                Assert.AreEqual(2, res.Count);
-								Assert.AreEqual(pAssOk2.MainShiftActivityLayers.First().Period, res[0].MainShiftActivityLayers.First().Period);
-								Assert.AreEqual(pAssOk.MainShiftActivityLayers.First().Period, res[1].MainShiftActivityLayers.First().Period);
-            }
-			_mocks.VerifyAll();
-		}
 
 		[Test]
 		public void VerifyProperties()
@@ -859,8 +794,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			public IList<IPersonAssignment> PersonAssignments { get { return new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>()); } }
 
-			public IList<IPersonAssignment> PersonConflictAssignments { get { return PersonAssignmentConflictInternalCollection; } }
-
 			public IList<IPersonDayOff> PersonDayOffs { get { return new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>()); } }
 
 			public IList<IPersonMeeting> PersonMeetings { get { return new List<IPersonMeeting>(ScheduleDataInternalCollection().OfType<IPersonMeeting>()); } }
@@ -882,53 +815,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                 _target.Remove(pAss);
                 Assert.AreEqual(0, _target.PersonAssignments.Count);
-            }
-		}
-
-		[Test]
-		public void CanAddAndRemoveConflictingAssignment()
-		{
-			fullPermission(true);
-			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                IPersonAssignment pAss1 = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-                IPersonAssignment pAss2 = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-
-                _target.Add(pAss1);
-                _target.Add(pAss2);
-
-                Assert.AreSame(pAss1, _target.PersonAssignments[0]);
-                Assert.AreSame(pAss2, _target.PersonConflictAssignments[0]);
-
-                _target.Remove(pAss1);
-                _target.Remove(pAss2);
-
-                Assert.AreEqual(0, _target.PersonAssignments.Count);
-                Assert.AreEqual(0, _target.PersonConflictAssignments.Count);
-            }
-		}
-
-		[Test]
-		public void ConflictShouldPopBackWhenAssignmentIsRemoved()
-		{
-			fullPermission(true);
-			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                IPersonAssignment pAss1 = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-                IPersonAssignment pAss2 = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-
-                _target.Add(pAss1);
-                _target.Add(pAss2);
-
-                Assert.AreSame(pAss1, _target.PersonAssignments[0]);
-                Assert.AreSame(pAss2, _target.PersonConflictAssignments[0]);
-
-                _target.Remove(pAss1);
-
-                Assert.AreEqual(1, _target.PersonAssignments.Count);
-                Assert.AreEqual(0, _target.PersonConflictAssignments.Count);
             }
 		}
 
@@ -1078,9 +964,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAssignment> pAsses = new List<IPersonAssignment>();
                 pAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
                 pAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
-                IList<IPersonAssignment> pConflictAsses = new List<IPersonAssignment>();
-                pConflictAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
-                pConflictAsses.Add(createPersonAssignment(new DateTimePeriod(1999, 12, 31, 2000, 1, 2)));
                 IList<IPersonAbsence> pAbses = new List<IPersonAbsence>();
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 2, 2000, 2, 3)));
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 4, 2000, 2, 5)));
@@ -1091,13 +974,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
                 _target.AddRange(pAsses);
-                _target.AddRange(pConflictAsses);
                 _target.AddRange(pAbses);
                 _target.AddRange(dayOffs);
                 _target.AddRange(personMeetings);
                 Assert.AreEqual(2, _target.PersonAbsences.Count);
                 Assert.AreEqual(2, _target.PersonAssignments.Count);
-                Assert.AreEqual(2, _target.PersonConflictAssignments.Count);
                 Assert.AreEqual(2, _target.PersonDayOffs.Count);
                 Assert.AreEqual(2, _target.PersonMeetings.Count);
             }
@@ -1116,19 +997,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IActivity activity = ActivityFactory.CreateActivity("sdf");
                 IPersonAssignment pAss = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                         _parameters.Scenario);
-                pAss.AddPersonalShift(new PersonalShift());
-                pAss.PersonalShiftCollection[0].LayerCollection.Add(new PersonalShiftActivityLayer(activity,
-                                                                                                   _parameters.Period));
-                IPersonAssignment pAss2 = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
-                                                                                         _parameters.Scenario);
-                pAss2.AddPersonalShift(new PersonalShift());
-                pAss2.PersonalShiftCollection[0].LayerCollection.Add(new PersonalShiftActivityLayer(activity,
-                                                                                                    _parameters.Period));
+                pAss.AddPersonalLayer(activity,_parameters.Period);
 
                 _target.Add(new PersonAbsence(_parameters.Person, _parameters.Scenario,
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));
                 _target.Add(pAss);
-                _target.Add(pAss2);
 
                 IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
                 dOff.Anchor = TimeSpan.Zero;
@@ -1145,9 +1018,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                 Assert.AreEqual(1, part.PersonDayOffCollection().Count);
                 Assert.AreEqual(1, part.PersistableScheduleDataCollection().OfType<IPersonAbsence>().Count());
-                Assert.AreEqual(1, part.PersonAssignmentCollection().Count);
+                Assert.AreEqual(1, part.PersonAssignmentCollectionDoNotUse().Count);
                 Assert.AreEqual(1, part.PersonMeetingCollection().Count);
-                Assert.AreEqual(1, part.PersonAssignmentConflictCollection.Count);
+                //Assert.AreEqual(1, part.PersonAssignmentConflictCollection.Count);
             }
 		}
 		#endregion

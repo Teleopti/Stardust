@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
                             e.Style.CellValue = periodType.TalkTimeIndex;
                             break;
                         case GridRowTypes.AverageTalkTime:
-                            if (SkillType.ForecastSource != ForecastSource.InboundTelephony)
+							if (SkillType.ForecastSource != ForecastSource.InboundTelephony && SkillType.ForecastSource != ForecastSource.Chat)
                                     e.Style.CellType = "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel";
                             else
                             e.Style.CellType = "PositiveTimeSpanTotalSecondsCell";
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
                             e.Style.CellValue = periodType.AfterTalkTimeIndex;
                             break;
                         case GridRowTypes.AverageAfterWorkTime:
-                            if (SkillType.ForecastSource != ForecastSource.InboundTelephony)
+							if (SkillType.ForecastSource != ForecastSource.InboundTelephony && SkillType.ForecastSource != ForecastSource.Chat)
                                 e.Style.CellType = "TimeSpanLongHourMinuteSecondOnlyPositiveCellModel";
                             else
                             e.Style.CellType = "PositiveTimeSpanTotalSecondsCell";

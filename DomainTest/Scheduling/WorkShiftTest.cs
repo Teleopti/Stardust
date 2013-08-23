@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [ExpectedException(typeof(ArgumentException))]
         public void CannotAddNothingButWorkShiftActivityLayer()
         {
-            target.LayerCollection.Add(new MainShiftActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
+					target.LayerCollection.Add(new ActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
         }
 
 
@@ -115,12 +115,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             workShift.LayerCollection.Add(layer1);
             workShift.LayerCollection.Add(layer2);
             Assert.AreEqual(workShift.Projection.ContractTime(), endTimeLate.Subtract(startTime),"Verify ContractTime in projection");
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof(WorkShiftActivityLayer)));
         }
 
         [Test]

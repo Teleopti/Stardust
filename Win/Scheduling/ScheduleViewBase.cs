@@ -472,15 +472,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// </summary>
         internal void CreateCellModels()
         {
-            // Simple singleton check
-            //if (ViewGrid.CellModels.Count != 0) return;
-
             if (!ViewGrid.CellModels.ContainsKey("TotalDayOffCell"))
                 ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0});
             if (!ViewGrid.CellModels.ContainsKey("TotalTimeCell"))
-                ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanLongHourMinutesStaticCellModel(ViewGrid.Model));
-            if (!ViewGrid.CellModels.ContainsKey("TimeCellModel"))
-                ViewGrid.CellModels.Add("TimeCellModel", new TimeCellModel(ViewGrid.Model));
+                ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionSummaryViewCellModel"))
                 ViewGrid.Model.CellModels.Add("RestrictionSummaryViewCellModel", new RestrictionSummaryViewCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionWeekHeaderViewCellModel"))
@@ -593,7 +588,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void addMultipleAssignmentMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             //check if we have multiple assignments
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             if (personAssignments.Count > 1)
             {
                 //draw a marker to indicate we have multiple assignments
@@ -603,10 +598,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.PersonalShiftCollection.Count > 0)
+                if (personAssignment.PersonalLayers().Any())
                 {
                     Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
                     Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
@@ -619,10 +614,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addOvertimeMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollection();
+            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
-                if (personAssignment.OvertimeShiftCollection.Count > 0)
+                if (personAssignment.OvertimeLayers().Any())
                 {
                     Size s = new Size(6, 6);
                     Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);
@@ -988,6 +983,28 @@ namespace Teleopti.Ccc.Win.Scheduling
             return schedulesForDelete;
         }
 
+        public IList<IScheduleDay> DeleteList<T>(ClipHandler<T> clipHandler,DeleteOption deleteOption )
+        {
+            IList<IScheduleDay> schedulesForDelete = new List<IScheduleDay>();
+
+            foreach (Clip<T> clip in clipHandler.ClipList)
+            {
+                int row = clipHandler.AnchorRow + clip.RowOffset;
+                int col = clipHandler.AnchorColumn + clip.ColOffset;
+
+                IScheduleDay scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
+
+                if (deleteOption.OvertimeAvailability)
+                    schedulesForDelete.Add(scheduleRange);
+                else if (scheduleRange.SignificantPart() != SchedulePartView.None )
+                    schedulesForDelete.Add(scheduleRange);
+                 
+
+            }
+
+            return schedulesForDelete;
+        }
+
         /// <summary>
         /// Gets a list with selected schedules for current column
         /// </summary>
@@ -1194,6 +1211,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
                 ret.Add(dateOnly);
+            }
+            return ret;
+        }
+		
+		public static ICollection<DateTime> AllSelectedUtcDates(IEnumerable<IScheduleDay> selectedSchedules)
+        {
+			ICollection<DateTime> ret = new HashSet<DateTime>();
+            foreach (IScheduleDay part in selectedSchedules)
+            {
+                var dateTime = TimeZoneHelper.ConvertToUtc(part.DateOnlyAsPeriod.DateOnly.Date, part.TimeZone);
+	            ret.Add(dateTime);
             }
             return ret;
         }

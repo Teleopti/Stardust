@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -36,6 +38,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			outlookTimePickerEnd.SelectedIndexChanged +=  OutlookTimePickerEndSelectedIndexChanged;
 			dateTimePickerAdvStart.Calendar.TodayButton.Text = UserTexts.Resources.Today;
 			dateTimePickerAdvEnd.Calendar.TodayButton.Text = UserTexts.Resources.Today;
+
+            dateTimePickerAdvStart.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            dateTimePickerAdvEnd.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+            
 			UseOffice2007SchemeBackColor = false;
 
 		}

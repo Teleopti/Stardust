@@ -51,12 +51,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             }
             return GridUtil.Max(empty, size);
         }
-
     }
 
     public class StaticDropDownCellRenderer : GridStaticCellRenderer
     {
-        // Methods
         public StaticDropDownCellRenderer(GridControlBase grid, GridCellModelBase cellModel)
             : base(grid, cellModel)
         {
@@ -68,24 +66,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return IsDroppedDown;
         }
 
-        // Properties
         public new GridDropDownContainer DropDownContainer
         {
             get
             {
                 return (GridDropDownContainer)base.DropDownContainer;
-            }
-        }
-
-        public PopupControlContainer PopupControlContainer
-        {
-            get
-            {
-                if (DropDownImp != null)
-                {
-                    return (PopupControlContainer)DropDownImp.PopupControlContainer;
-                }
-                return null;
             }
         }
     }

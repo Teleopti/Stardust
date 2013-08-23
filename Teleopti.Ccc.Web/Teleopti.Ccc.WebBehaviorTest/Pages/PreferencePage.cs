@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class PreferencePage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
+	public class PreferencePage : CalendarCellsPage, IDateRangeSelector
 	{
 		[FindBy(Id = "PreferenceDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#PreferenceDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".icon-arrow-right");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#PreferenceDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".icon-arrow-left");
 		}
 
 		[FindBy(Id = "PreferenceDatePicker")] public DatePicker DatePicker { get; set; }
@@ -31,16 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-add-extended-button")]
 		public Button ExtendedPreferenceButton { get; set; }
-
-		[FindBy(Id = "Preference-must-have-button")]
-		public Button MustHaveButton { get; set; }
-		[FindBy(Id = "Preference-must-have-delete-button")]
-		public Button MustHaveDeleteButton { get; set; }
-		[FindBy(Id = "Preference-must-have-numbers")]
-		public Span MustHaveNumbersText { get; set; }
-
-		[FindBy(Id = "Preference-delete-button")]
-		public Button DeleteButton { get; set; }
 
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
@@ -120,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div MeetingAndPersonalShiftIndicationForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-small")).EventualGet();
+			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("icon-user")).EventualGet();
 		}
 
 		public Div MeetingAndPersonalShiftTooltipForDate(DateTime date)

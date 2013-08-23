@@ -77,14 +77,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 			//bind for the grid.
 			ReadOnlyCollection<SFGridColumnBase<AdherenceInfoDto>> configGrid = ConfigureGrid();
 			_columnGridHelper = new SFGridColumnGridHelper<AdherenceInfoDto>(gridInfo, configGrid, _source);
-			_columnGridHelper.NewSourceEntityWanted += _columnGridHelper_NewSourceEntityWanted;
 			//set column widths.
 			gridInfo.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-		}
-
-		void _columnGridHelper_NewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<AdherenceInfoDto> e)
-		{
-
 		}
 
 		/// <summary>

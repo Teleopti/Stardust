@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             if (personRequestDto != null)
             {
                 new PersonRequestFormHandler(this).ShowRequestScreen(personRequestDto);
-                _scheduleView.Refresh(true);
+                _scheduleView.Refresh();
             }
         }
       
@@ -305,22 +305,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             AbsenceRequestView absenceRequestView = new AbsenceRequestView(period);
             absenceRequestView.StartPosition = FormStartPosition.CenterScreen;
             absenceRequestView.ShowDialog(this);
-            _scheduleView.Refresh(true);
+            _scheduleView.Refresh();
         }
 
         private void GetAllDayDateTimes(out DateTime startDateTime, out DateTime endDateTime)
         {
             startDateTime = scheduleControlMain.ClickedDate.Date;
             endDateTime = scheduleControlMain.ClickedDate.Date.AddDays(1).AddMinutes(-1);
-        }
-
-        public void ShowAbsenceRequestScreen(DateTime startDateTime, DateTime endDateTime, IWin32Window parentForm)
-        {
-            DateTimePeriodDto dateTimePeriodDto = HelperFunctions.CreateDateTimePeriodDto(startDateTime, endDateTime);
-            AbsenceRequestView absenceRequestView = new AbsenceRequestView(dateTimePeriodDto);
-            absenceRequestView.StartPosition = FormStartPosition.CenterScreen;
-            absenceRequestView.ShowDialog(parentForm);
-            _scheduleView.Refresh(true);
         }
 
         /// <summary>
@@ -375,7 +366,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             TextRequestView requestScreen = new TextRequestView(period, StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson, SdkServiceHelper.SchedulingService);
             requestScreen.StartPosition = FormStartPosition.CenterScreen;
             requestScreen.ShowDialog(this);
-            _scheduleView.Refresh(true);
+            _scheduleView.Refresh();
         }
 
         /// <summary>

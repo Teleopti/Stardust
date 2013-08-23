@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private LayerViewModel _target;
 		private MockRepository _mocks;
-		private ILayer<IActivity> _layerWithPayload;
+		private IPersonalShiftLayer _layerWithPayload;
 		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;
@@ -41,13 +43,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			_layerWithPayload = new PersonalShiftActivityLayer(_payload, _period);
+			_layerWithPayload = new PersonalShiftLayer(_payload, _period);
 			Expect.Call(_scheduleDay.Person).Return(person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(null, _layerWithPayload, null, null);
+			_target = new PersonalShiftLayerViewModel(null, _layerWithPayload, null, null, null);
 
 			_testRunner = new CrossThreadTestRunner();
 		}
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
-			Assert.IsFalse(_target.IsChanged);
+			_target.IsChanged.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -245,5 +247,23 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void ShouldMoveUp()
+		{
+			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+			personAssignment.AddPersonalLayer(activity, period);
+			personAssignment.AddPersonalLayer(activity, period2);
+
+
+			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalLayers().Last(), personAssignment, null, new MoveLayerVertical());
+			_target.MoveUp();
+
+			personAssignment.PersonalLayers().First().Period.Should().Be.EqualTo(period2);
+					}
     }
 }

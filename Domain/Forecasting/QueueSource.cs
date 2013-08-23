@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -18,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private int _queueAggId;
         private string _logObjectName = string.Empty;
         private int _dataSourceId;
-        private IList<ILayer<IStat>> _layerCollection = new List<ILayer<IStat>>();
         private int _queueMartId;
         private bool _isDeleted;
 
@@ -90,15 +86,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Gets the layer collection.
-        /// </summary>
-        /// <value>The layer collection.</value>
-        public virtual ILayerCollection<IStat> LayerCollection
-        {
-            get { return (new LayerCollection<IStat>(this, _layerCollection)); }
-        }
-
-        /// <summary>
         /// Gets the log object name.
         /// </summary>
         /// <value>The log object name.</value>
@@ -162,20 +149,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get { return _isDeleted; }
         }
-
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public virtual void OnAdd(ILayer<IStat> layer)
-        {
-
-        }
-
 
         public virtual void SetDeleted()
         {

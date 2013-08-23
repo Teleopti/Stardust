@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					                                               : null))
 				.ForMember(s => s.PersonAssignment,
 				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
+
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
 				.ForMember(d => d.StyleClassName, o => o.ResolveUsing(s =>
 					{
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							if (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
 								return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
 							if (s.SignificantPartForDisplay() == SchedulePartView.MainShift)
-								return s.AssignmentHighZOrder().ShiftCategory.DisplayColor.ToHtml();
+								return s.PersonAssignment().ShiftCategory.DisplayColor.ToHtml();
 							if (s.SignificantPartForDisplay() == SchedulePartView.DayOff)
 								return null;
 						}
@@ -89,16 +90,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.PersonalShifts, o => o.ResolveUsing(s =>
 					{
-						var assignments = s.PersonAssignmentCollection();
-						if (assignments.Count > 0)
+						var assignment = s.PersonAssignment();
+						if (assignment != null)
 						{
-							return (from personAssignment in assignments
-							        from personalShift in personAssignment.PersonalShiftCollection
-							        from layer in personalShift.LayerCollection
+							return (from layer in assignment.PersonalLayers()
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =
-										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+														layer.Payload.ConfidentialDescription(assignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
 									        TimeSpan =
 												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();
@@ -116,9 +115,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.AssignmentHighZOrder().ShiftCategory.Description.Name))
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PersonAssignment().ShiftCategory.Description.Name))
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
-				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.AssignmentHighZOrder().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
+				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.PersonAssignment().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Projection(s).ContractTime().TotalMinutes));
 		}
 	}

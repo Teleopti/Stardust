@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class RequestsPage : PortalPage, IEditRequestPage, IOkButton, ICancelButton
 	{
-		private Constraint RequestConstraint = Find.BySelector(".request-item");
+		private Constraint RequestConstraint = Find.BySelector(".request-body");
 		public DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
@@ -25,7 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button RequestDeleteButtonById(Guid Id)
 		{
 			var request = RequestById(Id);
-			return request.Button(QuicklyFind.ByClass("request-delete-button"));
+			return request.Button(QuicklyFind.ByClass("close"));
+		}
+
+		public Button RequestsDeleteButton()
+		{
+			return Document.Button(QuicklyFind.ByClass("close"));
 		}
 
 		public Span AddRequestDropDown
@@ -36,12 +41,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-addTextRequest-menuItem")]
 		public Link AddTextRequestMenuItem { get; set; }
 
-		[FindBy(Id = "Requests-addAbsenceRequest-menuItem")]
-		public Link AddAbsenceRequestMenuItem { get; set; }
-
-		[FindBy(Id = "Requests-addShiftTradeRequest-menuItem")]
-		public Link AddShiftTradeRequestMenuItem { get; set; }
-
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
@@ -50,9 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
-
-		[FindBy(Id = "Absence-type-element")]
-		public Div AbsenceTypesElement { get; set; }
 
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
@@ -71,9 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Deny-shift-trade")]
 		public Button DenyShiftTradeButton { get; set; }
-		
-		[FindBy(Id = "I-am-a-shifttrade")]
-		public Div IamAShiftTrade { get; set; }
 
 		[FindBy(Class = "request-detail-title")]
 		public Div RequestDetailTitle { get; set; }
@@ -167,12 +160,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-shift-trade-date-to")]
 		public Element ShiftTradeDateTo { get; set; }
 
-		[FindBy(Id = "Request-shift-trade-detail-subject")]
-		public Div ShiftTradeRequestDetailSubject { get; set; }
-
-		[FindBy(Id = "Request-shift-trade-detail-message")]
-		public Div  ShiftTradeRequestDetailMessage { get; set; }
-
 		[FindBy(Id = "Request-shift-trade-detail-info")]
 		public Div  ShiftTradeRequestDetailInfo { get; set; }
 
@@ -203,5 +190,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-timeline"));
 			}
 		}
+	
 	}
 }

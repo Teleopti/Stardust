@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		 public IEditableShift CreateEditorShift(IPersonAssignment personassignment)
 		 {
-			 if (!personassignment.MainShiftActivityLayers.Any())
+			 if (!personassignment.MainLayers().Any())
 				 return null;
 
 			 var retShift = new EditableShift(personassignment.ShiftCategory);
-			 foreach (var mainShiftActivityLayer in personassignment.MainShiftActivityLayers)
+			 foreach (var mainShiftActivityLayer in personassignment.MainLayers())
 			 {
 				 retShift.LayerCollection.Add(new EditorActivityLayer(mainShiftActivityLayer.Payload, mainShiftActivityLayer.Period));
 			 }
@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InParameter.NotNull("personassignment", personassignment);
 			InParameter.NotNull("editableShift", editableShift);
 
-			var layerList = new List<IMainShiftActivityLayerNew>();
+			var layerList = new List<IMainShiftLayer>();
 			foreach (var layer in editableShift.LayerCollection)
 			{
-				layerList.Add(new MainShiftActivityLayerNew(layer.Payload, layer.Period));
+				layerList.Add(new MainShiftLayer(layer.Payload, layer.Period));
 			}
 			personassignment.SetMainShiftLayers(layerList, editableShift.ShiftCategory);
 		}

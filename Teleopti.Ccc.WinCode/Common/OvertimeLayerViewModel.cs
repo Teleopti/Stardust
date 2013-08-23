@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -7,20 +8,44 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IOvertimeShiftActivityLayer _layer;
-        public OvertimeLayerViewModel(IVisualLayer layer)
+	    private readonly IOvertimeShiftLayer _layer;
+	    private readonly IPersonAssignment _assignment;
+	    private readonly IMoveLayerVertical _moveLayerVertical;
+
+	    public OvertimeLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftActivityLayer layer, IEventAggregator eventAggregator)
-            : base(observer, layer, null, eventAggregator)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
+            : base(observer, layer, assignment, eventAggregator, moveLayerVertical)
         {
 	        _layer = layer;
+	        _assignment = assignment;
+	        _moveLayerVertical = moveLayerVertical;
         }
 
-        public override bool Opaque
+	    public override bool CanMoveUp
+	    {
+				get { return _moveLayerVertical != null && _layer.OrderIndex > 0; }
+	    }
+
+	    public override bool CanMoveDown
+	    {
+		    get
+		    {
+			    return _moveLayerVertical != null && !isLayerLast();
+		    }
+	    }
+
+		private bool isLayerLast()
+		{
+			var overtimeLayers = _assignment.OvertimeLayers().ToList();
+			return overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
+		}
+
+	    public override bool Opaque
         {
             get{ return true; }
         }

@@ -20,17 +20,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 	public class PortalViewModelFactoryTeamScheduleTest
 	{
 
-		private static SectionNavigationItem RelevantTab(PortalViewModel result)
+		private static NavigationItem RelevantTab(PortalViewModel result)
 		{
 			return (from i in result.NavigationItems where i.Controller == "TeamSchedule" select i)
 					.SingleOrDefault();
-		}
-
-		private static T ToolBarItemOfType<T>(PortalViewModel result) where T : ToolBarItemBase
-		{
-			return (from i in RelevantTab(result).ToolBarItems where i is T select i)
-				.Cast<T>()
-				.SingleOrDefault();
 		}
 
 		[Test]
@@ -39,22 +32,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.TeamSchedule))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var result = RelevantTab(target.CreatePortalViewModel());
 
 			result.Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldHaveDatePicker()
-		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-
-			var result = ToolBarItemOfType<ToolBarDatePicker>(target.CreatePortalViewModel());
-
-			result.Should().Not.Be.Null();
-		}
-
 	}
 }

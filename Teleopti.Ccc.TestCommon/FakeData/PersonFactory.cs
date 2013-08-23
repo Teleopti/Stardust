@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -77,6 +78,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var ret = CreatePerson();
 			ret.SetId(Guid.NewGuid());
+			return ret;
+		}
+
+		public static IPerson CreatePersonWithSchedulePublishedToDate(DateOnly dateOnly)
+		{
+			var ret = CreatePerson();
+			ret.SetId(Guid.NewGuid());
+			ret.WorkflowControlSet = new WorkflowControlSet
+				{
+					SchedulePublishedToDate = dateOnly
+				};
 			return ret;
 		}
 
@@ -222,13 +234,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 												team);
 			person.AddPersonPeriod(per);
 		}
-
-		public static IPerson PersonWithId()
-		{
-			var person = new Person();
-			person.SetId(Guid.NewGuid());
-			return person;
-		}
-
     }
 }

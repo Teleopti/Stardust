@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class WorkShift : IWorkShift
+	public class WorkShift : IWorkShift
     {
 
         private readonly IShiftCategory _shiftCategory;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(null);
-			proj.Add(this);
+			proj.Add(LayerCollection, new VisualLayerFactory());
 			return proj;
 		}
 
@@ -47,11 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual object Clone()
 		{
-			var retObj = EntityClone();
-			return retObj;
+			return EntityClone();
 		}
 
-		public virtual IShift NoneEntityClone()
+		public virtual IWorkShift NoneEntityClone()
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return retObj;
 		}
 
-		public virtual IShift EntityClone()
+		public virtual IWorkShift EntityClone()
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
@@ -73,10 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return retObj;
 		}
 
-		public virtual IVisualLayerFactory CreateVisualLayerFactory()
-		{
-			return new VisualLayerFactory();
-		}
         public static DateTime BaseDate
         {
             get { return DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc); }

@@ -32,6 +32,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var teamInfoForBlockPeriod = _teamInfoFactory.CreateTeamInfo(teamInfo.GroupPerson.GroupMembers[0], blockInfo.BlockPeriod, allPersonMatrixList);
+			if (teamInfoForBlockPeriod == null)
+			{
+				return null;
+			}
 
 			return new TeamBlockInfo(teamInfoForBlockPeriod, blockInfo);
 		}

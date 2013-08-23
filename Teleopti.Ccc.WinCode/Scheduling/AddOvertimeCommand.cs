@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (!VerifySelectedSchedule(ScheduleParts)) return;
             if (ScheduleParts.Count > 0)
             {
-                personAssignment = ScheduleParts[0].PersonAssignmentCollection().FirstOrDefault();
+                personAssignment = ScheduleParts[0].PersonAssignment();
             } 
             if (personAssignment != null)
             {
@@ -104,11 +104,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (IScheduleDay part in ScheduleParts)
             {
-                   
-                IOvertimeShiftActivityLayer overtimeShiftActivityLayer = new OvertimeShiftActivityLayer(activity, period,
-                                                                                                        definitionSet);
-
-                part.CreateAndAddOvertime(overtimeShiftActivityLayer);
+								part.CreateAndAddOvertime(activity, period, definitionSet);
             }
 
 

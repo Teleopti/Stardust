@@ -35,14 +35,6 @@ namespace Teleopti.Ccc.Win.Permissions
             get { return _copyPasteStack; }
         }
 
-        public ICollection<PersonAdapter> PersonAdapterCollection
-        {
-            get
-            {
-                return _personAdapterCollection;
-            }
-        }
-
         public PermissionsExplorerStateHolder()
         {
             _copyPasteStack = new FixedCapacityStack<ApplicationRoleAdapter>(1024);

@@ -65,10 +65,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             _containedEntity.WorkTimeLimitation = _workTimePeriod;
             _containedEntity.NotAvailable = !_available;
 
-            //int day = ScheduleRestrictionBaseView.GetDayOfWeek(_dayCount);
-            //IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
-            //DayOfWeek dayOfWeek = daysOfWeek[day];
-
             int weekNumber = ScheduleRestrictionBaseView.GetWeek(_dayCount);
 
             _targetView = new AvailabilityRestrictionView(_containedEntity, weekNumber, _dayCount);
@@ -80,15 +76,11 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             Assert.IsNotNull(_targetView);
 
             Assert.AreEqual(_targetView.IsAvailable, _available);
-            Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTimeString);
-            Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTimeString);
-            Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTimeString);
-            Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTimeString);
+            Assert.AreEqual(_targetView.EarlyStartTime, _startTimeLimit.StartTime);
+            Assert.AreEqual(_targetView.LateEndTime, _endTimeLimit.EndTime);
+            Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTime);
+            Assert.AreEqual(_targetView.MaximumWorkTime, _workTimePeriod.EndTime);
             Assert.AreEqual(_targetView.Week, ScheduleRestrictionBaseView.GetWeek(_dayCount));
-
-            //int day = ScheduleRestrictionBaseView.GetDayOfWeek(_dayCount);
-            //IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
-            //DayOfWeek dayOfWeek = daysOfWeek[day];
 
             string dayName = UserTexts.Resources.Day + " " + _dayCount.ToString(CultureInfo.CurrentUICulture);
             Assert.AreEqual(_targetView.Day, dayName);
@@ -101,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 
             Assert.AreEqual(_targetView.IsAvailable, _available);
 
-            bool notAvailable = false;
+            const bool notAvailable = false;
             _targetView.IsAvailable = notAvailable;
 
             Assert.AreEqual(_targetView.IsAvailable, notAvailable);
@@ -117,10 +109,10 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
     	{
     		var availabilityRestrictionView = new AvailabilityRestrictionView(_containedEntity, 4, 1)
     		                                  	{
-    		                                  		EarlyStartTime = "08:00",
-    		                                  		LateEndTime = "21:00",
-    		                                  		MinimumWorkTime = "04:00",
-    		                                  		MaximumWorkTime = "07:00",
+    		                                  		EarlyStartTime = TimeSpan.FromHours(8),
+    		                                  		LateEndTime = TimeSpan.FromHours(21),
+    		                                  		MinimumWorkTime = TimeSpan.FromHours(4),
+    		                                  		MaximumWorkTime = TimeSpan.FromHours(7),
     		                                  		IsAvailable = true
     		                                  	};
 

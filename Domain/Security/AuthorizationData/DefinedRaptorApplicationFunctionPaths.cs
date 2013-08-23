@@ -45,6 +45,7 @@
 		public const string ViewRestrictedScenario = "Raptor/Global/ViewRestrictedScenario";
 		public const string ModifyRestrictedScenario = "Raptor/Global/ModifyRestrictedScenario";
 		public const string ViewActiveAgents = "Raptor/Global/ViewActiveAgents";
+		public const string OvertimeAvailability = "Raptor/Global/OvertimeAvailability";
 
         // PersonAdmin
         public const string ModifyPersonNameAndPassword = "Raptor/PersonAdmin/ModifyPersonNameAndPassword";
@@ -111,6 +112,7 @@
 		public const string AgentScheduleMessenger = "Raptor/MyTimeWeb/AgentScheduleMessenger";
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";
+		public const string ShareCalendar = "Raptor/MyTimeWeb/ShareCalendar";
 
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";

@@ -20,4 +20,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return _mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 		}
 	}
-}
+}	

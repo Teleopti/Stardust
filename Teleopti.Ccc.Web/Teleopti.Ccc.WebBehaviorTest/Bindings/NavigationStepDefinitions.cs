@@ -1,20 +1,22 @@
 using System;
 using System.Linq;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
 	[Binding]
 	public class NavigationStepDefinitions
 	{
+		[When(@"Someone is viewing sharing link")]
+		public void WhenSomeoneIsViewingSharingLink()
+		{
+			UserFactory.User().MakeUser();
+			Navigation.GotoRaw(UserFactory.User().UserData<CalendarLinkConfigurable>().SharingUrl);
+		}
 
 		[Given(@"I am viewing an application page")]
 		[When(@"I am viewing an application page")]
@@ -177,8 +179,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 
 
-
-
 		// navigation to signin and root
 		// does not logon, but creates user
 
@@ -217,5 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().MakeUser();
 			Navigation.GotoAnywhere();
 		}
+
+
 	}
 }

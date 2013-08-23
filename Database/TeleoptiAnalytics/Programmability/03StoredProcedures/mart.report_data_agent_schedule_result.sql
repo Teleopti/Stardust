@@ -2,17 +2,9 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[repo
 DROP PROCEDURE [mart].[report_data_agent_schedule_result]
 GO
 
-/*
-exec mart.report_data_agent_schedule_result @date_from='2013-05-01 00:00:00',@date_to='2013-05-31 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',
-@agent_set=N'9f0311d3-b4ca-4481-a344-a00b00a2d494,AF4C77D7-7782-4E8D-A517-A00B009EC05B'
-,@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
-
-2277 - Abdulaziz-AlLagman - AF4C77D7-7782-4E8D-A517-A00B009EC05B
-*/
---exec [mart].[report_data_agent_schedule_result] @date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=12,@language_id=1053
---exec [mart].[report_data_agent_schedule_result] @date_from='2009-02-03 00:00:00',@date_to='2009-02-03 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1053,@business_unit_code='5BC41544-6BF8-444E-A34D-A01A0128A204'
---exec [mart].[mart.report_data_team_metrics_new] @date_from='2010-12-13 00:00:00',@date_to='2010-12-13 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'-2',@team_set=N'4',@agent_set=N'160',@adherence_id=N'2',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=12,@language_id=1053
---exec mart.report_data_agent_schedule_adherence @date_from='2010-12-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_id=NULL,@site_id=N'-2',@team_set=N'-2',@agent_person_id=N'160',@adherence_id=N'2',@sort_by=N'1',@time_zone_id=N'1',@person_code='7008F537-6EE8-42AC-B371-9D34009CC423',@report_id=13,@language_id=1053
+--exec mart.report_data_agent_schedule_result @date_from='2013-05-12 00:00:00',@date_to='2013-05-17 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',@agent_set=N'9f0311d3-b4ca-4481-a344-a00b00a2d494,af4c77d7-7782-4e8d-a517-a00b009ec05b',@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
+--exec mart.report_data_agent_schedule_result @date_from='2013-05-12 00:00:00',@date_to='2013-05-17 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',@agent_set=N'af4c77d7-7782-4e8d-a517-a00b009ec05b',@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
+--exec mart.report_data_agent_schedule_result @date_from='2013-05-12 00:00:00',@date_to='2013-05-17 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',@agent_set=N'9f0311d3-b4ca-4481-a344-a00b00a2d494,af4c77d7-7782-4e8d-a517-a00b009ec05b,4d2d554d-903a-4493-ae65-a00b00a21358,a6bcb63c-2d8f-47c7-872c-a00b00a2d494',@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
 -- =============================================
 -- Author:		KJ
 -- Create date: 2008-06-03
@@ -39,6 +31,8 @@ exec mart.report_data_agent_schedule_result @date_from='2013-05-01 00:00:00',@da
 --				2012-01-23 Change parameters @group_page_group_id and @team_id to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2013-04-04 #22960 - replaced mart.DimPersonLocalized(@date_from, @date_to)
+--				2013-07-10 backed out of #23621
+--				2013-07-10 Fix #24119, same as #23621
 -- Description:	Agent Metrics Report
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_agent_schedule_result] 
@@ -64,10 +58,10 @@ SET NOCOUNT ON
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
-	acd_login_id int,
-	person_code uniqueidentifier
+	person_code uniqueidentifier,
+	acd_login_id int
 	)
-	
+
 CREATE TABLE  #rights_agents
 	(
 	right_id int
@@ -169,13 +163,17 @@ ELSE
 --a) allowed to see = #rights_agents
 --b) selected		= #agents
 INSERT INTO #person_acd_subSP
-SELECT b.id, acd.acd_login_id, person_code
+SELECT
+	person_id	= b.id,
+	person_code	= p.person_code,
+	acd_login_id= acd.acd_login_id
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
+INNER JOIN mart.dim_person p
+	on p.person_id = b.id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = b.id
-LEFT JOIN [mart].[dim_person] p ON p.person_id = acd.person_id
 
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
@@ -189,8 +187,6 @@ EXEC [mart].[report_data_schedule_result_subSP]
 	@report_id		= @report_id,
 	@scenario_id	= @scenario_id,
 	@language_id	= @language_id
-
---select * from #bridge_time_zone btz order by date_id,interval_id
 
 --get person info
 UPDATE #pre_result_subSP
@@ -257,3 +253,4 @@ INNER JOIN mart.dim_person p
 	ON r.person_id = p.person_id
 GROUP BY r.date_date, p.person_code, p.person_name
 ORDER BY p.person_name,r.date_date
+go

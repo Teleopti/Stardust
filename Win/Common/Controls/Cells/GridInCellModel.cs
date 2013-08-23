@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -8,9 +7,6 @@ using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
-    /// <summary>
-    /// Summary description for GridInCell.
-    /// </summary>
     [Serializable]
     public class GridInCellModel : GridGenericControlCellModel
     {
@@ -29,8 +25,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             return new GridInCellRenderer(control, this);
         }
-
-
     }
 
     public class GridInCellRenderer : GridGenericControlCellRenderer
@@ -43,13 +37,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             SupportsFocusControl = true;
         }
 
-        protected override void OnDraw(System.Drawing.Graphics g, System.Drawing.Rectangle clientRectangle, int rowIndex, int colIndex, Syncfusion.Windows.Forms.Grid.GridStyleInfo style)
+        protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
         {
             if (ShouldDrawFocused(rowIndex, colIndex))
             {
-                if (style.Control is CellEmbeddedGrid)
+                var embeddedGrid = style.Control as CellEmbeddedGrid;
+                if (embeddedGrid != null)
                 {
-                    activeGrid = (CellEmbeddedGrid)style.Control;
+                    activeGrid = embeddedGrid;
                     AlignColumn(activeGrid);
                 }
                 base.OnDraw(g, clientRectangle, rowIndex, colIndex, style);
@@ -57,9 +52,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             else
             {
                 // Draw a static grid
-                if (style.Control is CellEmbeddedGrid)
+                var embeddedGrid = style.Control as CellEmbeddedGrid;
+                if (embeddedGrid != null)
                 {
-                    var grid = (CellEmbeddedGrid)style.Control;
+                    var grid = embeddedGrid;
                     AlignColumn(grid);
                     grid.DrawGrid(g, clientRectangle, true);
                 }
@@ -95,85 +91,19 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
     public class CellEmbeddedGrid : GridControl
     {
-        public CellEmbeddedGrid()//GridControl parent
+        public CellEmbeddedGrid()
         {
-            this.RowHeights[0] = this.RowHeights[1];
-            this.DefaultColWidth = 110;
-
-            //this.FloatCellsMode = GridFloatCellsMode.OnDemandCalculation;
-            this.VScrollBehavior = GridScrollbarMode.Disabled;
-            this.HScrollBehavior = GridScrollbarMode.Disabled;
-            //this.BorderStyle = BorderStyle.None;
-            this.Location = new Point(-10000, -10000);
-            //this.ActivateCurrentCellBehavior = GridCellActivateAction.PositionCaret;
-            //this.ShowCurrentCellBorderBehavior = GridShowCurrentCellBorder.GrayWhenLostFocus;
-            //this.VerticalThumbTrack = true;
-            //this.HorizontalThumbTrack = true;
-            //this.FillSplitterPane = false;
-            //this.Properties.GridLineColor = System.Drawing.Color.Silver;
-            //this.DefaultGridBorderStyle = GridBorderStyle.Solid;
+            RowHeights[0] = RowHeights[1];
+            DefaultColWidth = 110;
+            VScrollBehavior = GridScrollbarMode.Disabled;
+            HScrollBehavior = GridScrollbarMode.Disabled;
+            Location = new Point(-10000, -10000);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             TraceUtil.TraceCurrentMethodInfo(e.KeyCode);
             base.OnKeyDown(e);
-
-            //TODO: Need to refactory
-
-            //try
-            //{
-            //    base.OnKeyDown(e);
-            //}
-            //catch (FormatException)
-            //{
-            //}
-
-            //int rowIndex = base.CurrentCell.RowIndex;
-            //int colIndex = base.CurrentCell.ColIndex;
-
-            //base.CurrentCell.Deactivate(false);
-
-
-            //switch (e.KeyCode)
-            //{
-            //    case Keys.Right:
-            //        {
-            //            base.CurrentCell.MoveTo(rowIndex, colIndex + 1);
-            //            break;
-            //        }
-            //    case Keys.Left:
-            //        {
-            //            base.CurrentCell.MoveTo(rowIndex, colIndex - 1);
-            //            break;
-            //        }
-            //    case Keys.Down:
-            //        {
-            //            base.CurrentCell.MoveTo(rowIndex + 1, colIndex);
-            //            break;
-            //        }
-            //    case Keys.Up:
-            //        {
-            //            base.CurrentCell.MoveTo(rowIndex - 1, colIndex);
-            //            break;
-            //        }
-            //    case Keys.Tab:
-            //        {
-            //            if (colIndex < base.ColCount)
-            //            {
-            //                base.CurrentCell.MoveTo(rowIndex, colIndex + 1);
-            //            }
-
-            //            else if (rowIndex < base.RowCount)
-            //            {
-            //                base.CurrentCell.MoveTo(rowIndex + 1, 2);
-            //            }
-            //            break;
-            //        }
-            //}
-
-
-            //base.Invalidate();
         }
 
         internal bool InitiateProcessKeyEventArgs(ref Message m)

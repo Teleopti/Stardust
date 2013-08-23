@@ -83,6 +83,12 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The full weeks period dictionary.</value>
         IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary { get; }
 
+		/// <summary>
+		/// Unlock a period of days.
+		/// </summary>
+		/// <param name="period">The period.</param>
+		void UnlockPeriod(DateOnlyPeriod period);
+
         /// <summary>
         /// Locks the given dateonly period.
         /// </summary>
@@ -107,23 +113,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The active schedule range.</value>
         IScheduleRange ActiveScheduleRange { get; }
-
-        ///// <summary>
-        ///// Add locked date
-        ///// </summary>
-        ///// <param name="dateOnly"></param>
-        //void LockUserDate(DateOnly dateOnly);
-
-        ///// <summary>
-        ///// Get user locked dates
-        ///// </summary>
-        //IList<DateOnly> UserLockedDates { get; }
-
-    	/// <summary>
-    	/// 
-    	/// </summary>
-		[Obsolete("Do not use this as it can return any period, not just the period in this matrix")]
-    	DateOnlyPeriod SelectedPeriod { get; set; }
     	
     }
 }

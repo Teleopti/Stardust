@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public interface IRequestFactory
     {
         IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario);
-        IPersonAccountProjectionService GetPersonAccountProjectionService(IAccount account, IScheduleRange range);
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker();
     }
