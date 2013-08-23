@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Teleopti.Messaging.Composites;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Messaging.SignalR;
 using log4net.Appender;
 using log4net.Config;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
-									new SignalBroker(MessageFilterManager.Instance.FilterDictionary), null);
+									new SignalBroker(MessageFilterManager.Instance), null);
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);

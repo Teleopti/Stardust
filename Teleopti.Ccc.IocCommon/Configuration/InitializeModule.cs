@@ -1,11 +1,11 @@
 using Autofac;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
-			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance))
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()
 				.As<IMessageBrokerListener>()

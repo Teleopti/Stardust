@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Messaging.Exceptions
+namespace Teleopti.Interfaces.Infrastructure
 {
     [Serializable]
     public class DomainObjectNotInFilterException : MessageBrokerException
