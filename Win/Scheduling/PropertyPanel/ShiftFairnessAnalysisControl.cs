@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftFairnessAnalysisControl : BaseUserControl
     {
         private System.Windows.Forms.TableLayoutPanel shiftFairnessTableLayoutPanel;
+	    private IDistributionInformationExtractor _model;
 
-        public ShiftFairnessAnalysisControl()
+        public ShiftFairnessAnalysisControl(IDistributionInformationExtractor distributionInformationExtractor)
         {
             InitializeComponent();
+	        _model = distributionInformationExtractor;
             var shiftFairnessGrid = new ShiftFairnessGrid();
             var shiftPerAgentGrid = new ShiftPerAgentGrid();
             shiftFairnessGrid.Dock = DockStyle.Fill;

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         private readonly IList<ShiftCategoryStructure> _mappedScheduleDays;
         private IList<ShiftCategoryPerAgent> _shiftCategoryPerAgentList;
 
-        public DistributionInformationExtractor(List<IScheduleDay> scheduleDays)
+        public DistributionInformationExtractor(IList<IScheduleDay> scheduleDays)
         {
             _mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(scheduleDays);
             _shiftCategoryAttributedExtractor = new ShiftCategoryAttributesExtractor();

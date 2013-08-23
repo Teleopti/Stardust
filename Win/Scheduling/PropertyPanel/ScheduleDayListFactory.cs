@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public interface IScheduleDayListFactory
     {
-        IList<IScheduleDay> CreatScheduleDayList(DateOnlyPeriod selectedPeriod);
+        IList<IScheduleDay> CreatScheduleDayList();
     }
 
     public class ScheduleDayListFactory : IScheduleDayListFactory
@@ -18,11 +18,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _schedulerStateHolder = schedulerStateHolder;
         }
 
-        public IList<IScheduleDay> CreatScheduleDayList(DateOnlyPeriod selectedPeriod)
+        public IList<IScheduleDay> CreatScheduleDayList()
         {
             var allSchedules = new List<IScheduleDay>();
             var period = _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-            period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
             var persons = _schedulerStateHolder.FilteredPersonDictionary;
 
             foreach (var day in period.DayCollection())

@@ -22,6 +22,7 @@ using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Grouping;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms;
@@ -4787,16 +4788,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
 			_agentInfoControl.Dock = DockStyle.Fill;
 			agentInfoTab.Controls.Add(_agentInfoControl);
-		    
+
+			var scheduleDayListFactory = new ScheduleDayListFactory(_schedulerState);
+			var allSchedules = scheduleDayListFactory.CreatScheduleDayList();
+			var shiftCategoryDistributionExtractor = new DistributionInformationExtractor(allSchedules);
+
             var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
-            var shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl();
+            var shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl(shiftCategoryDistributionExtractor);
             shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
             shiftCategoryTab.Controls.Add(shiftDistributionAnalysisControl);
 			
             var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
             _tabInfoPanels.TabPages.Add(shiftFairnessTab);
-            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl();
+            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(shiftCategoryDistributionExtractor);
             shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
             shiftFairnessTab.Controls.Add(shiftFairnessAnalysisControl);
 		}

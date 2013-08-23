@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftDistributionAnalysisControl : BaseUserControl
     {
         private TableLayoutPanel shiftDistributiontableLayoutPanel;
+	    private IDistributionInformationExtractor _model;
         
-        public ShiftDistributionAnalysisControl()
+        public ShiftDistributionAnalysisControl(IDistributionInformationExtractor distributionInformationExtractor)
         {
             InitializeComponent();
+	        _model = distributionInformationExtractor;
             var shiftDistributionGrid = new ShiftDistributionGrid();
             shiftDistributionGrid.Dock = DockStyle.Fill;
             shiftDistributiontableLayoutPanel.Controls.Add(shiftDistributionGrid,0,0);
