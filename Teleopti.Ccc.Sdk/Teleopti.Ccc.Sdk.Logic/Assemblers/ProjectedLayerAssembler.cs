@@ -21,12 +21,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override ProjectedLayerDto DomainEntityToDto(IVisualLayer entity)
         {
+	        var layerForPeriod = _visualLayerCollection.FilterLayers(entity.Period);
             var layer = new ProjectedLayerDto
                             {
                                 Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period),
                                 DisplayColor = new ColorDto(entity.DisplayColor()),
                                 Description = entity.DisplayDescription().Name,
-                                ContractTime = _visualLayerCollection.FilterLayers(entity.Period).ContractTime(),
+                                ContractTime = layerForPeriod.ContractTime(),
+								WorkTime = layerForPeriod.WorkTime(),
+								PaidTime = layerForPeriod.PaidTime(),
                                 IsAbsence = false,
                                 PayloadId = entity.Payload.Id.GetValueOrDefault()
                             };

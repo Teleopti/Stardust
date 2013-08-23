@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 {
@@ -56,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				fetchSession(uow).CreateQuery(@"delete from Revision").ExecuteUpdate();
+				uow.FetchSession().CreateQuery(@"delete from Revision").ExecuteUpdate();
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			//cleanup
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var session = fetchSession(uow);
+				var session = uow.FetchSession();
 				foreach (var scheduleData in session.CreateCriteria(typeof(IPersistableScheduleData)).List())
 				{
 					session.Delete(scheduleData);
@@ -102,12 +100,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				uow.PersistAll();
 			}
 			turnOffAudit();
-		}
-
-		private static ISession fetchSession(IUnitOfWork uow)
-		{
-			return (ISession)typeof(NHibernateUnitOfWork).GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic)
-															.GetValue(uow, null);
 		}
 	}
 }

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay1;
-    	private TimeZoneInfo _timeZone;
 	    private IEditableShiftMapper _editableShiftMapper;
 
     	[SetUp]
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-        	_timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
         }
 
         [Test]
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-            	Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
 				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -91,7 +89,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
 	            Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -124,7 +121,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
 				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -156,7 +152,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
 				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -190,7 +185,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
 				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);

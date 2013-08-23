@@ -113,6 +113,21 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// <remarks>This value is set with 0001-01-01 00:00 as base line date. 9 hours of contract time is returned as 0001-01-01 09:00.</remarks>
         [DataMember]
         public DateTime ContractTime { get; set; }
+		
+		/// <summary>
+		/// Gets or sets the work time.
+		/// </summary>
+		/// <remarks>This value is set with 0001-01-01 00:00 as base line date. 9 hours of contract time is returned as 0001-01-01 09:00.</remarks>
+		[DataMember]
+		public DateTime WorkTime { get; set; }
+		
+		/// <summary>
+		/// Gets or sets the paid time.
+		/// </summary>
+		/// <remarks>This value is set with 0001-01-01 00:00 as base line date. 9 hours of contract time is returned as 0001-01-01 09:00.</remarks>
+		[DataMember]
+		public DateTime PaidTime { get; set; }
+
 
         /// <summary>
         /// Gets or sets the period for the current day.
