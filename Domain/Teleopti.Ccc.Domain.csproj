@@ -1429,9 +1429,6 @@
     <EmbeddedResource Include="Forecasting\QueueSource.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\PersonDayOff.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Common\Contract.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
