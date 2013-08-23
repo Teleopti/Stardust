@@ -2,6 +2,7 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -73,12 +74,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDoToDto()
         {
-            var anchor = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date = new DateOnly(1900, 1, 1);
             var anchorTime = new TimeSpan(23);
             var flexibility = new TimeSpan(124);
             var length = new TimeSpan(1244);
-            var personDayOff = PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, anchor, length,
-                                                                               flexibility, anchorTime);
+
+						var dayOff = DayOffFactory.CreateDayOff(new Description("test"));
+					dayOff.Anchor = anchorTime;
+						dayOff.SetTargetAndFlexibility(length, flexibility);
+            var personDayOff = new PersonDayOff(_person, _scenario, dayOff, date);
 
 
             personDayOff.SetId(Guid.NewGuid());

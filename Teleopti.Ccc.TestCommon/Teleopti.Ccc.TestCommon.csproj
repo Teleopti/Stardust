@@ -112,7 +112,6 @@
     <Compile Include="FakeData\PersonAbsenceFactory.cs" />
     <Compile Include="FakeData\PersonAssignmentFactory.cs" />
     <Compile Include="FakeData\PersonContractFactory.cs" />
-    <Compile Include="FakeData\PersonDayOffFactory.cs" />
     <Compile Include="FakeData\PersonFactory.cs" />
     <Compile Include="FakeData\PersonPeriodFactory.cs" />
     <Compile Include="FakeData\PersonRequestFactory.cs" />

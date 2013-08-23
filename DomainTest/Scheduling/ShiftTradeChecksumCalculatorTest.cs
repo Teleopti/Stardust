@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,31 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private MockRepository _mocks;
         private IScheduleDay _schedulePart;
 
-        [Test]
-        public void VerifyChecksumForDayOff()
-        {
-            _mocks = new MockRepository();
-            _schedulePart = _mocks.StrictMock<IScheduleDay>();
-            _target = new ShiftTradeChecksumCalculator(_schedulePart);
-
-            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"), new Person(), new DateOnly(), new DayOffTemplate());
-            
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulePart.PersonAssignment()).Return(personDayOff);
-            }
-
-            using (_mocks.Playback())
-            {
-                long checksum = _target.CalculateChecksum();
-                Assert.AreNotEqual(
-                    PersonDayOffFactory.CreatePersonDayOff(personDayOff.Person, personDayOff.Scenario,
-                                                          personDayOff.Period.StartDateTime.AddDays(1),
-                                                          personDayOff.DayOff().TargetLength,
-																													personDayOff.DayOff().Flexibility,
-                                                          personDayOff.DayOff().AnchorLocal(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).TimeOfDay).Checksum(), checksum);
-            }
-        }
 
         [Test]
         public void VerifyChecksumIsSameForUnchangedPersonAssignment()
@@ -85,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             using (_mocks.Record())
             {
-               // Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.Overtime);
                 Expect.Call(_schedulePart.PersonAssignment()).Return(personAssignment);
             }
 

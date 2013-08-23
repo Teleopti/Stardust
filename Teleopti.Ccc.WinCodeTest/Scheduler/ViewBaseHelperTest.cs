@@ -715,20 +715,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyStyleCurrentDaysOffsetsCellCorrect()
         { 
-            IPersonDayOff persondayOff1 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
-            IPersonDayOff persondayOff2 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
-
-
-            var dayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { persondayOff1, persondayOff2 });
-
             var range = _mockRep.StrictMock<IScheduleRange>();
 
             var style = new GridStyleInfo();
 
             using (_mockRep.Record())
             {
-				Expect.Call(range.CalculatedScheduleDaysOff).Return(dayOffs.Count).Repeat.AtLeastOnce();
-				Expect.Call(() => range.CalculatedScheduleDaysOff = dayOffs.Count);
+				Expect.Call(range.CalculatedScheduleDaysOff).Return(2).Repeat.AtLeastOnce();
+				Expect.Call(() => range.CalculatedScheduleDaysOff = 2);
             }
 
             using (_mockRep.Playback())
@@ -736,7 +730,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 ViewBaseHelper.StyleCurrentTotalDayOffCell(style, range, new DateOnlyPeriod());
             }
 
-            Assert.AreEqual(dayOffs.Count, style.CellValue);
+            Assert.AreEqual(2, style.CellValue);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
@@ -765,15 +759,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ViewBaseHelper.CalculateTargetTime(null, null, false);
         }   
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void VerifyStyleCurrentDaysOffsetsCellCorrectWhenNoCachedValue()
         {
             IPerson person = _mockRep.StrictMock<IPerson>();
-            IPersonDayOff persondayOff1 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
-            IPersonDayOff persondayOff2 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
 
             IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
-            var dayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { persondayOff1, persondayOff2 });
 
             var part = _mockRep.StrictMock<IScheduleDay>();
             var range = _mockRep.StrictMock<IScheduleRange>();
@@ -799,7 +790,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 ViewBaseHelper.StyleCurrentTotalDayOffCell(style, range, new DateOnlyPeriod());
             }
 
-            Assert.AreEqual(dayOffs.Count, style.CellValue);
+            Assert.AreEqual(2, style.CellValue);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"),

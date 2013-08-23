@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             _newData = new List<IPersistableScheduleData>();
             _newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,_parameters.Period));	
             _newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
-            _newData.Add(PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("Hej"))));
         }
 
         [Test]
