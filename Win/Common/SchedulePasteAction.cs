@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common
                 if (options.MainShift)
                 {
                     tempPart = (IScheduleDay)part.Clone();
-                    tempPart.Clear<IPersonDayOff>();
+                    tempPart.PersonAssignment(true).SetDayOff(null);
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
