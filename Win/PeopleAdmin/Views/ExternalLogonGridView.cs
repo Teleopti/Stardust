@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private ColumnBase<ExternalLogOnModel> _checkBoxColumn;
 		private ColumnBase<ExternalLogOnModel> _externalLogonColumn;
-        //private ColumnBase<ExternalLogOnModel> _acdObjectColumn;
         private ColumnBase<ExternalLogOnModel> _acdObjectNameColumn;
 
         internal override ViewType Type
@@ -38,9 +37,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
             _externalLogonColumn= new ReadOnlyTextColumn<ExternalLogOnModel>("DescriptionText", Resources.ExternalLogOn);
             _gridColumns.Add(_externalLogonColumn);
-
-            //_acdObjectColumn = new ReadOnlyTextColumn<ExternalLogOnModel>("AcdText", Resources.LogObject);
-            //_gridColumns.Add(_acdObjectColumn);
 
             _acdObjectNameColumn = new ReadOnlyTextColumn<ExternalLogOnModel>("LogObjectName", Resources.LogObject);
             _gridColumns.Add(_acdObjectNameColumn);
