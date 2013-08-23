@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void ShouldFillSubscriptionWithDatasource()
 		{
 			var target = new SubscriptionFiller(
-				new SpecificDataSource(new FakeDataSource {DataSourceName = "data source"}),
+				new FakeCurrentDatasource("data source"),
 				new SpecificBusinessUnit(new BusinessUnit("unit")));
 			var subscription = new Subscription();
 
