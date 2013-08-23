@@ -6430,19 +6430,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<IPersistConflict> conflicts)
 		{
-			List<IPersistableScheduleData> changedEntitiesBuffer;
+			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
 			if (refreshedEntities == null)
-				changedEntitiesBuffer = new List<IPersistableScheduleData>();
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>();
 			else
-				changedEntitiesBuffer = new List<IPersistableScheduleData>(refreshedEntities);
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
 			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = DialogResult.None };
 			result.ConflictsFound = conflicts.Any();
 			if (result.ConflictsFound)
-				result.DialogResult = showPersistConflictView(changedEntitiesBuffer, conflicts);
+				result.DialogResult = showPersistConflictView(modifiedDataFromConflictResolution, conflicts);
 
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
-			foreach (var data in changedEntitiesBuffer)
+			foreach (var data in modifiedDataFromConflictResolution)
 			{
 				_schedulerState.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 				_personsToValidate.Add(data.Person);
@@ -6450,10 +6450,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private DialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
+		private DialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedDataResult, IEnumerable<IPersistConflict> conflicts)
 		{
 			DialogResult dialogResult;
-			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData))
+			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedDataResult))
 			{
 				conflictForm.ShowDialog();
 				dialogResult = conflictForm.DialogResult;
