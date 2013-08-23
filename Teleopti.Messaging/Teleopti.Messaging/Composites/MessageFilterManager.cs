@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Messaging.Composites
