@@ -1305,6 +1305,15 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftDistributionGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
@@ -2673,6 +2682,9 @@
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionAnalysisControl.resx">
       <DependentUpon>ShiftDistributionAnalysisControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.resx">
+      <DependentUpon>ShiftFairnessAnalysisControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </EmbeddedResource>
@@ -3086,9 +3098,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SingleAgentRestriction\RestrictionSummaryGrid.resx">
       <DependentUpon>RestrictionSummaryGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SkillDayGridControl.resx">
-      <DependentUpon>SkillDayGridControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SkillSummary.resx">
       <DependentUpon>SkillSummary.cs</DependentUpon>

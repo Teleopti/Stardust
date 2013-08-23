@@ -4787,13 +4787,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
 			_agentInfoControl.Dock = DockStyle.Fill;
 			agentInfoTab.Controls.Add(_agentInfoControl);
-		    var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
+		    
+            var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
             var shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl();
             shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
             shiftCategoryTab.Controls.Add(shiftDistributionAnalysisControl);
-			var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
-			_tabInfoPanels.TabPages.Add(shiftFairnessTab);
+			
+            var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
+            _tabInfoPanels.TabPages.Add(shiftFairnessTab);
+            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl();
+            shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
+            shiftFairnessTab.Controls.Add(shiftFairnessAnalysisControl);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
