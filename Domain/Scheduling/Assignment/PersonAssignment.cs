@@ -318,10 +318,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			unchecked
 			{
-				var hashCode = base.GetHashCode();
-				hashCode = (hashCode*397) ^ (_person != null ? _person.GetHashCode() : 0);
-				hashCode = (hashCode*397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
-				hashCode = (hashCode*397) ^ Date.GetHashCode();
+				var hashCode = Date.GetHashCode();
+				hashCode = (hashCode * 397) ^ (_person != null ? _person.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
 				return hashCode;
 			}
 		}
