@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		private IEnumerable<IPersonAbsence> calculatePersonAbsences(DateTime date, IPerson person,
-													PersonScheduleDayReadModel personScheduleDayReadModel)
+													IPersonScheduleDayReadModel personScheduleDayReadModel)
 		{
 			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), person.Id.Value);
 			var start = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
