@@ -65,19 +65,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             foreach (var messState in _model.PersistConflicts)
             {
-                var dbVersion = messState.DatabaseVersion;
+				if (discardMyChanges)
                 addToModifiedCollection(messState, discardMyChanges);
 
-                if(dbVersion==null)
+				var databaseVersion = messState.DatabaseVersion;
+				var originalVersion = messState.ClientVersion.OriginalItem;
+
+				if (databaseVersion == null)
                 {
-                    var orgVersion = messState.ClientVersion.OriginalItem;
-					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[orgVersion.Person]);
-					scheduleRange.UnsafeSnapshotDelete(orgVersion.Id.Value, discardMyChanges); 
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[originalVersion.Person]);
+					scheduleRange.UnsafeSnapshotDelete(originalVersion.Id.Value, discardMyChanges); 
                 }
                 else
                 {
-					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[dbVersion.Person]);
-					scheduleRange.UnsafeSnapshotUpdate(dbVersion, discardMyChanges);  
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[databaseVersion.Person]);
+					scheduleRange.UnsafeSnapshotUpdate(databaseVersion, discardMyChanges);  
                 }                
                 messState.RemoveFromCollection();
             }
@@ -85,13 +87,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private void addToModifiedCollection(IPersistConflict messState, bool discardMyChanges)
         {
-            if(discardMyChanges)
-            {
-                _model.ModifiedData.Add(messState.ClientVersion.OriginalItem);
+			if (messState.ClientVersion.OriginalItem != null)
+				_model.ModifiedDataResult.Add(messState.ClientVersion.OriginalItem);
                 if(messState.DatabaseVersion!=null)
 					_model.ModifiedDataResult.Add(messState.DatabaseVersion);
             }
-        }
 
         private void closeForm(bool allConflictsSolved)
         {
