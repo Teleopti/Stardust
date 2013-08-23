@@ -26,8 +26,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         var self = this;
         self.requestViewModel = ko.observable();
 
-        self.createRequestViewModel = function() {
-            self.requestViewModel(new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes));
+        self.createRequestViewModel = function () {
+            return new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
         };
         
         self.createShiftTradeRequestViewModel = function () {
@@ -51,9 +51,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
     function _prepareForAddingRequest() {
         Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-        parentViewModel.createRequestViewModel();
-        parentViewModel.requestViewModel().AddRequestCallback = _addItemAtTop;
-        parentViewModel.requestViewModel().DateFormat(_datePickerFormat());
+        var model = parentViewModel.createRequestViewModel();
+        model.AddRequestCallback = _addItemAtTop;
+        model.DateFormat(_datePickerFormat());
+        parentViewModel.requestViewModel(model);
     }
 
 	function _addTextRequestClick() {
@@ -68,7 +69,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _databindModel(requestDetailViewModel) {
 	    parentViewModel = requestDetailViewModel;
-	    var element = $('#Request-add-section')[0];
+	    var element = $('#Request-add-data-binding-area')[0];
 	    if (element) {
 	        ko.cleanNode(element);
 	        ko.applyBindings(parentViewModel, element);
@@ -114,9 +115,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		}
 		else {
-		    parentViewModel.createRequestViewModel();
-			parentViewModel.requestViewModel().IsUpdate(true);
-			parentViewModel.requestViewModel().TypeEnum(data.TypeEnum);
+		    var model = parentViewModel.createRequestViewModel();
+			model.IsUpdate(true);
+			model.TypeEnum(data.TypeEnum);
+			model.DateFormat(_datePickerFormat());
+		    parentViewModel.requestViewModel(model);
 		}
 	}
 

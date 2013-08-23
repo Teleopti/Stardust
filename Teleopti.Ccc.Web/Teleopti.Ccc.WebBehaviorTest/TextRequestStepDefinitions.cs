@@ -223,9 +223,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"the add request form should be closed")]
+		[Then(@"I should not see the add text request form")]
 		public void ThenTheAddRequestFormShouldBeClosed()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section");
+			Browser.Interactions.AssertNotExists("ul.nav li a[href='#ScheduleTab']", "#Request-add-section");
 		}
 	}
 }

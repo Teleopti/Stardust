@@ -69,9 +69,9 @@
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-    <div id="Request-add-section">
-        <div data-bind="with: requestViewModel">
-            <div class="well well-small clearfix">
+    <div>
+        <div id="Request-add-data-binding-area" data-bind="with: requestViewModel">
+            <div id="Request-add-section" class="well well-small clearfix">
                 <div data-bind="template: Template">
                 </div>
             </div>

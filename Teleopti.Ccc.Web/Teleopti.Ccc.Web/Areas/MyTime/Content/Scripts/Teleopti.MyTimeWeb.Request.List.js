@@ -14,7 +14,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var pageViewModel;
 
-    function RequestItemViewModel() {
+    function RequestItemViewModel(requestPageViewModel) {
 
         var self = this;
 
@@ -34,6 +34,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.CanDelete = ko.observable(true);
         self.StatusClass = ko.observable();
         self.DetailItem = undefined;
+        self.parent = requestPageViewModel;
 
         self.Type = ko.computed(function () {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
@@ -58,16 +59,19 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     },
                     success: function(data) {
                         self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-                        self.DetailItem.AddRequestCallback = function () {
-                            self.IsSelected(false);
-                            self.DetailItem = undefined;
-                        };
+                        self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
                         self.IsSelected(true);
                     }
                 });
             } else {
                 self.IsSelected(true);
             }
+        };
+
+        self.successUpdatingRequest = function(data) {
+            self.IsSelected(false);
+            self.DetailItem = undefined;
+            self.parent.AddRequest(data, true);
         };
 
         self.ToggleMouseOver = function () {
@@ -98,8 +102,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
-                var vm = new RequestItemViewModel();
-                vm.Initialize(item,false);
+                var vm = new RequestItemViewModel(self);
+                vm.Initialize(item, false);
                 self.Requests.push(vm);
             });
         };
@@ -146,7 +150,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 self.Requests.remove(selectedViewModel);
             }
             else {
-                selectedViewModel = new RequestItemViewModel();
+                selectedViewModel = new RequestItemViewModel(self);
                 selectedViewModel.Initialize(request);
             }
 
@@ -255,7 +259,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         var element = $('#Requests-data-binding-area')[0];
         if (element) ko.cleanNode(element);
 
-        element = $('#Request-add-section')[0];
+        element = $('#Request-add-data-binding-area')[0];
         if (element) ko.cleanNode(element);
 
         Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();

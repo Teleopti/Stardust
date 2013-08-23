@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -93,8 +95,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the request form with '(.*)' as default date")]
 		public void ThenIShouldSeeTheTextRequestFormWithAsDefaultDate(DateTime date)
 		{
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(date));
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(date));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
@@ -108,24 +110,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-subject");
 		}
-
-		[Then(@"I should not see the add text request form")]
-		public void ThenIShouldNotSeeTheTextRequestForm()
-		{
-			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-subject");
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section .request-new-absence");
-		}
-
+		
 		[Then(@"I should see the add absence request form")]
-		public void ThenIShouldSeeTheAbsenceRequestTab()
+		public void ThenIShouldSeeTheAbsenceRequestForm()
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery("#Request-add-section .request-new-absence");
 		}
 
-		[Then(@"I should not see the add absence request form")]
-		public void ThenIShouldNotSeeTheAbsenceRequestTab()
+		[Then(@"I should not see the add absence button")]
+		public void ThenIShouldNotSeeTheAddAbsenceButton()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-section .request-new-absence");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".absence-request-add");
 		}
 
 		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
