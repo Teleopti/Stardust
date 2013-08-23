@@ -18,22 +18,24 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 				public override PersonDayOffDto DomainEntityToDto(IPersonAssignment entity)
 				{
+					var retDto = new PersonDayOffDto();
 					var dayOff = entity.DayOff();
-            PersonDayOffDto retDto = new PersonDayOffDto();
-            retDto.Id = entity.Id;
-            retDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
-            retDto.Anchor = dayOff.Anchor;
+					if (dayOff != null)
+					{
+						retDto.Id = entity.Id;
+						retDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
+						retDto.Anchor = dayOff.Anchor;
 						retDto.AnchorTime = dayOff.AnchorLocal(TeleoptiPrincipal.Current.Regional.TimeZone).TimeOfDay;
 						retDto.Color = new ColorDto(dayOff.DisplayColor);
 						retDto.Length = dayOff.TargetLength;
 						retDto.Flexibility = dayOff.Flexibility;
-            retDto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period.ChangeEndTime(TimeSpan.FromTicks(-1)));
+						retDto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period.ChangeEndTime(TimeSpan.FromTicks(-1)));
 						retDto.Name = dayOff.Description.Name;
 						retDto.ShortName = dayOff.Description.ShortName;
 						retDto.PayrollCode = dayOff.PayrollCode;
-            retDto.Version = entity.Version.GetValueOrDefault(0);
-
-            return retDto;
+						retDto.Version = entity.Version.GetValueOrDefault(0);						
+					}
+					return retDto;
         }
 
 				protected override IPersonAssignment DtoToDomainEntityAfterValidation(PersonDayOffDto dto)
