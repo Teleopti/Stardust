@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[databaseVersion.Person]);
 					scheduleRange.UnsafeSnapshotUpdate(databaseVersion, discardMyChanges);  
-                }                
+                }
+
                 messState.RemoveFromCollection();
             }
         }
@@ -89,9 +90,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
 			if (messState.ClientVersion.OriginalItem != null)
 				_model.ModifiedDataResult.Add(messState.ClientVersion.OriginalItem);
-                if(messState.DatabaseVersion!=null)
-					_model.ModifiedDataResult.Add(messState.DatabaseVersion);
-            }
+			if (messState.DatabaseVersion != null)
+				_model.ModifiedDataResult.Add(messState.DatabaseVersion);
+        }
 
         private void closeForm(bool allConflictsSolved)
         {
@@ -105,27 +106,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private static PersistConflictData createConflictData(IPersistConflict messageState)
         {
-            var orgClientItem = messageState.ClientVersion.OriginalItem;
-            var ret = new PersistConflictData
+            var clientVersion = messageState.ClientVersion.OriginalItem;
+	        if (clientVersion == null)
+				clientVersion = messageState.ClientVersion.CurrentItem;
+            var conflictData = new PersistConflictData
                         {
-                            Name = formatName(orgClientItem.Person.Name),
-                            Date = new DateOnly(orgClientItem.Period.StartDateTime),
-                            ConflictType = typeString(orgClientItem),
+                            Name = formatName(clientVersion.Person.Name),
+                            Date = new DateOnly(clientVersion.Period.StartDateTime),
+                            ConflictType = typeString(clientVersion),
                             LastModifiedName = string.Empty
                         };
             if(messageState.DatabaseVersion == null)
             {
-                ret.LastModifiedName = UserTexts.Resources.Deleted;                 
+                conflictData.LastModifiedName = UserTexts.Resources.Deleted;                 
             }
             else
             {
                 var change = messageState.DatabaseVersion as IChangeInfo;
                 if(change!=null)
                 {
-                    ret.LastModifiedName = formatName(change.UpdatedBy.Name);
+                    conflictData.LastModifiedName = formatName(change.UpdatedBy.Name);
                 }
             }
-            return ret;
+            return conflictData;
         }
 
         private static string typeString(IScheduleParameters conflict)
