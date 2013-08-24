@@ -625,7 +625,6 @@
     <Compile Include="Domain\IPersonAssignment.cs" />
     <Compile Include="Domain\IPersonAssignmentRepository.cs" />
     <Compile Include="Domain\IPersonContract.cs" />
-    <Compile Include="Domain\IPersonDayOff.cs" />
     <Compile Include="Domain\IPersonMeeting.cs" />
     <Compile Include="Domain\IPersonPeriod.cs" />
     <Compile Include="Domain\IPersonSkill.cs" />

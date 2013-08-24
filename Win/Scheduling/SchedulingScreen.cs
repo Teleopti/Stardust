@@ -1418,8 +1418,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							return;
 
 						var dayOffTemplate = addDayOffDialog.SelectedItem;
-						var personDayOff = new PersonDayOff(clone.Person, _schedulerState.RequestedScenario, dayOffTemplate, new DateOnly().AddDays(1), clone.TimeZone);
-						clone.Add(personDayOff);
+						clone.PersonAssignment(true).SetDayOff(dayOffTemplate);
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));

@@ -112,20 +112,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                                         scenario);
         }
 
-        //create persondayoff
-        private static PersonDayOff CreatePersonDayOff(DateTime period, IPerson person, IScenario scenario)
-        {
-            DateTime date = DateTime.SpecifyKind(period, DateTimeKind.Utc);
-            DateOnly dateOnly =
-                new DateOnly(TimeZoneHelper.ConvertFromUtc(date, person.PermissionInformation.DefaultTimeZone()).Date);
-
-            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(6));
-            dayOff.Anchor = TimeSpan.FromHours(3);
-            return new PersonDayOff(person, scenario, dayOff, dateOnly);
-            
-        }
-
         //create personabsence
         private static PersonAbsence CreatePersonAbsence(DateTimePeriod period, IPerson person, IAbsence ab, IScenario scenario)
         {

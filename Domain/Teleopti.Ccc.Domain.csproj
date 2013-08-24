@@ -1291,7 +1291,6 @@
     <Compile Include="Scheduling\Absence.cs" />
     <Compile Include="Scheduling\AbsenceLayer.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecification.cs" />
-    <Compile Include="Scheduling\PersonDayOff.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />

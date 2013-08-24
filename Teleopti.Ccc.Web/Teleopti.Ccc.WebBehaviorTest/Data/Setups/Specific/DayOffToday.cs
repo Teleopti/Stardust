@@ -15,9 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var dayOff = new PersonDayOff(user, Scenario, DayOff, Date);
 			var dayOffRepository = new DayOffRepository(uow);
-			dayOffRepository.Add(dayOff);
+			dayOffRepository.Add(DayOff);
 		}
 	}
 }

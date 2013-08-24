@@ -80,15 +80,15 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			fluentCfg.Audit<AbsenceLayer>()
 				.ExcludeRelationData(pa => pa.Payload);
 
-			//persondayoff
-			fluentCfg.Audit<PersonDayOff>()
-				.Exclude(pa => pa.CreatedBy)
-				.Exclude(pa => pa.UpdatedBy)
-				.Exclude(pa => pa.CreatedOn)
-				.Exclude(pa => pa.UpdatedOn)
-				.ExcludeRelationData(pa => pa.Person)
-				.ExcludeRelationData(pa => pa.Scenario)
-				.ExcludeRelationData(pa => pa.BusinessUnit);
+			////persondayoff
+			//fluentCfg.Audit<PersonDayOff>()
+			//	.Exclude(pa => pa.CreatedBy)
+			//	.Exclude(pa => pa.UpdatedBy)
+			//	.Exclude(pa => pa.CreatedOn)
+			//	.Exclude(pa => pa.UpdatedOn)
+			//	.ExcludeRelationData(pa => pa.Person)
+			//	.ExcludeRelationData(pa => pa.Scenario)
+			//	.ExcludeRelationData(pa => pa.BusinessUnit);
 		}
 	}
 }

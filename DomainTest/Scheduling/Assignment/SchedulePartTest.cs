@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCreateAndAddDayOff()
 		{
-			_target.Clear<PersonDayOff>();
 
 			DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
 			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));

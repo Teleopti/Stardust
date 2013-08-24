@@ -119,9 +119,6 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
                             absActConverter.ConvertAndPersist(list);
                             uow.Clear();
 
-                            var agDayOffConverter = new AgentDayOffConverter(uow, new AgentDayOffMapper(MappedObjectPair, TimeZoneInfo));
-                            agDayOffConverter.ConvertAndPersist(list);
-
                             var noteConverter = new NoteConverter(uow, new NoteMapper(MappedObjectPair, TimeZoneInfo));
                             noteConverter.ConvertAndPersist(list);
 
