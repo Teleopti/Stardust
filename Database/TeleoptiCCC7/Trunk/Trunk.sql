@@ -1,3 +1,9 @@
+SET NOCOUNT ON
+PRINT '-----------------------'
+PRINT 'Release 360 will re-design the schedule/shift tables and convert a lot of data.'
+PRINT 'This will need some extra time to finish. Please be patient'
+PRINT 'Start time: ' + CONVERT(VARCHAR(24),GETDATE(),113)
+PRINT '-----------------------'
 
 ----------------  
 --Name: Roger Kratz
@@ -987,9 +993,9 @@ GO
 
 
 ----------------  
---Name: Roger Kratz
+--Name: David Jonsson
 --Date: 2013-08-22
---Desc: PBI #21978 - Adding dayoff ref from personassignment. (should also remove old persondayoff - but needs to happen after convertion of data
+--Desc: PBI #21978 - Adding dayoff ref from personassignment and convert old DayOff into PersonAssignment
 ----------------  
 ALTER TABLE dbo.PersonAssignment ADD 
             DayOffTemplate uniqueidentifier NULL
@@ -1006,10 +1012,144 @@ ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
 GO
 
 
---- ??? Here David magic
---- ??? Here David magic
+--moving data from PersonDayOff, and merge them with DayOffTemplate, by "Name"
+--drop table #personTeam
+--drop table #LastKnownBusinessUnit
+CREATE TABLE #personTeam(Person uniqueidentifier,Team uniqueidentifier,StartDate DateTime, OrderIndex int)
+CREATE CLUSTERED INDEX IX_Person ON #personTeam	([Person])
 
+CREATE TABLE #LastKnownBusinessUnit(Person uniqueidentifier,Businessunit uniqueidentifier)
+CREATE NONCLUSTERED INDEX IX_Person_Businessunit
+ON #LastKnownBusinessUnit ([Person]) INCLUDE ([BusinessUnit])
 
-drop table dbo.PersonDayOff
-drop table auditing.PersonDayOff_AUD
-GO
+;WITH personTeam AS
+(
+select
+	pp.Parent as 'Person',
+	pp.Team,
+	pp.StartDate,
+	ROW_NUMBER() OVER (PARTITION BY pp.Parent ORDER BY pp.StartDate DESC) AS rn
+from dbo.Person p
+inner join dbo.PersonPeriod pp
+	on pp.Parent = p.Id
+)
+
+--list all person periods, teams
+insert into #personTeam(Person,Team,StartDate,OrderIndex)
+select * from personTeam
+--select * from #personTeam
+
+--Get Last known BU for all agents
+INSERT INTO #LastKnownBusinessUnit(Person,Businessunit)
+SELECT
+	pt.Person,
+	bu.Id
+FROM #personTeam pt
+inner join dbo.team t
+	on t.Id = pt.Team
+inner join dbo.Site s
+	on s.Id = t.Site
+inner join dbo.BusinessUnit bu
+	on bu.Id = s.BusinessUnit
+where pt.OrderIndex = 1
+--select * from #LastKnownBusinessUnit
+
+--check number of agents that have belonged to more than one Business Unit
+DECLARE @PersonsMultipleBu int
+SET @PersonsMultipleBu=0
+	SELECT
+		@PersonsMultipleBu=count(*)
+	FROM #personTeam plkt
+	inner join dbo.team t
+		on t.Id = plkt.Team
+	inner join dbo.Site s
+		on s.Id = t.Site
+	inner join dbo.BusinessUnit bu
+		on bu.Id = s.BusinessUnit
+	GROUP by plkt.Person
+	having count(Bu.id) > 1
+
+IF @PersonsMultipleBu>0
+BEGIN
+	PRINT char(13)
+	PRINT '----'
+	PRINT char(9) + 'Warning - Some agents have belonged to more than one business unit!!'
+	PRINT char(9) + '@PersonsMultipleBu=' +cast(@PersonsMultipleBu as nvarchar(10))
+	PRINT char(9) + 'DayOff conversion might put the wrong scenario_id in personAssignment'
+	PRINT '----'
+END
+
+--DayOff connected to a person without Person Period = No Business Unit
+DECLARE @PersonsWithoutBu int
+SET @PersonsWithoutBu=0
+
+	select @PersonsWithoutBu=
+	(
+		select count(distinct(pdo.Person))
+		from dbo.PersonDayOff pdo
+		left join #LastKnownBusinessUnit p
+			on pdo.Person = p.Person --106469
+		where p.person is null
+	)
+BEGIN
+	PRINT char(13)
+	PRINT '----'
+	PRINT char(9) + 'Warning - Some PersonDayOff belong to a person without team/site/businessUnit'
+	PRINT char(9) + '@PersonsWithoutBu: ' +cast(@PersonsWithoutBu as nvarchar(10))
+	PRINT '----'
+END
+
+--Adding index to support next operation
+--DROP INDEX IX_PersonAssignment_Date ON [dbo].[PersonAssignment]
+CREATE NONCLUSTERED INDEX IX_PersonAssignment_Date
+ON [dbo].[PersonAssignment]
+	(
+	[Date]
+	)
+
+--DROP INDEX [IX_PersonDayOff_Anchor_Person] ON [dbo].[PersonDayOff]
+CREATE NONCLUSTERED INDEX [IX_PersonDayOff_Anchor_Person]
+ON [dbo].[PersonDayOff]
+(
+	[Anchor] ASC,
+	[Person] ASC,
+	[Name] ASC
+)
+INCLUDE
+(
+	[Id]
+)
+
+--Temp table to 
+--DROP TABLE #DayOffTemplateSameName
+CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50), BusinessUnit uniqueidentifier, ValidToDate datetime)
+ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName_] UNIQUE CLUSTERED 
+(
+	[CreatedOn] ASC,
+	[Name] ASC,
+	[BusinessUnit] ASC
+)
+
+;WITH DayOffTemplateSameName AS
+(
+select
+	dot.Id,
+	dot.CreatedOn,
+	dot.Name,
+	dot.BusinessUnit,
+	ROW_NUMBER() OVER (PARTITION BY dot.Name, dot.BusinessUnit ORDER BY dot.CreatedOn ASC) AS OrderIndex
+from dbo.DayOffTemplate dot
+)
+INSERT INTO #DayOffTemplateSameName
+SELECT
+	a.Id,
+	convert(datetime,floor(convert(decimal(18,8),a.CreatedOn))),
+	a.Name,
+	a.BusinessUnit,
+	CASE WHEN b.CreatedOn IS NULL THEN '2059-12-31' ELSE convert(datetime,floor(convert(decimal(18,8),b.CreatedOn))) END as 'ValidTo'
+FROM DayOffTemplateSameName a
+LEFT JOIN DayOffTemplateSameName b
+	ON a.BusinessUnit = b.BusinessUnit
+	AND a.Name = b.Name
+	AND a.OrderIndex = b.OrderIndex-1
+ORDER BY a.BusinessUnit,a.Name,a.OrderIndex
