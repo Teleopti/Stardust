@@ -241,7 +241,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+        public int FillFactSchedulePreferenceMart(DateOnlyPeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {
             return 0;
         }

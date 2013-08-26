@@ -28,6 +28,14 @@ BEGIN
 	RETURN 0
 END
 
+--Get min/max from stage
+DECLARE @start_date datetime
+DECLARE @end_date datetime
+SELECT
+	@start_date	=min(restriction_date),
+	@end_date	=max(restriction_date)
+FROM Stage.stg_schedule_preference
+
 DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
@@ -37,16 +45,17 @@ SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @s
 -- Delete rows from stage
 DELETE f
 FROM Stage.stg_schedule_preference stg
-INNER JOIN
-	mart.dim_person		dp
+INNER JOIN mart.dim_person p
+	ON p.person_code = stg.person_code
+INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
 ON
-	stg.person_code		=			dp.person_code
+	p.person_id		=			dp.person_id
 	AND --trim persons
 		(
-				(stg.restriction_date	>= dp.valid_from_date)
+				(stg.restriction_date	>= dp.valid_from_date_local)
 
 			AND
-				(stg.restriction_date <= dp.valid_to_date)
+				(stg.restriction_date <= dp.valid_to_date_local)
 		)
 INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.restriction_date
@@ -55,7 +64,6 @@ INNER JOIN mart.dim_scenario ds
 	AND stg.scenario_code = @scenario_code
 INNER JOIN mart.fact_schedule_preference f
 	ON f.date_id = dd.date_id
-	AND f.interval_id = stg.interval_id
 	AND f.scenario_id = ds.scenario_id
 WHERE stg.business_unit_code = @business_unit_code
 
@@ -88,8 +96,8 @@ INSERT INTO mart.fact_schedule_preference
 
 SELECT DISTINCT
 	date_id						= dsd.date_id, 
-	interval_id					= di.interval_id, 
-	person_id					= dp.person_id, 
+	interval_id					= 0, 
+	person_id					= p.person_id, 
 	scenario_id					= ds.scenario_id, 
 	preference_type_id			= CASE 
 										--Shift Category (standard) Preference
@@ -106,7 +114,7 @@ SELECT DISTINCT
 	preferences_requested	= 1, 
 	preferences_fulfilled	= f.preference_fulfilled, --kolla hur vi gör här
 	preferences_unfulfilled	= f.preference_unfulfilled,  --kolla hur vi gör här
-	business_unit_id			= dp.business_unit_id, 
+	business_unit_id			= p.business_unit_id, 
 	datasource_id				= f.datasource_id, 
 	datasource_update_date		= f.datasource_update_date, 
 	must_haves					= ISNULL(must_have,0),
@@ -115,19 +123,15 @@ FROM
 	(
 		SELECT * FROM Stage.stg_schedule_preference
 	) AS f
-JOIN
-	mart.dim_person		dp
-ON
-	f.person_code		=			dp.person_code	AND
-	f.restriction_date		BETWEEN		dp.valid_from_date	AND dp.valid_to_date  --Is person valid in this range
+INNER JOIN mart.dim_person p
+	on p.person_code = f.person_code
+INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
+	ON	dp.person_id = p.person_id
+	AND	f.restriction_date		BETWEEN		dp.valid_from_date_local	AND dp.valid_to_date_local --Is person valid in this range
 LEFT JOIN
 	mart.dim_date		dsd
 ON
 	f.restriction_date	= dsd.date_date
-LEFT JOIN				--kommer denna att ta bort sen och bli dateonly i agentens tidszon???
-	mart.dim_interval	di
-ON
-	f.interval_id = di.interval_id  --Fix By David: start_interval_id => interval_id
 LEFT JOIN
 	mart.dim_scenario	ds
 ON
@@ -140,7 +144,7 @@ ON
 INNER JOIN 
 	mart.dim_business_unit bu
 ON
-	dp.business_unit_code = bu.business_unit_code
+	p.business_unit_code = bu.business_unit_code
 LEFT JOIN				--vi kör tills vidare på day_off_name som "primary key"
 	mart.dim_day_off ddo
 ON
