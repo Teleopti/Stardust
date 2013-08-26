@@ -269,17 +269,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_schedule_preference", _dataMartConnectionString);
 		}
 
-		public int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+		public int FillFactSchedulePreferenceMart(DateOnlyPeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			var startDate = period.StartDate;
+			var endDate = period.EndDate;
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-            parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("start_date", startDate.Date),
+					new SqlParameter("end_date", endDate.Date),
+					new SqlParameter("business_unit_code", businessUnit.Id)
+				};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_load", parameterList,
