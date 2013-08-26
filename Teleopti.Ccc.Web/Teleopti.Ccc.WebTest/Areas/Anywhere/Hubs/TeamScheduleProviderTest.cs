@@ -67,15 +67,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldFilterOutUnpublishedSchedule()
 		{
 			var personWithUnpublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(-1))); // set the published date one day before the schedule time
-			
-			var schedules = new[]
+
+			var shifts = new[]
 				{
 					new PersonScheduleDayReadModel {PersonId = _personWithPublishedSchedule.Id.Value, Shift = "{FirstName: 'Published', Projection: [{Title:'Vacation', Color:'Red'}]}"},
 					new PersonScheduleDayReadModel {PersonId = personWithUnpublishedSchedule.Id.Value, Shift = "{FirstName: 'Unpublished'}"}
 				};
 
 			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId))
-				.Return(schedules);
+				.Return(shifts);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(
 				DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 				.Return(false);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldGreyConfidentialAbsenceIfNoPermission()
 		{
-			var schedules = new[]
+			var shifts = new[]
 				{
 					new PersonScheduleDayReadModel
 						{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'true'}]}"
 						}
 				};
-			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(schedules);
+			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(shifts);
 			_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(_scheduleDate), _teamId,
 				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { _personWithPublishedSchedule });
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldNotGreyNormalAbsenceIfNoPermission()
 		{
-			var schedules = new[]
+			var shifts = new[]
 				{
 					new PersonScheduleDayReadModel
 						{
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'false'}]}"
 						}
 				};
-			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(schedules);
+			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(shifts);
 			_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(_scheduleDate), _teamId,
 				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { _personWithPublishedSchedule });
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldNotGreyConfidentialAbsenceIfHasPermission()
 		{
-			var schedules = new[]
+			var shifts = new[]
 				{
 					new PersonScheduleDayReadModel
 						{
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 								"{FirstName: 'Pierre', Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Vacation', Color:'Red', IsAbsenceConfidential:'true'}]}"
 						}
 				};
-			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(schedules);
+			_personScheduleDayReadModelRepository.Stub(x => x.ForTeam(_period, _teamId)).Return(shifts);
 			_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(new DateOnly(_scheduleDate), _teamId,
 				DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { _personWithPublishedSchedule });
