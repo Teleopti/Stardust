@@ -29,9 +29,39 @@ namespace Teleopti.Support.Security
 				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
 				PasswordEncryption.Execute(commandLineArgument);
 				LicenseStatusChecker.Execute(commandLineArgument);
+				convertDayOffToNewStructure(commandLineArgument);
+				initAuditData(commandLineArgument);
 			}
 			Environment.ExitCode = 0;
         }
+
+		private static void initAuditData(CommandLineArgument commandLineArgument)
+		{
+			const string proc = "[Auditing].[TryInitAuditTables])";
+			callProcInSeperateTransaction(commandLineArgument, proc);
+		}
+
+		private static void convertDayOffToNewStructure(CommandLineArgument commandLineArgument)
+		{
+			const string proc = "[dbo].[DayOffConverter]";
+			callProcInSeperateTransaction(commandLineArgument, proc);
+		}
+
+		private static void callProcInSeperateTransaction(CommandLineArgument commandLineArgument, string proc)
+		{
+			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			{
+				conn.Open();
+				using (var tx = conn.BeginTransaction())
+				{
+					using (var cmd = new SqlCommand(proc, conn, tx))
+					{
+						cmd.ExecuteNonQuery();
+					}
+					tx.Commit();
+				}
+			}
+		}
 
 		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
 		{
