@@ -1009,6 +1009,7 @@ ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Pe
 ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person3]
 ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Scenario]
 ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_ShiftCategory]
+ALTER TABLE [dbo].[ShiftLayer] DROP CONSTRAINT [FK_ShiftLayer_PersonAssignment]
 
 --create new table with correct clustered key
 CREATE TABLE [dbo].[PersonAssignment](
@@ -1054,6 +1055,7 @@ ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssig
 ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Scenario] FOREIGN KEY([Scenario]) REFERENCES [dbo].[Scenario] ([Id])
 ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_ShiftCategory] FOREIGN KEY([ShiftCategory]) REFERENCES [dbo].[ShiftCategory] ([Id])
 ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_DayOffTemplate] FOREIGN KEY([DayOffTemplate]) REFERENCES dbo.DayOffTemplate([Id])
+ALTER TABLE [dbo].[ShiftLayer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftLayer_PersonAssignment] FOREIGN KEY([Parent]) REFERENCES [dbo].[PersonAssignment] ([Id]) ON DELETE CASCADE
 GO
 
 
