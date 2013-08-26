@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override PersonRequestDto DomainEntityToDto(IPersonRequest entity)
         {
-            PersonRequestDto personRequestDto = new PersonRequestDto();
+            var personRequestDto = new PersonRequestDto();
             personRequestDto.Id = entity.Id;
             personRequestDto.Message = entity.GetMessage(new NormalizeText());
             personRequestDto.Subject = entity.GetSubject(new NormalizeText());
 
-			int statusId = PersonRequest.GetUnderlyingStateId(entity);
+            var statusId = PersonRequest.GetUnderlyingStateId(entity);
 	        if (statusId == 4) statusId = 1;
 			personRequestDto.RequestStatus = (RequestStatusDto)statusId;
 
@@ -59,18 +59,18 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personRequestDto.CanDelete = entity.IsEditable;
             personRequestDto.Request = null;
             personRequestDto.DenyReason = entity.DenyReason;
-            IRequest request = entity.Request;
-            
-            IShiftTradeRequest shiftTradeRequest = request as IShiftTradeRequest;
-            IAbsenceRequest absenceRequest = request as IAbsenceRequest;
+            var request = entity.Request;
+
+            var shiftTradeRequest = request as IShiftTradeRequest;
+            var absenceRequest = request as IAbsenceRequest;
             if (absenceRequest!=null)
             {
                 personRequestDto.Request = _absenceRequestAssembler.DomainEntityToDto(absenceRequest);
             }
             else if (shiftTradeRequest!=null)
             {
-                ShiftTradeRequestDto shiftTradeRequestDto = _shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest);
-                foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+                var shiftTradeRequestDto = _shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest);
+                foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
                 {
                     shiftTradeRequestDto.ShiftTradeSwapDetails.Add(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail));
                 }
@@ -96,11 +96,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override IPersonRequest DtoToDomainEntity(PersonRequestDto dto)
         {
-            IPersonRequest personRequestDo = dto.Id.HasValue ? PersonRequestRepository.Load(dto.Id.Value) : null;
+            var personRequestDo = dto.Id.HasValue ? PersonRequestRepository.Load(dto.Id.Value) : null;
 
             if (personRequestDo == null)
             {
-                IPerson person = _personAssembler.DtoToDomainEntity(dto.Person);
+                var person = _personAssembler.DtoToDomainEntity(dto.Person);
                 personRequestDo = new PersonRequest(person);
             }
 
@@ -110,20 +110,21 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
             //get new or modified Request part
             if (dto.Request is TextRequestDto)
-            {
                 personRequestDo.Request = _textRequestAssembler.DtoToDomainEntity((TextRequestDto) dto.Request);
-            }else if (dto.Request is AbsenceRequestDto)
-            {
+
+            else if (dto.Request is AbsenceRequestDto)
                 personRequestDo.Request = _absenceRequestAssembler.DtoToDomainEntity((AbsenceRequestDto) dto.Request);
-            }else if (dto.Request is ShiftTradeRequestDto)
+
+            else if (dto.Request is ShiftTradeRequestDto)
             {
-                ShiftTradeRequestDto shiftTradeRequestDto = (ShiftTradeRequestDto) dto.Request;
-                IShiftTradeRequest shiftTradeRequest =
+                var shiftTradeRequestDto = (ShiftTradeRequestDto)dto.Request;
+                var shiftTradeRequest =
                     _shiftTradeRequestAssembler.DtoToDomainEntity(shiftTradeRequestDto);
                 shiftTradeRequest.ClearShiftTradeSwapDetails();
-                foreach (ShiftTradeSwapDetailDto shiftTradeSwapDetailDto in shiftTradeRequestDto.ShiftTradeSwapDetails)
+                foreach (var shiftTradeSwapDetailDto in shiftTradeRequestDto.ShiftTradeSwapDetails)
                 {
-                    shiftTradeRequest.AddShiftTradeSwapDetail(_shiftTradeSwapDetailAssembler.DtoToDomainEntity(shiftTradeSwapDetailDto));
+                    shiftTradeRequest.AddShiftTradeSwapDetail(
+                        _shiftTradeSwapDetailAssembler.DtoToDomainEntity(shiftTradeSwapDetailDto));
                 }
                 personRequestDo.Request = shiftTradeRequest;
             }

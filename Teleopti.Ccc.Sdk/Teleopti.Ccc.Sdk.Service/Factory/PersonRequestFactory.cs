@@ -138,21 +138,20 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
         public PersonRequestDto CreateShiftTradeRequest(PersonDto requester, string subject, string message, ICollection<ShiftTradeSwapDetailDto> shiftTradeSwapDetailDtos)
         {
-            if (shiftTradeSwapDetailDtos.Count == 0) throw new FaultException("You must supply at least one item in the list shiftTradeSwapDetailDtos.");
+            if (shiftTradeSwapDetailDtos.Count == 0)
+                throw new FaultException("You must supply at least one item in the list shiftTradeSwapDetailDtos.");
 
-            PersonRequestDto personRequestDto = new PersonRequestDto
+            var personRequestDto = new PersonRequestDto
                                                     {
                                                         Person = requester,
                                                         Subject = subject,
                                                         Message = message
                                                     };
             
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
-            foreach (ShiftTradeSwapDetailDto shiftTradeSwapDetailDto in shiftTradeSwapDetailDtos)
-            {
+            var shiftTradeRequestDto = new ShiftTradeRequestDto();
+            foreach (var shiftTradeSwapDetailDto in shiftTradeSwapDetailDtos)
                 shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
-            }
-            
+
             personRequestDto.Request = shiftTradeRequestDto;
 
             return CreatePersonRequest(personRequestDto);
@@ -204,8 +203,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
         public PersonRequestDto CreatePersonRequest(PersonRequestDto personRequestDto)
         {
-            IPersonRequest personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
-            ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
+            var personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
+            var shiftTradeRequestSetChecksum =
                 new ShiftTradeRequestSetChecksum(_scenarioRepository,
                                                  _scheduleRepository);
             shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
