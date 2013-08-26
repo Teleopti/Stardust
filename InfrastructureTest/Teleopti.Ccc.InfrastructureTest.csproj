@@ -303,7 +303,7 @@
     <Compile Include="Repositories\RotationNewRepositoryTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryPersisterIntegrationTest.cs" />
     <Compile Include="Repositories\StateGroupActivityAlarmRepositoryTest.cs" />
-    <Compile Include="Repositories\DayOffRepositoryTest.cs" />
+    <Compile Include="Repositories\DayOffTemplateRepositoryTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepositoryTest.cs" />
     <Compile Include="Repositories\GroupPageRepositoryTest.cs" />

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
     [Category("LongRunning")]
-    public class DayOffRepositoryTest : RepositoryTest<IDayOffTemplate>
+    public class DayOffTemplateRepositoryTest : RepositoryTest<IDayOffTemplate>
     {
         private IDayOffTemplate _dayOff;
         private IDayOffTemplate _dayOff2;
@@ -23,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private TimeSpan _timeSpanTargetLength;
         private TimeSpan _timeSpanFlexibility;
         private TimeSpan _timeSpanAnchor;
-        private DayOffRepository _dayOffRepo;
+        private DayOffTemplateRepository _dayOffRepo;
 
         /// <summary>
         /// Runs every test. Implemented by repository's concrete implementation.
@@ -36,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             _description = new Description("Day Off Test");
             _dayOff = DayOffFactory.CreateDayOff();
-            _dayOffRepo = new DayOffRepository(UnitOfWork);
+            _dayOffRepo = new DayOffTemplateRepository(UnitOfWork);
         }
 
         /// <summary>
@@ -71,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IDayOffTemplate> TestRepository(Teleopti.Interfaces.Infrastructure.IUnitOfWork unitOfWork)
         {
-            return new DayOffRepository(unitOfWork);
+            return new DayOffTemplateRepository(unitOfWork);
         }
 
 

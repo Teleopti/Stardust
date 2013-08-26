@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var unitOfWork = _mockRep.DynamicMock<IUnitOfWork>();
             var repositoryFactory = _mockRep.StrictMock<IRepositoryFactory>();
             var absenceRepMock = _mockRep.StrictMock<IAbsenceRepository>();
-            var dayOffRepMock = _mockRep.StrictMock<IDayOffRepository>();
+            var dayOffRepMock = _mockRep.StrictMock<IDayOffTemplateRepository>();
             var activityRepMock = _mockRep.StrictMock<IActivityRepository>();
             var shiftCategoryRepMock = _mockRep.StrictMock<IShiftCategoryRepository>();
             var contractRepMock = _mockRep.StrictMock<IContractRepository>();

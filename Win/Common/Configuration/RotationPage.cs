@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void AddDayOff(IEventMessage message)
 		{
-			var instance = new DayOffRepository(UnitOfWork)
+			var instance = new DayOffTemplateRepository(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_dayOffList.Add(instance);
 		}
@@ -650,7 +650,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_dayOffList.Add(RotationRestrictionView.DefaultDayOff);
 
 			// Loads all categories.
-			var repository = new DayOffRepository(UnitOfWork);
+			var repository = new DayOffTemplateRepository(UnitOfWork);
 
 			IList<IDayOffTemplate> list = repository.LoadAll();
 			IEnumerable<IDayOffTemplate> sortedList = (from d in list

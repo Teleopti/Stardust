@@ -269,9 +269,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new RtaStateGroupRepository(unitOfWork);
         }
 
-        public IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
+        public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
         {
-            return new DayOffRepository(unitOfWork);
+            return new DayOffTemplateRepository(unitOfWork);
         }
 
         public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)

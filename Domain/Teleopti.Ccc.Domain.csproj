@@ -1081,7 +1081,7 @@
     <Compile Include="RealTimeAdherence\RtaStateGroup.cs" />
     <Compile Include="Repositories\IContractRepository.cs" />
     <Compile Include="Repositories\IContractScheduleRepository.cs" />
-    <Compile Include="Repositories\IDayOffRepository.cs" />
+    <Compile Include="Repositories\IDayOffTemplateRepository.cs" />
     <Compile Include="Repositories\IPersonRequestRepository.cs" />
     <Compile Include="Repositories\IPersonRotationRepository.cs" />
     <Compile Include="Repositories\IQueueSourceRepository.cs" />

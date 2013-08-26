@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
             Logger.Info("Converting Rotations...");
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                IList<IDayOffTemplate> dayOffs = new DayOffRepository(uow).FindAllDayOffsSortByDescription();
+                IList<IDayOffTemplate> dayOffs = new DayOffTemplateRepository(uow).FindAllDayOffsSortByDescription();
 
                 var helper = new RotationConvertHelper(_connectionString);
                 var rotationsConverter = new RotationsConverter(uow, new RotationsMapper(MappedObjectPair, helper.LoadAllRotationDays(), new SystemSettingReader().GetSystemSetting.IntervalLength(), dayOffs));

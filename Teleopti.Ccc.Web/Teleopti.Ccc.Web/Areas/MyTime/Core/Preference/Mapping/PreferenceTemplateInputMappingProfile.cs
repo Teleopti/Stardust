@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceTemplateInputMappingProfile : Profile
 	{
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
-		private readonly IDayOffRepository _dayOffRepository;
+		private readonly IDayOffTemplateRepository _dayOffRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IActivityRepository _activityRespository;
 		private readonly Lazy<IMappingEngine> _mapper;
 
-		public PreferenceTemplateInputMappingProfile(IShiftCategoryRepository shiftCategoryRepository, IDayOffRepository dayOffRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRespository, Lazy<IMappingEngine> mapper)
+		public PreferenceTemplateInputMappingProfile(IShiftCategoryRepository shiftCategoryRepository, IDayOffTemplateRepository dayOffRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRespository, Lazy<IMappingEngine> mapper)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;

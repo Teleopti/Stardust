@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: Madhuranga Pinnagoda
         /// Created date: 2008-11-25
         /// </remarks>
-        IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
+        IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
         /// Creates the meeting repository.
