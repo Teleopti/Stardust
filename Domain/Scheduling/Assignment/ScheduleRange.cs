@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -348,6 +349,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			else
 			{
 				Snapshot.Add(databaseVersion);
+				var myVersion = find(databaseVersion);
+				var databaseVersionEntity = databaseVersion as IEntity;
+				if (databaseVersionEntity != null)
+					((IEntity) myVersion).SetId(databaseVersionEntity.Id);
+				var databaseVersionVersioned = databaseVersion as IVersioned;
+				if (databaseVersionVersioned != null)
+					((IVersioned) myVersion).SetVersion(databaseVersionVersioned.Version.Value);
 			}
 		}
 
