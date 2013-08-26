@@ -385,12 +385,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (data.Period.Intersect(Period))
                     Remove(data);
             }
-            
-            Clear<IPersonAssignment>();
+
             splitList.ForEach(Add);
 
-						var thisAss = PersonAssignment(true);
-						source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
+			var thisAss = PersonAssignment(true);
+			thisAss.ClearMainLayers();
+			source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
         }
 
         public void DeleteFullDayAbsence(IScheduleDay source)
