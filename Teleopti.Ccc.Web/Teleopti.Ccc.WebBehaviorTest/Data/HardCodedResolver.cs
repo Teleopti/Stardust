@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								new CurrentDataSource(new CurrentIdentity()))
 							)
 					};
-				throw new Exception("Cannot resolve type " + type + "! Add it manually or consider using autofac!");
+            Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
+		    return null;
 		}
 
 		private object MakeScheduleChangedHandler()
