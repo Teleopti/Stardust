@@ -21,7 +21,7 @@ BEGIN
 	CREATE NONCLUSTERED INDEX IX_Person_Businessunit
 	ON #LastKnownBusinessUnit ([Person]) INCLUDE ([BusinessUnit])
 
-	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50), BusinessUnit uniqueidentifier, ValidToDate datetime)
+	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50) collate database_default, BusinessUnit uniqueidentifier, ValidToDate datetime)
 	/*
 	ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName] UNIQUE CLUSTERED 
 	(
