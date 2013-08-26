@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var team = new Team();
 			var message = new PersonChangedMessage();
-			
-			var roots = new IRootChangeInfo[1];
-			roots[0] = new RootChangeInfo(team, DomainUpdateType.Update);
+
+			var roots = new IRootChangeInfo[] {new RootChangeInfo(team, DomainUpdateType.Update)};
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
 				Expect.Call(() => _serviceBusSender.Send(message))
 				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()));
 			}
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var site = new Site("My Site");
 			var message = new PersonChangedMessage();
-			
-			var roots = new IRootChangeInfo[1];
-			roots[0] = new RootChangeInfo(site, DomainUpdateType.Update);
+
+			var roots = new IRootChangeInfo[] { new RootChangeInfo(site, DomainUpdateType.Update) };
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
 				Expect.Call(() => _serviceBusSender.Send(message))
 				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()));
 			}
