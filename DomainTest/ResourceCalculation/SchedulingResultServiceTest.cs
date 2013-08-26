@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -45,8 +46,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void VerifyConstructorOverload2()
+		public void ShouldBeAbleToCreateInstanceFromScheduleDictionary()
 		{
+			var scheduleDictionary = new ScheduleDictionaryForTest(_personAssignmentListContainer.Scenario,
+			                                                       new ScheduleDateTimePeriod(_inPeriod,
+			                                                                                  _personAssignmentListContainer
+				                                                                                  .ContainedPersons.Values),
+			                                                       new Dictionary<IPerson, IScheduleRange>());
+			var range = new ScheduleRange(scheduleDictionary,
+			                              new ScheduleParameters(_personAssignmentListContainer.Scenario,
+			                                                     _personAssignmentListContainer.ContainedPersons.First().Value,
+			                                                     _inPeriod));
+			scheduleDictionary.AddTestItem(_personAssignmentListContainer.ContainedPersons.First().Value,range);
+			range.Add(_personAssignmentListContainer.PersonAssignmentListForActivityDividerTest[0]);
+			
+			_target =
+				new SchedulingResultService(
+					new SchedulingResultStateHolder(_personAssignmentListContainer.ContainedPersons.Values, scheduleDictionary, new Dictionary<ISkill, IList<ISkillDay>>
+						                                {
+							                                {_personAssignmentListContainer.AllSkills[0], new List<ISkillDay>()}
+						                                }),
+					_personAssignmentListContainer.AllSkills, true, new PersonSkillProvider());
 			Assert.IsNotNull(_target);
 		}
 
