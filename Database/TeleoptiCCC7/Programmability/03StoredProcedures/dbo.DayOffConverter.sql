@@ -21,7 +21,7 @@ BEGIN
 	CREATE NONCLUSTERED INDEX IX_Person_Businessunit
 	ON #LastKnownBusinessUnit ([Person]) INCLUDE ([BusinessUnit])
 
-	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50) collate database_default, BusinessUnit uniqueidentifier, ValidToDate datetime)
+	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50), BusinessUnit uniqueidentifier, ValidToDate datetime)
 	/*
 	ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName] UNIQUE CLUSTERED 
 	(
@@ -151,7 +151,7 @@ BEGIN
 	FROM DayOffTemplateSameName a
 	LEFT JOIN DayOffTemplateSameName b
 		ON a.BusinessUnit = b.BusinessUnit
-		AND a.Name = b.Name
+		AND a.Name = b.Name collate database_default
 		AND a.OrderIndex = b.OrderIndex-1
 	ORDER BY a.BusinessUnit,a.Name,a.OrderIndex
 
@@ -167,7 +167,7 @@ BEGIN
 		on pa.Person = pdo.Person
 		and pa.Date = convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
 	inner join #DayOffTemplateSameName dot
-		on pdo.Name = dot.Name
+		on pdo.Name = dot.Name collate database_default
 		and dot.BusinessUnit = pdo.Businessunit
 		and pa.Date between dot.CreatedOn and dot.ValidToDate
 	
@@ -186,7 +186,7 @@ BEGIN
 		on pa.Person = pdo.Person
 		and pa.Date = convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
 	inner join #DayOffTemplateSameName dot
-		on pdo.Name = dot.Name
+		on pdo.Name = dot.Name collate database_default
 		and dot.BusinessUnit = pdo.Businessunit
 		and dot.ValidToDate='2059-12-31'
 	where pa.DayOffTemplate is null
@@ -212,7 +212,7 @@ BEGIN
 	[DayOffTemplate]= dot.Id
 	from dbo.PersonDayOff pdo
 	inner join #DayOffTemplateSameName dot
-		on pdo.Name = dot.Name
+		on pdo.Name = dot.Name collate database_default
 		and dot.BusinessUnit = pdo.Businessunit
 		and dot.ValidToDate='2059-12-31'
 	WHERE NOT EXISTS (
