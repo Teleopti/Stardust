@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfMorningShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftCategoryPerAgentCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[0].ShiftCategoryName.Equals(_morning.Description.Name));
-            Assert.IsTrue(shiftDistributionList[1].ShiftCategoryName.Equals(_day.Description.Name));
-            Assert.IsTrue(shiftDistributionList[2].ShiftCategoryName.Equals(_late.Description.Name));
+            Assert.AreEqual(shiftDistributionList[0].ShiftCategory, _morning);
+            Assert.AreEqual(shiftDistributionList[1].ShiftCategory, _day);
+            Assert.AreEqual(shiftDistributionList[2].ShiftCategory, _late);
             Assert.AreEqual(shiftDistributionList[0].Person, _person1);
             Assert.AreEqual(shiftDistributionList[1].Person, _person1);
             Assert.AreEqual(shiftDistributionList[2].Person, _person1);
@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfDayShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftCategoryPerAgentCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[3].ShiftCategoryName.Equals(_morning.Description.Name));
-            Assert.IsTrue(shiftDistributionList[4].ShiftCategoryName.Equals(_day.Description.Name));
-            Assert.IsTrue(shiftDistributionList[5].ShiftCategoryName.Equals(_late.Description.Name));
+            Assert.AreEqual(shiftDistributionList[3].ShiftCategory, _morning);
+            Assert.AreEqual(shiftDistributionList[4].ShiftCategory, _day);
+            Assert.AreEqual(shiftDistributionList[5].ShiftCategory, _late);
             Assert.AreEqual(shiftDistributionList[3].Person, _person2);
             Assert.AreEqual(shiftDistributionList[4].Person, _person2);
             Assert.AreEqual(shiftDistributionList[5].Person, _person2);
@@ -100,9 +100,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfLateShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftCategoryPerAgentCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[6].ShiftCategoryName.Equals(_morning.Description.Name));
-            Assert.IsTrue(shiftDistributionList[7].ShiftCategoryName.Equals(_day.Description.Name));
-            Assert.IsTrue(shiftDistributionList[8].ShiftCategoryName.Equals(_late.Description.Name));
+            Assert.AreEqual(shiftDistributionList[6].ShiftCategory, _morning);
+            Assert.AreEqual(shiftDistributionList[7].ShiftCategory, _day);
+            Assert.AreEqual(shiftDistributionList[8].ShiftCategory, _late);
             Assert.AreEqual(shiftDistributionList[6].Person, _person3);
             Assert.AreEqual(shiftDistributionList[7].Person, _person3);
             Assert.AreEqual(shiftDistributionList[8].Person, _person3);

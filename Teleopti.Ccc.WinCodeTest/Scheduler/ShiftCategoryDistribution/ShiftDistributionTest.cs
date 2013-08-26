@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             DateOnly dateOnly = DateOnly.Today;
             IShiftCategory shiftCategory = new ShiftCategory("test1");
             const int count = 2;
-            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory.Description.Name, count);
+            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory, count);
 
-            Assert.AreEqual(shiftDistribution.ShiftCategoryName, shiftCategory.Description.Name);
+            Assert.AreEqual(shiftDistribution.ShiftCategory, shiftCategory);
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             DateOnly dateOnly = DateOnly.Today;
             IShiftCategory shiftCategory = new ShiftCategory("test1");
             const int count = 2;
-            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory.Description.Name, count);
+            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory, count);
 
             Assert.AreEqual(shiftDistribution.DateOnly, DateOnly.Today);
         }
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             DateOnly dateOnly = DateOnly.Today;
             IShiftCategory shiftCategory = new ShiftCategory("test1");
             const int count = 2;
-            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory.Description.Name, count);
+            var shiftDistribution = new ShiftDistribution(dateOnly, shiftCategory, count);
 
             Assert.AreEqual(shiftDistribution.Count, 2);
         }

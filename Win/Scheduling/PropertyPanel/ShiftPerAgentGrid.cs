@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex > 0 && e.RowIndex == 0)
 			{
-				e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1];
-				e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1];
+				e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description ;
+				e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1].Description ;
 			}
 
 			if (e.ColIndex == 0 && e.RowIndex > 0)
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					if (shiftCategoryPerAgent.Person.Equals(person))
 					{
-						if (shiftCategoryPerAgent.ShiftCategoryName.Equals(shiftCategory))
+						if (shiftCategoryPerAgent.ShiftCategory.Description.Name.Equals(shiftCategory))
 						{
 							e.Style.CellValue = shiftCategoryPerAgent.Count;
 							break;

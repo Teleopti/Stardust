@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                 Expect.Call(_scheduleDay.Person).Return(person);
             }
             _target = new ShiftCategoryStructure(_scheduleDay);
-            Assert.AreEqual(_target.ShiftCategoryValue.Description, shiftCategory.Description);
+            Assert.AreEqual(_target.ShiftCategory, shiftCategory);
             Assert.AreEqual(_target.DateOnlyValue, DateOnly.Today);
             Assert.AreEqual(_target.PersonValue, person);
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                 Expect.Call(_personAssignment.ShiftCategory).Return(null);
             }
             _target = new ShiftCategoryStructure(_scheduleDay);
-            Assert.AreEqual(_target.ShiftCategoryValue, null);
+            Assert.AreEqual(_target.ShiftCategory, null);
             Assert.AreEqual(_target.PersonValue, null);
 
         }
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
             }
             _target = new ShiftCategoryStructure(_scheduleDay);
-            Assert.AreEqual(_target.ShiftCategoryValue, null);
+            Assert.AreEqual(_target.ShiftCategory, null);
             Assert.AreEqual(_target.PersonValue, null);
 
         }
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             var shiftCategory = new Domain.Scheduling.ShiftCategory("test1");
             var person = PersonFactory.CreatePerson("person2");
             _target = new ShiftCategoryStructure(shiftCategory,DateOnly.Today,person);
-            Assert.AreEqual(_target.ShiftCategoryValue.Description, shiftCategory.Description);
+            Assert.AreEqual(_target.ShiftCategory.Description, shiftCategory.Description);
             Assert.AreEqual(_target.DateOnlyValue, DateOnly.Today);
             Assert.AreEqual(_target.PersonValue, person);
 

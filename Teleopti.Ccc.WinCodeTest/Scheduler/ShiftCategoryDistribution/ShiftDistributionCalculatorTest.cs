@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfMorningShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftDistributionCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[0].ShiftCategoryName.Equals(_morning.Description.Name  ));
-            Assert.IsTrue(shiftDistributionList[1].ShiftCategoryName.Equals(_morning.Description.Name  ));
+            Assert.AreEqual(shiftDistributionList[0].ShiftCategory,_morning);
+            Assert.AreEqual(shiftDistributionList[1].ShiftCategory,_morning);
             Assert.AreEqual(shiftDistributionList[0].DateOnly,_today  );
             Assert.AreEqual(shiftDistributionList[1].DateOnly,_tomorrow   );
             Assert.AreEqual(shiftDistributionList[0].Count,2 );
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfDayShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftDistributionCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[2].ShiftCategoryName.Equals(_day.Description.Name));
-            Assert.IsTrue(shiftDistributionList[3].ShiftCategoryName.Equals(_day.Description.Name));
+            Assert.AreEqual(shiftDistributionList[2].ShiftCategory, _day );
+            Assert.AreEqual(shiftDistributionList[3].ShiftCategory, _day);
             Assert.AreEqual(shiftDistributionList[2].DateOnly, _today);
             Assert.AreEqual(shiftDistributionList[3].DateOnly, _tomorrow);
             Assert.AreEqual(shiftDistributionList[2].Count, 1);
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void TestIfLateShiftsAreCorrect()
         {
             var shiftDistributionList = ShiftDistributionCalculator.Extract(_mappedShiftCategoriesList);
-            Assert.IsTrue(shiftDistributionList[4].ShiftCategoryName.Equals(_late .Description.Name));
-            Assert.IsTrue(shiftDistributionList[5].ShiftCategoryName.Equals(_late.Description.Name));
+            Assert.AreEqual(shiftDistributionList[4].ShiftCategory, _late );
+            Assert.AreEqual(shiftDistributionList[5].ShiftCategory, _late );
             Assert.AreEqual(shiftDistributionList[4].DateOnly, _today);
             Assert.AreEqual(shiftDistributionList[5].DateOnly, _tomorrow);
             Assert.AreEqual(shiftDistributionList[4].Count, 1);

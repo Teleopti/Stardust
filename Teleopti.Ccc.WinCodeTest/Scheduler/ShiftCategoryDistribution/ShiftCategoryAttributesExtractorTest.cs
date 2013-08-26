@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                     _shiftCategoryStructure3
                 };
             _target.ExtractShiftCategoryInformation(shiftCategoryStructureList);
-            Assert.AreEqual(_target.ShiftCategories[0], _sc1.Description.Name);
-            Assert.AreEqual(_target.ShiftCategories[1], _sc2.Description.Name  );
+            Assert.AreEqual(_target.ShiftCategories[0], _sc1);
+            Assert.AreEqual(_target.ShiftCategories[1], _sc2  );
         }
 
         [Test]

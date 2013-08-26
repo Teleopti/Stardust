@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             var returnList =
                 ScheduleDayToShiftCategoryMapper.MapScheduleDay(new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 });
 
-            Assert.AreEqual( returnList[0].ShiftCategoryValue.Description , _shiftCategory1.Description);
-            Assert.AreEqual(returnList[1].ShiftCategoryValue.Description, _shiftCategory2.Description);
+            Assert.AreEqual( returnList[0].ShiftCategory , _shiftCategory1);
+            Assert.AreEqual(returnList[1].ShiftCategory, _shiftCategory2);
         }
         
         [Test]
