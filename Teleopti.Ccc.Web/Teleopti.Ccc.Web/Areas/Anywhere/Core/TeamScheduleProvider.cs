@@ -34,17 +34,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				                                                   DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToArray();
 			foreach (var personScheduleDay in schedules)
 			{
+				var deserializedShift = JsonConvert.DeserializeObject<Shift>(personScheduleDay.Shift);
 				var canSeeConfidental = (permittedPersonsToViewConfidental.SingleOrDefault(x => x.Id == personScheduleDay.PersonId)) != null;
-				var shift = JsonConvert.DeserializeObject<Shift>(personScheduleDay.Shift);
+				
 				if (!canSeeConfidental)
 				{
-					foreach (var layer in shift.Projection.Where(layer => layer.IsAbsenceConfidential))
+					foreach (var layer in deserializedShift.Projection.Where(layer => layer.IsAbsenceConfidential))
 					{
 						layer.Color = ConfidentialPayloadValues.DisplayColor.ToHtml();
 						layer.Title = ConfidentialPayloadValues.Description.Name;
 					}
 				}
-				result.Add(shift);
+
+				result.Add(deserializedShift);
 			}
 			return result;
 		}
