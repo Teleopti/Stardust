@@ -121,7 +121,6 @@ namespace Teleopti.Ccc.Domain.Infrastructure
             aggregateRoots.Add(typeof (AgentDayScheduleTag), new List<Type> {typeof (IPersistableScheduleData)});
             aggregateRoots.Add(typeof (PersonAssignment), new List<Type> {typeof (IPersistableScheduleData)});
             aggregateRoots.Add(typeof (PersonAbsence), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (PersonDayOff), new List<Type> {typeof (IPersistableScheduleData)});
             aggregateRoots.Add(typeof (PublicNote), new List<Type> {typeof (IPersistableScheduleData)});
             aggregateRoots.Add(typeof (PreferenceDay), new List<Type> {typeof (IPersistableScheduleData)});
             aggregateRoots.Add(typeof (StudentAvailabilityDay), new List<Type> {typeof (IPersistableScheduleData)});

@@ -61,18 +61,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				{
 					var checkDateOnly = checkDay.DateOnlyAsPeriod.DateOnly;
 					oldResponses.Remove(createResponse(scheduleDay.Key, checkDateOnly, "remove"));
-					foreach (IPersonDayOff personDayOff in checkDay.PersonDayOffCollection())
+					var ass = checkDay.PersonAssignment();
+					if (ass != null)
 					{
-						DateTimePeriod layerAfterPeriod = periodOfLayerAfter(personDayOff, schedules);
-						DateTimePeriod layerBeforePeriod = periodOfLayerBefore(personDayOff, schedules);
-
-						if (DayOffDoesConflictWithActivity(personDayOff, layerBeforePeriod, layerAfterPeriod))
+						var dayOff = ass.DayOff();
+						if (dayOff != null)
 						{
-							IBusinessRuleResponse response = createResponse(scheduleDay.Key, checkDateOnly, ErrorMessage);
-							ErrorMessage = "";
-							if (!ForDelete)
-								responseList.Add(response);
-							oldResponses.Add(response);
+							DateTimePeriod layerAfterPeriod = periodOfLayerAfter(dayOff, schedules);
+							DateTimePeriod layerBeforePeriod = periodOfLayerBefore(dayOff, schedules);
+
+							if (DayOffDoesConflictWithActivity(dayOff, layerBeforePeriod, layerAfterPeriod))
+							{
+								IBusinessRuleResponse response = createResponse(scheduleDay.Key, checkDateOnly, ErrorMessage);
+								ErrorMessage = "";
+								if (!ForDelete)
+									responseList.Add(response);
+								oldResponses.Add(response);
+							}
 						}
 					}
 				}
@@ -81,12 +86,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
         }
 
-        public bool DayOffDoesConflictWithActivity(IPersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
+        public bool DayOffDoesConflictWithActivity(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
         {
-            if(dayOff.DayOff.TargetLength > (assignmentAfterPeriod.StartDateTime - assignmentBeforePeriod.EndDateTime))
+            if(dayOff.TargetLength > (assignmentAfterPeriod.StartDateTime - assignmentBeforePeriod.EndDateTime))
             {
                 // we can't fit the day off beween the days
-                ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage1 + ErrorMessage, dayOff.DayOff.Anchor);
+                ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage1 + ErrorMessage, dayOff.Anchor);
                 return true;
             }
             // if both are true the day off cannot be moved
@@ -106,64 +111,52 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return false;
         }
 
-        private bool dayOffCannotBeMoved(IPersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
+				private bool dayOffCannotBeMoved(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
         {
             DateTime startDayOff = dayOffStartEnd(dayOff).StartDateTime;
             DateTime endDayOff = dayOffStartEnd(dayOff).EndDateTime;
 
             if (DayOffConflictWithAssignmentBefore(dayOff, assignmentBeforePeriod))
             {
-                string day = dayOff.DayOff.Anchor.Date.ToString("d", _loggedOnCulture);
+                string day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
                 // find out how long the conflict is
                 TimeSpan conflictTime = assignmentBeforePeriod.EndDateTime - startDayOff;
                 // flexibility does not allow the move
-                if (dayOff.DayOff.Boundary.EndDateTime < endDayOff.Add(conflictTime))
+                if (dayOff.Boundary.EndDateTime < endDayOff.Add(conflictTime))
                 {
 
                     ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage2 + ErrorMessage, day);
                     return true;
                 }
-                // the layer After conflicts with a move
-                //if (endDayOff.Add(conflictTime) > assignmentAfterPeriod.StartDateTime)
-                //{
-                //    ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage3 + ErrorMessage, day);
-                //    return true;
-                //}
                 // if the flexibility allows it and we don't get a conflict at the end it can be moved
                 return false;
             }
 
             else
             {
-                string day = dayOff.DayOff.Anchor.Date.ToString("d", _loggedOnCulture);
+                string day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
                 // find out how long the conflict is
                 TimeSpan conflictTime = assignmentAfterPeriod.StartDateTime - endDayOff;
                 // flexibility does not allow the move
-                if (startDayOff.Add(conflictTime) < dayOff.DayOff.Boundary.StartDateTime)
+                if (startDayOff.Add(conflictTime) < dayOff.Boundary.StartDateTime)
                 {
                     ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage4 + ErrorMessage, day);
                     return true;
                 }
-                // the layer Before conflicts with a move
-                //if (startDayOff.Add(conflictTime) < assignmentBeforePeriod.EndDateTime)
-                //{
-                //    ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage5 + ErrorMessage, day);
-                //    return true;
-                //}
                 // if the flexibility allows it and we don't get a conflict at the end it cann be moved
                 return false;
             }
         }
 
-        public static bool DayOffConflictWithAssignmentBefore(IPersonDayOff dayOff, DateTimePeriod periodOfAssignment)
+				public static bool DayOffConflictWithAssignmentBefore(IDayOff dayOff, DateTimePeriod periodOfAssignment)
         {
             // if the assignment is on the same day then it's not a conflict
-            if (periodOfAssignment.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
+            if (periodOfAssignment.StartDateTime.Date == dayOff.Anchor.Date)
             {
                 return false;
             }
             // if the StartDateTimeOfAssignment is too late just return false   
-            if (periodOfAssignment.StartDateTime > dayOff.DayOff.Anchor)
+            if (periodOfAssignment.StartDateTime > dayOff.Anchor)
             {
                 return false;
             }
@@ -171,25 +164,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         }
 
         // checkes if the activity starts before the end of the day off, does not use the flexibility (comes later)
-        public static bool DayOffConflictWithAssignmentAfter(IPersonDayOff dayOff, DateTimePeriod periodOfAssignment)
+				public static bool DayOffConflictWithAssignmentAfter(IDayOff dayOff, DateTimePeriod periodOfAssignment)
         {
             // if the assignment is on the same day then it's not a conflict
-            if (periodOfAssignment.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
+            if (periodOfAssignment.StartDateTime.Date == dayOff.Anchor.Date)
             {
                 return false;
             }
             // if the StartDateTimeOfAssignment is too early just return false
-            if (periodOfAssignment.EndDateTime < dayOff.DayOff.Anchor)
+            if (periodOfAssignment.EndDateTime < dayOff.Anchor)
             {
                 return false;
             }
             return periodOfAssignment.StartDateTime < dayOffStartEnd(dayOff).EndDateTime;
         }
 
-        private static DateTimePeriod dayOffStartEnd(IPersonDayOff dayOff)
+				private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
         {
-            DateTime startDayOff = dayOff.DayOff.Anchor.AddMinutes(-(dayOff.DayOff.TargetLength.TotalMinutes / 2));
-            DateTime endDayOff = dayOff.DayOff.Anchor.AddMinutes((dayOff.DayOff.TargetLength.TotalMinutes / 2));
+            DateTime startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes / 2));
+            DateTime endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes / 2));
 
             return new DateTimePeriod(startDayOff, endDayOff);
         }
@@ -203,7 +196,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return response;
         }
 
-        private DateTimePeriod periodOfLayerBefore(IPersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
+				private DateTimePeriod periodOfLayerBefore(IDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             var assignmentJustBeforeDayOff = getAssignmentJustBeforeDayOff(personDayOff, daysToCheck);
             var layerBeforePeriod = new DateTimePeriod(1900, 1, 1, 1900, 1, 2);
@@ -221,28 +214,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return layerBeforePeriod;
         }
 
-        private static IPersonAssignment getAssignmentJustBeforeDayOff(IPersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
+				private static IPersonAssignment getAssignmentJustBeforeDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             IPersonAssignment returnVal = null;
             foreach (IScheduleDay day in daysToCheck)
             {
-                foreach (var assignment in day.PersonAssignmentCollectionDoNotUse())
-                {
-                    if (assignment.Period.StartDateTime < dayOff.DayOff.Anchor)
-                    {
-                        returnVal = assignment;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+							var assignment = day.PersonAssignment();
+							if (assignment != null)
+							{
+								if (assignment.Period.StartDateTime < dayOff.Anchor)
+								{
+									returnVal = assignment;
+								}
+								else
+								{
+									break;
+								}
+							}
             }
 
             return returnVal;
         }
 
-        private  DateTimePeriod periodOfLayerAfter(IPersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
+				private DateTimePeriod periodOfLayerAfter(IDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             var assignmentJustAfterDayOff = getAssignmentJustAfterDayOff(personDayOff, daysToCheck);
             var periodOfAssignmentAfter = new DateTimePeriod(2100, 1, 1, 2100, 1, 2);
@@ -257,15 +251,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return periodOfAssignmentAfter;
         }
 
-        private static IPersonAssignment getAssignmentJustAfterDayOff(IPersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
+				private static IPersonAssignment getAssignmentJustAfterDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             foreach (IScheduleDay day in daysToCheck)
             {
-                foreach (var assignment in day.PersonAssignmentCollectionDoNotUse())
-                {
-                    if (assignment.Period.StartDateTime > dayOff.DayOff.Anchor)
-                        return assignment;
-                }
+	            var ass = day.PersonAssignment();
+							if (ass != null)
+							{
+								if (ass.Period.StartDateTime > dayOff.Anchor)
+									return ass;
+							}
             }
 
             return null;
