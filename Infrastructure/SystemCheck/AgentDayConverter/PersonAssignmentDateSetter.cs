@@ -7,7 +7,6 @@
 			get
 			{
 				return "select COUNT(*) as cnt from dbo.PersonAssignment pa " +
-						"inner join ShiftLayer sl on pa.Id = sl.Parent " +
 							 "where pa.[Date]=@baseDate " +
 				       "and pa.Person=@personId";
 			}

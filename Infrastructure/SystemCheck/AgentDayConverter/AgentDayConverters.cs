@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				 {
 					 //no need to run on audit data becuase all audit data will be wiped seconds later...
 					 //new PersonAssignmentAuditDateSetter(),
-					 //new RemoveEmptyAssignments(), 
+					 new RemoveEmptyAssignments(), 
 					 new PersonAssignmentDateSetter()
 				 };
 		}
