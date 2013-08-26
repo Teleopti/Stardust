@@ -996,21 +996,66 @@ GO
 ----------------  
 --Name: David Jonsson
 --Date: 2013-08-22
---Desc: PBI #21978 - Adding dayoff ref from personassignment and convert old DayOff into PersonAssignment
+--Desc: PBI #21978 - re-factor clustered index + add column: DayOffTemplate
 ----------------  
-ALTER TABLE dbo.PersonAssignment ADD 
-            DayOffTemplate uniqueidentifier NULL
+--rename current table + PK
+EXEC dbo.sp_rename @objname = N'[dbo].[PersonAssignment]', @newname = N'PersonAssignment_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[dbo].[PersonAssignment_old].[PK_PersonAssignment]', N'PK_PersonAssignment_old', N'INDEX'
+
+--drop existing FK + UQ
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_BusinessUnit]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person_CreatedBy]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person_UpdatedBy]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person3]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Scenario]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_ShiftCategory]
+
+--create new table with correct clustered key
+CREATE TABLE [dbo].[PersonAssignment](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Version] [int] NOT NULL,
+	[CreatedBy] uniqueidentifier NOT NULL,
+	[UpdatedBy] uniqueidentifier NOT NULL,
+	[CreatedOn] datetime NOT NULL,
+	[UpdatedOn] datetime NOT NULL,
+	[Person] uniqueidentifier NOT NULL,
+	[Scenario] uniqueidentifier NOT NULL,
+	[BusinessUnit] uniqueidentifier NOT NULL,
+	[Date] datetime NOT NULL,
+	[ShiftCategory] uniqueidentifier NULL,
+	[DayOffTemplate] uniqueidentifier NULL,
+ CONSTRAINT [PK_PersonAssignment] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE CLUSTERED INDEX [CIX_PersonAssignment_PersonDate_Scenario] ON [dbo].[PersonAssignment]
+(
+	[Person] ASC,
+	[Date] ASC,
+	[Scenario] ASC
+)
+
+--Transfer data into new clustered index
+INSERT INTO [dbo].[PersonAssignment] (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, Scenario, BusinessUnit, Date, ShiftCategory,DayOffTemplate)
+SELECT Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, Scenario, BusinessUnit, Date, ShiftCategory,NULL
+FROM [dbo].[PersonAssignment_old]
+
+--drop old table
+DROP TABLE [dbo].[PersonAssignment_old]
 GO
 
-ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
-            FK_PersonAssignment_DayOffTemplate FOREIGN KEY
-            (
-                         DayOffTemplate
-            ) REFERENCES dbo.DayOffTemplate
-            (
-            Id
-            )
+--re-add FK + UQ
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_BusinessUnit] FOREIGN KEY([BusinessUnit]) REFERENCES [dbo].[BusinessUnit] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person_CreatedBy] FOREIGN KEY([CreatedBy]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person_UpdatedBy] FOREIGN KEY([UpdatedBy]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person] FOREIGN KEY([Person]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Scenario] FOREIGN KEY([Scenario]) REFERENCES [dbo].[Scenario] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_ShiftCategory] FOREIGN KEY([ShiftCategory]) REFERENCES [dbo].[ShiftCategory] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_DayOffTemplate] FOREIGN KEY([DayOffTemplate]) REFERENCES dbo.DayOffTemplate([Id])
 GO
+
 
 ALTER TABLE auditing.PersonAssignment_AUD ADD
             DayOffTemplate uniqueidentifier NULL
