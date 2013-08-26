@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -45,22 +43,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get { return _site; }
             set
             {
-	            if (_site == value) return;
-
-	            string siteBefore = null;
-	            if (_site != null)
-	            {
-		            siteBefore = XmlConvert.ToString(_site.Id.GetValueOrDefault());
-	            }
 	            _site = value;
-	            var siteAfter = XmlConvert.ToString(_site.Id.GetValueOrDefault());
-	            AddEvent(new TeamChangedEvent
-		            {
-			            TeamId = Id.GetValueOrDefault(),
-			            Property = "Site",
-			            OldValue = siteBefore,
-			            NewValue = siteAfter
-		            });
             }
         }
 
