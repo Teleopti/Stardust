@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
@@ -135,10 +136,24 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-				var broker = new SignalBroker(new Dictionary<Type, IList<Type>>()) {ConnectionString = _connectionString};
+				var broker = new SignalBroker(new DummyFilterManager()) {ConnectionString = _connectionString};
 				_messageBroker = broker;
 				_messageBroker.StartMessageBroker();
         	}
+        }
+
+        private class DummyFilterManager : IMessageFilterManager
+        {
+            public DummyFilterManager()
+            {
+                FilterDictionary = new Dictionary<Type, IList<Type>>();
+            }
+
+            public IDictionary<Type, IList<Type>> FilterDictionary { get; private set; }
+            public string LookupType(Type domainObjectType)
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>

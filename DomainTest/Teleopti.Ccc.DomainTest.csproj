@@ -222,6 +222,8 @@
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
+    <Compile Include="Infrastructure\ComplexRuleSetEventArgsTest.cs" />
+    <Compile Include="Infrastructure\EventMessageArgsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />

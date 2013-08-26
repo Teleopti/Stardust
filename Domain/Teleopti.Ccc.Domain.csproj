@@ -295,6 +295,7 @@
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
+    <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixes.cs" />
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />

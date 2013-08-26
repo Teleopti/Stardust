@@ -364,5 +364,18 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 			result.IsCurrentWeek.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldMapDateFormatForUser()
+		{
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(new WeekScheduleDomainData());
+
+			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
+		}
 	}
 }

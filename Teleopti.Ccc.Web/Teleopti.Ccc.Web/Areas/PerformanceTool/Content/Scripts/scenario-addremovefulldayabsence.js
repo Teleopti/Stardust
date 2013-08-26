@@ -141,7 +141,7 @@ define([
                     });
                     
                     personAbsenceSubscription = messagebroker.subscribe({
-                        domainType: 'IPersonAbsence',
+                        domainType: 'IPersistableScheduleData',
                         callback: function (notification) {
                             
                             if (notification.DomainUpdateType == 0) //Only insert

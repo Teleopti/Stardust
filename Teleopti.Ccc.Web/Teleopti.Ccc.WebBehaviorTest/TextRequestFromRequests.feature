@@ -105,3 +105,10 @@ Scenario: Can not delete denied text request
 	And I have a denied text request
 	When I am viewing requests
 	Then I should not see a delete button for request at position '1' in the list
+
+Scenario: Cancel adding a new text request
+	Given I am an agent
+	And I am viewing requests
+	When I click to add a new text request
+	And I click the cancel button
+	Then the add request form should be closed
