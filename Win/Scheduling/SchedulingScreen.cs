@@ -4801,7 +4801,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
             var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
             _tabInfoPanels.TabPages.Add(shiftFairnessTab);
-            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(shiftCategoryDistributionExtractor);
+            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(shiftCategoryDistributionExtractor, _schedulerState);
             shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
             shiftFairnessTab.Controls.Add(shiftFairnessAnalysisControl);
 		}
