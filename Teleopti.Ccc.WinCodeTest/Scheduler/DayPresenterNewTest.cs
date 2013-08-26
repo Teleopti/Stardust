@@ -83,17 +83,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyQueryCellInfo()
         {
-            IDictionary<Guid, IPerson> persons;
-            IPerson person;
-            IScheduleDictionary scheduleDictionary;
-            IScheduleRange range;
-            IScheduleDay scheduleDay1;
-            person = PersonFactory.CreatePerson();
-            persons = new Dictionary<Guid, IPerson>();
+            IPerson person = PersonFactory.CreatePerson();
+            IDictionary<Guid, IPerson> persons = new Dictionary<Guid, IPerson>();
             persons.Add(Guid.NewGuid(), person);
-            scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-            range = mocks.StrictMock<IScheduleRange>();
-            scheduleDay1 = mocks.StrictMock<IScheduleDay>();
+            IScheduleDictionary scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
+            IScheduleRange range = mocks.StrictMock<IScheduleRange>();
+            IScheduleDay scheduleDay1 = mocks.StrictMock<IScheduleDay>();
             ISchedulerStateHolder schedulerState1 = mocks.StrictMock<ISchedulerStateHolder>();
             DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
             IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, assPeriod2);

@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             mocks.VerifyAll();
         }
 
-        [Test, Ignore("Robin! Please kolla på denna!")]
+        [Test]
         public void VerifyRootWithoutDeleteSentToMessageBroker()
         {
             var person = PersonFactory.CreatePerson("Person1");
@@ -177,13 +177,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using (mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 1).AddTicks(1), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
+                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 1).AddTicks(1), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
+                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                                         .Return(mess2);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
