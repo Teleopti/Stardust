@@ -36,16 +36,4 @@ namespace Teleopti.Ccc.DomainTest.Infrastructure
             return new StateHolderException(message);
         }
     }
-
-	[TestFixture]
-	public class EventMessageArgsTest
-	{
-		[Test]
-		public void ShouldCreateMessageArgs()
-		{
-			var message = MockRepository.GenerateMock<IEventMessage>();
-			var target = new EventMessageArgs(message);
-			target.Message.Should().Be.EqualTo(message);
-		}
-	}
 }
