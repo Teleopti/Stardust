@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 	            IPersonAssignment assignment = scheduleDay.PersonAssignment();
-	            if (assignment != null)
+	            if (assignment != null && !scheduleDay.HasDayOff() && assignment.MainLayers().Any())
 	            {
 					personAssignments.Add(assignment);
 	            }
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                 }
 
-                if (personAssignments.Count < 1)
+                if (personAssignments.Count < 1 || scheduleDay.HasDayOff() || !scheduleDay.PersonAssignment(true).MainLayers().Any())
                 {
                     var personAssignmentEndDateTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);
                     var personAssignmentStartDateTime = scheduleDay.Period.StartDateTime;
