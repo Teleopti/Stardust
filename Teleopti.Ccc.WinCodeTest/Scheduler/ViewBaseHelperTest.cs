@@ -1106,16 +1106,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
 				if (Environment.UserInteractive)
-				{
 					Process.Start(fileInfo.FullName);
-				}
-
 			}
-			catch (Exception)
-			{
-				// do nada
-			}
-
+			catch
+			{}
 		}
 
 		[Test]
