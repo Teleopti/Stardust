@@ -23,17 +23,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             foreach (var matrix in scheduleMatrixes)
             {
-                var currentPerson = matrix.Person;
 
-                IList<DateOnly> dates = new List<DateOnly>();
-
-                foreach (var scheduleDay in scheduleDays)
-                {
-                    if (scheduleDay.Person.Equals(currentPerson))
-                        dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                }
-
-				setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
+	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
             }
         }
 

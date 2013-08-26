@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -35,13 +36,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				DateOnly firstDate = dates[0];
 				IGroupPerson firstGroup = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDate);
-				IList<IPerson> firstGroupMembers = firstGroup.GroupMembers;
+				var firstGroupMembers = firstGroup.GroupMembers;
 				
 				for (int i = 1; i < dates.Count; i++)
 				{
 					IGroupPerson thisGroup = _groupPersonBuilderForOptimization.BuildGroupPerson(person, dates[i]);
-					IList<IPerson> groupMembersToCompare = thisGroup.GroupMembers;
-					if (firstGroupMembers.Count != groupMembersToCompare.Count)
+					var groupMembersToCompare = thisGroup.GroupMembers;
+					if (firstGroupMembers.Count() != groupMembersToCompare.Count())
 					{
 						result.Success = true;
 						result.DaysToLock = new DateOnlyPeriod(dates[0], dates[0]);

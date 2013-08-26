@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -8,10 +9,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
     /// <summary>
     /// Class for verifying StaffingCalculatorService
     /// </summary>
-    /// <remarks>
-    /// Created by: zoet
-    /// Created date: 2008-01-14
-    /// </remarks>
     [TestFixture]
     public class StaffingCalculatorServiceTest
     {
@@ -45,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			_orderedSla = 80;
 			_intensity = 2;
 			_calculatorService = new StaffingCalculatorService();
-
 		}
 
         [Test]
@@ -54,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         {
 			_calculatorService.TeleoptiAgents(2, _serviceTime, _calls, _averageHandlingTime, _periodLength);
         }
+
         [Test]
         public void VerifyAgentsFromUtilization()
         {
@@ -87,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
                                                                              _averageHandlingTime, _periodLength,
                                                                              _minOcc, _maxOcc,1), 3));
         }
-
+		
         [Test]
         public void VerifyAgentsUseOccupancySmallDemandWorks()
         {
@@ -108,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(result1, result2, 0.01);
             Assert.AreEqual(result2, result3, 0.01); //Failed at first difference was almost 1 agent
         }
-            
-
+        
         [Test]
         public void VerifyTeleoptiErgBExtended()
         {
@@ -118,6 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgBExtended(-1, _intensity), 3));
         }
+
         [Test]
         public void VerifyTeleoptiErgCExtended()
         {
@@ -126,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgCExtended(-1, _intensity), 3));
         }
+
         [Test]
         public void VerifyServiceLevelAchieved()
         {
@@ -140,6 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(1,
                         Math.Round(_calculatorService.ServiceLevelAchieved(_agents, _serviceTime, 1, _averageHandlingTime, _periodLength, _orderedSla), 3));
         }
+
         [Test]
         public void VerifyUtilization()
         {
@@ -150,7 +149,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void TeleoptiAgentsShouldCalculateAlmostTheSameValueAsAgents()
 		{
-			//_calculatorService.Agents(_sla, _serviceTime, _calls, _averageHandlingTime, _periodLength);
 			Assert.AreEqual(6.101, Math.Round(_calculatorService.TeleoptiAgents(_sla, _serviceTime, _calls, _averageHandlingTime, _periodLength), 3));
 			Assert.AreEqual(31.982d, Math.Round(_calculatorService.TeleoptiAgents(0.7, 60, 456, 120, TimeSpan.FromMinutes(30)), 3));
 			Assert.AreEqual(6601.87d, Math.Round(_calculatorService.TeleoptiAgents(1, 20, 380, 30000, TimeSpan.FromMinutes(30)), 3));
@@ -168,7 +166,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 																		_minOcc, _maxOcc, 3), 3);
 
 			Assert.That(result,Is.EqualTo(expected));
-
 		}
     }
 }

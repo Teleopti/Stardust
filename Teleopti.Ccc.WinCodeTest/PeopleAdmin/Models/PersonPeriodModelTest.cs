@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -93,7 +94,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			Assert.IsNotNull(_target.Parent);
 			Assert.IsNotEmpty(_target.FullName);
 			Assert.IsNotNull(_target.PeriodDate);
-			Assert.IsNotNull(_target.Team);
 			Assert.IsNotNull(_target.Contract);
 			Assert.IsNotNull(_target.ContractSchedule);
 			Assert.IsNotNull(_target.PersonContract);
@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			//If current period is null 
 			_target.GetCurrentPersonPeriodByDate(new DateOnly(DateTime.MinValue));
 			Assert.IsNull(_target.PeriodDate);
-			Assert.IsNull(_target.Team);
 			Assert.IsNull(_target.Contract);
 			Assert.IsNull(_target.ContractSchedule);
 			Assert.IsNull(_target.PersonContract);
@@ -151,15 +150,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_target.PeriodDate = dateOnly;
 
 			Assert.AreEqual(dateOnly.AddDays(1), _target.PeriodDate);
-		}
-
-		[Test]
-		public void VerifyCurrentTeamCanSet()
-		{
-			ITeam team1 = TeamFactory.CreateSimpleTeam();
-			_target.Team = team1;
-
-			Assert.AreEqual(team1, _target.Team);
 		}
 
 		[Test]
@@ -232,12 +222,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
 
 			Assert.AreEqual(_personPeriod2, currentPeriod);
-			Assert.AreEqual(Skill2, currentPeriod.PersonSkillCollection[0].Skill);
+			Assert.AreEqual(Skill2, currentPeriod.PersonSkillCollection.First().Skill);
 			Assert.AreEqual("_skill2", _target.PersonSkills);
 
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
 			_target.PersonSkills = "_skill1";
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
 			Assert.AreEqual("_skill1", _target.PersonSkills);
 		}
 
@@ -269,7 +259,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		[Test]
 		public void VerifySiteTeamCanGetAndSet()
 		{
-
 			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
 
 			Assert.IsNotNull(currentPeriod);
@@ -280,9 +269,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			Assert.AreEqual(REDSITE + "/" + REDTEAM, _target.SiteTeam.Description);
 
 			Assert.IsNull(_target2.SiteTeam);
-
-
-
 		}
 
 		[Test]

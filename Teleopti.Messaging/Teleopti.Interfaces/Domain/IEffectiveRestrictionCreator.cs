@@ -23,6 +23,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="options">The options.</param>
 		/// <param name="scheduleDictionary">The schedule dictionary.</param>
 		/// <returns></returns>
-		IEffectiveRestriction GetEffectiveRestriction(IList<IPerson> groupPersons, DateOnly dateOnly, ISchedulingOptions options, IScheduleDictionary scheduleDictionary);
+		IEffectiveRestriction GetEffectiveRestriction(IEnumerable<IPerson> groupPersons, DateOnly dateOnly, ISchedulingOptions options, IScheduleDictionary scheduleDictionary);
 	}
 }

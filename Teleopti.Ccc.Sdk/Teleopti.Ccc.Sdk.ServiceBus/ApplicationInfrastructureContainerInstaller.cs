@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
@@ -33,7 +34,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
+			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
+			builder.RegisterType<ScheduledResourcesReadModelStorage>().As<IScheduledResourcesReadModelStorage>().SingleInstance();
 		}
 
     	private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

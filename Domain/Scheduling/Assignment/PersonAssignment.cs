@@ -150,16 +150,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _scenario; }
 		}
 
-		public virtual void ScheduleChanged(string dataSource)
+		public virtual void ScheduleChanged()
 		{
 			AddEvent(new ScheduleChangedEvent
 				{
-					Datasource = dataSource,
-					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-					ScenarioId = Scenario.Id.Value,
+					ScenarioId = Scenario.Id.GetValueOrDefault(),
 					StartDateTime = Period.StartDateTime,
 					EndDateTime = Period.EndDateTime,
-					PersonId = Person.Id.Value,
+					PersonId = Person.Id.GetValueOrDefault(),
 				});
 		}
 

@@ -94,17 +94,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
             range = mocks.StrictMock<IScheduleRange>();
             scheduleDay1 = mocks.StrictMock<IScheduleDay>();
-            IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
             ISchedulerStateHolder schedulerState1 = mocks.StrictMock<ISchedulerStateHolder>();
             DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
             IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, assPeriod2);
-            IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(person,
-                                                                                                           TimeSpan.
-                                                                                                               FromHours
-                                                                                                               (8),
-                                                                                                           TimeSpan.
-                                                                                                               FromHours
-                                                                                                               (16));
+
             using (mocks.Record())
             {
                 Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState1, new DateOnly(2011, 1, 1))).Return(
@@ -127,8 +120,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(scheduleDay1.BusinessRuleResponseCollection).Return(new List<IBusinessRuleResponse>());
                 Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-                Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService);
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             }
 
             using (mocks.Playback())

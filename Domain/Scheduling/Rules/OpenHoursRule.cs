@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dateOnlyPeriod) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
             return response;
         }
 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 if (layerCollection == null || !layerCollection.HasLayers)
                     return null;
                 DateTimePeriod period = layerCollection.Period().Value;
-                
+	            var timeZone = person.PermissionInformation.DefaultTimeZone();
                 
                 foreach (IVisualLayer layer in layerCollection.FilterLayers<IActivity>())
                 {
@@ -99,8 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             var errorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
                                            UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
                                            layer.DisplayDescription(),
-                                           TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, person.PermissionInformation.DefaultTimeZone()),
-                                           TimeZoneHelper.ConvertFromUtc(layer.Period.EndDateTime, person.PermissionInformation.DefaultTimeZone()));
+                                           layer.Period.StartDateTimeLocal(timeZone),
+                                           layer.Period.EndDateTimeLocal(timeZone));
                             return CreateResponse(person, dateOnly, errorMessage);
                         }
                     }
@@ -141,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var skills = new List<ISkill>();
             TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-            var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateToCheckOn, timeZoneInfo).Date);
+            var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateToCheckOn, timeZoneInfo));
             
 			var period = person.Period(scheduleDateOnlyPerson);
 			if (period != null)

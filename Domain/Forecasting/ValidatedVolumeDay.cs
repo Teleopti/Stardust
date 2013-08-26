@@ -623,25 +623,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwnerDay.CurrentDate; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        //public virtual bool IsClosed
-        public virtual IOpenForWork OpenForWork
+        public virtual OpenForWork OpenForWork
         {
-            //get { return _taskOwnerDay.IsClosed; }
             get
             {
-                return new OpenForWork()
-                           {
-                               IsOpenForIncomingWork = _taskOwnerDay.OpenForWork.IsOpenForIncomingWork,
-                               IsOpen = _taskOwnerDay.OpenForWork.IsOpen
-                           };
+                return _taskOwnerDay.OpenForWork;
             }
         }
 

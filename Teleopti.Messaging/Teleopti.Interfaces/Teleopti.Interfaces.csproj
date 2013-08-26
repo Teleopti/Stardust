@@ -160,7 +160,6 @@
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
-    <Compile Include="Domain\IOpenForWork.cs" />
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
@@ -547,6 +546,8 @@
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\RequestType.cs" />
+    <Compile Include="Domain\ResourceCalculationContext.cs" />
+    <Compile Include="Domain\ResourceLayer.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITracker.cs" />
     <Compile Include="Domain\ITrackerCalculator.cs" />
@@ -577,6 +578,7 @@
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
+    <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
@@ -587,6 +589,7 @@
     <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
+    <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
     <Compile Include="Infrastructure\IConfigReader.cs" />
     <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
@@ -739,6 +742,7 @@
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
+    <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />

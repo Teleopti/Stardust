@@ -50,7 +50,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
-		void ScheduleChanged(string dataSource);
+		void ScheduleChanged();
 
 		bool RemoveLayer(IShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);

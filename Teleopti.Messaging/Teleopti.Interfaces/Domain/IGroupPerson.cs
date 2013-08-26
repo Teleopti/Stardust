@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
         /// Return the members in the GroupPerson
         /// </summary>
         /// <returns></returns>
-		ReadOnlyCollection<IPerson> GroupMembers { get; }
+		IEnumerable<IPerson> GroupMembers { get; }
 
 		/// <summary>
 		/// Gets or sets the common PossibleStartEndCategory.

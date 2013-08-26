@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -8,10 +9,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public sealed class ScheduleProjectionExtractor : IScheduleExtractor
     {
-        readonly IList<IVisualLayerCollection> retList = new List<IVisualLayerCollection>();
+	    private readonly int _minResolution;
+	    private readonly ResourceCalculationDataContainer retList;
 
+	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution)
+	    {
+			retList = new ResourceCalculationDataContainer(personSkillProvider);
+		    _minResolution = minResolution;
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Creates the relevant projection list.
         /// </summary>
         /// <param name="scheduleDictionary">The schedule dictionary.</param>
@@ -20,13 +27,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public IList<IVisualLayerCollection> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
+        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
         {
-            retList.Clear();
+		    using (PerformanceOutput.ForOperation("Creating projection"))
+		    {
+			    retList.Clear();
 #pragma warning disable 618
-            scheduleDictionary.ExtractAllScheduleData(this);
+			    scheduleDictionary.ExtractAllScheduleData(this);
 #pragma warning restore 618
-            return retList;
+			    return retList;
+		    }
         }
 
         /// <summary>
@@ -39,29 +49,31 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public IList<IVisualLayerCollection> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
+        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
         {
-            retList.Clear();
-            scheduleDictionary.ExtractAllScheduleData(this, period);
-            return retList;
-        }
-
-        // just returns collections with layers
-        public IList<IVisualLayerCollection> CreateRelevantProjectionWithScheduleList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
-        {
-            CreateRelevantProjectionList(scheduleDictionary, period);
-            
-            return retList;
+	        using (PerformanceOutput.ForOperation("Creating projection"))
+	        {
+		        retList.Clear();
+		        scheduleDictionary.ExtractAllScheduleData(this, period);
+		        return retList;
+	        }
         }
 
         void IScheduleExtractor.AddSchedulePart(IScheduleDay schedulePart)
         {
-            IProjectionService svc = schedulePart.ProjectionService();
-            var projection = svc.CreateProjection();
-            if (projection.HasLayers)
-            {
-                retList.Add(projection);
-            }
+	        using (PerformanceOutput.ForOperation("Adding schedule part"))
+	        {
+				IProjectionService svc = schedulePart.ProjectionService();
+				var projection = svc.CreateProjection();
+				if (projection.HasLayers)
+				{
+					var resourceLayers = projection.ToResourceLayers(_minResolution);
+					foreach (var resourceLayer in resourceLayers)
+					{
+						retList.AddResources(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly, resourceLayer);
+					}
+				}
+			}
         }
     }
 }

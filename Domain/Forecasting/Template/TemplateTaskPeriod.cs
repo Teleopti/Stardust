@@ -476,25 +476,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             get { return DateOnly.MinValue; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public virtual IOpenForWork OpenForWork
+        public virtual OpenForWork OpenForWork
         {
-            //get { return false; }
             get
             {
-               return new OpenForWork()
-                    {
-                        IsOpenForIncomingWork = true,
-                        IsOpen =  true
-                        
-                    };
+               return new OpenForWork(true,true);
             }
         }
 

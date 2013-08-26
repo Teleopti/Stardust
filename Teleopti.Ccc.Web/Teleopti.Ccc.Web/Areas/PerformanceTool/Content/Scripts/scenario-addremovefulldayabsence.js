@@ -143,7 +143,7 @@ define([
                     });
                     
                     personAbsenceSubscription = messagebroker.subscribe({
-                        domainType: 'IPersonAbsence',
+                        domainType: 'IPersistableScheduleData',
                         callback: function(notification) {
                             $.each(iterations, function(i, e) {
                                 if (e.NotifyPersonAbsenceChanged(notification))

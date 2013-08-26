@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -91,7 +92,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var modifiedEntity = new ScheduleDataStub() { Id = Guid.NewGuid() };
 			var modifiedItem = new DifferenceCollectionItem<IPersistableScheduleData>(modifiedEntity, modifiedEntity);
 			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { modifiedItem };
-			var scheduleRange = _mocks.DynamicMock<ScheduleRange>(_mocks.DynamicMock<IScheduleDictionary>(), _mocks.DynamicMock<IScheduleParameters>());
+			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
+			var person = PersonFactory.CreatePerson();
+			parameters.Stub(x => x.Person).Return(person);
+			var scheduleRange = _mocks.DynamicMock<ScheduleRange>(_mocks.DynamicMock<IScheduleDictionary>(), parameters);
 
 			_mocks.Record();
 
@@ -112,7 +116,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var addedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedItem = new DifferenceCollectionItem<IPersistableScheduleData>(null, addedEntity);
 			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { addedItem };
-			var scheduleRangeDynamic = _mocks.DynamicMock<ScheduleRange>(_mocks.DynamicMock<IScheduleDictionary>(), _mocks.DynamicMock<IScheduleParameters>());
+			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
+			var person = PersonFactory.CreatePerson();
+			parameters.Stub(x => x.Person).Return(person);
+			var scheduleRangeDynamic = _mocks.DynamicMock<ScheduleRange>(_mocks.DynamicMock<IScheduleDictionary>(), parameters);
 
 			Expect.Call(_scheduleDictionary[null]).Return(scheduleRangeDynamic);
 			Expect.Call(addedEntity.Clone()).Return(addedEntity);

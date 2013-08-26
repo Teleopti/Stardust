@@ -14,9 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private readonly IScheduleParameters _parameters;
         private HashSet<IScheduleData> _scheduleDataCollection;
 
+		
         private readonly object lockObject = new object();
+		
+		private SchedulePublishedSpecification schedulePublishedSpecification;
+		private SchedulePublishedSpecificationForAbsence schedulePublishedSpecificationForAbsence;
+	    private SchedulePublishedSpecification schedulePublishedAnySpecification;
 
-        protected Schedule(IScheduleDictionary owner, IScheduleParameters parameters)
+	    protected Schedule(IScheduleDictionary owner, IScheduleParameters parameters)
         {
             InParameter.NotNull("parameters", parameters);
             InParameter.NotNull("owner", owner);
@@ -24,6 +29,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _parameters = parameters;
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
             _scheduleDataCollection = new HashSet<IScheduleData>();
+
+	        schedulePublishedSpecification = new SchedulePublishedSpecification(Person.WorkflowControlSet,
+	                                                                            ScheduleVisibleReasons.Published);
+			schedulePublishedAnySpecification =
+					new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
+			schedulePublishedSpecificationForAbsence =
+				new SchedulePublishedSpecificationForAbsence(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
         }
 
         public IScheduleDictionary Owner
@@ -162,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public DateTimePeriod? TotalPeriod()
         {
             IEnumerable<IScheduleData> scheduleDataClone = ScheduleDataInternalCollection();
-            if (scheduleDataClone.Count() == 0) return null;
+            if (!scheduleDataClone.Any()) return null;
 
 
             return new DateTimePeriod(scheduleDataClone.Min(d => d.Period.StartDateTime), scheduleDataClone.Max(d => d.Period.EndDateTime));
@@ -175,8 +187,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             var period = dateAndDateTime.Period();
             //this will probably slow things down - fix later
 
-            SchedulePublishedSpecification schedulePublishedSpecification =
-                new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Published);
             var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dateAndDateTime.DateOnly);
             var retObj = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(Owner, Person, dateAndDateTime);
             retObj.FullAccess = availableDatePeriods.Any(a => a.Contains(dateAndDateTime.DateOnly));
@@ -191,17 +201,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             else
             {
                 var agentTimeZone = Person.PermissionInformation.DefaultTimeZone();
-                schedulePublishedSpecification =
-                    new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
-				var schedulePublishedSpecificationForAbsence =
-					new SchedulePublishedSpecificationForAbsence(Person.WorkflowControlSet, ScheduleVisibleReasons.Any, dateAndDateTime);
+                
                 filteredData = (from data in ScheduleDataInternalCollection()
                                 where
                                     data.BelongsToPeriod(dateAndDateTime) &&
-                                    (schedulePublishedSpecification.IsSatisfiedBy(
+                                    (schedulePublishedAnySpecification.IsSatisfiedBy(
                                         new DateOnly(data.Period.StartDateTimeLocal(agentTimeZone)))
 										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
-                                        new PublishedScheduleData(data, agentTimeZone)))
+										new PublishedScheduleData(dateAndDateTime, data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
             }
             filteredData.ForEach(x => retObj._scheduleDataCollection.Add(x));

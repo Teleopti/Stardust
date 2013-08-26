@@ -5,14 +5,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
-
     /// <summary>
     /// Represent any person in the system
     /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2007-11-28
-    /// </remarks>
     public interface IPerson : IAggregateRoot, 
                                 IBusinessUnitHierarchyEntity,
                                 IChangeInfo
@@ -27,79 +22,47 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Terminal date
         /// </summary>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-04
-        /// </remarks>
         DateOnly? TerminalDate { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-28
-        /// </remarks>
         Name Name { get; set; }
 
         /// <summary>
         /// Gets the permission related information.
         /// </summary>
         /// <value>The permission information.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-28
-        /// </remarks>
         IPermissionInformation PermissionInformation { get; }
 
         /// <summary>
         /// Gets or sets the person period collecion.
         /// </summary>
         /// <value>The person period collecion.</value>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-09
-        /// </remarks>
         IList<IPersonPeriod> PersonPeriodCollection { get; }
 
         /// <summary>
         /// Gets the person schedule period collection
         /// </summary>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-07
-        /// </remarks>
         IList<ISchedulePeriod> PersonSchedulePeriodCollection { get; }
 
         /// <summary>
         /// Gets or sets the email.
         /// </summary>
         /// <value>The email.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-29
-        /// </remarks>
         string Email { get; set; }
 
         /// <summary>
         /// Gets or sets the note.
         /// </summary>
         /// <value>The note.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-01-22
-        /// </remarks>
         string Note { get; set; }
 
         /// <summary>
         /// Gets or sets the employment number.
         /// </summary>
         /// <value>The employment number.</value>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-04
-        /// </remarks>
         string EmploymentNumber { get; set; }
 
         /// <summary>
@@ -117,66 +80,24 @@ namespace Teleopti.Interfaces.Domain
         /// Adds the person period.
         /// </summary>
         /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-09
-        /// </remarks>
         void AddPersonPeriod(IPersonPeriod period);
-
-        /// <summary>
-        /// Determines whether [is ok to add person period] [the specified date only].
-        /// </summary>
-        /// <param name="dateOnly">The date only.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is ok to add person period] [the specified date only]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-11-03
-        /// </remarks>
-        bool IsOkToAddPersonPeriod(DateOnly dateOnly);
-
-        /// <summary>
-        /// Determines whether [is ok to add schedule period] [the specified date only].
-        /// </summary>
-        /// <param name="dateOnly">The date only.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is ok to add schedule period] [the specified date only]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: marias
-        /// Created date: 2011-06-08
-        /// </remarks>
-        bool IsOkToAddSchedulePeriod(DateOnly dateOnly);
 
         /// <summary>
         /// Deletes the person period.
         /// </summary>
         /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-03-19
-        /// </remarks>
         void RemoveSchedulePeriod(ISchedulePeriod period);
 
         /// <summary>
         /// Deletes the person period.
         /// </summary>
         /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-03-19
-        /// </remarks>
         void DeletePersonPeriod(IPersonPeriod period);
 
         /// <summary>
         /// Add schedule period to collection
         /// </summary>
         /// <param name="period"></param>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-07
-        /// </remarks>
         void AddSchedulePeriod(ISchedulePeriod period);
 
         /// <summary>
@@ -184,11 +105,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-03-18    
-        /// /// </remarks>
         IPersonPeriod Period(DateOnly dateOnly);
 
         /// <summary>
@@ -197,10 +113,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-07
-        /// </remarks>
         ISchedulePeriod SchedulePeriod(DateOnly dateOnly);
 
 		/// <summary>
@@ -213,19 +125,11 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Removes all person periods.
         /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-02
-        /// </remarks>
         void RemoveAllPersonPeriods();
 
         /// <summary>
         /// Removes all schedule periods.
         /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-03
-        /// </remarks>
         void RemoveAllSchedulePeriods();
 
         /// <summary>
@@ -233,10 +137,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="datePeriod"></param>
         /// <returns>A list of person periods or an empty list if no period found.</returns>
-        /// <remarks>
-        /// Created by: cs
-        /// Created date: 2008-03-04
-        /// </remarks>
         IList<IPersonPeriod> PersonPeriods(DateOnlyPeriod datePeriod);
 
         /// <summary>
@@ -280,11 +180,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personRestrictions">The person restrictions.</param>
         /// <param name="currentDate">The date.</param>
         /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-11    
-        /// /// </remarks>
         IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate);
 
         /// <summary>
@@ -293,11 +188,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personRestrictions">The person restrictions.</param>
         /// <param name="currentDate">The current date.</param>
         /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-10-20    
-        /// /// </remarks>
 		IAvailabilityRestriction GetPersonAvailabilityDayRestriction(IEnumerable<IPersonAvailability> personRestrictions, DateOnly currentDate);
         
         /// <summary>
@@ -309,10 +199,6 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the write protection.
         /// </summary>
         /// <value>The write protection.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-03-03
-        /// </remarks>
         IPersonWriteProtectionInfo PersonWriteProtection { get; }
 
         /// <summary>
@@ -320,9 +206,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The workflow control set.</value>
         /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-15
-        /// </remarks>
         IWorkflowControlSet WorkflowControlSet { get; set; }
 
         ///<summary>
@@ -351,10 +234,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="loadPasswordPolicyService">The load password policy service.</param>
         /// <param name="userDetail">The user detail.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2010-08-19
-        /// </remarks>
         bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
 		/// <summary>
@@ -365,10 +244,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="loadPasswordPolicyService">The load password policy service.</param>
 		/// <param name="userDetail">The user detail.</param>
 		/// <returns></returns>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2010-08-23
-		/// </remarks>
 		IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
         /// <summary>
@@ -415,5 +290,21 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dateOnly"></param>
         /// <returns>work time</returns>
         TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly);
+
+		/// <summary>
+		/// Change the start date for a person period.
+		/// </summary>
+		/// <param name="startDate"></param>
+		/// <param name="period"></param>
+	    void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod period);
+
+	    void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod);
+	    void ChangeTeam(ITeam team, IPersonPeriod personPeriod);
+	    void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod);
+	    void ActivateSkill(ISkill skill, IPersonPeriod personPeriod);
+	    void DeactivateSkill(ISkill skill, IPersonPeriod personPeriod);
+	    void RemoveSkill(ISkill skill, IPersonPeriod personPeriod);
+	    void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod);
+	    void ResetPersonSkills(IPersonPeriod personPeriod);
     }
 }

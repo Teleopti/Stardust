@@ -140,15 +140,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
+    <Compile Include="ApplicationLayer\ITestHandler.cs" />
     <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
+    <Compile Include="ApplicationLayer\TestEvent.cs" />
+    <Compile Include="ApplicationLayer\TestEventTwo.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug22600.cs" />
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
-    <Compile Include="CoverageTest.cs" />
     <Compile Include="CoverAllAssemblies.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
+    <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
@@ -359,10 +362,10 @@
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizerContextTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
     <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
@@ -391,11 +394,9 @@
     <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\PersonPeriodChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
-    <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
-    <Compile Include="UnitOfWork\SqlQueryTest.cs" />
+    <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />

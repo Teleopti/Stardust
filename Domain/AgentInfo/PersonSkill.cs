@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-    public class PersonSkill : AggregateEntity, IPersonSkill
+    public class PersonSkill : AggregateEntity, IPersonSkill, IPersonSkillModify
     {
         private readonly ISkill _skill;
         private Percent _skillPercentage;

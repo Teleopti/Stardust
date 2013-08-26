@@ -992,6 +992,7 @@ DROP COLUMN Minimum, Maximum
 GO
 
 
+
 ----------------  
 --Name: David Jonsson
 --Date: 2013-08-22
@@ -1035,3 +1036,60 @@ INCLUDE
 (
 	[Id]
 )
+
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-08-09
+--Desc: Adding read model for resources
+---------------- 
+CREATE TABLE [ReadModel].[ActivitySkillCombination](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Activity] [uniqueidentifier] NOT NULL,
+	[Skills] [nvarchar](1500) NULL,
+	[ActivityRequiresSeat] [bit] NOT NULL,
+ CONSTRAINT [PK_ActivitySkillCombination] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+
+GO
+
+CREATE TABLE [ReadModel].[PeriodSkillEfficiencies](
+	[ParentId] [int] NOT NULL,
+	[SkillId] [uniqueidentifier] NOT NULL,
+	[Amount] [float] NOT NULL
+ CONSTRAINT [PK_PeriodSkillEfficiencies] PRIMARY KEY CLUSTERED 
+(
+	[ParentId] ASC,
+	[SkillId] ASC
+))
+
+GO
+
+CREATE TABLE [ReadModel].[ScheduledResources](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ActivitySkillCombinationId] [int] NOT NULL,
+	[Resources] [float] NOT NULL,
+	[Heads] [float] NOT NULL,
+	[PeriodStart] [datetime] NOT NULL,
+	[PeriodEnd] [datetime] NOT NULL,
+ CONSTRAINT [PK_ScheduledResources] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+
+GO
+
+ALTER TABLE [ReadModel].[ActivitySkillCombination] ADD  CONSTRAINT [DF_ActivitySkillCombination_ActivityRequiresSeat]  DEFAULT ((0)) FOR [ActivityRequiresSeat]
+GO
+
+ALTER TABLE [ReadModel].[PeriodSkillEfficiencies] ADD  CONSTRAINT [DF_PeriodSkillEfficiencies_Amount]  DEFAULT ((0)) FOR [Amount]
+GO
+
+ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Resources]  DEFAULT ((0)) FOR [Resources]
+GO
+
+ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
+GO

@@ -260,6 +260,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static string GetToolTipOvertime(IScheduleDay cell)
         {
+	        if (!dayHasOvertime(cell)) return string.Empty;
+
             StringBuilder sb = new StringBuilder();
 
             var proj = cell.ProjectionService().CreateProjection();
@@ -279,7 +281,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return sb.ToString();
         }
 
-        /// <summary>
+	    private static bool dayHasOvertime(IScheduleDay cell)
+	    {
+		    return cell.PersonAssignmentCollectionDoNotUse().Any(p => p!=null && p.OvertimeLayers().Any());
+	    }
+
+	    /// <summary>
         /// Get tooltip for absences
         /// </summary>
         /// <param name="cell"></param>

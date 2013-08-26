@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Time;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -290,8 +289,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             historicDayOne.AddParent(historicalDepth);
             LastCall.IgnoreArguments().Repeat.Twice();
             Expect.Call(historicDayOne.IsLocked).Return(false).Repeat.AtLeastOnce();
-            //Expect.Call(historicDayOne.IsClosed).Return(false).Repeat.AtLeastOnce();
-            Expect.Call(historicDayOne.OpenForWork).Return(new OpenForWork(){IsOpen = true, IsOpenForIncomingWork = true}).Repeat.AtLeastOnce();
+            Expect.Call(historicDayOne.OpenForWork).Return(new OpenForWork(true, true)).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.CurrentDate).Return(outlier1.Dates[0]).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.TotalTasks).Return(0d).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.Tasks).Return(0d).Repeat.AtLeastOnce();

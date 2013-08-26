@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			skill.Activity = activity;
 
         	IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
-			personSkill.Active = true;
+			((IPersonSkillModify)personSkill).Active = true;
             IList<IPersonSkill> personSkills = new List<IPersonSkill>{personSkill};
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
