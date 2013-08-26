@@ -675,7 +675,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public virtual bool SendChangeOverMessageBroker()
         {
             if (Request is ShiftTradeRequest)
-                return !(_persistedState.IsNew && _requestState.IsPending);
+            {
+                if (_persistedState.IsNew && _requestState.IsNew)
+                    return false;
+                if (_persistedState.IsNew && _requestState.IsPending)
+                    return false;
+                if (_persistedState.IsPending && _requestState.IsDenied)
+                    return false;
+                if (_persistedState.IsDenied && _requestState.IsDenied)
+                    return true;
+                return true;
+            }
+
             return !(_persistedState.IsNew && _requestState.IsNew);
         }
     }

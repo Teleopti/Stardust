@@ -673,5 +673,25 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Persisted();
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
+
+        [Test]
+        public void ShiftTrade_SendChangeOverMessageBroker_DeniedByOther_ReturnFalse()
+        {
+            setupShiftTrade();
+            _target.Pending();
+            _target.Persisted();
+            _target.Deny(null, null, _authorization);
+            _target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+        }
+
+        [Test]
+        public void ShiftTrade_SendChangeOverMessageBroker_DeniedByAdmin_ReturnTrue()
+        {
+            setupShiftTrade();
+            _target.Pending();
+            _target.Deny(null, null, _authorization);
+            _target.Persisted();
+            _target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+        }
     }
 }
