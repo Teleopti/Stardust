@@ -37,7 +37,7 @@ namespace Teleopti.Support.Security
 
 		private static void initAuditData(CommandLineArgument commandLineArgument)
 		{
-			const string proc = "[Auditing].[TryInitAuditTables])";
+			const string proc = "[Auditing].[TryInitAuditTables]";
 			callProcInSeperateTransaction(commandLineArgument, proc);
 		}
 
