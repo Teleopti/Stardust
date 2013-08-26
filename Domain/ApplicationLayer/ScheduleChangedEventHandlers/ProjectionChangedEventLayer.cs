@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	/// </summary>
 	public class ProjectionChangedEventLayer
 	{
-		/// <summary>
+        /// <summary>
 		/// The payload id
 		/// </summary>
 		public Guid PayloadId { get; set; }

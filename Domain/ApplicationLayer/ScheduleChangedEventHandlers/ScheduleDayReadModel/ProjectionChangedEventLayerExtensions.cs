@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		                                                          int minutesSplit)
 		{
 			if (!resourceLayerCollection.Any()) yield break;
+		    if (minutesSplit < 1) minutesSplit = 15;
 
 			DateTime startTime = resourceLayerCollection.First().StartDateTime;
 			var rest = startTime.Minute%minutesSplit;

@@ -55,6 +55,7 @@ Scenario: View skill selection
 	| Direct Sales  |
 	| Channel Sales |
 
+	@ignore Robin will look on this one!
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And I have a shift with
