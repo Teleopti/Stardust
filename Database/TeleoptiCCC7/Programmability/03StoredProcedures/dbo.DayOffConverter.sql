@@ -22,12 +22,14 @@ BEGIN
 	ON #LastKnownBusinessUnit ([Person]) INCLUDE ([BusinessUnit])
 
 	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50), BusinessUnit uniqueidentifier, ValidToDate datetime)
-	ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName_] UNIQUE CLUSTERED 
+	/*
+	ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName] UNIQUE CLUSTERED 
 	(
 		[CreatedOn] ASC,
 		[Name] ASC,
 		[BusinessUnit] ASC
 	)
+	*/
 
 	--declare
 	DECLARE @DayOffToConvert int
@@ -191,8 +193,8 @@ BEGIN
 
 	SELECT @Converted = @Converted+@@ROWCOUNT
 
-	-- insert new DayOff with no aligned Assignments (by Date)
-	-- Assume that Template that should be used existed on the Schedule Day
+	-- Insert new DayOff with no aligned Assignments (by Date)
+	-- Assume the Template so use is the last=current.
 	--3) 129040
 	INSERT INTO [dbo].[PersonAssignment]
 	SELECT DISTINCT
@@ -221,6 +223,8 @@ BEGIN
 
 	SELECT @Converted = @Converted+@@ROWCOUNT
 	
+
+
 	--====================
 	--END
 	PRINT 'Converted DayOff :' + +cast(@Converted as nvarchar(10))
@@ -228,6 +232,7 @@ BEGIN
 	SELECT @DayOffToConvert as 'Assert',@Converted as 'Test'
 	RETURN 0
 	--====================
+
 	--4) 
 	--recreate "historic" Templates no longer to find
 	INSERT INTO [dbo].[DayOffTemplate]
@@ -242,6 +247,7 @@ BEGIN
 	,[ShortName] = pdo.ShortName
 	,[Flexibility] = pdo.Flexibility
 	,[Anchor] = datediff(SECOND,convert(smalldatetime,floor(convert(decimal(18,8),pdo.anchor))),pdo.anchor)
+--	,[Anchor] = pdo.anchor
 	,[TargetLength] = pdo.TargetLength
 	,[BusinessUnit] = pdo.BusinessUnit
 	,[IsDeleted] = 1
@@ -258,6 +264,7 @@ BEGIN
 		pdo.ShortName,
 		pdo.Flexibility,
 		datediff(SECOND,convert(smalldatetime,floor(convert(decimal(18,8),pdo.anchor))),pdo.anchor),
+--		pdo.anchor,
 		pdo.TargetLength,
 		pdo.BusinessUnit,
 		pdo.DisplayColor,
@@ -305,4 +312,4 @@ BEGIN
 END
 
 GO
-EXEC [dbo].[DayOffConverter]
+--EXEC [dbo].[DayOffConverter]
