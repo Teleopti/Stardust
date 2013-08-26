@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void initializeComponent()
 		{
+			ResetVolatileData();
+
 			QueryColCount += shiftPerAgentGridQueryColCount;
 			QueryRowCount += shiftPerAgentGridQueryRowCount;
 			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
@@ -56,8 +58,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex > 0 && e.RowIndex > 0)
 			{
-				var person = this[e.RowIndex - 1, 0].Tag as IPerson;
-				var shiftCategory = this[0, e.ColIndex - 1].Tag as string;
+				var person = this[e.RowIndex, 0].Tag as IPerson;
+				var shiftCategory = this[0, e.ColIndex].Tag as string;
 
 				foreach (var shiftCategoryPerAgent in _model.GetShiftCategoryPerAgent())
 				{
