@@ -79,8 +79,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 else
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[databaseVersion.Person]);
-					scheduleRange.SolveConflictBecauseOfExternalUpdate(databaseVersion, discardMyChanges);
-				}
+					// I inserted a person assignment, and so did someone else
+					if (databaseVersion is IPersonAssignment && messState.ClientVersion.OriginalItem == null)
+					{
+						scheduleRange.SolveConflictBecauseOfExternalInsert(databaseVersion, discardMyChanges);
+					}
+					else
+					{
+						scheduleRange.SolveConflictBecauseOfExternalUpdate(databaseVersion, discardMyChanges);
+					}
+                }
 
                 messState.RemoveFromCollection();
             }
