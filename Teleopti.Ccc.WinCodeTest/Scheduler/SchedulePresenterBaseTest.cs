@@ -949,6 +949,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ExpectCallsViewBaseOnVerifyAddAbsence(period);
             Expect.Call(_day2.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_day1.Period).Return(new DateTimePeriod(2008, 11, 04, 2008, 11, 05)).Repeat.Any();
+			Expect.Call(_day2.Period).Return(new DateTimePeriod(2008, 11, 04, 2008, 11, 05)).Repeat.Any();
 			Expect.Call(() => _day1.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.AtLeastOnce();
 			Expect.Call(_day1.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_day2.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
@@ -961,6 +962,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 .Return(_day1);
 			Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(1))))
 				.Return(_day1);
+			Expect.Call(_day1.HasDayOff()).Return(false).Repeat.AtLeastOnce();
+			Expect.Call(_day2.HasDayOff()).Return(false).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -1014,6 +1017,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 .Return(_day1);
 			Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(2))))
 				.Return(_day1);
+			Expect.Call(_day2.HasDayOff()).Return(false);
+			Expect.Call(_day1.HasDayOff()).Return(false);
+        
         
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -1148,6 +1154,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(scheduleRange);
 			Expect.Call(scheduleRange.ScheduledDay(date))
 				.Return(schedulePart);
+			Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
 
 			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments();
 		    
@@ -1208,6 +1215,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(schedulePart).Repeat.AtLeastOnce();
 			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments(); // a new absence created, that why ignore arguments
 			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
+			Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddAbsence();
@@ -1230,6 +1238,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(schedulePart.PersonAssignment()).Return(readOnlyCollection[0]).Repeat.AtLeastOnce();
+	        Expect.Call(schedulePart.HasDayOff()).Return(false);
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
 			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
