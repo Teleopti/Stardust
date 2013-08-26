@@ -38,11 +38,20 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			QueryColCount += shiftPerAgentGridQueryColCount;
 			QueryRowCount += shiftPerAgentGridQueryRowCount;
 			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
-
-			//ColWidths.ResizeToFit(GridRangeInfo.Table());
+			QueryColWidth += shiftPerAgentGridQueryColWidth;
 
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 			ResumeLayout(false);	
+		}
+
+		void shiftPerAgentGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
+		{
+			if (e.Index == 0)
+				e.Size = 100;
+			else
+				e.Size = 50;
+
+			e.Handled = true;
 		}
 
 	    void shiftPerAgentGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
