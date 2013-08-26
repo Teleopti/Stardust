@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex > 0 && e.RowIndex == 0)
 			{
-				e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description ;
-				e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1].Description ;
+				e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description.Name ;
+				e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1];
 			}
 
 			if (e.ColIndex == 0 && e.RowIndex > 0)
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (e.ColIndex > 0 && e.RowIndex > 0)
 			{
 				var person = this[e.RowIndex, 0].Tag as IPerson;
-				var shiftCategory = this[0, e.ColIndex].Tag as string;
+				var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
 
 				e.Style.CellValue = 0;
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					if (shiftCategoryPerAgent.Person.Equals(person))
 					{
-						if (shiftCategoryPerAgent.ShiftCategory.Description.Name.Equals(shiftCategory))
+						if (shiftCategoryPerAgent.ShiftCategory.Equals(shiftCategory))
 						{
 							e.Style.CellValue = shiftCategoryPerAgent.Count;
 							break;
@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Handled = true;
 		}
 
-		void shiftPerAgentGridQueryRowCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftPerAgentGridQueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
 			e.Count = _model.PersonInvolved.Count;
 			e.Handled = true;
 		}
 
-		void shiftPerAgentGridQueryColCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftPerAgentGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
 			e.Count = _model.ShiftCategories.Count;
 			e.Handled = true;

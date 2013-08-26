@@ -8,6 +8,7 @@ using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				if (e.RowIndex < _model.ShiftCategories.Count + 1)
 				{
-					e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1];
+					e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1].Description.Name;
 					e.Style.Tag = _model.ShiftCategories[e.RowIndex - 1];
 				}
 				else
@@ -81,11 +82,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (e.ColIndex > 0 && e.RowIndex > 0)
 			{
 				//e.Style.CellValue = e.RowIndex.ToString() + " " + e.ColIndex.ToString();
-				var shiftCategory = this[e.RowIndex, 0].Tag as string;
+				var shiftCategory = this[e.RowIndex, 0].Tag as IShiftCategory;
 
 				foreach (var shiftFairness in _model.GetShiftFairness())
 				{
-					if (shiftFairness.ShiftCategoryName.Equals(shiftCategory))
+					if (shiftFairness.ShiftCategory.Equals(shiftCategory))
 					{
 						if (e.ColIndex == 1) e.Style.CellValue = shiftFairness.MinimumValue;
 						if (e.ColIndex == 2) e.Style.CellValue = shiftFairness.MaximumValue;
