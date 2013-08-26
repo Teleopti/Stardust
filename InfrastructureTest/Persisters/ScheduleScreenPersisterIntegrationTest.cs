@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using NHibernate;
 using NHibernate.Criterion;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -16,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -177,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				var absence = absenceRepository.Get(Absence.Id.Value);
 				var scenarioRepository = new ScenarioRepository(unitOfWork);
 				var scenario = scenarioRepository.Get(Scenario.Id.Value);
-				var session = (ISession)typeof (NHibernateUnitOfWork).GetField("_session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(unitOfWork);
+				var session = unitOfWork.FetchSession();
 				var scheduleData =
 					session.CreateCriteria(typeof (IPersistableScheduleData)).Add(Restrictions.Eq("Id", ScheduleData.Id)).UniqueResult<IPersistableScheduleData>();
 

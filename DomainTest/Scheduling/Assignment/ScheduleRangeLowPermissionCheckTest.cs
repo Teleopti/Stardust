@@ -204,15 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                         scenario);
         }
 
-        private PersonDayOff createPersonDayOff(DateTime period)
-        {
-            DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
-            dOff.Anchor = TimeSpan.FromHours(3);
-            dOff.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(1));
-            return new PersonDayOff(person, scenario, dOff, new DateOnly(period.Date));
-        }
-
-
+        
         private class extractor : IScheduleExtractor
         {
             public extractor()

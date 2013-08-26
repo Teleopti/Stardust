@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-					scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
+					scheduleDay.PersonAssignment().AddOvertimeLayer(_activity, _period,
                                                                          new MultiplicatorDefinitionSet("test",
                                                                                                         MultiplicatorType
                                                                                                             .Overtime));
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_cancelOvertimeCommandDto);
-                scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
+                scheduleDay.PersonAssignment().OvertimeLayers().Should().Be.Empty();
             }
         }
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
  			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignmentCollectionDoNotUse()[0].AddOvertimeLayer(_activity, _period,
+			scheduleDay.PersonAssignment().AddOvertimeLayer(_activity, _period,
 																		 new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelOvertimeCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelOvertimeCommandDto);
-				scheduleDay.PersonAssignmentCollectionDoNotUse()[0].OvertimeLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().OvertimeLayers().Should().Be.Empty();
 			}
 		}
     }

@@ -155,6 +155,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                _nightlyRest,
                                                                new TimeSpan(50, 0, 0));
             _contract.MinTimeSchedulePeriod = new TimeSpan(1);
+
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
         }
 
         [Test]
@@ -204,7 +206,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipAbsences()
         {
-           
             IPersonAbsence abs3 = new PersonAbsence(_agent, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(2006, 1, 1, 2006, 1, 3)));
 
             //rk ändrat här. ska det visas agentens tid eller betraktarens tid?
@@ -236,25 +237,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsence = new PersonAbsence(_agent, _scenario, layer);
             var absCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { personAbsence });
             var part = _mockRep.StrictMock<IScheduleDay>();
-            string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime).ToShortTimeString() + 
-                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
+			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuard.Instance.TimeZone).ToShortTimeString() + 
+                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
 
-            string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() + 
-                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
+			string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() +
+											" - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
 
-            string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() + 
-                                            " - " + TimeZoneHelper.ConvertFromUtc(endTime).ToShortTimeString();
+			string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() +
+											" - " + TimeZoneHelper.ConvertFromUtc(endTime, TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
 
             using (_mockRep.Record())
             {
                 Expect.Call(part.PersonAbsenceCollection()).Return(absCollection).Repeat.AtLeastOnce();
-                Expect.Call(part.TimeZone).Return(TimeZoneHelper.CurrentSessionTimeZone).Repeat.AtLeastOnce();
                 Expect.Call(part.Period).Return(partStartperiod);
                 Expect.Call(part.Period).Return(partMiddlePeriod);
                 Expect.Call(part.Period).Return(partEndPeriod);
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partStartperiod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partMiddlePeriod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partEndPeriod.StartDateTime), TeleoptiPrincipal.Current.Regional.TimeZone));
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partStartperiod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partMiddlePeriod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
+				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partEndPeriod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
             }
 
             using (_mockRep.Playback())
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyToolTipOvertime()
         {
             var period = new DateTimePeriod(new DateTime(2008, 1, 1, 17, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 18, 0, 0, DateTimeKind.Utc));
-            IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(_agent.PermissionInformation.DefaultTimeZone()));
+			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone));
             IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
                 MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Paid Overtime",
                                                                                    MultiplicatorType.Overtime);
@@ -1054,8 +1054,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_schedulePart3.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart3.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulePart3.TimeZone).Return(
-                    (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))).Repeat.AtLeastOnce();
             }
 
             _underlyingDictionary.Clear();
@@ -1095,7 +1093,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             timeText = infoList[2];
             ViewBaseHelper.GetInfoTextWeekView(_schedulePart3, SchedulePartView.MainShift);
             Assert.AreEqual("shiftcategory", infoText);
-            Assert.AreEqual(_personAssignment.Period.LocalStartDateTime.ToShortTimeString() + " - " + _personAssignment.Period.LocalEndDateTime.ToShortTimeString(), periodText);
+	        Assert.AreEqual(
+		        _personAssignment.Period.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() + " - " +
+		        _personAssignment.Period.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(), periodText);
             Assert.AreEqual("00:00", timeText);
         }
 
@@ -1106,16 +1106,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
 				if (Environment.UserInteractive)
-				{
 					Process.Start(fileInfo.FullName);
-				}
-
 			}
-			catch (Exception)
-			{
-				// do nada
-			}
-
+			catch
+			{}
 		}
 
 		[Test]

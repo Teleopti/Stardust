@@ -42,16 +42,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
-		public void ShouldFindDayOffInRevision()
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				target.FindSchedules(new Revision { Id = revisionNumberAtSetupStart }, Agent, new DateOnly(Today))
-					.Should().Contain(PersonDayOff);
-			}
-		}
-
-		[Test]
 		public void ShouldFindRevisionForModifiedAssignment()
 		{
 			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
@@ -79,26 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				Repository.Remove(PersonAbsence);
 				uow.PersistAll();
 			}
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				target.FindRevisions(Agent, new DateOnly(Today), 2)
-					.Should().Have.SameSequenceAs(expected);
-			}
-		}
-
-		[Test]
-		public void ShouldFindRevisionForAddedDayOff()
-		{
-			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var dayOff = new PersonDayOff(Agent, PersonDayOff.Scenario,
-				                 new DayOffTemplate(new Description("test2")) {Anchor = TimeSpan.FromMinutes(12)},
-				                 new DateOnly(Today));
-				Repository.Add(dayOff);
-				uow.PersistAll();
-			}
-
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				target.FindRevisions(Agent, new DateOnly(Today), 2)
@@ -150,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				target.FindSchedules(new Revision { Id = revisionNumberAfterOneUnitTestModification }, Agent, new DateOnly(Today))
-					.Should().Have.SameValuesAs(PersonAbsence, PersonDayOff);
+					.Should().Have.SameValuesAs(PersonAbsence);
 			}
 		}
 
@@ -166,23 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				target.FindSchedules(new Revision { Id = revisionNumberAfterOneUnitTestModification }, Agent, new DateOnly(Today))
-					.Should().Have.SameValuesAs(PersonAssignment, PersonDayOff);
-			}
-		}
-
-		[Test]
-		public void ShouldFindOldButStillLatestScheduleDataWhenDayOffIsRemoved()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				Repository.Remove(PersonDayOff);
-				uow.PersistAll();
-			}
-
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				target.FindSchedules(new Revision { Id = revisionNumberAfterOneUnitTestModification }, Agent, new DateOnly(Today))
-					.Should().Have.SameValuesAs(PersonAssignment, PersonAbsence);
+					.Should().Have.SameValuesAs(PersonAssignment);
 			}
 		}
 

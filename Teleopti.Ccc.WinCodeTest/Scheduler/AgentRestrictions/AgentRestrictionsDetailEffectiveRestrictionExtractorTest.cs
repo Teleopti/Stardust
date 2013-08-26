@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
 			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
 			_periodTarget = TimeSpan.FromHours(40);
-			
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]

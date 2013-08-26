@@ -134,7 +134,9 @@ namespace Teleopti.Ccc.Win.Common
                 {
                     tempPart = (IScheduleDay)part.Clone();
                     tempPart.Clear<IPersonAbsence>();
-                    tempPart.Clear<IPersonAssignment>();
+                    tempPart.PersonAssignment(true).ClearMainLayers();
+					tempPart.PersonAssignment(true).ClearOvertimeLayers();
+					tempPart.PersonAssignment(true).ClearPersonalLayers();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
                     if (tempPart.HasDayOff())

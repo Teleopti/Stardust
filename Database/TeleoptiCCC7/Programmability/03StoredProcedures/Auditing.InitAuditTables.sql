@@ -21,16 +21,16 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 	select a.UpdatedOn, a.UpdatedBy
 	from (
 		select pa.UpdatedOn as UpdatedOn, pa.UpdatedBy as UpdatedBy
-		from PersonAssignment pa
-		inner join Scenario s on s.Id = pa.Scenario and s.DefaultScenario = 1
+		from PersonAssignment pa with (tablock, updlock)
+		inner join Scenario s 
+			on s.Id = pa.Scenario and s.DefaultScenario = 1
+		
 		union
+		
 		select pabs.UpdatedOn as UpdatedOn, pabs.UpdatedBy as UpdatedBy
-		from PersonAbsence pabs
-		inner join Scenario s on s.Id = pabs.Scenario and s.DefaultScenario = 1
-		union
-		select pd.UpdatedOn as UpdatedOn, pd.UpdatedBy as UpdatedBy
-		from PersonDayOff pd
-		with (tablock, updlock)		inner join Scenario s on s.Id = pd.Scenario and s.DefaultScenario = 1
+		from PersonAbsence pabs with (tablock, updlock)
+		inner join Scenario s 
+			on s.Id = pabs.Scenario and s.DefaultScenario = 1
 	) as a
 	group by a.UpdatedOn, a.UpdatedBy
 	order by a.UpdatedOn, a.UpdatedBy
@@ -45,6 +45,7 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Scenario]
 		,[BusinessUnit]
 		,[ShiftCategory]
+		,[DayOffTemplate]
 		,[Date])
 	 select p.Id
 		,ar.Id
@@ -54,6 +55,7 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Scenario]
 		,p.BusinessUnit
 		,p.ShiftCategory
+		,p.DayOffTemplate
 		,p.[Date]
 	from dbo.PersonAssignment p
 	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
@@ -106,39 +108,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		Payload,
 		p.BusinessUnit
 	 from dbo.PersonAbsence p
-	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
-	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1
-
-	--persondayoff
-	insert into Auditing.PersonDayOff_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[Version]
-		,[Anchor]
-		,[TargetLength]
-		,[Flexibility]
-		,[DisplayColor]
-		,[PayrollCode]
-		,[Name]
-		,[ShortName]
-		,[Person]
-		,[Scenario]
-		,[BusinessUnit])
-	 select p.Id,
-		ar.Id,
-		0,
-		p.Version,
-		Anchor,
-		TargetLength,
-		Flexibility,
-		DisplayColor,
-		PayrollCode,
-		p.Name,
-		p.ShortName,
-		Person,
-		Scenario,
-		p.BusinessUnit
-	 from dbo.PersonDayOff p
 	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
 	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1
 

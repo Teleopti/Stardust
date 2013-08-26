@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var dayOff = new DayOffRepository(uow).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
+			var dayOff = new DayOffTemplateRepository(uow).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
 			var personDayOff = new PersonAssignment(user, Scenario, new DateOnly(Date));
 			personDayOff.SetDayOff(dayOff);
 

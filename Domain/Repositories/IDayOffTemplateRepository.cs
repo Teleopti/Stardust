@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// <summary>
     /// Interface for DayOffRepository
     /// </summary>
-    public interface IDayOffRepository : IRepository<IDayOffTemplate>
+    public interface IDayOffTemplateRepository : IRepository<IDayOffTemplate>
     {
         /// <summary>
         /// Finds all day-off data and return them, sorted by the description

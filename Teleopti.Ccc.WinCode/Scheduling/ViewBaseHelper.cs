@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			    if (pa.ShiftCategory != null)
 				    sb.Append(pa.ShiftCategory.Description.Name); //name
 			    sb.Append("  ");
-			    sb.Append(ToLocalStartEndTimeString(pa.Period, scheduleDay.TimeZone)); //time
+			        sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone )); //time
 
 			    foreach (var layer in pa.PersonalLayers())
 			    {
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
 				    //name
 				    sb.Append(": ");
-				    sb.Append(ToLocalStartEndTimeString(layer.Period, scheduleDay.TimeZone)); //time
+                        sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
 			    }
 		    }
 		    return sb.ToString();
@@ -222,7 +223,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                     sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person,cell.DateOnlyAsPeriod.DateOnly).Name); //name
                     sb.Append(": ");
-                    sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, cell.TimeZone));
+                    sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
                 }
             }
 
@@ -244,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                 sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
                 sb.Append(": ");
-            	sb.Append(ToLocalStartEndTimeString(personMeeting.Period, cell.TimeZone));
+                sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuard.Instance.TimeZone));
 
                 if (personMeeting.Optional)
                     sb.AppendFormat(" ({0})", Resources.Optional);
@@ -273,7 +274,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 sb.Append(": ");
                 sb.Append(layer.Payload.ConfidentialDescription(cell.Person,cell.DateOnlyAsPeriod.DateOnly).Name);
                 sb.Append(": ");
-                sb.Append(ToLocalStartEndTimeString(layer.Period, cell.TimeZone));
+                sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
             }
             return sb.ToString();
         }
@@ -789,7 +790,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (significantPart == SchedulePartView.MainShift)
             {
                 infoText = pa.ShiftCategory.Description.Name;
-                periodText = ToLocalStartEndTimeString(pa.Period, schedulePart.TimeZone);
+                periodText = ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone);
             }
 
             if(!string.IsNullOrEmpty(infoText))

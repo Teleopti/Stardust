@@ -111,7 +111,5 @@ namespace Teleopti.Ccc.Win.Shifts
                 if (_viewCache != null) _viewCache.Clear();
             }
         }
-
-        
     }
 }

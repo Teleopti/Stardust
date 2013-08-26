@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return new RequestViewModel();
 			}
 
-			shouldNotBeHere(personRequest);
+			persistWithBus(personRequest);
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
-		private void shouldNotBeHere(IPersonRequest personRequest)
+		private void persistWithBus(IPersonRequest personRequest)
 		{
 			if (_serviceBusSender.EnsureBus())
 			{

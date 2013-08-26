@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
 			preferenceCellData.HasFullDayAbsence = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.Current.Regional.Culture);
-			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
+			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
 
             return totalRestriction;
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var timePeriod = projection.Period();
 			if (timePeriod == null) return null;
 			var dateTimePeriod = timePeriod.Value;
-			var zone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+			var zone = TimeZoneGuard.Instance.TimeZone;
 			var viewLocalTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, zone);
 			var viewLocalEndTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, zone);
 			var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.DisplayColor = assignment.ShiftCategory.DisplayColor;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture);
 			var period = projection.Period();
-			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
+			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
 
 			return totalRestriction;
 		}

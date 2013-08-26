@@ -35,18 +35,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p1,period);
-
-            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-            
-            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-            dayOff.Anchor = new TimeSpan();
-            PersonDayOff dOff = new PersonDayOff(p1, scenario, dayOff, new DateOnly(2000, 1, 2));
+  
             
             IPersonAbsence pAbs =
                 PersonAbsenceFactory.CreatePersonAbsence(p2, scenario,
                                                          new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             ((ScheduleRange)dic[pAss.Person]).Add(pAss);
-            ((ScheduleRange)dic[dOff.Person]).Add(dOff);
             ((ScheduleRange)dic[pAbs.Person]).Add(pAbs);
 
             var retList = _target.CreateRelevantProjectionList(dic);

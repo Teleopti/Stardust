@@ -204,15 +204,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return retList;
         }
 
-
-        public ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection()
-        {
-					throw new Exception("nope. you should use HasDayOff on scheduleday or/and dayoff on personassignment instead!");
-						////todo - when only ScheduleDay, no need to sort this one
-						//var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
-						//return new ReadOnlyCollection<IPersonDayOff>(retList);
-        }
-
         public ReadOnlyCollection<INote> NoteCollection()
         {
             var retList = new List<INote>(ScheduleDataInternalCollection().OfType<INote>());
@@ -394,12 +385,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (data.Period.Intersect(Period))
                     Remove(data);
             }
-            
-            Clear<IPersonAssignment>();
+
             splitList.ForEach(Add);
 
-						var thisAss = PersonAssignment(true);
-						source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
+			var thisAss = PersonAssignment(true);
+			thisAss.ClearMainLayers();
+			source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
         }
 
         public void DeleteFullDayAbsence(IScheduleDay source)

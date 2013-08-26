@@ -1,6 +1,6 @@
 using System;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             DateTime min = DateTime.MaxValue;
             DateTime max = DateTime.MinValue;
-            TimeZoneInfo timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
             foreach (var person in schedulerState.FilteredPersonDictionary.Values)
             {
                 IScheduleRange range = schedulerState.Schedules[person];
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (min.TimeOfDay != TimeSpan.Zero)
                 {
                     IScheduleDay yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
-                	timeZone = yesterDay.TimeZone;
 	                personAssignment = yesterDay.PersonAssignment();
                     if (personAssignment != null)
                     {

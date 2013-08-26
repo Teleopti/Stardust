@@ -264,6 +264,7 @@
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\RemoveEmptyAssignments.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
@@ -322,7 +323,7 @@
     <Compile Include="Repositories\PersonalSettingDataRepository.cs" />
     <Compile Include="Repositories\SettingDataRepository.cs" />
     <Compile Include="Repositories\StateGroupActivityAlarmRepository.cs" />
-    <Compile Include="Repositories\DayOffRepository.cs" />
+    <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />

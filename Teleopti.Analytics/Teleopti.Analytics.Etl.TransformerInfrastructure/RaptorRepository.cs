@@ -649,7 +649,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				new ActivityRepository(uow).LoadAll();
 				new AbsenceRepository(uow).LoadAll();
 				new ShiftCategoryRepository(uow).LoadAll();
-				new DayOffRepository(uow).LoadAll();
+				new DayOffTemplateRepository(uow).LoadAll();
 				new MultiplicatorDefinitionSetRepository(uow).LoadAll();
 			}
 
@@ -801,7 +801,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				var repository = new DayOffRepository(uow);
+				var repository = new DayOffTemplateRepository(uow);
 				return repository.FindAllDayOffsSortByDescription();
 			}
 		}

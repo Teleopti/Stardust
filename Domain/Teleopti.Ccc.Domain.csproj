@@ -943,6 +943,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorDefinitionSet.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
+    <Compile Include="Scheduling\TimeZoneGuard.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
@@ -1080,7 +1081,7 @@
     <Compile Include="RealTimeAdherence\RtaStateGroup.cs" />
     <Compile Include="Repositories\IContractRepository.cs" />
     <Compile Include="Repositories\IContractScheduleRepository.cs" />
-    <Compile Include="Repositories\IDayOffRepository.cs" />
+    <Compile Include="Repositories\IDayOffTemplateRepository.cs" />
     <Compile Include="Repositories\IPersonRequestRepository.cs" />
     <Compile Include="Repositories\IPersonRotationRepository.cs" />
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
@@ -1290,7 +1291,6 @@
     <Compile Include="Scheduling\Absence.cs" />
     <Compile Include="Scheduling\AbsenceLayer.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecification.cs" />
-    <Compile Include="Scheduling\PersonDayOff.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
@@ -1427,9 +1427,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\QueueSource.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\PersonDayOff.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\Contract.hbm.xml">

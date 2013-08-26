@@ -794,6 +794,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayerTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionServiceTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorTest.cs" />
+    <Compile Include="Scheduling\TimeZoneGuardTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServiceTest.cs" />
     <Compile Include="Scheduling\Tracking\SchedulePartTrackingDataProviderTest.cs" />
     <Compile Include="Scheduling\Tracking\TestTrackerOne.cs" />
@@ -1042,7 +1043,6 @@
     <Compile Include="Scheduling\AbsenceTest.cs" />
     <Compile Include="Scheduling\PersonAbsenceTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecificationTest.cs" />
-    <Compile Include="Scheduling\PersonDayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />

@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1),
                                                  person.PermissionInformation.DefaultTimeZone()).Period());
                 Expect.Call(scheduleDay1.PersonAssignment()).Return(ass2).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay1.TimeZone).Return(person.PermissionInformation.DefaultTimeZone());
                 Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(scheduleDay1.BusinessRuleResponseCollection).Return(new List<IBusinessRuleResponse>());
                 Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));

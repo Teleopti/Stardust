@@ -442,8 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
 			dOff.Anchor = TimeSpan.FromHours(12);
 			dOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(1));
-			PersonDayOff dayOff1 = new PersonDayOff(scheduleDay.Person, scheduleDay.Scenario, dOff, new DateOnly(2000, 1, 1));
-			scheduleDay.Add(dayOff1);
+			scheduleDay.PersonAssignment(true).SetDayOff(dOff);
 
 			IVisualLayerCollection projection = target.CreateProjection();
 			Assert.AreEqual(0, projection.Count());

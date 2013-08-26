@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created by: shirang
     /// Created date: 2008-10-28
     /// </remarks>
-    public class DayOffRepository : Repository<IDayOffTemplate>, IDayOffRepository
+    public class DayOffTemplateRepository : Repository<IDayOffTemplate>, IDayOffTemplateRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ContractRepository"/> class.
@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Created by: shirang
         /// Created date: 2008-10-28
         /// </remarks>
-        public DayOffRepository(IUnitOfWork unitOfWork)
+        public DayOffTemplateRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
         }
 
-				public DayOffRepository(ICurrentUnitOfWork currentUnitOfWork)
+				public DayOffTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
 		    
