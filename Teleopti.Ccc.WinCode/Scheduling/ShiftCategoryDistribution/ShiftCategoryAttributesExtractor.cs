@@ -7,18 +7,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
     public interface IShiftCategoryAttributesExtractor
     {
         void ExtractShiftCategoryInformation(IList<ShiftCategoryStructure> shiftCategoryStructureList);
-        IList<String> ShiftCategories { get; }
+        IList<IShiftCategory> ShiftCategories { get; }
         IList<IPerson> PersonInvolved { get; }
         IList<DateOnly> Dates { get; }
     }
     
     public class ShiftCategoryAttributesExtractor : IShiftCategoryAttributesExtractor
     {
-        private IList<string> _shiftCategories;
+        private IList<IShiftCategory> _shiftCategories;
         private IList<IPerson> _persons; 
-        private IList<DateOnly> _dates ; 
+        private IList<DateOnly> _dates ;
 
-        public IList<string> ShiftCategories
+        public IList<IShiftCategory> ShiftCategories
         {
             get { return _shiftCategories; }
         }
@@ -35,15 +35,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
         public void ExtractShiftCategoryInformation(IList<ShiftCategoryStructure> shiftCategoryStructureList)
         {
-            _shiftCategories = new List<string>();
+            _shiftCategories = new List<IShiftCategory>();
             _persons  = new List<IPerson>();
             _dates = new List<DateOnly>();
 
             foreach (var shiftCategoryStructure in shiftCategoryStructureList)
             {
-                if (!_shiftCategories.Contains(shiftCategoryStructure.ShiftCategoryValue.Description.Name))
+                if (!_shiftCategories.Contains(shiftCategoryStructure.ShiftCategory))
                 {
-                    _shiftCategories.Add(shiftCategoryStructure.ShiftCategoryValue.Description.Name);
+                    _shiftCategories.Add(shiftCategoryStructure.ShiftCategory);
                 }
 
                 if (!_persons.Contains(shiftCategoryStructure.PersonValue))

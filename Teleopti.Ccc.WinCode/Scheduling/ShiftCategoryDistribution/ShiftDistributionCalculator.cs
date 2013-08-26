@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 if (!assignShiftDistrubuionIfExists(shiftDistributionList,shiftCategoryStructure))
                 {
                     shiftDistributionList.Add(new ShiftDistribution(shiftCategoryStructure.DateOnlyValue,
-                                                                    shiftCategoryStructure.ShiftCategoryValue
-                                                                                          .Description.Name, 1));
+                                                                    shiftCategoryStructure.ShiftCategory, 1));
                 }
                 
             }
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             foreach (var shiftDistribution in shiftDistributionList)
             {
                 if (shiftDistribution.DateOnly == shiftCategoryStructure.DateOnlyValue 
-                    && shiftCategoryStructure.ShiftCategoryValue.Description.Name.Equals(shiftDistribution.ShiftCategoryName))
+                    && shiftCategoryStructure.ShiftCategory.Equals(shiftDistribution.ShiftCategory))
                 {
                     shiftDistribution.Count++;
                     return true;

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
     {
         public IPerson PersonValue { get; set; }
         public DateOnly DateOnlyValue { get; set; }
-        public IShiftCategory ShiftCategoryValue { get; set; }
+        public IShiftCategory ShiftCategory { get; set; }
 
         public ShiftCategoryStructure(IScheduleDay scheduleDay)
         {
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
         private void populateFeilds(IShiftCategory shiftCategory, DateOnly dateOnly, IPerson person)
         {
-            ShiftCategoryValue = shiftCategory;
+            ShiftCategory = shiftCategory;
             DateOnlyValue = dateOnly;
             PersonValue = person;
         }

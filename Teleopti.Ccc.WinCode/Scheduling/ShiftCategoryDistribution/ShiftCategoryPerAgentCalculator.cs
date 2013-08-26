@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 else
                 {
                     shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(shiftCategoryStructure.PersonValue ,
-                                                                            shiftCategoryStructure.ShiftCategoryValue
-                                                                                                  .Description.Name, 1));
+                                                                            shiftCategoryStructure.ShiftCategory, 1));
                 }
 
             }
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             foreach (var shiftDistribution in shiftCategoryPerAgentList)
             {
                 if (shiftDistribution.Person == shiftCategoryStructure.PersonValue
-                    && shiftCategoryStructure.ShiftCategoryValue.Description.Name.Equals(shiftDistribution.ShiftCategoryName))
+                    && shiftCategoryStructure.ShiftCategory.Equals(shiftDistribution.ShiftCategory))
                 {
                     shiftDistribution.Count++;
                     return true;

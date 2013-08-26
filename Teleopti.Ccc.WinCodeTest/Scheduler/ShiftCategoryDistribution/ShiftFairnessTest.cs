@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 {
@@ -18,8 +19,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             const double averageValue = 6;
             const double standardDeviationValue = 2.5;
             var shiftCategory = new ShiftCategory("Test1");
-            var shiftFairness = new ShiftFairness(shiftCategory.Description.Name , minimumValue, maximumValue, averageValue, standardDeviationValue);
-            Assert.AreEqual(shiftFairness.ShiftCategoryName,shiftCategory.Description.Name );
+            var shiftFairness = new ShiftFairness(shiftCategory , minimumValue, maximumValue, averageValue, standardDeviationValue);
+            Assert.AreEqual(shiftFairness.ShiftCategory,shiftCategory );
         }
         [Test]
         public void VerifyThatMinimumValueIsPopulated()
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             const double averageValue = 6;
             const double standardDeviationValue = 2.5;
             var shiftCategory = new ShiftCategory("Test1");
-            var shiftFairness = new ShiftFairness(shiftCategory.Description.Name, minimumValue, maximumValue, averageValue, standardDeviationValue);
+            var shiftFairness = new ShiftFairness(shiftCategory, minimumValue, maximumValue, averageValue, standardDeviationValue);
             Assert.AreEqual(shiftFairness.MinimumValue , minimumValue);
         }
         [Test]
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             const double averageValue = 6;
             const double standardDeviationValue = 2.5;
             var shiftCategory = new ShiftCategory("Test1");
-            var shiftFairness = new ShiftFairness(shiftCategory.Description.Name, minimumValue, maximumValue, averageValue, standardDeviationValue);
+            var shiftFairness = new ShiftFairness(shiftCategory, minimumValue, maximumValue, averageValue, standardDeviationValue);
             Assert.AreEqual(shiftFairness.MaximumValue , maximumValue );
         }
         [Test]
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             const double averageValue = 6;
             const double standardDeviationValue = 2.5;
             var shiftCategory = new ShiftCategory("Test1");
-            var shiftFairness = new ShiftFairness(shiftCategory.Description.Name, minimumValue, maximumValue, averageValue, standardDeviationValue);
+            var shiftFairness = new ShiftFairness(shiftCategory, minimumValue, maximumValue, averageValue, standardDeviationValue);
             Assert.AreEqual(shiftFairness.AverageValue, averageValue);
         }
         [Test]
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             const double averageValue = 6;
             const double standardDeviationValue = 2.5;
             var shiftCategory = new ShiftCategory("Test1");
-            var shiftFairness = new ShiftFairness(shiftCategory.Description.Name, minimumValue, maximumValue, averageValue, standardDeviationValue);
+            var shiftFairness = new ShiftFairness(shiftCategory, minimumValue, maximumValue, averageValue, standardDeviationValue);
             Assert.AreEqual(shiftFairness.StandardDeviationValue , standardDeviationValue);
         }
     }

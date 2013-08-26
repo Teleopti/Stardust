@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             foreach (var scheduleDay in scheduleDays)
             {
                 var shiftCategoryStructure = new ShiftCategoryStructure(scheduleDay);
-                if (shiftCategoryStructure.ShiftCategoryValue != null)
+                if (shiftCategoryStructure.ShiftCategory != null)
                 {
                     mappedScheduleDays.Add(shiftCategoryStructure);
                 }

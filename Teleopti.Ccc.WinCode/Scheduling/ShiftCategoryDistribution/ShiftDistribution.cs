@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
     public class ShiftDistribution
     {
         public DateOnly DateOnly { get; set; }
-        public string ShiftCategoryName { get; set; }
+        public IShiftCategory ShiftCategory  { get; set; }
         public int Count { get; set; }
 
-        public ShiftDistribution(DateOnly dateOnly, string shiftCategory, int count)
+        public ShiftDistribution(DateOnly dateOnly, IShiftCategory shiftCategory, int count)
         {
             DateOnly = dateOnly;
-            ShiftCategoryName = shiftCategory;
+            ShiftCategory = shiftCategory;
             Count = count;
         }
     }

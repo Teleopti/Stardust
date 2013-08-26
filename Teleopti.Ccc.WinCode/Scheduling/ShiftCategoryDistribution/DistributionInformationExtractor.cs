@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
     public interface IDistributionInformationExtractor
     {
-        IList<string> ShiftCategories { get; }
+        IList<IShiftCategory> ShiftCategories { get; }
         IList<DateOnly> Dates { get; }
         IList<IPerson> PersonInvolved { get; }
         IList<ShiftDistribution> GetShiftDistribution();
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             _shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent>();
         }
 
-        public IList<string> ShiftCategories { get { return _shiftCategoryAttributedExtractor.ShiftCategories; } }
+        public IList<IShiftCategory> ShiftCategories { get { return _shiftCategoryAttributedExtractor.ShiftCategories; } }
 
         public IList<DateOnly> Dates { get { return _shiftCategoryAttributedExtractor.Dates; } }
 

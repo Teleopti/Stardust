@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         public static IList<ShiftFairness> GetShiftFairness(IEnumerable<ShiftCategoryPerAgent> shiftCategoryPerAgentList)
         {
             var returnShiftFairness = new List<ShiftFairness>();
-            var shiftCategoryPerAgentCountValues = new Dictionary<string, List<double>>();
+            var shiftCategoryPerAgentCountValues = new Dictionary<IShiftCategory, List<double>>();
             foreach (var shiftCategoryPerAgent in shiftCategoryPerAgentList)
             {
-                if (shiftCategoryPerAgentCountValues.ContainsKey(shiftCategoryPerAgent.ShiftCategoryName))
+                if (shiftCategoryPerAgentCountValues.ContainsKey(shiftCategoryPerAgent.ShiftCategory))
                 {
-                    shiftCategoryPerAgentCountValues[shiftCategoryPerAgent.ShiftCategoryName].Add(shiftCategoryPerAgent.Count);
+                    shiftCategoryPerAgentCountValues[shiftCategoryPerAgent.ShiftCategory].Add(shiftCategoryPerAgent.Count);
                 }
                 else
                 {
-                    shiftCategoryPerAgentCountValues.Add(shiftCategoryPerAgent.ShiftCategoryName, new List<double>());
-                    shiftCategoryPerAgentCountValues[shiftCategoryPerAgent.ShiftCategoryName].Add(shiftCategoryPerAgent.Count);
+                    shiftCategoryPerAgentCountValues.Add(shiftCategoryPerAgent.ShiftCategory, new List<double>());
+                    shiftCategoryPerAgentCountValues[shiftCategoryPerAgent.ShiftCategory].Add(shiftCategoryPerAgent.Count);
                 }
             }
 

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             var person = PersonFactory.CreatePerson("person1");
             var shiftCategory = new ShiftCategory("shiftcategory");
             const int count = 2;
-            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory.Description.Name, count);
+            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory, count);
             Assert.AreEqual(shiftCategoryPerAgent.Person.Name ,person.Name );
         }
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             var person = PersonFactory.CreatePerson("person1");
             var shiftCategory = new ShiftCategory("shiftcategory");
             const int count = 2;
-            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory.Description.Name, count);
+            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory, count);
             Assert.AreEqual(shiftCategoryPerAgent.Count, 2);
         }
 
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             var person = PersonFactory.CreatePerson("person1");
             var shiftCategory = new ShiftCategory("shiftcategory");
             const int count = 2;
-            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory.Description.Name, count);
-            Assert.AreEqual(shiftCategoryPerAgent.ShiftCategoryName, shiftCategory.Description.Name );
+            var shiftCategoryPerAgent = new ShiftCategoryPerAgent(person, shiftCategory, count);
+            Assert.AreEqual(shiftCategoryPerAgent.ShiftCategory, shiftCategory );
         }
     }
 }

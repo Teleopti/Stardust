@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         private IPerson _person3;
         private IPerson _person4;
         private List<ShiftCategoryPerAgent> _shiftCategoryPerAgentList;
+        private ShiftCategory _morning;
+        private ShiftCategory _day;
+        private ShiftCategory _late;
 
         [SetUp]
         public void Setup()
@@ -25,21 +29,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             _person3 = PersonFactory.CreatePerson("Bill");
             _person4 = PersonFactory.CreatePerson("Stan");
 
+            _morning = new ShiftCategory("Morning");
+            _day = new ShiftCategory("Day");
+            _late = new ShiftCategory("Late");
+
             _shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent>();
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, "Morning", 2));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, "Morning", 3));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, "Morning", 2));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, "Morning", 4));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, _morning, 2));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, _morning, 3));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, _morning, 2));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, _morning, 4));
 
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, "Day", 7));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, "Day", 6));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, "Day", 2));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, "Day", 5));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, _day, 7));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, _day, 6));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, _day, 2));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, _day, 5));
 
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, "Late", 1));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, "Late", 1));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, "Late", 1));
-            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, "Late", 1));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person1, _late, 1));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person2, _late, 1));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person3, _late, 1));
+            _shiftCategoryPerAgentList.Add(new ShiftCategoryPerAgent(_person4, _late, 1));
         }
 
         [Test]
@@ -52,9 +60,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         public void VerifyThatShiftCategoryIsPopulated()
         {
             var shiftFairnessList = ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList);
-            Assert.IsTrue(shiftFairnessList[0].ShiftCategoryName.Equals( "Morning") );
-            Assert.IsTrue(shiftFairnessList[1].ShiftCategoryName.Equals( "Day") );
-            Assert.IsTrue(shiftFairnessList[2].ShiftCategoryName.Equals( "Late") );
+            Assert.AreEqual(shiftFairnessList[0].ShiftCategory,_morning  );
+            Assert.AreEqual(shiftFairnessList[1].ShiftCategory,_day  );
+            Assert.AreEqual(shiftFairnessList[2].ShiftCategory,_late  );
         }
 
         [Test]
