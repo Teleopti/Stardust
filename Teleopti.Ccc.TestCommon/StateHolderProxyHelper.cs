@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -15,7 +16,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.TestCommon
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, new SignalBroker(MessageFilterManager.Instance.FilterDictionary), null);
+			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, new SignalBroker(MessageFilterManager.Instance), null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };

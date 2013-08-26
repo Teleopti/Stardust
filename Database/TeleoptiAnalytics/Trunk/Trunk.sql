@@ -310,3 +310,25 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_person_category_type_get]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_control_person_category_type_get]
 GO
+
+----------------  
+--Name: Ola
+--Date: 2013-08-26
+--Desc: Part of #24362 - New index to speed up read from  [fact_schedule] when running [etl_fact_schedule_day_count_intraday_load]
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[fact_schedule]') AND name = N'IX_fact_schedule_scenario_shift_category')
+CREATE NONCLUSTERED INDEX [IX_fact_schedule_scenario_shift_category]
+ON [mart].[fact_schedule] 
+(
+[scenario_id],
+[shift_category_id]
+)
+INCLUDE ([person_id],
+[shift_startdate_id],
+[shift_starttime],
+[shift_startinterval_id],
+[business_unit_id],
+[datasource_id],
+[datasource_update_date])
+GO
+
