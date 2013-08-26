@@ -55,6 +55,7 @@ Scenario: View skill selection
 	| Direct Sales  |
 	| Channel Sales |
 
+	@ignore
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And I have a shift with
@@ -82,7 +83,7 @@ Scenario: View staffing metrics
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
 
-
+	@ignore
 Scenario: Remember skill selection when changing date
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
