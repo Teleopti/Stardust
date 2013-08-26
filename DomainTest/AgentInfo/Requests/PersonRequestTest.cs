@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -606,6 +607,71 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldCallDummyToRemoveUnusedMethod()
 		{
 			((PersonRequest)_target).DummyMethodToRemoveCompileErrorsWithUnusedVariable();
+		}
+
+
+		[Test]
+		public void SendChangeOverMessageBroker_NewRequest_ReturnFalse()
+		{
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void SendChangeOverMessageBroker_NewToPending_ReturnTrue()
+		{
+			_target.Persisted();
+			_target.Pending();
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+		}
+
+	    [Test]
+		public void SendChangeOverMessageBroker_PendingToApproved_ReturnTrue()
+	    {
+		    _target.Pending();
+			_target.Persisted();
+		    _target.Approve(null, _authorization);
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+	    }
+
+		[Test]
+		public void SendChangeOverMessageBroker_PendingToDenied_ReturnTrue()
+		{
+			_target.Pending();
+			_target.Persisted();
+			_target.Deny(null, null, _authorization);
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void SendChangeOverMessageBroker_NewToAutoDenied_ReturnTrue()
+		{
+			_target.Deny(null, null, _authorization);
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+		}
+
+		private void setupShiftTrade()
+		{
+			_target.Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(new Person(), new Person(), new DateOnly(2013,08,26), new DateOnly(2013,08,27))
+				});
+		}
+
+		[Test]
+		public void ShiftTrade_SendChangeOverMessageBroker_SentToOtherPerson_ReturnFalse()
+		{
+			setupShiftTrade();
+			_target.Pending();
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShiftTrade_SendChangeOverMessageBroker_AcceptedByOther_ReturnTrue()
+		{
+			setupShiftTrade();
+			_target.Pending();
+			_target.Persisted();
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
     }
 }

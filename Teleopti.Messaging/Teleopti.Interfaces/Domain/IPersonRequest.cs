@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-10-10
     /// </remarks>
     public interface IPersonRequest : ICloneableEntity<IPersonRequest>, 
-                                        IAggregateRoot,
+                                        IAggregateRootBrokerConditions,
                                         IOriginator<IPersonRequest>,
                                         IChangeInfo,
                                         INotifyPropertyChanged

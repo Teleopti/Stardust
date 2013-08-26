@@ -113,6 +113,7 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
+    <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
