@@ -1,8 +1,11 @@
 using System;
 using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.Infrastructure
 {
@@ -33,4 +36,16 @@ namespace Teleopti.Ccc.DomainTest.Infrastructure
             return new StateHolderException(message);
         }
     }
+
+	[TestFixture]
+	public class EventMessageArgsTest
+	{
+		[Test]
+		public void ShouldCreateMessageArgs()
+		{
+			var message = MockRepository.GenerateMock<IEventMessage>();
+			var target = new EventMessageArgs(message);
+			target.Message.Should().Be.EqualTo(message);
+		}
+	}
 }

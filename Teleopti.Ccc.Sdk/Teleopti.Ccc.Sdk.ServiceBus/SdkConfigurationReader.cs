@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             	var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
-            			new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
+            			new SignalBroker(MessageFilterManager.Instance));
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);
@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					new ScheduleMessageSender(sender),
 					new MeetingMessageSender(sender),
 					new GroupPageChangedMessageSender(sender),
+					new TeamOrSiteChangedMessageSender(sender),
 					new PersonChangedMessageSender(sender),
 					new PersonPeriodChangedMessageSender(sender)
 				};
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
 						                       DataSourceConfigurationSetter.ForServiceBus()),
-						new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
+						new SignalBroker(MessageFilterManager.Instance));
 				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 
 				Logger.Info("Initialized application");

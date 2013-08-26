@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 	    private static bool dayHasOvertime(IScheduleDay cell)
 	    {
-		    return cell.PersonAssignmentCollection().Any(p => p!=null && p.OvertimeShiftCollection.Count > 0);
+		    return cell.PersonAssignmentCollectionDoNotUse().Any(p => p!=null && p.OvertimeLayers().Any());
 	    }
 
 	    /// <summary>

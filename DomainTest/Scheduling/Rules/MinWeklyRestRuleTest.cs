@@ -424,9 +424,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 22, 2010, 8, 30))).Return(new[] { day0Hours, day1, day1, day1, day1, day1, day1, day0Hours });
-				Expect.Call(day0Hours.PersonAssignmentCollection()).Return(personAssCol).Repeat.Times(2);
+				Expect.Call(day0Hours.PersonAssignmentCollectionDoNotUse()).Return(personAssCol).Repeat.Times(2);
 				Expect.Call(day1.PersonAssignmentCollectionDoNotUse()).Return(personAssCol2).Repeat.Times(6);
-				Expect.Call(day1.PersonAssignmentCollection()).Return(personAssCol2).Repeat.Times(6);
 
 				mockShift(personAss, firstlayerCollectionPeriod, WorkTimeOptions.Both);
 				mockShift(personAss, firstlayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(1)), WorkTimeOptions.Both);

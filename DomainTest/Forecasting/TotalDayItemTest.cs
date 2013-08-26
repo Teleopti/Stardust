@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _date = new DateOnly(2008, 3, 31);
             _taskOwner = mocks.StrictMock<ITaskOwner>();
 
-            //Expect.Call(_taskOwner.IsClosed).Return(false).Repeat.Any();
-            Expect.Call(_taskOwner.OpenForWork).Return(new OpenForWork() { IsOpenForIncomingWork = true, IsOpen = true }).Repeat.Any();
+            Expect.Call(_taskOwner.OpenForWork).Return(new OpenForWork(true,true)).Repeat.Any();
             Expect.Call(_taskOwner.Tasks).PropertyBehavior().Return(10).Repeat.Any();
             Expect.Call(_taskOwner.AverageTaskTime).PropertyBehavior().Return(TimeSpan.Zero).Repeat.Any();
             Expect.Call(_taskOwner.AverageAfterTaskTime).PropertyBehavior().Return(TimeSpan.Zero).Repeat.Any();

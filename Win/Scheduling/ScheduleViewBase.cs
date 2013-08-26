@@ -1204,18 +1204,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return ret;
         }
 
-            }
-            return ret;
-        }
-		
-		public static ICollection<DateTime> AllSelectedUtcDates(IEnumerable<IScheduleDay> selectedSchedules)
-        {
-			ICollection<DateTime> ret = new HashSet<DateTime>();
-            foreach (IScheduleDay part in selectedSchedules)
-            {
-                var dateTime = TimeZoneHelper.ConvertToUtc(part.DateOnlyAsPeriod.DateOnly.Date, part.TimeZone);
-	            ret.Add(dateTime);
-        public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
+	    public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
             var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
             return extractor.ExtractPersons();

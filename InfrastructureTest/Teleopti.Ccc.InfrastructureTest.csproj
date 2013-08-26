@@ -398,6 +398,7 @@
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
+    <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />

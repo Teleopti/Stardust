@@ -53,10 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 if (schedulePeriod.IsValid)
 				{
-                    DateOnlyPeriod scheduleDateOnlyPeriod = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
 					var timeZone = person.PermissionInformation.DefaultTimeZone();
-					var currentSchedules = rangeClones[person];
                     foreach (PersonWeek personWeek in personWeeks)
                     {
                         foreach (DateOnly day in personWeek.Week.DayCollection())
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 {
                     DateOnlyPeriod scheduleDateOnlyPeriod = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
-                    
+	                var timeZone = schedulePeriod.Person.PermissionInformation.DefaultTimeZone();
                     
                     foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                     {

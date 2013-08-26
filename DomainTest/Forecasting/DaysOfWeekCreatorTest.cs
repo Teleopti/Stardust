@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Expect.Call(taskOwner.CurrentDate).Return(new DateOnly(2010, 9, 21)).Repeat.AtLeastOnce();
                 Expect.Call(()=>taskOwner.AddParent(null)).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(taskOwner.IsLocked).Return(false).Repeat.AtLeastOnce();
-                //Expect.Call(taskOwner.IsClosed).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(taskOwner.OpenForWork).Return(new OpenForWork() { IsOpenForIncomingWork = false, IsOpen = false }).Repeat.AtLeastOnce();
+                Expect.Call(taskOwner.OpenForWork).Return(new OpenForWork()).Repeat.AtLeastOnce();
                 Expect.Call(taskOwner.TotalStatisticCalculatedTasks).Return(0).Repeat.AtLeastOnce();
                 Expect.Call(taskOwner.TotalStatisticAnsweredTasks).Return(0).Repeat.AtLeastOnce();
                 Expect.Call(taskOwner.TotalStatisticAbandonedTasks).Return(0).Repeat.AtLeastOnce();

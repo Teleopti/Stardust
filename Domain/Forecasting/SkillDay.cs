@@ -1097,24 +1097,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _isDirty = true;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public virtual IOpenForWork OpenForWork
+        public virtual OpenForWork OpenForWork
         {
             get
             {
                 var isOpen = SkillStaffPeriodCollection.Count > 0;
-                return new OpenForWork
-                {
-                    IsOpenForIncomingWork = isOpen,
-                    IsOpen =  isOpen
-                };
+	            return new OpenForWork(isOpen, isOpen);
             }
         }
 

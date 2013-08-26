@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Win.Common.ServiceBus;
@@ -20,7 +21,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Win.Services;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Main
         	bool messageBrokerDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
 
         	new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
-				new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+				new SignalBroker(MessageFilterManager.Instance))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper(), true);
@@ -131,10 +131,11 @@ namespace Teleopti.Ccc.Win.Main
 												          new ScheduleMessageSender(sendToServiceBus), 
                                                           new MeetingMessageSender(sendToServiceBus),
                                                           new GroupPageChangedMessageSender(sendToServiceBus),
+                                                          new TeamOrSiteChangedMessageSender(sendToServiceBus),
                                                           new PersonChangedMessageSender(sendToServiceBus),
                                                           new PersonPeriodChangedMessageSender(sendToServiceBus)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

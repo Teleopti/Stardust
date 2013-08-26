@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new ScheduleMessageSender(busSender),
                                                 new MeetingMessageSender(busSender),
                                                 new GroupPageChangedMessageSender(busSender),
+                                                new TeamOrSiteChangedMessageSender(busSender),
                                                 new PersonChangedMessageSender(busSender),
                                                 new PersonPeriodChangedMessageSender(busSender)
                                             },
