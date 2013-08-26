@@ -19,7 +19,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668;
-	var timeLineOffset = 110;
+	var timeLineOffset = 109;
 	var pixelToDisplayAll = 33;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -416,7 +416,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var timelineHeight = 668;
-		var timelineOffset = 120;
+		var offset = 120;
 		var timeindicatorHeight = 2;
 
 		var hours = theDate.getHours();
@@ -435,7 +435,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		if (timelineStartMinutes <= clientNowMinutes && clientNowMinutes <= timelineEndMinutes) {
 			timeIndicator.css("top", position).show();
-			timeIndicatorTimeLine.css("top", position + timelineOffset).show();
+			timeIndicatorTimeLine.css("top", position + offset).show();
 		}
 		else {
 			timeIndicator.hide();
