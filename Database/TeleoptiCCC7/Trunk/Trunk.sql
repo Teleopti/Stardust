@@ -1011,6 +1011,10 @@ ALTER TABLE dbo.PersonAssignment ADD CONSTRAINT
             )
 GO
 
+ALTER TABLE auditing.PersonAssignment_AUD ADD
+            DayOffTemplate uniqueidentifier NULL
+GO
+
 --Adding index to support next operation
 --DROP INDEX IX_PersonAssignment_Date ON [dbo].[PersonAssignment]
 CREATE NONCLUSTERED INDEX IX_PersonAssignment_Date
