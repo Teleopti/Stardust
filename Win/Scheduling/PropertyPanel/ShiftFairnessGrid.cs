@@ -13,13 +13,106 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftFairnessGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftFairnessGrid
     {
-	    private IDistributionInformationExtractor _model;
+	    private readonly IDistributionInformationExtractor _model;
 	    private ShiftFairnessGridPresenter _presenter;
 
 		public ShiftFairnessGrid(IDistributionInformationExtractor model)
 		{
 			_model = model;
 			_presenter = new ShiftFairnessGridPresenter(this);
+			initializeComponent();
+		}
+
+		private void initializeComponent()
+		{
+			//ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+
+			ResetVolatileData();
+
+			QueryColCount += ShiftFairnessGrid_QueryColCount;
+			QueryRowCount += ShiftFairnessGrid_QueryRowCount;
+			QueryCellInfo += ShiftFairnessGrid_QueryCellInfo;
+			QueryColWidth += ShiftFairnessGrid_QueryColWidth;
+			
+
+			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+			ResumeLayout(false);
+		}
+
+		void ShiftFairnessGrid_QueryColWidth(object sender, Syncfusion.Windows.Forms.Grid.GridRowColSizeEventArgs e)
+		{
+			if (e.Index == 0)
+				e.Size = 50;
+			else
+				e.Size = 120;
+
+			e.Handled = true;
+		}
+
+		
+		void ShiftFairnessGrid_QueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+		{
+			if (e.ColIndex < 0 || e.RowIndex < 0) return;
+			if (e.ColIndex == 0 && e.RowIndex == 0) return;
+			if (e.ColIndex > 4) return;
+			if (e.RowIndex > _model.ShiftCategories.Count + 1) return;
+
+			if (e.ColIndex > 0 && e.RowIndex == 0)
+			{
+				if (e.ColIndex == 1) e.Style.CellValue = UserTexts.Resources.Min;
+				if (e.ColIndex == 2) e.Style.CellValue = UserTexts.Resources.Max;
+				if (e.ColIndex == 3) e.Style.CellValue = "xxAvarage";
+				if (e.ColIndex == 4) e.Style.CellValue = UserTexts.Resources.StandardDeviation;
+			}
+
+			if (e.ColIndex == 0 && e.RowIndex > 0)
+			{
+				if (e.RowIndex < _model.ShiftCategories.Count + 1)
+				{
+					e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1];
+					e.Style.Tag = _model.ShiftCategories[e.RowIndex - 1];
+				}
+				else
+				{
+					e.Style.CellValue = UserTexts.Resources.TotalColon;
+				}
+			}
+
+			if (e.ColIndex > 0 && e.RowIndex > 0)
+			{
+				//e.Style.CellValue = e.RowIndex.ToString() + " " + e.ColIndex.ToString();
+				var shiftCategory = this[e.RowIndex, 0].Tag as string;
+
+				foreach (var shiftFairness in _model.GetShiftFairness())
+				{
+					if (shiftFairness.ShiftCategoryName.Equals(shiftCategory))
+					{
+						if (e.ColIndex == 1) e.Style.CellValue = shiftFairness.MinimumValue;
+						if (e.ColIndex == 2) e.Style.CellValue = shiftFairness.MaximumValue;
+						if (e.ColIndex == 3) e.Style.CellValue = shiftFairness.AverageValue;
+						if (e.ColIndex == 4) e.Style.CellValue = shiftFairness.StandardDeviationValue;
+					}
+				}
+
+				if (e.ColIndex == 4 && e.RowIndex == _model.ShiftCategories.Count + 1)
+				{
+					e.Style.CellValue = "Total";
+				}
+			}
+
+			e.Handled = true;
+		}
+
+		void ShiftFairnessGrid_QueryRowCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		{
+			e.Count = _model.ShiftCategories.Count + 1;
+			e.Handled = true;
+		}
+
+		void ShiftFairnessGrid_QueryColCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		{
+			e.Count = 4;
+			e.Handled = true;
 		}
 
         public bool HasColumns { get; private set; }
