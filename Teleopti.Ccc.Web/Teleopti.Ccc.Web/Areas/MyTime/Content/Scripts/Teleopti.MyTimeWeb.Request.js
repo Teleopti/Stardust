@@ -1,6 +1,5 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
@@ -16,11 +15,42 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Request = (function ($) {
     var readyForInteraction = function () { };
     var completelyLoaded = function () { };
-    
-    function _initNavigationViewModel() {
-        //Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick()
 
-        ko.applyBindings({}, $('div.navbar')[1]);
+    var requestNavigationViewModel = null;
+    
+    function RequestNavigationViewModel() {
+        var self = this;
+
+        self.addTextRequestActive = ko.observable(false);
+        self.addAbsenceRequestActive = ko.observable(false);
+        self.addShiftTradeRequestActive = ko.observable(false);
+
+        self.addTextRequest = function () {
+            self.resetToolbarActiveButtons();
+            self.addTextRequestActive(true);
+            Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
+        };
+        self.addAbsenceRequest = function () {
+            self.resetToolbarActiveButtons();
+            self.addAbsenceRequestActive(true);
+            Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
+        };
+        self.addShiftTradeRequest = function () {
+            self.resetToolbarActiveButtons();
+            self.addShiftTradeRequestActive(true);
+            Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();
+        };
+
+        self.resetToolbarActiveButtons = function() {
+            self.addTextRequestActive(false);
+            self.addAbsenceRequestActive(false);
+            self.addShiftTradeRequestActive(false);
+        };
+    }
+
+    function _initNavigationViewModel() {
+        requestNavigationViewModel = new RequestNavigationViewModel();
+        ko.applyBindings(requestNavigationViewModel, $('div.navbar')[1]);
 	}
 
     function _activatePlaceHolderText() {
@@ -48,10 +78,13 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
-		    _activatePlaceHolderText();
+			_activatePlaceHolderText();
 		},
 	    RequestPartialDispose: function() {
 	        Teleopti.MyTimeWeb.Request.List.Dispose();
+	    },
+	    ResetToolbarActiveButtons: function () {
+	        requestNavigationViewModel.resetToolbarActiveButtons();
 	    }
 	};
 
