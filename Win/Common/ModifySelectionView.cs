@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Teleopti.Ccc.Domain.Common;
@@ -31,7 +26,6 @@ namespace Teleopti.Ccc.Win.Common
             _percentage = textBoxExtPercent.Text;
             SetTexts();
             UpdateChart(true);
-            //tableLayoutPanel3.BackColor = ColorHelper.ChartControlBackColor();
             chartControlSelection.BackInterior = ColorHelper.ChartControlBackInterior();
             chartControlSelection.ChartInterior = ColorHelper.ChartControlChartInterior();
         }
