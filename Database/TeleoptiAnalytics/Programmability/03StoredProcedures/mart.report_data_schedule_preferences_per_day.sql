@@ -18,6 +18,7 @@ GO
 -- 2012-01-09 Pass BU to ReportAgents
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- 2013-04-29 Added absence and must haves KJ
+-- 2013-08-14 Unhook report from bridge_time_zone // ErikS
 -- Description:	<Used by report Preferences per Day>
 -- =============================================
 --exec mart.report_data_schedule_preferences_per_day @scenario_id=N'0',@date_from='2009-02-01 00:00:00',@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_code=N'00000000-0000-0000-0000-000000000002',@time_zone_id=N'1',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id='0E3F340F-C05D-4A98-AD23-A019607745C9',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
@@ -33,7 +34,6 @@ CREATE PROCEDURE [mart].[report_data_schedule_preferences_per_day]
 @site_id int,
 @team_set nvarchar(max),
 @agent_code uniqueidentifier,
-@time_zone_id int,
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
@@ -42,17 +42,10 @@ AS
 BEGIN
 SET NOCOUNT ON;
 
-
-/* Check if time zone will be hidden (if only one exist then hide) */
-DECLARE @hide_time_zone bit
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-	SET @hide_time_zone = 1
-ELSE
-	SET @hide_time_zone = 0
-
+SET @date_from = CONVERT(smalldatetime, CONVERT(nvarchar(30), @date_from, 112)) -- ISO yyyymmdd
+SET @date_to = CONVERT(smalldatetime, CONVERT(nvarchar(30), @date_to, 112))
 
 /* Get the agents to report on */
-
 CREATE TABLE  #rights_agents (right_id int)
 
 INSERT INTO #rights_agents
@@ -79,7 +72,7 @@ CREATE TABLE #RESULT(date smalldatetime,
 ------------------
 --Shift categories
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled, must_haves)
 SELECT	d.date_date,
 		f.preference_type_id, 
 		ISNULL(term_language, dpt.preference_type_name), 
@@ -88,8 +81,7 @@ SELECT	d.date_date,
 		sum(preferences_requested), 
 		sum(preferences_fulfilled),
 		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
-		sum(preferences_unfulfilled), 
-		@hide_time_zone, 
+		sum(preferences_unfulfilled),  
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
@@ -98,19 +90,13 @@ INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_shift_category sc
 	ON sc.shift_category_id=f.shift_category_id
-INNER JOIN mart.bridge_time_zone b
-	ON	f.interval_id= b.interval_id
-	AND f.date_id= b.date_id
 INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id	
+	ON f.date_id = d.date_id	
 LEFT JOIN
 	mart.language_translation l ON
 	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
@@ -120,7 +106,7 @@ GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_t
 ------------------
 --Day off
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled, must_haves)
 SELECT	d.date_date, 
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name),  
@@ -131,7 +117,6 @@ SELECT	d.date_date,
 		sum(preferences_fulfilled),
 		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
 		sum(preferences_unfulfilled), 
-		@hide_time_zone, 
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
@@ -140,19 +125,13 @@ INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_day_off ddo
 	ON ddo.day_off_id=f.day_off_id
-INNER JOIN mart.bridge_time_zone b
-	ON	f.interval_id= b.interval_id
-	AND f.date_id= b.date_id
 INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
+	ON f.date_id = d.date_id
 LEFT JOIN
 	mart.language_translation l ON
 	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id	
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
@@ -162,7 +141,7 @@ GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_t
 ------------------
 --Absences
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled, must_haves)
 SELECT	d.date_date, 
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name),  
@@ -171,8 +150,7 @@ SELECT	d.date_date,
 		sum(preferences_requested), 
 		sum(preferences_fulfilled),
 		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
-		sum(preferences_unfulfilled), 
-		@hide_time_zone, 
+		sum(preferences_unfulfilled), 		
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
@@ -181,19 +159,13 @@ INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_absence ab
 	ON ab.absence_id=f.absence_id
-INNER JOIN mart.bridge_time_zone b
-	ON	f.interval_id= b.interval_id
-	AND f.date_id= b.date_id
 INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
+	ON f.date_id = d.date_id
 LEFT JOIN
 	mart.language_translation l ON
 	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id	
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
@@ -203,7 +175,7 @@ GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_t
 ------------------
 --Extended prefs
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled, must_haves)
 SELECT	d.date_date, 
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name), 
@@ -213,26 +185,19 @@ SELECT	d.date_date,
 		sum(preferences_fulfilled),
 		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
 		sum(preferences_unfulfilled), 
-		@hide_time_zone,
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
-INNER JOIN mart.bridge_time_zone b
-	ON	f.interval_id= b.interval_id
-	AND f.date_id= b.date_id
 INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id	
+	ON f.date_id = d.date_id
 LEFT JOIN
 	mart.language_translation l ON
 	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
