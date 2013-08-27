@@ -21,30 +21,35 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         public ShiftDistributionGrid(IDistributionInformationExtractor model)
         {
-            initializeComponent();
-	        _model = model;
-			_presenter = new ShiftDistributionGridPresenter(this);
             
-            Cols.Size[0] = ColorHelper.GridHeaderColumnWidth();
-            DefaultColWidth = 50;
-            ColCount = _model.ShiftCategories.Count;
-            ExcelLikeCurrentCell = true;
-            Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
+	        _model = model;
+			_presenter = new ShiftDistributionGridPresenter(this,_model.GetShiftDistribution());
+            initializeComponent();
         }
 
         private void initializeComponent()
         {
+            ResetVolatileData();
             QueryColCount += shiftPerAgentGridQueryColCount;
             QueryRowCount += shiftPerAgentGridQueryRowCount;
             QueryCellInfo += shiftPerAgentGridQueryCellInfo;
-
-           
+            QueryColWidth += shiftPerAgentGridQueryColWidth;
 
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             ResumeLayout(false);
         }
 
-        void shiftPerAgentGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+	    private void shiftPerAgentGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
+	    {
+            if (e.Index == 0)
+                e.Size = 100;
+            else
+                e.Size = 50;
+
+            e.Handled = true;
+	    }
+
+	    void shiftPerAgentGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
         {
             if (e.ColIndex < 0 || e.RowIndex < 0) return;
             if (e.ColIndex == 0 && e.RowIndex == 0) return;
@@ -53,32 +58,24 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (e.ColIndex > 0 && e.RowIndex == 0)
             {
-                e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description ;
-                e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1].Description ;
+                e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description.Name  ;
+                e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1] ;
             }
 
             if (e.ColIndex == 0 && e.RowIndex > 0)
             {
-                e.Style.CellValue = _model.Dates[e.RowIndex - 1].Date ;
+                e.Style.CellValue = _model.Dates[e.RowIndex - 1].Date.ToShortDateString() ;
                 e.Style.Tag = _model.Dates[e.RowIndex - 1] ;
             }
 
             if (e.ColIndex > 0 && e.RowIndex > 0)
             {
                 var date = (DateOnly) this[e.RowIndex , 0].Tag ;
-                var shiftCategory = this[0, e.ColIndex ].Tag as string;
+                var shiftCategory = this[0, e.ColIndex ].Tag as IShiftCategory;
 
-                foreach (var shiftDistribution in _model.GetShiftDistribution())
-                {
-                    if (shiftDistribution.DateOnly.Equals(date ))
-                    {
-                        if (shiftDistribution.ShiftCategory.Description.Name.Equals(shiftCategory))
-                        {
-                            e.Style.CellValue = shiftDistribution.Count;
-                            break;
-                        }
-                    }
-                }
+                var count = _presenter.ShiftCategoryCount(date, shiftCategory );
+                if(count.HasValue)
+                    e.Style.CellValue = count;
             }
 
             e.Handled = true;
