@@ -129,10 +129,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 addPersonAssignments(retDic,
                                      _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork)
                                                        .Find(people, period, scenario));
-                addPersonDayOffs(retDic,
-                                 _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork)
-                                                   .Find(people, longDateTimePeriod, scenario));
-
 
                 addPersonMeetings(retDic,
                                   _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, period, scenario),
