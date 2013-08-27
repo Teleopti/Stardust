@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
@@ -30,17 +28,17 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			ResetVolatileData();
 
-			QueryColCount += ShiftFairnessGrid_QueryColCount;
-			QueryRowCount += ShiftFairnessGrid_QueryRowCount;
-			QueryCellInfo += ShiftFairnessGrid_QueryCellInfo;
-			QueryColWidth += ShiftFairnessGrid_QueryColWidth;
+			QueryColCount += shiftFairnessGridQueryColCount;
+			QueryRowCount += shiftFairnessGridQueryRowCount;
+			QueryCellInfo += shiftFairnessGridQueryCellInfo;
+			QueryColWidth += shiftFairnessGridQueryColWidth;
 			
 
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 			ResumeLayout(false);
 		}
 
-		void ShiftFairnessGrid_QueryColWidth(object sender, Syncfusion.Windows.Forms.Grid.GridRowColSizeEventArgs e)
+		void shiftFairnessGridQueryColWidth(object sender, Syncfusion.Windows.Forms.Grid.GridRowColSizeEventArgs e)
 		{
 			if (e.Index == 0)
 				e.Size = 50;
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		}
 
 		
-		void ShiftFairnessGrid_QueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+		void shiftFairnessGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
 		{
 			if (e.ColIndex < 0 || e.RowIndex < 0) return;
 			if (e.ColIndex == 0 && e.RowIndex == 0) return;
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				if (e.ColIndex == 1) e.Style.CellValue = UserTexts.Resources.Min;
 				if (e.ColIndex == 2) e.Style.CellValue = UserTexts.Resources.Max;
-				if (e.ColIndex == 3) e.Style.CellValue = "xxAvarage";
+				if (e.ColIndex == 3) e.Style.CellValue = UserTexts.Resources.Average;
 				if (e.ColIndex == 4) e.Style.CellValue = UserTexts.Resources.StandardDeviation;
 			}
 
@@ -103,13 +101,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Handled = true;
 		}
 
-		void ShiftFairnessGrid_QueryRowCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftFairnessGridQueryRowCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
 		{
 			e.Count = _model.ShiftCategories.Count + 1;
 			e.Handled = true;
 		}
 
-		void ShiftFairnessGrid_QueryColCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftFairnessGridQueryColCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
 		{
 			e.Count = 4;
 			e.Handled = true;

@@ -11687,4 +11687,14 @@ Reduce the complexity to use these shifts.</value>
     <value>Send again</value>
     <comment>Send again (ie. shifttrade)</comment>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+    <comment>Average</comment>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per Shift Category</value>
+  </data>
 </root>
