@@ -649,6 +649,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
 
+        [Test]
+        public void SendChangeOverMessageBroker_SimulateDeleteFromMyTimeWeb_ReturnTrue()
+        {
+            _target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+        }
+
 		private void setupShiftTrade()
 		{
 			_target.Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
@@ -664,6 +670,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Pending();
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
 		}
+
+        [Test]
+        public void ShiftTrade_SendChangeOverMessageBroker_NotPickedUpByBus_ReturnFalse()
+        {
+            setupShiftTrade();
+            _target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+        }
 
 		[Test]
 		public void ShiftTrade_SendChangeOverMessageBroker_AcceptedByOther_ReturnTrue()
