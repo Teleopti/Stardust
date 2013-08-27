@@ -13,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -24,7 +23,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
@@ -66,18 +64,19 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
-        	var busSender = new SendDenormalizeNotificationToBus(denormalizeHandler);
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
+        	var busSender = new ServiceBusSender();
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IMessageSender>
         			                       	{
-                                                new ScheduleMessageSender(busSender,saveToDenormalizationQueue),
-                                                new MeetingMessageSender(busSender,saveToDenormalizationQueue),
-                                                new GroupPageChangedMessageSender(busSender,saveToDenormalizationQueue  ),
-                                                new PersonChangedMessageSender(busSender,saveToDenormalizationQueue ),
-                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue)
+												new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(busSender))),
+                                                new ScheduleMessageSender(busSender),
+                                                new MeetingMessageSender(busSender),
+                                                new GroupPageChangedMessageSender(busSender),
+                                                new TeamOrSiteChangedMessageSender(busSender),
+                                                new PersonChangedMessageSender(busSender),
+                                                new PersonPeriodChangedMessageSender(busSender)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			new SignalBroker(MessageFilterManager.Instance))

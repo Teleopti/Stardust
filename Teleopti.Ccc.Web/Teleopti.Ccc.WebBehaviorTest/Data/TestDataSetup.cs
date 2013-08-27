@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			TestData.DayOffTemplate = DayOffFactory.CreateDayOff(new Description("Legacy common day off", "LCDO"));
 
-			var dayOffRepository = new DayOffRepository(unitOfWork);
+			var dayOffRepository = new DayOffTemplateRepository(unitOfWork);
 			dayOffRepository.Add(TestData.DayOffTemplate);
 		}
 

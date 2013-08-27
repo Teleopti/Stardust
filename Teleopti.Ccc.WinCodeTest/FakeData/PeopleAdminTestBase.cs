@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
@@ -24,9 +23,6 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "GREENSITE")]
         public const string GREENSITE = "Kana Site";
         
-
-        
-
         public SiteTeamModel SiteTeam1
         {
             get;
@@ -152,7 +148,6 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
 
        public void CreateExternalLogOnCollection()
        {
-
            ExternalLogOn1 = ExternalLogOnFactory.CreateExternalLogOn();
            ExternalLogOn2 = ExternalLogOnFactory.CreateExternalLogOn();
            ExternalLogOn3 = ExternalLogOnFactory.CreateExternalLogOn();
@@ -176,18 +171,14 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
            _personSkillCollection.Add(PersonSkill1);
            _personSkillCollection.Add(PersonSkill2);
            _personSkillCollection.Add(PersonSkill3);
-
        }
 
-      
        public void CreateSkills()
        {
            Skill1 = SkillFactory.CreateSkill("_skill1");
            Skill2 = SkillFactory.CreateSkill("_skill2");
            Skill3 = SkillFactory.CreateSkill("_skill3");
        }
-
-
 
        public static DateOnly DateOnly1
        {
@@ -213,11 +204,5 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
        {
            get { return new DateOnly(2006, 1, 1); }
        }
-
-      
-
-
-
-
     }
 }

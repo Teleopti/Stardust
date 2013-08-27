@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private ISingleSkillDictionary _singleSkillDictionary;
+		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			ISingleSkillDictionary singleSkillDictionary)
+			IPersonSkillProvider personSkillProvider,
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -39,7 +42,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_singleSkillDictionary = singleSkillDictionary;
+			_personSkillProvider = personSkillProvider;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		/// <summary>
@@ -61,22 +65,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixLockableBitArrayConverter matrixConverter =
 					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
 
-				IScheduleResultDailyValueCalculator dailyValueCalculator;
-				IScheduleResultDataExtractor personalSkillsDataExtractor;
-				//if(_optimizerPreferences.Advanced.TargetValueCalculation == TargetValueOptions.StandardDeviation)
-				//{
-				dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
-				personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
-				//}
+				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
+				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
 
-				INonBlendSkillCalculator nonBlendSkillCalculator =
-					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
+				INonBlendSkillCalculator nonBlendSkillCalculator = new NonBlendSkillCalculator();
 
 				IDeleteSchedulePartService deleteSchedulePartService =
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator());
+                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, _currentTeleoptiPrincipal);
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
 				IEffectiveRestrictionCreator effectiveRestrictionCreator =

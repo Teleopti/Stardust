@@ -47,78 +47,79 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
                 IScheduleDay scheduleDay = e.Style.CellValue as IScheduleDay;
-                if (scheduleDay != null)
-                {
-                    var significantPart = scheduleDay.SignificantPartForDisplay();
+	            if (scheduleDay != null)
+	            {
+		            var significantPart = scheduleDay.SignificantPartForDisplay();
 
-                    String symbol = String.Empty;
-                    Color color2 = Color.White;
-                    
-                    if (scheduleDay.PersonAssignmentCollectionDoNotUse().Count > 0)
-                    {
-                        if (significantPart == SchedulePartView.MainShift)
-                        {
-                            IPersonAssignment pa = scheduleDay.PersonAssignment();
+		            String symbol = String.Empty;
+		            Color color2 = Color.White;
 
-                            if (pa != null)
-                            {
-                                if (pa.ShiftCategory != null)
-                                {
-                                    if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsToday || ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsAndEndsToday)
-                                    {
-                                        color2 = pa.ShiftCategory.DisplayColor;
-                                        symbol = "|";
-                                    }
-                                }
-                            }
-                        }
-                    }
+		            if (scheduleDay.PersonAssignment() != null)
+		            {
+			            if (significantPart == SchedulePartView.MainShift)
+			            {
+				            IPersonAssignment pa = scheduleDay.PersonAssignment();
 
-                    var absenceCollection = scheduleDay.PersonAbsenceCollection();
-                    if (absenceCollection.Count > 0)
-                    {
-                        if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
-                        {
-                            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
-                            symbol = "X";	
-                        }
-                    }
+				            if (pa != null)
+				            {
+					            if (pa.ShiftCategory != null)
+					            {
+						            if (ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsToday ||
+						                ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleDay) == DisplayMode.BeginsAndEndsToday)
+						            {
+							            color2 = pa.ShiftCategory.DisplayColor;
+							            symbol = "|";
+						            }
+					            }
+				            }
+			            }
+		            }
 
-                    if (scheduleDay.PersonDayOffCollection().Count > 0)
-                    {
-                        if (significantPart == SchedulePartView.DayOff)
-                        {
-                            color2 = Color.LightGray;
-                            symbol = "-";
-                        }
-                    }
+		            var absenceCollection = scheduleDay.PersonAbsenceCollection();
+		            if (absenceCollection.Count > 0)
+		            {
+			            if (significantPart == SchedulePartView.FullDayAbsence ||
+			                significantPart == SchedulePartView.ContractDayOff)
+			            {
+				            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,
+				                                                                                 scheduleDay.DateOnlyAsPeriod
+				                                                                                            .DateOnly);
+				            symbol = "X";
+			            }
+		            }
 
-                    if (!String.IsNullOrEmpty(symbol))
-                    {
-						if(significantPart == SchedulePartView.ContractDayOff)
-						{
-							_drawAbsenceDayOff.Draw(e,symbol,color2);
-						}
+		            if (significantPart == SchedulePartView.DayOff)
+		            {
+			            color2 = Color.LightGray;
+			            symbol = "-";
+		            }
 
-						if(significantPart == SchedulePartView.FullDayAbsence)
-						{
-							_drawAbsence.Draw(e, symbol, color2);
-						}
+		            if (!String.IsNullOrEmpty(symbol))
+		            {
+			            if (significantPart == SchedulePartView.ContractDayOff)
+			            {
+				            _drawAbsenceDayOff.Draw(e, symbol, color2);
+			            }
 
-						if(significantPart == SchedulePartView.MainShift)
-						{
-							_drawMainShift.Draw(e, symbol, color2);	
-						}
+			            if (significantPart == SchedulePartView.FullDayAbsence)
+			            {
+				            _drawAbsence.Draw(e, symbol, color2);
+			            }
 
-						if(significantPart == SchedulePartView.DayOff)
-						{
-							var color = scheduleDay.PersonDayOffCollection()[0].DayOff.DisplayColor;
-							_drawDayOff.Draw(e, color);
-						}
-                    }
+			            if (significantPart == SchedulePartView.MainShift)
+			            {
+				            _drawMainShift.Draw(e, symbol, color2);
+			            }
 
-                    AddMarkersToCell(e, scheduleDay, significantPart);
-                }
+			            if (significantPart == SchedulePartView.DayOff)
+			            {
+				            var color = scheduleDay.PersonAssignment().DayOff().DisplayColor;
+				            _drawDayOff.Draw(e, color);
+			            }
+		            }
+
+		            AddMarkersToCell(e, scheduleDay, significantPart);
+	            }
             }
         }
     }

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -16,24 +17,22 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender _target;
 		private MockRepository _mocks;
-        private ISaveToDenormalizationQueue _saveToDenormalizationQueue;
-		private ISendDenormalizeNotification _sendDenormalizeNotification;
+        private IServiceBusSender _serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-            _saveToDenormalizationQueue = _mocks.DynamicMock<ISaveToDenormalizationQueue>();
+			_serviceBusSender = _mocks.DynamicMock<IServiceBusSender>();
 
-			_sendDenormalizeNotification = _mocks.DynamicMock<ISendDenormalizeNotification>();
-			_target = new GroupPageChangedMessageSender(_sendDenormalizeNotification, _saveToDenormalizationQueue);
+			_target = new GroupPageChangedMessageSender(_serviceBusSender);
 		}
 
         [Test]
         public void ShouldSaveRebuildReadModelForGroupPageToQueue()
         {
             var page = new GroupPage("Page");
-            Guid[] ids = new Guid[] { };
+            var ids = new Guid[] { };
             var message = new GroupPageChangedMessage();
             message.SetGroupPageIdCollection(ids);
 
@@ -42,7 +41,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (_mocks.Record())
             {
-                //Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
+                Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
+                Expect.Call(() => _serviceBusSender.Send(message)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {

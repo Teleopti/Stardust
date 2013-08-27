@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverter.CollectionConverter
                             Mapper<IDayOffTemplate, global::Domain.Absence> mapper)
             : base(unitOfWork, mapper)
         {
-            _rep = new DayOffRepository(unitOfWork);
+            _rep = new DayOffTemplateRepository(unitOfWork);
         }
 
         /// <summary>

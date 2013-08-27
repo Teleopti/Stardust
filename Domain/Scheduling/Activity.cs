@@ -1,13 +1,12 @@
 using System;
+using System.Xml;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    /// <summary>
-    /// Represents an activity (something to do)
-    /// </summary>
     [Serializable]
     public class Activity : Payload, IActivity
     {
@@ -26,9 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private bool _allowOverwrite;
 
-        #region Constructors
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="Activity"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -40,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public Activity(string name)
             : base(true)
         {
-            Description = new Description(name);
+            _description = new Description(name);
         }
 
         /// <summary>
@@ -54,9 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
         }
 
-        #endregion
-
-		public virtual Description Description
+	    public virtual Description Description
 		{
             get
             {
@@ -69,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _description = value; }
 		}
 
-
 		public virtual Color DisplayColor
 		{
 			get { return _displayColor; }
@@ -81,7 +75,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			get { return _inReadyTime; }
 			set { _inReadyTime = value; }
 		}
-
 
 		public virtual bool RequiresSkill
 		{
@@ -99,10 +92,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _allowOverwrite = value; }
         }
 
-
-		/// <summary>
-		/// Parent grouping activity
-		/// </summary>
 		public virtual IGroupingActivity GroupingActivity
 		{
 			get { return _groupingActivity; }
@@ -115,8 +104,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_groupingActivity.AddActivity(this);
 			}
 		}
-
-
 
 		public virtual ReportLevelDetail ReportLevelDetail
 		{
@@ -136,7 +123,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
     			return _requiresSeat;
     		}
     		set {
-    			_requiresSeat = value;
+    			if (_requiresSeat != value)
+    			{
+    				var valueBefore = _requiresSeat;
+    				_requiresSeat = value;
+    				var valueAfter = _requiresSeat;
+    				AddEvent(new ActivityChangedEvent
+    					{
+    						ActivityId = Id.GetValueOrDefault(),
+    						OldValue = XmlConvert.ToString(valueBefore),
+    						NewValue = XmlConvert.ToString(valueAfter),
+    						Property = "RequiresSeat"
+    					});
+    			}
     		}
     	}
 

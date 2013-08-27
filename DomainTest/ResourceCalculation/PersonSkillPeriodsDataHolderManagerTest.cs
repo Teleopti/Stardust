@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<ISkill> skills = new List<ISkill>{skill};
 
             _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-            _person.Period(new DateOnly()).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+            _person.AddSkill(new PersonSkill(skill, new Percent(1)), _person.Period(new DateOnly()));
             _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
             
             var dateOnly = new DateOnly(2009,2,2);

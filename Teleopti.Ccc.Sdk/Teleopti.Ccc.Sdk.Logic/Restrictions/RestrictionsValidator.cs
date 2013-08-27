@@ -108,15 +108,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 if (!studentAvailabilityDays.IsEmpty())
                     dto.StudentAvailabilityDay = _studentAvailabilityDayAssembler.DomainEntityToDto(studentAvailabilityDays.First());
 
-                var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
+	            var assignment = scheduleDay.PersonAssignment();
                 var personMeetingCollection = scheduleDay.PersonMeetingCollection();
 
                 var significant = scheduleDay.SignificantPartForDisplay();
                 if (significant == SchedulePartView.DayOff)
-                    dto = CheckPersonDayOffCollection(scheduleDay.PersonDayOffCollection(), dto);
+                    checkPersonDayOffCollection(assignment.DayOff(), dto);
 
                 if(significant == SchedulePartView.MainShift)
-                    dto = CheckPersonAssignmentCollection(personAssignmentCollection, dto);
+                    checkPersonAssignmentCollection(assignment, dto);
                 
                 if (significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
                 {
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
                 AddMinMaxToDto(dto, minMaxLength);
 
-                if ((personMeetingCollection.Count > 0 || personAssignmentCollection.Count > 0) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
+                if ((personMeetingCollection.Count > 0 || assignment!=null) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
                 {
                     dto.HasPersonalAssignmentOnly = true;
                     dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay, person.PermissionInformation.DefaultTimeZone(), person.PermissionInformation.Culture());
@@ -209,34 +209,27 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             }
         }
 
-        private static ValidatedSchedulePartDto CheckPersonDayOffCollection(ReadOnlyCollection<IPersonDayOff> personDayOffs ,ValidatedSchedulePartDto resultSoFar)
+        private static void checkPersonDayOffCollection(IDayOff dayOff, ValidatedSchedulePartDto resultSoFar)
         {
-            if (personDayOffs.Count > 0)
-            {
-                IPersonDayOff dayOff = personDayOffs.First();
-                resultSoFar.ScheduledItemName = dayOff.DayOff.Description.Name;
-                resultSoFar.ScheduledItemShortName = dayOff.DayOff.Description.ShortName;
-                resultSoFar.DisplayColor = new ColorDto(dayOff.DayOff.DisplayColor);
-                resultSoFar.HasDayOff = true;
-            }
-            return resultSoFar;
+					if (dayOff != null)
+					{
+						resultSoFar.ScheduledItemName = dayOff.Description.Name;
+						resultSoFar.ScheduledItemShortName = dayOff.Description.ShortName;
+						resultSoFar.DisplayColor = new ColorDto(dayOff.DisplayColor);
+						resultSoFar.HasDayOff = true;
+					}
         }
 
-        private static ValidatedSchedulePartDto CheckPersonAssignmentCollection(ReadOnlyCollection<IPersonAssignment> personAssignments, ValidatedSchedulePartDto resultSoFar)
+        private static void checkPersonAssignmentCollection(IPersonAssignment personAssignment, ValidatedSchedulePartDto resultSoFar)
         {
-            if (personAssignments.IsEmpty() )
-                return resultSoFar;
+            if (personAssignment==null || personAssignment.ShiftCategory==null)
+                return;
 
-            if(personAssignments[0].ShiftCategory == null)
-                return resultSoFar;
-
-            IShiftCategory cat = personAssignments[0].ShiftCategory;
+            IShiftCategory cat = personAssignment.ShiftCategory;
             resultSoFar.HasShift = true;
             resultSoFar.DisplayColor = new ColorDto(cat.DisplayColor);
             resultSoFar.ScheduledItemName = cat.Description.Name;
             resultSoFar.ScheduledItemShortName = cat.Description.ShortName;
-                    
-            return resultSoFar;
         }
 
     	private static ValidatedSchedulePartDto AddFullDayAbsence(IEnumerable<IVisualLayer> visualLayerCollection, ValidatedSchedulePartDto resultSoFar)

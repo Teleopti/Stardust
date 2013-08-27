@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 _lastRow = rowIndex;
             }
 
-            var theToolTip = GetToolTip(rowIndex, e.X);
+            var theToolTip = getToolTip(rowIndex, e.X);
             if (theToolTip != _toolTip.GetToolTip(Grid))
             {
                 _toolTip.Hide(Grid);
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             base.OnMouseMove(rowIndex, colIndex, e);
         }
 
-        private string GetToolTip(int rowIndex, float x)
+        private string getToolTip(int rowIndex, float x)
         {
             string ret = "";
             IList<ToolTipData> tipDatas;
@@ -121,11 +119,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
             if (revisionDisplayRow.ScheduleDay.SignificantPart() == SchedulePartView.DayOff)
             {
-                
-                var personDayOffs = revisionDisplayRow.ScheduleDay.PersonDayOffCollection();
-                if (personDayOffs.Count == 0) return;
 
-                IPersonDayOff personDayOff = personDayOffs[0];
+				IDayOff personDayOff = revisionDisplayRow.ScheduleDay.PersonAssignment().DayOff();
 
                 var start = timePeriod.StartDateTime;
                 var end = timePeriod.EndDateTime;
@@ -136,10 +131,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
                 var period = new DateTimePeriod(start, end);
 
-                var rect = GetLayerRectangle(pixelConverter, period, clientRectangle);
+                var rect = getLayerRectangle(pixelConverter, period, clientRectangle);
                 rect.Inflate(0, -4);
 
-                var shortName = personDayOff.DayOff.Description.ShortName;
+                var shortName = personDayOff.Description.ShortName;
                 var stringMeasure = g.MeasureString(shortName, Grid.Font);
                 var x = (int)(rect.Width / 2 - stringMeasure.Width / 2 + rect.Left);
                 var y = (int)(rect.Height / 2 - stringMeasure.Height / 2 + rect.Top);
@@ -150,7 +145,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 {
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
-                    using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, personDayOff.DayOff.DisplayColor, Color.LightGray))
+                    using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, personDayOff.DisplayColor, Color.LightGray))
                     {
                         g.FillRectangle(brush, rect);
                         g.DrawString(shortName, Grid.Font, Brushes.Black, point);
@@ -165,7 +160,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
             foreach (var layer in list)
             {
-                var rect = GetLayerRectangle(pixelConverter, layer.Period, clientRectangle);
+                var rect = getLayerRectangle(pixelConverter, layer.Period, clientRectangle);
                 
                 rect.Inflate(0, -4);
                 var upperRect = new RectangleF(rect.X, rect.Y, rect.Width, rect.Height / 2 - 5);
@@ -193,7 +188,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             _toolTipLists.Add(rowIndex, tipDatas);
         }
 
-        private RectangleF GetLayerRectangle(LengthToTimeCalculator pixelConverter, DateTimePeriod period, RectangleF clientRect)
+        private RectangleF getLayerRectangle(LengthToTimeCalculator pixelConverter, DateTimePeriod period, RectangleF clientRect)
         {
             var x1 = pixelConverter.PositionFromDateTime(period.StartDateTime, Grid.IsRightToLeft());
             var x2 = pixelConverter.PositionFromDateTime(period.EndDateTime, Grid.IsRightToLeft());

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -51,18 +52,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the import forecasts.");
             }
-            var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
             var message = new ImportForecastsFileToSkill
             {
                 JobId = jobResultId,
                 UploadedFileId = command.UploadedFileId,
                 TargetSkillId = command.TargetSkillId,
                 OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
-                BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-                Datasource = identity.DataSource.Application.Name,
-                Timestamp = DateTime.UtcNow,
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
+	        message.SetMessageDetail();
             _busSender.Send(message);
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }

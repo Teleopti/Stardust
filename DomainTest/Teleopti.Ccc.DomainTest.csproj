@@ -134,6 +134,19 @@
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CoverageTests.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonTerminatedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonDeletedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodAddedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodRemovedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodStartDateChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillProficiencyChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillDeactivatedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillActivatedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillRemovedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
     <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
@@ -260,7 +273,6 @@
     <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
     <Compile Include="Optimization\IntradayDecisionMakerComponentsTest.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixesTest.cs" />
-    <Compile Include="Optimization\MatrixMultipleShiftsLockerTest.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroupTest.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
@@ -350,7 +362,10 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftTest.cs" />
@@ -387,10 +402,7 @@
     <Compile Include="ResourceCalculation\ScheduleDayAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleServiceTest.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeopleTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionaryTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillLoadedDeciderTest.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SwapRawServiceTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
@@ -653,6 +665,7 @@
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCloserTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
     <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
+    <Compile Include="Scheduling\ResourceCalculateSkillCommandTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />
@@ -683,7 +696,6 @@
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollectionTest.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRuleTest.cs" />
-    <Compile Include="Scheduling\Rules\NewMaxOneDayOffRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRuleTest.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRuleTest.cs" />
@@ -805,7 +817,6 @@
     <Compile Include="Scheduling\Tracking\TrackerTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractorTest.cs" />
-    <Compile Include="ResourceCalculation\PersonSkillDictionaryTestClass.cs" />
     <Compile Include="Scheduling\AbsenceSorterTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPersonTest.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeetingTest.cs" />
@@ -971,7 +982,6 @@
     <Compile Include="ResourceCalculation\FurnessDataTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet1.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet2.cs" />
-    <Compile Include="ResourceCalculation\FurnessEvaluatorCollectionTest.cs" />
     <Compile Include="ResourceCalculation\OccupancyCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionaryTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizerTest.cs" />
@@ -1046,7 +1056,6 @@
     <Compile Include="Scheduling\AbsenceTest.cs" />
     <Compile Include="Scheduling\PersonAbsenceTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecificationTest.cs" />
-    <Compile Include="Scheduling\PersonDayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />
@@ -1073,9 +1082,6 @@
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsenceTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivitiesTest.cs" />
     <Compile Include="Time\DateOnlyPeriodTest.cs" />
-    <Compile Include="Time\DayOffTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Time\AnchorTimePeriodTest.cs">
       <SubType>Code</SubType>
     </Compile>

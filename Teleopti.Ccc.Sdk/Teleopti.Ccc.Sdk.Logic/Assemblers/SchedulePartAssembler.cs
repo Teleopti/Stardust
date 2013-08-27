@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private readonly IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> _personAssignmentAssembler;
         private readonly IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> _personAbsenceAssembler;
         private readonly ICurrentScenario _scenarioRepository;
-        private readonly IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto> _personDayOffAssembler;
+				private readonly IScheduleDataAssembler<IPersonAssignment, PersonDayOffDto> _personDayOffAssembler;
         private readonly IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto> _personMeetingAssembler;
         private readonly IScheduleDataAssembler<IPreferenceDay, PreferenceRestrictionDto> _prefRestrictionAssembler;
         private readonly IScheduleDataAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studRestrictionAssembler;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 		public SchedulePartAssembler(ICurrentScenario scenarioRepository,
                                     IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> personAssignmentAssembler,
                                     IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> personAbsenceAssembler,
-                                    IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto> personDayOffAssembler,
+																		IScheduleDataAssembler<IPersonAssignment, PersonDayOffDto> personDayOffAssembler,
                                     IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto> personMeetingAssembler,
                                     IScheduleDataAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceRestrictionAssembler,
                                     IScheduleDataAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studRestrictionAssembler,
@@ -59,10 +59,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             SchedulePartDto part = fetchSchedulePart(entity);
             if (entity != null)
             {
+	            var assignment = entity.PersonAssignment();
                 fillProjection(part, entity);
-                fillPersonAssignment(part, entity.PersonAssignmentCollectionDoNotUse());
+                fillPersonAssignment(part, assignment);
                 fillPersonAbsence(part, entity.PersonAbsenceCollection());
-                fillPersonDayOff(part, entity.PersonDayOffCollection());
+                fillPersonDayOff(part, assignment);
                 fillPersonMeeting(part, entity.PersonMeetingCollection());
                 FillPreference(part, entity.PersistableScheduleDataCollection().OfType<IPreferenceDay>());
                 FillStudentAvailability(part, entity.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>());
@@ -71,14 +72,14 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return part;
         }
 
-        public override IScheduleDay DtoToDomainEntity(SchedulePartDto dto)
+				//isn't used anymore (?)
+				public override IScheduleDay DtoToDomainEntity(SchedulePartDto dto)
         {
             ensureInjectionForDtoToDo();
 
             IScheduleDay part = fetchSchedulePart(dto);
             fillPersonAssignment(part, dto.PersonAssignmentCollection);
             fillPersonAbsence(part, dto.PersonAbsenceCollection);
-            fillPersonDayOff(part, dto.PersonDayOff);
             //Meetings cannot be added from dto as they are generated automatically!
             //FillPreference(part, dto.PreferenceRestriction);
             FillStudentAvailability(part, dto.StudentAvailabilityDay);
@@ -199,16 +200,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                    personAssignmentDto.MainShift.LayerCollection.Count != 0;
         }
 
-        private void fillPersonDayOff(IScheduleDay part, PersonDayOffDto dayOffDto)
-        {
-            part.Clear<IPersonDayOff>();
-            if(dayOffDto!=null)
-            {
-                _personDayOffAssembler.Person = part.Person;
-                _personDayOffAssembler.DefaultScenario = _scenarioRepository.Current();
-                part.Add(_personDayOffAssembler.DtoToDomainEntity(dayOffDto));                
-            }
-        }
 
         private void fillPersonAbsence(SchedulePartDto part, IEnumerable<IPersonAbsence> absences)
         {
@@ -222,19 +213,22 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             _personMeetingAssembler.DomainEntitiesToDtos(meetings).ForEach(part.PersonMeetingCollection.Add);
         }
 
-        private void fillPersonAssignment(SchedulePartDto part, IEnumerable<IPersonAssignment> assignments)
+        private void fillPersonAssignment(SchedulePartDto part, IPersonAssignment assignment)
         {
             part.PersonAssignmentCollection.Clear();
-            _personAssignmentAssembler.DomainEntitiesToDtos(assignments).ForEach(part.PersonAssignmentCollection.Add);
+					if (assignment != null)
+					{
+						part.PersonAssignmentCollection.Add(_personAssignmentAssembler.DomainEntityToDto(assignment));
+					}
         }
 
-        private void fillPersonDayOff(SchedulePartDto part, IEnumerable<IPersonDayOff> dayOffs)
+        private void fillPersonDayOff(SchedulePartDto part, IPersonAssignment dayOff)
         {
             part.PersonDayOff = null;
-            if (dayOffs.Count()>0)
-            {
-                part.PersonDayOff = _personDayOffAssembler.DomainEntityToDto(dayOffs.First());
-            }
+					if (dayOff != null)
+					{
+						part.PersonDayOff = _personDayOffAssembler.DomainEntityToDto(dayOff);
+					}
         }
 
         private void fillProjection(SchedulePartDto part, IScheduleDay scheduleDay)

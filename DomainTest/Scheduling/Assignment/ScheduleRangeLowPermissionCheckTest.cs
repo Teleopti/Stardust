@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             absOutSide.SetId(Guid.NewGuid());
             var absInside = createPersonAbsence(new DateTimePeriod(paramStart.AddDays(1), paramStart.AddDays(10)));
             absInside.SetId(Guid.NewGuid());
-            PersonDayOff dayOutSide = createPersonDayOff(paramStart.AddDays(20));
-            PersonDayOff dayInside = createPersonDayOff(paramStart.AddDays(1));
 
             using (mocks.Record())
             {
@@ -76,19 +74,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     target.AddRange(new List<IPersonAssignment> {assInside, assOutSide});
                     target.Add(absInside);
                     target.Add(absOutSide);
-                    target.Add(dayInside);
-                    target.Add(dayOutSide);
                     target.ExtractAllScheduleData(extractor, new DateTimePeriod(2000, 1, 1, 2000, 12, 31));
 
                     Assert.IsTrue(target.Contains(assInside));
                     Assert.IsTrue(target.Contains(absInside));
-                    Assert.IsTrue(target.Contains(dayInside));
                     Assert.IsFalse(target.Contains(assOutSide));
                     Assert.IsFalse(target.Contains(absOutSide));
-                    Assert.IsFalse(target.Contains(dayOutSide));
                     Assert.AreEqual(2, extractor.PersonAbsences.Count);
                     Assert.AreEqual(2, extractor.PersonAssignments.Count);
-                    Assert.AreEqual(2, extractor.PersonDayOffs.Count);
                 }
             }
         }
@@ -124,7 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     var asses = extractor.PersonAssignments;
                     Assert.AreEqual(0, extractor.PersonAbsences.Count);
                     Assert.AreEqual(1, asses.Count);
-                    Assert.AreEqual(0, extractor.PersonDayOffs.Count);
                     Assert.AreEqual(new DateTimePeriod(paramStart.AddDays(20), paramStart.AddDays(22)),
                                     asses.First().Period);
                 }
@@ -212,34 +204,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                         scenario);
         }
 
-        private PersonDayOff createPersonDayOff(DateTime period)
-        {
-            DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
-            dOff.Anchor = TimeSpan.FromHours(3);
-            dOff.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(1));
-            return new PersonDayOff(person, scenario, dOff, new DateOnly(period.Date));
-        }
-
-
+        
         private class extractor : IScheduleExtractor
         {
             public extractor()
             {
                 PersonAssignments = new HashSet<IPersonAssignment>();
                 PersonAbsences = new HashSet<IPersonAbsence>();
-                PersonDayOffs = new HashSet<IPersonDayOff>();
             }           
 
             public ICollection<IPersonAssignment> PersonAssignments { get; private set; }
             public ICollection<IPersonAbsence> PersonAbsences { get; private set; }
-            public ICollection<IPersonDayOff> PersonDayOffs { get; private set; }
 
 
             public void AddSchedulePart(IScheduleDay schedulePart)
             {
                 schedulePart.PersonAssignmentCollectionDoNotUse().ForEach(PersonAssignments.Add);
                 schedulePart.PersonAbsenceCollection().ForEach(PersonAbsences.Add);
-                schedulePart.PersonDayOffCollection().ForEach(PersonDayOffs.Add);
             }
         }
     }

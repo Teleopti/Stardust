@@ -73,9 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private static DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
         {
-            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                TeleoptiPrincipal.Current.Regional.TimeZone);
+            return new DateOnlyPeriod(scheduleDay, scheduleDay).ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
         }
 
         private static ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)

@@ -11417,6 +11417,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+    <comment>Hour in short description</comment>
+  </data>
   <data name="ConfirmRemoval" xml:space="preserve">
     <value>Confirm removal</value>
     <comment>Confirm removal</comment>

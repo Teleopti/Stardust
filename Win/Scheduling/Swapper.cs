@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				_undoRedo.CreateBatch(Resources.UndoRedoPaste);
-				IList<DateOnly> dates = ScheduleViewBase.AllSelectedDates(selectedSchedules).ToList();
+				IList<DateOnly> dates = allSelectedDates(selectedSchedules);
 				IEnumerable<IBusinessRuleResponse> lstBusinessRuleResponse;
 
 				INewBusinessRuleCollection newRules = _schedulerState.SchedulingResultState.GetRulesToRun();
@@ -135,6 +135,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_undoRedo.CommitBatch();
 				_schedulingScreen.RecalculateResources();
 			}
+		}
+
+		private static IList<DateOnly> allSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
+		{
+			ICollection<DateOnly> ret = new HashSet<DateOnly>();
+			foreach (IScheduleDay part in selectedSchedules)
+			{
+				DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
+				ret.Add(dateOnly);
+			}
+			return ret.ToList();
 		}
 	}
 }

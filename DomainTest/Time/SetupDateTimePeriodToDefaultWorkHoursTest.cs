@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void CanCreateOvertimeOnPeriod()
         {
             _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,_scheduleDay, _info);
-            DateTimePeriod? period = _scheduleDay.PersonAssignmentCollectionDoNotUse().First().Period;
+            DateTimePeriod? period = _scheduleDay.PersonAssignment().Period;
             var newPeriod = new DateTimePeriod(period.Value.EndDateTime, period.Value.EndDateTime.AddHours(1));
             Assert.AreEqual(newPeriod, _target.Period);
         }

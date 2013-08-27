@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (Dayoff != null)
 			{
-				var dayOffRepository = new DayOffRepository(uow);
+				var dayOffRepository = new DayOffTemplateRepository(uow);
 				var dayOffTemplate = dayOffRepository.LoadAll().Single(b => b.Description.Name == Dayoff);
 				restriction.DayOffTemplate = dayOffTemplate;
 			}

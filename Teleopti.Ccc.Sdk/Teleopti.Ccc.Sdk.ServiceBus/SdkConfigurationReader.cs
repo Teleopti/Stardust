@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -71,26 +71,51 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         }
     }
 
-	public class MessageSenderCreator
+	public class InternalServiceBusSender : IServiceBusSender
 	{
 		private readonly Func<IServiceBus> _serviceBus;
 
-		public MessageSenderCreator(Func<IServiceBus> serviceBus)
+		public InternalServiceBusSender(Func<IServiceBus> serviceBus)
 		{
 			_serviceBus = serviceBus;
 		}
 
+		public void Dispose()
+		{
+		}
+
+		public void Send(object message)
+		{
+			_serviceBus().Send(message);
+		}
+
+		public bool EnsureBus()
+		{
+			return true;
+		}
+	}
+
+	public class MessageSenderCreator
+	{
+		private readonly IServiceBusSender _serviceBusSender;
+
+		public MessageSenderCreator(IServiceBusSender serviceBusSender)
+		{
+			_serviceBusSender = serviceBusSender;
+		}
+
 		public IList<IMessageSender> Create()
 		{
-			var notify = new BusDenormalizeNotification(_serviceBus);
-			var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
+			var sender = _serviceBusSender;
 			return new List<IMessageSender>
 				{
-					new ScheduleMessageSender(notify, saveToDenormalizationQueue),
-					new MeetingMessageSender(notify, saveToDenormalizationQueue),
-					new GroupPageChangedMessageSender(notify, saveToDenormalizationQueue),
-					new PersonChangedMessageSender(notify, saveToDenormalizationQueue),
-					new PersonPeriodChangedMessageSender(notify, saveToDenormalizationQueue)
+					new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(sender))),
+					new ScheduleMessageSender(sender),
+					new MeetingMessageSender(sender),
+					new GroupPageChangedMessageSender(sender),
+					new TeamOrSiteChangedMessageSender(sender),
+					new PersonChangedMessageSender(sender),
+					new PersonPeriodChangedMessageSender(sender)
 				};
 		}
 	}
@@ -162,25 +187,4 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
 		void ReadConfiguration(MessageSenderCreator creator);
     }
-
-	public class BusDenormalizeNotification : ISendDenormalizeNotification
-	{
-		private readonly Func<IServiceBus> _serviceBus;
-
-		public BusDenormalizeNotification(Func<IServiceBus> serviceBus)
-		{
-			_serviceBus = serviceBus;
-		}
-
-		public void Notify()
-		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-			_serviceBus.Invoke().Send(new ProcessDenormalizeQueue
-			                          	{
-			                          		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-			                          		Datasource = identity.DataSource.Application.Name,
-			                          		Timestamp = DateTime.UtcNow
-			                          	});
-		}
-	}
 }

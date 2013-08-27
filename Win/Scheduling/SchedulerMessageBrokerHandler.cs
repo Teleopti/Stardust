@@ -212,10 +212,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAssignmentRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
 				}
-			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonDayOff)))
-				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonDayOffRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
-				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
 				{
 				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAbsenceRepository(unitOfWorkFactory), eventMessage.DomainObjectId);

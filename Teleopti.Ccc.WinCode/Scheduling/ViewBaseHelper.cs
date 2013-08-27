@@ -168,47 +168,44 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 									TimeHelper.TimeOfDayFromTimeSpan(endTimePeriod.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
         }
 
-        /// <summary>
-        /// Get tooltip for assignments
-        /// </summary>
-        /// <param name="scheduleDay"></param>
-        /// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
-        {
-            var sb = new StringBuilder();
+	    /// <summary>
+	    /// Get tooltip for assignments
+	    /// </summary>
+	    /// <param name="scheduleDay"></param>
+	    /// <returns></returns>
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		    MessageId = "0")]
+	    public static string GetToolTipAssignments(IScheduleDay scheduleDay)
+	    {
+		    var sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
-	        if (asses.Count > 0)
-	        {
-		        foreach (IPersonAssignment pa in asses)
-		        {
-			        if (sb.Length > 0)
-				        sb.AppendLine();
-			        if (pa.ShiftCategory != null)
-				        sb.Append(pa.ShiftCategory.Description.Name); //name
-			        sb.Append("  ");
+		    IPersonAssignment pa = scheduleDay.PersonAssignment();
+		    if (pa != null)
+		    {
+			    if (sb.Length > 0)
+				    sb.AppendLine();
+			    if (pa.ShiftCategory != null)
+				    sb.Append(pa.ShiftCategory.Description.Name); //name
+			    sb.Append("  ");
 			        sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone )); //time
 
-			        foreach (var layer in pa.PersonalLayers())
-			        {
-				        sb.AppendLine();
-				        sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
+			    foreach (var layer in pa.PersonalLayers())
+			    {
+				    sb.AppendLine();
+				    sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
 
-				        sb.AppendLine();
-				        sb.Append("    ");
-				        sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
-					        //name
-				        sb.Append(": ");
+				    sb.AppendLine();
+				    sb.Append("    ");
+				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+				    //name
+				    sb.Append(": ");
                         sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
-			        }
-		        }
-	        }
+			    }
+		    }
+		    return sb.ToString();
+	    }
 
-	        return sb.ToString();
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Get tooltip for absences
         /// </summary>
         /// <param name="cell"></param>
@@ -263,6 +260,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static string GetToolTipOvertime(IScheduleDay cell)
         {
+	        if (!dayHasOvertime(cell)) return string.Empty;
+
             StringBuilder sb = new StringBuilder();
 
             var proj = cell.ProjectionService().CreateProjection();
@@ -282,7 +281,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return sb.ToString();
         }
 
-        /// <summary>
+	    private static bool dayHasOvertime(IScheduleDay cell)
+	    {
+	        var assignment = cell.PersonAssignment();
+		    return assignment != null && assignment.OvertimeLayers().Any();
+	    }
+
+	    /// <summary>
         /// Get tooltip for absences
         /// </summary>
         /// <param name="cell"></param>
@@ -291,21 +296,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
 			StringBuilder sb = new StringBuilder();
         	var culture = TeleoptiPrincipal.Current.Regional.Culture;
-
-            var personDayOffs = cell.PersonDayOffCollection();
-            if (personDayOffs.Count > 0)
-            {
-            	var dayOff = personDayOffs[0].DayOff;
-				sb.AppendLine(dayOff.Description.Name);
-            	sb.Append(Resources.TargetLengthColon + " ");
-				sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
-				sb.Append(Resources.AnchorColon + " ");
-            	sb.AppendLine(
-            		TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
+	        var ass = cell.PersonAssignment();
+					if (ass != null)
+					{
+						var dayOff = ass.DayOff();
+						if (dayOff != null)
+						{
+							sb.AppendLine(dayOff.Description.Name);
+							sb.Append(Resources.TargetLengthColon + " ");
+							sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
+							sb.Append(Resources.AnchorColon + " ");
+							sb.AppendLine(
+								TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
 													 culture));
-				sb.Append(Resources.FlexibilityColon + " ");
-				sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
-            }
+							sb.Append(Resources.FlexibilityColon + " ");
+							sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
+						}
+					}
 
 			return sb.ToString();
         }
@@ -474,16 +481,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             style.CellType = "TotalDayOffCell";
 
-			//if (!wholeRange.CalculatedScheduleDaysOff.HasValue)
-			//{
-			//    int totalDayOff = 0;
-			//    foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-			//    {
-			//        SchedulePartView significant = scheduleDay.SignificantPart();
-			//        if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-			//            totalDayOff += 1;
-			//    }
-			//    wholeRange.CalculatedScheduleDaysOff = totalDayOff;
 	
 			wholeRange.CalculatedScheduleDaysOff = CurrentTotalDayOffs(wholeRange, period);
 			//}
@@ -794,7 +791,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (significantPart == SchedulePartView.DayOff)
             {
-                infoText = schedulePart.PersonDayOffCollection()[0].DayOff.Description.Name;
+                infoText = schedulePart.PersonAssignment().DayOff().Description.Name;
                 periodText = "-";
             }
 

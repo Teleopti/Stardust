@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PersonSkillDictionary"/> class.
+        /// Initializes a new instance of the <see cref="KeyedSkillResourceDictionary"/> class.
         /// </summary>
         public SkillVisualLayerCollectionDictionary()
         {
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PersonSkillDictionary"/> class.
+        /// Initializes a new instance of the <see cref="KeyedSkillResourceDictionary"/> class.
         /// </summary>
         /// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"/> object containing the information required to serialize the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>
         /// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> structure containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>

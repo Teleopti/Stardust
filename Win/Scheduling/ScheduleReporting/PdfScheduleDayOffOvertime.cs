@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
     {
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
-        public PdfScheduleDayOffOvertime(float columnWidth, IScheduleDay schedulePart, IPersonDayOff dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
+        public PdfScheduleDayOffOvertime(float columnWidth, IScheduleDay schedulePart, IPersonAssignment dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
         {
             CultureInfo = culture;
             Brush = new PdfSolidBrush(Color.DimGray);
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             const float top = 2;
             IVisualLayerCollection projection = schedulePart.ProjectionService().CreateProjection();
-            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff.Description.Name, projection, details, timeZoneInfo);
+            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff().Description.Name, projection, details, timeZoneInfo);
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff.Description.Name, projection, details, timeZoneInfo);
+            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff().Description.Name, projection, details, timeZoneInfo);
         }
 
 

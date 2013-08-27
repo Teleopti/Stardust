@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly Guid _messageId = Guid.NewGuid();
 		public override Guid Identity { get { return _messageId; } }
 
-		public IEnumerable<IEvent> Events { get; set; }
+		public List<Event> Events { get; set; }
 	}
 }

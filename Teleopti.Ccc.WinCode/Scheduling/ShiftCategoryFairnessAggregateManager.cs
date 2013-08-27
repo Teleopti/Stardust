@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -11,10 +9,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		IShiftCategoryFairnessCompareResult GetPerPersonAndGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
 		IShiftCategoryFairnessCompareResult GetPerGroupAndOtherGroup(IPerson person, IGroupPageLight groupPage, DateOnly dateOnly);
-		IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage,
+		IList<IShiftCategoryFairnessCompareResult> GetForGroups(IEnumerable<IPerson> persons, IGroupPageLight groupPage,
 		                                                       DateOnly dateOnly, IList<DateOnly> selectedDates);
 
-		IList<IShiftCategoryFairnessCompareResult> GetPerPersonsAndGroup(IList<IPerson> persons, IGroupPageLight groupPage,
+		IList<IShiftCategoryFairnessCompareResult> GetPerPersonsAndGroup(IEnumerable<IPerson> persons, IGroupPageLight groupPage,
 		                                                                 DateOnly dateOnly);
 	}
 
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
 		}
 
-		public IList<IShiftCategoryFairnessCompareResult> GetForGroups(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
+		public IList<IShiftCategoryFairnessCompareResult> GetForGroups(IEnumerable<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly, IList<DateOnly> selectedDates )
 		{
 			var ret = new List<IShiftCategoryFairnessCompareResult>();
 			var groups = _shiftCategoryFairnessGroupPersonHolder.GroupPersons(selectedDates, groupPage, dateOnly, persons);
@@ -114,14 +112,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						
 				var compare = _shiftCategoryFairnessAggregator.GetShiftCategoryFairnessForPersons(_dic, otherPersons);
 				var result = _shiftCategoryFairnessComparer.Compare(orig, compare, _resultStateHolder.ShiftCategories);
-				result.OriginalMembers = groupPerson.GroupMembers;
+				result.OriginalMembers = groupPerson.GroupMembers.ToList();
 				ret.Add(result);
 			}
 
 			return ret;
 		}
 
-		public IList<IShiftCategoryFairnessCompareResult> GetPerPersonsAndGroup(IList<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly)
+		public IList<IShiftCategoryFairnessCompareResult> GetPerPersonsAndGroup(IEnumerable<IPerson> persons, IGroupPageLight groupPage, DateOnly dateOnly)
 		{
 			return persons.Select(person => GetPerPersonAndGroup(person, groupPage, dateOnly)).ToList();
 		}

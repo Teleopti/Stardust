@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			Name = "stg_schedule_preference, stg_day_off, dim_day_off";
 			JobCategory = JobCategoryType.Schedule;
-			Transformer = new IntradaySchedulePreferenceTransformer(_jobParameters.IntervalsPerDay);
+			Transformer = new IntradaySchedulePreferenceTransformer();
 			DayOffSubStep = new EtlDayOffSubStep();
 			SchedulePreferenceInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}

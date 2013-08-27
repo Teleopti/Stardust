@@ -117,6 +117,7 @@
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
+    <Compile Include="Domain\IDayOff.cs" />
     <Compile Include="Domain\IEditableShift.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
-    <Compile Include="Domain\IOpenForWork.cs" />
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
@@ -345,9 +345,6 @@
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
-    <Compile Include="Domain\DayOff.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\AuthenticationTypeOption.cs" />
     <Compile Include="Domain\AvailableDataRangeOption.cs" />
     <Compile Include="Domain\DateOnly.cs" />
@@ -549,6 +546,8 @@
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
     <Compile Include="Domain\RequestType.cs" />
+    <Compile Include="Domain\ResourceCalculationContext.cs" />
+    <Compile Include="Domain\ResourceLayer.cs" />
     <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
     <Compile Include="Domain\ITracker.cs" />
     <Compile Include="Domain\ITrackerCalculator.cs" />
@@ -579,6 +578,7 @@
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
+    <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
@@ -628,7 +628,6 @@
     <Compile Include="Domain\IPersonAssignment.cs" />
     <Compile Include="Domain\IPersonAssignmentRepository.cs" />
     <Compile Include="Domain\IPersonContract.cs" />
-    <Compile Include="Domain\IPersonDayOff.cs" />
     <Compile Include="Domain\IPersonMeeting.cs" />
     <Compile Include="Domain\IPersonPeriod.cs" />
     <Compile Include="Domain\IPersonSkill.cs" />

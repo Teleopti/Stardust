@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -89,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
                 Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
-                Expect.Call(vPeriod2.Person).Return(person);
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Times(4);
+                Expect.Call(vPeriod2.Person).Return(person).Repeat.Times(3);
 
                 Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
                 Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Times(4);
 
                 Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
 
@@ -211,8 +210,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
                 Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-                Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
-                Expect.Call(vPeriod2.Person).Return(person);
+                Expect.Call(vPeriod1.Person).Return(person).Repeat.Times(4);
+                Expect.Call(vPeriod2.Person).Return(person).Repeat.Times(3);
 
                 Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
                 Expect.Call(vPeriod2.ShiftCategoryLimitationCollection()).Return(_limitations);
@@ -235,8 +234,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Assert.AreEqual(4, ret.Count());
             }
         }
-
     }
-
-    
 }

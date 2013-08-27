@@ -32,18 +32,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
             if (rectangle.IsEmpty) return rectangle;
 
-            DrawLayer(rectangle, personDayOff.DayOff.DisplayColor);
-            DrawDescription(personDayOff.DayOff.Description.ShortName, rectangle);
+						DrawLayer(rectangle, personDayOff.DisplayColor);
+						DrawDescription(personDayOff.Description.ShortName, rectangle);
 
             return rectangle;
         }
 
         private void DrawLayer(Rectangle rectangle, Color color)
         {
-            //var tilingBrush = TilingBrush();
             var brush = GradientBrush(rectangle, color);
-            _pdfGraphics.DrawRectangle(brush, rectangle);
-            //_pdfGraphics.DrawRectangle(tilingBrush, rectangle);      
+            _pdfGraphics.DrawRectangle(brush, rectangle); 
         }
 
         private void DrawDescription(string text, Rectangle rectangle)
@@ -73,16 +71,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             return tilingBrush;   
         }
 
-        public IPersonDayOff PersonDayOff()
+        public IDayOff PersonDayOff()
         {
-            if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff || _scheduleDay.PersonDayOffCollection().Count == 0) return null;
+            if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff) 
+				return null;
 
-            var overtime = (from p in _scheduleDay.PersonAssignmentCollectionDoNotUse()
-                            where p.OvertimeLayers().Any()
-                            select p).ToList();
-
-
-            return overtime.Count > 0 ? null : _scheduleDay.PersonDayOffCollection()[0];
+	        var personAssignment = _scheduleDay.PersonAssignment();
+			var overtime = personAssignment.OvertimeLayers().Any();
+			return overtime ? null : personAssignment.DayOff();
         }
 
         public DateTimePeriod Period()

@@ -19,7 +19,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-    	private readonly ISingleSkillDictionary _singleSkillDictionary;
     	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -57,8 +56,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
-        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
         	_daysOffSchedulingService = _container.Resolve<IDaysOffSchedulingService>();
+	        _personSkillProvider = _container.Resolve<IPersonSkillProvider>();
         }
 
         #region Interface
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      optimizerPreferences,
                                                                      rollbackService,
                                                                      SchedulingStateHolder,
-																	 _singleSkillDictionary);
+																	 _personSkillProvider, new CurrentTeleoptiPrincipal());
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
             IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -128,7 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              optimizerPreferences,
                                              rollbackService,
                                              SchedulingStateHolder,
-											 _singleSkillDictionary);
+											 _personSkillProvider, new CurrentTeleoptiPrincipal());
 
             IList<IMoveTimeOptimizer> optimizers = creator.Create();
             IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
@@ -145,11 +144,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             DateOnlyPeriod selectedPeriod, 
             IScheduleService scheduleService)
         {
-            //if (matrixList == null) throw new ArgumentNullException("matrixList");
-            //if (dayOffTemplate == null) throw new ArgumentNullException("dayOffTemplate");
-            //if (scheduleService == null) throw new ArgumentNullException("scheduleService");
-            //if (matrixOriginalStateContainers == null) throw new ArgumentNullException("matrixOriginalStateContainers");
-
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
             ISchedulePartModifyAndRollbackService rollbackService =
@@ -163,7 +157,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     SchedulingStateHolder, 
                     _scheduleDayChangeCallback, 
                     new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
 
             IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
 
@@ -193,8 +186,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
@@ -216,10 +207,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
             var selectedPersons = ScheduleViewBase.AllSelectedPersons(unlockedSchedules);
-            var selectedPeriod = ScheduleViewBase.AllSelectedDates(unlockedSchedules);
-            var sorted = new List<DateOnly>(selectedPeriod);
-            sorted.Sort();
-            var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
+            var selectedPeriod = unlockedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, optimizationPreferences.Rescheduling, _container);
 
@@ -260,10 +249,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
 
-			var selectedPeriod = ScheduleViewBase.AllSelectedDates(allSelectedSchedules);
-            var sorted = new List<DateOnly>(selectedPeriod);
-            sorted.Sort();
-            var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
+			var selectedPeriod = allSelectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, schedulingOptions, _container);
 
@@ -381,7 +368,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //if (schedulePart.PersonAssignmentCollection().Count == 0)
                     if (PreSchedulingStatusChecker.CheckAssignments(schedulePart))
                         //no day off
-                        if (schedulePart.PersonDayOffCollection().Count == 0)
+                        if (!schedulePart.HasDayOff())
                         {
                             DateTime schedulingTime = DateTime.Now;
                             IWorkShiftCalculationResultHolder cache;

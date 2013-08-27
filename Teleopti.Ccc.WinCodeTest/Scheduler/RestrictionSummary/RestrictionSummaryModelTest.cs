@@ -131,8 +131,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             var dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff.Anchor = TimeSpan.FromHours(12);
-            var personDayOff = new PersonDayOff(_person, _scenario, dayOff, new DateOnly(_dateTime));
-            part.Add(personDayOff);
+            part.PersonAssignment(true).SetDayOff(dayOff);
             Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
             Expect.Call(_range.ScheduledDay(new DateOnly(_dateTime))).IgnoreArguments().Return(part).Repeat.AtLeastOnce();
             Expect.Call(_stateHolder.TimeZoneInfo).Return(_timeZoneInfo).Repeat.Any();

@@ -20,9 +20,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private MockRepository _mocks;
         private ISchedulingResultService _schedulingResultService;
         private IDictionary<ISkill, IList<ISkillDay>> _skillDaysDictionary;
+	    private DateTimePeriod _scheduleLoadedForPeriod;
 		private readonly DateTime _updatedOnDateTime = DateTime.Now;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -31,7 +32,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             ISkill skill = SkillFactory.CreateSkill("Skill A", SkillTypeFactory.CreateSkillType(), 15);
             skill.SetId(Guid.NewGuid());
 
-			ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11), skill, _updatedOnDateTime);
+	        var period = new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11);
+			ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(period, skill, _updatedOnDateTime);
+		    _scheduleLoadedForPeriod = period.ToDateTimePeriod(skill.TimeZone);
             _skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
             _skillDaysDictionary.Add(skill, skillDayCollection.ToList());
 
@@ -40,7 +43,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             const int intervalPerDay = 96;
 
-            _target = new ScheduleForecastSkillResourceCalculation(_skillDaysDictionary, _schedulingResultService, skillStaffPeriods, intervalPerDay);
+            _target = new ScheduleForecastSkillResourceCalculation(_skillDaysDictionary, _schedulingResultService, skillStaffPeriods, intervalPerDay, _scheduleLoadedForPeriod);
         }
 
         [Test]
@@ -48,7 +51,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             using (_mocks.Record())
             {
-                Expect.Call(_schedulingResultService.SchedulingResult()).Return(new SkillSkillStaffPeriodExtendedDictionary()).Repeat.Twice();
+                Expect.Call(_schedulingResultService.SchedulingResult(_scheduleLoadedForPeriod)).Return(new SkillSkillStaffPeriodExtendedDictionary()).Repeat.Twice();
             }
 
             using (_mocks.Playback())

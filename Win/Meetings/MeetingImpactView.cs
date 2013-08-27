@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -57,14 +58,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
+			var personSkillProvider = new PersonSkillProvider();
 			var optimizationHelperWin = new ResourceOptimizationHelper(schedulerStateHolder.SchedulingResultState,
-																	new OccupiedSeatCalculator(
-																		new SkillVisualLayerCollectionDictionaryCreator(),
-																		new SeatImpactOnPeriodForProjection()),
-																	new NonBlendSkillCalculator(
-																		new NonBlendSkillImpactOnPeriodForProjection()),
-																		new SingleSkillDictionary(),
-																		new SingleSkillMaxSeatCalculator());
+			                                                           new OccupiedSeatCalculator(),
+			                                                           new NonBlendSkillCalculator(),
+			                                                           personSkillProvider,
+																		new CurrentTeleoptiPrincipal());
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);

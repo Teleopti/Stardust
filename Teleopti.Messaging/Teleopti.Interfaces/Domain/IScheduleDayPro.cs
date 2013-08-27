@@ -22,11 +22,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The day schedule part.</value>
         IScheduleDay DaySchedulePart();
-
-        /// <summary>
-        /// Calculates the day's local date time period.
-        /// </summary>
-        /// <returns></returns>
-        DateTimePeriod LocalDateTimePeriod();
     }
 }

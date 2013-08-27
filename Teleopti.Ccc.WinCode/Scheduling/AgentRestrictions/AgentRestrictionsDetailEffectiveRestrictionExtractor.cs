@@ -114,27 +114,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
             return totalRestriction;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private IEffectiveRestriction ExtractOnDayOff(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
 		{
 			var startTimeLimitation = new StartTimeLimitation(null, null);
 			var endTimeLimitation = new EndTimeLimitation(null, null);
 			var workTimeLimitation = new WorkTimeLimitation(null, null);
-			var dayOffTemplate = new DayOffTemplate(scheduleDay.PersonDayOffCollection()[0].DayOff.Description);
-			dayOffTemplate.SetTargetAndFlexibility(scheduleDay.PersonDayOffCollection()[0].DayOff.TargetLength, scheduleDay.PersonDayOffCollection()[0].DayOff.Flexibility);
+			var dayOff = scheduleDay.PersonAssignment().DayOff();
+			var dayOffTemplate = new DayOffTemplate(dayOff.Description);
+			dayOffTemplate.SetTargetAndFlexibility(dayOff.TargetLength, dayOff.Flexibility);
 
 			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
 
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, dayOffTemplate, null, new List<IActivityRestriction>()));
-			preferenceCellData.DisplayName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.Name;
-			preferenceCellData.DisplayShortName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+			preferenceCellData.DisplayName = dayOff.Description.Name;
+			preferenceCellData.DisplayShortName = dayOff.Description.ShortName;
 			preferenceCellData.HasDayOff = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, TeleoptiPrincipal.Current.Regional.Culture);
 			
 			return totalRestriction;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private IEffectiveRestriction ExtractOnMainShift(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
 		{
 			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -169,17 +168,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private void SetTotalRestriction(IScheduleDay scheduleDay, IEffectiveRestriction totalRestriction, IPreferenceCellData preferenceCellData)
 		{
 			var minMaxLength = GetMinMaxLength(scheduleDay, totalRestriction);
-			if (minMaxLength != null)totalRestriction = new EffectiveRestriction(minMaxLength.StartTimeLimitation,minMaxLength.EndTimeLimitation,minMaxLength.WorkTimeLimitation,totalRestriction.ShiftCategory,totalRestriction.DayOffTemplate,totalRestriction.Absence, new List<IActivityRestriction>());
+			if (minMaxLength != null)
+				totalRestriction = new EffectiveRestriction(minMaxLength.StartTimeLimitation, minMaxLength.EndTimeLimitation,
+				                                            minMaxLength.WorkTimeLimitation, totalRestriction.ShiftCategory,
+				                                            totalRestriction.DayOffTemplate, totalRestriction.Absence,
+				                                            new List<IActivityRestriction>());
 			else
 			{
-				if (totalRestriction.IsRestriction && totalRestriction.DayOffTemplate == null && totalRestriction.Absence == null)
+				if (totalRestriction != null && totalRestriction.IsRestriction && totalRestriction.DayOffTemplate == null &&
+				    totalRestriction.Absence == null)
 				{
 					preferenceCellData.NoShiftsCanBeFound = true;
-					totalRestriction = new EffectiveRestriction(new StartTimeLimitation(),new EndTimeLimitation(),new WorkTimeLimitation(),totalRestriction.ShiftCategory,totalRestriction.DayOffTemplate,totalRestriction.Absence, new List<IActivityRestriction>());
+					totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+					                                            new WorkTimeLimitation(), totalRestriction.ShiftCategory,
+					                                            totalRestriction.DayOffTemplate, totalRestriction.Absence,
+					                                            new List<IActivityRestriction>());
 				}
 			}
 			preferenceCellData.EffectiveRestriction = totalRestriction;
-			if (totalRestriction.Absence != null) 
+			if (totalRestriction != null && totalRestriction.Absence != null)
 				SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
 		}
 

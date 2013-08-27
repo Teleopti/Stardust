@@ -39,14 +39,12 @@ namespace Teleopti.Ccc.Domain.Helper
             string xmlString;
             using (var memoryStream = new MemoryStream())
             {
-                var xs = new XmlSerializer(type);
+				var xs = new XmlSerializer(type);
                 using (var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8))
                 {
                     xs.Serialize(xmlTextWriter, value);
                     xmlString = UTF8ByteArrayToString(((MemoryStream)xmlTextWriter.BaseStream).ToArray());
-                    //xmlTextWriter.Close();
                 }
-                
             }   
             // Lose any whitespaces or crap characters that XML Serializer produces.
             if (xmlString.Substring(0, 1) != "<")
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Helper
                 int startPos = xmlString.IndexOf("<", StringComparison.OrdinalIgnoreCase);
                 xmlString = xmlString.Substring(startPos, xmlString.Length - startPos);
             }
-            
             return xmlString;
         }
 

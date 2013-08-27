@@ -1,16 +1,18 @@
 using System;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Autofac;
-using Rhino.ServiceBus.Hosting;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Interfaces.Domain;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				    builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
 				    _customHost = builder.Build();
 
-                        	Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString = ConfigurationManager.ConnectionStrings["Queue"].ConnectionString;
+				    Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString =
+					    ((NameValueCollection) ConfigurationManager.GetSection("teleopti/publishedSettings"))["Queue"];
 
 				    new OnewayRhinoServiceBusConfiguration()
 					    .UseAutofac(_customHost)

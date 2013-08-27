@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,11 +14,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
-		public static readonly DateTimePeriod UndefinedPeriod = new DateTimePeriod(1800,1,1,1800,1,2);
 		private IList<IShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private IShiftCategory _shiftCategory;
+		private IDayOffTemplate _dayOffTemplate;
 
 
 		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
@@ -54,9 +55,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeLayer.Period, mergedPeriod);
 			}
+			if (_dayOffTemplate != null && !mergedPeriod.HasValue)
+			{
+				var dayOff = DayOff();
+				mergedPeriod = new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
+			}
 			if (!mergedPeriod.HasValue)
 			{
-				mergedPeriod = UndefinedPeriod;
+				//gillar inte att man måste hoppa till personaggregatet här. stämpla assignmentet med tidszon istället?
+				mergedPeriod = new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
 			}
 			return mergedPeriod.Value;
 		}
@@ -144,16 +151,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _scenario; }
 		}
 
-		public virtual void ScheduleChanged(string dataSource)
+		public virtual void ScheduleChanged()
 		{
 			AddEvent(new ScheduleChangedEvent
 				{
-					Datasource = dataSource,
-					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-					ScenarioId = Scenario.Id.Value,
+					ScenarioId = Scenario.Id.GetValueOrDefault(),
 					StartDateTime = Period.StartDateTime,
 					EndDateTime = Period.EndDateTime,
-					PersonId = Person.Id.Value,
+					PersonId = Person.Id.GetValueOrDefault(),
 				});
 		}
 
@@ -292,5 +297,65 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 		}
+
+		public virtual IDayOff DayOff()
+		{
+			if (_dayOffTemplate == null)
+				return null;
+			//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+      var anchorDateTime = TimeZoneHelper.ConvertToUtc(Date.Date.Add(_dayOffTemplate.Anchor), Person.PermissionInformation.DefaultTimeZone());
+			return new DayOff(anchorDateTime, _dayOffTemplate.TargetLength, _dayOffTemplate.Flexibility, _dayOffTemplate.Description, _dayOffTemplate.DisplayColor, _dayOffTemplate.PayrollCode);
+		}
+
+		public virtual void SetDayOff(IDayOffTemplate template)
+		{
+			_dayOffTemplate = template;
+		}
+
+		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination)
+		{
+			dayOffDestination.SetDayOff(_dayOffTemplate);
+		}
+
+		public virtual bool AssignedWithDayOff(IDayOffTemplate template)
+		{
+			if (_dayOffTemplate == null)
+				return template == null;
+			return _dayOffTemplate.Equals(template);
+		}
+
+		#region Equals
+
+		public virtual bool Equals(IPersonAssignment other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return
+				Equals(_person, other.Person) && 
+				Equals(_scenario, other.Scenario) && 
+				Date.Equals(other.Date);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((IPersonAssignment) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = Date.GetHashCode();
+				hashCode = (hashCode * 397) ^ (_person != null ? _person.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
+				return hashCode;
+			}
+		}
+
+		#endregion
+
 	}
 }
