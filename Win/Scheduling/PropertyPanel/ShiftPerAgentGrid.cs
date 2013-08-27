@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class ShiftPerAgentGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftPerAgentGrid
     {
 	    private readonly IDistributionInformationExtractor _model;
-	    private ShiftPerAgentGridPresenter _presenter;
+	    private readonly ShiftPerAgentGridPresenter _presenter;
 	    private readonly ISchedulerStateHolder _schedulerState;
 
 		public ShiftPerAgentGrid(IDistributionInformationExtractor model, ISchedulerStateHolder schedulerState)
