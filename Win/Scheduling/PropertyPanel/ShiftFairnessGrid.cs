@@ -25,8 +25,21 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			QueryColCount += shiftFairnessGridQueryColCount;
 			QueryRowCount += shiftFairnessGridQueryRowCount;
 			QueryCellInfo += shiftFairnessGridQueryCellInfo;
+			CellDoubleClick += shiftFairnessGridCellDoubleClick;
 
 			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+		}
+
+		void shiftFairnessGridCellDoubleClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.RowIndex == 0)
+			{
+				BeginUpdate();
+				_presenter.Sort(e.ColIndex);
+				EndUpdate();
+
+				Refresh();
+			}
 		}
 
 		void shiftFairnessGridQueryCellInfo(object sender,GridQueryCellInfoEventArgs e)
@@ -48,8 +61,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				if (e.RowIndex < _model.ShiftCategories.Count + 1)
 				{
-					e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1].Description.Name;
-					e.Style.Tag = _model.ShiftCategories[e.RowIndex - 1];
+					//e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1].Description.Name;
+					//e.Style.Tag = _model.ShiftCategories[e.RowIndex - 1];
+					e.Style.CellValue = _presenter.SortedShiftCategories()[e.RowIndex - 1].Description.Name;
+					e.Style.Tag = _presenter.SortedShiftCategories()[e.RowIndex - 1];
 				}
 				else
 				{
@@ -93,6 +108,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			e.Count = 4;
 			e.Handled = true;
+		}
+
+		public IDistributionInformationExtractor ExtractorModel
+		{
+			get { return _model; }
 		}
     }
 }
