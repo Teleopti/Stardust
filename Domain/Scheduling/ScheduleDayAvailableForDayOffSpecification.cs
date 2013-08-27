@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (obj == null) 
 				return false;
 
-			return !obj.IsScheduled() && obj.PersonMeetingCollection().Count == 0;
+			return !obj.IsScheduled() && obj.PersonMeetingCollection().Count == 0 && obj.PersonAbsenceCollection().Count == 0;
 		}
 	}
 }
