@@ -33,6 +33,7 @@ Background:
 	| Name |
 	| Day  |
 
+	@ignore
 Scenario: View skill selection
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
