@@ -991,6 +991,14 @@ ALTER TABLE [Auditing].[PersonAssignment_AUD]
 DROP COLUMN Minimum, Maximum
 GO
 
+--remove assignments without shifts
+delete from PersonAssignment
+where id in 
+(
+select pa.id from personassignment pa
+left outer join ShiftLayer sl on pa.Id=sl.Parent
+where not exists(select 1 from ShiftLayer where Parent=pa.Id)
+)
 
 
 ----------------  
