@@ -56,10 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 return _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).LoadAggregate(id);
             }
-            if (typeof(IPersonDayOff).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).LoadAggregate(id);
-            }
             if (typeof(IPersonAbsence).IsAssignableFrom(scheduleDataType))
             {
                 return _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).LoadAggregate(id);
@@ -204,7 +200,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					var longDateOnlyP = new DateOnlyPeriod(new DateOnly(p.StartDateTime.AddDays(-1)), new DateOnly(p.EndDateTime.AddDays(1)));
 					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario));
-					addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
 				}
             }
 
@@ -283,7 +278,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(longPeriod, scenario));
 						addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(dateOnlyPeriod, scenario));
-            addPersonDayOffs(scheduleDictionary, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(longPeriod, scenario));
             addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(longPeriod, scenario),false,new List<IPerson>());
         }
 
@@ -291,7 +285,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(persons, longPeriod, scenario));
 						addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario));
-            addPersonDayOffs(scheduleDictionary, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(persons, longPeriod, scenario));
             addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario),true,persons);
         }
 
@@ -388,13 +381,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        private static void addPersonDayOffs(IScheduleDictionary retDic, IEnumerable<IPersonDayOff> personDayOffs)
-        {
-            foreach (IPersonDayOff dayOff in personDayOffs)
-            {
-                ((ScheduleRange)retDic[dayOff.Person]).Add(dayOff);
-            }
-        }
         private static void addNotes(IScheduleDictionary retDic, IEnumerable<INote> notes)
         {
             foreach (INote note in notes)

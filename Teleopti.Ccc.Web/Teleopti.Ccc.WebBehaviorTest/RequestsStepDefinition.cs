@@ -98,14 +98,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForYourApproval);
 		}
 
-		
-		[Then(@"I should see my existing absence request with absence '(.*)'")]
-		public void ThenIShouldSeeMyExistingAbsenceRequestWithAbsence(string absence)
-		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(absence));
-		}
-
 		[Then(@"I should be able to see requests link")]
 		public void ThenIShouldBeAbleToSeeRequestsLink()
 		{

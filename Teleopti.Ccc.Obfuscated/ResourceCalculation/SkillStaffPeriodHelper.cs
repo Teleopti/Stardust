@@ -70,22 +70,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             return skillStaffPeriods.Select(s => s.RelativeDifference * s.Period.ElapsedTime().TotalHours).ToList();
         }
 
-        /// <summary>
-        /// Gets the Forecasted hours in the specified <see cref="ISkillStaffPeriod"/> list.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This method is used for getting the forecasted hours for a day, preceding by a method
-        /// that gets the <see cref="ISkillStaffPeriod"/> list for a given day. This method is called by
-        /// that <see cref="ISkillStaffPeriod"/> list as parameter.
-        /// </remarks>
-        public static double? ForecastedHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
-        {
-            var list = skillStaffPeriods.Select(s => s.FStaffHours()).ToList();
-            return (list.Count > 0) ? list.Sum() : (double?)null;
-        }
-
 		/// <summary>
 		/// Gets max of used seats during the period
 		/// </summary>
@@ -185,34 +169,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         /// <summary>
-        /// Gets the specified person's active skills for the specified day.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <param name="utcScheduleDate">The schedule date.</param>
-        /// <returns></returns>
-        public static IList<ISkill> PersonActiveSkillOnDay(IPerson person, DateTime utcScheduleDate)
-        {
-            // check for correct input data
-            InParameter.NotNull("person", person);
-
-            IList<ISkill> returnSkills = new List<ISkill>();
-            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-            DateOnly scheduleDay = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcScheduleDate, timeZoneInfo).Date);
-            IPersonPeriod personPeriod = person.Period(scheduleDay);
-            if (personPeriod == null) 
-                return returnSkills;
-
-            IList<IPersonSkill> personSkills = personPeriod.PersonSkillCollection;
-            foreach (IPersonSkill personSkill in personSkills)
-            {
-                if (!returnSkills.Contains(personSkill.Skill))
-                    returnSkills.Add(personSkill.Skill);
-            }
-
-            return returnSkills;
-        }
-
-        /// <summary>
         /// Calculates the relative difference between the forecasted and scheduled hours in the specified <see cref="ISkillStaffPeriod"/> list.
         /// </summary>
         /// <param name="skillStaffPeriods">The skill staff periods.</param>
@@ -289,21 +245,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         /// <summary>
-        /// Calculates the root mean square from the relatiove values.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <param name="considerMinStaffing">if set to <c>true</c> [consider min staffing].</param>
-        /// <param name="considerMaxStaffing">if set to <c>true</c> [consider max staffing].</param>
-        /// <param name="considerHighestIntraIntervalDeviation">if set to <c>true</c> [consider highest intra interval deviation].</param>
-        /// <returns></returns>
-        public static double? CalculateRelativeRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing, bool considerHighestIntraIntervalDeviation)
-        {
-            skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod = SkillStaffPeriodsRelativeDifferenceHours;
-            return CalculateSkillStaffPeriodsRootMeanSquare(calculationMethod, skillStaffPeriods, considerMinStaffing,
-                                                            considerMaxStaffing, considerHighestIntraIntervalDeviation);
-        }
-
-        /// <summary>
         /// Calculates the skill staff periods root mean square.
         /// </summary>
         /// <param name="calculationMethod">The calculation method.</param>
@@ -345,8 +286,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             return result;
         }
 
-        #region SkillDayGrid
-
         public static double? SkillDayRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             return CalculateAbsoluteRootMeanSquare(skillStaffPeriods, false, false, false);
@@ -354,7 +293,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public static double? SkillDayGridSmoothness(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            if (skillStaffPeriods.Count() == 0)
+            if (!skillStaffPeriods.Any())
                 return null;
             SkillStaffPeriodStatisticsForSkillIntraday statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods.ToList());
             statistics.Analyze();
@@ -437,33 +376,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (talj > 0)
                 return new Percent(namer / talj);
             return new Percent();
-        }
-
-        #endregion
-
-        /// note: currently not used
-        /// <summary>
-        /// Boosts AbsoluteDifference with 10000 times for each Min or Max staff that is broken.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-24
-        /// </remarks>
-        public static IList<double> IntradayMinMaxBoostedAbsoluteDifference(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
-        {
-            //Why should tis be in hours???
-            IList<Double> ret = new List<double>();
-            foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
-            {
-                double traff = (skillStaffPeriod.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(false) * 10000)
-                                + skillStaffPeriod.AbsoluteDifference;
-                double value = traff * skillStaffPeriod.Period.ElapsedTime().TotalHours;
-                ret.Add(value);
-            }
-
-            return ret;
         }
     }
 }

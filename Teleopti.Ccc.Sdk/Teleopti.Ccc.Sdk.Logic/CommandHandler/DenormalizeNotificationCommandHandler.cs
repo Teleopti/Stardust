@@ -3,6 +3,7 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -25,13 +26,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
 			}
 
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-			var message = new ProcessDenormalizeQueue
-			              	{
-			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-			              		Datasource = identity.DataSource.Application.Name,
-			              		Timestamp = DateTime.UtcNow
-			              	};
+			var message = new ProcessDenormalizeQueue();
+			message.SetMessageDetail();
 
 			_busSender.Send(message);
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };

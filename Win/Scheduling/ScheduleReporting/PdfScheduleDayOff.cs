@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
     public class PdfScheduleDayOff : PdfScheduleTemplate
     {
 
-        public PdfScheduleDayOff(float columnWidth, IPersonDayOff dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
+        public PdfScheduleDayOff(float columnWidth, IPersonAssignment dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
         {
             CultureInfo = culture;
             Brush = new PdfSolidBrush(Color.DimGray);
@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             ColumnWidth = columnWidth;
 
             const float top = 2;
-            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff.Description.Name);
+            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff().Description.Name);
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff.Description.Name);
+            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), dayOff.DayOff().Description.Name);
         }
 
 

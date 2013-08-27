@@ -71,8 +71,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Today.AddHours(24), DateTimeKind.Utc));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, null, new Dictionary<IPerson, IScheduleRange>());
 			var range = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period));
-			var personDayOff = new PersonDayOff(person, scenario, DayOffFactory.CreateDayOff(), new DateOnly(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)), TimeZoneInfoFactory.UtcTimeZoneInfo());
-			range.Add(personDayOff);
 			scheduleDictionary.AddTestItem(person, range);
 			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();

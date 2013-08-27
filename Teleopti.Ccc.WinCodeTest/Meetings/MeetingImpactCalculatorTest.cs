@@ -49,28 +49,24 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             var personMeeting = _mocks.StrictMock<IPersonMeeting>();
         	var schedulePeriod = _mocks.StrictMock<IScheduleDateTimePeriod>();
-            _parameters = _mocks.StrictMock<IScheduleParameters>();
+	        _parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), _person, _period);
 
             var range = new ScheduleExposingAddRemove(_scheduleDic, _parameters);
 
             //remove
             Expect.Call(_meeting.MeetingPersons).Return(
-                new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson> { meetingPerson1, meetingPerson2 }));
+                new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson> { meetingPerson1, meetingPerson2 })).Repeat.Twice();
             Expect.Call(_meeting.StartDate).Return(_meetingDate).Repeat.Times(2);
             Expect.Call(_stateHolder.Schedules).Return(_scheduleDic).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDic.SchedulesForDay(_meetingDate)).Return(new List<IScheduleDay> { scheduleDay }).Repeat.Times(2);
             Expect.Call(scheduleDay.PersonMeetingCollection()).Return(
                 new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting })).Repeat.Times(2);
             Expect.Call(personMeeting.BelongsToMeeting).Return(_meeting).Repeat.Times(2);
-            Expect.Call(meetingPerson1.Person).Return(_person);
-            Expect.Call(meetingPerson2.Person).Return(_person);
+            Expect.Call(meetingPerson1.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(meetingPerson2.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDic[_person]).Return(range).Repeat.Times(2);
-			
+            
             //add
-            Expect.Call(_meeting.MeetingPersons).Return(
-                new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson> { meetingPerson1, meetingPerson2 }));
-            Expect.Call(meetingPerson1.Person).Return(_person);
-            Expect.Call(meetingPerson2.Person).Return(_person);
             Expect.Call(_meeting.GetPersonMeetings(_person)).Return(new List<IPersonMeeting> { personMeeting }).Repeat.Twice();
 			Expect.Call(_scheduleDic.Period).Return(schedulePeriod);
         	Expect.Call(personMeeting.Period).Return(_period);
@@ -97,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var meetingPerson2 = _mocks.StrictMock<IMeetingPerson>();
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             var personMeeting = _mocks.StrictMock<IPersonMeeting>();
-            _parameters = _mocks.StrictMock<IScheduleParameters>();
+            _parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(),_person,_period);
             var range = new ScheduleExposingAddRemove(_scheduleDic, _parameters);
 
             Expect.Call(_meeting.MeetingPersons).Return(

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
 using Is = Rhino.Mocks.Constraints.Is;
@@ -349,7 +348,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void VerifyDefaultProperty()
 		{
 			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()),
-				new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
+				new SignalBroker(MessageFilterManager.Instance));
 		}
 
 

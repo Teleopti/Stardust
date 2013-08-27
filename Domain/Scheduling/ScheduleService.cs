@@ -70,47 +70,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			                           possibleStartEndCategory, null, rollbackService);
 		}
 
-        //public bool ScheduleForAdvanceScheduling(
-        //    IScheduleDay schedulePart,
-        //    ISchedulingOptions schedulingOptions,
-        //    IResourceCalculateDelayer resourceCalculateDelayer,
-        //    ISchedulePartModifyAndRollbackService rollbackService,
-        //    IShiftProjectionCache shiftProjectionCache )
-        //{
-        //    using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
-        //    {
-        //        //if (schedulePart.IsScheduled())
-        //        //{
-        //        //    return true;
-        //        //}
-
-        //        var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-        //        //var   person = schedulePart.Person;
-                
-
-        //        using (PerformanceOutput.ForOperation("Finding the best shift in total"))
-        //        {
-        //            //_shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
-
-        //            IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.
-        //                CreateMatrixListFromScheduleParts(
-        //                    new List<IScheduleDay> { schedulePart });
-        //            if (matrixList.Count == 0)
-        //                return false;
-                    
-        //        }
-
-        //        schedulePart.AddMainShift(shiftProjectionCache.TheMainShift);
-        //        rollbackService.Modify(schedulePart);
-
-        //        resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly,
-        //                                                   shiftProjectionCache.WorkShiftProjectionPeriod, new List<IScheduleDay> { schedulePart });
-
-        //        return true;
-        //    }
-        //}
-
-
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         private bool schedulePersonOnDay(
             IScheduleDay schedulePart,

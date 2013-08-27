@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IPersonAssignment _ass3;
 		private IPersonAssignment _ass4;
 
-        private PersonDayOff _dayOff1;
-        private PersonDayOff _dayOff2;
-        private PersonDayOff _dayOff3;
+        private IPersonAssignment _dayOff1;
+				private IPersonAssignment _dayOff2;
+				private IPersonAssignment _dayOff3;
 
         private PersonAbsence _abs1;
         private PersonAbsence _abs2;
@@ -330,22 +330,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
         //create persondayoff
-        private PersonDayOff CreatePersonDayOff(DateTime period, IPerson person)
+        private IPersonAssignment CreatePersonDayOff(DateTime period, IPerson person)
         {
             DateOnly date = new DateOnly(period.Date);
 
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.Anchor = TimeSpan.FromHours(3);
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(6));
-            return new PersonDayOff(person, _scenario, dayOff, date);
+						return PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, person, date, dayOff);
         }
-        private PersonDayOff CreatePersonDayOffWithSpecificTemplate(DateTime period, IPerson person, IDayOffTemplate template)
+        private IPersonAssignment CreatePersonDayOffWithSpecificTemplate(DateTime period, IPerson person, IDayOffTemplate template)
         {
             DateOnly date = new DateOnly(period.Date);
 
             template.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(6));
             template.Anchor = TimeSpan.FromHours(4);
-            return new PersonDayOff(person, _scenario, template, date);
+						return PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, person, date, template);
         }
 
         //create personabsence

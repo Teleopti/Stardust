@@ -48,5 +48,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
         ISkill LoadSkill(ISkill skill);
         IMultisiteSkill LoadMultisiteSkill(ISkill skill);
+	    int MinimumResolution();
     }
 }

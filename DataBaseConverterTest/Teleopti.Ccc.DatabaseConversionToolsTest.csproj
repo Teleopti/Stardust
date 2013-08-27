@@ -118,7 +118,6 @@
     <Compile Include="CollectionConverter\AgentAbsenceConverterTest.cs" />
     <Compile Include="CollectionConverter\AgentAssignmentConverterTest.cs" />
     <Compile Include="CollectionConverter\AgentConverterTest.cs" />
-    <Compile Include="CollectionConverter\AgentDayOffConverterTest.cs" />
     <Compile Include="CollectionConverter\AgentPreferenceConverterTest.cs" />
     <Compile Include="CollectionConverter\AvailabilityConverterTest.cs" />
     <Compile Include="CollectionConverter\CccConverterTest.cs" />
@@ -180,7 +179,6 @@
     <Compile Include="EntityMapper\ActivityLayerMapperTest.cs" />
     <Compile Include="EntityMapper\AgentAbsenceMapperTest.cs" />
     <Compile Include="EntityMapper\AgentAssignmentMapperTest.cs" />
-    <Compile Include="EntityMapper\AgentDayOffMapperTest.cs" />
     <Compile Include="EntityMapper\DateTimePeriodMapperTest.cs" />
     <Compile Include="EntityMapper\MainShiftMapperTest.cs" />
     <Compile Include="EntityMapper\MapperTest.cs" />

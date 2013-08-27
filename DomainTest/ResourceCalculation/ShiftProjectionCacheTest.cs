@@ -86,10 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var meetings = new List<IPersonMeeting>();
 			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
 
-			var persAss = new List<IPersonAssignment>();
-			var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
-
-			Assert.IsTrue(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
+			Assert.IsTrue(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, null));
 		}
 
 		[Test]
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using(_mocks.Record())
 			{
-				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, null);
 				Assert.IsFalse(result);
 			}
 		}
@@ -114,8 +111,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseIfPersonalShiftTimeNotOk()
 		{
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment});
-
 
 			using(_mocks.Record())
 			{
@@ -124,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using(_mocks.Playback())
 			{
-				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()), personAssignments);
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()), personAssignment);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -133,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnTrueIfMeetingAndPersonalShiftTimeOk()
 		{
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment });
 			var personMeeting = _mocks.StrictMock<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
 
@@ -145,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personAssignments);
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personAssignment);
 				Assert.IsTrue(result);
 			}	
 		}
@@ -206,10 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
 
-			var persAss = new List<IPersonAssignment>();
-			var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
-
-			Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
+			Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, null));
 		}
 
 		//[Test]

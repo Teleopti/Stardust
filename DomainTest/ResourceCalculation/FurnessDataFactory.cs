@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+﻿using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {

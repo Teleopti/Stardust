@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     else
                         workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
 					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStartDate.Value, scheduleDate) &&
-						ScheduleDay.PersonDayOffCollection().IsEmpty();
+						!ScheduleDay.HasDayOff();
 				}
 				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
 				if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
@@ -125,7 +125,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IList<IVisualLayer> createAssignmentLayers()
 		{
 			var assesProjection = new List<IVisualLayer>();
-			foreach (var assignment in ScheduleDay.PersonAssignmentCollectionDoNotUse())
+			var assignment = ScheduleDay.PersonAssignment();
+			if (assignment != null)
 			{
 				var assLayers = ((VisualLayerCollection)assignment.ProjectionService().CreateProjection()).UnMergedCollection;
 				assesProjection.AddRange(assLayers);

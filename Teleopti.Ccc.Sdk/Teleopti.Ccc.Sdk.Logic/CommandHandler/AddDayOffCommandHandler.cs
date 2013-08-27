@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class AddDayOffCommandHandler : IHandleCommand<AddDayOffCommandDto>
     {
-        private readonly IDayOffRepository _dayOffRepository;
+        private readonly IDayOffTemplateRepository _dayOffRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 
-		public AddDayOffCommandHandler(IDayOffRepository dayOffRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
+		public AddDayOffCommandHandler(IDayOffTemplateRepository dayOffRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
         {
             _dayOffRepository = dayOffRepository;
             _scheduleRepository = scheduleRepository;

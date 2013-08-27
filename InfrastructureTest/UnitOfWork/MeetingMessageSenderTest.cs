@@ -1,16 +1,13 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
@@ -19,16 +16,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender target;
 		private MockRepository mocks;
-		private ISendDenormalizeNotification sendDenormalizeNotification;
-		private ISaveToDenormalizationQueue saveToDenormalizationQueue;
+		private IServiceBusSender serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			sendDenormalizeNotification = mocks.DynamicMock<ISendDenormalizeNotification>();
-			saveToDenormalizationQueue = mocks.DynamicMock<ISaveToDenormalizationQueue>();
-			target = new MeetingMessageSender(sendDenormalizeNotification,saveToDenormalizationQueue);
+			serviceBusSender = mocks.DynamicMock<IServiceBusSender>();
+			target = new MeetingMessageSender(serviceBusSender);
 		}
 
 		[Test]
@@ -43,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify);
-				Expect.Call(()=>saveToDenormalizationQueue.Execute<ScheduleChangedEvent>(null)).IgnoreArguments();
+				Expect.Call(serviceBusSender.EnsureBus()).Return(true);
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
@@ -60,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{

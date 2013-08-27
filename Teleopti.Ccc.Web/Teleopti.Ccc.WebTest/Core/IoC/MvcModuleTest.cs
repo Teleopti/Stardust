@@ -13,8 +13,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -44,14 +42,11 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
-using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Rta;
 
 
 namespace Teleopti.Ccc.WebTest.Core.IoC

@@ -67,6 +67,30 @@ INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC utc
 	AND utc.person_id = fs.person_id
 WHERE stg.business_unit_code = @business_unit_code
 
+-- special delete if something is left, a shift over midninght for example
+DELETE fs
+FROM Stage.stg_schedule stg
+INNER JOIN
+	mart.dim_person		dp
+ON
+	stg.person_code		=			dp.person_code
+	AND --trim
+		(
+				(stg.shift_start	>= dp.valid_from_date)
+			AND
+				(stg.shift_start < dp.valid_to_date)
+		)
+INNER JOIN mart.dim_date AS dsd 
+ON stg.schedule_date = dsd.date_date
+INNER JOIN mart.dim_scenario ds
+	ON stg.scenario_code = ds.scenario_code
+INNER JOIN mart.fact_schedule_day_count fs
+	ON dp.person_id = fs.person_id
+	AND fs.date_id = dsd.date_id
+	AND fs.start_interval_id = stg.interval_id
+	AND ds.scenario_id = fs.scenario_id
+	WHERE fs.business_unit_id = @business_unit_id
+
 ----------------------------------------------------------------------------------
 -- Insert shift_category_count rows
 -- Take a look at performance on the select

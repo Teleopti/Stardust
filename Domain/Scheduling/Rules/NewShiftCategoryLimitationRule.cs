@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dateOnlyPeriod)
+            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop)
                                                  {Overridden = !_haltModify};
             return response;
         }

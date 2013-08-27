@@ -128,51 +128,6 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             return new MinMax<TimeSpan>(minLenght, maxLength);
         }
 
-        //public MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix)
-        //{
-        //    MinMax<TimeSpan> minMax = currentMinMax(dayToSchedule, matrix);
-        //    int numberOfWeeks = WeekCount(matrix);
-        //    TimeSpan sumCorrection = calculateSumCorrection(dayToSchedule, matrix, numberOfWeeks);
-
-        //    TimeSpan corrMax = minMax.Maximum.Subtract(sumCorrection);
-        //    TimeSpan minLenght = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrix).StartTime.Subtract(corrMax);
-
-        //    TimeSpan minForDay = PossibleMinMaxWorkShiftLengths(matrix)[dayToSchedule].Minimum;
-        //    if (minForDay > minLenght)
-        //        minLenght = minForDay;
-
-        //    TimeSpan maxLength = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrix).EndTime.Subtract(minMax.Minimum);
-        //    TimeSpan maxForDay = PossibleMinMaxWorkShiftLengths(matrix)[dayToSchedule].Maximum;
-        //    if (maxForDay < maxLength)
-        //        maxLength = maxForDay;
-
-        //    int weekIndex = weekIndexFromDate(dayToSchedule, matrix);
-        //    bool skipThisWeek = false;
-        //    if (weekIndex == 0 || weekIndex == numberOfWeeks - 1)
-        //        skipThisWeek = skipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
-
-        //    if (!skipThisWeek)
-        //    {
-        //        TimeSpan? maxLengthByWeek = _weekCalculator.MaxAllowedLength(weekIndex, PossibleMinMaxWorkShiftLengths(matrix), dayToSchedule, matrix);
-
-        //        if (maxLengthByWeek.HasValue)
-        //        {
-        //            if (maxLengthByWeek.Value < maxLength)
-        //                maxLength = maxLengthByWeek.Value;
-        //        }
-        //        else
-        //        {
-        //            return null;
-        //        }
-        //    }
-            
-
-        //    if (maxLength < minLenght)
-        //        return null;
-
-        //    return new MinMax<TimeSpan>(minLenght, maxLength);
-        //}
-
         private TimeSpan calculateSumCorrection(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, int numberOfWeeks, ISchedulingOptions schedulingOptions)
         {
             TimeSpan sumCorrection = TimeSpan.Zero;
@@ -257,7 +212,6 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             }
 
             return _possibleMinMaxWorkShiftLengthState;
-
         }
 
         private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
@@ -278,11 +232,11 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
                     }
                 }
 
-                SchedulePartView significant = scheduleDayPro.DaySchedulePart().SignificantPart();
+	            var part = scheduleDayPro.DaySchedulePart();
+                SchedulePartView significant = part.SignificantPart();
                 if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)
                 {
-                    contractTime =
-                        scheduleDayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+                    contractTime = part.ProjectionService().CreateProjection().ContractTime();
                     min = min.Add(contractTime);
                     max = max.Add(contractTime);
                 }

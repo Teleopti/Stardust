@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow)
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description(Name));
-			var dayOffRepository = new DayOffRepository(uow);
+			var dayOffRepository = new DayOffTemplateRepository(uow);
 			dayOffRepository.Add(dayOffTemplate);
 		}
 	}

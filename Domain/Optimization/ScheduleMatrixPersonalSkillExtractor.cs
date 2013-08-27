@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -22,8 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IEnumerable<ISkill> ExtractSkills()
         {
             DateOnly firstPeriodDay = _scheduleMatrix.EffectivePeriodDays[0].Day;
-            IList<IPersonSkill> personalSkills =
-                _scheduleMatrix.Person.Period(firstPeriodDay).PersonSkillCollection;
+            var personalSkills = _scheduleMatrix.Person.Period(firstPeriodDay).PersonSkillCollection;
             return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
         }
     }

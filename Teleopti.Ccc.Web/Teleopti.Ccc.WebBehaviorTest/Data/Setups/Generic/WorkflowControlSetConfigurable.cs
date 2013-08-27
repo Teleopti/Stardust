@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (!string.IsNullOrEmpty(AvailableDayOff))
 			{
-				var dayOffTemplate = new DayOffRepository(uow).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
+				var dayOffTemplate = new DayOffTemplateRepository(uow).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
 				workflowControlSet.AddAllowedPreferenceDayOff(dayOffTemplate);
 			}
 

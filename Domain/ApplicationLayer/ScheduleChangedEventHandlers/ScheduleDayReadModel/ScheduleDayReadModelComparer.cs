@@ -15,10 +15,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
         {
             string message = null;
             string weekDayName;
-            string startDateTime;
-            string endDateTime;
 
-            string currentDateFormat = string.Format(cultureInfo, currentDate.ToShortDateString(cultureInfo));
+			string currentDateFormat = currentDate.ToShortDateString(cultureInfo);
 
             //if new and existing both are OFF days
             if ((newReadModel == null && existingReadModel == null) || (newReadModel == null && existingReadModel.Workday == false) || (existingReadModel == null && newReadModel.Workday == false))
@@ -27,32 +25,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
             if(newReadModel==null)
             {
-                weekDayName = cultureInfo.DateTimeFormat.DayNames[(int)currentDate.DayOfWeek];
-                message = weekDayName + " " + currentDateFormat + string.Format(cultureInfo, UserTexts.Resources.NotWorking);
+                weekDayName = cultureInfo.DateTimeFormat.GetDayName(currentDate.DayOfWeek);
+				message = weekDayName + " " + currentDateFormat + UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo);
                 return message;
             }
+
+			weekDayName = cultureInfo.DateTimeFormat.GetDayName(newReadModel.StartDateTime.DayOfWeek);
+			string startDateTime = newReadModel.StartDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
+			string endDateTime = newReadModel.EndDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
                
             // if existingReadModel is NULL and new read model is NOT NULL  (From OFF Day to a working day)
             if (existingReadModel==null)
             {
-                weekDayName = cultureInfo.DateTimeFormat.DayNames[(int)newReadModel.StartDateTime.DayOfWeek];
-                startDateTime = string.Format(cultureInfo, newReadModel.StartDateTime.ToShortTimeString().ToString(cultureInfo));
-                endDateTime = string.Format(cultureInfo, newReadModel.EndDateTime.ToShortTimeString().ToString(cultureInfo));
-
                 message = weekDayName + " " + currentDateFormat + " " + startDateTime + "-" + endDateTime;
                 return message;
             }
 
-            weekDayName = cultureInfo.DateTimeFormat.DayNames[(int)newReadModel.StartDateTime.DayOfWeek];
-            startDateTime = string.Format(cultureInfo, newReadModel.StartDateTime.ToShortTimeString().ToString(cultureInfo));
-            endDateTime = string.Format(cultureInfo, newReadModel.EndDateTime.ToShortTimeString().ToString(cultureInfo));
-            
             if(newReadModel.Workday!= existingReadModel.Workday)
             {
                 // if chnage working day to an Off day.
                 if (!newReadModel.Workday)
                 {
-                    message = weekDayName + " " + currentDateFormat + " " + string.Format(cultureInfo, UserTexts.Resources.NotWorking);
+                    message = weekDayName + " " + currentDateFormat + " " + UserTexts.Resources.ResourceManager.GetString("NotWorking",cultureInfo);
                 }
                 else  // From Off Day to Working day.
                 {

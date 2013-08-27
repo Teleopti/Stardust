@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
     public class NewBusinessRuleCollectionTest
     {
         private INewBusinessRuleCollection _target;
-        private const int totalNumberOfRules = 10;
+        private const int totalNumberOfRules = 9;
     	private ISchedulingResultStateHolder _state;
 
         [SetUp]

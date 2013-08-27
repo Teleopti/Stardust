@@ -95,11 +95,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1),
                                                   personWeek.Week.EndDate.AddDays(1));
             var pAss = new List<IPersonAssignment>();
-            foreach (var day in extendedWeek.DayCollection())
+            foreach (var schedule in currentSchedules.ScheduledDayCollection(extendedWeek))
             {
-                var schedule = currentSchedules.ScheduledDay(day);
-                // to check! are the assignments in correct order??
-                schedule.PersonAssignmentCollectionDoNotUse().ForEach(ass => pAss.Add(ass));
+	            var ass = schedule.PersonAssignment();
+							if (ass != null)
+							{
+								pAss.Add(ass);
+							}
             }
             if (pAss.Count == 0)
                 return true;
@@ -151,8 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dateOnlyPeriod)
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop)
                                                  {Overridden = !_haltModify};
             return response;
         }

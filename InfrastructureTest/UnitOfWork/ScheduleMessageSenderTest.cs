@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,16 +16,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender target;
 		private MockRepository mocks;
-		private ISendDenormalizeNotification sendDenormalizeNotification;
-		private ISaveToDenormalizationQueue saveToDenormalizationQueue;
+		private IServiceBusSender serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			sendDenormalizeNotification = mocks.DynamicMock<ISendDenormalizeNotification>();
-			saveToDenormalizationQueue = mocks.DynamicMock<ISaveToDenormalizationQueue>();
-			target = new ScheduleMessageSender(sendDenormalizeNotification,saveToDenormalizationQueue);
+			serviceBusSender = mocks.DynamicMock<IServiceBusSender>();
+			target = new ScheduleMessageSender(serviceBusSender);
 		}
 
 		[Test]
@@ -37,8 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify);
-				
+				Expect.Call(serviceBusSender.EnsureBus()).Return(true);
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{

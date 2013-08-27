@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Domain.Time
         {
             if (ScheduleDayHasPersonAssignment(scheduleDay))
             {
-                var timePeriod = scheduleDay.PersonAssignmentCollectionDoNotUse().First().Period;
+                var timePeriod = scheduleDay.PersonAssignment().Period;
                 _period = new DateTimePeriod(timePeriod.EndDateTime, timePeriod.EndDateTime.AddHours(1));
             }
         }
 
         private static bool ScheduleDayHasPersonAssignment(IScheduleDay scheduleDay)
         {
-            return scheduleDay != null && scheduleDay.PersonAssignmentCollectionDoNotUse().Count > 0;
+            return scheduleDay != null && scheduleDay.PersonAssignment() != null;
         }
 
         public DateTimePeriod Period

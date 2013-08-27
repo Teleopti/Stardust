@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common
                 if (options.MainShift)
                 {
                     tempPart = (IScheduleDay)part.Clone();
-                    tempPart.Clear<IPersonDayOff>();
+                    tempPart.PersonAssignment(true).SetDayOff(null);
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.Win.Common
                     }
 
                     tempPart = (IScheduleDay)part.Clone();
-                    tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
@@ -135,17 +134,18 @@ namespace Teleopti.Ccc.Win.Common
                 {
                     tempPart = (IScheduleDay)part.Clone();
                     tempPart.Clear<IPersonAbsence>();
-                    tempPart.Clear<IPersonAssignment>();
+                    tempPart.PersonAssignment(true).ClearMainLayers();
+					tempPart.PersonAssignment(true).ClearOvertimeLayers();
+					tempPart.PersonAssignment(true).ClearPersonalLayers();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
-                    if (tempPart.PersonDayOffCollection().Count>0)
+                    if (tempPart.HasDayOff())
                         destination.Merge(tempPart, false);
                 }
 
                 if (options.Absences != PasteAction.Ignore)
                 {
                     tempPart = (IScheduleDay)part.Clone();
-                    tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart = (IScheduleDay)part.Clone();
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPersonAssignment>();
-                    tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IStudentAvailabilityDay>();
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
@@ -176,7 +175,6 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart = (IScheduleDay)part.Clone();
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPersonAssignment>();
-                    tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IPreferenceDay>();
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)

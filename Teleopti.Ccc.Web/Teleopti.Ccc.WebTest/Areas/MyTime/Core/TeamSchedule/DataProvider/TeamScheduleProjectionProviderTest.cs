@@ -102,16 +102,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldProjectDayOff()
 		{
-			var stubs = new StubFactory();
-			var period = new DateTimePeriod();
-			var dayOff = stubs.PersonDayOffStub(period);
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
 
 			var target = new TeamScheduleProjectionProvider(MockRepository.GenerateMock<IProjectionProvider>());
 
 			var result = target.Projection(scheduleDay);
 
-			result.DayOff.Should().Be(dayOff);
+			result.DayOff.Should().Be(dayOff.DayOff());
 			result.Layers.Should().Be.Empty();
 		}
 
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var period = new DateTimePeriod(startTime, endTime);
 			var layer = stubs.VisualLayerStub(period);
 			var projection = stubs.ProjectionStub(new[] { layer });
-			var dayOff = stubs.PersonDayOffStub(period);
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
 
 			var projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
@@ -169,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldSetCorrectSortDateIfDayOff()
 		{
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithoutMainShift();
-			scheduleDay.Add(new PersonDayOff(scheduleDay.Person, scheduleDay.Scenario,new DayOffTemplate(new Description("d")), new DateOnly(2001,1,1)));
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, new DateOnly(2001,1,1), new DayOffTemplate()));
 
 			var target = new TeamScheduleProjectionProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);

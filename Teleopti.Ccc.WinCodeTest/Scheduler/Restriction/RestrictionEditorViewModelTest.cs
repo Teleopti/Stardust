@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             var repositoryFactory = _mockRep.StrictMock<IRepositoryFactory>();
             var activityRepository = _mockRep.StrictMock<IActivityRepository>();
             var shiftCategoryRepository = _mockRep.StrictMock<IShiftCategoryRepository>();
-            var dayOffRepository = _mockRep.StrictMock<IDayOffRepository>();
+            var dayOffRepository = _mockRep.StrictMock<IDayOffTemplateRepository>();
             IList<IActivity> activities = new List<IActivity>();
             IList<IShiftCategory> shiftCategories = new List<IShiftCategory>();
             IList<IDayOffTemplate> dayOffTemplates = new List<IDayOffTemplate>();

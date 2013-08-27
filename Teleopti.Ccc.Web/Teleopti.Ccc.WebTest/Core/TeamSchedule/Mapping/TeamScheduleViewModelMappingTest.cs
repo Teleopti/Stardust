@@ -8,7 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
@@ -273,7 +273,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapDayOffText()
 		{
-			var dayOff = new PersonDayOff(new Person(), new Scenario("   "), new DayOffTemplate(new Description("long", "short")), new DateOnly(2000, 1, 1));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("s"), new Person(),
+			                                                                new DateOnly(2000, 1, 1),
+			                                                                new DayOffTemplate(new Description("long", "short")));
 
 			data.Days = new[]
 			            	{
@@ -281,7 +283,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			            			{
 			            				Projection = new TeamScheduleProjection
 			            				             	{
-			            				             		DayOff = dayOff,
+			            				             		DayOff = dayOff.DayOff(),
 			            				             		SortDate = DateTime.MaxValue
 			            				             	}
 			            			}

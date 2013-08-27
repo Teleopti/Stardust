@@ -428,13 +428,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         		if (currentPeriod != null)
         		{
-        			var personSkillCollection = currentPeriod.PersonSkillCollection.Where(s => s.Skill.Equals(personSkill.Skill));
-
-        			foreach (var personSkillFromCollection in personSkillCollection)
-        			{
-        				currentPeriod.DeletePersonSkill(personSkillFromCollection);
-        				personPeriodModel.CanBold = true;
-        			}
+        			personPeriodModel.Parent.RemoveSkill(personSkill.Skill, currentPeriod);
+        			personPeriodModel.CanBold = true;
         		}
         	}
         }
@@ -488,7 +483,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				var personSkillFromCollection = selectedPersonPeriod.Period.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
     			if (personSkillFromCollection != null && personSkillFromCollection.Active != active)
     			{
-					personSkillFromCollection.Active = active;
+					if (active)
+					{
+						selectedPersonPeriod.Parent.ActivateSkill(personSkill.Skill,selectedPersonPeriod.Period);
+					}
+					else
+					{
+						selectedPersonPeriod.Parent.DeactivateSkill(personSkill.Skill, selectedPersonPeriod.Period);
+					}
 					selectedPersonPeriod.CanBold = true;
     			}
     		}
@@ -510,14 +512,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					IPersonSkill personSkillFromCollection = currentPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
 					if (personSkillFromCollection == null)
 					{
-						currentPeriod.AddPersonSkill(new PersonSkill(personSkill.Skill, skillPercentage));
+						personPeriodModel.Parent.AddSkill(new PersonSkill(personSkill.Skill, skillPercentage), currentPeriod);
 						personPeriodModel.CanBold = true;
 					}
 					else
 					{
-						if (!(personSkillFromCollection.SkillPercentage == skillPercentage))
+						if (personSkillFromCollection.SkillPercentage != skillPercentage)
 						{
-							personSkillFromCollection.SkillPercentage = skillPercentage;
+							personPeriodModel.Parent.ChangeSkillProficiency(personSkill.Skill,skillPercentage, currentPeriod);
 							personPeriodModel.CanBold = true;
 						}
 					}
@@ -582,7 +584,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
 
             _schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-            CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);    //.Name.ToString();
+            CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);
 
             foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
             {
@@ -594,7 +596,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             		model.CanBold = true;
             	}
 
-            	model.FullName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);  //.Name.ToString();
+            	model.FullName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);
             	_schedulePeriodGridViewChildCollection.Add(model);
             }
         }
@@ -608,7 +610,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
 
             _schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-            CurrentChildName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent); // .Name.ToString();
+            CurrentChildName =commonNameDescription.BuildCommonNameDescription( schedulePeriodGridViewCollection[index].Parent);
 
             foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
             {

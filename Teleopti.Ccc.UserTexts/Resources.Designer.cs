@@ -9770,6 +9770,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to h.
+        /// </summary>
+        public static string HourShort {
+            get {
+                return ResourceManager.GetString("HourShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hours inc.
         /// </summary>
         public static string HoursInc {

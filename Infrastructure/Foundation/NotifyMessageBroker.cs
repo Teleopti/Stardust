@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

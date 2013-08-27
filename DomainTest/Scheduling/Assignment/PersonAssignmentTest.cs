@@ -51,7 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void PersonAssignmentWithoutLayersShouldHaveSpecificPeriod()
 		{
-			Assert.AreEqual(PersonAssignment.UndefinedPeriod, target.Period);
+			var expected =
+				new DateOnlyPeriod(target.Date, target.Date).ToDateTimePeriod(target.Person.PermissionInformation.DefaultTimeZone());
+			target.Period.Should().Be.EqualTo(expected);
 		}
 
 		/// <summary>
@@ -388,33 +390,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyICloneableEntity()
 		{
-			DateTime zOrder = new DateTime(2000,1,1);
 			target.SetId(Guid.NewGuid());
 
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			var dayOffTemplate = new DayOffTemplate(new Description());
 
 			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			target.PersonalLayers().Single().SetId(Guid.NewGuid());
 			target.OvertimeLayers().Single().SetId(Guid.NewGuid());
+			target.SetDayOff(dayOffTemplate);
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
 			Assert.AreEqual(target.PersonalLayers().Single().Id, pAss.PersonalLayers().Single().Id);
 			Assert.AreEqual(target.OvertimeLayers().Single().Id, pAss.OvertimeLayers().Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
+			pAss.DayOff().Should().Not.Be.Null();
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers().Single().Id);
 			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
+			pAss.DayOff().Should().Not.Be.Null();
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
 			Assert.IsNull(pAss.PersonalLayers().Single().Id);
 			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
+			pAss.DayOff().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -446,6 +452,87 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddPersonalLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4)));
 			target.ProjectionService().CreateProjection()
 				.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldSetDayOff()
+		{
+			var desc = new Description("desc");
+			var template = new DayOffTemplate(desc);
+			target.SetDayOff(template);
+			target.DayOff().Description.Should().Be.EqualTo(desc);
+		}
+
+		[Test]
+		public void ShouldSetDayOffAsNull()
+		{
+			target.SetDayOff(null);
+			target.DayOff().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldSetThisDayOffOnDestination()
+		{
+			var desc = new Description("desc");
+			var template = new DayOffTemplate(desc);
+			target.SetDayOff(template);
+			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+			target.SetThisAssignmentsDayOffOn(ass);
+
+			ass.DayOff().Description.Should().Be.EqualTo(desc);
+		}
+
+		[Test]
+		public void ShouldSetThisDayOffOnDestinationAsNull()
+		{
+			var desc = new Description("desc");
+			var template = new DayOffTemplate(desc);
+			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly());
+			ass.SetDayOff(template);
+
+			target.SetThisAssignmentsDayOffOn(ass);
+
+			ass.DayOff().Should().Be.Null();
+		}
+
+		[Test]
+		public void AssignedWithDayoffFulfilled()
+		{
+			var template = new DayOffTemplate();
+			target.SetDayOff(template);
+			target.AssignedWithDayOff(template)
+			      .Should().Be.True();
+		}
+
+		[Test]
+		public void AssignedWithDayoffDifferent()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.AssignedWithDayOff(new DayOffTemplate())
+						.Should().Be.False();
+		}
+
+		[Test]
+		public void AssignedWithDayoffWhenAssignmentHasNoDayoff()
+		{
+			target.AssignedWithDayOff(new DayOffTemplate())
+						.Should().Be.False();
+		}
+
+		[Test]
+		public void AssignedWithDayoffCompareWithNull()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.AssignedWithDayOff(null)
+						.Should().Be.False();
+		}
+
+
+		[Test]
+		public void AssignedWithDayoffBothNull()
+		{
+			target.AssignedWithDayOff(null)
+						.Should().Be.True();
 		}
 	}
 }

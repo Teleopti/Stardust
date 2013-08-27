@@ -585,47 +585,36 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void addMultipleAssignmentMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
-        {
-            //check if we have multiple assignments
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            if (personAssignments.Count > 1)
-            {
-                //draw a marker to indicate we have multiple assignments
-                e.Graphics.DrawString("+", CellFontSmall, Brushes.Black, new Point(e.Bounds.X, e.Bounds.Y));
-            }
-        }
-
         private static void addPersonalShiftMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            foreach (IPersonAssignment personAssignment in personAssignments)
-            {
-                if (personAssignment.PersonalLayers().Any())
-                {
-                    Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
-                    Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
-                    Point pt3 = new Point(e.Bounds.Right, e.Bounds.Y + 6);
+            var personAssignment = scheduleRange.PersonAssignment();
+					if (personAssignment != null)
+					{
+						if (personAssignment.PersonalLayers().Any())
+						{
+							Point pt1 = new Point(e.Bounds.Right, e.Bounds.Y);
+							Point pt2 = new Point(e.Bounds.Right - 6, e.Bounds.Y);
+							Point pt3 = new Point(e.Bounds.Right, e.Bounds.Y + 6);
 
-                    e.Graphics.FillPolygon(Brushes.Blue, new[] { pt1, pt2, pt3 });
-                }
-            }
+							e.Graphics.FillPolygon(Brushes.Blue, new[] { pt1, pt2, pt3 });
+						}
+					}
         }
 
         private static void addOvertimeMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
-            var personAssignments = scheduleRange.PersonAssignmentCollectionDoNotUse();
-            foreach (IPersonAssignment personAssignment in personAssignments)
-            {
-                if (personAssignment.OvertimeLayers().Any())
-                {
-                    Size s = new Size(6, 6);
-                    Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);
-                    Rectangle rectangle = new Rectangle(point1, s);
+            var personAssignment = scheduleRange.PersonAssignment();
+					if (personAssignment != null)
+					{
+						if (personAssignment.OvertimeLayers().Any())
+						{
+							Size s = new Size(6, 6);
+							Point point1 = new Point(e.Bounds.Left, (e.Bounds.Y + e.Bounds.Height / 2) - 3);
+							Rectangle rectangle = new Rectangle(point1, s);
 
-                    e.Graphics.FillRectangle(Brushes.Orange, rectangle);
-                }
-            }
+							e.Graphics.FillRectangle(Brushes.Orange, rectangle);
+						}
+					}
         }
 
         private static void addMeetingMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
@@ -710,9 +699,6 @@ namespace Teleopti.Ccc.Win.Scheduling
  
         protected void AddMarkersToCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
         {  
-            //multiple assignments
-            addMultipleAssignmentMarkers(e, scheduleRange);
-
             //conflicts
             addConflictMarkers(e, scheduleRange);
 
@@ -1204,29 +1190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return ret;
         }
 
-        public static ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
-        {
-            ICollection<DateOnly> ret = new HashSet<DateOnly>();
-            foreach (IScheduleDay part in selectedSchedules)
-            {
-                DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
-                ret.Add(dateOnly);
-            }
-            return ret;
-        }
-		
-		public static ICollection<DateTime> AllSelectedUtcDates(IEnumerable<IScheduleDay> selectedSchedules)
-        {
-			ICollection<DateTime> ret = new HashSet<DateTime>();
-            foreach (IScheduleDay part in selectedSchedules)
-            {
-                var dateTime = TimeZoneHelper.ConvertToUtc(part.DateOnlyAsPeriod.DateOnly.Date, part.TimeZone);
-	            ret.Add(dateTime);
-            }
-            return ret;
-        }
-
-        public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
+	    public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
             var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
             return extractor.ExtractPersons();

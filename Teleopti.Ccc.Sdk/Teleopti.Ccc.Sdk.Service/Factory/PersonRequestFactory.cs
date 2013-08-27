@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -115,14 +116,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             if (enabled)
             {
                 //Call RSB!
-                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-                _serviceBusSender.Send(new NewShiftTradeRequestCreated
-	                {
-		                BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-		                Datasource = identity.DataSource.Application.Name,
-		                Timestamp = DateTime.UtcNow,
-		                PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
-	                });
+	            var message = new NewShiftTradeRequestCreated
+		            {
+			            PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
+		            };
+				message.SetMessageDetail();
+                _serviceBusSender.Send(message);
             }
 
             return new PersonRequestDto {Id = result.Id};
@@ -231,20 +230,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 if (_serviceBusSender.EnsureBus())
                 {
-                    var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-                    _serviceBusSender.Send(new AcceptShiftTrade
-	                    {
-		                    BusinessUnitId =
-			                    identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-		                    Datasource =
-			                    identity.DataSource.Application.Name,
-		                    Timestamp = DateTime.UtcNow,
-		                    PersonRequestId =
-			                    personRequestDto.Id.GetValueOrDefault(Guid.Empty),
-		                    AcceptingPersonId =
-			                    person.Id.GetValueOrDefault(Guid.Empty),
-		                    Message = personRequestDto.Message
-	                    });
+	                var message = new AcceptShiftTrade
+		                {
+			                PersonRequestId = personRequestDto.Id.GetValueOrDefault(Guid.Empty), AcceptingPersonId = person.Id.GetValueOrDefault(Guid.Empty), Message = personRequestDto.Message
+		                };
+					message.SetMessageDetail();
+	                _serviceBusSender.Send(message);
                 }
                 else
                 {

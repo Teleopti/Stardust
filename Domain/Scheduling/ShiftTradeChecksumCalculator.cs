@@ -20,23 +20,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             long checksum = -1; // Default checksum indicates not scheduled
 
-            if (_scheduleDay.SignificantPart() == SchedulePartView.DayOff)
-            {
-                checksum = getDayOffChecksum();
-            }
-            else
-            {
-                foreach (IPersonAssignment personAssignment in _scheduleDay.PersonAssignmentCollectionDoNotUse())
-                {
-	                var shift = new EditableShiftMapper().CreateEditorShift(personAssignment);
-					if (shift != null)
-                    {
-                        IVisualLayerCollection visualLayerCollection =
-                            shift.ProjectionService().CreateProjection();
-                        checksum = checksum ^ getMainShiftChecksum(visualLayerCollection);
-                    }
-                }
-            }
+	        var personAssignment = _scheduleDay.PersonAssignment();
+					if (personAssignment != null)
+					{
+						if (personAssignment.DayOff() != null)
+						{
+							checksum = getDayOffChecksum(personAssignment);
+						}
+						else
+						{
+							var shift = new EditableShiftMapper().CreateEditorShift(personAssignment);
+							if (shift != null)
+							{
+								var visualLayerCollection = shift.ProjectionService().CreateProjection();
+								checksum = checksum ^ getMainShiftChecksum(visualLayerCollection);
+							}
+						}
+					}
 
             return checksum;
         }
@@ -54,9 +54,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return checksum;
         }
 
-        private long getDayOffChecksum()
+        private static long getDayOffChecksum(IPersonAssignment assignment)
         {
-            return _scheduleDay.PersonDayOffCollection()[0].Checksum();
+	        var dayOff = assignment.DayOff();
+					return Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.Anchor)) ^
+						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.Flexibility)) ^
+						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.TargetLength)) ^
+						Crc32.Compute(SerializationHelper.SerializeAsBinary(assignment.Date.Date.Ticks));
         }
     }
 }

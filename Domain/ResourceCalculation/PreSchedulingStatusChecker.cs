@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return false;
             }
             //no day off
-            if (_schedulePart.PersonDayOffCollection().Count != 0)
+            if (_schedulePart.HasDayOff())
             {
                 loggFilterResult(UserTexts.Resources.ThereIsAlreadyADayOff, 0, 0);
                 return false;
@@ -102,15 +102,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				public static bool CheckAssignments(IScheduleDay schedulePart)
         {
             //no assignment is ok
-            var personAssignmentCollection = schedulePart.PersonAssignmentCollectionDoNotUse();
-            if (personAssignmentCollection.Count == 0)
+            var personAssignment = schedulePart.PersonAssignment();
+            if (personAssignment == null)
                 return true;
-            //more than 1 is not ok
-            //if (personAssignmentCollection.Count > 1)
-            //    return false;
             //1 assignment is ok if we have no mainshift and we have a personalshift
-            IPersonAssignment personAssignment = personAssignmentCollection[0];
-
 						if (personAssignment.PersonalLayers().Any() && personAssignment.ShiftCategory == null)
                 return true;
 
@@ -120,7 +115,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter)
         {
 			_finderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
-            //Console.WriteLine(message);
         }
     }
 }

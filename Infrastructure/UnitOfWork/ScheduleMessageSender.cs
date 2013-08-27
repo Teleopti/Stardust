@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class ScheduleMessageSender : IMessageSender
 	{
-		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
-		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+		private readonly IServiceBusSender _serviceBusSender;
 		private static readonly Type[] ExcludedTypes = new[] { typeof(INote), typeof(IPublicNote) };
 
-		public ScheduleMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		public ScheduleMessageSender(IServiceBusSender serviceBusSender)
 		{
-			_sendDenormalizeNotification = sendDenormalizeNotification;
-			_saveToDenormalizationQueue = saveToDenormalizationQueue;
+			_serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
+			if (!_serviceBusSender.EnsureBus()) return;
+
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
 
 			var people = scheduleData.Select(s => s.Person).Distinct();
 			var scenarios = scheduleData.Select(s => s.Scenario).Distinct();
-			var atLeastOneMessage = false;
 
 			foreach (var person in people)
 			{
@@ -50,14 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};
-					_saveToDenormalizationQueue.Execute(message);
-					atLeastOneMessage = true;
+					_serviceBusSender.Send(message);
 				}
-			}
-
-			if (atLeastOneMessage)
-			{
-				_sendDenormalizeNotification.Notify();
 			}
 		}
 
