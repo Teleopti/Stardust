@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
     public interface INonBlendSkillImpactOnPeriodForProjection
     {
-        double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList, ISkill skill);
         double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity);
         DateOnly SkillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person);
         bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate);
@@ -14,27 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 
     public class NonBlendSkillImpactOnPeriodForProjection : INonBlendSkillImpactOnPeriodForProjection
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList, ISkill skill)
-        {
-            //ISkill skill = ((ISkillDay)skillStaffPeriod.Parent).Skill;
-            //if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-            //    return 0;
-            
-            double result = 0;
-            foreach (var layercollection in shiftList)
-            {
-                DateOnly dateOnly = SkillStaffPeriodDate(skillStaffPeriod, layercollection.Person);
-                if (!CheckPersonSkill(skill, layercollection.Person, dateOnly))
-                    continue;
-
-                result += calculateShift(skillStaffPeriod, layercollection, skill.Activity);
-            }
-
-            return result;
-        }
-
-        public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity)
+		public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity)
         {
             return calculateShift(skillStaffPeriod, shift, skillActivity);
         }

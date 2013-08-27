@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private static string dayOffText(IScheduleDay scheduleDay)
 		{
 			return scheduleDay.SignificantPartForDisplay() == SchedulePartView.DayOff ?
-				scheduleDay.PersonDayOffCollection().First().DayOff.Description.Name :
+				scheduleDay.PersonAssignment().DayOff().Description.Name :
 				string.Empty;
 		}
 

@@ -52,12 +52,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
-                var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
-
-            	foreach (var personAssignment in personAssignmentCollection)
-            	{
-								cancelOvertime(personAssignment, dateTimePeriod);
-            	}
+                var personAssignment = scheduleDay.PersonAssignment();
+							if (personAssignment != null)
+							{
+								cancelOvertime(personAssignment, dateTimePeriod);								
+							}
 
                 _saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())

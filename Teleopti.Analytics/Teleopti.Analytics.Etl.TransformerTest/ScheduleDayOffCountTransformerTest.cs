@@ -51,19 +51,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             DayOffTemplate dayOff1 = new DayOffTemplate(new Description("test"));
             dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff1.Anchor = TimeSpan.Zero;
-            var pdOff1 = new PersonDayOff(_person, _scenario, dayOff1, _schedulePart1.DateOnlyAsPeriod.DateOnly);
 
-            _schedulePart1.Add(pdOff1);
+            _schedulePart1.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart1.DateOnlyAsPeriod.DateOnly, dayOff1));
 
             DayOffTemplate dayOff2 = new DayOffTemplate(new Description("test"));
             dayOff2.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff2.Anchor = new TimeSpan(1, 15, 0);
-            var pdOff2 = new PersonDayOff(_person, _scenario, dayOff2, _schedulePart2.DateOnlyAsPeriod.DateOnly);
-            _schedulePart2.Add(pdOff2);
+						_schedulePart2.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart2.DateOnlyAsPeriod.DateOnly, dayOff2));
 
 
-            RaptorTransformerHelper.SetUpdatedOn(_schedulePart1.PersonDayOffCollection()[0], DateTime.Now);
-            RaptorTransformerHelper.SetUpdatedOn(_schedulePart2.PersonDayOffCollection()[0], DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(_schedulePart1.PersonAssignment(), DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(_schedulePart2.PersonAssignment(), DateTime.Now);
 
             _schedules.Add(_schedulePart1);
             _schedules.Add(_schedulePart2);
@@ -96,17 +94,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable, IntervalsPerDay);
             }
 
-            Assert.AreEqual(dataRowCollection[0]["date"], _schedulePart1.PersonDayOffCollection()[0].DayOff.Anchor.Date);
+            Assert.AreEqual(dataRowCollection[0]["date"], _schedulePart1.PersonAssignment().DayOff().Anchor.Date);
             Assert.AreEqual(dataRowCollection[0]["start_interval_id"],
-                            new IntervalBase(((PersonDayOff)_schedulePart1.PersonDayOffCollection()[0]).DayOff.Anchor, IntervalsPerDay).Id);
+                            new IntervalBase(_schedulePart1.PersonAssignment().DayOff().Anchor, IntervalsPerDay).Id);
 
             Assert.AreEqual(dataRowCollection[0]["person_code"], _schedulePart1.Person.Id);
             Assert.AreEqual(dataRowCollection[0]["scenario_code"], _schedulePart1.Scenario.Id);
-            Assert.AreEqual(dataRowCollection[1]["starttime"], ((PersonDayOff)_schedulePart2.PersonDayOffCollection()[0]).DayOff.Anchor);
+            Assert.AreEqual(dataRowCollection[1]["starttime"], _schedulePart2.PersonAssignment().DayOff().Anchor);
             Assert.AreEqual(dataRowCollection[0]["day_off_code"], DBNull.Value);
             Assert.AreEqual(dataRowCollection[0]["day_count"], 1);
-            Assert.AreEqual(dataRowCollection[0]["business_unit_code"], _schedulePart1.PersonDayOffCollection()[0].BusinessUnit.Id);
-            Assert.AreEqual(dataRowCollection[1]["datasource_update_date"], _schedulePart2.PersonDayOffCollection()[0].UpdatedOn.Value);
+						Assert.AreEqual(dataRowCollection[0]["business_unit_code"], _schedulePart1.PersonAssignment().BusinessUnit.Id);
+						Assert.AreEqual(dataRowCollection[1]["datasource_update_date"], _schedulePart2.PersonAssignment().UpdatedOn.Value);
         }
 
         [Test]
@@ -135,9 +133,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			{
 				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Twice();
 				Expect.Call(scheduleDay.Person).Return(_person).Repeat.Twice();
-				Expect.Call(scheduleDay.Scenario).Return(_scenario).Repeat.Twice();
+				Expect.Call(scheduleDay.Scenario).Return(_scenario).Repeat.Any();
 				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
 				Expect.Call(dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
+				Expect.Call(scheduleDay.PersonAssignment()).Return(null);
 			}
 			using(mocks.Playback())
 			{

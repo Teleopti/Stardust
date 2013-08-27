@@ -17,12 +17,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 	public class ScheduleScreenRetryingPersisterIntegrationTest : ScheduleScreenPersisterIntegrationTest
 	{
 
-		protected override IPersistableScheduleData MakeScheduleData()
+		protected override IPersistableScheduleData SetupScheduleData()
 		{
 			return new Note(Person, FirstDayDateOnly, Scenario, "a test note");
 		}
 
-		protected override IEnumerable<IAggregateRoot> TestDataToReassociate() { return new IAggregateRoot[] { }; }
+		protected override IEnumerable<IAggregateRoot> TestDataToReassociate()
+		{
+			return new IAggregateRoot[] { };
+		}
 
 		private static T UnitOfWorkAction<T>(Func<IUnitOfWork, T> expressionThatRequiresUnitOfWork)
 		{

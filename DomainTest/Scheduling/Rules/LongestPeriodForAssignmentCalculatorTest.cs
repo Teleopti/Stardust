@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyLongestAssignmentPeriod()
         {
             //copy/paste from old code. 
@@ -34,13 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                                                nightlyRest,
                                                                new TimeSpan(50, 0, 0));
 
-            //var start = new DateTime(2007, 8, 2, 8, 30, 0, DateTimeKind.Utc);
-            //var end = new DateTime(2007, 8, 2, 17, 30, 0, DateTimeKind.Utc);
             var range = new DateTimePeriod(2007, 8, 1, 2007, 8, 5);
 
             var scenario = ScenarioFactory.CreateScenarioAggregate();
-            //var category = ShiftCategoryFactory.CreateShiftCategory("myCategory");
-            //var activity = ActivityFactory.CreateActivity("Phone");
             var person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
@@ -50,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(1));
             dayOff.Anchor = new TimeSpan(8, 30, 0);
-            var personDayOff = new PersonDayOff(person, scenario, dayOff, new DateOnly(2007, 8, 3));
 
             person.AddPersonPeriod(new PersonPeriod(
                                       new DateOnly(1900, 1, 1),
@@ -60,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 new ScheduleRange(dic, new ScheduleParameters(scenario, person, range));
             underlyingDictionary.Add(person, scheduleRange);
 
-            scheduleRange.Add(personDayOff);
+            scheduleRange.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2007, 8, 3), dayOff));
 
             var expected = new DateTimePeriod(new DateTime(2007, 8, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 13, 30, 0, DateTimeKind.Utc));
             var result = target.PossiblePeriod(scheduleRange, new DateOnly(2007, 8, 2));

@@ -10,7 +10,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
     {
 		private readonly bool _isIntraday;
 
-		public FactSchedulePreferenceJobStep(IJobParameters jobParameters) : this(jobParameters, false) { }
+		public FactSchedulePreferenceJobStep(IJobParameters jobParameters) 
+			: this(jobParameters, false) { }
+
 		public FactSchedulePreferenceJobStep(IJobParameters jobParameters, bool isIntraday ) : base(jobParameters)
         {
 	        Name = "fact_schedule_preference";
@@ -27,13 +29,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					_jobParameters.StateHolder.UpdateThisTime("Preferences", RaptorTransformerHelper.CurrentBusinessUnit);
 					return rows;
 				}
-				
 
-			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
+	        var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(JobCategoryDatePeriod.StartDateLocal),
+	                                                new DateOnly(JobCategoryDatePeriod.EndDateLocal));
 
-            //Load data from stage to datamart
             return
-                _jobParameters.Helper.Repository.FillFactSchedulePreferenceMart(period,
+                _jobParameters.Helper.Repository.FillFactSchedulePreferenceMart(dateOnlyPeriod,
                 _jobParameters.DefaultTimeZone, RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }

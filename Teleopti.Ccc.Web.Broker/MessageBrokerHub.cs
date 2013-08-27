@@ -8,20 +8,35 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-
 	[HubName("MessageBrokerHub")]
 	public class MessageBrokerHub : TestableHub
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
+		private readonly IActionScheduler _actionScheduler;
+		private readonly IBeforeSubscribe _beforeSubscribe;
+
+		public MessageBrokerHub(IActionScheduler actionScheduler, IBeforeSubscribe beforeSubscribe)
+		{
+			_actionScheduler = actionScheduler;
+			_beforeSubscribe = beforeSubscribe;
+		}
+
 		public string AddSubscription(Subscription subscription)
 		{
+			_beforeSubscribe.Invoke(subscription);
+
+			var route = subscription.Route();
+			
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), RouteToGroupName(subscription.Route()));
+				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId,
+								   route, RouteToGroupName(route));
 			}
-			var route = subscription.Route();
-			Groups.Add(Context.ConnectionId, RouteToGroupName(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+			
+			Groups.Add(Context.ConnectionId, RouteToGroupName(route))
+				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+
 			return route;
 		}
 
@@ -29,9 +44,22 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, route, route.GetHashCode());
+				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, route,
+								   route.GetHashCode());
 			}
 			Groups.Remove(Context.ConnectionId, route);
+		}
+
+		public static string RouteToGroupName(string route)
+		{
+			//gethashcode won't work in 100% of the cases...
+			UInt64 hashedValue = 3074457345618258791ul;
+			for (int i = 0; i < route.Length; i++)
+			{
+				hashedValue += route[i];
+				hashedValue *= 3074457345618258799ul;
+			}
+			return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
 		}
 
 		public void NotifyClients(Notification notification)
@@ -39,13 +67,14 @@ namespace Teleopti.Ccc.Web.Broker
 			var routes = notification.Routes();
 
 			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("New notification from client {0} with routes {1} (Id's: {2}).", Context.ConnectionId, string.Join(", ", notification.Routes()), string.Join(", ", notification.Routes().Select(RouteToGroupName)));
-			}
+				Logger.DebugFormat("New notification from client {0} with (DomainUpdateType: {1}) (Routes: {2}) (Id: {3}).",
+								   Context.ConnectionId, notification.DomainUpdateType, string.Join(", ", routes),
+								   string.Join(", ", routes.Select(RouteToGroupName)));
 
 			foreach (var route in routes)
 			{
-				Clients.Group(RouteToGroupName(route)).onEventMessage(notification, route);
+				var r = route;
+				_actionScheduler.Do(() => Clients.Group(RouteToGroupName(r)).onEventMessage(notification, r));
 			}
 		}
 
@@ -57,16 +86,5 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		public static string RouteToGroupName(string route)
-		{
-			//gethashcode won't work in 100% of the cases...
-            UInt64 hashedValue = 3074457345618258791ul;
-            for (int i = 0; i < route.Length; i++)
-            {
-                hashedValue += route[i];
-                hashedValue *= 3074457345618258799ul;
-            }
-            return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
-		}
 	}
 }

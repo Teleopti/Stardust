@@ -48,14 +48,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotGetUpdatedScheduleChangeFromTeleoptiRtaService>().As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
 		}
 	}
-
-	public class DenormalizationQueueEventsPublisherModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<DenormalizationQueueEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-			builder.RegisterType<SaveToDenormalizationQueue>().As<ISaveToDenormalizationQueue>().SingleInstance();
-		}
-	}
-
 }

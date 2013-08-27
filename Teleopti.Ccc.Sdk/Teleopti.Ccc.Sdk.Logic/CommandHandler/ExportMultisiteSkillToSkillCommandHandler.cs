@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -52,18 +53,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 unitOfWork.PersistAll();
 
                 //Prepare message to send to service bus
-                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                 var message = new ExportMultisiteSkillsToSkill
                                   {
-                                      BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-                                      Datasource = identity.DataSource.Application.Name,
-                                      Timestamp = DateTime.UtcNow,
                                       OwnerPersonId =
                                           ((IUnsafePerson) TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(
                                               Guid.Empty),
                                               JobId = jobId,
                                       Period = period
                                   };
+	            message.SetMessageDetail();
                 foreach (var multisiteSkillSelection in command.MultisiteSkillSelection)
                 {
                     var selection = new MultisiteSkillSelection();

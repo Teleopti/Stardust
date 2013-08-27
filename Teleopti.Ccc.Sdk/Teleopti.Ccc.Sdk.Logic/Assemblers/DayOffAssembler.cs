@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
     public class DayOffAssembler : Assembler<IDayOffTemplate,DayOffInfoDto>
     {
-        private readonly IDayOffRepository _dayOffRepository;
+        private readonly IDayOffTemplateRepository _dayOffRepository;
 
-        public DayOffAssembler(IDayOffRepository dayOffRepository)
+        public DayOffAssembler(IDayOffTemplateRepository dayOffRepository)
         {
             _dayOffRepository = dayOffRepository;
         }

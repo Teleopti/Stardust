@@ -42,17 +42,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ShouldResolveDenormalizationQueueEventsPublisher()
-		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterInstance(MockRepository.GenerateMock<ISendDenormalizeNotification>()).As<ISendDenormalizeNotification>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
-			containerBuilder.RegisterModule<UnitOfWorkModule>();
-			containerBuilder.RegisterModule<DenormalizationQueueEventsPublisherModule>();
-			var container = containerBuilder.Build();
-			container.Resolve<IEventsPublisher>().Should().Be.OfType<DenormalizationQueueEventsPublisher>();
-		}
 	}
 }

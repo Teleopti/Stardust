@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _person = agent;
             _scenario = scenario;
             _layer = layer;
-			((IAggregateEntity)_layer).SetParent(this);
+			_layer.SetParent(this);
         }
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
+		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
 		{
 			_person = person;
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
@@ -54,30 +54,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(new FullDayAbsenceAddedEvent
 				{
-					Datasource = dataSource,
-					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-					AbsenceId = absence.Id.Value,
-					PersonId = person.Id.Value,
+					AbsenceId = absence.Id.GetValueOrDefault(),
+					PersonId = person.Id.GetValueOrDefault(),
 					StartDateTime = startDateTimeInUtc,
 					EndDateTime = endDateTimeInUtc,
-					ScenarioId = _scenario.Id.Value
+					ScenarioId = _scenario.Id.GetValueOrDefault()
 				});
 		}
 
-		public virtual void RemovePersonAbsence(string dataSourceName)
+		public virtual void RemovePersonAbsence()
 		{
 			AddEvent(new PersonAbsenceRemovedEvent
 			{
-				Datasource = dataSourceName,
-				BusinessUnitId = BusinessUnit.Id.Value,
-				PersonId = Person.Id.Value,
-				ScenarioId = Scenario.Id.Value,
+				PersonId = Person.Id.GetValueOrDefault(),
+				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime
 			});
 		}
 
-		public virtual void AddExplicitAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
+		public virtual void AddExplicitAbsence(IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
 		{
 			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
 			endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
@@ -88,13 +84,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(new PersonAbsenceAddedEvent
 				{
-					Datasource = dataSource,
-					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-					AbsenceId = absence.Id.Value,
-					PersonId = person.Id.Value,
+					AbsenceId = absence.Id.GetValueOrDefault(),
+					PersonId = person.Id.GetValueOrDefault(),
 					StartDateTime = startDateTime,
 					EndDateTime = endDateTime,
-					ScenarioId = _scenario.Id.Value
+					ScenarioId = _scenario.Id.GetValueOrDefault()
 				});
 		}
 		

@@ -275,7 +275,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        IOpenForWork OpenForWork { get; }
+        OpenForWork OpenForWork { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is locked.

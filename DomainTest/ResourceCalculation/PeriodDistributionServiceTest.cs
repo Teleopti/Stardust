@@ -15,17 +15,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class PeriodDistributionServiceTest
     {
-        PeriodDistributionService _periodDistributionService;
+        private PeriodDistributionService _periodDistributionService;
         private IActivity _activity;
         private DateTime _start;
         private DateTime _end;
         private IPerson _person;
+	    private Guid _skillId;
+	    private MockRepository _mocks;
+	    private IResourceCalculationDataContainer _container;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
+            _mocks = new MockRepository();
+
             _activity = ActivityFactory.CreateActivity("adkfj");
-            _periodDistributionService = new PeriodDistributionService(new List<IVisualLayerCollection>(), 5);
+			_activity.SetId(Guid.NewGuid());
+	        _skillId = Guid.NewGuid();
+		    _container = _mocks.StrictMock<IResourceCalculationDataContainer>();
+            _periodDistributionService = new PeriodDistributionService(_container, 5);
             _start = new DateTime(2009, 2, 10, 8, 0, 0, DateTimeKind.Utc);
             _end = _start.AddHours(9);
             _person = PersonFactory.CreatePerson();
@@ -46,18 +54,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             ISkillStaffPeriod skillStaffPeriod = new SkillStaffPeriod(period,task,serviceAgreement,new StaffingCalculatorService());
 
-            MockRepository mocks = new MockRepository();
-
-            ISkill skill = mocks.StrictMock<ISkill>();
+            ISkill skill = _mocks.StrictMock<ISkill>();
             ISkillStaffPeriodDictionary dicSkillStaffPeriods = new SkillStaffPeriodDictionary(skill);
             dicSkillStaffPeriods.Add(period, skillStaffPeriod);
             ISkillSkillStaffPeriodExtendedDictionary dictionary = new SkillSkillStaffPeriodExtendedDictionary();
             dictionary.Add(skill, dicSkillStaffPeriods);
 
-            mocks.Record();
+            _mocks.Record();
             Expect.Call(skill.Activity).Return(_activity).Repeat.AtLeastOnce();
 
-            mocks.ReplayAll();
+            _mocks.ReplayAll();
 
             _periodDistributionService.CalculateDay(dictionary);
             
@@ -66,24 +72,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCalculateWithLayers()
         {
-            IVisualLayerFactory layerFactory = new VisualLayerFactory();
-            DateTimePeriod period = new DateTimePeriod(_start, _end);
-            VisualLayerProjectionService projectionService = new VisualLayerProjectionService(_person);
-            IVisualLayer layer = layerFactory.CreateShiftSetupLayer(_activity, period, _person);
-            projectionService.Add(layer);
-
-            DateTimePeriod breakPeriod = new DateTimePeriod(_start.AddHours(2), _start.AddHours(2).AddMinutes(7));
-            IVisualLayer layer2 = layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("l"), breakPeriod, _person);
-            projectionService.Add(layer2);
-
-            var lst = new List<IVisualLayerCollection> { projectionService.CreateProjection() };
-
-            _periodDistributionService = new PeriodDistributionService(lst, 5);
+            _periodDistributionService = new PeriodDistributionService(_container, 5);
 
             ITask task = new Task(5, new TimeSpan(0, 2, 0), new TimeSpan(0, 6, 0));
             ServiceAgreement serviceAgreement = new ServiceAgreement(new ServiceLevel(new Percent(.8), 20),
                                                                      new Percent(.9), new Percent(.7));
-            period = new DateTimePeriod(_start.AddHours(2), _start.AddHours(2).AddMinutes(15));
+            var period = new DateTimePeriod(_start.AddHours(2), _start.AddHours(2).AddMinutes(15));
             ISkillStaffPeriod skillStaffPeriod = new SkillStaffPeriod(period, task, serviceAgreement,
                                                                       new StaffingCalculatorService());
 
@@ -99,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             mocks.Record();
             Expect.Call(skill.Activity).Return(_activity).Repeat.AtLeastOnce();
-
+            
             mocks.ReplayAll();
 
             _periodDistributionService.CalculateDay(dictionary);

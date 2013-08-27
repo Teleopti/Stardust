@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -17,24 +17,21 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender _target;
 		private MockRepository _mocks;
-		private ISaveToDenormalizationQueue _saveToDenormalizationQueue;
-		private ISendDenormalizeNotification _sendDenormalizeNotification;
-
+		private IServiceBusSender _serviceBusSender;
+		
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_saveToDenormalizationQueue = _mocks.DynamicMock<ISaveToDenormalizationQueue>();
-
-			_sendDenormalizeNotification = _mocks.DynamicMock<ISendDenormalizeNotification>();
-			_target = new PersonChangedMessageSender(_sendDenormalizeNotification, _saveToDenormalizationQueue);
+			_serviceBusSender = _mocks.DynamicMock<IServiceBusSender>();
+			_target = new PersonChangedMessageSender(_serviceBusSender);
 		}
 
         [Test]
         public void ShouldSaveRebuildReadModelForPersonToQueue()
         {
             var person = new Person();
-            Guid[] ids = new Guid[] {};
+            var ids = new Guid[] {};
             var message = new PersonChangedMessage();
             message.SetPersonIdCollection(ids);
             
@@ -43,7 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
+                Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
+                Expect.Call(() => _serviceBusSender.Send(message)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
@@ -52,10 +50,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         }
 
 		[Test]
-		public void ShouldSaveRebuildReadModelForPersonWriteProtectionToQueue()
+		public void ShouldNotSaveRebuildReadModelForPersonWriteProtectionToQueue()
 		{
 			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
-			Guid[] ids = new Guid[] { };
+			var ids = new Guid[] { };
 			var message = new PersonChangedMessage();
 			message.SetPersonIdCollection(ids);
 
@@ -64,7 +62,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
+				Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
+				Expect.Call(() => _serviceBusSender.Send(message)).Repeat.Never();
 			}
 			using (_mocks.Playback())
 			{
@@ -85,28 +84,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 _target.Execute(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
             }
         }
-
-		[Test]
-		public void ShouldSaveRebuildReadModelForTeamToQueue()
-		{
-			var team = new Team();
-			var ids = new Guid[] { };
-			var message = new PersonChangedMessage();
-			message.SetPersonIdCollection(ids);
-
-			var roots = new IRootChangeInfo[1];
-			roots[0] = new RootChangeInfo(team, DomainUpdateType.Update);
-
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
-			}
-			using (_mocks.Playback())
-			{
-				_target.Execute(roots);
-			}
-		}
 	}
-
-	
 }

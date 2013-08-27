@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 	{
 		IEnumerable<ITeamScheduleLayer> Layers { get; }
 		DateTime SortDate { get; }
-		IPersonDayOff DayOff { get; }
+		IDayOff DayOff { get; }
 	}
 
 	public class TeamScheduleProjection : ITeamScheduleProjection
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		public IEnumerable<ITeamScheduleLayer> Layers { get; set; }
 		public DateTime SortDate { get; set; }
-		public IPersonDayOff DayOff { get; set; }
+		public IDayOff DayOff { get; set; }
 	}
 
 	public interface ITeamScheduleLayer

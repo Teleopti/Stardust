@@ -60,6 +60,11 @@
 				class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 				access="nosetter.camelcase-underscore"
 				not-null="true" foreign-key="FK_PersonAssignment_BusinessUnit"/>
+		<many-to-one name="_dayOffTemplate"
+				access="field"
+				column="DayOffTemplate"
+				class="Teleopti.Ccc.Domain.Scheduling.DayOffTemplate"
+				foreign-key="FK_PersonAssignment_DayOffTemplate"/>
 
 		<filter name="businessUnitFilter"
 						condition=":businessUnitParameter = BusinessUnit" />

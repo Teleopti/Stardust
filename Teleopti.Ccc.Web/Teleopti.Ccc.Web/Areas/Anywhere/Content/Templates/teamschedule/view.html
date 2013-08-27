@@ -1,60 +1,85 @@
 <div class="container team-schedule">
-    <div class="row">
-        <div class="span12 nowrap">
-            <select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
-            <div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.DateFormatForMoment, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
-                <button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
-                <input class="add-on date-input" size="16" type="text" readonly="readonly"/>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-                <button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
-            </div>
-        </div>
-    </div>
+	<table class="table table-condensed well well-small" data-bind="visible: DisplayStaffingMetrics">
+		<thead>
+			<tr>
+				<th>
+					<span id="skill-selector" class="btn-group">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							<span data-bind="text: SelectedSkillName"></span>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" data-bind="foreach: { data: Skills, as: 'skill' }">
+							<li>
+								<a data-bind="text: skill.Name, value: skill.Id, click: $parent.SelectSkill"></a>
+							</li>
+						</ul>
+					</span>
+				</th>
+				<th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="text: Resources.LoadingThreeDots"></span></th>
+				<th><span id="forecasted-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
+				<th><span id="scheduled-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
+				<th><span id="difference-forecasted-scheduled" class="text-error" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
+				<th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
+			</tr>
+		</thead>
+	</table>
+	
+	<div class="row">
+		<div class="span12 nowrap">
+			<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+			<div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+				<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
+				<input class="add-on date-input" size="16" type="text" readonly="readonly"/>
+				<span class="add-on"><i class="icon-calendar"></i></span>
+				<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
+			</div>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="span12">
+	<div class="row">
+		<div class="span12">
             <!-- ko if: Loading -->
             <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
             <!-- /ko -->
             <!-- ko if: !Loading() -->
             <div class="relative">
-    			
-                <div class="time-line absolute">
-                    <div class="relative">
-                        <div data-bind="foreach: TimeLine.Times">
-                            <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-                            <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-                        </div>
-                    </div>
-                </div>
+				
+				<div class="time-line absolute">
+					<div class="relative">
+						<div data-bind="foreach: TimeLine.Times">
+							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+						</div>
+					</div>
+				</div>
 						
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th class="contract-time"><span data-bind="text: Resources.ContractTime"></span></th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: Persons">
-                        <tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
-                            <td class="person-name">
-                                <!-- Must do it this way to get correct overflow: hidden in IE -->
-                                <div class="person-name nowrap" data-bind="text: Name"></div>
-                            </td>
-                            <td class="shift">
-                                <ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
-                            </td>
-                            <td class="contract-time" data-bind="text: ContractTime"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th class="contract-time"><span data-bind="text: Resources.ContractTime"></span></th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: Persons">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
+							<td class="person-name">
+								<!-- Must do it this way to get correct overflow: hidden in IE -->
+								<div class="person-name nowrap" data-bind="text: Name"></div>
+							</td>
+							<td class="shift">
+								<ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
+							</td>
+							<td class="contract-time" data-bind="text: ContractTime"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
             <!-- /ko -->
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 
 <script id="layerTemplate" type="text/html">
-    <li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
+	<li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
 </script>

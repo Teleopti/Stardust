@@ -140,22 +140,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
+    <Compile Include="ApplicationLayer\ITestHandler.cs" />
     <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
+    <Compile Include="ApplicationLayer\TestEvent.cs" />
+    <Compile Include="ApplicationLayer\TestEventTwo.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug22600.cs" />
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
-    <Compile Include="CoverageTest.cs" />
     <Compile Include="CoverAllAssemblies.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\BugTest\Bug24079.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
+    <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
@@ -303,7 +307,7 @@
     <Compile Include="Repositories\RotationNewRepositoryTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryPersisterIntegrationTest.cs" />
     <Compile Include="Repositories\StateGroupActivityAlarmRepositoryTest.cs" />
-    <Compile Include="Repositories\DayOffRepositoryTest.cs" />
+    <Compile Include="Repositories\DayOffTemplateRepositoryTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepositoryTest.cs" />
     <Compile Include="Repositories\GroupPageRepositoryTest.cs" />
@@ -334,7 +338,6 @@
     <Compile Include="Repositories\ApplicationFunctionRepositoryTest.cs" />
     <Compile Include="Repositories\ApplicationRoleRepositoryTest.cs" />
     <Compile Include="Repositories\BusinessUnitRepositoryTest.cs" />
-    <Compile Include="Repositories\PersonDayOffRepositoryTest.cs" />
     <Compile Include="Repositories\AvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\ContractRepositoryTest.cs" />
     <Compile Include="Repositories\ContractScheduleRepositoryTest.cs" />
@@ -354,16 +357,15 @@
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetterForAuditTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetterTest.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\RemoveEmptyAssignmentsTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ResetDateForAssignments.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\VerifyAllConvertedTest.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizerContextTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
     <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
@@ -392,11 +394,9 @@
     <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\PersonPeriodChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
-    <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
-    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
-    <Compile Include="UnitOfWork\SqlQueryTest.cs" />
+    <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />

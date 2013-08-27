@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,15 +16,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			var events = (from i in modifiedRoots
-			              let r = i.Root
-			              let withEvents = r as IAggregateRootWithEvents
-			              where withEvents != null
-			              let es = withEvents.PopAllEvents()
-			              where es != null
-			              from e in es
-			              select e)
-				.ToArray();
+			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
+			if (!withEvents.Any()) return;
+
+			var events = withEvents.SelectMany(e => e.PopAllEvents()).ToArray();
 			_publisher.Publish(events);
 		}
 	}

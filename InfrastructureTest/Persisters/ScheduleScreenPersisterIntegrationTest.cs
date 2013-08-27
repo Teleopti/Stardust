@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
 		protected ScheduleRepository ScheduleRepository { get; set; }
+		protected PersonAssignmentRepository PersonAssignmentRepository { get; set; }
 
 		protected IScheduleDictionarySaver ScheduleDictionarySaver { get; set; }
 		protected IPersonAbsenceAccount PersonAbsenceAccount { get; set; }
@@ -37,6 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		protected IPersistableScheduleData ScheduleData { get; set; }
 		protected IScheduleDictionary ScheduleDictionary { get; private set; }
 		protected IAbsence Absence { get; private set; }
+		protected IActivity Activity { get; private set; }
+		protected IShiftCategory ShiftCategory { get; private set; }
 		protected DateOnly AccountDate { get; set; }
 		protected IAccount Account { get; set; }
 		protected DateTime ScheduleStartDate { get; set; }
@@ -47,8 +52,75 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		protected DateTimePeriod FirstDayDateTimePeriod { get; set; }
 		protected ICollection<IPersonWriteProtectionInfo> PersonWriteProtectionInfoCollection { get; private set; }
 
-
 		private ScheduleScreenRetryingPersister Target { get; set; }
+
+
+
+		[SetUp]
+		public void ScheduleScreenPersisterIntegrationTestSetup()
+		{
+			SetupEntities();
+			SetupDatabase();
+			SetupScheduleDictionary();
+			SetupDependencies();
+		}
+
+		private void SetupEntities() 
+		{
+			Person = PersonFactory.CreatePerson("person", "one");
+			Absence = AbsenceFactory.CreateAbsence("absence");
+			Absence.Tracker = Tracker.CreateDayTracker();
+			PersonAbsenceAccount = new PersonAbsenceAccount(Person, Absence);
+			Activity = new Activity("activity");
+			ShiftCategory = new ShiftCategory("shift category");
+			PersonWriteProtectionInfoCollection = new List<IPersonWriteProtectionInfo>();
+			AccountDate = DateOnly.Today;
+			Account = new AccountDay(AccountDate);
+			PersonAbsenceAccount.Add(Account);
+			Scenario = new Scenario("scenario");
+			ScheduleStartDate = DateTime.Now.AddMonths(-1).Date.ToUniversalTime();
+			ScheduleEndDate = ScheduleStartDate.AddMonths(2).Date.ToUniversalTime();
+			DateTimePeriod = new DateTimePeriod(ScheduleStartDate, ScheduleEndDate);
+			ScheduleDateTimePeriod = new ScheduleDateTimePeriod(DateTimePeriod);
+			FirstDayDateTimePeriod = new DateTimePeriod(ScheduleStartDate, ScheduleStartDate.AddDays(1));
+			FirstDayDateOnly = new DateOnly(ScheduleStartDate);
+			ScheduleData = SetupScheduleData();
+		}
+
+		protected abstract IPersistableScheduleData SetupScheduleData();
+
+		private void SetupDatabase()
+		{
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				new PersonRepository(unitOfWork).Add(Person);
+				new AbsenceRepository(unitOfWork).Add(Absence);
+				new PersonAbsenceAccountRepository(unitOfWork).Add(PersonAbsenceAccount);
+				new ActivityRepository(unitOfWork).Add(Activity);
+				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
+				new ScenarioRepository(unitOfWork).Add(Scenario);
+				if (ScheduleData != null)
+					new ScheduleRepository(unitOfWork).Add(ScheduleData);
+
+				unitOfWork.PersistAll();
+			}
+		}
+
+		private void SetupScheduleDictionary() 
+		{
+			var innerDictionary = new Dictionary<IPerson, IScheduleRange>();
+
+			ScheduleDictionary = new ScheduleDictionaryForTest(Scenario, ScheduleDateTimePeriod, innerDictionary);
+
+			var scheduleParameters = new ScheduleParameters(Scenario, Person, DateTimePeriod);
+			var scheduleRange = new ScheduleRange(ScheduleDictionary, scheduleParameters);
+			if (ScheduleData != null)
+				scheduleRange.Add(ScheduleData);
+
+			innerDictionary[Person] = scheduleRange;
+
+			//_scheduleDictionary.TakeSnapshot();
+		}
 
 		private void SetupDependencies()
 		{
@@ -61,98 +133,126 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			_messageBrokerModule = Mocks.DynamicMock<IMessageBrokerModule>();
 			_personAbsenceAccountValidator = Mocks.DynamicMock<IPersonAbsenceAccountValidator>();
 			ScheduleRepository = new ScheduleRepository(UnitOfWorkFactory.Current);
+			PersonAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
 			ScheduleDictionaryConflictCollector = Mocks.DynamicMock<IScheduleDictionaryConflictCollector>();
 			ScheduleDictionarySaver = new ScheduleDictionarySaver();
 			Mocks.ReplayAll();
 		}
 
 
+
+
+
+
+
 		protected void MakeTarget()
 		{
 			Target = new ScheduleScreenRetryingPersister(UnitOfWorkFactory.CurrentUnitOfWorkFactory(),
 													   new WriteProtectionRepository(UnitOfWorkFactory.Current),
-													   //ScheduleRepository,
+														//ScheduleRepository,
 													   new PersonRequestRepository(UnitOfWorkFactory.Current),
 													   new PersonAbsenceAccountRepository(UnitOfWorkFactory.Current),
-													   //ScheduleDictionarySaver,
+														//ScheduleDictionarySaver,
 													   new PersonRequestPersister(_clearReferredShiftTradeRequests),
 													   new PersonAbsenceAccountConflictCollector(),
 													   new PersonAbsenceAccountRefresher(new RepositoryFactory(), Scenario),
 													   _personAbsenceAccountValidator,
 													   ScheduleDictionaryConflictCollector,
-													   //new ScheduleDictionaryModifiedCallback(),
+														//new ScheduleDictionaryModifiedCallback(),
 													   _messageBrokerModule,
 													   new ScheduleDictionaryBatchPersister(
 														   UnitOfWorkFactory.CurrentUnitOfWorkFactory(),
 														   ScheduleRepository,
 														   ScheduleDictionarySaver,
 														   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-														   _messageBrokerModule, 
-														   this, 
-														   new ScheduleDictionaryModifiedCallback()), 
+														   _messageBrokerModule,
+														   this,
+														   new ScheduleDictionaryModifiedCallback()),
 													   this);
 		}
 
-
-		[SetUp]
-		public void ScheduleScreenPersisterIntegrationTestSetup()
-		{
-			SetupEntities();
-			SetupDatabase();
-			SetupScheduleDictionary();
-			SetupDependencies();
-		}
-
-		private void SetupDatabase()
+		protected void DeleteScheduleDataAsAnotherUser()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(unitOfWork).Add(Person);
-				new AbsenceRepository(unitOfWork).Add(Absence);
-				new PersonAbsenceAccountRepository(unitOfWork).Add(PersonAbsenceAccount);
-				new ScenarioRepository(unitOfWork).Add(Scenario);
-				new ScheduleRepository(unitOfWork).Add(ScheduleData);
+				var repository = new Repository(unitOfWork);
+				//remove clone to simulate other user (and instance)
+				repository.Remove((IPersistableScheduleData)ScheduleData.Clone());
+				unitOfWork.PersistAll();
+			}
+		}
+
+		protected void ModifyPersonAbsenceAccountAsAnotherUser()
+		{
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(unitOfWork);
+				var personAbsenceAccount = personAbsenceAccountRepository.Get(PersonAbsenceAccount.Id.Value);
+				modifyPersonAbsenceAccount(personAbsenceAccount);
+				personAbsenceAccountRepository.Add(personAbsenceAccount);
 
 				unitOfWork.PersistAll();
 			}
 		}
 
-		private void SetupEntities() 
+		protected IPersonAssignment AddPersonAssignmentAsAnotherUser(DateOnly date)
 		{
-			Person = PersonFactory.CreatePerson("person", "one");
-			Absence = AbsenceFactory.CreateAbsence("absence");
-			Absence.Tracker = Tracker.CreateDayTracker();
-			PersonAbsenceAccount = new PersonAbsenceAccount(Person, Absence);
-			PersonWriteProtectionInfoCollection = new List<IPersonWriteProtectionInfo>();
-			AccountDate = DateOnly.Today;
-			Account = new AccountDay(AccountDate);
-			PersonAbsenceAccount.Add(Account);
-			Scenario = new Scenario("scenario");
-			ScheduleStartDate = DateTime.Now.AddMonths(-1).Date.ToUniversalTime();
-			ScheduleEndDate = ScheduleStartDate.AddMonths(2).Date.ToUniversalTime();
-			DateTimePeriod = new DateTimePeriod(ScheduleStartDate, ScheduleEndDate);
-			ScheduleDateTimePeriod = new ScheduleDateTimePeriod(DateTimePeriod);
-			FirstDayDateTimePeriod = new DateTimePeriod(ScheduleStartDate, ScheduleStartDate.AddDays(1));
-			FirstDayDateOnly = new DateOnly(ScheduleStartDate);
-			ScheduleData = MakeScheduleData();
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+				var personAssignment = new PersonAssignment(Person, Scenario, date);
+				personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, FirstDayDateTimePeriod) }, ShiftCategory);
+				personAssignmentRepository.Add(personAssignment);
+
+				unitOfWork.PersistAll();
+
+				return personAssignment;
+			}
 		}
 
-		protected abstract IPersistableScheduleData MakeScheduleData();
-
-		private void SetupScheduleDictionary() 
+		protected void AddPersonAssignmentInMemory(DateOnly date)
 		{
-			var innerDictionary = new Dictionary<IPerson, IScheduleRange>();
+			if (ScheduleData != null)
+				throw new Exception("You'v already created a schedule data, and I can only handle 1, unless you modify me");
+			var personAssignment = new PersonAssignment(Person, Scenario, date);
+			personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, new DateTimePeriod(date, date.AddDays(1))) }, ShiftCategory);
 
-			ScheduleDictionary = new ScheduleDictionaryForTest(Scenario, ScheduleDateTimePeriod, innerDictionary);
-
-			var scheduleParameters = new ScheduleParameters(Scenario, Person, DateTimePeriod);
-			var scheduleRange = new ScheduleRange(ScheduleDictionary, scheduleParameters);
-			scheduleRange.Add(ScheduleData);
-
-			innerDictionary[Person] = scheduleRange;
-
-			//_scheduleDictionary.TakeSnapshot();
+			
+			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(date);
+			scheduleDay.Add(personAssignment);
+			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
+
+		protected void ModifyPersonAbsenceAccountInMemory()
+		{
+			modifyPersonAbsenceAccount(PersonAbsenceAccount);
+		}
+
+		private static void modifyPersonAbsenceAccount(IPersonAbsenceAccount personAbsenceAccountToChange)
+		{
+			foreach (var account in personAbsenceAccountToChange.AccountCollection())
+			{
+				account.BalanceIn = account.BalanceIn.Add(TimeSpan.FromDays(1));
+			}
+		}
+
+		protected IScheduleScreenPersisterResult TryPersistScheduleScreen()
+		{
+			// create and persist schedule with data using original entity objects which are now stale
+
+			var personAbsenceAccounts = new List<IPersonAbsenceAccount> { PersonAbsenceAccount };
+			//var writeProtect = new PersonWriteProtectionInfo(Person);
+			return Target.TryPersist(ScheduleDictionary, PersonWriteProtectionInfoCollection, new IPersonRequest[] { }, personAbsenceAccounts);
+		}
+
+
+
+
+
+
+
+
+
 
 		[TearDown]
 		public void ScheduleScreenPersisterIntegrationTestTeardown()
@@ -173,16 +273,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				var person = personRepository.Get(Person.Id.Value);
 				var absenceRepository = new AbsenceRepository(unitOfWork);
 				var absence = absenceRepository.Get(Absence.Id.Value);
+				var activityRepository = new ActivityRepository(unitOfWork);
+				var activity = activityRepository.Get(Activity.Id.Value);
+				var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
+				var shiftCategory = shiftCategoryRepository.Get(ShiftCategory.Id.Value);
 				var scenarioRepository = new ScenarioRepository(unitOfWork);
 				var scenario = scenarioRepository.Get(Scenario.Id.Value);
 				var session = unitOfWork.FetchSession();
-				var scheduleData =
-					session.CreateCriteria(typeof (IPersistableScheduleData)).Add(Restrictions.Eq("Id", ScheduleData.Id)).UniqueResult<IPersistableScheduleData>();
+				IPersistableScheduleData scheduleData = null;
+				if (ScheduleData != null)
+					scheduleData = session.CreateCriteria(typeof (IPersistableScheduleData)).Add(Restrictions.Eq("Id", ScheduleData.Id)).UniqueResult<IPersistableScheduleData>();
 
 				var repository = new Repository(unitOfWork);
 				repository.Remove(personAbsenceAccount);
 				repository.Remove(person);
 				repository.Remove(absence);
+				repository.Remove(activity);
+				repository.Remove(shiftCategory);
 				repository.Remove(scenario);
 				if (scheduleData != null)
 					repository.Remove(scheduleData);
@@ -191,54 +298,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		}
 
-		protected void DeleteScheduleDataAsAnotherUser()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var repository = new Repository(unitOfWork);
-				//remove clone to simulate other user (and instance)
-				repository.Remove((IPersistableScheduleData)ScheduleData.Clone());
-				unitOfWork.PersistAll();
-			}
-		}
 
-		protected void ModifyPersonAbsenceAccountAsAnotherUser()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(unitOfWork);
-				var personAbsenceAccountToChange = personAbsenceAccountRepository.Get(PersonAbsenceAccount.Id.Value);
 
-				ModifyPersonAbsenceAccount(personAbsenceAccountToChange);
 
-				personAbsenceAccountRepository.Add(personAbsenceAccountToChange);
-
-				unitOfWork.PersistAll();
-			}
-		}
-
-		protected void ModifyPersonAbsenceAccount()
-		{
-			ModifyPersonAbsenceAccount(PersonAbsenceAccount);
-		}
-
-		private static void ModifyPersonAbsenceAccount(IPersonAbsenceAccount personAbsenceAccountToChange)
-		{
-			foreach (var account in personAbsenceAccountToChange.AccountCollection())
-			{
-				account.BalanceIn = account.BalanceIn.Add(TimeSpan.FromDays(1));
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected IScheduleScreenPersisterResult TryPersistScheduleScreen()
-		{
-			// create and persist schedule with data using original entity objects which are now stale
-
-			var personAbsenceAccounts = new List<IPersonAbsenceAccount>{PersonAbsenceAccount};
-		    //var writeProtect = new PersonWriteProtectionInfo(Person);
-            return Target.TryPersist(ScheduleDictionary, PersonWriteProtectionInfoCollection, new IPersonRequest[] { }, personAbsenceAccounts);
-		}
 
 		public void ReassociateDataWithAllPeople()
 		{
@@ -248,7 +310,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
 		{
-			return new[] { new IAggregateRoot[] { Scenario }, TestDataToReassociate() };
+			return new[] { new IAggregateRoot[] { Scenario, Activity, ShiftCategory }, TestDataToReassociate() };
 		}
 
 		protected abstract IEnumerable<IAggregateRoot> TestDataToReassociate();

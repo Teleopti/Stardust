@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -16,15 +17,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 	[TestFixture]
 	public class PersonPeriodTest
 	{
-		private IPersonPeriod _target;
+		private PersonPeriod _target;
+		private IPerson _person;
 
 		/// <summary>
 		/// Setups this instance.
 		/// </summary>
-		/// <remarks>
-		/// Created by: sumeda herath
-		/// Created date: 2008-02-01
-		/// </remarks>
 		[SetUp]
 		public void Setup()
 		{
@@ -34,18 +32,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			_target = new PersonPeriod(startDate, personContract, team);
 
-			IPerson person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Local));
-			person.AddPersonPeriod(_target);
+			_person = PersonFactory.CreatePerson();
+			_person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Local));
+			_person.AddPersonPeriod(_target);
 		}
 
 		/// <summary>
 		/// Verifies the default properties.
 		/// </summary>
-		/// <remarks>
-		/// Created by: sumeda herath
-		/// Created date: 2008-02-01
-		/// </remarks>
 		[Test]
 		public void VerifyDefaultProperties()
 		{
@@ -58,10 +52,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		/// <summary>
 		/// Verifies the period can be set and get.
 		/// </summary>
-		/// <remarks>
-		/// Created by: sumeda herath
-		/// Created date: 2008-01-10
-		/// </remarks>
 		[Test]
 		public void VerifyPeriodCanBeSetAndGet()
 		{
@@ -70,8 +60,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			
 			Assert.AreEqual(_target.StartDate,startDate);
 		}
-
-		
 
 		[Test]
 		public void CanGetEndDate()
@@ -122,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		/// <summary>
-		/// Determines whether this instance [can add person skill].
+		/// Determines whether this instance [can add _person skill].
 		/// </summary>
 		/// <remarks>
 		/// Created by: sumeda herath
@@ -183,11 +171,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill("test skill", 1);
 			_target.AddPersonSkill(personSkill);
 
-			Assert.AreEqual(1, _target.PersonSkillCollection.Count);
+			Assert.AreEqual(1, _target.PersonSkillCollection.Count());
 
 			_target.DeletePersonSkill(personSkill);
 
-			Assert.AreEqual(0, _target.PersonSkillCollection.Count);
+			Assert.AreEqual(0, _target.PersonSkillCollection.Count());
 		}
 
 		[Test]
@@ -256,9 +244,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			IPersonPeriod personPeriodClone = (IPersonPeriod)_target.Clone();
 			Assert.IsFalse(personPeriodClone.Id.HasValue);
-			Assert.AreEqual(_target.PersonSkillCollection.Count, personPeriodClone.PersonSkillCollection.Count);
-			Assert.AreSame(_target, _target.PersonSkillCollection[0].Parent);
-			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection[0].Parent);
+			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
+			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
+			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
 			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
 			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
@@ -273,9 +261,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			personPeriodClone = _target.NoneEntityClone();
 			Assert.IsFalse(personPeriodClone.Id.HasValue);
-			Assert.AreEqual(_target.PersonSkillCollection.Count, personPeriodClone.PersonSkillCollection.Count);
-			Assert.AreSame(_target, _target.PersonSkillCollection[0].Parent);
-			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection[0].Parent);
+			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
+			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
+			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
 			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
 			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
@@ -290,9 +278,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			personPeriodClone = _target.EntityClone();
 			Assert.AreEqual(_target.Id.Value, personPeriodClone.Id.Value);
-			Assert.AreEqual(_target.PersonSkillCollection.Count, personPeriodClone.PersonSkillCollection.Count);
-			Assert.AreSame(_target, _target.PersonSkillCollection[0].Parent);
-			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection[0].Parent);
+			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
+			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
+			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
 			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
 			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
@@ -313,16 +301,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			
 			_target.AddPersonSkill(skill);
 
-			Assert.AreEqual(1, _target.PersonSkillCollection.Count);
+			Assert.AreEqual(1, _target.PersonSkillCollection.Count());
 		}
 
 		/// <summary>
 		/// Verifies the reset external log on.
 		/// </summary>
-		/// <remarks>
-		/// Created by: Muhamad Risath
-		/// Created date: 2008-08-18
-		/// </remarks>
 		[Test]
 		public void VerifyResetExternalLogOn()
 		{

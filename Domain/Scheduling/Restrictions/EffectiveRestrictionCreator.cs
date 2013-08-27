@@ -24,28 +24,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		    if (options.UseAvailability && ret.IsAvailabilityDay && ret.NotAvailable)
 		        ret.DayOffTemplate = options.DayOffTemplate;
 
-			//TODO 12582 Ola temporary fix for bug 
 			if (part != null && part.SignificantPart() != SchedulePartView.MainShift)
 				return ret;
-
-			//if (options.RescheduleOptions == OptimizationRestriction.KeepShiftCategory)
-			//{
-			//    IEffectiveRestriction keepShiftCatRestriction = _keepRestrictionCreator.CreateKeepShiftCategoryRestriction(part);
-			//    ret = ret.Combine(keepShiftCatRestriction);
-			//}
-
-			//if (options.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime)
-			//{
-			//    IEffectiveRestriction keepStartAndEndTimeRestriction =
-			//        _keepRestrictionCreator.CreateKeepStartAndEndTimeRestriction(part);
-			//    ret = ret.Combine(keepStartAndEndTimeRestriction);
-			//}
 
 		    return ret;
 		}
 
 		public IEffectiveRestriction GetEffectiveRestriction(
-            IList<IPerson> groupPersons, 
+            IEnumerable<IPerson> groupPersons, 
             DateOnly dateOnly, 
             ISchedulingOptions options, 
             IScheduleDictionary scheduleDictionary)

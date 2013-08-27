@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters
@@ -38,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         private IUpdateScheduleDataFromMessages _scheduleDataUpdater;
         private IEventMessage _refreshedDerivedFromScheduleDataMessage;
         private Guid _refreshedDerivedFromScheduleDataEntityId;
-        private IPersonDayOff _refreshedDerivedFromScheduleDataEntity;
+        private IPersonAssignment _refreshedDerivedFromScheduleDataEntity;
 
         [SetUp]
         public void Setup()
@@ -58,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             Expect.Call(_refreshedScheduleDataEntity.Id).Return(_refreshedScheduleDataEntityId).Repeat.Any();
 
             _refreshedDerivedFromScheduleDataEntityId = Guid.NewGuid();
-            _refreshedDerivedFromScheduleDataEntity = _mocks.Stub<IPersonDayOff>();
+            _refreshedDerivedFromScheduleDataEntity = _mocks.Stub<IPersonAssignment>();
             Expect.Call(_refreshedDerivedFromScheduleDataEntity.Id).Return(_refreshedDerivedFromScheduleDataEntityId).Repeat.Any();
 
             _deletedScheduleDataEntityId = Guid.NewGuid();
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             _refreshedScheduleDataMessage.DomainObjectId = _refreshedScheduleDataEntityId;
             _refreshedScheduleDataMessage.DomainUpdateType = DomainUpdateType.Update;
             _refreshedDerivedFromScheduleDataMessage = _mocks.Stub<IEventMessage>();
-            _refreshedDerivedFromScheduleDataMessage.InterfaceType = typeof(IPersonDayOff);
+            _refreshedDerivedFromScheduleDataMessage.InterfaceType = typeof(IPersonAssignment);
             _refreshedDerivedFromScheduleDataMessage.DomainObjectId = _refreshedScheduleDataEntityId;
             _refreshedDerivedFromScheduleDataMessage.DomainUpdateType = DomainUpdateType.Update;
             _deletedScheduleDataMessage = _mocks.Stub<IEventMessage>();
@@ -103,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
+			_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(_scheduleRepository, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
         }
 
         [Test]

@@ -1,28 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class MeetingMessageSender : IMessageSender
 	{
-		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
-		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+		private readonly IServiceBusSender _serviceBusSender;
 
-		public MeetingMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+		public MeetingMessageSender(IServiceBusSender serviceBusSender)
 		{
-			_sendDenormalizeNotification = sendDenormalizeNotification;
-			_saveToDenormalizationQueue = saveToDenormalizationQueue;
+			_serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
+			if (!_serviceBusSender.EnsureBus()) return;
+
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });
 			meetings = meetings.Where(m => m.ProvideCustomChangeInfo != null);
@@ -58,11 +56,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = customChange.Period.EndDateTime,
 					              		PersonId = customChange.MainRoot.Id.GetValueOrDefault()
 					              	};
-					_saveToDenormalizationQueue.Execute(message);
+					_serviceBusSender.Send(message);
 				}
 			}
-
-			_sendDenormalizeNotification.Notify();
 		}
 	}
 }

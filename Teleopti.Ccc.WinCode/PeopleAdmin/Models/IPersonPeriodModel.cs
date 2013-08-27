@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         IPerson Parent{ get;}
 
         /// <summary>
-        /// Gets or sets the team.
-        /// </summary>
-        /// <value>The team.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-08-14
-        /// </remarks>
-        ITeam Team { get; set; }
-
-        /// <summary>
         /// Gets or sets the person contract.
         /// </summary>
         /// <value>The person contract.</value>

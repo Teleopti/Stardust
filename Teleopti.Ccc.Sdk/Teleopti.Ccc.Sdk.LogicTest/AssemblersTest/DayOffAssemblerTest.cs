@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private DayOffAssembler _target;
         private DayOffInfoDto _dayOffIntoDto;
         private MockRepository _mocks;
-        private IDayOffRepository _dayOffRep;
+        private IDayOffTemplateRepository _dayOffRep;
         private IDayOffTemplate _dayOffDomain;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _dayOffRep = _mocks.StrictMock<IDayOffRepository>();
+            _dayOffRep = _mocks.StrictMock<IDayOffTemplateRepository>();
             _target = new DayOffAssembler(_dayOffRep);
 
             // Create domain object

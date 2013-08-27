@@ -9,6 +9,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -161,9 +162,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDayoffDate()
 		{
-			var dayoff = new PersonDayOff(_person, new Scenario("d"), new DayOff(), new DateOnly(2000, 1, 1), TimeZoneInfo.Utc);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(2000,1,1), _person);
-			scheduleDay.Add(dayoff);
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"), _person, new DateOnly(2000,1,1), new DayOffTemplate()));
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new IVisualLayer[0]));
 
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapDayOff()
 		{
 			var theDayOff = new DayOffTemplate(new Description("my day off"));
-			var personDayOff = new PersonDayOff(_person, new Scenario("scenario"), theDayOff, DateOnly.Today);
+			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), _person, DateOnly.Today, theDayOff);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, personDayOff);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(scheduleDay);
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMyDayOff()
 		{
 			var theDayOff = new DayOffTemplate(new Description("my day off"));
-			var personDayOff = new PersonDayOff(_person, new Scenario("scenario"), theDayOff, DateOnly.Today);
+			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), _person, DateOnly.Today, theDayOff);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, personDayOff);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(scheduleDay);
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
 			var possibleTradePersons = new[] {possibleTradePerson};
 			var theDayOff = new DayOffTemplate(new Description("a day off"));
-			var tradeVictimDayOff = new PersonDayOff(possibleTradePerson, new Scenario("scenario"), theDayOff, date);
+			var tradeVictimDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), possibleTradePerson, date, theDayOff);
 			var myDay = _scheduleFactory.ScheduleDayStub();
 			var tradeVictimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, possibleTradePerson, SchedulePartView.DayOff, tradeVictimDayOff);
 
@@ -657,7 +657,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapTimeLineWhenIHaveDayOffAndTradeVictimSchedule()
 		{
-			var myDayOff = new PersonDayOff(_person, new Scenario("scenario"), new DayOffTemplate(new Description("a day off")), DateOnly.Today);
+			var myDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), _person, DateOnly.Today, new DayOffTemplate(new Description("a day off")));
 			var myDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, myDayOff);
 			var tradeVictimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, new Person());
 			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 0, 0, DateTimeKind.Utc),

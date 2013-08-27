@@ -2,6 +2,7 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -37,48 +38,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         }
 
         [Test]
-        public void VerifyDtoToDo()
-        {
-            var dto = new PersonDayOffDto
-                                      {
-                                          Id = Guid.NewGuid(),
-                                          Version = 4,
-                                          Anchor = new DateTime(2009, 1, 1, 11, 0, 0, DateTimeKind.Utc),
-                                          AnchorTime = new TimeSpan(12, 0, 0),
-                                          Flexibility = new TimeSpan(0),
-                                          Length = new TimeSpan(24, 0, 0),
-                                          Name = "Malmös Maradona",
-                                          Person = null,
-                                          //totalt onödig eftersom den tillhör en schedulepart
-                                          ShortName = "banana",
-                                          Color = new ColorDto(Color.Blue),
-										  PayrollCode = "payrollcode007"
-                                      };
-
-
-            var entity = _target.DtoToDomainEntity(dto);
-            Assert.AreEqual(dto.Id, entity.Id);
-            Assert.AreEqual(dto.Version, entity.Version);
-            Assert.AreEqual(dto.Anchor, entity.DayOff.Anchor);
-            Assert.AreEqual(dto.AnchorTime, entity.DayOff.AnchorLocal(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone).TimeOfDay);
-            Assert.AreEqual(dto.Flexibility, entity.DayOff.Flexibility);
-            Assert.AreEqual(dto.Length, entity.DayOff.TargetLength);
-            Assert.AreEqual(dto.Name, entity.DayOff.Description.Name);
-            Assert.AreEqual(_person.Id, entity.Person.Id);
-            Assert.AreEqual(dto.ShortName, entity.DayOff.Description.ShortName);
-            Assert.AreEqual(dto.Color.ToColor(), entity.DayOff.DisplayColor);
-            Assert.AreEqual(dto.PayrollCode, entity.DayOff.PayrollCode);
-        }
-
-        [Test]
         public void VerifyDoToDto()
         {
-            var anchor = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date = new DateOnly(1900, 1, 1);
             var anchorTime = new TimeSpan(23);
             var flexibility = new TimeSpan(124);
             var length = new TimeSpan(1244);
-            var personDayOff = PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, anchor, length,
-                                                                               flexibility, anchorTime);
+
+						var dayOff = DayOffFactory.CreateDayOff(new Description("test"));
+					dayOff.Anchor = anchorTime;
+						dayOff.SetTargetAndFlexibility(length, flexibility);
+						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, date, dayOff);
 
 
             personDayOff.SetId(Guid.NewGuid());

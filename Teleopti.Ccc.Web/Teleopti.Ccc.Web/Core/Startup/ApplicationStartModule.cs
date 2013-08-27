@@ -16,6 +16,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using log4net;
+using AutofacDependencyResolver = Autofac.Integration.Mvc.AutofacDependencyResolver;
 
 [assembly: PreApplicationStartMethod(typeof(ApplicationStartModule), "RegisterModule")]
 
@@ -104,12 +105,19 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-					var resolver = new Areas.Anywhere.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
-					GlobalHost.DependencyResolver = resolver;
+					GlobalHost.DependencyResolver = new Broker.AutofacDependencyResolver(container.BeginLifetimeScope()); 
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
 					SignalRConfiguration.Configure(new HubConfiguration {EnableCrossDomain = true});
 				}
 				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
+				application.Disposed += (s, e) =>
+					{
+						if (SignalRConfiguration.ActionScheduler is IDisposable)
+						{
+							var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
+							if (actionThrottle != null) actionThrottle.Dispose();
+						}
+					};
 			}
 			catch (Exception ex)
 			{

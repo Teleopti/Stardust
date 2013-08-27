@@ -1,3 +1,9 @@
+SET NOCOUNT ON
+PRINT '-----------------------'
+PRINT 'Release 360 will re-design the schedule/shift tables and convert a lot of data.'
+PRINT 'This will need some extra time to finish. Please be patient'
+PRINT 'Start time: ' + CONVERT(VARCHAR(24),GETDATE(),113)
+PRINT '-----------------------'
 
 ----------------  
 --Name: Roger Kratz
@@ -983,4 +989,162 @@ GO
 
 ALTER TABLE [Auditing].[PersonAssignment_AUD]
 DROP COLUMN Minimum, Maximum
+GO
+
+--remove assignments without shifts
+delete from PersonAssignment
+where id in 
+(
+select pa.id from personassignment pa
+left outer join ShiftLayer sl on pa.Id=sl.Parent
+where not exists(select 1 from ShiftLayer where Parent=pa.Id)
+)
+
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-08-22
+--Desc: PBI #21978 - re-factor clustered index + add column: DayOffTemplate
+----------------  
+--rename current table + PK
+EXEC dbo.sp_rename @objname = N'[dbo].[PersonAssignment]', @newname = N'PersonAssignment_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[dbo].[PersonAssignment_old].[PK_PersonAssignment]', N'PK_PersonAssignment_old', N'INDEX'
+
+--drop existing FK + UQ
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_BusinessUnit]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person_CreatedBy]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person_UpdatedBy]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Person3]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_Scenario]
+ALTER TABLE [dbo].[PersonAssignment_old] DROP CONSTRAINT [FK_PersonAssignment_ShiftCategory]
+ALTER TABLE [dbo].[ShiftLayer] DROP CONSTRAINT [FK_ShiftLayer_PersonAssignment]
+
+--create new table with correct clustered key
+CREATE TABLE [dbo].[PersonAssignment](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Version] [int] NOT NULL,
+	[CreatedBy] uniqueidentifier NOT NULL,
+	[UpdatedBy] uniqueidentifier NOT NULL,
+	[CreatedOn] datetime NOT NULL,
+	[UpdatedOn] datetime NOT NULL,
+	[Person] uniqueidentifier NOT NULL,
+	[Scenario] uniqueidentifier NOT NULL,
+	[BusinessUnit] uniqueidentifier NOT NULL,
+	[Date] datetime NOT NULL,
+	[ShiftCategory] uniqueidentifier NULL,
+	[DayOffTemplate] uniqueidentifier NULL,
+ CONSTRAINT [PK_PersonAssignment] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE CLUSTERED INDEX [CIX_PersonAssignment_PersonDate_Scenario] ON [dbo].[PersonAssignment]
+(
+	[Person] ASC,
+	[Date] ASC,
+	[Scenario] ASC
+)
+
+--Transfer data into new clustered index
+INSERT INTO [dbo].[PersonAssignment] (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, Scenario, BusinessUnit, Date, ShiftCategory,DayOffTemplate)
+SELECT Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, Scenario, BusinessUnit, Date, ShiftCategory,NULL
+FROM [dbo].[PersonAssignment_old]
+
+--drop old table
+DROP TABLE [dbo].[PersonAssignment_old]
+GO
+
+--re-add FK + UQ
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_BusinessUnit] FOREIGN KEY([BusinessUnit]) REFERENCES [dbo].[BusinessUnit] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person_CreatedBy] FOREIGN KEY([CreatedBy]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person_UpdatedBy] FOREIGN KEY([UpdatedBy]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Person] FOREIGN KEY([Person]) REFERENCES [dbo].[Person] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_Scenario] FOREIGN KEY([Scenario]) REFERENCES [dbo].[Scenario] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_ShiftCategory] FOREIGN KEY([ShiftCategory]) REFERENCES [dbo].[ShiftCategory] ([Id])
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_DayOffTemplate] FOREIGN KEY([DayOffTemplate]) REFERENCES dbo.DayOffTemplate([Id])
+ALTER TABLE [dbo].[ShiftLayer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftLayer_PersonAssignment] FOREIGN KEY([Parent]) REFERENCES [dbo].[PersonAssignment] ([Id]) ON DELETE CASCADE
+GO
+
+
+ALTER TABLE auditing.PersonAssignment_AUD ADD
+            DayOffTemplate uniqueidentifier NULL
+GO
+
+--Adding index to support next operation
+--DROP INDEX IX_PersonAssignment_Date ON [dbo].[PersonAssignment]
+CREATE NONCLUSTERED INDEX IX_PersonAssignment_Date
+ON [dbo].[PersonAssignment]
+	(
+	[Date]
+	)
+
+--DROP INDEX [IX_PersonDayOff_Anchor_Person] ON [dbo].[PersonDayOff]
+CREATE NONCLUSTERED INDEX [IX_PersonDayOff_Anchor_Person]
+ON [dbo].[PersonDayOff]
+(
+	[Anchor] ASC,
+	[Person] ASC,
+	[Name] ASC
+)
+INCLUDE
+(
+	[Id]
+)
+
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-08-09
+--Desc: Adding read model for resources
+---------------- 
+CREATE TABLE [ReadModel].[ActivitySkillCombination](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Activity] [uniqueidentifier] NOT NULL,
+	[Skills] [nvarchar](1500) NULL,
+	[ActivityRequiresSeat] [bit] NOT NULL,
+ CONSTRAINT [PK_ActivitySkillCombination] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+
+GO
+
+CREATE TABLE [ReadModel].[PeriodSkillEfficiencies](
+	[ParentId] [int] NOT NULL,
+	[SkillId] [uniqueidentifier] NOT NULL,
+	[Amount] [float] NOT NULL
+ CONSTRAINT [PK_PeriodSkillEfficiencies] PRIMARY KEY CLUSTERED 
+(
+	[ParentId] ASC,
+	[SkillId] ASC
+))
+
+GO
+
+CREATE TABLE [ReadModel].[ScheduledResources](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ActivitySkillCombinationId] [int] NOT NULL,
+	[Resources] [float] NOT NULL,
+	[Heads] [float] NOT NULL,
+	[PeriodStart] [datetime] NOT NULL,
+	[PeriodEnd] [datetime] NOT NULL,
+ CONSTRAINT [PK_ScheduledResources] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+
+GO
+
+ALTER TABLE [ReadModel].[ActivitySkillCombination] ADD  CONSTRAINT [DF_ActivitySkillCombination_ActivityRequiresSeat]  DEFAULT ((0)) FOR [ActivityRequiresSeat]
+GO
+
+ALTER TABLE [ReadModel].[PeriodSkillEfficiencies] ADD  CONSTRAINT [DF_PeriodSkillEfficiencies_Amount]  DEFAULT ((0)) FOR [Amount]
+GO
+
+ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Resources]  DEFAULT ((0)) FOR [Resources]
+GO
+
+ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
 GO

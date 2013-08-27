@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// </summary>
     public class AgentAssignmentMapper : Mapper<IPersonAssignment, global::Domain.AgentDay>
     {
-        private ShiftContainsOvertime _shiftContainsOvertime;
+	    private ShiftContainsOvertime _shiftContainsOvertime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AgentAssignmentMapper"/> class.
@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </remarks>
         public AgentAssignmentMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
-            _shiftContainsOvertime = new ShiftContainsOvertime(mappedObjectPair);
+	        _shiftContainsOvertime = new ShiftContainsOvertime(mappedObjectPair);
         }
 
-        /// <summary>
+	    /// <summary>
         /// Maps the specified old entity.
         /// </summary>
         /// <param name="oldEntity">The old entity.</param>
@@ -79,7 +79,24 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 }
             }
 
-            //Always check for fillups
+			//check for day off
+	        if ((oldEntity.AgentDayAssignment.AssignmentType == global::Domain.AssignedType.AbsenceWithoutSavedWorkShift ||
+	             oldEntity.AgentDayAssignment.AssignmentType == global::Domain.AssignedType.AbsenceWithSavedWorkShift) &&
+	            (oldEntity.AgentDayAssignment.Assigned.AssignedAbsence.UseCountRules))
+	        {
+				if (agAss == null)
+				{
+					agAss =
+						new PersonAssignment(MappedObjectPair.Agent.GetPaired(oldEntity.AssignedAgent),
+											MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario),
+																						new DateOnly(oldEntity.AgentDate));
+				}
+
+		        IDayOffTemplate defaultTemplate = MappedObjectPair.DayOff.GetPaired(oldEntity.AgentDayAssignment.Assigned.AssignedAbsence);
+				agAss.SetDayOff(defaultTemplate);
+	        }
+
+	        //Always check for fillups
             if (oldEntity.AgentDayAssignment.FillupCollection.Count > 0)
             {
                 if (agAss == null)

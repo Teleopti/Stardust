@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// /// </remarks>
     public class PeriodDistributionService
     {
-        private readonly IList<IVisualLayerCollection> _relevantProjections;
+        private readonly IResourceCalculationDataContainer _relevantProjections;
         private readonly int _lengthToSplitOn;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Created by: Ola
         ///  Created date: 2008-10-27    
         /// /// </remarks>
-        public PeriodDistributionService(IList<IVisualLayerCollection> relevantProjections, int lengthToSplitOn)
+        public PeriodDistributionService(IResourceCalculationDataContainer relevantProjections, int lengthToSplitOn)
         {
             _relevantProjections = relevantProjections;
             _lengthToSplitOn = lengthToSplitOn;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 }
             }
 
-        	foreach (var projection in _relevantProjections)
+        	/*foreach (var projection in _relevantProjections)
         	{
         		foreach (var pair in periodDistr)
         		{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         				periodDistribution.ProcessLayers(projFilteredByPeriod);
         			}
         		}	
-        	}
+        	}*/
         }
 
     	private static void addPeriodDistributionToList(SortedList<DateTimePeriod, ICollection<PeriodDistribution>> periodDistributionCollection, 

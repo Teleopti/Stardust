@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -20,8 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         readonly DateOnly _dateOnly = new DateOnly(2000, 1, 1);
         private IPerson _person1;
         private IPerson _person2;
-        private IPermissionInformation _permissionInformation;
-        private TimeZoneInfo _timeZone;
         private IWorkShiftRuleSet _ruleSet1;
         private IWorkShiftRuleSet _ruleSet2;
         private IWorkShiftRuleSet _ruleSet3;
@@ -35,12 +34,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         public void Setup()
         {
             _mock = new MockRepository();
-            _person1 = _mock.StrictMock<IPerson>();
-            _person2 = _mock.StrictMock<IPerson>();
-            _permissionInformation = _mock.StrictMock<IPermissionInformation>();
-            _timeZone = TimeZoneInfo.Utc;
-			_personPeriod = _mock.StrictMock<IPersonPeriod>();
-			_personPeriod2 = _mock.StrictMock<IPersonPeriod>();
+            _person1 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly,Enumerable.Empty<ISkill>());
+            _person2 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly,Enumerable.Empty<ISkill>());
+			_person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			_person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+            _personPeriod = _person1.Period(_dateOnly);
+			_personPeriod2 = _person2.Period(_dateOnly);
 			_bag1 = new RuleSetBag();
 			_bag2 = new RuleSetBag();
         	_guid = Guid.NewGuid();
@@ -48,13 +47,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
         private void SetExpectations()
         {
-            var skill = _mock.StrictMock<ISkill>();
+            var skill = SkillFactory.CreateSkill("Phone");
             var skillPercent = new Percent(1);
-            var personSkill = new PersonSkill(skill, skillPercent);   //_mock.StrictMock<IPersonSkill>();
+            var personSkill = new PersonSkill(skill, skillPercent);
             
-
-            var personSkills = new List<IPersonSkill> { personSkill };
-
             var category1 = new ShiftCategory("kat1");
             var category2 = new ShiftCategory("kat2");
             var generator1 = _mock.StrictMock<IWorkShiftTemplateGenerator>();
@@ -69,90 +65,91 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
            
             _bag2.AddRuleSet(_ruleSet3);
 
-            Expect.Call(_person1.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
-            Expect.Call(_person2.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
-            Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
-
-            Expect.Call(_person1.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-            Expect.Call(_person2.Period(_dateOnly)).Return(_personPeriod2).Repeat.AtLeastOnce();
-
-            Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-            Expect.Call(_personPeriod2.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-            //Expect.Call(personSkill.Skill).Return(skill).Repeat.AtLeastOnce();
-            //Expect.Call(() => personSkill.SetParent(_personPeriod)).IgnoreArguments().Repeat.AtLeastOnce();
-                
-            Expect.Call(skill.Equals(skill)).Return(true).Repeat.AtLeastOnce();
-            //Expect.Call(personSkill.SkillPercentage).Return(skillPercent).Repeat.AtLeastOnce();
-
+	        _person1.AddSkill(personSkill, _personPeriod);
             personSkill.SkillPercentage = new Percent(2);
 
-            Expect.Call(_ruleSet1.TemplateGenerator).Return(generator1).Repeat.AtLeastOnce();
-            Expect.Call(_ruleSet2.TemplateGenerator).Return(generator2).Repeat.AtLeastOnce();
-            Expect.Call(_ruleSet3.TemplateGenerator).Return(generator1).Repeat.AtLeastOnce();
+            Expect.Call(_ruleSet1.TemplateGenerator).Return(generator1).Repeat.Any();
+            Expect.Call(_ruleSet2.TemplateGenerator).Return(generator2).Repeat.Any();
+            Expect.Call(_ruleSet3.TemplateGenerator).Return(generator1).Repeat.Any();
 
-            Expect.Call(generator1.Category).Return(category1).Repeat.AtLeastOnce();
-            Expect.Call(generator2.Category).Return(category2).Repeat.AtLeastOnce();
-
-            //Expect.Call(personSkill.Clone()).Return(personSkill).Repeat.AtLeastOnce();
-            _mock.ReplayAll();
+            Expect.Call(generator1.Category).Return(category1).Repeat.Any();
+            Expect.Call(generator2.Category).Return(category2).Repeat.Any();
         }
 
 		private void SetRuleSetBagExpectations()
 		{
-			Expect.Call(_personPeriod.RuleSetBag).Return(_bag1).Repeat.AtLeastOnce();
-			Expect.Call(_personPeriod2.RuleSetBag).Return(_bag2).Repeat.AtLeastOnce();
+			_personPeriod.RuleSetBag = _bag1;
+			_personPeriod2.RuleSetBag = _bag2;
 		}
 
 		private void SetRuleSetBagExpectationsNoBag()
 		{
-			Expect.Call(_personPeriod.RuleSetBag).Return(_bag1).Repeat.AtLeastOnce();
-			Expect.Call(_personPeriod2.RuleSetBag).Return(null).Repeat.AtLeastOnce();
+			_personPeriod.RuleSetBag = _bag1;
+			_personPeriod2.RuleSetBag = null;
 		}
 
         [Test]
         public void VerifyPersonPeriodAndSchedulePeriod()
         {
 			var persons = new List<IPerson> { _person1, _person2 };
-        	SetRuleSetBagExpectations();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+        	
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+	        using (_mock.Playback())
+	        {
+		        var factory = new GroupPersonFactory();
+		        _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            var person = _groupPerson as Person;
-            Assert.IsNotNull(person);
-            Assert.IsNotNull(person.Period(_dateOnly));
-            Assert.IsNotNull(person.SchedulePeriod(_dateOnly));
-            Assert.IsNotNull(person.VirtualSchedulePeriod(_dateOnly));
-            Assert.IsTrue(person.VirtualSchedulePeriod(_dateOnly).IsValid);
-            _mock.VerifyAll();
+		        var person = _groupPerson as Person;
+		        Assert.IsNotNull(person);
+		        Assert.IsNotNull(person.Period(_dateOnly));
+		        Assert.IsNotNull(person.SchedulePeriod(_dateOnly));
+		        Assert.IsNotNull(person.VirtualSchedulePeriod(_dateOnly));
+		        Assert.IsTrue(person.VirtualSchedulePeriod(_dateOnly).IsValid);
+	        }
         }
 
         [Test]
         public void CanGetListOfPersons()
         {
 			var persons = new List<IPerson> { _person1, _person2 };
-        	SetRuleSetBagExpectations();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+			
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+	        using (_mock.Playback())
+	        {
+		        var factory = new GroupPersonFactory();
+		        _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            Assert.AreEqual(2, _groupPerson.GroupMembers.Count);
-            _mock.VerifyAll();
+		        Assert.AreEqual(2, _groupPerson.GroupMembers.Count());
+	        }
         }
 
         [Test]
         public void CanGetAListOfPersonalSkillsOnDate()
         {
 			var persons = new List<IPerson> { _person1, _person2 };
-        	SetRuleSetBagExpectations();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+			
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+	        using (_mock.Playback())
+	        {
+		        var factory = new GroupPersonFactory();
+		        _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
-            Assert.IsNotNull(personalSkills);
-            Assert.AreEqual(1, personalSkills.Count);
-            _mock.VerifyAll();
+		        var personalSkills = ((Person) _groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
+		        Assert.IsNotNull(personalSkills);
+		        Assert.AreEqual(1, personalSkills.Count());
+	        }
         }
 
         [Test]
@@ -162,58 +159,75 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { skill });
             IPerson person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { skill });
             var persons = new List<IPerson> { person1, person2 };
-            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection[0].SkillPercentage);
+            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection.First().SkillPercentage);
             var factory = new GroupPersonFactory();
 			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
             var personalSkills = ((Person)_groupPerson).PersonPeriodCollection[0].PersonSkillCollection;
             Assert.IsNotNull(personalSkills);
-            Assert.AreEqual(1, personalSkills.Count);
-            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection[0].SkillPercentage);
+            Assert.AreEqual(1, personalSkills.Count());
+            Assert.AreEqual(new Percent(1), person1.PersonPeriodCollection[0].PersonSkillCollection.First().SkillPercentage);
         }
 
         [Test]
         public void CommonRuleSetBagRemovesCategoryThatIsNotCommon()
         {
 			var persons = new List<IPerson> { _person1, _person2 };
-        	SetRuleSetBagExpectations();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+			
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+	        using (_mock.Playback())
+	        {
+		        var factory = new GroupPersonFactory();
+		        _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            var bag = ((Person)_groupPerson).PersonPeriodCollection[0].RuleSetBag;
-            Assert.AreEqual(2, bag.RuleSetCollection.Count);
-            Assert.IsTrue(bag.RuleSetCollection.Contains(_ruleSet1));
-            Assert.IsTrue(bag.RuleSetCollection.Contains(_ruleSet3));
-            Assert.IsFalse(bag.RuleSetCollection.Contains(_ruleSet2));
-
-            _mock.VerifyAll();
+		        var bag = ((Person) _groupPerson).PersonPeriodCollection[0].RuleSetBag;
+		        Assert.AreEqual(2, bag.RuleSetCollection.Count);
+		        Assert.IsTrue(bag.RuleSetCollection.Contains(_ruleSet1));
+		        Assert.IsTrue(bag.RuleSetCollection.Contains(_ruleSet3));
+		        Assert.IsFalse(bag.RuleSetCollection.Contains(_ruleSet2));
+	        }
         }
 
         [Test]
         public void ShouldBeSameRuleSetBagInVirtualSchedulePeriodAsOnFirstPersonPeriod()
         {
 			var persons = new List<IPerson> { _person1, _person2 };
-        	SetRuleSetBagExpectations();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+			
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+	        using (_mock.Playback())
+	        {
+		        var factory = new GroupPersonFactory();
+		        _groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-            var bag = ((Person)_groupPerson).PersonPeriodCollection[0].RuleSetBag;
-            //Assert.That(bag.Equals(_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag));
-            Assert.That(bag.Equals(((Person)_groupPerson).Period(_dateOnly).RuleSetBag));
+		        var bag = ((Person) _groupPerson).PersonPeriodCollection[0].RuleSetBag;
+		        Assert.That(bag.Equals(((Person) _groupPerson).Period(_dateOnly).RuleSetBag));
+	        }
         }
 
 		[Test]
 		public void ShouldReturnEmptyRuleSetBagsWhenAgentHasNoBag()
 		{
 			var persons = new List<IPerson> { _person1, _person2 };
-			SetRuleSetBagExpectationsNoBag();
-			SetExpectations();
-			var factory = new GroupPersonFactory();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
 
-			//Assert.AreEqual(0,_groupPerson.VirtualSchedulePeriod(_dateOnly).PersonPeriod.RuleSetBag.RuleSetCollection.Count);
-            Assert.AreEqual(0, ((Person)_groupPerson).Period(_dateOnly).RuleSetBag.RuleSetCollection.Count);
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectationsNoBag();
+				SetExpectations();
+			}
+			using (_mock.Playback())
+			{
+				var factory = new GroupPersonFactory();
+				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
+
+				Assert.AreEqual(0, ((Person) _groupPerson).Period(_dateOnly).RuleSetBag.RuleSetCollection.Count);
+			}
 		}
 
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -230,8 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             var skillPercent = new Percent(1);
 		    var skill = SkillFactory.CreateSkill("hej");
             var personSkill = new PersonSkill(skill, skillPercent);
-			var personSkills = new List<IPersonSkill> { personSkill };
-
+			
 			_ruleSet1 = _mock.StrictMock<IWorkShiftRuleSet>();
 			_ruleSet2 = _mock.StrictMock<IWorkShiftRuleSet>();
 			_ruleSet3 = _mock.StrictMock<IWorkShiftRuleSet>();
@@ -242,24 +255,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_bag2.AddRuleSet(_ruleSet3);
 			var persons = new List<IPerson> { _person1, _person2 };
 
+			_person2.DeletePersonPeriod(_personPeriod2);
+			_person1.AddSkill(personSkill,_personPeriod);
+			_personPeriod.RuleSetBag = _bag1;
+			
 			using(_mock.Record())
 			{
-				Expect.Call(_person1.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
-				Expect.Call(_person2.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
-				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
-				Expect.Call(_person1.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_person2.Period(_dateOnly)).Return(null).Repeat.AtLeastOnce();
-				Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-				Expect.Call(_personPeriod.RuleSetBag).Return(_bag1).Repeat.AtLeastOnce();
-				//Expect.Call(() => personSkill.SetParent(_personPeriod)).IgnoreArguments().Repeat.AtLeastOnce();
 			}
-
-			
 			using (_mock.Playback())
 			{
 				var factory = new GroupPersonFactory();
 				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "NAME", _guid);
-				Assert.AreEqual(1, _groupPerson.GroupMembers.Count);
+				Assert.AreEqual(1, _groupPerson.GroupMembers.Count());
 			}
 		}
 
@@ -268,13 +275,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var persons = new List<IPerson> { _person1, _person2 };
 			var factory = new GroupPersonFactory();
-			SetRuleSetBagExpectations();
-			SetExpectations();
-			_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "Name", _guid);
 
-			Assert.AreEqual(_guid, _groupPerson.Id);
+			using(_mock.Record())
+			{
+				SetRuleSetBagExpectations();
+				SetExpectations();
+			}
+			using (_mock.Playback())
+			{
+				_groupPerson = factory.CreateGroupPerson(persons, _dateOnly, "Name", _guid);
+
+				Assert.AreEqual(_guid, _groupPerson.Id);
+			}
 		}
     }
-
-    
 }

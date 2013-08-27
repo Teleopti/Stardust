@@ -25,25 +25,34 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public class ResourceOptimizationHelperWin : ResourceOptimizationHelper, IResourceOptimizationHelperWin
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
+		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperWin"/> class.
 		/// </summary>
 		/// <param name="stateHolder">The state holder.</param>
+		/// <param name="personSkillProvider"></param>
 		/// <remarks>
 		/// Created by: henrika
 		/// Created date: 2008-05-27
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, ISingleSkillDictionary singleSkillDictionary)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, new SingleSkillMaxSeatCalculator())
+		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider)
+			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new CurrentTeleoptiPrincipal())
 		{
 			_stateHolder = stateHolder;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		public void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
 		{
-            resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks, _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
+				                      _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+			}
 		}
 
 		private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks, ToolStripProgressBar progressBar)
@@ -60,8 +69,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateMarkedDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
-			resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks, _stateHolder.DaysToRecalculate);
-			_stateHolder.ClearDaysToRecalculate();
+			if (!_stateHolder.DaysToRecalculate.Any()) return;
+
+			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min(), _stateHolder.DaysToRecalculate.Max());
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
+				                      _stateHolder.DaysToRecalculate);
+				_stateHolder.ClearDaysToRecalculate();
+			}
 		}
 
 		private void resourceCalculateDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, IEnumerable<DateOnly> dates)

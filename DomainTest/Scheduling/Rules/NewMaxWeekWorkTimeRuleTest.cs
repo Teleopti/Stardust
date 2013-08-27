@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -90,13 +91,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day0Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours);
+	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29)))
+	                  .Return(new[]
+		                  {day8Hours, day8Hours, day8Hours, day8Hours, day8Hours, day0Hours, day0Hours});
 
                 Expect.Call(day8Hours.ProjectionService()).Return(projService8Hours).Repeat.Times(5);
                 Expect.Call(day0Hours.ProjectionService()).Return(projService0Hours).Repeat.Times(2);
@@ -153,13 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 
                 Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
                 Expect.Call(_personContract.Contract).Return(_contract);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day8Hours);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1Hour);
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day1Hour);
+                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 23,2010,8,29))).Return(new[]{ day8Hours,day8Hours,day8Hours,day8Hours,day8Hours,day1Hour,day1Hour});
 
                 Expect.Call(day8Hours.ProjectionService()).Return(projService8Hours).Repeat.Times(5);
                 Expect.Call(day1Hour.ProjectionService()).Return(projService1Hour).Repeat.Times(2);

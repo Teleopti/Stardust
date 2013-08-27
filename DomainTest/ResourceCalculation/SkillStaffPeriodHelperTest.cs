@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -226,45 +225,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // RMS of {1, -1, 0} >> SQRT(2/3)
             Assert.AreEqual(Math.Sqrt(2d / 3d) + 3, result.Value, 0.001);
         }
-
-        [Test]
-        public void VerifyCalculateRelativeRootMeanSquare()
-        {
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod1, 4);
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod2, -4);
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod3, 0);
-
-            _mockRepository.ReplayAll();
-
-            _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3 };
-
-            double? result = SkillStaffPeriodHelper.CalculateRelativeRootMeanSquare(_skillStaffPeriods, false, false, false);
-
-            // RMS of {1, -1, 0} >> SQRT(2/3)
-            Assert.AreEqual(Math.Sqrt(2d / 3d), result.Value, 0.001);
-        }
-
-        [Test]
-        public void VerifyCalculateRelativeRootMeanSquareWithMaxIntraIntraday()
-        {
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod1, 4);
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod2, -4);
-            SkillStaffPeriodFactory.InjectMockedRelativeDifference(_skillStaffPeriod3, 0);
-
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod1, 1);
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod2, 2);
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod3, 3);
-
-            _mockRepository.ReplayAll();
-
-            _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3 };
-
-            double? result = SkillStaffPeriodHelper.CalculateRelativeRootMeanSquare(_skillStaffPeriods, false, false, true);
-
-            // RMS of {1, -1, 0} >> SQRT(2/3)
-            Assert.AreEqual(Math.Sqrt(2d / 3d) + 3, result.Value, 0.001);
-        }
-
 
         [Test]
         public void VerifyRelativeDifferenceWithNoForecastNoScheduled ()

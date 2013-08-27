@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,21 +13,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 	{
 		private MockRepository _mocks;
 		private INonBlendSkillCalculator _target;
-		private INonBlendSkillImpactOnPeriodForProjection _nonBlendSkillImpactOnPeriodForProjection;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_nonBlendSkillImpactOnPeriodForProjection = _mocks.StrictMock<INonBlendSkillImpactOnPeriodForProjection>();
-			_target = new NonBlendSkillCalculator(_nonBlendSkillImpactOnPeriodForProjection);
+			_target = new NonBlendSkillCalculator();
 		}
 
 		[Test]
 		public void ShouldAddResourceAndLoggedOntoSkillStaffPeriod()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
-			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
+			var relevantProjections = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateNonBlendSkill("nonBlendSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);
@@ -40,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Record())
 			{
-                Expect.Call(_nonBlendSkillImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, relevantProjections, skill)).Return(4.5d);
+				Expect.Call(relevantProjections.SkillResources(skill, skillStaffPeriod.Period)).Return(new Tuple<double, double>(4.5d,4.5d));
 			}
 
 			using (_mocks.Playback())
@@ -54,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		[Test]
 		public void ShouldNotAddResourceIfNotNonBlendSkill()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
-			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
+			var relevantProjections = _mocks.DynamicMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateSkill("nonBlendSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);
@@ -67,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Record())
 			{
-
+				Expect.Call(relevantProjections.SkillResources(skill, skillStaffPeriod.Period)).Repeat.Never();
 			}
 
 			using (_mocks.Playback())
