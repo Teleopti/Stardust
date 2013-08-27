@@ -11177,6 +11177,9 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Zooma</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Skicka igen</value>
+  </data>
   <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
     <value>Anslutningen till databasen tog för lång tid. Försök att begränsa dina sökvillkor.</value>
   </data>
@@ -11203,5 +11206,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
     <value>Kopiera/klistra in följande URL och lägg till den i Outlook eller Google kalender etc.</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Ändra till den valda agentens perspektiv</value>
   </data>
 </root>
