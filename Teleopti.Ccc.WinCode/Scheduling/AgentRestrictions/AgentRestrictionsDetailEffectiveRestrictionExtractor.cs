@@ -168,17 +168,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private void SetTotalRestriction(IScheduleDay scheduleDay, IEffectiveRestriction totalRestriction, IPreferenceCellData preferenceCellData)
 		{
 			var minMaxLength = GetMinMaxLength(scheduleDay, totalRestriction);
-			if (minMaxLength != null)totalRestriction = new EffectiveRestriction(minMaxLength.StartTimeLimitation,minMaxLength.EndTimeLimitation,minMaxLength.WorkTimeLimitation,totalRestriction.ShiftCategory,totalRestriction.DayOffTemplate,totalRestriction.Absence, new List<IActivityRestriction>());
+			if (minMaxLength != null)
+				totalRestriction = new EffectiveRestriction(minMaxLength.StartTimeLimitation, minMaxLength.EndTimeLimitation,
+				                                            minMaxLength.WorkTimeLimitation, totalRestriction.ShiftCategory,
+				                                            totalRestriction.DayOffTemplate, totalRestriction.Absence,
+				                                            new List<IActivityRestriction>());
 			else
 			{
-				if (totalRestriction.IsRestriction && totalRestriction.DayOffTemplate == null && totalRestriction.Absence == null)
+				if (totalRestriction != null && totalRestriction.IsRestriction && totalRestriction.DayOffTemplate == null &&
+				    totalRestriction.Absence == null)
 				{
 					preferenceCellData.NoShiftsCanBeFound = true;
-					totalRestriction = new EffectiveRestriction(new StartTimeLimitation(),new EndTimeLimitation(),new WorkTimeLimitation(),totalRestriction.ShiftCategory,totalRestriction.DayOffTemplate,totalRestriction.Absence, new List<IActivityRestriction>());
+					totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+					                                            new WorkTimeLimitation(), totalRestriction.ShiftCategory,
+					                                            totalRestriction.DayOffTemplate, totalRestriction.Absence,
+					                                            new List<IActivityRestriction>());
 				}
 			}
 			preferenceCellData.EffectiveRestriction = totalRestriction;
-			if (totalRestriction.Absence != null) 
+			if (totalRestriction != null && totalRestriction.Absence != null)
 				SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
 		}
 
