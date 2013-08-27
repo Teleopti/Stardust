@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var scheduleDay in scheduleDays)
 			{
-				var result = scheduleDay.PersonAbsenceCollection().Count == 0 && scheduleDay.PersonAssignment() == null &&
+				var result = scheduleDay.PersonAbsenceCollection().Count == 0 && !scheduleDay.IsScheduled() &&
 				              scheduleDay.PersonMeetingCollection().Count == 0;
 				if (!result)
 					return false;
