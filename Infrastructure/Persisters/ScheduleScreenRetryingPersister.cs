@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			}
 			catch (ConstraintViolationException exception)
 			{
-				if (exception.InnerException.Message.Contains("'UQ_PersonAssignment_Person_Date_Scenario'"))
+				if (exception.InnerException.Message.Contains("'UQ_PersonAssignment_Date_Scenario_Person'"))
 				{
 					// if 2 persons try to save a PA for the same person and date, handle it like a conflict
 					throw new PersonAssignmentConstraintViolationOnScheduleDictionary(exception);
